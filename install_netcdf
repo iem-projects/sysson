@@ -1,0 +1,8 @@
+#!/bin/sh
+
+cd lib
+if [ ! -f netcdfAll-4.3.jar ]
+then
+  echo "Downloading netcdf..."
+  curl "ftp://ftp.unidata.ucar.edu/pub/netcdf-java/v4.3/netcdfAll-4.3.jar" >netcdfAll-4.3.jar
+fi
