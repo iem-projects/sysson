@@ -1,4 +1,4 @@
-name := "SysSonTest"
+name := "SysSon"
 
 organization := "at.iem.sysson"
 
