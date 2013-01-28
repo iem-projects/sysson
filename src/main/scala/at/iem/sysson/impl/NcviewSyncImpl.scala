@@ -2,21 +2,23 @@ package at.iem.sysson
 package impl
 
 import de.sciss.osc
-import util.control.NonFatal
 
 private[sysson] object NcviewSyncImpl {
   def apply(config: NcviewSync.Config): NcviewSync = new Impl(config)
 
-  private final class Impl(config: NcviewSync.Config) extends NcviewSync {
+  private final class Impl(config: NcviewSync.Config) extends NcviewSync with ModelImpl[NcviewSync.Update] {
     private val sync      = new AnyRef
     private var channel   = Option.empty[osc.Channel]
-    private var listeners = Vector.empty[NcviewSync.Listener]
     private var dumping   = false
+
+    override def toString = "NcviewSync@" + hashCode().toHexString
 
     private def act(p: osc.Packet, sender: Any) {
       p match {
         case osc.Bundle(time, ps @ _*) => ps.foreach(p1 => act(p1, sender))
-        case osc.Message("/open", path: String) => dispatch(NcviewSync.Open(path))
+        case osc.Message("/open", path: String) =>
+//          dispatch(NcviewSync.Open(path))
+          DocumentHandler.instance.openRead(path)
         case _ => logWarn("Dropping unsupported OSC " + p)
       }
     }
@@ -24,29 +26,6 @@ private[sysson] object NcviewSyncImpl {
     def dump(on: Boolean) = sync.synchronized {
       channel.foreach(_.dump(if (on) osc.Dump.Text else osc.Dump.Off))
       dumping = on
-      this
-    }
-
-    private def dispatch(update: NcviewSync.Update) {
-      sync.synchronized {
-        listeners.foreach { l =>
-          if (l.isDefinedAt(update)) try {
-            l(update)
-          } catch {
-            case NonFatal(e) => e.printStackTrace()
-          }
-        }
-      }
-    }
-
-    def addListener(pf: NcviewSync.Listener) = sync.synchronized {
-      listeners :+= pf
-      this
-    }
-
-    def removeListener(pf: NcviewSync.Listener) = sync.synchronized {
-      val idx = listeners.indexOf(pf)
-      if (idx >=0 ) listeners = listeners.patch(idx, Nil, 1)
       this
     }
 

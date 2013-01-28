@@ -76,22 +76,22 @@ object NcviewSync {
     def build: Config
   }
 
-  type Listener = PartialFunction[Update, Unit]
+  type Listener = Model.Listener[Update]
 
   /**
    * A message from an Ncview client.
    */
   sealed trait Update
 
-  /**
-   * The client has opened a NetCDF file with the given path.
-   */
-  final case class Open(path: String) extends Update
+//  /**
+//   * The client has opened a NetCDF file with the given path.
+//   */
+//  final case class Open(path: String) extends Update
 }
 /**
  * An Open Sound Control server providing synchronized views from Ncview.
  */
-trait NcviewSync {
+trait NcviewSync extends Model[NcviewSync.Update] {
   /**
    * Starts the server.
    */
@@ -108,31 +108,4 @@ trait NcviewSync {
    * Turns on or off OSC message dumping.
    */
   def dump(on: Boolean): this.type
-
-  /**
-   * Registers a listener for updates from the client.
-   * A listener is simply a partial function which receives instances of `NcviewSync.Update`. Therefore
-   * the listener can decide with pattern match cases which updates it wants to handle.
-   *
-   * Example:
-   * {{{
-   *   n.addListener {
-   *     case NcviewSync.Open(path) => ...
-   *   }
-   * }}}
-   *
-   * __Note:__ If the listener should be removed at some point, it is important to store it somewhere:
-   *
-   * {{{
-   *   val l: NcviewSync.Listener = { case NcviewSync.Open(path) => ... }
-   *   n.addListener(l)
-   *   ...
-   *   n.removeListener(l)
-   * }}}
-   */
-  def addListener(pf: NcviewSync.Listener): this.type
-  /**
-   * Unregisters a listener for updates from the client.
-   */
-  def removeListener(pf: NcviewSync.Listener): this.type
 }
