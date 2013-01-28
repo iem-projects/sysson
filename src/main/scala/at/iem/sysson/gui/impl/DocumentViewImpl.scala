@@ -4,12 +4,12 @@ package impl
 
 import swing.{ScrollPane, Orientation, BoxPanel, Table, Component, Frame}
 import de.sciss.swingtree.tree.{Tree, ExternalTreeModel}
-import ucar.{ma2, nc2}
+import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.JTree
 import de.sciss.swingtree.event.TreeNodeSelected
 import collection.immutable.{IndexedSeq => IIdxSeq}
-import javax.swing.table.{AbstractTableModel, TableModel}
+import javax.swing.table.AbstractTableModel
 import annotation.switch
 
 object DocumentViewImpl {
@@ -36,7 +36,12 @@ object DocumentViewImpl {
 
   private final class AttrsModel(attrs: IIdxSeq[nc2.Attribute]) extends AbstractTableModel {
     def getRowCount     = attrs.size
+
     def getColumnCount  = 2 // name, value representation
+    override def getColumnName(col: Int) = (col: @switch) match {
+      case 0 => "Name"
+      case 1 => "Value"
+    }
 
     def getValueAt(row: Int, col: Int) = {
       val attr = attrs(row)
@@ -54,6 +59,36 @@ object DocumentViewImpl {
     }
   }
 
+  private final class VarsModel(vrs: IIdxSeq[nc2.Variable]) extends AbstractTableModel {
+    def getRowCount     = vrs.size
+
+    def getColumnCount  = 4 // name, /* full-name, */ description, data-type, shape /* , size */
+    override def getColumnName(col: Int) = (col: @switch) match {
+      case 0 => "Name"
+      case 1 => "Description"
+      case 2 => "Data Type"
+      case 3 => "Shape"
+//      case 4 => "Size"
+    }
+
+    def getValueAt(row: Int, col: Int) = {
+      val vr = vrs(row)
+      (col: @switch) match {
+        case 0 => vr.name
+//        case 1 => attr.fullName
+        case 1 /* 2 */ => vr.description.getOrElse("")
+        case 2 /* 3 */ => vr.dataType
+        case 3 /* 4 */ => (vr.dimensions zip vr.shape) map {
+          case (dim, sz) => dim.name match {
+            case Some(name) => s"${name}:${sz}"
+            case _ => sz.toString
+          }
+        } mkString ("[", ", ", "]")
+//        case 4 /* 5 */ => vr.size.asInstanceOf[AnyRef]
+      }
+    }
+  }
+
   private final class Impl(doc: Document)
     extends DocumentView {
 
@@ -67,7 +102,12 @@ object DocumentViewImpl {
       peer.setVisibleRowCount(3)
     }
 
-    val tGroupAttr  = {
+    val tGroupAttrs = {
+      val res = new Table()
+      res
+    }
+
+    val tGroupVars = {
       val res = new Table()
       res
     }
@@ -77,7 +117,8 @@ object DocumentViewImpl {
       contents  = new BoxPanel(Orientation.Vertical) {
         contents ++= Seq(
           new ScrollPane(tGroup),
-          tGroupAttr
+          new ScrollPane(tGroupAttrs),
+          new ScrollPane(tGroupVars)
         )
       }
 //      centerOnScreen()
@@ -86,7 +127,8 @@ object DocumentViewImpl {
     }
 
     private def groupSelected(g: nc2.Group) {
-      tGroupAttr.model = new AttrsModel(g.attributes)
+      tGroupAttrs.model = new AttrsModel(g.attributes)
+      tGroupVars.model  = new VarsModel(g.variables)
     }
 
     def component: Component = tGroup

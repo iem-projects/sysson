@@ -31,13 +31,13 @@ object Implicits {
     def dimensions    = peer.getDimensions.toIndexedSeq
     def variables     = peer.getVariables.toIndexedSeq
     def children      = peer.getGroups.toIndexedSeq
-    def parent        = Option( peer.getParentGroup )
+    def parent        = Option(peer.getParentGroup)
   }
 
   implicit class RichDimension( peer: nc2.Dimension ) {
-    def name          = Option( peer.getName )
+    def name          = Option(peer.getName)
     def size          = peer.getLength
-    def group         = Option( peer.getGroup )
+    def group         = Option(peer.getGroup)
   }
 
   implicit class RichVariable(peer: nc2.Variable) extends impl.HasDimensions with impl.HasAttributes {
@@ -49,8 +49,8 @@ object Implicits {
     def size          = peer.getSize
     def rank          = peer.getRank
     def attributes    = peer.getAttributes.toIndexedSeq
-    def description   = Option( peer.getDescription )
-    def group         = Option( peer.getParentGroup )
+    def description   = Option(peer.getDescription)
+    def group         = Option(peer.getParentGroup)
     def dimensions    = peer.getDimensions.toIndexedSeq
     def ranges        = peer.getRanges.toIndexedSeq
   }
