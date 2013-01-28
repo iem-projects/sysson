@@ -30,7 +30,7 @@ object Implicits {
     def attributes    = peer.getAttributes.toIndexedSeq
     def dimensions    = peer.getDimensions.toIndexedSeq
     def variables     = peer.getVariables.toIndexedSeq
-    def groups        = peer.getGroups.toIndexedSeq
+    def children      = peer.getGroups.toIndexedSeq
     def parent        = Option( peer.getParentGroup )
   }
 

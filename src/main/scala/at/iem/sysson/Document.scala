@@ -1,5 +1,7 @@
 package at.iem.sysson
 
+import ucar.nc2
+
 object Document {
   type Listener = Model.Listener[Update]
 
@@ -15,6 +17,8 @@ trait Document extends Model[Document.Update] {
    * Path to the document's underlying file (NetCDF).
    */
   def path: String
+
+  def data: nc2.NetcdfFile
 
   def close(): Unit
 }

@@ -5,7 +5,7 @@ import ucar.nc2
 import de.sciss.synth
 
 package object sysson {
-  def defaultPath = new File("../netcdf/data/RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc").getAbsolutePath
+  def defaultPath = "/Users/hhrutz/Desktop/IEM/SysSon/netcdf/data/RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc"
   def openDefault() : nc2.NetcdfFile = nc2.NetcdfFile.open(defaultPath).setImmutable()
   def boot() {
     synth.Server.boot() {
