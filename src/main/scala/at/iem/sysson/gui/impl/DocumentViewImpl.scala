@@ -43,9 +43,12 @@ object DocumentViewImpl {
     }
   }
 
-  private final class AttrsModel(attrs: IIdxSeq[nc2.Attribute]) extends AbstractTableModel {
-    def getRowCount     = attrs.size
+  private trait TableModel[A] extends AbstractTableModel {
+    def data: IIdxSeq[A]
+    def getRowCount = data.size
+  }
 
+  private final class AttrsModel(val data: IIdxSeq[nc2.Attribute]) extends TableModel[nc2.Attribute] {
     def getColumnCount  = 2 // name, value representation
     override def getColumnName(col: Int) = (col: @switch) match {
       case 0 => "Name"
@@ -53,7 +56,7 @@ object DocumentViewImpl {
     }
 
     def getValueAt(row: Int, col: Int) = {
-      val attr = attrs(row)
+      val attr = data(row)
       (col: @switch) match {
         case 0 => attr.name
         case 1 => {
@@ -68,9 +71,7 @@ object DocumentViewImpl {
     }
   }
 
-  private final class VarsModel(vrs: IIdxSeq[nc2.Variable]) extends AbstractTableModel {
-    def getRowCount     = vrs.size
-
+  private final class VarsModel(val data: IIdxSeq[nc2.Variable]) extends TableModel[nc2.Variable] {
     def getColumnCount  = 4 // name, /* full-name, */ description, data-type, shape /* , size */
     override def getColumnName(col: Int) = (col: @switch) match {
       case 0 => "Name"
@@ -81,7 +82,7 @@ object DocumentViewImpl {
     }
 
     def getValueAt(row: Int, col: Int) = {
-      val vr = vrs(row)
+      val vr = data(row)
       (col: @switch) match {
         case 0 => vr.name
 //        case 1 => attr.fullName
@@ -101,6 +102,7 @@ object DocumentViewImpl {
   private final class Impl(val document: Document)
     extends DocumentView {
 
+    private var _selVar = Option.empty[nc2.Variable]
     private val mGroups = new GroupModel(document.data.rootGroup)
     private val tGroups = new Tree(mGroups) {
       selection.mode = Tree.SelectionMode.Single
@@ -112,13 +114,20 @@ object DocumentViewImpl {
       peer.setVisibleRowCount(3)
     }
 
-    val tGroupAttrs = {
-      val res = new Table()
+    private var mGroupAttrs = new AttrsModel(IIdxSeq.empty)
+    private var mGroupVars  = new VarsModel(IIdxSeq.empty)
+
+    private val tGroupAttrs = {
+      val res                     = new Table()
+      res.selection.intervalMode  = Table.IntervalMode.Single
+      res.model                   = mGroupAttrs
       res
     }
 
-    val tGroupVars = {
-      val res = new Table()
+    private val tGroupVars = {
+      val res                     = new Table()
+      res.selection.intervalMode  = Table.IntervalMode.Single
+      res.model                   = mGroupVars
       res
     }
 
@@ -139,11 +148,13 @@ object DocumentViewImpl {
     }
 
     private def groupSelected(g: nc2.Group) {
-      tGroupAttrs.model = new AttrsModel(g.attributes)
-      tGroupVars.model  = new VarsModel(g.variables)
+      mGroupAttrs       = new AttrsModel(g.attributes)
+      mGroupVars        = new VarsModel(g.variables)
+      tGroupAttrs.model = mGroupAttrs
+      tGroupVars.model  = mGroupVars
     }
 
-    def selectGroup(group: nc2.Group) {
+    private def selectGroup(group: nc2.Group) {
       @tailrec def loop(path: Tree.Path[nc2.Group], g: nc2.Group): Tree.Path[nc2.Group] = {
         val p2 = g +: path
         g.parent match {
@@ -155,11 +166,32 @@ object DocumentViewImpl {
       tGroups.expandPath(fullPath)
       tGroups.selection.paths += fullPath
       tGroups.peer.makeVisible(tGroups.pathToTreePath(fullPath))
+      // the following in fact kicks in automatically due to the event dispatch;
+      // but the caller needs to make selections to tGroupVars for example,
+      // so that update must happen synchronously. eventually we could
+      // add a filter to `groupSelected` not to do the work twice.
+      groupSelected(group)
     }
 
-    def selectVar(vr: nc2.Variable) {
-      vr.group.foreach(selectGroup)
-      // TODO
+    def selectedVariable: Option[nc2.Variable] = {
+      GUI.requireEDT()
+      _selVar
+    }
+
+    def selectedVariable_=(opt: Option[nc2.Variable]) {
+      GUI.requireEDT()
+      _selVar = opt
+      opt match {
+        case Some(vr) =>
+          vr.group.foreach(selectGroup)
+          val row = mGroupVars.data.indexOf(vr)
+          if (row >= 0) {
+            tGroupVars.selection.rows += row
+          }
+
+        case None =>
+          tGroupVars.selection.rows.clear()
+      }
     }
   }
 }

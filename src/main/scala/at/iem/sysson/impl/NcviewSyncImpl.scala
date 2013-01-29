@@ -26,7 +26,7 @@ private[sysson] object NcviewSyncImpl {
             doc  <- DocumentHandler.instance.getDocument(path)
             vr   <- doc.variableMap.get(name)
             view <- DocumentViewHandler.instance.getView(doc)
-          } view.selectVar(vr)
+          } view.selectedVariable = Some(vr)
         }
 
         case _ => logWarn("Dropping unsupported OSC " + p)

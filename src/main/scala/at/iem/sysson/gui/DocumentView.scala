@@ -10,5 +10,6 @@ object DocumentView {
 trait DocumentView {
   def document: Document
   def component: Component
-  def selectVar(vr: nc2.Variable)
+  def selectedVariable: Option[nc2.Variable]
+  def selectedVariable_=(opt: Option[nc2.Variable]): Unit
 }
