@@ -10,7 +10,7 @@ import javax.swing.JTree
 import de.sciss.swingtree.event.TreeNodeSelected
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import javax.swing.table.AbstractTableModel
-import annotation.switch
+import annotation.{tailrec, switch}
 
 object DocumentViewImpl {
   import Implicits._
@@ -19,6 +19,15 @@ object DocumentViewImpl {
 
   private final class GroupModel(root: nc2.Group)
     extends ExternalTreeModel[nc2.Group](root :: Nil, _.children) {
+
+//    def test(t: Tree[nc2.Group]) {
+//      // t.expandPath()
+//      // t.expandsSelectedPaths
+//      // t.getRowForPath()
+//      // t.model.pathToTreePath()
+//      // t.treePathToPath()
+//      // t.selection
+//    }
   }
 
   private object GroupRenderer extends DefaultTreeCellRenderer {
@@ -92,8 +101,9 @@ object DocumentViewImpl {
   private final class Impl(val document: Document)
     extends DocumentView {
 
-    private val mGroup  = new GroupModel(document.data.rootGroup)
-    private val tGroup  = new Tree(mGroup) {
+    private val mGroups = new GroupModel(document.data.rootGroup)
+    private val tGroups = new Tree(mGroups) {
+      selection.mode = Tree.SelectionMode.Single
       renderer = Tree.Renderer.wrap(GroupRenderer)
       listenTo(selection)
       reactions += {
@@ -112,15 +122,17 @@ object DocumentViewImpl {
       res
     }
 
+    val component = new BoxPanel(Orientation.Vertical) {
+      contents ++= Seq(
+        new ScrollPane(tGroups),
+        new ScrollPane(tGroupAttrs),
+        new ScrollPane(tGroupVars)
+      )
+    }
+
     val f = new Frame {
       title     = document.path
-      contents  = new BoxPanel(Orientation.Vertical) {
-        contents ++= Seq(
-          new ScrollPane(tGroup),
-          new ScrollPane(tGroupAttrs),
-          new ScrollPane(tGroupVars)
-        )
-      }
+      contents  = component
 //      centerOnScreen()
       pack()
       open()
@@ -131,10 +143,18 @@ object DocumentViewImpl {
       tGroupVars.model  = new VarsModel(g.variables)
     }
 
-    def component: Component = tGroup
-
-    def selectGroup(g: nc2.Group) {
-      // TODO
+    def selectGroup(group: nc2.Group) {
+      @tailrec def loop(path: Tree.Path[nc2.Group], g: nc2.Group): Tree.Path[nc2.Group] = {
+        val p2 = g +: path
+        g.parent match {
+          case None => p2
+          case Some(p) => loop(p2, p)
+        }
+      }
+      val fullPath = loop(Tree.Path.empty[nc2.Group], group)
+      tGroups.expandPath(fullPath)
+      tGroups.selection.paths += fullPath
+      tGroups.peer.makeVisible(tGroups.pathToTreePath(fullPath))
     }
 
     def selectVar(vr: nc2.Variable) {
