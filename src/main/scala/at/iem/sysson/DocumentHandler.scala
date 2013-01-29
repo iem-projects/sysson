@@ -12,4 +12,5 @@ object DocumentHandler {
 trait DocumentHandler extends Model[DocumentHandler.Update] {
   def openRead(path: String): Document
   def allDocuments: Iterator[Document]
+  def getDocument(path: String): Option[Document]
 }

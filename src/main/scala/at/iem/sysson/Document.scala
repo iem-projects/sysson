@@ -19,6 +19,7 @@ trait Document extends Model[Document.Update] {
   def path: String
 
   def data: nc2.NetcdfFile
+  def variableMap: Map[String, nc2.Variable]
 
   def close(): Unit
 }

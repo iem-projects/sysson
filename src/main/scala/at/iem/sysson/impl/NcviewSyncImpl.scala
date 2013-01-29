@@ -2,6 +2,7 @@ package at.iem.sysson
 package impl
 
 import de.sciss.osc
+import gui.{GUI, DocumentViewHandler}
 
 private[sysson] object NcviewSyncImpl {
   def apply(config: NcviewSync.Config): NcviewSync = new Impl(config)
@@ -19,6 +20,15 @@ private[sysson] object NcviewSyncImpl {
         case osc.Message("/open", path: String) =>
 //          dispatch(NcviewSync.Open(path))
           DocumentHandler.instance.openRead(path)
+
+        case osc.Message("/var", path: String, name: String) => GUI.defer {
+          for {
+            doc  <- DocumentHandler.instance.getDocument(path)
+            vr   <- doc.variableMap.get(name)
+            view <- DocumentViewHandler.instance.getView(doc)
+          } view.selectVar(vr)
+        }
+
         case _ => logWarn("Dropping unsupported OSC " + p)
       }
     }

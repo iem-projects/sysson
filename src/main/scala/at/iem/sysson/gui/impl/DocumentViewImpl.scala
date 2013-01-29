@@ -89,10 +89,10 @@ object DocumentViewImpl {
     }
   }
 
-  private final class Impl(doc: Document)
+  private final class Impl(val document: Document)
     extends DocumentView {
 
-    private val mGroup  = new GroupModel(doc.data.rootGroup)
+    private val mGroup  = new GroupModel(document.data.rootGroup)
     private val tGroup  = new Tree(mGroup) {
       renderer = Tree.Renderer.wrap(GroupRenderer)
       listenTo(selection)
@@ -113,7 +113,7 @@ object DocumentViewImpl {
     }
 
     val f = new Frame {
-      title     = doc.path
+      title     = document.path
       contents  = new BoxPanel(Orientation.Vertical) {
         contents ++= Seq(
           new ScrollPane(tGroup),
@@ -132,5 +132,14 @@ object DocumentViewImpl {
     }
 
     def component: Component = tGroup
+
+    def selectGroup(g: nc2.Group) {
+      // TODO
+    }
+
+    def selectVar(vr: nc2.Variable) {
+      vr.group.foreach(selectGroup)
+      // TODO
+    }
   }
 }
