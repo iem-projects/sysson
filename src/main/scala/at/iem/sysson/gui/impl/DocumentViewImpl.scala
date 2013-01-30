@@ -13,6 +13,10 @@ import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
 import de.sciss.audiowidgets.Transport
 import swing.event.TableRowsSelected
+import sound.AudioSystem
+import java.io.File
+import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFileSpec, AudioFile}
+import de.sciss.synth
 
 object DocumentViewImpl {
   import Implicits._
@@ -235,7 +239,57 @@ object DocumentViewImpl {
 
     private def play() {
       selectedVariable.foreach { vr =>
-        println("rank =" + vr.rank)
+//        println("rank = " + vr.rank)
+        if (vr.dataType.isFloatingPoint) {
+//          (vr.rank: @switch) match {
+//            case 1 =>
+//            case 2 =>
+//            case 3 =>
+//            case _ =>
+//          }
+
+          // just for testing purposes
+          val data1d    = vr.read.f1d_force
+          val dataLen   = data1d.size
+          if (dataLen > 0) {
+            val duration  = 5.0
+            val frameRate = duration / dataLen
+//            val noise     = frameRate < 200
+            AudioSystem.instance.server match {
+              case Some(server: synth.Server) =>
+                val fTmp  = File.createTempFile("sysson", ".aif")
+                fTmp.deleteOnExit()
+                val afTmp = AudioFile.openWrite(fTmp,
+                  AudioFileSpec(AudioFileType.AIFF, SampleFormat.Float, numChannels = 1, sampleRate = 44100, numFrames = dataLen))
+                try {
+                  val dataN = Array(data1d.dropNaNs.normalize.toArray)
+                  afTmp.write(dataN)
+                  afTmp.close()
+                  import synth._
+                  import ugen._
+                  import Ops._
+                  val df = SynthDef("temp") {
+                    val disk  = VDiskIn.ar(1, "buf".ir, "speed".ir(1), loop = 0)
+  //                  val n     = "noise".ir
+  //                  val noise = LFNoise1.
+  //                  val sig   = Select.ar(n, Seq(disk, disk * noise))
+                    val sig   = SinOsc.ar(disk.linexp(0, 1, 300, 3000))
+                    Line.kr(0, 0, dur = "dur".ir, doneAction = freeSelf)
+                    Out.ar(0, Pan2.ar(sig))
+                  }
+                  Buffer.cue(server, fTmp.getAbsolutePath, numChannels = 1, completion = action { b =>
+                    val synth = df.play(server, Seq("buf" -> b.id, "speed" -> frameRate, "dur" -> duration))
+                    synth.onEnd { b.close(b.freeMsg()) }
+                  })
+
+                } finally {
+                  if (afTmp.isOpen) afTmp.close()
+                }
+
+              case _ =>
+            }
+          }
+        }
       }
     }
   }

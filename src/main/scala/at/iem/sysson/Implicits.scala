@@ -60,9 +60,12 @@ object Implicits {
     def elementType   = peer.getElementType
     def rank          = peer.getRank
     def shape         = peer.getShape.toIndexedSeq
-    def f1d: IndexedSeq[Float] = {
+    def f1d_force: IndexedSeq[Float] = float1d(force = true)
+    def f1d: IndexedSeq[Float] = float1d(force = false)
+
+    private def float1d(force: Boolean) = {
       require(peer.getElementType == classOf[Float], "Wrong element type (" + peer.getElementType + "); required: Float")
-      require(peer.getRank == 1, "Wrong rank (" + peer.getRank + "); required: 1")
+      if (!force) require(peer.getRank == 1, "Wrong rank (" + peer.getRank + "); required: 1")
       val sz = peer.getSize
       require(sz <= 0x7FFFFFFF, "Array too large (size = " + sz + ")")
       val it = peer.getIndexIterator
@@ -71,6 +74,15 @@ object Implicits {
   }
 
   implicit class RichFloatSeq(peer: IndexedSeq[Float]) {
+    def replaceNaNs(value: Float): IndexedSeq[Float] = {
+      peer.collect {
+        case Float.NaN => value
+        case x => x
+      }
+    }
+
+    def dropNaNs: IndexedSeq[Float] = peer.filterNot(java.lang.Float.isNaN)
+
     def normalize: IndexedSeq[Float] = {
       val sz   = peer.size
       if( sz == 0 ) return peer
