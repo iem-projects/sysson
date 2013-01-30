@@ -14,6 +14,7 @@ object MainWindow {
 class MainWindow extends Frame {
   val view  = MainView()
 
+  menuBar   = MenuFactory.root.create(this)
   title     = s"${Main.name} v${Main.version}"
   //size      = new Dimension(300, 200)
   contents  = view.component

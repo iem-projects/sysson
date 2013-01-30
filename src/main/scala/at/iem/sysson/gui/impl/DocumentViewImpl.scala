@@ -142,7 +142,7 @@ object DocumentViewImpl {
     val f = new Frame {
       title     = document.path
       contents  = component
-//      centerOnScreen()
+      centerOnScreen()
       pack()
       open()
     }

@@ -3,62 +3,74 @@ package at.iem.sysson.gui
 import swing.{Action, Frame, Component}
 import javax.swing.KeyStroke
 
-import impl.{MenuNodeImpl => Impl}
+import impl.{MenuImpl => Impl}
 
-sealed trait MenuNodeLike {
-  def id: String
-  var enabled: Boolean
-  def create(window: Frame): Component
-  def destroy(window: Frame): Unit
-}
-trait MenuNode[+C <: Component] extends MenuNodeLike {
-  def create(window: Frame): C
-}
+object Menu {
+  sealed trait Element {
+    def create(window: Frame): Component
+    def destroy(window: Frame): Unit
+  }
+  sealed trait NodeLike extends Element {
+    def id: String
+    var enabled: Boolean
+    def enable(): this.type
+    def disable(): this.type
+  }
+  trait Node[+C <: Component] extends NodeLike {
+    def create(window: Frame): C
+  }
+  object Line extends Element {
+    def create(w: Frame) = new swing.Separator
+    def destroy(w: Frame) {}
+  }
 
-object MenuItem {
-  def apply(id: String, action: Action): MenuItem = Impl.itemApply(id, action)
-  def apply(id: String)(attr: Attributes)(action: => Unit): MenuItem =
-    Impl.itemApply(id)(attr)(action)
+  object Item {
+    def apply(id: String, action: Action): Item = Impl.itemApply(id, action)
+    def apply(id: String)(attr: Attributes)(action: => Unit): Item =
+      Impl.itemApply(id)(attr)(action)
 
-  def apply(id: String, attr: Attributes): MenuItem = Impl.itemApply(id, attr)
+    def apply(id: String, attr: Attributes): Item = Impl.itemApply(id, attr)
 
-  object Attributes {
-    implicit final class TextOnly(val text: String) extends Attributes {
-      def keyStroke   = None
+    object Attributes {
+      implicit final class TextOnly(val text: String) extends Attributes {
+        def keyStroke   = None
+      }
+      implicit final class TextAndKeyStroke(tup: (String, KeyStroke)) extends Attributes {
+        def text        = tup._1
+        def keyStroke   = Some(tup._2)
+      }
     }
-    implicit final class TextAndKeyStroke(tup: (String, KeyStroke)) extends Attributes {
-      def text        = tup._1
-      def keyStroke   = Some(tup._2)
+    sealed trait Attributes {
+      def text: String
+      def keyStroke: Option[KeyStroke]
     }
   }
-  sealed trait Attributes {
-    def text: String
-    def keyStroke: Option[KeyStroke]
+  trait ItemLike[+C <: swing.MenuItem] extends Node[C] {
+    def action: Action
+    def setAction(window: Frame, action: Action): Unit
+    def setAction(window: Frame)(body: => Unit): Unit
+    def clearAction(window: Frame): Unit
   }
-}
-trait MenuItemLike[+C <: swing.MenuItem] extends MenuNode[C] {
-  def action: Action
-  def setAction(window: Frame, action: Action): Unit
-  def setAction(window: Frame)(body: => Unit): Unit
-  def clearAction(window: Frame): Unit
-}
-trait MenuItem extends MenuItemLike[swing.MenuItem]
+  trait Item extends ItemLike[swing.MenuItem]
 
-object MenuGroup {
-  def apply(id: String, action: Action): MenuGroup = Impl.groupApply(id, action)
-  def apply(id: String)(text: String)(action: => Unit): MenuGroup = Impl.groupApply(id)(text)(action)
-  def apply(id: String, text: String): MenuGroup = Impl.groupApply(id, text)
-}
-trait MenuGroupLike[+C <: Component with swing.SequentialContainer] extends MenuNode[C]{
-  def add(w: Option[Frame], n: MenuNodeLike): this.type
-  def add(n: MenuNodeLike): this.type
-}
-trait MenuGroup extends MenuGroupLike[swing.Menu] with MenuItemLike[swing.Menu]
+  object Group {
+    def apply(id: String, action: Action): Group = Impl.groupApply(id, action)
+    def apply(id: String)(text: String)(action: => Unit): Group = Impl.groupApply(id)(text)(action)
+    def apply(id: String, text: String): Group = Impl.groupApply(id, text)
+  }
+  trait GroupLike[+C <: Component with swing.SequentialContainer] extends Node[C]{
+    def add(w: Option[Frame], elem: Element): this.type
+    def add(elem: Element): this.type
+  }
+  trait Group extends GroupLike[swing.Menu] with ItemLike[swing.Menu] {
+    def addLine(): this.type
+  }
 
-object MenuRoot {
-  def apply(): MenuRoot = Impl.rootApply()
+  object Root {
+    def apply(): Root = Impl.rootApply()
+  }
+  trait Root extends GroupLike[swing.MenuBar]
 }
-trait MenuRoot extends MenuGroupLike[swing.MenuBar]
 
 //public class MenuGroup
 //extends MenuItem // implements MenuNode

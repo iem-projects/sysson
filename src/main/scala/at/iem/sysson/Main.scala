@@ -25,6 +25,12 @@ object Main extends App with Runnable {
     ncview.dump(on = true)
     ncview.start()
 
-    if (useGUI) Swing.onEDT(gui.GUI.init())
+    if (useGUI) {
+      // this is just for simple IDEA run configurations.
+      // the app-bundle will have these already
+      sys.props("com.apple.mrj.application.apple.menu.about.name")  = name
+      sys.props("apple.laf.useScreenMenuBar")                       = "true"
+      Swing.onEDT(gui.GUI.init())
+    }
   }
 }
