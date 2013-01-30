@@ -23,6 +23,12 @@ private[gui] object DocumentViewHandlerImpl {
       getView(doc).getOrElse {
         val view = DocumentViewImpl(doc)
         map += doc -> view
+        doc.addListener {
+          case Document.Closed(_) => GUI.defer {
+            view.dispose()
+            map -= doc
+          }
+        }
         view
       }
     }

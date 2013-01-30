@@ -6,22 +6,24 @@ import swing.{ScrollPane, Orientation, BoxPanel, Table, Component, Frame}
 import de.sciss.swingtree.tree.{Tree, ExternalTreeModel}
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
-import javax.swing.JTree
+import javax.swing.{WindowConstants, JTree}
 import de.sciss.swingtree.event.TreeNodeSelected
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
 import de.sciss.audiowidgets.Transport
-import swing.event.TableRowsSelected
+import swing.event.{WindowClosing, TableRowsSelected}
 import sound.AudioSystem
 import java.io.File
 import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFileSpec, AudioFile}
 import de.sciss.synth
 
-object DocumentViewImpl {
+private[impl] object DocumentViewImpl {
   import Implicits._
 
-  def apply(doc: Document): DocumentView = new Impl(doc)
+  def apply(doc: Document): DocumentView with Disposable = new Impl(doc)
+
+  trait Disposable { def dispose(): Unit }
 
   private final class GroupModel(root: nc2.Group)
     extends ExternalTreeModel[nc2.Group](root :: Nil, _.children) {
@@ -106,7 +108,7 @@ object DocumentViewImpl {
   }
 
   private final class Impl(val document: Document)
-    extends DocumentView {
+    extends DocumentView with Disposable {
 
     private var _selVar = Option.empty[nc2.Variable]
     private val mGroups = new GroupModel(document.data.rootGroup)
@@ -186,9 +188,26 @@ object DocumentViewImpl {
     val f = new Frame {
       title     = document.path
       contents  = component
-      centerOnScreen()
+      peer.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
+      listenTo(this)
+      reactions += {
+        case WindowClosing(_) =>
+           // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
+          document.close()
+      }
+      menuBar   = {
+        val r = MenuFactory.root
+//        r("file")("close").actionFor(this) { ... }
+        r.create(this)
+      }
       pack()
+      centerOnScreen()
       open()
+    }
+
+    def dispose() {
+      MenuFactory.root.destroy(f)
+      f.dispose()
     }
 
     private def groupSelected(g: nc2.Group) {
