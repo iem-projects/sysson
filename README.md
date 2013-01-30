@@ -46,4 +46,4 @@ A fresh IDEA project is setup by running the following command in the terminal: 
 
 ## Getting Started
 
-__TODO__: ... ... XXX
+__TODO__: ... ... XXX YYY
