@@ -11,6 +11,8 @@ import de.sciss.swingtree.event.TreeNodeSelected
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
+import de.sciss.audiowidgets.Transport
+import swing.event.TableRowsSelected
 
 object DocumentViewImpl {
   import Implicits._
@@ -124,18 +126,56 @@ object DocumentViewImpl {
       res
     }
 
-    private val tGroupVars = {
-      val res                     = new Table()
-      res.selection.intervalMode  = Table.IntervalMode.Single
-      res.model                   = mGroupVars
-      res
+    private val tGroupVars = new Table() {
+      selection.intervalMode  = Table.IntervalMode.Single
+      model                   = mGroupVars
+      listenTo(selection)
+      reactions += {
+        case TableRowsSelected(_, range, adjusting) if !adjusting =>
+          val vro   = if (range.isEmpty) None else {
+            val data  = mGroupVars.data
+//            val row   = range.end // weird scala-swing convention! screw the range, let's use the leadIndex instead
+            val row = selection.rows.leadIndex
+//            println("IDX =" + row)
+            if (row >= 0 && data.size > row) Some(data(row)) else None
+          }
+          deafTo(selection) // avoid feedback
+          try {
+//            println("SELECTING" + vro.map(_.name))
+            selectedVariable = vro
+          } finally {
+            listenTo(selection)
+          }
+      }
+    }
+
+    private val transport = Transport.makeButtonStrip {
+      import Transport._
+      Seq(
+        GoToBegin {
+          println("Go-to-begin")
+        },
+        Rewind {
+          println("Rewind")
+        },
+        Stop {
+          println("Stop")
+        },
+        Play {
+          play()
+        },
+        FastForward {
+          println("Fast-forward")
+        }
+      )
     }
 
     val component = new BoxPanel(Orientation.Vertical) {
       contents ++= Seq(
         new ScrollPane(tGroups),
         new ScrollPane(tGroupAttrs),
-        new ScrollPane(tGroupVars)
+        new ScrollPane(tGroupVars),
+        transport
       )
     }
 
@@ -181,16 +221,21 @@ object DocumentViewImpl {
     def selectedVariable_=(opt: Option[nc2.Variable]) {
       GUI.requireEDT()
       _selVar = opt
+      val sel = tGroupVars.selection.rows
       opt match {
         case Some(vr) =>
           vr.group.foreach(selectGroup)
           val row = mGroupVars.data.indexOf(vr)
-          if (row >= 0) {
-            tGroupVars.selection.rows += row
-          }
+          if (row >= 0 && sel.leadIndex != row) sel += row
 
         case None =>
-          tGroupVars.selection.rows.clear()
+          if (sel.size != 0) sel.clear()
+      }
+    }
+
+    private def play() {
+      selectedVariable.foreach { vr =>
+        println("rank =" + vr.rank)
       }
     }
   }
