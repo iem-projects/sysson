@@ -6,24 +6,38 @@ package impl
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import collection.breakOut
 import prefuse.{Visualization, Display}
-import swing.{Action, Component, Frame}
+import swing.{BorderPanel, Action, Component, Frame}
 import javax.swing.{JTextField, JComponent}
 import gui.GUI
-import java.awt.event.{ActionEvent, ActionListener, MouseEvent, MouseMotionAdapter, KeyEvent}
-import prefuse.util.display.PaintListener
-import java.awt.{GraphicsEnvironment, Font, Rectangle, BasicStroke, Color, Shape, Graphics2D}
+import java.awt.event.{ActionEvent, ActionListener, MouseEvent, KeyEvent}
+import java.awt.{RenderingHints, Cursor, Point, Toolkit, GraphicsEnvironment, Font, Rectangle, BasicStroke, Color, Shape, Graphics2D}
 import prefuse.data.Graph
-import prefuse.controls.{ZoomControl, ZoomingPanControl, PanControl, DragControl, ControlAdapter}
+import prefuse.controls.{ControlAdapter, ZoomControl, PanControl}
 import javax.swing.event.{DocumentEvent, DocumentListener, MouseInputAdapter}
-import java.awt.geom.{Rectangle2D, Point2D}
-import prefuse.action.{RepaintAction, ActionList}
-import prefuse.render.{Renderer, AbstractShapeRenderer, LabelRenderer, DefaultRendererFactory}
+import java.awt.geom.{Area, Ellipse2D, Rectangle2D, Point2D}
+import prefuse.render.{Renderer, AbstractShapeRenderer, DefaultRendererFactory}
 import prefuse.util.ColorLib
 import prefuse.visual.VisualItem
-import javax.swing.text.JTextComponent
+import de.sciss.audiowidgets.Transport
+import java.awt.image.BufferedImage
 
 object DesignerViewImpl {
   def apply(): DesignerView = new Impl
+
+  object Port {
+    final case class In(idx: Int) extends Port {
+      def visualRect(ports: VisualPorts)  = ports.inlets(idx)
+      def name(elem: GraphElem)           = elem.spec.inputs(idx).name
+    }
+    final case class Out(idx: Int) extends Port {
+      def visualRect(ports: VisualPorts)  = ports.outlets(idx)
+      def name(elem: GraphElem)           = elem.spec.outputs(idx)
+    }
+  }
+  sealed trait Port {
+    def visualRect(ports: VisualPorts): Rectangle2D
+    def name(elem: GraphElem): String
+  }
 
   object Input {
     sealed trait Type
@@ -34,13 +48,17 @@ object DesignerViewImpl {
   sealed trait Input
 
   object GraphElem {
-    final case class Spec(name: String, inputs: IIdxSeq[Input.Spec]) {
-      def mkInputSlots: IIdxSeq[Option[Input]] = inputs.map(_.default)
+    final case class Spec(name: String, inputs: IIdxSeq[Input.Spec], outputs: IIdxSeq[String] = IIdxSeq("out")) {
+      def numIns  = inputs.size
+      def numOuts = outputs.size
+      def mkInputSlots:  IIdxSeq[Option[Input]]             = inputs.map(_.default)
+      def mkOutputSlots: IIdxSeq[Option[(GraphElem, Int)]]  = IIdxSeq.fill(numOuts)(None)
     }
   }
   final class GraphElem(val spec: GraphElem.Spec) extends Input {
-    def name        = spec.name
-    var inputElems  = spec.mkInputSlots
+    def name                                        = spec.name
+    var inputs: IIdxSeq[Option[Input]]              = spec.mkInputSlots
+    var outputs: IIdxSeq[Option[(GraphElem, Int)]]  = spec.mkOutputSlots
   }
 
   final case class Constant(values: IIdxSeq[Float]) extends Input
@@ -84,14 +102,44 @@ object DesignerViewImpl {
 //  private sealed trait Mode
 
   private final val GROUP_GRAPH   = "graph"
-  private final val GROUP_NODES   = "graph.nodes"
-  private final val GROUP_EDGES   = "graph.edges"
+//  private final val GROUP_NODES   = "graph.nodes"
+//  private final val GROUP_EDGES   = "graph.edges"
   private final val COL_ELEM      = "element"
+  private final val COL_PORTS     = "ports"
 
   private final val MIN_BOX_WIDTH = 24
   private final val BOX_HEIGHT    = 18
 
-  private final val ACTION_REPAINT  = "repaint"
+  final class VisualPorts(numIns: Int, numOuts: Int) {
+    val inlets  = IIdxSeq.fill(numIns )(new Rectangle2D.Float)
+    val outlets = IIdxSeq.fill(numOuts)(new Rectangle2D.Float)
+    var active  = Option.empty[Port]
+
+    def update(bounds: Rectangle2D) {
+//      val x       = bounds.getX.toFloat
+//      val y       = bounds.getY.toFloat
+      val x       = 0f
+      val y       = 0f
+      val w       = bounds.getWidth.toFloat
+      val h       = bounds.getHeight.toFloat
+      val wm      = w - 7
+      if (numIns > 0) {
+        val xf = if (numIns > 1) wm / (numIns - 1) else 0f
+        var i = 0; while (i < numIns) {
+          inlets(i).setRect(x + i * xf, y, 8, 3)
+        i += 1 }
+      }
+      if (numOuts > 0) {
+        val xf = if (numOuts > 1) wm / (numOuts - 1) else 0f
+        val y2 = y + h - 2 /* 3 */
+        var i = 0; while (i < numOuts) {
+          outlets(i).setRect(x + i * xf, y2, 8, 3)
+        i += 1 }
+      }
+    }
+  }
+
+//  private final val ACTION_REPAINT  = "repaint"
 
 //  private object TextEditor extends JTextField() {
 //    setBorder(null)
@@ -103,7 +151,7 @@ object DesignerViewImpl {
 //    })
 //  }
 
-  private val font = {
+  val font = {
     val fntNames  = GraphicsEnvironment.getLocalGraphicsEnvironment.getAvailableFontFamilyNames
     val fntMenlo  = "Menlo"
     val name      = if (fntNames.contains(fntMenlo)) {
@@ -114,6 +162,22 @@ object DesignerViewImpl {
     new Font(name, Font.PLAIN, 11)
   }
 
+  val csrPatch = {
+    val img = new BufferedImage(17, 17, BufferedImage.TYPE_INT_ARGB)
+    val g   = img.createGraphics()
+    val shp1 =    new Area(new Ellipse2D.Float(0, 0, 17, 17))
+    shp1.subtract(new Area(new Ellipse2D.Float(5, 5,  7,  7)))
+    val shp2 =    new Area(new Ellipse2D.Float(1, 1, 15, 15))
+    shp2.subtract(new Area(new Ellipse2D.Float(4, 4,  9,  9)))
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+    g.setColor(Color.white)
+    g.fill(shp1)
+    g.setColor(Color.black)
+    g.fill(shp2)
+    g.dispose()
+    Toolkit.getDefaultToolkit.createCustomCursor(img, new Point(8, 8), "patch")
+  }
+
   private final class Impl extends DesignerView {
 //    private var mode: Mode = Mode.Select
 
@@ -121,16 +185,19 @@ object DesignerViewImpl {
     var editingOldText  = ""
 
     private object BoxRenderer extends AbstractShapeRenderer {
-      private val r = new Rectangle2D.Float()
+      private val r   = new Rectangle2D.Float()
+      private val r2  = new Rectangle2D.Float()
 
+      val colrSel     = ColorLib.getColor(  0,   0, 240)
       val strkColrOk  = ColorLib.getColor(192, 192, 192)
-      val strkColrEdit= ColorLib.getColor(  0,   0, 240)
+      val strkColrEdit= colrSel
       val strkColrErr = ColorLib.getColor(240,   0,   0)
       val fillColr    = ColorLib.getColor(246, 248, 248)
       val textColrEdit= strkColrEdit
       val textColr    = Color.black
       val strkShpOk   = new BasicStroke(1f)
       val strkShpPend = new BasicStroke(1f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array[Float](6, 4), 0f)
+      val portColr    = ColorLib.getColor( 80,  80, 128)
 
       protected def getRawShape(vi: VisualItem): Shape = {
         var x    = vi.getX
@@ -174,8 +241,32 @@ object DesignerViewImpl {
               g.setColor(textColr)
           }
           g.setFont(font)
-          val fm = Renderer.DEFAULT_GRAPHICS.getFontMetrics(font)
-          g.drawString(data.name, b.getX.toFloat + 3, b.getY.toFloat + 2 + fm.getAscent)
+          val fm  = Renderer.DEFAULT_GRAPHICS.getFontMetrics(font)
+          val x   = b.getX.toFloat
+          val y   = b.getY.toFloat
+          g.drawString(data.name, x + 3, y + 2 + fm.getAscent)
+
+          data match {
+            case vge: VisualGraphElem =>
+              vge.content.foreach { ge =>
+                getPorts(vi).foreach { ports =>
+                  val atOrig = g.getTransform
+                  g.translate(x, y)
+                  g.setColor(portColr)
+                  ports.inlets .foreach(g.fill(_))
+                  ports.outlets.foreach(g.fill(_))
+                  ports.active.foreach { p =>
+                    val r = p.visualRect(ports)
+                    g.setColor(colrSel)
+                    r2.setRect(r.getX - 1, r.getY - 1, r.getWidth + 2, r.getHeight + 2)
+                    g.fill(r2)
+                  }
+                  g.setTransform(atOrig)
+                }
+              }
+            case vc: VisualConstant =>
+
+          }
         }
       }
     }
@@ -196,6 +287,7 @@ object DesignerViewImpl {
     val g   = new Graph
     g.addColumn(COL_ELEM, classOf[VisualElement])
     val vg  = vis.addGraph(GROUP_GRAPH, g)
+    vg.addColumn(COL_PORTS, classOf[VisualPorts])
 
 //    disp.addPaintListener(new PaintListener {
 //      def prePaint(p1: Display, p2: Graphics2D) {
@@ -211,38 +303,185 @@ object DesignerViewImpl {
 //
 //    })
 
-    private val mousePoint = new Point2D.Float()
+//    // ControlAdapter branches into all sorts
+//    // of methods when mouse is over visual item,
+//    // so a plain mouse listener is more useful here
+//    val mouseCoordListener = new MouseInputAdapter {
+//      override def mouseDragged(e: MouseEvent) {
+//        reportMouse(e)
+//      }
+//      override def mouseMoved(e: MouseEvent) {
+//        reportMouse(e)
+//      }
+//      override def mouseEntered(e: MouseEvent) {
+//        reportMouse(e)
+//      }
+//    }
 
-    def reportMouse(e: MouseEvent) {
-      val at = disp.getInverseTransform
-      at.transform(e.getPoint, mousePoint)
-//println(s"mouse screen ${e.getPoint} - virt ${mousePoint}")
-    }
-
-    // ControlAdapter branches into all sorts
-    // of methods when mouse is over visual item,
-    // so a plain mouse listener is more useful here
-    val mouseCoordListener = new MouseInputAdapter {
-      override def mouseDragged(e: MouseEvent) {
-        reportMouse(e)
-      }
-      override def mouseMoved(e: MouseEvent) {
-        reportMouse(e)
-      }
-      override def mouseEntered(e: MouseEvent) {
-        reportMouse(e)
-      }
-    }
-
-    disp.addMouseListener(mouseCoordListener)
-    disp.addMouseMotionListener(mouseCoordListener)
-    disp.addControlListener(new DragControl())
+//    disp.addMouseListener(mouseCoordListener)
+//    disp.addMouseMotionListener(mouseCoordListener)
+    disp.addControlListener(DragControl)
+//    disp.addControlListener(new DragControl())
 //    disp.addControlListener(new ZoomingPanControl())
     disp.addControlListener(new PanControl())
     disp.addControlListener(new ZoomControl())
 //    disp.setTextEditor(TextEditor)
 
-    def getData(vi: VisualItem): Option[VisualElement] = Option(vi.get(COL_ELEM).asInstanceOf[VisualElement])
+    // TODO: add TableListener to react to items disappearing (see original DragControl)
+    object DragControl extends ControlAdapter {
+      val mousePoint = new Point2D.Float()  // in virtual space
+      private var activeItem  = Option.empty[VisualItem]
+      private var activePort  = Option.empty[Port]
+
+      def reportMouse(e: MouseEvent) {
+        val at = disp.getInverseTransform
+        at.transform(e.getPoint, mousePoint)
+  //println(s"mouse screen ${e.getPoint} - virt ${mousePoint}")
+      }
+
+      private def findPort(seq: IIdxSeq[Rectangle2D], tx: Double, ty: Double): Int = seq.indexWhere { r =>
+        r.getMinX - 1 <= tx && r.getMaxX >= tx && r.getMinY - 1 <= ty && r.getMaxY >= ty
+      }
+
+      def processMove(vi: VisualItem, e: MouseEvent) {
+        reportMouse(e)
+        getPorts(vi).foreach { ports =>
+          val b     = vi.getBounds
+          val tx    = mousePoint.getX - b.getX
+          val ty    = mousePoint.getY - b.getY
+//          val idxIn = findPort(ports.inlets, tx, ty)
+          activePort = /* if (idxIn >= 0) Some(Port.In(idxIn)) else */ {
+            val idxOut = findPort(ports.outlets, tx, ty)
+            if (idxOut >= 0) Some(Port.Out(idxOut)) else None
+          }
+          if (ports.active != activePort) {
+            ports.active = activePort
+//println("SET " + ports.active)
+            vi.setValidated(false)  // force repaint
+            vis.repaint()
+          }
+        }
+      }
+
+      def updateCursor() {
+        disp.setCursor(if (activePort.isDefined) csrPatch else Cursor.getPredefinedCursor(Cursor.HAND_CURSOR))
+      }
+
+      override def itemEntered(vi: VisualItem, e: MouseEvent) {
+        activeItem = Some(vi)
+        processMove(vi, e)
+        updateCursor()
+      }
+
+      override def itemExited(vi: VisualItem, e: MouseEvent) {
+        activeItem  = None
+        if (activePort.isDefined) {
+          activePort  = None
+          getPorts(vi).foreach(_.active = None)
+          vis.repaint()
+        }
+        disp.setCursor(Cursor.getDefaultCursor)
+//        processMove(vi, e)
+      }
+
+      override def itemMoved(vi: VisualItem, e: MouseEvent) {
+        val hadPort = activePort.isDefined
+        processMove(vi, e)
+        if (activePort.isDefined != hadPort) updateCursor()
+      }
+
+//      /**
+//       * @see prefuse.controls.Control#itemPressed(prefuse.visual.VisualItem, java.awt.event.MouseEvent)
+//       */
+//      public void itemPressed(VisualItem item, MouseEvent e) {
+//          if (!SwingUtilities.isLeftMouseButton(e)) return;
+//          if ( !fixOnMouseOver ) {
+//              wasFixed = item.isFixed();
+//              resetItem = true;
+//              item.setFixed(true);
+//              item.getTable().addTableListener(this);
+//          }
+//          dragged = false;
+//          Display d = (Display)e.getComponent();
+//          d.getAbsoluteCoordinate(e.getPoint(), down);
+//      }
+//
+//      /**
+//       * @see prefuse.controls.Control#itemReleased(prefuse.visual.VisualItem, java.awt.event.MouseEvent)
+//       */
+//      public void itemReleased(VisualItem item, MouseEvent e) {
+//          if (!SwingUtilities.isLeftMouseButton(e)) return;
+//          if ( dragged ) {
+//              activeItem = null;
+//              item.getTable().removeTableListener(this);
+//              if ( resetItem ) item.setFixed(wasFixed);
+//              dragged = false;
+//          }
+//      }
+//
+//      /**
+//       * @see prefuse.controls.Control#itemDragged(prefuse.visual.VisualItem, java.awt.event.MouseEvent)
+//       */
+//      public void itemDragged(VisualItem item, MouseEvent e) {
+//          if (!SwingUtilities.isLeftMouseButton(e)) return;
+//          dragged = true;
+//          Display d = (Display)e.getComponent();
+//          d.getAbsoluteCoordinate(e.getPoint(), temp);
+//          double dx = temp.getX()-down.getX();
+//          double dy = temp.getY()-down.getY();
+//          double x = item.getX();
+//          double y = item.getY();
+//
+//          item.setStartX(x);  item.setStartY(y);
+//          item.setX(x+dx);    item.setY(y+dy);
+//          item.setEndX(x+dx); item.setEndY(y+dy);
+//
+//          if ( repaint )
+//              item.getVisualization().repaint();
+//
+//          down.setLocation(temp);
+//          if ( action != null )
+//              d.getVisualization().run(action);
+//      }
+
+      override def mouseEntered(e: MouseEvent) { reportMouse(e) }
+      override def mouseDragged(e: MouseEvent) { reportMouse(e) }
+      override def mouseMoved(  e: MouseEvent) { reportMouse(e) }
+    }
+
+    def getData( vi: VisualItem): Option[VisualElement] = Option(vi.get(COL_ELEM ).asInstanceOf[VisualElement])
+    def getPorts(vi: VisualItem): Option[VisualPorts  ] = Option(vi.get(COL_PORTS).asInstanceOf[VisualPorts  ])
+
+    def stopEditing() {
+      val txt = disp.getTextEditor.getText
+      disp.stopEditing()
+      editingNode.foreach { vi =>
+        editingNode = None
+        getData(vi).foreach { data =>
+          data.name = txt
+          data match {
+            case vge: VisualGraphElem =>
+              if (vge.name != editingOldText) {
+                Collection.map.get(vge.name) match {
+                  case Some(spec) =>
+                    vge.state   = ElementState.Ok
+                    vge.content = Some(new GraphElem(spec))
+                    vi.set(COL_PORTS, new VisualPorts(numIns = spec.numIns, numOuts = spec.numOuts))
+                  case _ =>
+                    vge.state   = ElementState.Error
+                    vge.content = None
+                    vi.set(COL_PORTS, null)
+                }
+                updateEditingBounds(vi)
+                vis.repaint()
+              }
+
+            case vc: VisualConstant =>
+
+          }
+        }
+      }
+    }
 
     disp.getTextEditor match {
       case tf: JTextField =>
@@ -270,17 +509,7 @@ object DesignerViewImpl {
         })
         tf.addActionListener(new ActionListener {
           def actionPerformed(e: ActionEvent) {
-            disp.stopEditing()
-            editingNode.foreach { vi =>
-              editingNode = None
-              getData(vi).foreach { data =>
-                data.name   = tf.getText
-                if (data.name != editingOldText) {
-                  data.state  = if (Collection.map.contains(data.name)) ElementState.Ok else ElementState.Error
-                  vis.repaint()
-                }
-              }
-            }
+            stopEditing()
           }
       })
     }
@@ -288,9 +517,39 @@ object DesignerViewImpl {
     val rf = new DefaultRendererFactory(BoxRenderer)
     vis.setRendererFactory(rf)
 
+    private val transport = Transport.makeButtonStrip {
+      import Transport._
+      Seq(
+        GoToBegin {
+          println("Go-to-begin")
+        },
+        Rewind {
+          println("Rewind")
+        },
+        Stop {
+          println("Stop")
+        },
+        Pause {
+          println("Pause")
+        },
+        Play {
+          println("Play")
+        },
+        FastForward {
+          println("Fast-forward")
+        },
+        Loop {
+          println("Loop")
+        }
+      )
+    }
+
     val frame = new Frame {
       title     = "Sound Designer"
-      contents  = Component.wrap(disp)
+      contents  = new BorderPanel {
+        add(Component.wrap(disp), BorderPanel.Position.Center)
+        add(transport, BorderPanel.Position.South)
+      }
       pack()
       centerOnScreen()
       open()
@@ -308,6 +567,7 @@ object DesignerViewImpl {
       r.y       += 1
       r.width   -= 5
       r.height  -= 2
+      getPorts(vi).foreach(_.update(b))
       r
     }
 
@@ -324,8 +584,9 @@ object DesignerViewImpl {
       val n   = g.addNode()
       n.set(COL_ELEM, new VisualGraphElem)
       val vi  = vis.getVisualItem(GROUP_GRAPH, n)
-      vi.setX(mousePoint.getX - 2)
-      vi.setY(mousePoint.getY - 2)
+      val mp  = DragControl.mousePoint
+      vi.setX(mp.getX - 2)
+      vi.setY(mp.getY - 2)
       editObject(vi)
       vis.repaint()
     }
