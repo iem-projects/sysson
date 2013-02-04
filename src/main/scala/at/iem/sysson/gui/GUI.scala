@@ -1,11 +1,17 @@
 package at.iem.sysson
 package gui
 
-import java.awt.EventQueue
+import java.awt.{Toolkit, EventQueue}
 import swing.Swing
+import javax.swing.KeyStroke
+import java.awt.event.InputEvent
 
 object GUI {
   private var isInitialized = false
+
+  def stroke(code: Int, modifiers: Int): KeyStroke = KeyStroke.getKeyStroke(code, modifiers)
+  lazy val meta  = Toolkit.getDefaultToolkit.getMenuShortcutKeyMask
+  lazy val shift = InputEvent.SHIFT_MASK
 
   def init() {
     requireEDT()

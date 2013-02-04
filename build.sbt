@@ -18,7 +18,8 @@ scalaVersion := "2.10.0"
 
 libraryDependencies ++= Seq(
   "de.sciss" %% "scalacolliderswing" % "1.3.1+",
-  "de.sciss" %% "swingtree" % "1.2.+"
+  "de.sciss" %% "swingtree" % "1.2.+",
+  "de.sciss" % "prefuse-core" % "0.21"
 )
 
 retrieveManaged := true

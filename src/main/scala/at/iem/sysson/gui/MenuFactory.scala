@@ -9,14 +9,11 @@ import ucar.nc2.NetcdfFile
 import util.control.NonFatal
 
 object MenuFactory {
-  private def stroke(code: Int, modifiers: Int): KeyStroke = KeyStroke.getKeyStroke(code, modifiers)
 
   def root: Menu.Root = _root
 
   private lazy val _root = {
-    val meta  = Toolkit.getDefaultToolkit.getMenuShortcutKeyMask
-    val shift = InputEvent.SHIFT_MASK
-
+    import GUI.{shift, meta, stroke}
     import Menu._
     import KeyEvent._
     Root().add(
@@ -36,6 +33,12 @@ object MenuFactory {
 //        Item("save", "Save" -> stroke(VK_S, meta))
 //      ).add(
 //        Item("save-as", "Save As..." -> stroke(VK_S, meta + shift))
+      )
+    ).add(
+      Group("tools", "Tools").add(
+        Item("designer")("Sound Designer..." -> stroke(VK_D, meta)) {
+          openSoundDesigner()
+        }
       )
     ).add(
       Group("window", "Window")
@@ -65,5 +68,9 @@ object MenuFactory {
 
     val f = new File(parent, name)
     DocumentHandler.instance.openRead(f.getPath)
+  }
+
+  def openSoundDesigner() {
+    sound.designer.DesignerView()
   }
 }
