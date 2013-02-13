@@ -3,6 +3,9 @@ package at.iem.sysson.sound.designer.impl
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import java.awt.geom.Rectangle2D
 
+private[impl] object VisualPorts {
+  final val minSpacing = 10
+}
 private[impl] final class VisualPorts(numIns: Int, numOuts: Int) {
   val inlets  = IIdxSeq.fill(numIns )(new Rectangle2D.Float)
   val outlets = IIdxSeq.fill(numOuts)(new Rectangle2D.Float)

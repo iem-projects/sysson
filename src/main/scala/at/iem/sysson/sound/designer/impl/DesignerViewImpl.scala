@@ -239,12 +239,12 @@ private[designer] object DesignerViewImpl {
       r
     }
 
-    private def editObject(vi: VisualItem) {
+    def editObject(vi: VisualItem) {
       getData(vi).foreach { data =>
         val r = updateEditingBounds(vi)
         editingNode     = Some(vi)
         editingOldText  = data.name
-        display.editText("", r)
+        display.editText(data.name, r)
       }
     }
 
@@ -265,4 +265,6 @@ private[impl] sealed trait DesignerViewImpl extends DesignerView {
   def visualization: Visualization
   def getData( vi: VisualItem): Option[VisualElement]
   def getPorts(vi: VisualItem): Option[VisualPorts  ]
+
+  def editObject(vi: VisualItem): Unit
 }

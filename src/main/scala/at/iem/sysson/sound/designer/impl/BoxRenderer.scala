@@ -35,8 +35,15 @@ private[impl] final class BoxRenderer(d: DesignerViewImpl) extends AbstractShape
 
     val w = d.getData(vi) match {
       case Some(data) =>
-        val fm    = Renderer.DEFAULT_GRAPHICS.getFontMetrics(Style.font)
-        math.max(MIN_BOX_WIDTH, fm.stringWidth(data.name) + 6)
+        val fm = Renderer.DEFAULT_GRAPHICS.getFontMetrics(Style.font)
+        val m1 = math.max(MIN_BOX_WIDTH, fm.stringWidth(data.name) + 6)
+        data match {
+          case VisualGraphElem(ge) =>
+            val m2 = math.max(ge.numIns,ge.numOuts) * VisualPorts.minSpacing
+            math.max(m2, m1)
+          case _ => m1
+        }
+
       case _ => MIN_BOX_WIDTH
     }
 

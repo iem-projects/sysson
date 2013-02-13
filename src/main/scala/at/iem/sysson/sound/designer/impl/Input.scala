@@ -10,6 +10,8 @@ private[impl] final class GraphElem(val spec: UGenSpec, val rate: MaybeRate) ext
     a.defaults.get(rate).map(v => ConstElem(Vector(v)))
   }
   var outputs: IIdxSeq[Option[(GraphElem, Int)]]  = IIdxSeq.fill(spec.outputs.size)(None)
+  def numIns  = inputs.size
+  def numOuts = outputs.size
 }
 private[impl] final case class ConstElem(values: IIdxSeq[UGenSpec.ArgumentValue]) extends Input
 
