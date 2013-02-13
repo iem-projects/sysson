@@ -3,48 +3,24 @@ package sound
 package designer
 package impl
 
-import collection.immutable.{IndexedSeq => IIdxSeq}
 import prefuse.{Visualization, Display}
 import swing.{BorderPanel, Action, Component, Frame}
 import javax.swing.{JTextField, JComponent}
 import gui.GUI
-import java.awt.event.{ActionEvent, ActionListener, MouseEvent, KeyEvent}
-import java.awt.{RenderingHints, Cursor, Point, Toolkit, GraphicsEnvironment, Font, Rectangle, BasicStroke, Color, Shape, Graphics2D}
+import java.awt.event.{ActionEvent, ActionListener, KeyEvent}
+import java.awt.Rectangle
 import prefuse.data.Graph
-import prefuse.controls.{ControlAdapter, ZoomControl, PanControl}
+import prefuse.controls.{ZoomControl, PanControl}
 import javax.swing.event.{DocumentEvent, DocumentListener}
-import java.awt.geom.{Area, Ellipse2D, Rectangle2D, Point2D}
-import prefuse.render.{Renderer, AbstractShapeRenderer, DefaultRendererFactory}
-import prefuse.util.ColorLib
+import prefuse.render.DefaultRendererFactory
 import prefuse.visual.VisualItem
 import de.sciss.audiowidgets.Transport
-import java.awt.image.BufferedImage
 import de.sciss.synth._
 
 private[designer] object DesignerViewImpl {
   def apply(): DesignerView = new View
 
-  private object ElementState {
-    case object Edit  extends ElementState
-    case object Error extends ElementState
-    case object Ok    extends ElementState
-  }
-  private sealed trait ElementState
-
-  private sealed trait VisualElement {
-    var name: String = ""
-    var state: ElementState = ElementState.Edit
-  }
-  private final class VisualGraphElem extends VisualElement {
-    var content = Option.empty[GraphElem]
-  }
-  private final class VisualConstant extends VisualElement {
-    var content = Option.empty[ConstElem]
-  }
-
-  private object Collection {
-    val map = UGenSpec.standardUGens
-  }
+  private val Collection = UGenSpec.standardUGens
 
   private final val GROUP_GRAPH   = "graph"
 //  private final val GROUP_NODES   = "graph.nodes"
@@ -52,112 +28,11 @@ private[designer] object DesignerViewImpl {
   private final val COL_ELEM      = "element"
   private final val COL_PORTS     = "ports"
 
-  private final val MIN_BOX_WIDTH = 24
-  private final val BOX_HEIGHT    = 18
-
-  private val font = {
-    val fntNames  = GraphicsEnvironment.getLocalGraphicsEnvironment.getAvailableFontFamilyNames
-    val fntMenlo  = "Menlo"
-    val name      = if (fntNames.contains(fntMenlo)) {
-      fntMenlo
-    } else {
-      Font.MONOSPACED
-    }
-    new Font(name, Font.PLAIN, 11)
-  }
-
   private final class View extends DesignerViewImpl {
 //    private var mode: Mode = Mode.Select
 
     private var editingNode     = Option.empty[VisualItem]
     private var editingOldText  = ""
-
-    private object BoxRenderer extends AbstractShapeRenderer {
-      private val r   = new Rectangle2D.Float()
-      private val r2  = new Rectangle2D.Float()
-
-      val colrSel     = ColorLib.getColor(  0,   0, 240)
-      val strkColrOk  = ColorLib.getColor(192, 192, 192)
-      val strkColrEdit= colrSel
-      val strkColrErr = ColorLib.getColor(240,   0,   0)
-      val fillColr    = ColorLib.getColor(246, 248, 248)
-      val textColrEdit= strkColrEdit
-      val textColr    = Color.black
-      val strkShpOk   = new BasicStroke(1f)
-      val strkShpPend = new BasicStroke(1f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array[Float](6, 4), 0f)
-      val portColr    = ColorLib.getColor( 80,  80, 128)
-
-      protected def getRawShape(vi: VisualItem): Shape = {
-        var x    = vi.getX
-        if (x.isNaN || x.isInfinity) x = 0.0
-        var y    = vi.getY
-        if (y.isNaN || y.isInfinity) y = 0.0
-
-        val w = getData(vi) match {
-          case Some(data) =>
-            val fm    = Renderer.DEFAULT_GRAPHICS.getFontMetrics(font)
-            math.max(MIN_BOX_WIDTH, fm.stringWidth(data.name) + 6)
-          case _ => MIN_BOX_WIDTH
-        }
-
-        r.setRect(x, y, w, BOX_HEIGHT)
-        r
-      }
-
-      override def render(g: Graphics2D, vi: VisualItem) {
-        getData(vi).foreach { data =>
-          val r = getShape(vi)
-          val b = r.getBounds2D
-          g.setColor(fillColr)
-          g.fill(r)
-          data.state match {
-            case ElementState.Ok =>
-              g.setColor(strkColrOk)
-              g.setStroke(strkShpOk)
-            case ElementState.Edit =>
-              g.setColor(strkColrEdit)
-              g.setStroke(strkShpPend)
-            case ElementState.Error =>
-              g.setColor(strkColrErr)
-              g.setStroke(strkShpPend)
-          }
-          g.draw(r)
-          data.state match {
-            case ElementState.Edit =>
-              g.setColor(textColrEdit)
-            case _ =>
-              g.setColor(textColr)
-          }
-          g.setFont(font)
-          val fm  = Renderer.DEFAULT_GRAPHICS.getFontMetrics(font)
-          val x   = b.getX.toFloat
-          val y   = b.getY.toFloat
-          g.drawString(data.name, x + 3, y + 2 + fm.getAscent)
-
-          data match {
-            case vge: VisualGraphElem =>
-              vge.content.foreach { ge =>
-                getPorts(vi).foreach { ports =>
-                  val atOrig = g.getTransform
-                  g.translate(x, y)
-                  g.setColor(portColr)
-                  ports.inlets .foreach(g.fill(_))
-                  ports.outlets.foreach(g.fill(_))
-                  ports.active.foreach { p =>
-                    val r = p.visualRect(ports)
-                    g.setColor(colrSel)
-                    r2.setRect(r.getX - 1, r.getY - 1, r.getWidth + 2, r.getHeight + 2)
-                    g.fill(r2)
-                  }
-                  g.setTransform(atOrig)
-                }
-              }
-            case vc: VisualConstant =>
-
-          }
-        }
-      }
-    }
 
     private val dragControl = new DragControl(this)
     val visualization = new Visualization
@@ -255,7 +130,7 @@ private[designer] object DesignerViewImpl {
                 } else {
                   n -> UndefinedRate
                 }
-                Collection.map.get(name) match {
+                Collection.get(name) match {
                   case Some(spec) =>
                     vge.state   = ElementState.Ok
                     vge.content = Some(new GraphElem(spec, rate))
@@ -278,9 +153,9 @@ private[designer] object DesignerViewImpl {
 
     display.getTextEditor match {
       case tf: JTextField =>
-        tf.setFont(font)
-        tf.setForeground(BoxRenderer.strkColrEdit)
-        tf.setBackground(BoxRenderer.fillColr)
+        tf.setFont(Style.font)
+        tf.setForeground(Style.selectionColor)
+        tf.setBackground(Style.boxColor)
         tf.getDocument.addDocumentListener(new DocumentListener {
           def refreshBox() {
             editingNode.foreach { vi =>
@@ -307,7 +182,7 @@ private[designer] object DesignerViewImpl {
       })
     }
 
-    private val rf = new DefaultRendererFactory(BoxRenderer)
+    private val rf = new DefaultRendererFactory(new BoxRenderer(this))
     visualization.setRendererFactory(rf)
 
     private val transport = Transport.makeButtonStrip {
@@ -388,5 +263,6 @@ private[designer] object DesignerViewImpl {
 private[impl] sealed trait DesignerViewImpl extends DesignerView {
   def display: Display
   def visualization: Visualization
+  def getData( vi: VisualItem): Option[VisualElement]
   def getPorts(vi: VisualItem): Option[VisualPorts  ]
 }
