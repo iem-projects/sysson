@@ -2,12 +2,14 @@ package at.iem.sysson.sound.designer.impl
 
 import java.awt.event.MouseEvent
 import prefuse.controls.ControlAdapter
-import java.awt.geom.{Ellipse2D, Area, Rectangle2D, Point2D}
+import java.awt.geom.{Line2D, Ellipse2D, Area, Rectangle2D, Point2D}
 import prefuse.visual.VisualItem
 import collection.immutable.{IndexedSeq => IIdxSeq}
-import java.awt.{Point, Toolkit, Color, RenderingHints, Cursor}
+import java.awt.{BasicStroke, Graphics2D, Point, Toolkit, Color, RenderingHints, Cursor}
 import java.awt.image.BufferedImage
 import javax.swing.SwingUtilities
+import prefuse.util.display.PaintListener
+import prefuse.Display
 
 // TODO: add TableListener to react to items disappearing (see original DragControl)
 object DragControl {
@@ -26,6 +28,8 @@ object DragControl {
     g.dispose()
     Toolkit.getDefaultToolkit.createCustomCursor(img, new Point(8, 8), "patch")
   }
+
+  private val strkRubber = new BasicStroke(1.5f)
 }
 final class DragControl(d: DesignerViewImpl) extends ControlAdapter {
   import DragControl._
@@ -40,6 +44,64 @@ final class DragControl(d: DesignerViewImpl) extends ControlAdapter {
   private var dragPort    = Option.empty[Port]
 
   private val dragTemp    = new Point2D.Float
+
+  private object Rubberband extends PaintListener {
+    private val line    = new Line2D.Float
+//    private val tempPt1 = new Point2D.Float
+//    private val tempPt2 = new Point2D.Float
+
+    private var vi:     VisualItem  = _
+    private var ports:  VisualPorts = _
+    private var port:   Port        = _
+    private val pt                  = new Point2D.Float
+
+    def reset(vi: VisualItem, ports: VisualPorts, port: Port, pt: Point2D) {
+      this.vi     = vi
+      this.ports  = ports
+      this.port   = port
+
+      drag(pt)
+    }
+
+    def end() {
+      vi    = null
+      ports = null
+      port  = null
+      d.visualization.repaint()
+    }
+
+    def drag(pt: Point2D) {
+      this.pt.setLocation(pt)
+      d.visualization.repaint()
+    }
+
+    def prePaint(disp: Display, g: Graphics2D) {}
+
+    def postPaint(disp: Display, g: Graphics2D) {
+      if (vi == null) return
+
+      val b         = vi.getBounds
+      val r         = port.visualRect(ports)
+      val rx        = r.getCenterX + b.getX
+      val ry        = r.getCenterY + b.getY
+      val at        = disp.getTransform
+//      tempPt1.setLocation(rx, ry)
+//      at.transform(tempPt1, tempPt2)
+//      val rxt       = tempPt2.getX
+//      val ryt       = tempPt2.getY
+
+      line.setLine(rx, ry, pt.getX, pt.getY)
+      val lineO = strkRubber.createStrokedShape(line)
+      val shp = at.createTransformedShape(lineO)
+
+      g.setColor(Style.selectionColor)
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+//      g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
+      g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY)
+//      g.setStroke(strkRubber)
+      g.fill(shp)
+    }
+  }
 
   private def reportMouse(e: MouseEvent) {
     val at = d.display.getInverseTransform
@@ -119,14 +181,24 @@ final class DragControl(d: DesignerViewImpl) extends ControlAdapter {
   }
 
   override def itemReleased(vi: VisualItem, e: MouseEvent) {
-    if (!SwingUtilities.isLeftMouseButton(e) || !dragPressed) return
+    if (!dragPressed) return
+
+    if (dragPort.isDefined) {
+      dragPort = None
+      if (dragStarted) {
+        d.display.removePaintListener(Rubberband)
+        Rubberband.end()
+      }
+    }
 
     dragPressed = false
     dragStarted = false
+
+    processMove(vi, e)  // might unhighlight port
   }
 
   override def itemDragged(vi: VisualItem, e: MouseEvent ) {
-    if (!SwingUtilities.isLeftMouseButton(e) || !dragPressed) return
+    if (!dragPressed) return
 
     d.display.getAbsoluteCoordinate(e.getPoint, dragTemp)
     val dx  = dragTemp.getX - dragPoint.getX
@@ -137,23 +209,33 @@ final class DragControl(d: DesignerViewImpl) extends ControlAdapter {
       if (dist < 4) return
     }
 
-    if (dragPort.isDefined) return
+    dragPort match {
+      case Some(port) =>
+        if (!dragStarted) {
+          d.getPorts(vi).foreach { ports =>
+            Rubberband.reset(vi, ports, port, dragTemp)
+            d.display.addPaintListener(Rubberband)
+          }
+        } else {
+          Rubberband.drag(dragTemp)
+        }
 
-    val x   = vi.getX
-    val y   = vi.getY
+      case _ =>
+        val x   = vi.getX
+        val y   = vi.getY
 
-    vi.setStartX(x)
-    vi.setStartY(y)
-    vi.setX     (x + dx)
-    vi.setY     (y + dy)
-    vi.setEndX  (x + dx)
-    vi.setEndY  (y + dy)
+        vi.setStartX(x)
+        vi.setStartY(y)
+        vi.setX     (x + dx)
+        vi.setY     (y + dy)
+        vi.setEndX  (x + dx)
+        vi.setEndY  (y + dy)
 
-    vi.getVisualization.repaint()
+        vi.getVisualization.repaint()
+    }
 
     dragPoint.setLocation(dragTemp)
-//      if ( action != null )
-//          d.getVisualization.run(action)
+    dragStarted = true
   }
 
   override def mouseEntered(e: MouseEvent) { reportMouse(e) }
