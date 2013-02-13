@@ -17,9 +17,11 @@ licenses := Seq("GPL v2+" -> url("http://www.gnu.org/licenses/gpl-2.0.txt"))
 scalaVersion := "2.10.0"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "scalacolliderswing" % "1.3.1+",
+  "de.sciss" %% "scalacolliderswing" % "1.4.+",
   "de.sciss" %% "swingtree" % "1.2.+",
-  "de.sciss" % "prefuse-core" % "0.21"
+  "de.sciss" %  "prefuse-core" % "0.21",
+  "de.sciss" %  "scalacolliderugens-spec" % "1.4.+"
+//  "de.sciss" %% "scalacolliderugens-api" % "1.4.+"
 )
 
 retrieveManaged := true

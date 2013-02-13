@@ -4,7 +4,6 @@ package designer
 package impl
 
 import collection.immutable.{IndexedSeq => IIdxSeq}
-import collection.breakOut
 import prefuse.{Visualization, Display}
 import swing.{BorderPanel, Action, Component, Frame}
 import javax.swing.{JTextField, JComponent}
@@ -13,13 +12,14 @@ import java.awt.event.{ActionEvent, ActionListener, MouseEvent, KeyEvent}
 import java.awt.{RenderingHints, Cursor, Point, Toolkit, GraphicsEnvironment, Font, Rectangle, BasicStroke, Color, Shape, Graphics2D}
 import prefuse.data.Graph
 import prefuse.controls.{ControlAdapter, ZoomControl, PanControl}
-import javax.swing.event.{DocumentEvent, DocumentListener, MouseInputAdapter}
+import javax.swing.event.{DocumentEvent, DocumentListener}
 import java.awt.geom.{Area, Ellipse2D, Rectangle2D, Point2D}
 import prefuse.render.{Renderer, AbstractShapeRenderer, DefaultRendererFactory}
 import prefuse.util.ColorLib
 import prefuse.visual.VisualItem
 import de.sciss.audiowidgets.Transport
 import java.awt.image.BufferedImage
+import de.sciss.synth._
 
 object DesignerViewImpl {
   def apply(): DesignerView = new Impl
@@ -27,11 +27,11 @@ object DesignerViewImpl {
   object Port {
     final case class In(idx: Int) extends Port {
       def visualRect(ports: VisualPorts)  = ports.inlets(idx)
-      def name(elem: GraphElem)           = elem.spec.inputs(idx).name
+      def name(elem: GraphElem)           = elem.spec.args(idx).name
     }
     final case class Out(idx: Int) extends Port {
       def visualRect(ports: VisualPorts)  = ports.outlets(idx)
-      def name(elem: GraphElem)           = elem.spec.outputs(idx)
+      def name(elem: GraphElem)           = elem.spec.outputs(idx).name.getOrElse("out")
     }
   }
   sealed trait Port {
@@ -39,29 +39,31 @@ object DesignerViewImpl {
     def name(elem: GraphElem): String
   }
 
-  object Input {
-    sealed trait Type
-    case object GraphElem extends Type
-
-    final case class Spec(name: String, tpe: Type = GraphElem, default: Option[Constant] = None)
-  }
+//  object Input {
+//    sealed trait Type
+//    case object GraphElem extends Type
+//
+//    final case class Spec(name: String, tpe: Type = GraphElem, default: Option[Constant] = None)
+//  }
   sealed trait Input
-
-  object GraphElem {
-    final case class Spec(name: String, inputs: IIdxSeq[Input.Spec], outputs: IIdxSeq[String] = IIdxSeq("out")) {
-      def numIns  = inputs.size
-      def numOuts = outputs.size
-      def mkInputSlots:  IIdxSeq[Option[Input]]             = inputs.map(_.default)
-      def mkOutputSlots: IIdxSeq[Option[(GraphElem, Int)]]  = IIdxSeq.fill(numOuts)(None)
-    }
-  }
-  final class GraphElem(val spec: GraphElem.Spec) extends Input {
+//
+//  object GraphElem {
+//    final case class Spec(name: String, inputs: IIdxSeq[Input.Spec], outputs: IIdxSeq[String] = IIdxSeq("out")) {
+//      def numIns  = inputs.size
+//      def numOuts = outputs.size
+//      def mkInputSlots:  IIdxSeq[Option[Input]]             = inputs.map(_.default)
+//      def mkOutputSlots: IIdxSeq[Option[(GraphElem, Int)]]  = IIdxSeq.fill(numOuts)(None)
+//    }
+//  }
+  final class GraphElem(val spec: UGenSpec, val rate: MaybeRate) extends Input {
     def name                                        = spec.name
-    var inputs: IIdxSeq[Option[Input]]              = spec.mkInputSlots
-    var outputs: IIdxSeq[Option[(GraphElem, Int)]]  = spec.mkOutputSlots
+    var inputs: IIdxSeq[Option[Input]]              = spec.args.map { a =>
+      a.defaults.get(rate).map(v => ConstElem(Vector(v)))
+    }
+    var outputs: IIdxSeq[Option[(GraphElem, Int)]]  = IIdxSeq.fill(spec.outputs.size)(None)
   }
 
-  final case class Constant(values: IIdxSeq[Float]) extends Input
+  final case class ConstElem(values: IIdxSeq[UGenSpec.ArgumentValue]) extends Input
 
   object ElementState {
     case object Edit  extends ElementState
@@ -78,20 +80,21 @@ object DesignerViewImpl {
     var content = Option.empty[GraphElem]
   }
   final class VisualConstant extends VisualElement {
-    var content = Option.empty[Constant]
+    var content = Option.empty[ConstElem]
   }
 
-  private implicit def mkCont(value: Float): Constant = Constant(IIdxSeq(value))
+//  private implicit def mkCont(value: Float): Constant = Constant(IIdxSeq(value))
 
   object Collection {
-    val all = IIdxSeq(
-      GraphElem.Spec("SinOsc", IIdxSeq(
-        Input.Spec("freq",  default = Some(440f)),
-        Input.Spec("phase", default = Some(  0f))
-      ))
-    )
+//    val all = IIdxSeq(
+//      GraphElem.Spec("SinOsc", IIdxSeq(
+//        Input.Spec("freq",  default = Some(440f)),
+//        Input.Spec("phase", default = Some(  0f))
+//      ))
+//    )
+    val map = UGenSpec.standardUGens
 
-    val map: Map[String, GraphElem.Spec] = all.map(e => e.name -> e)(breakOut)
+//    val map: Map[String, UGenSpec] = all.map(e => e.name -> e)(breakOut)
   }
 
 //  private object Mode {
@@ -462,11 +465,27 @@ object DesignerViewImpl {
           data match {
             case vge: VisualGraphElem =>
               if (vge.name != editingOldText) {
-                Collection.map.get(vge.name) match {
+                val n = vge.name
+                val i = n.indexOf('.')
+                val (name, rate) = if (i > 0) {
+                  val rOpt = PartialFunction.condOpt(n.substring(i + 1)) {
+                    case audio.methodName   => audio
+                    case control.methodName => control
+                    case scalar.methodName  => scalar
+                    case demand.methodName  => demand
+                  }
+                  rOpt match {
+                    case Some(r)  => n.substring(0, i) -> r
+                    case _        => "???" -> UndefinedRate
+                  }
+                } else {
+                  n -> UndefinedRate
+                }
+                Collection.map.get(name) match {
                   case Some(spec) =>
                     vge.state   = ElementState.Ok
-                    vge.content = Some(new GraphElem(spec))
-                    vi.set(COL_PORTS, new VisualPorts(numIns = spec.numIns, numOuts = spec.numOuts))
+                    vge.content = Some(new GraphElem(spec, rate))
+                    vi.set(COL_PORTS, new VisualPorts(numIns = spec.args.size, numOuts = spec.outputs.size))
                   case _ =>
                     vge.state   = ElementState.Error
                     vge.content = None
