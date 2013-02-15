@@ -25,6 +25,8 @@ The following examples assume that SysSon is launched in console mode: `sbt cons
     f.attributeMap("Title") // gets the attribute named "Title"
     f.variableMap("temp")   // gets the variable named "temp"
 
+```
+
 ## Dimensions
 
 ```scala
@@ -32,6 +34,8 @@ The following examples assume that SysSon is launched in console mode: `sbt cons
     val d1 = f.dimensionMap("lat")
     d1.name  // the dimension's name (optional)
     d1.size  // the dimension's size (number of samples in that dimension)
+
+```
 
 ## Attributes
 
@@ -43,6 +47,8 @@ The following examples assume that SysSon is launched in console mode: `sbt cons
     a1.size         // number of elements stored
     a1.data         // array of the attribute elements
 
+```
+
 ## Groups
 
 ```scala
@@ -51,6 +57,8 @@ The following examples assume that SysSon is launched in console mode: `sbt cons
     g1.name         // group's name
     g1.children     // vector of nested child groups within this group
     g1.parent       // parent group of which this group is a child (optional)
+
+```
 
 The group furthermore responds to the same method as the file, such as getting attributes (`attributes`, `attributeMap`), variables (`variables`, `variableMap`) and dimensions (`dimensions`, `dimensionMap`).
 
@@ -67,6 +75,8 @@ Variables describe an n-dimensional matrix of sampled data along with a name and
     v1.size          // total number of elements in the matrix, i.e. the product of the shape; e.g. `19440`
     v1.group         // group in which the variable resides (optional)
     v1.description   // textual description of the variable (optional)
+
+```
 
 The variable furthermore responds to the common methods `attributes`, `attributeMap`, `dimensions`, `dimensionMap`, e.g. `v1.attributeMap("missing_value")`.
 
@@ -87,6 +97,8 @@ Often you want to select sub-sections of the matrix, for example to reduce the d
     val sel3 = sel2 in "lat" select (10 to end)          // replaces previous selection
     val sel4 = sel3 in "lat" select (start to 4)         // replaces previous selection
 
+```
+
 Indices always start at zero. Ranges in the form of `(<start> to <end>)` are inclusive (end index is included), whereas ranges in the form of `(<start> until <end>)` are exclusive, as is standard in Scala's regular ranges.
 
 There are also strides, in the form of `(<start> to <end> by <step>)`. However, there seems to be currently a problem with the underlying `Section` type not supporting them properly.
@@ -104,6 +116,8 @@ The whole matrix of a variable may be read through `v1.read`. To read sub sectio
     arr2.shape                  // e.g. is now `10 x 18`
     val data = arr2.f1d         // force matrix into a 1-dimensional float vector
 
+```
+
 When using `f1d`, a multi-dimensional array is scanned along the order of its dimensions "breadth-first". For example, if the shape is `2 x 3 x 4`, the first two elements scan the first dimension where dimensions 2 and 3 are fixed at index 0, followed by the two elements in the first dimension where the second dimension is fixed at index 1 and the third dimension is fixed at index 0, etc.
 
 ## Sending Data via OSC
@@ -117,6 +131,8 @@ To quickly hook up SuperCollider, PD, or ChucK, bulk data can be sent via OSC. T
 
     val sel = f.variableMap("refr") in "time" select 0
     sel.send()
+
+```
 
 The format of the message sent:
 
