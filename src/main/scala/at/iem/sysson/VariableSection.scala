@@ -4,6 +4,7 @@ import ucar.{nc2, ma2}
 import collection.immutable.{IndexedSeq => IIdxSeq}
 
 import Implicits._
+import collection.JavaConversions
 
 object VariableSection {
   final class In(vs: VariableSection, dim: Int) {
@@ -15,10 +16,10 @@ object VariableSection {
     }
   }
 }
-final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange]) {
+final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange]) extends impl.VariableLike {
   def read(): ma2.Array = variable.read(toSection)
 
-  private def toSection: ma2.Section = {
+  private lazy val toSection: ma2.Section = {
     val sz      = section.size
     val origin  = new Array[Int](sz)
     val shape   = new Array[Int](sz)
@@ -32,6 +33,28 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
     i += 1}
     new ma2.Section(origin, shape)
   }
+
+  def ranges: IIdxSeq[ma2.Range] = {
+    import JavaConversions._
+    toSection.getRanges.toIndexedSeq
+  }
+
+  def size: Long = {
+    val sh = shape
+    var res = 1L
+    var i = 0; while (i < sh.size) {
+      res *= sh(i)
+    i += 1 }
+    res
+  }
+
+  def rank          = toSection.getRank
+  def shape         = toSection.getShape.toIndexedSeq
+
+  def name          = variable.name
+  def dataType      = variable.dataType
+  def dimensions    = variable.dimensions
+  def selectAll     = variable.selectAll
 
   def in(dim: String): VariableSection.In = {
     val idx = variable.findDimensionIndex(dim)

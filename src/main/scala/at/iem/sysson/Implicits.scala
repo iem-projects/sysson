@@ -18,10 +18,10 @@ object Implicits {
     def until(e: end.type): OpenRange = OpenRange.all
   }
 
-  implicit def sectionAll(v: nc2.Variable): VariableSection = {
-    val s = IIdxSeq.fill(v.rank)(all) // new ma2.Section(v.getShape)
-    new VariableSection(v, s)
-  }
+//  implicit def sectionAll(v: nc2.Variable): VariableSection = {
+//    val s = IIdxSeq.fill(v.rank)(all) // new ma2.Section(v.getShape)
+//    new VariableSection(v, s)
+//  }
 
   // important: use name distinct from `RichInt` which would otherwise shadow enrichments from ScalaCollider
   implicit class SyRichInt(i: Int) {
@@ -63,7 +63,9 @@ object Implicits {
     def group         = Option(peer.getGroup)
   }
 
-  implicit class RichVariable(peer: nc2.Variable) extends impl.HasDimensions with impl.HasAttributes {
+  implicit class RichVariable(peer: nc2.Variable)
+    extends impl.HasDimensions with impl.HasAttributes with impl.VariableLike{
+
     import JavaConversions._
     def fullName      = peer.getFullName
     def name          = peer.getShortName
@@ -76,6 +78,13 @@ object Implicits {
     def group         = Option(peer.getParentGroup)
     def dimensions    = peer.getDimensions.toIndexedSeq
     def ranges        = peer.getRanges.toIndexedSeq
+
+    def in(dim: String): VariableSection.In = selectAll.in(dim)
+
+    def selectAll: VariableSection = {
+      val s = IIdxSeq.fill(rank)(all)
+      new VariableSection(peer, s)
+    }
   }
 
   implicit class RichArray(peer: ma2.Array) {
@@ -83,8 +92,8 @@ object Implicits {
     def elementType   = peer.getElementType
     def rank          = peer.getRank
     def shape         = peer.getShape.toIndexedSeq
-    def f1d_force: IndexedSeq[Float] = float1d(force = true)
-    def f1d: IndexedSeq[Float] = float1d(force = false)
+//    def f1d_force: IndexedSeq[Float] = float1d(force = true)
+    def f1d: IndexedSeq[Float] = float1d(force = true)
 
     private def float1d(force: Boolean) = {
       require(peer.getElementType == classOf[Float], "Wrong element type (" + peer.getElementType + "); required: Float")

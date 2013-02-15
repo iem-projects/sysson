@@ -2,7 +2,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import swing.{ScrollPane, Orientation, BoxPanel, Table, Component, Frame}
+import swing.{ScrollPane, Orientation, BoxPanel, Table, Frame}
 import de.sciss.swingtree.tree.{Tree, ExternalTreeModel}
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
@@ -98,7 +98,7 @@ private[impl] object DocumentViewImpl {
         case 2 /* 3 */ => vr.dataType
         case 3 /* 4 */ => (vr.dimensions zip vr.shape) map {
           case (dim, sz) => dim.name match {
-            case Some(name) => s"${name}:${sz}"
+            case Some(name) => s"$name:$sz"
             case _ => sz.toString
           }
         } mkString ("[", ", ", "]")
@@ -268,7 +268,7 @@ private[impl] object DocumentViewImpl {
 //          }
 
           // just for testing purposes
-          val data1d    = vr.read.f1d_force
+          val data1d    = vr.read.f1d
           val dataLen   = data1d.size
           if (dataLen > 0) {
             val duration  = 5.0

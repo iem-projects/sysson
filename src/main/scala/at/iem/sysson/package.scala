@@ -1,12 +1,14 @@
 package at.iem
 
-import java.io.File
 import ucar.nc2
 import de.sciss.synth
 
 package object sysson {
   def defaultPath = "/Users/hhrutz/Desktop/IEM/SysSon/netcdf/data/RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc"
-  def openDefault() : nc2.NetcdfFile = nc2.NetcdfFile.open(defaultPath).setImmutable()
+  def openDefault() : nc2.NetcdfFile = open(defaultPath)
+
+  def open(path: String): nc2.NetcdfFile = nc2.NetcdfFile.open(path).setImmutable()
+
   def boot() {
     synth.Server.boot() {
       case _ => ()   // don't do anything specific now

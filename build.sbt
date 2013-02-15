@@ -35,6 +35,7 @@ import Implicits._
 import de.sciss.synth._
 import ugen._
 import Ops._
+import de.sciss.osc.Implicits._
 """
 
 // ---- build info source generator ----
