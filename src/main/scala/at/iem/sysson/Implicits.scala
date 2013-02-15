@@ -4,10 +4,11 @@ import ucar.{nc2, ma2}
 import collection.JavaConversions
 import de.sciss.synth
 import synth.ugen
+import collection.immutable.{IndexedSeq => IIdxSeq}
 
 object Implicits {
   final val all = OpenRange.all
-  final val at  = OpenRange.at
+//  final val at  = OpenRange.at
 
   object end    // used in expressions such as 1 to end
   object start {
@@ -18,10 +19,11 @@ object Implicits {
   }
 
   implicit def sectionAll(v: nc2.Variable): VariableSection = {
-    val s = new ma2.Section(v.getShape)
+    val s = IIdxSeq.fill(v.rank)(all) // new ma2.Section(v.getShape)
     new VariableSection(v, s)
   }
 
+  // important: use name distinct from `RichInt` which would otherwise shadow enrichments from ScalaCollider
   implicit class SyRichInt(i: Int) {
     def to   (e: end.type): OpenRange = OpenRange(startOption = Some(i), endOption = None, isInclusive = true)
     def until(e: end.type): OpenRange = OpenRange(startOption = Some(i), endOption = None, isInclusive = false)

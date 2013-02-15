@@ -14,6 +14,11 @@ object OpenRange {
 final case class OpenRange(startOption: Option[Int], endOption: Option[Int], isInclusive: Boolean, step: Int = 1) {
   def by(step: Int) = copy(step = step)
 
+  def isAll: Boolean = startOption.isEmpty && stopOption.isEmpty
+
+  /**
+   * The exclusive stop position, taking care of the `isInclusive` setting
+   */
   def stopOption = if (isInclusive) endOption.map(_ + 1) else endOption
 
   override def toString: String = {
