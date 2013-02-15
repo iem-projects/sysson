@@ -6,6 +6,27 @@ import de.sciss.synth
 import synth.ugen
 
 object Implicits {
+  final val all = OpenRange.all
+  final val at  = OpenRange.at
+
+  object end    // used in expressions such as 1 to end
+  object start {
+    def to   (idx: Int):    OpenRange = OpenRange(startOption = None, endOption = Some(idx), isInclusive = true)
+    def to   (e: end.type): OpenRange = OpenRange.all
+    def until(idx: Int):    OpenRange = OpenRange(startOption = None, endOption = Some(idx), isInclusive = false)
+    def until(e: end.type): OpenRange = OpenRange.all
+  }
+
+  implicit def sectionAll(v: nc2.Variable): VariableSection = {
+    val s = new ma2.Section(v.getShape)
+    new VariableSection(v, s)
+  }
+
+  implicit class SyRichInt(i: Int) {
+    def to   (e: end.type): OpenRange = OpenRange(startOption = Some(i), endOption = None, isInclusive = true)
+    def until(e: end.type): OpenRange = OpenRange(startOption = Some(i), endOption = None, isInclusive = false)
+  }
+
   implicit class RichNetcdfFile(peer: nc2.NetcdfFile)
     extends impl.HasDimensions with impl.HasAttributes with impl.HasVariables {
 

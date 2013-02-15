@@ -194,7 +194,7 @@ final class DragControl(d: DesignerViewImpl) extends ControlAdapter {
     dragPressed = false
     dragStarted = false
 
-    processMove(vi, e)  // might unhighlight port
+    processMove(vi, e)  // might un-highlight port
   }
 
   override def itemDragged(vi: VisualItem, e: MouseEvent ) {
