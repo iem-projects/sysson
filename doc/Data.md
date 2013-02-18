@@ -133,7 +133,7 @@ The format of the message sent:
     (Int) rank
     [ Dimension-Info ] * rank
     (Int) size
-    [ (Float) Matrix-Element ] * size
+    [ (Float) matrix-element ] * size
 
 Where `Dimension-Info` is defined as follows:
 
