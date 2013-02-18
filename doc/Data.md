@@ -143,6 +143,11 @@ Where `Dimension-Info` is defined as follows:
     (Int) range end-index in dimension (inclusive)
     (Int) range stride (or `1` if no stride is used)
 
+On the SuperCollider language side, you could await such a message as follows:
+
+    ~osc = OSCFunc({ arg msg, time, addr; msg.postln }, "/sysson_matrix");
+    ~osc.free;  // to stop listening
+
 To send arbitrary OSC messages:
 
     send("/test", "one", 2, 3.4)
