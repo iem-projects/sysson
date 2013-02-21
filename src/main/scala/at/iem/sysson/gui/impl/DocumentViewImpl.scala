@@ -296,7 +296,7 @@ private[impl] object DocumentViewImpl {
                     Line.kr(0, 0, dur = "dur".ir, doneAction = freeSelf)
                     Out.ar(0, Pan2.ar(sig))
                   }
-                  Buffer.cue(server, fTmp.getAbsolutePath, numChannels = 1, completion = action { b =>
+                  Buffer.cue(server, fTmp.getAbsolutePath, numChannels = 1, completion = { (b: Buffer) =>
                     val synth = df.play(server, Seq("buf" -> b.id, "speed" -> frameRate, "dur" -> duration))
                     synth.onEnd { b.close(b.freeMsg()) }
                   })

@@ -3,32 +3,37 @@ package sound
 package impl
 
 import de.sciss.synth
-import synth._
 import synth.impl.BasicUGenGraphBuilder
-import collection.immutable.{IndexedSeq => IIdxSeq}
+import synth._
 import ugen.ControlProxyLike
 
 private[impl] object UGenGraphBuilderImpl {
-   def apply(sonif: Sonification): UGenGraphBuilder = new Impl(sonif)
+   def apply(sonif: Sonification): (UGenGraph, Set[String]) = new Impl(sonif).build()
 
   private final class Impl(sonif: Sonification) extends BasicUGenGraphBuilder with UGenGraphBuilder {
-    builder =>
 
     override def toString = s"UGenGraphBuilder(${sonif.name})@" + hashCode.toHexString
 
-    var remaining:      IIdxSeq[Lazy]             = sonif.graph.sources
-    var controlProxies: Set[ControlProxyLike[_]]  = sonif.graph.controlProxies
-    var scanIns                                   = Map.empty[String, Int]
+    private def controlName(key: String): String = "$son_" + key
 
-    def addMatrixIn(key: String): Int = {
-      ???
-//      val res = aural.scanInNumChannels(timed, time, key)(tx)
-//      scanIns += key -> res
-//      res
+    private var usedMappings = Set.empty[String]
+
+    def addMatrixIn(m: MatrixIn): GE = {
+      import ugen._
+      val key       = m.key
+      val source    = sonif.mapping.getOrElse(key, throw Sonification.MissingInput(key))
+      val ctlName   = controlName(key)
+      usedMappings += key
+      source match {
+        case col @ ColumnSource(_) =>
+          BufRd.kr(numChannels = col.size, buf = ctlName.ir, index = 0, loop = 1, interp = 0)
+        case row @ RowSource(_) =>
+            ???
+      }
     }
 
-    def build() {
-      UGenGraph.use(this) {
+    def build(): (UGenGraph, Set[String]) = {
+      val ug = UGenGraph.use(this) {
         var g = sonif.graph
         var controlProxies = Set.empty[ControlProxyLike[_]]
         while (g.nonEmpty) {
@@ -37,6 +42,7 @@ private[impl] object UGenGraphBuilderImpl {
         }
         build(controlProxies)
       }
+      (ug, usedMappings)
     }
   }
 }
