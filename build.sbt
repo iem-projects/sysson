@@ -16,13 +16,14 @@ licenses := Seq("GPL v2+" -> url("http://www.gnu.org/licenses/gpl-2.0.txt"))
 
 scalaVersion := "2.10.0"
 
-libraryDependencies ++= Seq(
-  "de.sciss" %% "scalacolliderswing" % "1.4.+",
-  "de.sciss" %% "swingtree" % "1.2.+",
-  "de.sciss" %  "prefuse-core" % "0.21",
-  "de.sciss" %  "scalacolliderugens-spec" % "1.4.+"
-//  "de.sciss" %% "scalacolliderugens-api" % "1.4.+"
-)
+libraryDependencies ++= {
+  val sv = "1.5.+" // ScalaCollider
+  Seq(
+    "de.sciss" %% "scalacolliderswing" % sv,
+    "de.sciss" %% "swingtree" % "1.2.+",
+    "de.sciss" %  "scalacolliderugens-spec" % sv
+  )
+}
 
 retrieveManaged := true
 
@@ -36,6 +37,7 @@ import de.sciss.synth._
 import ugen._
 import Ops._
 import de.sciss.osc.Implicits._
+import concurrent.duration._
 """
 
 // ---- build info source generator ----

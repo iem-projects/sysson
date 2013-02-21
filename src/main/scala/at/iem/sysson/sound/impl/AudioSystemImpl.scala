@@ -6,7 +6,11 @@ import at.iem.sysson.impl.ModelImpl
 import de.sciss.synth
 
 object AudioSystemImpl {
-  lazy val instance: AudioSystem = new Impl
+  lazy val instance: AudioSystem = {
+    val i = new Impl
+    sys.addShutdownHook(i.stop())
+    i
+  }
 
   private final class Impl extends AudioSystem with ModelImpl[AudioSystem.Update] {
     override def toString = "AudioSystem"

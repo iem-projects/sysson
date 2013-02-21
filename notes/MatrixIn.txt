@@ -1,0 +1,29 @@
+:::: special graph elements ::::
+
+RowIn.ar(key = "freq")
+      dr
+      kr
+      ir
+
+ColumnIn.ar(key = "freq")
+         dr
+         kr
+
+MatrixIn.ar(key = "freq")
+         dr
+         kr
+
+:::: building ::::
+
+requires a special UGenGraphBuilder which administrates matrix inputs
+
+:::: wrapping ::::
+
+simple interface:
+
+Sonification {
+  var graph: SynthGraph
+  var matrices: Map[String, MatrixSpec]
+
+  def play(data: Map[String, MatrixSource]): Synth
+}
