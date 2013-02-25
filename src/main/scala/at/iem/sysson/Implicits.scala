@@ -80,6 +80,8 @@ object Implicits {
     def dimensions    = peer.getDimensions.toIndexedSeq
     def ranges        = peer.getRanges.toIndexedSeq
 
+    def read()        = peer.read()
+
     def in(dim: String): VariableSection.In = selectAll.in(dim)
 
     def selectAll: VariableSection = {
@@ -96,13 +98,31 @@ object Implicits {
 //    def f1d_force: IndexedSeq[Float] = float1d(force = true)
     def f1d: IndexedSeq[Float] = float1d(force = true)
 
+    private def requireFloat() {
+      require(peer.getElementType == classOf[Float], s"Wrong element type (${peer.getElementType}); required: Float")
+    }
+
     private def float1d(force: Boolean) = {
-      require(peer.getElementType == classOf[Float], "Wrong element type (" + peer.getElementType + "); required: Float")
-      if (!force) require(peer.getRank == 1, "Wrong rank (" + peer.getRank + "); required: 1")
+      requireFloat()
+      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
       val sz = peer.getSize
-      require(sz <= 0x7FFFFFFF, "Array too large (size = " + sz + ")")
+      require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
       val it = peer.getIndexIterator
       IndexedSeq.fill(sz.toInt)(it.getFloatNext)
+    }
+
+    def minmax: (Float, Float) = {
+      requireFloat()
+      require(peer.getSize > 0, "Array is empty")
+      val it  = peer.getIndexIterator
+      var min = Float.MaxValue
+      var max = Float.MinValue
+      while (it.hasNext) {
+        val f = it.getFloatNext
+        if (f < min) min = f
+        if (f > max) max = f
+      }
+      (min, max)
     }
   }
 

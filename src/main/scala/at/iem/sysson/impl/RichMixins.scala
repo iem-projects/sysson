@@ -32,6 +32,8 @@ trait VariableLike extends HasDimensions {
   def rank: Int
   def ranges: IIdxSeq[ma2.Range]
 
+  def read(): ma2.Array
+
   private def effectiveDimIndices: IIdxSeq[Int] = {
     val sh  = shape
     (0 until rank).filter(sh(_) > 1)
@@ -51,4 +53,14 @@ trait VariableLike extends HasDimensions {
   def in(dim: String): VariableSection.In
 
   def selectAll: VariableSection
+
+  // ---- data manipulation ----
+
+  def min: Float = minmax._1
+  def max: Float = minmax._2
+
+  def minmax: (Float, Float) = {
+    import Implicits._
+    read().minmax
+  }
 }

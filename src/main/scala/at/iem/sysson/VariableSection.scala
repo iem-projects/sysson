@@ -7,16 +7,34 @@ import Implicits._
 import collection.JavaConversions
 
 object VariableSection {
+  /** A transitory class specifying a variable section along with a dimension
+    * on which a subsequent selection is to be made
+    *
+    * @param  vs  the variable section
+    * @param  dim the dimension given as index into `vs.dimensions`
+    */
   final class In(vs: VariableSection, dim: Int) {
+    /** The select operation is given as an object with `apply` method */
     object select {
+      /** Slices the variable section in the selected dimension at a given index */
       def apply(i: Int): VariableSection = apply(OpenRange.at(i))
+      /** Constrains the variable section in the selected dimension to a given sub range */
       def apply(r: OpenRange): VariableSection = {
         vs.copy(section = vs.section.updated(dim, r))
       }
     }
   }
 }
-final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange]) extends impl.VariableLike {
+
+/** A variable section is a non destructive selection within the dimension of a variable,
+  * possibly applying scaling to its values.
+  *
+  * @param variable the original NetCDF variable
+  * @param section  the range selection within the dimension
+  */
+final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange] /*, scale: Scale */)
+  extends impl.VariableLike {
+
   def read(): ma2.Array = variable.read(toSection)
 
   private lazy val toSection: ma2.Section = {
@@ -39,6 +57,7 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
     toSection.getRanges.toIndexedSeq
   }
 
+  /** Queries the total number of elements within the selected sub matrix */
   def size: Long = {
     val sh = shape
     var res = 1L
@@ -54,8 +73,17 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
   def name          = variable.name
   def dataType      = variable.dataType
   def dimensions    = variable.dimensions
+
+  /** Undoes all dimensional selections and reverts to the full matrix of the variable */
   def selectAll     = variable.selectAll
 
+  /** Selects a dimension in which a subsequent selection should be made.
+    * A typical call is `section in "dim-name" select some-range`
+    *
+    * @param dim  the dimension to operate on, specified as its name
+    * @return an object holding the section along with the dimension selection,
+    *         ready to apply a particular range selection
+    */
   def in(dim: String): VariableSection.In = {
     val idx = variable.findDimensionIndex(dim)
     if (idx < 0) throw new IllegalArgumentException(s"Variable '${variable.name}' has no dimension '$dim'")
