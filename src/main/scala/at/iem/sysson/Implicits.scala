@@ -5,6 +5,7 @@ import collection.JavaConversions
 import de.sciss.synth
 import synth.ugen
 import collection.immutable.{IndexedSeq => IIdxSeq}
+import java.io.File
 
 object Implicits {
   final val all = OpenRange.all
@@ -151,5 +152,9 @@ object Implicits {
       val env = Env(peer.head, peer.tail.map(mag => Env.Seg(segDur, mag, shape)) :+ Env.Seg(segDur, peer.last, stepShape))
       EnvGen.ar(env, doneAction = freeSelf)
     }
+  }
+
+  implicit class RichFile(f: File) {
+    def /(child: String): File = new File(f, child)
   }
 }

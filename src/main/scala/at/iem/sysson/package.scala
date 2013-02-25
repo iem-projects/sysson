@@ -2,12 +2,15 @@ package at.iem
 
 import ucar.nc2
 import de.sciss.synth
+import java.io.File
 
 package object sysson {
   def defaultPath = "/Users/hhrutz/Desktop/IEM/SysSon/netcdf/data/RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc"
   def openDefault() : nc2.NetcdfFile = open(defaultPath)
 
   def open(path: String): nc2.NetcdfFile = nc2.NetcdfFile.open(path).setImmutable()
+
+  def file(path: String): File = new File(path)
 
   def boot() {
     synth.Server.boot() {

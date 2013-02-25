@@ -10,9 +10,9 @@ import de.sciss.osc.{TCP, Dump}
 import ExecutionContext.Implicits.global
 
 object SonifTest extends App {
-  val cfg       = Server.Config()
-  cfg.transport = TCP
-  val as        = AudioSystem.instance.start(cfg)
+//  val cfg       = Server.Config()
+//  cfg.transport = TCP
+//  val as        = AudioSystem.instance.start(cfg)
 
   val son   = Sonification("test")
   son.graph = SynthGraph {
@@ -32,15 +32,17 @@ object SonifTest extends App {
 
   son.mapping += "vec" -> sec3.asColumn
 
-  def play(s: Server) {
-    s.dumpOSC(Dump.Text)
-    son play 1.0
-    future {
-      Thread.sleep(10000)
-      println("Quitting...")
-      sys.exit(0)
-    }
-  }
+  son._debug_writeDef()
 
-  as.whenBooted(play _)
+//  def play(s: Server) {
+//    s.dumpOSC(Dump.Text)
+//    son play 1.0
+//    future {
+//      Thread.sleep(10000)
+//      println("Quitting...")
+//      sys.exit(0)
+//    }
+//  }
+//
+//  as.whenBooted(play _)
 }
