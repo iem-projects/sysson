@@ -88,6 +88,9 @@ object SonficationImpl {
 
           case row @ RowSource(section) =>
             ???
+
+          case m @ MatrixSource(section, row, col) =>
+            ???
         }
       }
       val newMsg  = syn.newMsg(synthDefName, args = ctls)

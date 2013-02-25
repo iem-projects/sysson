@@ -17,11 +17,14 @@ licenses := Seq("GPL v2+" -> url("http://www.gnu.org/licenses/gpl-2.0.txt"))
 scalaVersion := "2.10.0"
 
 libraryDependencies ++= {
-  val sv = "1.5.+" // ScalaCollider
+  val scv  = "1.5.2+" // ScalaCollider
+  val scbv = "1.5.+"  // base (ugens, swing)
   Seq(
-    "de.sciss" %% "scalacolliderswing" % sv,
+    "de.sciss" %% "scalacolliderswing" % scbv,
+    "de.sciss" %% "scalacollider" % scv,
     "de.sciss" %% "swingtree" % "1.2.+",
-    "de.sciss" %  "scalacolliderugens-spec" % sv
+    "de.sciss" %  "scalacolliderugens-spec" % scbv,
+    "de.sciss" %% "scalaosc" % "1.1.1+"
   )
 }
 

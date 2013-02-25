@@ -30,7 +30,10 @@ private[impl] object UGenGraphBuilderImpl {
           Latch(m.rate, sig)  // instant k- to a-rate
 
         case row @ RowSource(_) =>
-            ???
+          ??? // val sig = BufRd.ar()
+
+        case m @ MatrixSource(_, _, _) =>
+          ???
       }
     }
 
