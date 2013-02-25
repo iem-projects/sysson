@@ -6,11 +6,13 @@ import synth.{Server, SynthGraph}
 import Implicits._
 import concurrent.{ExecutionContext, duration, future}
 import duration._
-import de.sciss.osc.Dump
+import de.sciss.osc.{TCP, Dump}
 import ExecutionContext.Implicits.global
 
 object SonifTest extends App {
-  val as = AudioSystem.instance.start()
+  val cfg       = Server.Config()
+  cfg.transport = TCP
+  val as        = AudioSystem.instance.start(cfg)
 
   val son   = Sonification("test")
   son.graph = SynthGraph {
@@ -26,13 +28,18 @@ object SonifTest extends App {
   val v     = f.variableMap("refr")
   val sec1  = v    in "plev" select 0
   val sec2  = sec1 in "lat"  select 0
+  val sec3  = sec2 in "time" select (0 to 10) // XXX test
 
-  son.mapping += "vec" -> sec2.asColumn
+  son.mapping += "vec" -> sec3.asColumn
 
   def play(s: Server) {
     s.dumpOSC(Dump.Text)
     son play 1.0
-    future { Thread.sleep(1000); println("AQUI"); sys.exit(0) }
+    future {
+      Thread.sleep(10000)
+      println("Quitting...")
+      sys.exit(0)
+    }
   }
 
   as.whenBooted(play _)
