@@ -4,6 +4,7 @@ package impl
 
 import at.iem.sysson.impl.ModelImpl
 import de.sciss.synth
+import synth.Server
 
 object AudioSystemImpl {
   lazy val instance: AudioSystem = {
@@ -60,5 +61,19 @@ object AudioSystemImpl {
 
     def isBooting: Boolean = sync.synchronized(_server match { case Some(_: synth.ServerConnection) => true; case _ => false })
     def isRunning: Boolean = sync.synchronized(_server match { case Some(_: synth.Server) => true; case _ => false })
+
+    def whenBooted(fun: Server => Unit): this.type = {
+      server match {
+        case Some(s: Server) => fun(s)
+        case _ =>
+          lazy val list: AudioSystem.Listener = addListener {
+            case AudioSystem.Started(s) =>
+              removeListener(list)
+              fun(s)
+          }
+          list
+      }
+      this
+    }
   }
 }

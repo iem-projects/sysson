@@ -25,9 +25,9 @@ trait Model[U] {
    *   m.removeListener(l)
    * }}}
    */
-  def addListener(pf: Model.Listener[U]): this.type
+  def addListener(pf: Model.Listener[U]): Model.Listener[U]
   /**
    * Unregisters a listener for updates from the model.
    */
-  def removeListener(pf: Model.Listener[U]): this.type
+  def removeListener(pf: Model.Listener[U]): Unit
 }

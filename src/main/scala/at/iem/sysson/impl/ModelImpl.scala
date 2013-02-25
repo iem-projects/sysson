@@ -22,13 +22,11 @@ trait ModelImpl[U] extends Model[U] {
 
   final def addListener(pf: Listener) = sync.synchronized {
     listeners :+= pf
-    this
+    pf
   }
 
-  final def removeListener(pf: Listener) = sync.synchronized {
+  final def removeListener(pf: Listener) { sync.synchronized {
     val idx = listeners.indexOf(pf)
     if (idx >=0 ) listeners = listeners.patch(idx, Nil, 1)
-    this
-  }
-
+  }}
 }

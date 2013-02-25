@@ -62,6 +62,10 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
     new VariableSection.In(this, idx)
   }
 
+  // ---- conversion to sonifcation source ----
+  def asColumn      = ColumnSource(this)
+  def asRow         = RowSource(this)
+
   override def toString = {
     val relevant  = section.zipWithIndex.filterNot(_._1.isAll)
     if (relevant.isEmpty) variable.name else {

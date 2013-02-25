@@ -58,10 +58,11 @@ object SonficationImpl {
       }
     }
     val newMsg  = syn.newMsg(synthDefName, args = ctls)
+    val recvMsg = sd.recvMsg(newMsg)
     val bndl    = if (allocs.isEmpty) newMsg else {
       val init = allocs.init
       val last = allocs.last
-      val upd  = last.updateCompletion(Some(newMsg))
+      val upd  = last.updateCompletion(Some(recvMsg))
       osc.Bundle.now((init :+ upd): _*)
     }
 

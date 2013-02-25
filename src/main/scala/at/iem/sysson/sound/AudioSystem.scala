@@ -3,6 +3,7 @@ package sound
 
 import impl.{AudioSystemImpl => Impl}
 import de.sciss.synth
+import synth.Server
 
 object AudioSystem {
   def instance: AudioSystem = Impl.instance
@@ -21,4 +22,6 @@ trait AudioSystem extends Model[AudioSystem.Update] {
 
   def isBooting: Boolean
   def isRunning: Boolean
+
+  def whenBooted(fun: Server => Unit): this.type
 }
