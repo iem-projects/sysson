@@ -26,7 +26,9 @@ private[impl] object UGenGraphBuilderImpl {
       usedMappings += key
       source match {
         case col @ ColumnSource(_) =>
-          BufRd.kr(numChannels = col.size, buf = ctlName.ir, index = 0, loop = 1, interp = 0)
+          val sig = BufRd.kr(numChannels = col.size, buf = ctlName.ir, index = 0, loop = 1, interp = 0)
+          Latch(m.rate, sig)  // instant k- to a-rate
+
         case row @ RowSource(_) =>
             ???
       }
