@@ -8,7 +8,7 @@ import synth._
 import ugen.ControlProxyLike
 
 private[impl] object UGenGraphBuilderImpl {
-   def apply(sonif: Sonification): (UGenGraph, Set[String]) = new Impl(sonif).build()
+   def apply(sonif: Sonification, sg: SynthGraph): (UGenGraph, Set[String]) = new Impl(sonif).build(sg)
 
   private final class Impl(sonif: Sonification) extends BasicUGenGraphBuilder with UGenGraphBuilder {
 
@@ -34,9 +34,9 @@ private[impl] object UGenGraphBuilderImpl {
       }
     }
 
-    def build(): (UGenGraph, Set[String]) = {
+    def build(init: SynthGraph): (UGenGraph, Set[String]) = {
       val ug = UGenGraph.use(this) {
-        var g = sonif.graph
+        var g = init // sonif.graph
         var controlProxies = Set.empty[ControlProxyLike[_]]
         while (g.nonEmpty) {
           controlProxies ++= g.controlProxies

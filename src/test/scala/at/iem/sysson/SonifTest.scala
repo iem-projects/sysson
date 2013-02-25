@@ -2,28 +2,27 @@ package at.iem.sysson
 
 import sound.{MatrixSpec, MatrixIn, Sonification, AudioSystem}
 import de.sciss.synth
-import synth.{Synth, Server, SynthGraph}
+import synth.{Synth, Server}
 import Implicits._
 import concurrent.{ExecutionContext, duration, future}
 import duration._
-import de.sciss.osc.{TCP, Dump}
+import de.sciss.osc
 import ExecutionContext.Implicits.global
-import synth.Ops._
 
 object SonifTest extends App {
   val cfg       = Server.Config()
-  cfg.transport = TCP
+  cfg.transport = osc.TCP
   val as        = AudioSystem.instance.start(cfg)
 
   val son   = Sonification("test")
-  son.graph = SynthGraph {
+  son.graph = {
     import synth._
     import ugen._
     val data  = MatrixIn.ar("vec")
     val clip  = data.max(0).min(1)
     val scale = clip.linexp(0, 1, 100, 10000)
     val sin   = SinOsc.ar(scale) * 0.09
-    Out.ar(0, Pan2.ar(Mix(sin)))
+    Pan2.ar(Mix(sin))
   }
   son.matrices += "vec" -> MatrixSpec()
 
@@ -39,17 +38,17 @@ object SonifTest extends App {
 
     son.mapping += "vec" -> sec2.asColumn
     println("Lat " + lat)
-    son play 1.0
+    son playOver 3.seconds
   }
 
   def play(s: Server) {
-//    s.dumpOSC(Dump.Text)
+//    s.dumpOSC(osc.Dump.Text)
 
     def loop(lat: Int) {
-      val synth = playLat(lat)
+      /* val synth = */ playLat(lat)
       future {
         Thread.sleep(3000)
-        synth.free()
+//        synth.free()
       } onSuccess { case _ =>
         if (lat < 9) loop(lat + 1) else {
           println("Quitting...")

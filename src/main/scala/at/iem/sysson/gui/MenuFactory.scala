@@ -18,6 +18,12 @@ object MenuFactory {
     import KeyEvent._
     Root().add(
       Group("file", "File").add(
+        Group("new", "New").add(
+          Item("interpreter")("Interpreter..." -> stroke(VK_R, meta)) {
+            openInterpreter()
+          }
+        )
+      ).add(
         Item("open")("Open..." -> stroke(VK_O, meta)) {
           openDialog()
         }
@@ -72,5 +78,9 @@ object MenuFactory {
 
   def openSoundDesigner() {
     sound.designer.DesignerView()
+  }
+
+  def openInterpreter() {
+    println("TODO")
   }
 }

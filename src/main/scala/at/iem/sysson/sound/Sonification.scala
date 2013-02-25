@@ -14,7 +14,9 @@ object Sonification {
 }
 trait Sonification {
   var name:     String
-  var graph:    SynthGraph
+//  var graph:    SynthGraph
+  def graph:    () => GE
+  def graph_=(body: => GE): Unit
   var matrices: Map[String, MatrixSpec]
   var mapping:  Map[String, SonificationSource]
 

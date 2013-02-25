@@ -8,7 +8,7 @@ import io.{AudioFileSpec, AudioFile}
 import java.io.File
 import Implicits._
 import Ops._
-import de.sciss.osc
+import de.sciss.{synth, osc}
 
 object SonficationImpl {
   private final val synthDefName = "$son_play"
@@ -16,28 +16,52 @@ object SonficationImpl {
   def apply(name: String): Sonification = new Impl(name)
 
   private final class Impl(var name: String) extends Sonification {
-    var graph:    SynthGraph                      = Sonification.emptyGraph
+    private var _graph = () => 0f: GE
     var matrices: Map[String, MatrixSpec]         = Map.empty
     var mapping:  Map[String, SonificationSource] = Map.empty
 
     override def toString = s"Sonification($name)${hashCode().toHexString}"
 
+    def graph: () => GE = _graph
+    def graph_=(body: => GE) {
+      _graph = () => body
+    }
+
     def playOver(duration: Duration): Synth = {
       val szs = mapping.values.collect {
         case r @ RowSource(_) => r.size
       }
-      val sz    = szs.headOption.getOrElse(sys.error("playOver requires at least one row vector"))
-      val rate  = sz.toDouble / duration.toMillis
-      play(rate = rate)
+      szs.headOption match {
+        case Some(sz) =>
+          val rate  = sz.toDouble / duration.toMillis
+          play(rate = rate, duration = None)
+
+        case None =>
+          play(rate = 1.0, duration = Some(duration.toMillis * 0.001))
+      }
+//      val sz    = szs.headOption.getOrElse(sys.error("playOver requires at least one row vector"))
     }
 
-    def play(rate: Double): Synth = {
+    def play(rate: Double): Synth = play(rate = rate, duration = None)
+
+    private def buildUGens(duration: Option[Double]): (UGenGraph, Set[String]) =
+      UGenGraphBuilderImpl(this, SynthGraph {
+        import synth._
+        import ugen._
+        val res = _graph()
+        duration.foreach { secs =>
+          Line.kr(start = 0, end = 0, dur = secs, doneAction = freeSelf)
+        }
+        WrapOut(in = res, fadeTime = 0.01f)
+      })
+
+    private def play(rate: Double, duration: Option[Double]): Synth = {
       val s = AudioSystem.instance.server match {
         case Some(_s: Server) => _s
         case _ => sys.error("Audio system not running")
       }
       validateMatrixSpecs()
-      val (ug, keySet) = UGenGraphBuilderImpl(this)
+      val (ug, keySet) = buildUGens(duration = duration)
       val sd      = SynthDef(synthDefName, ug)
       val syn     = Synth(s)
       var ctls    = Vector.empty[ControlSetMap]
@@ -82,7 +106,7 @@ object SonficationImpl {
 
     def _debug_writeDef() {
       val dir     = file(sys.props("user.home")) / "Desktop"
-      val (ug, _) = UGenGraphBuilderImpl(this)
+      val (ug, _) = buildUGens(duration = None)
       val sd      = SynthDef(synthDefName, ug)
       sd.write(dir.getPath, overwrite = true)
     }
