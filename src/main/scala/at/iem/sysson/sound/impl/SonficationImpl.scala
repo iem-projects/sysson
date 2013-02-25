@@ -51,7 +51,7 @@ object SonficationImpl {
             val file      = File.createTempFile("sysson", ".aif")
             val af        = AudioFile.openWrite(file, AudioFileSpec(numChannels = colSz, sampleRate = 44100))
             val ab        = af.buffer(1)
-            val data      = section.read().f1d
+            val data      = section.readScaled1D()
             data.zipWithIndex.foreach { case (f, ch) => ab(ch)(0) = f }
             af.write(ab)
             af.close()

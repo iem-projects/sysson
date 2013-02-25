@@ -2,12 +2,13 @@ package at.iem.sysson
 
 import sound.{MatrixSpec, MatrixIn, Sonification, AudioSystem}
 import de.sciss.synth
-import synth.{Server, SynthGraph}
+import synth.{Synth, Server, SynthGraph}
 import Implicits._
 import concurrent.{ExecutionContext, duration, future}
 import duration._
 import de.sciss.osc.{TCP, Dump}
 import ExecutionContext.Implicits.global
+import synth.Ops._
 
 object SonifTest extends App {
   val cfg       = Server.Config()
@@ -28,23 +29,37 @@ object SonifTest extends App {
 
   val f     = openDefault()
   val v     = f.variableMap("refr")
-  val sec1  = v    in "plev" select 0
-  val sec2  = sec1 in "lat"  select 0
-  val sec3  = sec2 // in "time" select (0 to 10) // XXX test
-
-  son.mapping += "vec" -> sec3.asColumn
+  val sec0  = v in "plev" select 0
+  val sec1  = sec0.normalized
 
 //  son._debug_writeDef()
 
-  def play(s: Server) {
-    s.dumpOSC(Dump.Text)
+  def playLat(lat: Int): Synth = {
+    val sec2  = sec1 in "lat" select lat
+
+    son.mapping += "vec" -> sec2.asColumn
+    println("Lat " + lat)
     son play 1.0
-    future {
-      Thread.sleep(10000)
-      println("Quitting...")
-      as.stop()
-      sys.exit(0)
+  }
+
+  def play(s: Server) {
+//    s.dumpOSC(Dump.Text)
+
+    def loop(lat: Int) {
+      val synth = playLat(lat)
+      future {
+        Thread.sleep(3000)
+        synth.free()
+      } onSuccess { case _ =>
+        if (lat < 9) loop(lat + 1) else {
+          println("Quitting...")
+          as.stop()
+          sys.exit(0)
+        }
+      }
     }
+
+    loop(0)
   }
 
   as.whenBooted(play _)

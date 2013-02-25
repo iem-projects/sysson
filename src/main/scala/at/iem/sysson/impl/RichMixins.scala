@@ -28,6 +28,7 @@ trait VariableLike extends HasDimensions {
   def name: String
   def dataType: ma2.DataType
   def shape: IIdxSeq[Int]
+
   def size: Long
   def rank: Int
   def ranges: IIdxSeq[ma2.Range]
@@ -56,11 +57,31 @@ trait VariableLike extends HasDimensions {
 
   // ---- data manipulation ----
 
-  def min: Float = minmax._1
-  def max: Float = minmax._2
+  def min: Double = minmax._1
+  def max: Double = minmax._2
 
-  def minmax: (Float, Float) = {
+  def minmax: (Double, Double) = {
     import Implicits._
     read().minmax
   }
+
+  def normalized: VariableSection = {
+    val (min, max) = minmax
+    applyScale(Scale.LinLin(srcLo = min, srcHi = max, dstLo = 0.0, dstHi = 1.0))
+  }
+
+  protected def scale: Scale
+
+  def linlin(srcLo: Double, srcHi: Double, dstLo: Double, dstHi: Double, clip: Boolean = false): VariableSection = {
+    require(scale == Scale.Identity, "Cannot change scales")
+    applyScale(Scale.LinLin(srcLo = srcLo, srcHi = srcHi, dstLo = dstLo, dstHi = dstHi, clip = clip))
+  }
+
+  def linexp(srcLo: Double, srcHi: Double, dstLo: Double, dstHi: Double, clip: Boolean = false): VariableSection = {
+    require(scale == Scale.Identity, "Cannot change scales")
+    applyScale(Scale.LinExp(srcLo = srcLo, srcHi = srcHi, dstLo = dstLo, dstHi = dstHi, clip = clip))
+  }
+
+  def applyScale(scale: Scale): VariableSection
+  def resetScale: VariableSection = applyScale(Scale.Identity)
 }

@@ -25,4 +25,6 @@ package object sysson {
   def logWarn(what: => String) {
     println("[warn] " + what)
   }
+
+  type Scale = Double => Double
 }

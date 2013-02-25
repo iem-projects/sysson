@@ -4,6 +4,7 @@ import ucar.{nc2, ma2}
 import collection.JavaConversions
 import de.sciss.synth
 import synth.ugen
+import collection.breakOut
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import java.io.File
 
@@ -72,6 +73,7 @@ object Implicits {
     def name          = peer.getShortName
     def dataType      = peer.getDataType
     def shape         = peer.getShape.toIndexedSeq
+    /** Reports the total number of elements within the variable's matrix */
     def size          = peer.getSize
     def rank          = peer.getRank
     def attributes    = peer.getAttributes.toIndexedSeq
@@ -84,10 +86,14 @@ object Implicits {
 
     def in(dim: String): VariableSection.In = selectAll.in(dim)
 
+    protected def scale = Scale.Identity
+
     def selectAll: VariableSection = {
       val s = IIdxSeq.fill(rank)(all)
       new VariableSection(peer, s)
     }
+
+    def applyScale(scale: Scale) = selectAll.applyScale(scale)
   }
 
   implicit class RichArray(peer: ma2.Array) {
@@ -96,22 +102,33 @@ object Implicits {
     def rank          = peer.getRank
     def shape         = peer.getShape.toIndexedSeq
 //    def f1d_force: IndexedSeq[Float] = float1d(force = true)
-    def f1d: IndexedSeq[Float] = float1d(force = true)
+//    def f1d: IndexedSeq[Float] = float1d(force = true)
 
     private def requireFloat() {
       require(peer.getElementType == classOf[Float], s"Wrong element type (${peer.getElementType}); required: Float")
     }
 
-    private def float1d(force: Boolean) = {
-      requireFloat()
-      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
+    def scaled1D(scale: Scale): IIdxSeq[Float] = {
+      val it = float1DIter
       val sz = peer.getSize
-      require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
-      val it = peer.getIndexIterator
-      IndexedSeq.fill(sz.toInt)(it.getFloatNext)
+      Vector.fill(sz.toInt)(scale(it.getFloatNext).toFloat)
     }
 
-    def minmax: (Float, Float) = {
+    def float1D: IIdxSeq[Float] = {
+      val it = float1DIter
+      val sz = peer.getSize
+      Vector.fill(sz.toInt)(it.getFloatNext)
+    }
+
+    private def float1DIter: ma2.IndexIterator = {
+      requireFloat()
+//      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
+      val sz = peer.getSize
+      require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
+      peer.getIndexIterator
+    }
+
+    def minmax: (Double, Double) = {
       requireFloat()
       require(peer.getSize > 0, "Array is empty")
       val it  = peer.getIndexIterator
@@ -126,17 +143,17 @@ object Implicits {
     }
   }
 
-  implicit class RichFloatSeq(peer: IndexedSeq[Float]) {
-    def replaceNaNs(value: Float): IndexedSeq[Float] = {
+  implicit class RichFloatSeq(peer: IIdxSeq[Float]) {
+    def replaceNaNs(value: Float): IIdxSeq[Float] = {
       peer.collect {
         case Float.NaN => value
         case x => x
       }
     }
 
-    def dropNaNs: IndexedSeq[Float] = peer.filterNot(java.lang.Float.isNaN)
+    def dropNaNs: IIdxSeq[Float] = peer.filterNot(java.lang.Float.isNaN)
 
-    def normalize: IndexedSeq[Float] = {
+    def normalize: IIdxSeq[Float] = {
       val sz   = peer.size
       if( sz == 0 ) return peer
       var min  = Float.MaxValue
@@ -148,13 +165,13 @@ object Implicits {
         if (f > max) max = f
       i += 1 }
       val div = max - min
-      if (div == 0f) return IndexedSeq.fill(sz)(0f)
+      if (div == 0f) return Vector.fill(sz)(0f)
       assert(div > 0f)
       val mul = 1f / div
       peer.map(f => (f - min) * mul)
     }
 
-    def linlin(srcLo: Double = 0.0, srcHi: Double = 1.0)(tgtLo: Double, tgtHi: Double): IndexedSeq[Float] = {
+    def linlin(srcLo: Double = 0.0, srcHi: Double = 1.0)(tgtLo: Double, tgtHi: Double): IIdxSeq[Float] = {
       require(srcLo != srcHi, "Source range is zero (lo = " + srcLo + ", hi = " + srcHi + ")")
       require(tgtLo != tgtHi, "Target range is zero (lo = " + tgtLo + ", hi = " + tgtHi + ")")
       val add1 = -srcLo

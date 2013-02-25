@@ -268,7 +268,7 @@ private[impl] object DocumentViewImpl {
 //          }
 
           // just for testing purposes
-          val data1d    = vr.read.f1d
+          val data1d    = vr.read.float1D
           val dataLen   = data1d.size
           if (dataLen > 0) {
             val duration  = 5.0

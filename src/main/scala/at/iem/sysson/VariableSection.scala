@@ -32,10 +32,14 @@ object VariableSection {
   * @param variable the original NetCDF variable
   * @param section  the range selection within the dimension
   */
-final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange] /*, scale: Scale */)
+final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange], scale: Scale = Scale.Identity)
   extends impl.VariableLike {
 
   def read(): ma2.Array = variable.read(toSection)
+
+  def readScaled1D(): IIdxSeq[Float] = read().scaled1D(scale)
+
+  def applyScale(scale: Scale): VariableSection = copy(scale = scale)
 
   private lazy val toSection: ma2.Section = {
     val sz      = section.size
@@ -57,7 +61,7 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
     toSection.getRanges.toIndexedSeq
   }
 
-  /** Queries the total number of elements within the selected sub matrix */
+  /** Reports the total number of elements within the selected sub matrix */
   def size: Long = {
     val sh = shape
     var res = 1L
@@ -95,10 +99,11 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
   def asRow         = RowSource(this)
 
   override def toString = {
-    val relevant  = section.zipWithIndex.filterNot(_._1.isAll)
-    if (relevant.isEmpty) variable.name else {
+    val relevant = section.zipWithIndex.filterNot(_._1.isAll)
+    val selected = if (relevant.isEmpty) variable.name else {
       val relT      = relevant.map { case (r, idx) => s"${variable.getDimension(idx).name.getOrElse(idx)}: $r" }
       s"${variable.name} @ ${relT.mkString("[", ", ", "]")}"
     }
+    if (scale == Scale.Identity) selected else s"$selected ; scale = $scale"
   }
 }

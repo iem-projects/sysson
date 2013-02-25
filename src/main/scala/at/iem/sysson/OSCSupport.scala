@@ -22,7 +22,7 @@ object OSCSupport {
 
   implicit class OSCVarSect(val peer: VariableSection) extends AnyVal {
     def send() {
-      val data    = peer.read().f1d
+      val data    = peer.readScaled1D()
       val dims    = peer.dimensions
       val ranges  = peer.ranges
       val infos   = (dims zip ranges).zipWithIndex.flatMap { case ((dim, r), idx) =>
