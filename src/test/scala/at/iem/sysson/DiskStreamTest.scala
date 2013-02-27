@@ -9,7 +9,6 @@ import io.{AudioFile, AudioFileSpec}
 import Ops._
 import concurrent.{ExecutionContext, future}
 import ExecutionContext.Implicits.global
-import java.nio.ByteBuffer
 
 object DiskStreamTest extends App {
   val f     = File.createTempFile("sysson", ".aif")
@@ -43,7 +42,7 @@ object DiskStreamTest extends App {
 
     val df = SynthDef("disk") {
       val inBuf       = "buf".ir
-      val bufRate     = "rate".kr   // buffer sample rate * playback speed
+      val bufRate     = "rate".ir   // buffer sample rate * playback speed
       val numFrames   = BufFrames.ir(inBuf) // .kr ?
 //      val rate        = "rate".kr(1)
       val phasorRate  = bufRate / SampleRate.ir
@@ -51,7 +50,7 @@ object DiskStreamTest extends App {
       val phasor      = Phasor.ar(speed = phasorRate, lo = pad, hi = numFrames - pad)
       val interp: GE  = if (userInterpolation) (phasorRate - 1.0).signum.abs * 3 + 1 else 1
       val bufReader   = BufRd.ar(numChannels, buf = inBuf, index = phasor, loop = 0, interp = interp)
-      val phasorTrig  = Trig1.kr(A2K.kr(phasor) - (numFrames / 2), 0.01)
+      val phasorTrig  = Trig1.kr(A2K.kr(phasor) - (numFrames / 2), ControlDur.ir) //
       val clockTrig   = phasorTrig + TDelay.kr(phasorTrig, halfPeriod)
 
       SendTrig.kr(clockTrig, value = PulseCount.kr(clockTrig))

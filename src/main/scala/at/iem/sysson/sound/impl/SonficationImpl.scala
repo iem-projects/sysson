@@ -9,6 +9,7 @@ import java.io.File
 import Implicits._
 import Ops._
 import de.sciss.{synth, osc}
+import sound.impl.{UGenGraphBuilderImpl => GraphB}
 
 object SonficationImpl {
   private final val synthDefName = "$son_play"
@@ -28,6 +29,7 @@ object SonficationImpl {
     }
 
     def playOver(duration: Duration): Synth = {
+//      mapping.values.headOption.map(_.numColumns)
       val szs = mapping.values.collect {
         case r @ RowSource(_) => r.size
       }
@@ -45,7 +47,7 @@ object SonficationImpl {
     def play(rate: Double): Synth = play(rate = rate, duration = None)
 
     private def buildUGens(duration: Option[Double]): (UGenGraph, Set[String]) =
-      UGenGraphBuilderImpl(this, SynthGraph {
+      GraphB(this, SynthGraph {
         import synth._
         import ugen._
         val res = _graph()
@@ -65,42 +67,148 @@ object SonficationImpl {
       val sd      = SynthDef(synthDefName, ug)
       val syn     = Synth(s)
       var ctls    = Vector.empty[ControlSetMap]
-      var allocs  = Vector.empty[osc.Message with message.HasCompletion]
+      var msgs    = Vector.empty[osc.Message] // osc.Message with message.HasCompletion]
 
       keySet.foreach { key =>
-        mapping(key) match {
-          case col @ ColumnSource(section) =>
-            val colSz     = col.size
-            val b         = Buffer(s)
-            val file      = File.createTempFile("sysson", ".aif")
-            val af        = AudioFile.openWrite(file, AudioFileSpec(numChannels = colSz, sampleRate = 44100))
-            val ab        = af.buffer(1)
-            val data      = section.readScaled1D()
-            data.zipWithIndex.foreach { case (f, ch) => ab(ch)(0) = f }
-            af.write(ab)
-            af.close()
-            val readMsg   = b.readMsg(file.getAbsolutePath)
-            val allocMsg  = b.allocMsg(numFrames = 1, numChannels = colSz)
-            syn.onEnd { b.free() }
-            allocs :+= allocMsg
-            allocs :+= readMsg
-            ctls   :+= ((key -> b.id): ControlSetMap)
+        val source      = mapping(key)
+        val numChannels = source.numRows
+        val numFrames   = source.numColumns
+        val buf         = Buffer(s)
+        val file        = File.createTempFile("sysson", ".aif")
+        val path        = file.getAbsolutePath
+        syn.onEnd {
+          if (numFrames == 1) buf.close() // file was streamed
+          buf.free()
+          file.delete()
+        }
 
-          case row @ RowSource(section) =>
-            ???
+        // WARNING: sound file should be AIFF to allow for floating point sample rates
+        val af        = AudioFile.openWrite(file, AudioFileSpec(numChannels = numChannels, sampleRate = rate))
+        ctls        :+= ((GraphB.bufCtlName(key) -> buf.id): ControlSetMap)
+        val data      = source.section.readScaled1D() // XXX TODO: should read piece wise for large files
 
-          case m @ MatrixSource(section, row, col) =>
-            ???
+        try {
+          if (numFrames == 1) {
+            val fBuf      = af.buffer(1)
+            data.zipWithIndex.foreach { case (f, ch) => fBuf(ch)(0) = f }
+            af.write(fBuf)
+            val allocMsg  = buf.allocMsg(numFrames = 1, numChannels = numChannels)
+            val readMsg   = buf.readMsg(path)
+            msgs      :+= allocMsg
+            msgs      :+= readMsg
+
+          } else { // row or matrix source; requires streaming
+            val bufSizeHM     = math.max(32, math.ceil(rate).toInt)
+            val bufSizeH      = bufSizeHM + GraphB.diskPad
+            val bufSize       = bufSizeH * 2
+
+            val fBufSz        = math.min(8192, numFrames)
+            val fBuf          = af.buffer(fBufSz)
+            var rem           = numFrames
+            val isTrns        = source.isTransposed
+            while (rem > 0) {
+              val chunk = math.min(fBufSz, rem)
+              var ch    = 0
+              while (ch < numChannels) {
+                val cBuf  = fBuf(ch)
+                var fr    = 0
+                while (fr < chunk) {
+                  val dataIdx = if (isTrns) { // XXX TODO: test if this is correct
+                    fr * numFrames + ch
+                  } else {
+                    ch * numChannels + fr
+                  }
+                  cBuf(fr) = data(dataIdx)
+                  fr += 1
+                }
+                ch += 1
+              }
+              af.write(fBuf, 0, chunk)
+              rem -= chunk
+            }
+
+            // ---- buffer updating function ----
+            
+            // 'flatten'
+            def addPacket(p: osc.Packet) {
+              p match {
+                case osc.Bundle(_, pp @ _*)         => pp.foreach(addPacket)
+                case m @ osc.Message(_, args @ _*)  => msgs :+= m
+              }
+            }
+
+            def updateBuffer(trigVal: Int): (osc.Packet, Int) = {
+              val trigEven    = trigVal % 2 == 0
+              val bufOff      = if (trigEven) 0 else bufSizeH
+              val frame       = (trigVal * bufSizeHM) /* + startPos = 0 */ + (if (trigEven) 0 else GraphB.diskPad)
+              val readSz      = math.max(0, math.min(bufSizeH, numFrames - frame))
+              val fillSz      = bufSizeH - readSz
+              var ms          = List.empty[osc.Packet]
+
+              if (fillSz > 0) {
+                val m = buf.fillMsg((bufOff + readSz) * numChannels, fillSz * numChannels, 0f)
+                ms = m :: ms
+              }
+
+              if (readSz > 0) {
+                val m = buf.readMsg(
+                  path            = path,
+                  fileStartFrame  = frame,
+                  numFrames       = readSz,
+                  bufStartFrame   = bufOff,
+                  leaveOpen       = false
+                )
+                ms = m :: ms
+              }
+
+              val p = ms match {
+                case single :: Nil  => single
+                case _              => osc.Bundle.now(ms: _*)
+              }
+
+              (p, frame)
+            }
+
+            // ---- register trig responder ----
+
+            val trigResp  = message.Responder.add(s) {
+              case osc.Message("/tr", _ /* syn.id */, _ /* GraphB.diskTrigID */, trigValF: Float) =>
+                println(s"RECEIVED TR $trigValF...")
+                val trigVal = trigValF.toInt + 1
+                val (p, frame) = updateBuffer(trigVal)
+                println(s"...translating to frame $frame of $numFrames")
+                if (frame < numFrames + bufSizeH) {
+                  s ! p
+                } else {
+                  syn.free()
+                }
+
+//              case other =>
+//                println(s"Jo dude: $other")
+            }
+
+            // ---- generate initial buffer updates ----
+            val allocMsg      = buf.allocMsg(numFrames = bufSize, numChannels = numChannels)
+            msgs          :+= allocMsg
+            addPacket(updateBuffer(0)._1)
+            addPacket(updateBuffer(1)._1)
+
+            syn.onEnd { trigResp.remove() }
+          }
+
+        } finally {
+          af.close()
         }
       }
       val newMsg  = syn.newMsg(synthDefName, args = ctls)
       val recvMsg = sd.recvMsg(newMsg)
-      val bndl    = if (allocs.isEmpty) newMsg else {
-        val init = allocs.init
-        val last = allocs.last
-        val upd  = last.updateCompletion(Some(recvMsg))
-        osc.Bundle.now((init :+ upd): _*)
-      }
+//      val bndl    = if (msgs.isEmpty) newMsg else {
+//        val init = msgs.init
+//        val last = msgs.last
+//        val upd  = last.updateCompletion(Some(recvMsg))
+//        osc.Bundle.now((init :+ upd): _*)
+//      }
+      val bndl  = osc.Bundle.now((msgs :+ recvMsg): _*)
 
       s ! bndl
 
