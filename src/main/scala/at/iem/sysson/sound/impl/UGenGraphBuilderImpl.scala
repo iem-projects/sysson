@@ -23,10 +23,15 @@ private[impl] object UGenGraphBuilderImpl {
 
     private var usedMappings = Set.empty[String]
 
+    def getMatrixInSource(m: MatrixIn): SonificationSource = {
+      val key = m.key
+      sonif.mapping.getOrElse(key, throw Sonification.MissingInput(key))
+    }
+
     def addMatrixIn(m: MatrixIn): GE = {
       import ugen._
       val key       = m.key
-      val source    = sonif.mapping.getOrElse(key, throw Sonification.MissingInput(key))
+      val source    = getMatrixInSource(m)
       val bufCtl    = bufCtlName(key)
       usedMappings += key
       source match {

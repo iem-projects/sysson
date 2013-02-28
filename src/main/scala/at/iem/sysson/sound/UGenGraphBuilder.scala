@@ -5,4 +5,5 @@ import de.sciss.synth.{GE, UGenGraph}
 
 private[sound] trait UGenGraphBuilder extends UGenGraph.Builder {
   def addMatrixIn(m: MatrixIn): GE
+  def getMatrixInSource(m: MatrixIn): SonificationSource
 }

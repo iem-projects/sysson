@@ -2,7 +2,7 @@ package at.iem.sysson
 package sound
 
 import de.sciss.synth._
-import impl.{SonficationImpl => Impl}
+import impl.{SonificationImpl => Impl}
 import concurrent.duration.Duration
 
 object Sonification {

@@ -8,12 +8,29 @@ object MatrixIn {
   def kr(key: String): MatrixIn = apply(control, key)
 
   private def outsideOfContext() = sys.error( "Expansion out of context" )
+
+  private final case class NumRows(m: MatrixIn) extends GE {
+    def rate = scalar
+    def expand: UGenInLike = builder.getMatrixInSource(m).numRows
+  }
+
+  private final case class NumColumns(m: MatrixIn) extends GE {
+    def rate = scalar
+    def expand: UGenInLike = builder.getMatrixInSource(m).numColumns
+  }
+
+  private def builder: UGenGraphBuilder = UGenGraph.builder match {
+    case b: UGenGraphBuilder  => b
+    case _                    => MatrixIn.outsideOfContext()
+  }
 }
 case class MatrixIn(rate: Rate, key: String) extends GE.Lazy {
+  import MatrixIn._
+
   protected def makeUGens: UGenInLike = {
-    UGenGraph.builder match {
-      case b: UGenGraphBuilder  => b.addMatrixIn(this)
-      case _                    => MatrixIn.outsideOfContext()
-    }
+    builder.addMatrixIn(this)
   }
+
+  def numRows:    GE = NumRows   (this)
+  def numColumns: GE = NumColumns(this)
 }

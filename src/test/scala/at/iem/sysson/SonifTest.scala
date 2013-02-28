@@ -10,14 +10,12 @@ import de.sciss.osc
 import ExecutionContext.Implicits.global
 
 object SonifTest extends App {
-  val asRow     = true  // if false: uses asColumn
+  val mode      = "matrix"    // either of "row", "column", and "matrix"
 
-  val cfg       = Server.Config()
-  cfg.transport = osc.TCP
-  val as        = AudioSystem.instance.start(cfg)
+  val as        = AudioSystem.instance.start()
 
-  val eachDur     = if (asRow) 10.0 else 3.0
-  val iterations  = if (asRow) 0 else 10
+  val eachDur     = if (mode != "column") 10.0 else 3.0
+  val iterations  = if (mode == "column") 10 else 0
 
   val son   = Sonification("test")
   son.graph = {
@@ -26,7 +24,7 @@ object SonifTest extends App {
     val data  = MatrixIn.ar("vec")
     val clip  = data.max(0).min(1)
     val scale = clip.linexp(0, 1, 100, 10000)
-    val sin   = SinOsc.ar(scale) * 0.09
+    val sin   = SinOsc.ar(scale) * data.numRows.reciprocal.sqrt
     Pan2.ar(Mix(sin))
   }
   son.matrices += "vec" -> MatrixSpec()
@@ -36,28 +34,30 @@ object SonifTest extends App {
   val sec0  = v in "plev" select 0
   val sec1  = sec0.normalized
 
-//  son._debug_writeDef()
-
   def playLat(lat: Int): Synth = {
-    val sec2  = sec1 in "lat" select lat
 
-    son.mapping += "vec" -> (if (asRow) sec2.asRow else sec2.asColumn)
-    println("Lat " + lat)
-    if (asRow) {
-      son play(5)
+    val source = if (mode == "matrix") {
+      sec1.asMatrix(row = "time", column = "lat") // ("lat", "time")
     } else {
-      son playOver eachDur.seconds
+      val sec2 = sec1 in "lat" select lat
+      if (mode == "column") {
+        println("Lat " + lat)
+        sec2.asColumn
+      } else {
+        sec2.asRow
+      }
     }
+    son.mapping += "vec" -> source
+    son playOver eachDur.seconds
   }
 
   def play(s: Server) {
     s.dumpOSC(osc.Dump.Text)
 
     def loop(lat: Int) {
-      /* val synth = */ playLat(lat)
+      playLat(lat)
       future {
         Thread.sleep((eachDur * 1000).toLong)
-//        synth.free()
       } onSuccess { case _ =>
         if (lat + 1 < iterations) loop(lat + 1) else {
           println("Quitting...")

@@ -4,6 +4,7 @@ package sound
 import impl.{AudioSystemImpl => Impl}
 import de.sciss.synth
 import synth.Server
+import de.sciss.osc.TCP
 
 object AudioSystem {
   def instance: AudioSystem = Impl.instance
@@ -14,10 +15,16 @@ object AudioSystem {
   case object Stopped extends Update
 
   type Listener = Model.Listener[Update]
+
+  lazy val defaultConfig = {
+    val cfg       = synth.Server.Config()
+    cfg.transport = TCP
+    cfg.build
+  }
 }
 trait AudioSystem extends Model[AudioSystem.Update] {
   def server: Option[synth.ServerLike]
-  def start(config: synth.Server.Config = synth.Server.Config().build): this.type
+  def start(config: synth.Server.Config = AudioSystem.defaultConfig): this.type
   def stop(): this.type
 
   def isBooting: Boolean

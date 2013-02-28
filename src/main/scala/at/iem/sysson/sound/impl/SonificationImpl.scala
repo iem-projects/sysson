@@ -11,7 +11,7 @@ import Ops._
 import de.sciss.{synth, osc}
 import sound.impl.{UGenGraphBuilderImpl => GraphB}
 
-object SonficationImpl {
+object SonificationImpl {
   private final val synthDefName = "$son_play"
 
   def apply(name: String): Sonification = new Impl(name)
@@ -31,11 +31,15 @@ object SonficationImpl {
     def playOver(duration: Duration): Synth = {
 //      mapping.values.headOption.map(_.numColumns)
       val szs = mapping.values.collect {
-        case r @ RowSource(_) => r.size
+        case r @ RowSource(_)           => r.numColumns
+        case m @ MatrixSource(_, _, _)  => m.numColumns
       }
+
+//println(s"szs.headOption = ${szs.headOption}")
+
       szs.headOption match {
         case Some(sz) =>
-          val rate  = sz.toDouble / duration.toMillis
+          val rate  = sz.toDouble * 1000 / duration.toMillis
           play(rate = rate, duration = None)
 
         case None =>
@@ -51,10 +55,15 @@ object SonficationImpl {
         import synth._
         import ugen._
         val res = _graph()
-        duration.foreach { secs =>
-          Line.kr(start = 0, end = 0, dur = secs, doneAction = freeSelf)
+        val sig = duration match {
+          case Some(secs) if secs > 0 =>
+            val sus = math.max(0, secs - 0.02)
+            val rls = secs - sus
+            val env = Env.linen(attack = 0, sustain = sus, release = rls, shape = sinShape)
+            res * EnvGen.ar(env, doneAction = freeSelf)
+          case _ => res
         }
-        WrapOut(in = res, fadeTime = 0.01f)
+        WrapOut(in = sig, fadeTime = 0.02f)
       })
 
     private def play(rate: Double, duration: Option[Double]): Synth = {
@@ -173,18 +182,15 @@ object SonficationImpl {
 
             val trigResp  = message.Responder.add(s) {
               case osc.Message("/tr", _ /* syn.id */, _ /* GraphB.diskTrigID */, trigValF: Float) =>
-                println(s"RECEIVED TR $trigValF...")
+//                println(s"RECEIVED TR $trigValF...")
                 val trigVal = trigValF.toInt + 1
                 val (p, frame) = updateBuffer(trigVal)
-                println(s"...translating to frame $frame of $numFrames")
+//                println(s"...translating to frame $frame of $numFrames")
                 if (frame < numFrames + bufSizeH) {
                   s ! p
                 } else {
                   syn.free()
                 }
-
-//              case other =>
-//                println(s"Jo dude: $other")
             }
 
             // ---- generate initial buffer updates ----

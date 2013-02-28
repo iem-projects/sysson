@@ -89,14 +89,21 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
     *         ready to apply a particular range selection
     */
   def in(dim: String): VariableSection.In = {
-    val idx = variable.findDimensionIndex(dim)
-    if (idx < 0) throw new IllegalArgumentException(s"Variable '${variable.name}' has no dimension '$dim'")
-    new VariableSection.In(this, idx)
+    new VariableSection.In(this, dimIdxByName(dim))
+  }
+
+  private def dimIdxByName(n: String): Int = {
+    val idx = variable.findDimensionIndex(n)
+    if (idx < 0) throw new IllegalArgumentException(s"Variable '${variable.name}' has no dimension '$n'")
+    idx
   }
 
   // ---- conversion to sonifcation source ----
   def asColumn      = ColumnSource(this)
   def asRow         = RowSource(this)
+
+  def asMatrix(row: String, column: String) =
+    MatrixSource(this, rowDim = dimIdxByName(row), columnDim = dimIdxByName(column))
 
   override def toString = {
     val relevant = section.zipWithIndex.filterNot(_._1.isAll)

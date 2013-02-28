@@ -40,7 +40,7 @@ case class MatrixSource(section: VariableSection, rowDim: Int, columnDim: Int) e
 
   def numRows       = section.dimensions(rowDim).size
   def numColumns    = section.dimensions(columnDim).size
-  def isTransposed  = rowDim > columnDim  // XXX TODO: test if this is correct
+  def isTransposed  = rowDim < columnDim  // XXX TODO: test if this is correct
 
   override def toString = {
     val dims    = section.reducedDimensions
