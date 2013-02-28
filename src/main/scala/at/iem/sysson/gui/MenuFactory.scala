@@ -81,6 +81,6 @@ object MenuFactory {
   }
 
   def openInterpreter() {
-    println("TODO")
+    InterpreterView()
   }
 }

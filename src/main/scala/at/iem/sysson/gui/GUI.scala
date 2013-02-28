@@ -34,7 +34,7 @@ object GUI {
     dh.allDocuments.foreach(mkDocView)
 
     new MainWindow
-    new LogWindow
+    LogWindow.instance  // initializes it
 
     isInitialized = true
   }
