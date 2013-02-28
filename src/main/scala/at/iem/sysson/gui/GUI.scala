@@ -1,10 +1,11 @@
 package at.iem.sysson
 package gui
 
-import java.awt.{Toolkit, EventQueue}
-import swing.Swing
+import java.awt.{GraphicsEnvironment, Toolkit, EventQueue}
+import swing.{Window, Swing}
 import javax.swing.KeyStroke
 import java.awt.event.InputEvent
+import Swing._
 
 object GUI {
   private var isInitialized = false
@@ -12,6 +13,15 @@ object GUI {
   def stroke(code: Int, modifiers: Int): KeyStroke = KeyStroke.getKeyStroke(code, modifiers)
   lazy val meta  = Toolkit.getDefaultToolkit.getMenuShortcutKeyMask
   lazy val shift = InputEvent.SHIFT_MASK
+
+  def placeWindow(w: Window, horizontal: Float, vertical: Float, padding: Int) {
+    val ge  = GraphicsEnvironment.getLocalGraphicsEnvironment
+    val bs  = ge.getMaximumWindowBounds
+    val b   = w.size
+    val x   = (horizontal * (bs.width  - padding * 2 - b.width )).toInt + bs.x + padding
+    val y   = (vertical   * (bs.height - padding * 2 - b.height)).toInt + bs.y + padding
+    w.location = (x, y)
+  }
 
   def init() {
     requireEDT()
@@ -24,6 +34,7 @@ object GUI {
     dh.allDocuments.foreach(mkDocView)
 
     new MainWindow
+    new LogWindow
 
     isInitialized = true
   }
