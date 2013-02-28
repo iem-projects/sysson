@@ -6,7 +6,7 @@ version := "0.0.1-SNAPSHOT"
 
 organization := "at.iem.sysson"
 
-description := "Sonfication Server of the IEM SysSon project"
+description := "Sonification Server of the IEM SysSon project"
 
 homepage := Some(url("https://github.com/iem-projects/sysson"))
 

@@ -12,7 +12,7 @@ import ExecutionContext.Implicits.global
 object SonifTest extends App {
   val mode      = "matrix"    // either of "row", "column", and "matrix"
 
-  val as        = AudioSystem.instance.start()
+  val as        = AudioSystem.start()
 
   val eachDur     = if (mode != "column") 10.0 else 3.0
   val iterations  = if (mode == "column") 10 else 0

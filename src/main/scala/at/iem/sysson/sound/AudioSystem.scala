@@ -9,6 +9,8 @@ import de.sciss.osc.TCP
 object AudioSystem {
   def instance: AudioSystem = Impl.instance
 
+  def start(config: synth.Server.Config = defaultConfig): AudioSystem = instance.start(config)
+
   sealed trait Update
   final case class Booting(connection: synth.ServerConnection) extends Update
   final case class Started(server: synth.Server) extends Update

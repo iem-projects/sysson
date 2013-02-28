@@ -1,4 +1,4 @@
-# Sonfication
+# Sonification
 
 There is currently a very simple interface for the data sonification. It is based on the idea that any multi dimensional variable can be broken down (through slicing) into either one dimensional vectors or two dimensional matrices. Of these, each dimension may be mapped to a spatial or temporal parameter in the sonification.
 
@@ -12,7 +12,7 @@ The black box object for sonification is type `Sonification`. It stores a list o
 
 ```scala
 
-    AudioSystem.instance.start()            // start the SuperCollider server
+    AudioSystem.start()                     // start the SuperCollider server
 
     val f = open(<someNetCDFFile>)
     val v = f.variableMap(<someVariable>) in <someDimension> select <someRange>
