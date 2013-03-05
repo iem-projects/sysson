@@ -67,3 +67,26 @@ z = play { arg amp = 1.0;
 // das problem ist die skewedness der feature vektoren
 // -- die punkte sollten homogener beieinander liegen.
 // d.h. man muesste statt zu 'normalisieren' eher entzerren
+
+
+~equalize = { arg data, amt = 1.0;
+	var v, s, ss, dims = data[0].size;
+//	["dims", dims].postln;
+	ss = dims.collect { arg d;
+		v = data.collect(_.at(d));
+		v.sort;
+	};
+	data.collect { arg frame;
+		frame.collect { arg x, d;
+			s = ss[d];
+			(s.indexOf(x).linlin(0, s.size - 1, 0.0, 1.0) * amt) + (x * (1 - amt))
+		}
+	}
+};
+
+e = SCMIRAudioFile(~path, [[SpecCentroid], [SensoryDissonance]]);
+{e.extractFeatures()}.fork;
+// e.plotFeatures(800,500,40,true); // x, y, border, useLines
+
+x = e.featuredata.clump(2);
+x = ~equalize.(x);
