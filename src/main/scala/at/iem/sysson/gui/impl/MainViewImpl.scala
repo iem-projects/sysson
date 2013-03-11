@@ -70,14 +70,14 @@ private[gui] object MainViewImpl {
     }
 
     private lazy val box1 = new BoxPanel(Orientation.Horizontal) {
-      background = Color.black
+      background = Color.white // .black
       contents += new Label(null, logo, Alignment.Center) {
         border = BorderFactory.createEmptyBorder(4, 4, 4, 4)
       }
     }
 
     lazy val component = new BoxPanel(Orientation.Vertical) {
-      background = Color.black
+      background = Color.white // black
       contents += box1
       contents += mainMeters
       contents += RigidBox((2, 4))

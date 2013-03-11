@@ -6,7 +6,7 @@ import java.awt.{FileDialog, Toolkit}
 import java.awt.event.{InputEvent, KeyEvent}
 import java.io.{File, FilenameFilter}
 import ucar.nc2.NetcdfFile
-import util.control.NonFatal
+import scala.util.control.NonFatal
 
 object MenuFactory {
 

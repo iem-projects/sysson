@@ -1,7 +1,7 @@
 package at.iem.sysson
 package impl
 
-import util.control.NonFatal
+import scala.util.control.NonFatal
 
 trait ModelImpl[U] extends Model[U] {
   private type Listener = Model.Listener[U]

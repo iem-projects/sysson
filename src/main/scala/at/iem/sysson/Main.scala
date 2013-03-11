@@ -1,7 +1,7 @@
 package at.iem.sysson
 
-import util.control.NonFatal
 import swing.Swing
+import scala.util.control.NonFatal
 
 object Main extends App with Runnable {
   final val useGUI = true
