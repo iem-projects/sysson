@@ -46,4 +46,29 @@ A fresh IDEA project is setup by running the following command in the terminal: 
 
 ## Getting Started
 
-__TODO__: ... ... XXX YYY
+See the different files in the `doc` directory.
+
+### SysSon home directory
+
+We now expect an environment variable `SYSSON_HOME` to be specified, in order to find common data files. The directory to which `SYSSON_HOME` points, should contain a sub-directory `data` with the same layout as on the IEM server. For example, there should be `$SYSSON_HOME/data/201211/gcm/RCP45/MetOffUK_HadGEM2-ES`.
+
+Depending on whether SysSon is launched from the Finder or a terminal, unfortunately there are two locations where that environment variable should be defined: `~/.bash_profile` and `~/.MacOSX/environment.plist`. From a terminal, the bash profile can be edited for example with the `vi` editor:
+
+    $ vi ~/.bash_profile
+
+Adding an entry like the following:
+
+    export SYSSON_HOME=/Users/hhrutz/Desktop/IEM/SysSon
+
+Similarily, the property list file can be edited:
+
+    $ mkdir ~/.MacOSX
+    $ vi ~/.MacOSX/environment.plist
+
+The format is slightly different. The following shows how it could look:
+
+    {
+            "SYSSON_HOME" = "/Users/hhrutz/Desktop/IEM/SysSon";
+    }
+
+(The property list file changes take effect only after rebooting OS X.)

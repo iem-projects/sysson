@@ -193,5 +193,8 @@ object Implicits {
 
   implicit class RichFile(f: File) {
     def /(child: String): File = new File(f, child)
+    def path: String  = f.getPath
+    def name: String  = f.getName
+    def parent: File  = f.getParentFile
   }
 }

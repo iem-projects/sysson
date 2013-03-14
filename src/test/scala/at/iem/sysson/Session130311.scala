@@ -190,6 +190,7 @@ object Session130311 extends SessionLike {
 //    x.set("decay" -> 0.5)
   }
 
+  // helper method
   def graphArray(name: String)(fun: (Int, Int, IIdxSeq[Buffer]) => GE) {
     val v = f.variableMap("ta")
     val t = v in "time" select 700
@@ -233,10 +234,12 @@ object Session130311 extends SessionLike {
     }
   }
 
+  // helper method
   def graph333(name: String)(fun: (Double, Double, GE, Int, Int, Int) => GE) {
     graphNNN(name)(60 until 63, 30 until 33, 10 until 13)(fun)
   }
 
+  // helper method
   def graphNNN(name: String)(lonRange: Range, latRange: Range, plevRange: Range)
               (fun: (Double, Double, GE, Int, Int, Int) => GE) {
     val v     = f.variableMap("ta")
