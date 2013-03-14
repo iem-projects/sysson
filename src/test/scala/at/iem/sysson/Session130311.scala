@@ -1,6 +1,7 @@
 package at.iem.sysson
 
 import sound.AudioSystem
+import collection.immutable.{IndexedSeq => IIdxSeq}
 import Implicits._
 import de.sciss.synth
 import synth._
@@ -11,7 +12,7 @@ import concurrent.duration._
 
 object Session130311 extends App {
   AudioSystem.start().whenBooted { _ =>
-    test6()
+    test9()
   }
   lazy val syssonDir = file(sys.props("user.home")) / "Desktop" / "IEM" / "SysSon"
   lazy val dataDir   = syssonDir / "netcdf" / "data"
@@ -150,6 +151,127 @@ object Session130311 extends App {
       val sig = sin // * mod
       val out = Pan2.ar(sig * 0.05, pan)
       out
+    }
+  }
+
+  def test7() {
+    val v = f.variableMap("ta")
+    val t = v in "time" select 700
+    val numChans = f.dimensionMap("lon").size
+    assert(numChans == 144)
+
+    val d = Vector.tabulate(numChans) { i =>
+      val sel = ((t in "lon" select i) in "plev" select 7)
+      val h = sel.read().float1D // .drop(4)
+      h
+    }
+
+    val numFrames = d(0).size
+    assert(numFrames == f.dimensionMap("lat").size)
+
+    val df = Vector.tabulate(numFrames) { f =>
+      d.map(_ apply f)
+    }
+
+    val dff = df.flatten
+    val b = Buffer(s)
+    b.alloc(numFrames = numFrames, numChannels = numChans, completion = b.setnMsg(dff))
+
+    record("PlayBufArray") {
+      play {
+        val rate = "freq".kr(1.0 / 15) // MouseY.kr(0,1).linexp(0,1,1.0/1000,1.0)
+        val p = PlayBuf.ar(numChans, b.id, rate, loop = 1)
+  //      val idx = MouseX.kr(0, numChans)
+        val idx = LFSaw.kr(freq = 1.0/3, iphase = -1).linlin(-1,1,0,numChans)
+        val sel = Select.ar(idx, p)
+        val sig = sel.linlin(dff.min, dff.max, -1, 1)
+
+        Line.kr(dur = 20, doneAction = freeSelf)
+
+        LeakDC.ar(sig) * "amp".kr(4)
+      }
+    }
+
+//    x.set("freq" -> 1.0 / 20)
+//    x.set("amp" -> 100)
+  }
+
+  def test8() {
+    graphArray("PlayBufArray2") { (numChans, numPlevs, bufs) =>
+      val idx = LFSaw.kr("lfo".kr(1.0/5),-1).linlin(-1,1,0,numChans)
+      val brate = "freq".kr(0.25)
+      val out = Mix.tabulate(numPlevs) { plev =>
+         val rate = brate * plev.linexp(0,numPlevs-1,1.0/4,1.0)
+         val p = PlayBuf.ar(numChans, bufs(plev).id, rate, loop = 1)
+         val sel = Select.ar(idx, p)
+         val sig = sel.linlin(190,240,-1,1)
+         LeakDC.ar(sig)
+      }
+      out * "amp".kr(0.3) * Line.ar(0, 1, 0.05)
+    }
+  }
+
+  def test9() {
+    graphArray("PlayBufArrayRingz") { (numChans, numPlevs, bufs) =>
+      val idx = LFSaw.kr("lfo".kr(1.0/3),-1).linlin(-1,1,0,numChans)
+      val brate = "freq".kr(1.0/20.0)
+      val out = Mix.tabulate(numPlevs) { plev =>
+         val rate = brate // * plev.linexp(0,numPlevs-1,1.0/4,1.0)
+         val p = PlayBuf.ar(numChans, bufs(plev).id, rate, loop = 1)
+         val sel0 = Select.ar(idx, p)
+         val sel1 = sel0.linlin(190,240,-1,1)
+         val freq = plev.linexp(0, numPlevs-1,300, 3000)
+         val sig = Ringz.ar(sel1, freq, "decay".kr(0.5))
+         LeakDC.ar(sig)
+      }
+      out * "amp".kr(0.075)
+    }
+
+//    x.set("freq" -> 1.0/30)
+//    x.set("lfo" -> 1.0/2)
+//    x.set("decay" -> 0.5)
+  }
+
+  def graphArray(name: String)(fun: (Int, Int, IIdxSeq[Buffer]) => GE) {
+    val v = f.variableMap("ta")
+    val t = v in "time" select 700
+    val numChans = f.dimensionMap("lon").size
+    val plevRange = 4 until 14
+
+    val numFrames = f.dimensionMap("lat").size
+
+    val ds = plevRange.map { plev =>
+      val d0 = Vector.tabulate(numChans) { i =>
+         val sel = ((t in "lon" select i) in "plev" select plev)
+         val h = sel.read().float1D // .drop(4)
+         h
+      }
+
+      val d = d0.map { dd => dd.map {
+        case value if (value > 1e4f) => 200f
+        case value => value
+      }}
+
+      assert(d(0).size == numFrames)
+      val df = Vector.tabulate(numFrames) { f =>
+         d.map { v => v(f)}
+      }
+
+      val dff = df.flatten
+      dff
+    }
+
+    val bs = ds.map { d =>
+      val b = Buffer(s)
+      b.alloc(numFrames = numFrames, numChannels = numChans, completion = b.setnMsg(d))
+      b
+    }
+
+    record(name) {
+      play {
+        Line.kr(dur = 20, doneAction = freeSelf)
+        fun(numChans, plevRange.size, bs)
+      }
     }
   }
 
