@@ -104,108 +104,61 @@ object Session130311 extends App {
   }
 
   def test3() {
-    graph333("PanSin") { (min, max) =>
-      var sum: GE = 0
-      for(lon <- 0 to 2) {
-        for(lat <- 0 to 2) {
-          for(plev <- 0 to 2) {
-            val idx = lon * 9 + lat * 3 + plev
-            val d = sound.MatrixIn.ar("data_" + idx)
-            val freq = d.linexp(min,max,400,600)
-            val pan = lon.linlin(0, 2, -1, 1)
-            sum = sum + Pan2.ar(SinOsc.ar(freq), pan)
-          }
-        }
-      }
-      sum * 0.1
+    graph333("PanSin") { (min, max, d, lon, lat, plev) =>
+      val freq = d.linexp(min,max,400,600)
+      val pan = lon.linlin(0, 2, -1, 1)
+      Pan2.ar(SinOsc.ar(freq) * 0.1, pan)
     }
   }
 
   def test4() {
-    graph333("PanRingz") { (min, max) =>
+    graph333("PanRingz") { (min, max, d, lon, lat, plev) =>
       val inp = PinkNoise.ar
-      var sum: GE = 0
-      for(lon <- 0 to 2) {
-        for(lat <- 0 to 2) {
-          for(plev <- 0 to 2) {
-            val idx = lon * 9 + lat * 3 + plev
-            val d = sound.MatrixIn.ar("data_" + idx)
-            val freq = d.linexp(min,max,400,600)
-            val pan = lon.linlin(0, 2, -1, 1)
-            val decay = plev.linexp(0, 2, 0.25, 0.75)
-            val sig = Ringz.ar(inp, freq, decay)
-            val out = Pan2.ar(sig, pan)
-            sum = sum + out
-          }
-        }
-      }
-      sum * 0.1
+      val freq = d.linexp(min,max,400,600)
+      val pan = lon.linlin(0, 2, -1, 1)
+      val decay = plev.linexp(0, 2, 0.25, 0.75)
+      val sig = Ringz.ar(inp, freq, decay)
+      val out = Pan2.ar(sig * 0.1, pan)
+      out
     }
   }
 
   def test5() {
-    graph333("PanRingzPulse") { (min, max) =>
+    graph333("PanRingzPulse") { (min, max, d, lon, lat, plev) =>
       val inp = PinkNoise.ar
-      var sum: GE = 0
-      for(lon <- 0 to 2) {
-        for(lat <- 0 to 2) {
-          for(plev <- 0 to 2) {
-            val idx = lon * 9 + lat * 3 + plev
-            val d = sound.MatrixIn.ar("data_" + idx)
-            val freq = d.linexp(min,max,400,600)
-            val pan = lon.linlin(0, 2, -1, 1)
-    //        val decay = plev.linexp(0, 2, 0.25, 0.75)
-    //        val sig = Ringz.ar(inp, freq, decay)
-
-    //       val sin = SinOsc.ar(freq)
-             val sin = Ringz.ar(inp, freq, 1)
-//            val mod = Pulse.ar(plev.linexp(0, 2, 1, 5))
-             val mod = Lag.ar(Pulse.ar(plev.linexp(0, 2, 2, 17)), plev.linexp(0, 2, 0.01, 0.05))
-            val sig = sin * mod
-            val out = Pan2.ar(sig, pan)
-            sum = sum + out
-          }
-        }
-      }
-      sum * 0.1
+      val freq = d.linexp(min,max,400,600)
+      val pan = lon.linlin(0, 2, -1, 1)
+      val sin = Ringz.ar(inp, freq, 1)
+      val mod = Lag.ar(Pulse.ar(plev.linexp(0, 2, 2, 17)), plev.linexp(0, 2, 0.01, 0.05))
+      val sig = sin * mod
+      val out = Pan2.ar(sig * 0.1, pan)
+      out
     }
   }
 
-//  def test6() {
-//    son.graph = {
-//      val inp = PinkNoise.ar
-//      var sum: GE = 0
-//      for(lon <- 0 to 2) {
-//        for(lat <- 0 to 2) {
-//          for(plev <- 0 to 8) {
-//            val idx = lon * 27 + lat * 9 + plev
-//            val d = sound.MatrixIn.ar("data_" + idx)
-//            val pan = lon.linlin(0, 2, -1, 1)
-//    //        val decay = plev.linexp(0, 2, 0.25, 0.75)
-//    //        val sig = Ringz.ar(inp, freq, decay)
-//
-//    //       val sin = SinOsc.ar(freq)
-//
-//            val freq = plev.linexp(0, 8, 200, 7887)
-//            val amp = d.linlin(min, max, -30, -6).dbamp
-//            val inpa = inp * amp
-//             val sin = Ringz.ar(inpa, freq, 1)
-//    //         val mod = Pulse.ar(plev.linexp(0, 2, 1, 5))
-//            val sig = sin // * mod
-//            val out = Pan2.ar(sig, pan)
-//            sum = sum + out
-//          }
-//        }
-//      }
-//      sum * 0.1
-//    }
-//  }
+  def test6() {
+//    s.dumpOSC()
 
-  def graph333(name: String)(fun: (Double, Double) => GE) {
+    graphNNN("Ringz339")(60 until 63, 30 until 33, 5 until 14) { (min, max, d, lon, lat, plev) =>
+      val inp = PinkNoise.ar
+      val pan = lon.linlin(0, 2, -1, 1)
+      val freq = plev.linexp(0, 8, 200, 7887)
+      val amp = d.linlin(min, max, -30, -6).dbamp
+      val inpa = inp * amp
+       val sin = Ringz.ar(inpa, freq, 1)
+//         val mod = Pulse.ar(plev.linexp(0, 2, 1, 5))
+      val sig = sin // * mod
+      val out = Pan2.ar(sig * 0.05, pan)
+      out
+    }
+  }
+
+  def graph333(name: String)(fun: (Double, Double, GE, Int, Int, Int) => GE) {
     graphNNN(name)(60 until 63, 30 until 33, 10 until 13)(fun)
   }
 
-  def graphNNN(name: String)(lonRange: Range, latRange: Range, plevRange: Range)(fun: (Double, Double) => GE) {
+  def graphNNN(name: String)(lonRange: Range, latRange: Range, plevRange: Range)
+              (fun: (Double, Double, GE, Int, Int, Int) => GE) {
     val v     = f.variableMap("ta")
     val sel1  = v    in "lon"  select lonRange
     val sel2  = sel1 in "lat"  select latRange
@@ -213,19 +166,31 @@ object Session130311 extends App {
     val (min, max) = sel3.minmax
 
     val son = sound.Sonification("Test")
-    son.graph = fun(min, max)
+    son.graph = {
+      var sum: GE = 0
+      for(lon <- 0 until lonRange.size) {
+        for(lat <- 0 until latRange.size) {
+          for(plev <- 0 until plevRange.size) {
+            val idx = lon * (latRange.size * plevRange.size) + lat * plevRange.size + plev
+            val d   = sound.MatrixIn.ar("data_" + idx)
+            sum += fun(min, max, d, lon, lat, plev)
+          }
+        }
+      }
+      sum
+    }
 
     val numCells = lonRange.size * latRange.size * plevRange.size
 
     (0 until numCells).foreach { i => son.matrices += ("data_" + i) -> sound.MatrixSpec() }
 
-    for(lon <- lonRange) {
-      for(lat <- latRange) {
-        for(plev <- plevRange) {
-          val idx = (lon - lonRange.start) * 9 + (lat - latRange.start) * 3 + (plev - plevRange.start)
-          val sel1 = v    in "lon"  select lon
-          val sel2 = sel1 in "lat"  select lat
-          val sel3 = sel2 in "plev" select plev
+    for(lon <- 0 until lonRange.size) {
+      for(lat <- 0 until latRange.size) {
+        for(plev <- 0 until plevRange.size) {
+          val idx = lon * (latRange.size * plevRange.size) + lat * plevRange.size + plev
+          val sel1 = v    in "lon"  select (lon  + lonRange.start)
+          val sel2 = sel1 in "lat"  select (lat  + latRange.start)
+          val sel3 = sel2 in "plev" select (plev + plevRange.start)
           son.mapping += ("data_" + idx) -> sel3.asRow
         }
       }

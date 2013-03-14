@@ -16,6 +16,8 @@ object SonificationImpl {
 
   def apply(name: String): Sonification = new Impl(name)
 
+  private final val codec = osc.PacketCodec().scsynth().build
+
   private final class Impl(var name: String) extends Sonification {
     private var _graph = () => 0f: GE
     var matrices: Map[String, MatrixSpec]         = Map.empty
@@ -208,13 +210,17 @@ object SonificationImpl {
       }
       val newMsg  = syn.newMsg(synthDefName, args = ctls)
       val recvMsg = sd.recvMsg(newMsg)
+      val dfMsg   = if (codec.encodedMessageSize(recvMsg) < 0x3FFF) recvMsg else {
+        sd.write(overwrite = true)
+        sd.loadMsg(completion = newMsg)
+      }
 //      val bndl    = if (msgs.isEmpty) newMsg else {
 //        val init = msgs.init
 //        val last = msgs.last
 //        val upd  = last.updateCompletion(Some(recvMsg))
 //        osc.Bundle.now((init :+ upd): _*)
 //      }
-      val bndl  = osc.Bundle.now((msgs :+ recvMsg): _*)
+      val bndl  = osc.Bundle.now((msgs :+ dfMsg): _*)
 
       s ! bndl
 
