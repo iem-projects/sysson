@@ -9,6 +9,7 @@ package object sysson {
   def openDefault() : nc2.NetcdfFile = open(defaultPath)
 
   def open(path: String): nc2.NetcdfFile = nc2.NetcdfFile.open(path).setImmutable()
+  def openFile(file: File): nc2.NetcdfFile = open(file.getPath)
 
   def file(path: String): File = new File(path)
 
