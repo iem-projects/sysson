@@ -15,6 +15,7 @@ object Export {
   def netcdfToCSV(out: File, in: nc2.NetcdfFile, delimiter: Char = ',') {
     import Implicits._
 
+    val del = delimiter.toString
     var varsDone = Set.empty[String]
     val fos = new FileOutputStream(out)
     val w   = new OutputStreamWriter(fos, "UTF-8")
@@ -37,9 +38,9 @@ object Export {
         in.variableMap.get(name).foreach(loop)
       }
 
-      val units   = v.units.map(str => " :units \"" + str.escape + "\"").getOrElse("")
-      val dimStr  = dimensions.map(str => "\"" + str.escape + "\"").mkString(" ")
-      w.write(s""":var "${v.name.escape}"$units :dim $dimStr\n""")
+      val units   = v.units.map(str => del + ":units" + del + "\"" + str.escape + "\"").getOrElse("")
+      val dimStr  = dimensions.map(str => "\"" + str.escape + "\"").mkString(del)
+      w.write(s""":var$del"${v.name.escape}"${units}$del:dim${del}$dimStr\n""")
 
       def iter(sec: VariableSection, prefix: String, dims: IIdxSeq[nc2.Dimension], shape: IIdxSeq[Int]) {
 //        val rank      = sec.reducedRank
@@ -47,15 +48,15 @@ object Export {
         if (dims.size <= 1) {
           val arr   = sec.read()
           val data  = if (arr.isFloat) arr.float1D else arr.double1D
-          val dataS = data.mkString(" ")
-          w.write(s"$prefix:val $dataS\n")
+          val dataS = data.mkString(del)
+          w.write(s"$prefix:val${del}$dataS\n")
         } else {
           val dimName   = dims.head.name.get
           val dimNameS  = "\"" + dimName.escape + "\""
           val num       = shape.head
           var i = 0
           while (i < num) {
-            iter(sec in dimName select i, s"${prefix}$dimNameS $i ", dims.tail, shape.tail)
+            iter(sec in dimName select i, s"${prefix}${dimNameS}${del}${i}$del", dims.tail, shape.tail)
           i += 1 }
         }
       }
@@ -67,7 +68,7 @@ object Export {
       val dimsRR  = if (mxIdx < 0) dimsR  else dimsR .patch(mxIdx, Vector.empty, 1) :+ dimsR(mxIdx)
       val shapeRR = if (mxIdx < 0) shapeR else shapeR.patch(mxIdx, Vector.empty, 1) :+ shapeR(mxIdx)
 
-      iter(v.selectAll, if (dimsRR.size <= 1) "" else ":sel ", dimsRR, shapeRR)
+      iter(v.selectAll, if (dimsRR.size <= 1) "" else s":sel$del", dimsRR, shapeRR)
       w.write("\n")
     }
 
