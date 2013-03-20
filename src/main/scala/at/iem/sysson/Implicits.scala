@@ -40,6 +40,8 @@ object Implicits {
     def attributes    = peer.getGlobalAttributes.toIndexedSeq
     def rootGroup     = peer.getRootGroup
     def variables     = peer.getVariables.toIndexedSeq
+
+    def exportAsCSV(file: File, delimiter: Char = ',') { util.Export.netcdfToCSV(file, peer, delimiter) }
   }
 
   implicit class RichAttribute(peer: nc2.Attribute) {
@@ -82,6 +84,8 @@ object Implicits {
     def dimensions    = peer.getDimensions.toIndexedSeq
     def ranges        = peer.getRanges.toIndexedSeq
 
+    def units         = Option(peer.getUnitsString)
+
     def read()        = peer.read()
 
     def in(dim: String): VariableSection.In = selectAll.in(dim)
@@ -104,8 +108,15 @@ object Implicits {
 //    def f1d_force: IndexedSeq[Float] = float1d(force = true)
 //    def f1d: IndexedSeq[Float] = float1d(force = true)
 
+    def isFloat       = peer.getElementType == classOf[Float]
+    def isDouble      = peer.getElementType == classOf[Double]
+
     private def requireFloat() {
-      require(peer.getElementType == classOf[Float], s"Wrong element type (${peer.getElementType}); required: Float")
+      require(isFloat, s"Wrong element type (${peer.getElementType}); required: Float")
+    }
+
+    private def requireDouble() {
+      require(isDouble, s"Wrong element type (${peer.getElementType}); required: Double")
     }
 
     def scaled1D(scale: Scale): IIdxSeq[Float] = {
@@ -120,8 +131,22 @@ object Implicits {
       Vector.fill(sz.toInt)(it.getFloatNext)
     }
 
+    def double1D: IIdxSeq[Double] = {
+      val it = double1DIter
+      val sz = peer.getSize
+      Vector.fill(sz.toInt)(it.getDoubleNext)
+    }
+
     private def float1DIter: ma2.IndexIterator = {
       requireFloat()
+//      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
+      val sz = peer.getSize
+      require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
+      peer.getIndexIterator
+    }
+
+    private def double1DIter: ma2.IndexIterator = {
+      requireDouble()
 //      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
       val sz = peer.getSize
       require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")

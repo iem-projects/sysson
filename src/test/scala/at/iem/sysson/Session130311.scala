@@ -9,7 +9,9 @@ import synth.Ops._
 import concurrent.duration._
 
 object Session130311 extends SessionLike {
-  def run() { test9() }
+  rec = true
+
+  def run() { test3() }
 
   def test1() {
     val v   = f.variableMap("ta")
@@ -63,7 +65,7 @@ object Session130311 extends SessionLike {
   }
 
   def test3() {
-    graph333("PanSin") { (min, max, d, lon, lat, plev) =>
+    graph333("PanSin2") { (min, max, d, lon, lat, plev) =>
       val freq = d.linexp(min,max,400,600)
       val pan = lon.linlin(0, 2, -1, 1)
       Pan2.ar(SinOsc.ar(freq) * 0.1, pan)
@@ -236,7 +238,8 @@ object Session130311 extends SessionLike {
 
   // helper method
   def graph333(name: String)(fun: (Double, Double, GE, Int, Int, Int) => GE) {
-    graphNNN(name)(60 until 63, 30 until 33, 10 until 13)(fun)
+//    graphNNN(name)(60 until 63, 30 until 33, 10 until 13)(fun)  // urspruenglihe Aufnahmen!
+    graphNNN(name)(60 until 63, 30 until 33, 2 until 5)(fun)
   }
 
   // helper method
