@@ -27,8 +27,8 @@ object Session130314 extends SessionLike {
     val sel = v in "time" select timeIdx
 
     val numPlev = f.dimensionMap("plev").size
-    val numLat  = f.dimensionMap("lat").size
-    val numLon  = f.dimensionMap("lat").size
+    val numLat  = f.dimensionMap("lat" ).size
+    val numLon  = f.dimensionMap("lat" ).size
 
     sys.error("Unfinished")
 

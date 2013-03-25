@@ -61,7 +61,7 @@ object Implicits {
     def parent        = Option(peer.getParentGroup)
   }
 
-  implicit class RichDimension( peer: nc2.Dimension ) {
+  implicit class RichDimension(peer: nc2.Dimension) {
     def name          = Option(peer.getName)
     def size          = peer.getLength
     def group         = Option(peer.getGroup)

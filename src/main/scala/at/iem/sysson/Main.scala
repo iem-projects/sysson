@@ -20,7 +20,7 @@ object Main extends App with Runnable {
   }
 
   def run() {
-    logInfo(s"Welcome to ${name} v${version}")
+    logInfo(s"Welcome to $name v$version")
     val ncview = NcviewSync()
     ncview.dump(on = true)
     ncview.start()

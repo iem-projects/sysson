@@ -4,7 +4,7 @@ package gui
 import javax.swing.KeyStroke
 import java.awt.{FileDialog, Toolkit}
 import java.awt.event.{InputEvent, KeyEvent}
-import java.io.{File, FilenameFilter}
+import java.io.{RandomAccessFile, File, FilenameFilter}
 import ucar.nc2.NetcdfFile
 import scala.util.control.NonFatal
 
@@ -61,7 +61,16 @@ object MenuFactory {
       def accept(dir: File, name: String): Boolean = {
         val f = new File(dir, name)
         try {
-          NetcdfFile.canOpen(f.getPath) // TODO: this is really crappily written, very slow. Should use our own detection mechanism
+          // NetcdfFile.canOpen(f.getPath) // TODO: this is really crappily written, very slow. Should use our own detection mechanism
+          val r = new RandomAccessFile(f, "r")
+          try {
+            if (f.length() < 4) false else {
+              val cookie = r.readInt()
+              cookie == 0x43444601 || cookie == 0x43444602
+            }
+          } finally {
+            r.close()
+          }
         } catch {
           case NonFatal(_) => false // sucky `canOpen` throws EOFException in certain cases
         }

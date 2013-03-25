@@ -2,7 +2,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import swing.{ScrollPane, Orientation, BoxPanel, Table, Frame}
+import swing._
 import de.sciss.swingtree.tree.{Tree, ExternalTreeModel}
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
@@ -15,8 +15,10 @@ import de.sciss.audiowidgets.Transport
 import swing.event.{WindowClosing, TableRowsSelected}
 import sound.AudioSystem
 import java.io.File
-import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFileSpec, AudioFile}
+import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFile}
 import de.sciss.synth
+import synth.io.AudioFileSpec
+import Swing._
 
 private[impl] object DocumentViewImpl {
   import Implicits._
@@ -80,13 +82,13 @@ private[impl] object DocumentViewImpl {
   }
 
   private final class VarsModel(val data: IIdxSeq[nc2.Variable]) extends TableModel[nc2.Variable] {
-    def getColumnCount  = 4 // name, /* full-name, */ description, data-type, shape /* , size */
+    def getColumnCount = 5 // name, /* full-name, */ description, data-type, shape /* , size */
     override def getColumnName(col: Int) = (col: @switch) match {
       case 0 => "Name"
       case 1 => "Description"
       case 2 => "Data Type"
       case 3 => "Shape"
-//      case 4 => "Size"
+      case 4 => "Units"
     }
 
     def getValueAt(row: Int, col: Int) = {
@@ -102,7 +104,8 @@ private[impl] object DocumentViewImpl {
             case _ => sz.toString
           }
         } mkString ("[", ", ", "]")
-//        case 4 /* 5 */ => vr.size.asInstanceOf[AnyRef]
+
+        case 4 => vr.units.getOrElse("")
       }
     }
   }
@@ -176,12 +179,25 @@ private[impl] object DocumentViewImpl {
       )
     }
 
+    private val ggPlot = Button("Plot") {
+      selectedVariable.foreach { v =>
+        val view  = ClimateView(document.data, v.selectAll)
+        new Frame {
+          title     = v.name
+          contents = view.component
+          size    = (600, 400)
+          centerOnScreen()
+          open()
+        }
+      }
+    }
+
     val component = new BoxPanel(Orientation.Vertical) {
       contents ++= Seq(
         new ScrollPane(tGroups),
         new ScrollPane(tGroupAttrs),
         new ScrollPane(tGroupVars),
-        transport
+        ggPlot // transport
       )
     }
 

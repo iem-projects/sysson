@@ -24,7 +24,8 @@ libraryDependencies ++= {
     "de.sciss" %% "scalacollider" % scv,
     "de.sciss" %% "swingtree" % "1.2.+",
     "de.sciss" %  "scalacolliderugens-spec" % scbv,
-    "de.sciss" %% "scalaosc" % "1.1.1+"
+    "de.sciss" %% "scalaosc" % "1.1.1+",
+    "org.jfree" % "jfreechart" % "1.0.14"
   )
 }
 
