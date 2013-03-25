@@ -2,12 +2,10 @@ package at.iem.sysson
 package gui
 package impl
 
-import javax.swing.JComponent
-import java.awt.{Color, Graphics}
+import java.awt.Color
 import swing.Component
 import ucar.nc2
 import org.jfree.chart.{JFreeChart, ChartPanel}
-import org.jfree.data.general.DefaultHeatMapDataset
 import Implicits._
 import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.renderer.GrayPaintScale
@@ -31,12 +29,12 @@ object ClimateViewImpl {
     val arr     = sec.read().float1D.normalize
 
 //    val data    = new DefaultHeatMapDataset(width, height, 0f, 1f, 0f, 1f)
-    val data   = new MatrixSeries("Continguency", width, height)
+    val data   = new MatrixSeries("Continguency", height, width)
     for (x <- 0 until width) {
       for (y <- 0 until height) {
-        val z = arr(x * height + y)
+        val z = arr(y * width + x)
         // data.setZValue(x, y, z)
-        data.update(x, y, z)
+        data.update(y, x, z)
       }
     }
     val renderer  = new XYBlockRenderer()
