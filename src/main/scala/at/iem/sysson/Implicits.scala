@@ -85,6 +85,12 @@ object Implicits {
     def ranges        = peer.getRanges.toIndexedSeq
 
     def units         = Option(peer.getUnitsString)
+    def isFloat       = dataType == classOf[Float]
+    def isDouble      = dataType == classOf[Double]
+    def fillValue: Float = {
+      require(isFloat, "fillValue only defined for floating point variables")
+      attributeMap.get("_FillValue").map(_.getNumericValue.floatValue()).getOrElse(Float.NaN)
+    }
 
     def read()        = peer.read()
 
