@@ -6,7 +6,7 @@ import ucar.nc2
 import org.jfree.chart.{JFreeChart, ChartPanel}
 import Implicits._
 import org.jfree.chart.renderer.xy.XYBlockRenderer
-import org.jfree.chart.renderer.GrayPaintScale
+import org.jfree.chart.renderer.{PaintScale, LookupPaintScale, GrayPaintScale}
 import org.jfree.chart.axis.NumberAxis
 import org.jfree.chart.plot.XYPlot
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
@@ -19,9 +19,27 @@ import collection.immutable.{IndexedSeq => IIdxSeq}
 import javax.swing.GroupLayout
 import swing.event.ValueChanged
 import language.reflectiveCalls
+import de.sciss.intensitypalette.IntensityPalette
 
 object ClimateViewImpl {
   private case class Reduction(name: Label, slider: Slider, value: Label)
+
+  private lazy val intensityScale: PaintScale = {
+    val res = new LookupPaintScale(0.0, 1.0, Color.red)
+    val numM = IntensityPalette.numColors - 1
+    for(i <- 0 to numM) {
+      val d   = i.toDouble / numM
+      val pnt = new Color(IntensityPalette.apply(d.toFloat))
+      res.add(d, pnt)
+    }
+    res
+  }
+
+  private final class MyMatrix(width: Int, height: Int) extends MatrixSeries("Climate", height, width) {
+    def put(x: Int, y: Int, value: Float) {
+      data(y)(x) = value
+    }
+  }
 
   def apply(in: nc2.NetcdfFile, section: VariableSection): ClimateView = {
     def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
@@ -48,20 +66,28 @@ object ClimateViewImpl {
     val width   = lon.size
     val height  = lat.size
 
-    val data   = new MatrixSeries("Continguency", height, width)
+    val data   = new MyMatrix(width, height)
+
+    @inline def time() = System.currentTimeMillis()
 
     def updateData() {
+//      val t1 = time()
       val sec = red.zipWithIndex.foldLeft(section) { case (res, (d, idx)) =>
         res in d.name.getOrElse("?") select redGUI(idx).slider.value
       }
+//      val t2 = time()
       val arr = sec.read().float1D.normalize(sec.variable.fillValue)
-      for (x <- 0 until width) {
-        for (y <- 0 until height) {
+//      val t3 = time()
+      var x = 0; while(x < width) {
+        var y = 0; while(y < height) {
           val z = arr(y * width + x)
           // data.setZValue(x, y, z)
-          data.update(y, x, z)
-        }
-      }
+          // data.update(y, x, z)
+          data.put(x, y, z)
+        y += 1 }
+      x += 1 }
+      data.fireSeriesChanged()
+//      val t4 = time()
     }
 
     lazy val redGUI: IIdxSeq[Reduction] = red.map { d =>
@@ -112,8 +138,8 @@ object ClimateViewImpl {
     updateData()
 
     val renderer  = new XYBlockRenderer()
-    val scale     = new GrayPaintScale(0.0, 1.0)
-    renderer.setPaintScale(scale)
+//    val scale     = new GrayPaintScale(0.0, 1.0)
+    renderer.setPaintScale(intensityScale)
     val xAxis     = new NumberAxis("Longitude")
     xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits())
     xAxis.setLowerMargin(0.0)
@@ -128,7 +154,7 @@ object ClimateViewImpl {
     plot.setBackgroundPaint(Color.lightGray)
     plot.setDomainGridlinesVisible(false)
     plot.setRangeGridlinePaint(Color.white)
-    val chart     = new JFreeChart(section.variable.name, plot)
+    val chart     = new JFreeChart(section.variable.description.getOrElse(section.variable.name), plot)
     chart.removeLegend()
     chart.setBackgroundPaint(Color.white)
     val view    = new Impl(chart, redGroup)

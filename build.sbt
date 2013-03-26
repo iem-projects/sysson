@@ -26,6 +26,7 @@ libraryDependencies ++= {
     "com.github.benhutchison" % "scalaswingcontrib" % "1.4",
     "de.sciss" %  "scalacolliderugens-spec" % scbv,
     "de.sciss" %% "scalaosc" % "1.1.1+",
+    "de.sciss" % "intensitypalette" % "1.0.0",
     "org.jfree" % "jfreechart" % "1.0.14"
   )
 }
