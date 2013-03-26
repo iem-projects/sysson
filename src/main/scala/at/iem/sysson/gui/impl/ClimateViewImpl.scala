@@ -41,6 +41,10 @@ object ClimateViewImpl {
     }
   }
 
+  private var _currentSection = Option.empty[VariableSection]
+
+  def currentSection: Option[VariableSection] = _currentSection
+
   def apply(in: nc2.NetcdfFile, section: VariableSection): ClimateView = {
     def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
       in.variableMap.get(dim.name.getOrElse("?")) match {
@@ -75,6 +79,7 @@ object ClimateViewImpl {
       val sec = red.zipWithIndex.foldLeft(section) { case (res, (d, idx)) =>
         res in d.name.getOrElse("?") select redGUI(idx).slider.value
       }
+      _currentSection = Some(sec)
 //      val t2 = time()
       val arr = sec.read().float1D.normalize(sec.variable.fillValue)
 //      val t3 = time()

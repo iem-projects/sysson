@@ -8,9 +8,18 @@ import ucar.nc2
 object InterpreterView {
   def apply(): InterpreterView = Impl()
 
+  /** The content of this object is imported into the REPL */
   object Bindings {
-    def doc: nc2.NetcdfFile =
-      DocumentHandler.instance.allDocuments.toList.headOption.getOrElse(sys.error("No document open")).data
+    private def document =
+      DocumentHandler.instance.allDocuments.toList.headOption.getOrElse(sys.error("No document open"))
+
+    def doc: nc2.NetcdfFile = document.data
+
+    def selectedVariable: nc2.Variable =
+      DocumentViewHandler.instance.getView(document).getOrElse(sys.error("No document view")).selectedVariable
+        .getOrElse(sys.error("No variable selected"))
+
+    def plotSection = ClimateView.currentSection.getOrElse(sys.error("No variable section plotted"))
   }
 }
 trait InterpreterView {

@@ -28,9 +28,16 @@ object Implicits {
   implicit class SyRichInt(i: Int) {
     def to   (e: end.type): OpenRange = OpenRange(startOption = Some(i), endOption = None, isInclusive = true)
     def until(e: end.type): OpenRange = OpenRange(startOption = Some(i), endOption = None, isInclusive = false)
+
+    def isPowerOfTwo: Boolean = (i & (i-1)) == 0
+    def nextPowerOfTwo: Int = {
+   		var j = 1
+   		while( j < i ) j <<= 1
+   		j
+   	}
   }
 
-  implicit class RichNetcdfFile(peer: nc2.NetcdfFile)
+  implicit class SyRichNetcdfFile(peer: nc2.NetcdfFile)
     extends impl.HasDimensions with impl.HasAttributes with impl.HasVariables {
 
     import JavaConversions._
@@ -43,14 +50,14 @@ object Implicits {
     def exportAsCSV(file: File, delimiter: Char = ',') { util.Export.netcdfToCSV(file, peer, delimiter) }
   }
 
-  implicit class RichAttribute(peer: nc2.Attribute) {
+  implicit class SyRichAttribute(peer: nc2.Attribute) {
     def name          = peer.getName
     def dataType      = peer.getDataType
     def size          = peer.getLength
     def values        = peer.getValues
   }
 
-  implicit class RichGroup(peer: nc2.Group) extends impl.HasDimensions with impl.HasAttributes {
+  implicit class SyRichGroup(peer: nc2.Group) extends impl.HasDimensions with impl.HasAttributes {
     import JavaConversions._
     def name          = peer.getName
     def attributes    = peer.getAttributes.toIndexedSeq
@@ -60,13 +67,13 @@ object Implicits {
     def parent        = Option(peer.getParentGroup)
   }
 
-  implicit class RichDimension(peer: nc2.Dimension) {
+  implicit class SyRichDimension(peer: nc2.Dimension) {
     def name          = Option(peer.getName)
     def size          = peer.getLength
     def group         = Option(peer.getGroup)
   }
 
-  implicit class RichVariable(peer: nc2.Variable)
+  implicit class SyRichVariable(peer: nc2.Variable)
     extends impl.HasDimensions with impl.HasAttributes with impl.VariableLike {
 
     import JavaConversions._
@@ -110,7 +117,7 @@ object Implicits {
   else
     _ == fillValue
 
-  implicit class RichArray(peer: ma2.Array) {
+  implicit class SyRichArray(peer: ma2.Array) {
     def size          = peer.getSize
     def elementType   = peer.getElementType
     def rank          = peer.getRank
@@ -181,7 +188,7 @@ object Implicits {
     }
   }
 
-  implicit class RichFloatSeq(peer: IIdxSeq[Float]) {
+  implicit class SyRichFloatSeq(peer: IIdxSeq[Float]) {
     def replaceNaNs(value: Float, fillValue: Float = Float.NaN): IIdxSeq[Float] = {
       val checkNaN = checkNaNFun(fillValue)
       peer.map { f =>
@@ -217,7 +224,7 @@ object Implicits {
       if (div == 0f) return Vector.fill(sz)(0f)
       assert(div > 0f)
       val mul = 1f / div
-      peer.map(f => (f - min) * mul)
+      peer.map(f => if (checkNaN(f)) f else (f - min) * mul)
     }
 
     def linlin(srcLo: Double = 0.0, srcHi: Double = 1.0)(tgtLo: Double, tgtHi: Double): IIdxSeq[Float] = {
@@ -240,7 +247,7 @@ object Implicits {
     }
   }
 
-  implicit class RichFile(f: File) {
+  implicit class SyRichFile(f: File) {
     def /(child: String): File = new File(f, child)
     def path: String  = f.getPath
     def name: String  = f.getName
