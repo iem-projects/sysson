@@ -13,7 +13,7 @@ package object sysson {
   val syssonDir   = sys.env.get("SYSSON_HOME") match {
     case Some(path) => file(path)
     case _ =>
-      Console.err.println("WARNING: Environment variable SYSSON not set. Cannot access default data files.")
+      Console.err.println("WARNING: Environment variable SYSSON_HOME not set. Cannot access default data files.")
       val res = file(sys.props("user.home")) / "sysson"
       if (!res.isDirectory) res.mkdir()
       res

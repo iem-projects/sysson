@@ -3,11 +3,9 @@ package gui
 package impl
 
 import swing._
-import de.sciss.swingtree.tree.{Tree, ExternalTreeModel}
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.{WindowConstants, JTree}
-import de.sciss.swingtree.event.TreeNodeSelected
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
@@ -19,6 +17,8 @@ import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFile}
 import de.sciss.synth
 import synth.io.AudioFileSpec
 import Swing._
+import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
+import scalaswingcontrib.event.TreeNodeSelected
 
 private[impl] object DocumentViewImpl {
   import Implicits._
@@ -197,7 +197,10 @@ private[impl] object DocumentViewImpl {
         new ScrollPane(tGroups),
         new ScrollPane(tGroupAttrs),
         new ScrollPane(tGroupVars),
-        ggPlot // transport
+        new BoxPanel(Orientation.Horizontal) {
+          contents += ggPlot
+          contents += transport
+        }
       )
     }
 
