@@ -203,6 +203,7 @@ private[impl] object DocumentViewImpl {
         new ScrollPane(tGroupVars),
         new BoxPanel(Orientation.Horizontal) {
           contents += ggPlot
+          contents += HStrut(16)
           contents += transport
         }
       )

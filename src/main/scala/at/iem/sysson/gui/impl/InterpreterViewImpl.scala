@@ -43,7 +43,8 @@ private[gui] object InterpreterViewImpl {
         "ugen._",
         "Ops._",
         "de.sciss.osc.Implicits._",
-        "concurrent.duration._"
+        "concurrent.duration._",
+        "gui.InterpreterView.Bindings._"
       )
 
 //      intpCfg.bindings = Seq( NamedParam( "replSupport", replSupport ))
