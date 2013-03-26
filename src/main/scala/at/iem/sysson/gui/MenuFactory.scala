@@ -1,38 +1,37 @@
 package at.iem.sysson
 package gui
 
-import javax.swing.KeyStroke
-import java.awt.{FileDialog, Toolkit}
-import java.awt.event.{InputEvent, KeyEvent}
+import java.awt.FileDialog
+import java.awt.event.KeyEvent
 import java.io.{RandomAccessFile, File, FilenameFilter}
-import ucar.nc2.NetcdfFile
 import scala.util.control.NonFatal
+import de.sciss.desktop.{KeyStrokes, Menu}
 
 object MenuFactory {
 
   def root: Menu.Root = _root
 
   private lazy val _root = {
-    import GUI.{shift, meta, stroke}
     import Menu._
     import KeyEvent._
+    import KeyStrokes._
     Root().add(
       Group("file", "File").add(
         Group("new", "New").add(
-          Item("interpreter")("Interpreter..." -> stroke(VK_R, meta)) {
+          Item("interpreter")("Interpreter..." -> (menu1 + VK_R)) {
             openInterpreter()
           }
         )
       ).add(
-        Item("open")("Open..." -> stroke(VK_O, meta)) {
+        Item("open")("Open..." -> (menu1 + VK_O)) {
           openDialog()
         }
       ).add(
         Group("recent", "Open Recent")
       ).addLine().add(
-        Item("close", "Close" -> stroke(VK_W, meta))
+        Item("close", "Close" -> (menu1 + VK_W))
       ).add(
-        Item("close-all")("Close All" -> stroke(VK_W, meta + shift)) {
+        Item("close-all")("Close All" -> (menu1 + shift + VK_W)) {
           closeAll()
         } disable()
 //      ).addLine().add(
@@ -42,7 +41,7 @@ object MenuFactory {
       )
     ).add(
       Group("tools", "Tools").add(
-        Item("designer")("Sound Designer..." -> stroke(VK_D, meta)) {
+        Item("designer")("Sound Designer..." -> (menu1 + VK_D)) {
           openSoundDesigner()
         }
       )
@@ -61,7 +60,9 @@ object MenuFactory {
       def accept(dir: File, name: String): Boolean = {
         val f = new File(dir, name)
         try {
-          // NetcdfFile.canOpen(f.getPath) // TODO: this is really crappily written, very slow. Should use our own detection mechanism
+          // NOTE: NetcdfFile.canOpen is really crappily written, very slow. Therefore,
+          // make a short cut and just check for NetCDF cookies
+          // NetcdfFile.canOpen(f.getPath)
           val r = new RandomAccessFile(f, "r")
           try {
             if (f.length() < 4) false else {
@@ -72,7 +73,7 @@ object MenuFactory {
             r.close()
           }
         } catch {
-          case NonFatal(_) => false // sucky `canOpen` throws EOFException in certain cases
+          case NonFatal(_) => false
         }
       }
     })

@@ -1,9 +1,9 @@
 package at.iem.sysson
 package gui
 
-import swing.Frame
 import de.sciss.scalainterpreter.LogPane
 import impl.{LogWindowImpl => Impl}
+import de.sciss.desktop.Window
 
 object LogWindow {
   val horizontalPlacement   = 1.0f
@@ -12,6 +12,6 @@ object LogWindow {
 
   lazy val instance: LogWindow  = new Impl
 }
-abstract class LogWindow extends Frame {
+abstract class LogWindow extends Window {
   def log: LogPane
 }

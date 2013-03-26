@@ -1,6 +1,6 @@
 package at.iem.sysson
 
-import swing.Swing
+import gui.SwingApplication
 import scala.util.control.NonFatal
 
 object Main extends App with Runnable {
@@ -26,11 +26,12 @@ object Main extends App with Runnable {
     ncview.start()
 
     if (useGUI) {
-      // this is just for simple IDEA run configurations.
-      // the app-bundle will have these already
-      sys.props("com.apple.mrj.application.apple.menu.about.name")  = name
-      sys.props("apple.laf.useScreenMenuBar")                       = "true"
-      Swing.onEDT(gui.GUI.init())
+      SwingApplication.main(Array.empty)
+//      // this is just for simple IDEA run configurations.
+//      // the app-bundle will have these already
+//      sys.props("com.apple.mrj.application.apple.menu.about.name")  = name
+//      sys.props("apple.laf.useScreenMenuBar")                       = "true"
+//      Swing.onEDT(gui.GUI.init())
     }
   }
 }

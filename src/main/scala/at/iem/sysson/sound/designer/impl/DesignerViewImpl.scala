@@ -16,6 +16,7 @@ import prefuse.render.DefaultRendererFactory
 import prefuse.visual.VisualItem
 import de.sciss.audiowidgets.Transport
 import de.sciss.synth._
+import de.sciss.desktop.KeyStrokes
 
 private[designer] object DesignerViewImpl {
   def apply(): DesignerView = new View
@@ -40,9 +41,9 @@ private[designer] object DesignerViewImpl {
       val res   = new Display(visualization)
       val imap  = res.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
       val amap  = res.getActionMap
-      import GUI.{meta, stroke}
       import KeyEvent._
-      imap.put(stroke(VK_1, meta), "designer.putObject")
+      import KeyStrokes._
+      imap.put(menu1 + VK_1, "designer.putObject")
       amap.put("designer.putObject", Action("putObject") {
         enterPutObject()
       }.peer)

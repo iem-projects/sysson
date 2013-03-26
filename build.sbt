@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name := "SysSon"
 
-version := "0.0.1"
+version := "0.1.0-SNAPSHOT"
 
 organization := "at.iem.sysson"
 
@@ -14,7 +14,7 @@ licenses := Seq("GPL v2+" -> url("http://www.gnu.org/licenses/gpl-2.0.txt"))
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion := "2.10.0"
+scalaVersion := "2.10.1"
 
 libraryDependencies ++= {
   val scv  = "1.5.2+" // ScalaCollider
@@ -22,10 +22,10 @@ libraryDependencies ++= {
   Seq(
     "de.sciss" %% "scalacolliderswing" % scbv,
     "de.sciss" %% "scalacollider" % scv,
-//    "de.sciss" %% "swingtree" % "1.2.+",
     "com.github.benhutchison" % "scalaswingcontrib" % "1.4",
     "de.sciss" %  "scalacolliderugens-spec" % scbv,
     "de.sciss" %% "scalaosc" % "1.1.1+",
+    "de.sciss" %% "desktop" % "0.1.+",
     "de.sciss" % "intensitypalette" % "1.0.0",
     "org.jfree" % "jfreechart" % "1.0.14"
   )

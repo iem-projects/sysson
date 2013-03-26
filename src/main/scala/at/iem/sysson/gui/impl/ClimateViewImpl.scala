@@ -68,7 +68,7 @@ object ClimateViewImpl {
 
     val data   = new MyMatrix(width, height)
 
-    @inline def time() = System.currentTimeMillis()
+//    @inline def time() = System.currentTimeMillis()
 
     def updateData() {
 //      val t1 = time()

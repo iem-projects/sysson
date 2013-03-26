@@ -8,11 +8,17 @@ import java.io.OutputStream
 import javax.swing.{WindowConstants, BorderFactory}
 import at.iem.sysson.gui.GUI
 import swing.event.WindowClosing
+import de.sciss.desktop.impl.WindowImpl
+import de.sciss.desktop.Window
 
 // lazy window - opens as soon as something goes to the console
-private[gui] final class LogWindowImpl extends LogWindow {
+private[gui] final class LogWindowImpl extends LogWindow with WindowImpl {
   frame =>
-  peer.getRootPane.putClientProperty("Window.style", "small")
+
+//  peer.getRootPane.putClientProperty("Window.style", "small")
+
+  def style   = Window.Auxiliary
+  def handler = SwingApplication.windowHandler
 
   val log = LogPane()
 
@@ -20,7 +26,7 @@ private[gui] final class LogWindowImpl extends LogWindow {
     override def write(b: Array[Byte], off: Int, len: Int) {
       log.makeDefault()               // detaches this observer
       log.outputStream.write(b, off, len)
-      Swing.onEDT(frame.open())     // there we go
+      Swing.onEDT(frame.front())     // there we go
     }
 
     def write(b: Int) {
@@ -34,8 +40,7 @@ private[gui] final class LogWindowImpl extends LogWindow {
   }
 
   observe()
-  peer.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
-  listenTo(this)
+  closeOperation = Window.CloseIgnore
   reactions += {
     case WindowClosing(_) =>
       frame.visible = false
@@ -48,7 +53,6 @@ private[gui] final class LogWindowImpl extends LogWindow {
   }
 
   title   = "Log"
-  menuBar = MenuFactory.root.create(this)
   pack()
   import LogWindow._
   GUI.placeWindow(frame, horizontal = horizontalPlacement, vertical = verticalPlacement, padding = placementPadding)

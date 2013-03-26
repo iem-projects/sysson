@@ -19,6 +19,8 @@ import synth.io.AudioFileSpec
 import Swing._
 import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
 import scalaswingcontrib.event.TreeNodeSelected
+import de.sciss.desktop.impl.WindowImpl
+import de.sciss.desktop.Window
 
 private[impl] object DocumentViewImpl {
   import Implicits._
@@ -113,6 +115,8 @@ private[impl] object DocumentViewImpl {
   private final class Impl(val document: Document)
     extends DocumentView with Disposable {
 
+    impl =>
+
     private var _selVar = Option.empty[nc2.Variable]
     private val mGroups = new GroupModel(document.data.rootGroup)
     private val tGroups = new Tree(mGroups) {
@@ -204,34 +208,35 @@ private[impl] object DocumentViewImpl {
       )
     }
 
-    val f = new Frame {
+    val f = new WindowImpl {
+      def style   = Window.Regular
+      def handler = SwingApplication.windowHandler
+
       title     = document.path
-      contents  = component
-      peer.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
-      listenTo(this)
+      contents  = impl.component
+      closeOperation = Window.CloseIgnore
       reactions += {
         case WindowClosing(_) =>
            // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
           document.close()
       }
-      menuBar   = {
-        val r = MenuFactory.root
-//        r("file")("close").actionFor(this) { ... }
-        r.create(this)
-      }
+//      menuBar   = {
+//        val r = MenuFactory.root
+////        r("file")("close").actionFor(this) { ... }
+//        r.create(this)
+//      }
       pack()
-      centerOnScreen()
-      open()
+      GUI.centerOnScreen(this)
+      front()
     }
 
     def dispose() {
-      MenuFactory.root.destroy(f)
       f.dispose()
     }
 
     private def groupSelected(g: nc2.Group) {
       mGroupAttrs       = new AttrsModel(g.attributes)
-      mGroupVars        = new VarsModel(g.variables)
+      mGroupVars        = new VarsModel (g.variables )
       tGroupAttrs.model = mGroupAttrs
       tGroupVars.model  = mGroupVars
     }

@@ -7,11 +7,15 @@ import java.io.{IOException, FileInputStream, File}
 import swing.{Component, Frame}
 import javax.swing.WindowConstants
 import swing.event.WindowClosing
+import de.sciss.desktop.Window
+import de.sciss.desktop.impl.WindowImpl
 
 private[gui] object InterpreterViewImpl {
   def apply(): InterpreterView = new Impl
 
   private final class Impl extends InterpreterView {
+    impl =>
+
     val intp = {
       val codeCfg = CodePane.Config()
 
@@ -48,31 +52,23 @@ private[gui] object InterpreterViewImpl {
 
 //      intpCfg.out = Some( LogWindow.instance.log.writer )
 
-      InterpreterPane( interpreterConfig = intpCfg, codePaneConfig = codeCfg )
+      InterpreterPane(interpreterConfig = intpCfg, codePaneConfig = codeCfg)
     }
 
     val component = Component.wrap(intp.component)
 
-    val f = new Frame {
+    val f = new WindowImpl {
       frame =>
 
-      title     = "Interpreter"
-      contents  = component
-      peer.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
-      listenTo(this)
-      reactions += {
-        case WindowClosing(_) =>
-           // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
+      def style   = Window.Auxiliary
+      def handler = SwingApplication.windowHandler
 
-          // XXX TODO: wooop - no hook here?
-          // intp.dispose()
-          MenuFactory.root.destroy(frame)
-          frame.dispose()
-      }
-      menuBar = MenuFactory.root.create(this)
+      title     = "Interpreter"
+      contents  = impl.component
+      closeOperation = Window.CloseDispose
       pack()
-      centerOnScreen()
-      open()
+      GUI.centerOnScreen(this)
+      front()
     }
   }
 }
