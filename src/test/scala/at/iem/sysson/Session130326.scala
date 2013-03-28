@@ -16,8 +16,9 @@ object Session130326 extends SessionLike {
 
   rec = true
 
-  val minTA = 167.23929f
-  val maxTA = 301.96228f
+  lazy val minTA = 167.23929f
+  lazy val maxTA = 301.96228f
+  lazy val AMP   = 16
 
   def test1() {
     val numTime = f.dimensionMap("time").size
@@ -71,7 +72,8 @@ object Session130326 extends SessionLike {
     val numTime = f.dimensionMap("time").size
     val numPlev = f.dimensionMap("plev").size
 
-    val timeIdxs = (0 until (numTime/4) by 30)
+//    val timeIdxs = (0 until (numTime/10) by 3)
+    val timeIdxs = (0 until numTime/30)
     val plevIdxs = 5 :: Nil // (0 until numPlev)
     val rates    = 1.0/3 :: Nil
     val scan     = 'lat  // 'lon, 'lat, or 'zig as first scanning axis
@@ -95,6 +97,7 @@ object Session130326 extends SessionLike {
       }
     }
 
+    Thread.sleep(500)
     dummy.free()  // and hence record
     quit()
   }
@@ -116,29 +119,27 @@ object Session130326 extends SessionLike {
 //    val in  = sel.read().float1D.normalize(nan).replaceNaNs(value = nanRplc, fillValue = nan)
     val in  = sel.read().float1D.replaceNaNs(value = nanRplc, fillValue = nan).linlin(min, max)(0.0f, 1.0f)
 
-    val tmp   = File.createTempFile("sysson", ".aif")
-    val af    = AudioFile.openWrite(tmp, AudioFileSpec(numChannels = 1, sampleRate = 44100))
+//    val tmp   = File.createTempFile("sysson", ".aif")
+//    val af    = AudioFile.openWrite(tmp, AudioFileSpec(numChannels = 1, sampleRate = 44100))
     val out   = new Array[Float](in.size)
 
     var ilat = 0; while(ilat < numLat) {
       var ilon = 0; while(ilon < numLon) {
-        val idx = ilat * numLon + ilon
+        val idx     = ilat * numLon + ilon
+        val colIdx  = idx / numLat
+        val rowIdx  = idx % numLat
 
-        if (scan == 'lon) {
-          val z = in(ilat * numLon + ilon)
-          out(ilon + ilat * numLon) = z
+        val z = if (scan == 'lon) {
+          in(ilon + ilat * numLon)
+
         } else if (scan == 'zig) {
-          val z = in(ilat * numLon + ilon)
-          if (ilon % 2 == 0) {
-            out(ilat + ilon * numLat) = z
-          } else {
-            out(numLat - 1 - ilat + ilon * numLat) = z
-          }
+          val readLon = colIdx
+          val readLat = if (colIdx % 2 == 0) rowIdx else numLat - 1 - rowIdx
+          in(readLat * numLon + readLon)
+
         } else if (scan == 'lat) {
-          val colIdx = idx / numLat
-          val rowIdx = idx % numLat
           // abwechselnd die folgenden zwei faelle
-          val z = if (colIdx % 2 == 0) {
+          if (colIdx % 2 == 0) {
             // bei gerader scanner spalte:
             // longitude = scanner spalte / 2
             // latitude  = scanner index modulus numLat
@@ -153,20 +154,21 @@ object Session130326 extends SessionLike {
             val readLat = numLat - 1 - rowIdx
             in(readLat * numLon + readLon)
           }
-          out(idx) = z
 
         } else {
           sys.error(s"Unknown scanning direction $scan")
         }
+        out(idx) = z
+
       ilon += 1 }
     ilat += 1 }
 
-    af.write(Array(out))
-    af.close()
+//    af.write(Array(out))
+//    af.close()
 
-    val bufSz = if (in.size.isPowerOfTwo) in.size else in.size.nextPowerOfTwo >> 1
+    val bufSz = in.size // if (in.size.isPowerOfTwo) in.size else in.size.nextPowerOfTwo >> 1
 //    println(s"Buffer size $bufSz")
-    require(bufSz >= 64)
+//    require(bufSz >= 64)
 
     val buf = Buffer(s)
 
@@ -174,15 +176,16 @@ object Session130326 extends SessionLike {
     val dur   = in.size.toDouble / sr * iter
 
     val df = SynthDef("sysson") {
-      val disk0 = VDiskIn.ar(numChannels = 1, buf = buf.id, speed = rate, loop = 1)
+//      val disk0 = VDiskIn.ar(numChannels = 1, buf = buf.id, speed = rate, loop = 1)
+      val disk0 = PlayBuf.ar(numChannels = 1, buf = buf.id, speed = rate, loop = 1)
       val disk1 = HPZ1.ar(disk0)
 //      val disk  = disk1 // LPF.ar(disk1, SampleRate.ir * rate * 0.5)
-      val baseFreq:GE = sr / (if (scan == 'lon) numLon else numLat)
+//      val baseFreq:GE = sr / (if (scan == 'lon) numLon else numLat)
 //      baseFreq.poll(0)
-      val disk  = BRF.ar(disk1, freq = baseFreq, rq = 1)
+      val disk  = disk1 // BRF.ar(disk1, freq = baseFreq, rq = 1)
       val env0  = EnvGen.ar(Env.linen(0.02, dur - 0.04, 0.02), doneAction = freeSelf)
-      val env   = DelayN.ar(env0, ControlDur.ir * 2, ControlDur.ir * 2)
-      val sig   = Pan2.ar(disk * 8 * env) // Lag.kr(ToggleFF.kr(DelayN.kr(Impulse.kr(0), ControlDur.ir, ControlDur.ir))))
+      val env   = env0 // DelayN.ar(env0, ControlDur.ir * 2, ControlDur.ir * 2)
+      val sig   = Pan2.ar(disk * AMP * env) // Lag.kr(ToggleFF.kr(DelayN.kr(Impulse.kr(0), ControlDur.ir, ControlDur.ir))))
       WrapOut(sig, fadeTime = None)
     }
 
@@ -190,14 +193,18 @@ object Session130326 extends SessionLike {
 
 //    Buffer.cue(s, tmp.path, bufFrames = bufSz)
     buf.alloc(numFrames = bufSz, numChannels = 1,
-      buf.cueMsg(tmp.path, startFrame = 0, df.recvMsg(x.newMsg(df.name)))
+//      buf.cueMsg(tmp.path, startFrame = 0, df.recvMsg(x.newMsg(df.name)))
+      osc.Bundle.now(
+        buf.setnMsg(out.toVector),
+        df.recvMsg(x.newMsg(df.name))
+      )
     )
 
     val prom = concurrent.promise[Unit]()
 
     x.onEnd {
       buf.close(); buf.free()
-      tmp.delete()
+//      tmp.delete()
       // quit()
       prom.success(())
     }
