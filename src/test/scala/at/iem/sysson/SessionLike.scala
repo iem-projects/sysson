@@ -59,7 +59,9 @@ trait SessionLike extends App {
       return
     }
 
-    val fRec  = recDir / s"${dataName}_$name.aif"
+    val i     = dataName.lastIndexOf('.')
+    val name1 = if (i < 0) dataName else dataName.substring(0, i)
+    val fRec  = recDir / s"${name1}_$name.aif"
     val dfRec = SynthDef("_rec") {
       val sig = In.ar(0, 2)
       DiskOut.ar("buf".ir, Limiter.ar(sig, level = -0.2.dbamp))

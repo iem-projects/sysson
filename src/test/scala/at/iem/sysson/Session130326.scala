@@ -12,13 +12,16 @@ import java.io.File
 import concurrent.{Await, Future}
 
 object Session130326 extends SessionLike {
-  def run() { test5() }
+  def run() { test6() }
 
   rec = true
 
-  lazy val minTA = 167.23929f
-  lazy val maxTA = 301.96228f
-  lazy val AMP   = 16
+  lazy val minTA  = 167.23929f
+  lazy val maxTA  = 301.96228f
+  var AMP    = 16
+  var FM     = false
+  var INTERP = true
+  var MOD    = true
 
   def test1() {
     val numTime = f.dimensionMap("time").size
@@ -68,9 +71,14 @@ object Session130326 extends SessionLike {
     scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdxs, rates = rate :: Nil, scan = scan)
   }
 
+  // session mit kathi
   def test5() {
     val numTime = f.dimensionMap("time").size
-    val numPlev = f.dimensionMap("plev").size
+
+    FM      = false
+    INTERP  = true
+    MOD     = false
+    AMP     = 32
 
 //    val timeIdxs = (0 until (numTime/10) by 3)
     val timeIdxs = (0 until numTime/30)
@@ -81,9 +89,32 @@ object Session130326 extends SessionLike {
     scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdxs, rates = rates, scan = scan, iter = Some(1))
   }
 
+  // fm (delay modulation) versuche. noch nicht gut.
+  def test6() {
+    val numTime = f.dimensionMap("time").size
+
+    FM      = false
+    INTERP  = true
+    MOD     = true
+    AMP     = 128
+
+    val timeIdxs = (0 until numTime/90)
+    val plevIdxs = 5 :: Nil // (0 until numPlev)
+    val rates    = 1.0/15 :: Nil
+    val scan     = 'lat  // 'lon, 'lat, or 'zig as first scanning axis
+
+    scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdxs, rates = rates, scan = scan, iter = Some(1))
+  }
+
+  private def mkString(t: Seq[_]): String = {
+    val sz = t.size
+    if (sz <= 6) t.mkString("_")
+    else t.take(3).mkString("_") + "_()_" + t.takeRight(3).mkString("_")
+  }
+
   def scanIter(timeIdxs: Seq[Int], plevIdxs: Seq[Int], rates: Seq[Double], scan: Symbol, iter: Option[Int] = None) {
     val dummy   = play { DC.ar(0) }
-    record(f"Scan_time_${timeIdxs.mkString("_")}_plev_${plevIdxs.mkString("_")}_rate_${rates.map(r => f"$r%1.2f").mkString("_")}_scan_${scan.name}")(dummy)
+    record(f"Scan_time_${mkString(timeIdxs)}_plev_${mkString(plevIdxs)}_rate_${mkString(rates.map(r => f"$r%1.2f"))}_scan_${scan.name}${if (FM) "FM" else ""}")(dummy)
     Thread.sleep(100)
 
     for (timeIdx <- timeIdxs) {
@@ -177,16 +208,49 @@ object Session130326 extends SessionLike {
 
     val df = SynthDef("sysson") {
 //      val disk0 = VDiskIn.ar(numChannels = 1, buf = buf.id, speed = rate, loop = 1)
-      val disk0 = PlayBuf.ar(numChannels = 1, buf = buf.id, speed = rate, loop = 1)
-      val disk1 = HPZ1.ar(disk0)
+
+      val disk0 = if (INTERP) {
+        PlayBuf.ar(numChannels = 1, buf = buf.id, speed = rate, loop = 1)
+      } else {
+        val bufFrames = BufFrames.ir(buf.id)
+        val phasor0 = Phasor.ar(speed = rate, lo = 0, hi = bufFrames)
+        val phasor  = if (FM) {
+          val gridSize  = if (scan == 'lon) numLon else numLat
+          val down      = 8
+          val fmDepth   = gridSize.toDouble / down // 0.25 // 1.0 // 0.5
+//          val noise     = SinOsc.ar(SampleRate.ir/(gridSize * down)) // BrownNoise.ar // WhiteNoise.ar
+          val noise     = LFNoise2.ar(sr/down)
+          val fmMod     = noise.linlin(-1, 1, 0, fmDepth)
+          (phasor0 + fmMod) % bufFrames
+        } else phasor0
+        BufRd.ar(numChannels = 1, buf = buf.id, index = phasor, loop = 1, interp = 1)
+      }
+
+      val disk1  = HPZ1.ar(disk0)
+
+      val disk = if (MOD) {
+        PinkNoise.ar(disk1)
+      } else disk1
+
 //      val disk  = disk1 // LPF.ar(disk1, SampleRate.ir * rate * 0.5)
-//      val baseFreq:GE = sr / (if (scan == 'lon) numLon else numLat)
-//      baseFreq.poll(0)
-      val disk  = disk1 // BRF.ar(disk1, freq = baseFreq, rq = 1)
+//      val baseFreq  = sr / (if (scan == 'lon) numLon else numLat)
+//      (baseFreq: GE).poll(0)
+      val sig  =
+//        if (FM) {
+//        val gridSize  = if (scan == 'lon) numLon else numLat
+//        val fmDepth   = gridSize * 0.25 // 1.0 // 0.5
+////        println(s"fmDepth $fmDepth, gridSize $gridSize")
+////        val noise     = LFNoise1.ar(SampleRate.ir/(2 * gridSize))
+//        val noise     = WhiteNoise.ar
+//        val fmMod     = noise.linlin(-1, 1, 0, fmDepth)
+//        DelayC.ar(disk, maxDelayTime = fmDepth / SampleRate.ir, delayTime = fmMod / SampleRate.ir)
+//      } else
+        disk  // BRF.ar(disk1, freq = baseFreq, rq = 1)
+
       val env0  = EnvGen.ar(Env.linen(0.02, dur - 0.04, 0.02), doneAction = freeSelf)
       val env   = env0 // DelayN.ar(env0, ControlDur.ir * 2, ControlDur.ir * 2)
-      val sig   = Pan2.ar(disk * AMP * env) // Lag.kr(ToggleFF.kr(DelayN.kr(Impulse.kr(0), ControlDur.ir, ControlDur.ir))))
-      WrapOut(sig, fadeTime = None)
+      val pan   = Pan2.ar(sig * AMP * env) // Lag.kr(ToggleFF.kr(DelayN.kr(Impulse.kr(0), ControlDur.ir, ControlDur.ir))))
+      WrapOut(pan, fadeTime = None)
     }
 
     val x = Synth(s)
