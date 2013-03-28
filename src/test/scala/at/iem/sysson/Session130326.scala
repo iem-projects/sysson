@@ -2,7 +2,7 @@ package at.iem.sysson
 
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import Implicits._
-import de.sciss.synth
+import de.sciss.{osc, synth}
 import synth._
 import io.{AudioFileSpec, AudioFile}
 import ugen._
@@ -12,9 +12,12 @@ import java.io.File
 import concurrent.{Await, Future}
 
 object Session130326 extends SessionLike {
-  def run() { test1() }
+  def run() { test5() }
 
   rec = true
+
+  val minTA = 167.23929f
+  val maxTA = 301.96228f
 
   def test1() {
     val numTime = f.dimensionMap("time").size
@@ -64,7 +67,19 @@ object Session130326 extends SessionLike {
     scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdxs, rates = rate :: Nil, scan = scan)
   }
 
-  def scanIter(timeIdxs: Seq[Int], plevIdxs: Seq[Int], rates: Seq[Double], scan: Symbol) {
+  def test5() {
+    val numTime = f.dimensionMap("time").size
+    val numPlev = f.dimensionMap("plev").size
+
+    val timeIdxs = (0 until (numTime/4) by 30)
+    val plevIdxs = 5 :: Nil // (0 until numPlev)
+    val rates    = 1.0/3 :: Nil
+    val scan     = 'lat  // 'lon, 'lat, or 'zig as first scanning axis
+
+    scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdxs, rates = rates, scan = scan, iter = Some(1))
+  }
+
+  def scanIter(timeIdxs: Seq[Int], plevIdxs: Seq[Int], rates: Seq[Double], scan: Symbol, iter: Option[Int] = None) {
     val dummy   = play { DC.ar(0) }
     record(f"Scan_time_${timeIdxs.mkString("_")}_plev_${plevIdxs.mkString("_")}_rate_${rates.map(r => f"$r%1.2f").mkString("_")}_scan_${scan.name}")(dummy)
     Thread.sleep(100)
@@ -72,9 +87,9 @@ object Session130326 extends SessionLike {
     for (timeIdx <- timeIdxs) {
       for (plevIdx <- plevIdxs) {
         for (rate <- rates) {
-          val iter = math.ceil(12 * rate).toInt
+          val iter0 = iter getOrElse math.ceil(12 * rate).toInt
           println(f"time $timeIdx, plev $plevIdx, rate $rate%1.2f")
-          val fut = scanIter1(plevIdx = plevIdx, timeIdx = timeIdx, scan = scan, iter = iter, rate = rate)
+          val fut = scanIter1(plevIdx = plevIdx, timeIdx = timeIdx, scan = scan, iter = iter0, rate = rate)
           Await.result(fut, 1000.seconds)
         }
       }
@@ -84,8 +99,8 @@ object Session130326 extends SessionLike {
     quit()
   }
 
-  private def scanIter1(plevIdx: Int, timeIdx: Int, scan: Symbol, iter: Int, rate: Double): Future[Unit] = {
-    val nanRplc = 1f  // value to replace NaNs with
+  private def scanIter1(plevIdx: Int, timeIdx: Int, scan: Symbol, iter: Int, rate: Double, min: Float = minTA, max: Float = maxTA): Future[Unit] = {
+    val nanRplc = max // value to replace NaNs with
 
     val v       = f.variableMap("ta")
     val numPlev = f.dimensionMap("plev").size
@@ -98,56 +113,85 @@ object Session130326 extends SessionLike {
 
     val sel = (v in "time" select timeIdx) in "plev" select plevIdx
     val nan = v.fillValue
-    val arr = sel.read().float1D.normalize(nan).replaceNaNs(value = nanRplc, fillValue = nan)
-//    println(s"Min ${arr.min}, Max ${arr.max}")
+//    val in  = sel.read().float1D.normalize(nan).replaceNaNs(value = nanRplc, fillValue = nan)
+    val in  = sel.read().float1D.replaceNaNs(value = nanRplc, fillValue = nan).linlin(min, max)(0.0f, 1.0f)
 
     val tmp   = File.createTempFile("sysson", ".aif")
     val af    = AudioFile.openWrite(tmp, AudioFileSpec(numChannels = 1, sampleRate = 44100))
-    val arr1  = new Array[Float](arr.size)
+    val out   = new Array[Float](in.size)
 
     var ilat = 0; while(ilat < numLat) {
       var ilon = 0; while(ilon < numLon) {
-        // val z = arr(y * width + x)
-        val z = arr(ilat * numLon + ilon)
-        // data.setZValue(x, y, z)
-        // data.update(y, x, z)
+        val idx = ilat * numLon + ilon
+
         if (scan == 'lon) {
-          arr1(ilon + ilat * numLon) = z
+          val z = in(ilat * numLon + ilon)
+          out(ilon + ilat * numLon) = z
         } else if (scan == 'zig) {
+          val z = in(ilat * numLon + ilon)
           if (ilon % 2 == 0) {
-            arr1(ilat + ilon * numLat) = z
+            out(ilat + ilon * numLat) = z
           } else {
-            arr1(numLat - 1 - ilat + ilon * numLat) = z
+            out(numLat - 1 - ilat + ilon * numLat) = z
           }
         } else if (scan == 'lat) {
-          if (ilon % 2 == 0) {
-            arr1(ilat + (ilon >> 1) * numLat) = z
+          val colIdx = idx / numLat
+          val rowIdx = idx % numLat
+          // abwechselnd die folgenden zwei faelle
+          val z = if (colIdx % 2 == 0) {
+            // bei gerader scanner spalte:
+            // longitude = scanner spalte / 2
+            // latitude  = scanner index modulus numLat
+            val readLon = colIdx / 2
+            val readLat = rowIdx
+            in(readLat * numLon + readLon)
           } else {
-            arr1(numLat - 1 - ilat + ((ilon >> 1) + numLon >> 1) * numLat) = z
+            // bei ungerader scanner spalte:
+            // longitude = scanner spalte / 2 + numLon/2
+            // latitude  = scanner index modulus numLat
+            val readLon = (colIdx + numLon) / 2
+            val readLat = numLat - 1 - rowIdx
+            in(readLat * numLon + readLon)
           }
+          out(idx) = z
+
         } else {
           sys.error(s"Unknown scanning direction $scan")
         }
       ilon += 1 }
     ilat += 1 }
 
-    af.write(Array(arr1))
+    af.write(Array(out))
     af.close()
 
-    val bufSz = if (arr.size.isPowerOfTwo) arr.size else arr.size.nextPowerOfTwo >> 1
+    val bufSz = if (in.size.isPowerOfTwo) in.size else in.size.nextPowerOfTwo >> 1
 //    println(s"Buffer size $bufSz")
     require(bufSz >= 64)
-    val buf   = Buffer.cue(s, tmp.path, bufFrames = bufSz)
 
-    val dur   = arr.size.toDouble / (44100 * rate) * iter
+    val buf = Buffer(s)
 
-    val x = play {
+    val sr    = 44100 * rate
+    val dur   = in.size.toDouble / sr * iter
+
+    val df = SynthDef("sysson") {
       val disk0 = VDiskIn.ar(numChannels = 1, buf = buf.id, speed = rate, loop = 1)
       val disk1 = HPZ1.ar(disk0)
-      val disk  = LPF.ar(disk1, SampleRate.ir * rate * 0.5)
-      Line.kr(dur = dur, doneAction = freeSelf)
-      Pan2.ar(disk * 2 * ToggleFF.kr(DelayN.kr(Impulse.kr(0), ControlDur.ir, ControlDur.ir)))
+//      val disk  = disk1 // LPF.ar(disk1, SampleRate.ir * rate * 0.5)
+      val baseFreq:GE = sr / (if (scan == 'lon) numLon else numLat)
+//      baseFreq.poll(0)
+      val disk  = BRF.ar(disk1, freq = baseFreq, rq = 1)
+      val env0  = EnvGen.ar(Env.linen(0.02, dur - 0.04, 0.02), doneAction = freeSelf)
+      val env   = DelayN.ar(env0, ControlDur.ir * 2, ControlDur.ir * 2)
+      val sig   = Pan2.ar(disk * 8 * env) // Lag.kr(ToggleFF.kr(DelayN.kr(Impulse.kr(0), ControlDur.ir, ControlDur.ir))))
+      WrapOut(sig, fadeTime = None)
     }
+
+    val x = Synth(s)
+
+//    Buffer.cue(s, tmp.path, bufFrames = bufSz)
+    buf.alloc(numFrames = bufSz, numChannels = 1,
+      buf.cueMsg(tmp.path, startFrame = 0, df.recvMsg(x.newMsg(df.name)))
+    )
 
     val prom = concurrent.promise[Unit]()
 
