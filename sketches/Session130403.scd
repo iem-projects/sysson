@@ -9,10 +9,14 @@
 // [0] the index of the latitude which is maximal
 // [1] the sample value (specific humidity) for that latitude
 // [2] the bandwidth in latitude indices, as -3 drop off against maximum
-~lm = [[29,0.0023981533, 5], [39,0.0020948418, 3], [37,0.0020472144, 10], [37,0.00249873, 3], [35,0.0016489016, 7], [29,0.0024894124, 9], [34,0.0027244077, 7], [34,0.0032935464, 7], [34,0.0021819484, 7]];
+~lm_time0 = [[29,0.0023981533, 5], [39,0.0020948418, 3], [37,0.0020472144, 10], [37,0.00249873, 3], [35,0.0016489016, 7], [29,0.0024894124, 9], [34,0.0027244077, 7], [34,0.0032935464, 7], [34,0.0021819484, 7]];
+
+~lm_time6 = [[37.0,0.0020803397,4.0],[38.0,0.0018434906,3.0],[38.0,0.0027859572,10.0],[37.0,0.0028848622,3.0],[37.0,0.0025149807,4.0],[39.0,0.0016448286,6.0],[48.0,0.0031668704,4.0],[45.0,0.0030612436,15.0],[37.0,0.0031533504,7.0]];
+
 
 // normalize stuff. 1st step: humidity value
-~lmn = ~lm.deepCopy;
+// CHANGE THE INPUT ARRAY HERE!!
+~lmn = ~lm_time6.deepCopy;
 ~lmn.do({ arg x; x[1] = x[1].linlin(0, ~max, 0, 1) }); // assume 0 is the natural minimum humidity ratio
 
 // 3nd step: latitude indices (center them around equator + normalize to -1..1)
@@ -29,10 +33,10 @@
 s.options.numWireBufs = 512; // !
 
 (
-~def = SynthDef(\sysson_bubbles, { arg pitchcurvelen = 0.1, baseFreq = 400, volume = 0.1;
+~def = SynthDef(\sysson_bubbles, { arg pitchcurvelen = 0.1, baseFreq = 400, volume = 0.1, maxDensity = 4;
 	var lat, mag, spread, poly, pool, trig, density, amp, trans, freq, attack, decay,
-	    trigs, ts, osc, oscs, cnt, maxDensity;
-	poly   = 2; // 10;
+	    trigs, ts, osc, oscs, cnt;
+	poly   = 10;
 	lat    = \lat.kr(0 ! 9);
 	mag    = \mag.kr(0 ! 9);
 	spread = \spread.kr(0 ! 9);
@@ -40,29 +44,28 @@ s.options.numWireBufs = 512; // !
 	attack = \attack.kr(0.01);
 	decay  = \decay.kr(0.08);
 
-	maxDensity = 1; // 20;
-
 	// first dimension = longitude, second dim. = voice#
 	pool   = Array.fill(9, { |lon|
-		density = mag[lon].linexp(0, 1, 0, maxDensity);
+		density = mag[lon].linlin(0, 1, 0, maxDensity);
+//density.poll(1, "lon" ++ lon);
 		trig  = Dust.kr(density);
 		trigs = trig ! poly;
 		cnt   = Stepper.kr(trig, min: 0, max: poly - 1);
-cnt.poll(trig);
+// cnt.poll(trig);
 		trigs = trigs.collect { arg t, i; t * BinaryOpUGen('==', i, cnt) };
-// trigs.poll(trig, label: "lon" ++ lon);
+//trigs.poll(trig, label: "lon" ++ lon);
 		freq  = lat[lon].linlin(-1, 1, -12, 12).midiratio * baseFreq;
 		oscs  = Array.fill(poly, { |vc|
-			["aqui", vc].postln;
 			ts    = trigs[vc];
 			amp   = EnvGen.ar(Env.perc(attack, decay).delay(0.003), ts);
 			trans = EnvGen.ar(Env.new([0,0,1],[0,1]).exprange(1, 2), ts,
 			timeScale: pitchcurvelen);
-			osc   = SinOsc.ar(freq * trans);
+			osc   = SinOsc.ar(freq * trans) * amp;
 		});
 //		oscs = DC.ar(0) ! poly;
 		Pan2.ar(Mix.ar(oscs), lon.linlin(0, 8, -1, 1));
 	});
+//	pool = pool.keep(2);
 	Out.ar(0, HPF.ar(Mix.ar(pool), 500) * volume);
 });
 ~def.load(s);
@@ -72,11 +75,16 @@ cnt.poll(trig);
 
 x = Synth(~def.name, [\lat, ~lmn.collect(_.at(0)), \mag, ~lmn.collect(_.at(1)),
 	\spread, ~lmn.collect(_.at(2))]);
+
+x.set(\maxDensity, 8);
 x.set(\volume, 0.1);
-// x.set(\baseFreq, 400);
+x.set(\baseFreq, 400);
 
 x.set(\mag, 0 ! 9);
 
+
+~rec = SimpleRecorder.new;
+~rec.makeWindow;
 
 
 

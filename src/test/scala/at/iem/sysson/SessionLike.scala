@@ -25,11 +25,12 @@ trait SessionLike extends App {
     * it just launches the payload synth and doesn't record anything.
     */
   var rec = false
+  lazy val useAudio = true
 
   /** You must define this method which is invoked when the audio system is ready and the data file has been opened. */
   def run(): Unit
 
-  AudioSystem.start().whenBooted { _ => run() }
+  if (useAudio) AudioSystem.start().whenBooted { _ => run() } else run()
 
   lazy val dataName  = "25_ta_Amon_HadGEM2-ES_rcp45_r1i1p1_200512-210012.nc"
   lazy val dataFile  = dataDir / "201211" / "gcm" / "RCP45" / "MetOffUK_HadGEM2-ES" / dataName
