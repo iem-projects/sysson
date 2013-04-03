@@ -27,7 +27,8 @@ libraryDependencies ++= {
     "de.sciss" %% "scalaosc" % "1.1.1+",
     "de.sciss" %% "desktop" % "0.1.+",
     "de.sciss" % "intensitypalette" % "1.0.0",
-    "org.jfree" % "jfreechart" % "1.0.14"
+    "org.jfree" % "jfreechart" % "1.0.14",
+    "org.scala-saddle" %% "saddle" % "1.0.1"
   )
 }
 
