@@ -90,6 +90,12 @@ object Implicits {
     def dimensions    = peer.getDimensions.toIndexedSeq
     def ranges        = peer.getRanges.toIndexedSeq
 
+    def file: nc2.NetcdfFile = {
+      val field = classOf[nc2.Variable].getDeclaredField("ncfile")
+      field.setAccessible(true)
+      field.get(peer).asInstanceOf[nc2.NetcdfFile]
+    }
+
     def units         = Option(peer.getUnitsString)
     def isFloat       = dataType == ma2.DataType.FLOAT
     def isDouble      = dataType == ma2.DataType.DOUBLE
@@ -98,7 +104,10 @@ object Implicits {
       attributeMap.get("_FillValue").map(_.getNumericValue.floatValue()).getOrElse(Float.NaN)
     }
 
-    def read()        = peer.read()
+    // it would be good to shadow peer.read(), but because it takes precedence over
+    // an equally named enriched method, there is no way to enforce this. use `readSafe` instead.
+    def read()        = peer.synchronized(peer.read())
+    def readSafe()    = peer.synchronized(peer.read())
 
     def in(dim: String): VariableSection.In = selectAll.in(dim)
 

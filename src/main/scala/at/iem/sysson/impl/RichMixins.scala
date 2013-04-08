@@ -4,6 +4,7 @@ package impl
 import ucar.{nc2, ma2}
 import collection.breakOut
 import collection.immutable.{IndexedSeq => IIdxSeq}
+import at.iem.sysson.gui.Plot
 
 trait HasDimensions {
   import Implicits._
@@ -34,6 +35,9 @@ trait VariableLike extends HasDimensions {
   def ranges: IIdxSeq[ma2.Range]
 
   def read(): ma2.Array
+
+  // this requires reflection because stupidly there is no public accessor on nc2.Variable
+  def file: nc2.NetcdfFile
 
   private def effectiveDimIndices: IIdxSeq[Int] = {
     val sh  = shape

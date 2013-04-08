@@ -20,15 +20,15 @@ libraryDependencies ++= {
   val scv  = "1.5.2+" // ScalaCollider
   val scbv = "1.5.+"  // base (ugens, swing)
   Seq(
-    "de.sciss" %% "scalacolliderswing" % scbv,
-    "de.sciss" %% "scalacollider" % scv,
-    "com.github.benhutchison" % "scalaswingcontrib" % "1.4",
-    "de.sciss" %  "scalacolliderugens-spec" % scbv,
-    "de.sciss" %% "scalaosc" % "1.1.1+",
-    "de.sciss" %% "desktop" % "0.1.+",
-    "de.sciss" % "intensitypalette" % "1.0.0",
-    "org.jfree" % "jfreechart" % "1.0.14"
-//    "org.scala-saddle" %% "saddle" % "1.0.1"
+    "de.sciss" %% "scalacollider" % scv,                        // client for SuperCollider
+    "de.sciss" %% "scalacolliderswing" % scbv,                  // some graphical features for ScalaCollider
+    "de.sciss" %  "scalacolliderugens-spec" % scbv,             // UGen specs used in the patcher class
+    "de.sciss" %% "scalaosc" % "1.1.1+",                        // Open Sound Control
+    "de.sciss" %% "desktop" % "0.1.+",                          // application framework
+    "de.sciss" %  "intensitypalette" % "1.0.0",                 // colour palette
+    "de.sciss" %% "filecache" % "0.1.+",                        // caching statistics of data files
+    "org.jfree" % "jfreechart" % "1.0.14",                      // plotting
+    "com.github.benhutchison" % "scalaswingcontrib" % "1.4"     // some GUI widgets
   )
 }
 

@@ -5,6 +5,7 @@ import collection.immutable.{IndexedSeq => IIdxSeq}
 
 import Implicits._
 import collection.JavaConversions
+import at.iem.sysson.gui.Plot
 
 object VariableSection {
   /** A transitory class specifying a variable section along with a dimension
@@ -35,7 +36,7 @@ object VariableSection {
 final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange], scale: Scale = Scale.Identity)
   extends impl.VariableLike {
 
-  def read(): ma2.Array = variable.read(toSection)
+  def read(): ma2.Array = variable.synchronized(variable.read(toSection))
 
   def readScaled1D(): IIdxSeq[Float] = read().scaled1D(scale)
 
@@ -81,6 +82,8 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
   /** Undoes all dimensional selections and reverts to the full matrix of the variable */
   def selectAll     = variable.selectAll
 
+  def file: nc2.NetcdfFile = variable.file
+
   /** Selects a dimension in which a subsequent selection should be made.
     * A typical call is `section in "dim-name" select some-range`
     *
@@ -91,6 +94,10 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
   def in(dim: String): VariableSection.In = {
     new VariableSection.In(this, dimIdxByName(dim))
   }
+
+  // ---- plotting ----
+
+  def plot(): Plot = Plot(this)
 
   private def dimIdxByName(n: String): Int = {
     val idx = variable.findDimensionIndex(n)

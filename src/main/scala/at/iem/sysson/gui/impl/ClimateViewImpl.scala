@@ -45,7 +45,9 @@ object ClimateViewImpl {
 
   def currentSection: Option[VariableSection] = _currentSection
 
-  def apply(in: nc2.NetcdfFile, section: VariableSection): ClimateView = {
+  def apply(section: VariableSection): ClimateView = {
+    val in = section.file
+
     def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
       in.variableMap.get(dim.name.getOrElse("?")) match {
         case Some(v) if v.isFloat =>

@@ -5,7 +5,7 @@ package impl
 import swing._
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
-import javax.swing.{WindowConstants, JTree}
+import javax.swing.JTree
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
@@ -185,7 +185,7 @@ private[impl] object DocumentViewImpl {
 
     private val ggPlot = Button("Plot") {
       selectedVariable.foreach { v =>
-        val view  = ClimateView(document.data, v.selectAll)
+        val view  = ClimateView(v.selectAll)
         new Frame {
           title     = v.name
           contents = view.component
