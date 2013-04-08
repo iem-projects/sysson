@@ -11,6 +11,10 @@ import concurrent.duration._
 object Session130311 extends SessionLike {
   rec = true
 
+  lazy val useGivenMinMax = true
+  lazy val givenMin = 215.90529
+  lazy val givenMax = 309.3748
+
   def run() { test3() }
 
   def test1() {
@@ -65,8 +69,8 @@ object Session130311 extends SessionLike {
   }
 
   def test3() {
-    graph333("PanSin2") { (min, max, d, lon, lat, plev) =>
-      val freq = d.linexp(min,max,400,600)
+    graph333("PanSinNeu") { (min, max, d, lon, lat, plev) =>
+      val freq = d.linexp(min, max, 400, 800)
       val pan = lon.linlin(0, 2, -1, 1)
       Pan2.ar(SinOsc.ar(freq) * 0.1, pan)
     }
@@ -249,7 +253,7 @@ object Session130311 extends SessionLike {
     val sel1  = v    in "lon"  select lonRange
     val sel2  = sel1 in "lat"  select latRange
     val sel3  = sel2 in "plev" select plevRange
-    val (min, max) = sel3.minmax
+    val (min, max) = if (useGivenMinMax) (givenMin, givenMax) else sel3.minmax
 
     val son = sound.Sonification("Test")
     son.graph = {

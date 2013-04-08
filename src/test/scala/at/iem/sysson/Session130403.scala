@@ -4,7 +4,7 @@ import Implicits._
 
 object Session130403 extends SessionLike {
   lazy val supercollider  = true   // if `true`, print array data for sclang
-  lazy val useMax         = true
+  lazy val useMax         = false
 
   override lazy val useAudio = !supercollider
 

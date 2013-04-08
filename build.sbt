@@ -79,4 +79,6 @@ appbundle.icon <<= (resourceDirectory in Compile, organization) { case (par, org
   Some(icn)
 }
 
+appbundle.javaOptions += "-Xmx2048m"
+
 appbundle.target <<= baseDirectory      // make .app bundle in the main directory
