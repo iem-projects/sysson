@@ -9,13 +9,13 @@ import synth.Ops._
 import concurrent.duration._
 
 object Session130311 extends SessionLike {
-  rec = true
+  rec = false
 
   lazy val useGivenMinMax = true
   lazy val givenMin = 215.90529
   lazy val givenMax = 309.3748
 
-  def run() { test3() }
+  def run() { test8() }
 
   def test1() {
     val v   = f.variableMap("ta")

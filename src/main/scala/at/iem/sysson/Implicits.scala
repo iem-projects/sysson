@@ -163,6 +163,36 @@ object Implicits {
       Vector.fill(sz.toInt)(it.getDoubleNext)
     }
 
+    def float1Diterator: Iterator[Float] = {
+      val it = peer.getIndexIterator
+      if (isFloat)
+        new Iterator[Float] {
+          def hasNext = it.hasNext
+          def next()  = it.getFloatNext
+        }
+      else if (isDouble)
+        new Iterator[Float] {
+          def hasNext = it.hasNext
+          def next()  = it.getDoubleNext.toFloat
+        }
+      else sys.error(s"Data type is neither Float nor Double")
+    }
+
+    def double1Diterator: Iterator[Double] = {
+      val it = peer.getIndexIterator
+      if (isFloat)
+        new Iterator[Double] {
+          def hasNext = it.hasNext
+          def next()  = it.getFloatNext.toDouble
+        }
+      else if (isDouble)
+        new Iterator[Double] {
+          def hasNext = it.hasNext
+          def next()  = it.getDoubleNext
+        }
+      else sys.error(s"Data type is neither Float nor Double")
+    }
+
     private def float1DIter: ma2.IndexIterator = {
       requireFloat()
 //      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
