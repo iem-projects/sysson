@@ -53,7 +53,7 @@ object Session130326 extends SessionLike {
 
     val timeIdxs = 0 :: Nil
     val plevIdxs = 5 :: Nil // (0 until numPlev by 2)
-    val rates   = Seq.tabulate(6)(1.0 / _)
+    val rates   = (1 to 6).map(1.0 / _)
     val scan    = 'zig  // 'lon, 'lat, or 'zig as first scanning axis
 
     scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdxs, rates = rates, scan = scan)
