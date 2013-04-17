@@ -10,7 +10,13 @@ import concurrent._
 import Implicits._
 
 object Stats {
-  private val COOKIE = 0x53746174
+  private val COOKIE  = 0x53746174
+
+  private val DEBUG   = true
+
+  private def debug(what: => String) {
+    if (DEBUG) println(s"<cache> $what")
+  }
 
   private object CacheValue {
     implicit object Serializer extends ImmutableSerializer[CacheValue] {
@@ -32,7 +38,10 @@ object Stats {
       }
     }
   }
-  private case class CacheValue(size: Long, lastModified: Long, data: File)
+  private case class CacheValue(size: Long, lastModified: Long, data: File) {
+    override def toString =
+      s"$productPrefix(size = $size, lastModified = ${new java.util.Date(lastModified)}, data = ${data.getName})"
+  }
 
   /*
     The cache is organised as follows:
@@ -48,9 +57,16 @@ object Stats {
   private lazy val cache = {
     val config        = filecache.Producer.Config[File, CacheValue]()
     config.capacity   = filecache.Limit(count = 100, space = 1L * 1024 * 1024)  // 1 MB... whatever, these files are incredibly small
-    config.accept     = (key, value) => key.lastModified() == value.lastModified && key.length() == value.size
+    config.accept     = (key, value) => {
+      val res = key.lastModified() == value.lastModified && key.length() == value.size
+      debug(s"accept key = ${key.getName} (lastModified = ${new java.util.Date(key.lastModified())}, size = ${key.length()}), value = $value? $res")
+      res
+    }
     config.space      = (_  , value) => value.data.length()
-    config.evict      = (_  , value) => value.data.delete()
+    config.evict      = (_  , value) => {
+      debug(s"evict $value")
+      value.data.delete()
+    }
     config.folder     = dataDir / "cache"
     filecache.Producer(config)
   }
@@ -70,22 +86,35 @@ object Stats {
         // then build the Map[String, IIdxSeq[Counts]] by iteratively reducing all dimensions but one, over which
         // the stats are generated
 
+        val accept = if (vr.isFloat) {
+          val f = vr.fillValue
+          if (f.isNaN) !(_: Double).isNaN else (_: Double).toFloat != f
+        } else {
+          (_: Double) => true  // no fill values for non-float vars, accept all
+        }
+
         def sectionCounts(sel: VariableSection): PreCounts = {
           val arr = sel.read()
-          val num = arr.size
+          // val num = arr.size
           var sum = 0.0
           var min = Double.MaxValue
           var max = Double.MinValue
+          var num = 0
           arr.double1Diterator.foreach { d =>
-            sum += d
-            if (min > d) min = d
-            if (max < d) max = d
+            if (accept(d)) {
+              num += 1
+              sum += d
+              if (min > d) min = d
+              if (max < d) max = d
+            }
           }
           val mean    = sum/num
           var sqrDif  = 0.0
           arr.double1Diterator.foreach { d =>
-            val dif = d - mean
-            sqrDif += dif * dif
+            if (accept(d)) {
+              val dif = d - mean
+              sqrDif += dif * dif
+            }
           }
           // val stddev = math.sqrt(sqrDif/num)
           PreCounts(num = num, min = min, max = max, sum = sum, sqrDif = sqrDif)
@@ -111,8 +140,8 @@ object Stats {
       val stats = Stats(statsMap)
       val f     = File.createTempFile("sysson", ".stats", cache.config.folder)
       val out   = DataOutput.open(f)
-      val fSz   = f.length()
-      val fMod  = f.lastModified()
+      val fSz   = key.length()
+      val fMod  = key.lastModified()
       var succ  = false
       try {
         Stats.Serializer.write(stats, out)
@@ -121,7 +150,10 @@ object Stats {
         CacheValue(size = fSz, lastModified = fMod, data = f)
       } finally {
         out.close()
-        if (!succ) f.delete()
+        if (!succ) {
+          debug(s"Not successful. Deleting $f")
+          f.delete()
+        }
       }
     })
     import cache.executionContext
@@ -161,7 +193,9 @@ object Stats {
       }
     }
   }
-  case class Counts(min: Double, max: Double, mean: Double, stddev: Double)
+  case class Counts(min: Double, max: Double, mean: Double, stddev: Double) {
+    override def toString = s"$productPrefix(min = ${min.toFloat}, max = ${max.toFloat}, mean = ${mean.toFloat}, stddev = ${stddev.toFloat})"
+  }
 
   private case class PreCounts(num: Long, min: Double, max: Double, sum: Double, sqrDif: Double) {
     def complete = Counts(min = min, max = max, mean = sum/num, stddev = math.sqrt(sqrDif/num))
@@ -191,7 +225,9 @@ object Stats {
       }
     }
   }
-  case class Variable(name: String, total: Counts, slices: Map[String, IIdxSeq[Counts]])
+  case class Variable(name: String, total: Counts, slices: Map[String, IIdxSeq[Counts]]) {
+    override def toString = s"(\"$name\", total = $total${if (slices.isEmpty) "" else slices.keys.mkString(", slices = <", ",", ">")})"
+  }
 
   implicit object Serializer extends ImmutableSerializer[Stats] {
     def write(v: Stats, out: DataOutput) {
@@ -220,4 +256,17 @@ object Stats {
   */
 case class Stats(map: Map[String, Stats.Variable]) {
   def apply(name: String) = map(name)
+
+  override def toString = {
+    val sb = new java.lang.StringBuilder(128)
+    sb.append(productPrefix)
+    sb.append('(')
+    map.values.foreach { v =>
+      sb.append("\n  ")
+      sb.append(v)
+    }
+    if (map.nonEmpty) sb.append('\n')
+    sb.append(')')
+    sb.toString
+  }
 }
