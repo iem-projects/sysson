@@ -71,6 +71,8 @@ object Stats {
     filecache.Producer(config)
   }
 
+  implicit def executionContext = cache.executionContext
+
   def get(doc: nc2.NetcdfFile): Future[Stats] = {
     val key = file(doc.path)
     val fut = cache.acquire(key, blocking {
@@ -156,7 +158,7 @@ object Stats {
         }
       }
     })
-    import cache.executionContext
+
     fut.map { value =>
       blocking {
         val in = DataInput.open(value.data)
@@ -226,7 +228,7 @@ object Stats {
     }
   }
   case class Variable(name: String, total: Counts, slices: Map[String, IIdxSeq[Counts]]) {
-    override def toString = s"(\"$name\", total = $total${if (slices.isEmpty) "" else slices.keys.mkString(", slices = <", ",", ">")})"
+    override def toString = raw""""$name", total = $total${if (slices.isEmpty) "" else slices.keys.mkString(", slices = <", ",", ">")})"""
   }
 
   implicit object Serializer extends ImmutableSerializer[Stats] {

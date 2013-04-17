@@ -34,7 +34,8 @@ trait VariableLike extends HasDimensions {
   def rank: Int
   def ranges: IIdxSeq[ma2.Range]
 
-  def read(): ma2.Array
+  def read(): ma2.Array = readSafe()
+  def readSafe(): ma2.Array
 
   // this requires reflection because stupidly there is no public accessor on nc2.Variable
   def file: nc2.NetcdfFile

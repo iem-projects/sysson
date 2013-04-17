@@ -36,7 +36,7 @@ object VariableSection {
 final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange], scale: Scale = Scale.Identity)
   extends impl.VariableLike {
 
-  def read(): ma2.Array = variable.synchronized(variable.read(toSection))
+  def readSafe(): ma2.Array = variable.synchronized(variable.read(toSection))
 
   def readScaled1D(): IIdxSeq[Float] = read().scaled1D(scale)
 

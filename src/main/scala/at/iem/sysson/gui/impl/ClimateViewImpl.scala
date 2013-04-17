@@ -48,14 +48,16 @@ object ClimateViewImpl {
   def apply(section: VariableSection): ClimateView = {
     val in = section.file
 
+    var stats =  Option.empty[Stats.Variable]
+
     def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
       in.variableMap.get(dim.name.getOrElse("?")) match {
         case Some(v) if v.isFloat =>
-          val dat = v.read().float1D
+          val dat = v.readSafe().float1D
           (i: Int) => f"${dat(i).toInt}%d${if (units) v.units.map(s => " " + s).getOrElse("") else ""}"
 
         case Some(v) if v.isDouble  =>
-          val dat = v.read().double1D
+          val dat = v.readSafe().double1D
           (i: Int) => f"${dat(i).toInt}%d${if (units) v.units.map(s => " " + s).getOrElse("") else ""}"
 
         case _ => (i: Int) => i.toString
@@ -83,7 +85,16 @@ object ClimateViewImpl {
       }
       _currentSection = Some(sec)
 //      val t2 = time()
-      val arr = sec.read().float1D.normalize(sec.variable.fillValue)
+      val arr0 = sec.readSafe().float1D
+
+      // if the statistics are available, make a global scale normalization, otherwise
+      // normalize the current frame.
+      val arr = stats match {
+        case Some(s) =>
+          arr0.linlin(s.total.min, s.total.max, sec.variable.fillValue)(0.0, 1.0)
+        case _ =>
+          arr0.normalize(sec.variable.fillValue)
+      }
 //      val t3 = time()
       var x = 0; while(x < width) {
         var y = 0; while(y < height) {
@@ -95,6 +106,16 @@ object ClimateViewImpl {
       x += 1 }
       data.fireSeriesChanged()
 //      val t4 = time()
+    }
+
+    import Stats.executionContext
+    Stats.get(in).onSuccess {
+      case Stats(map) =>
+        val s = map.get(section.name)
+        if (s.isDefined) {
+          stats = s
+          updateData()
+        }
     }
 
     lazy val redGUI: IIdxSeq[Reduction] = red.map { d =>

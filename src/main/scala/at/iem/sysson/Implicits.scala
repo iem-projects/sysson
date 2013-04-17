@@ -106,7 +106,6 @@ object Implicits {
 
     // it would be good to shadow peer.read(), but because it takes precedence over
     // an equally named enriched method, there is no way to enforce this. use `readSafe` instead.
-    def read()        = peer.synchronized(peer.read())
     def readSafe()    = peer.synchronized(peer.read())
 
     def in(dim: String): VariableSection.In = selectAll.in(dim)
@@ -266,13 +265,14 @@ object Implicits {
       peer.map(f => if (checkNaN(f)) f else (f - min) * mul)
     }
 
-    def linlin(srcLo: Double = 0.0, srcHi: Double = 1.0)(tgtLo: Double, tgtHi: Double): IIdxSeq[Float] = {
+    def linlin(srcLo: Double = 0.0, srcHi: Double = 1.0, fillValue: Float = Float.NaN)(tgtLo: Double, tgtHi: Double): IIdxSeq[Float] = {
       require(srcLo != srcHi, "Source range is zero (lo = " + srcLo + ", hi = " + srcHi + ")")
       require(tgtLo != tgtHi, "Target range is zero (lo = " + tgtLo + ", hi = " + tgtHi + ")")
+      val checkNaN = checkNaNFun(fillValue)
       val add1 = -srcLo
       val mul  = (tgtHi - tgtLo) / (srcHi - srcLo)
       val add2 = tgtLo
-      peer.map(f => ((f + add1) * mul + add2).toFloat)
+      peer.map(f => if (checkNaN(f)) f else ((f + add1) * mul + add2).toFloat)
     }
 
     def asEnv(dur: Double, shape: synth.Env.ConstShape = synth.stepShape): ugen.EnvGen = {
