@@ -5,7 +5,7 @@ import java.awt.FileDialog
 import java.awt.event.KeyEvent
 import java.io.{RandomAccessFile, File, FilenameFilter}
 import scala.util.control.NonFatal
-import de.sciss.desktop.{KeyStrokes, Menu}
+import de.sciss.desktop.{RecentFiles, KeyStrokes, Menu}
 
 object MenuFactory {
 
@@ -15,6 +15,17 @@ object MenuFactory {
     import Menu._
     import KeyEvent._
     import KeyStrokes._
+
+    val dh = DocumentHandler.instance
+
+    val recent = RecentFiles(SwingApplication.userPrefs("recent-docs")) { f =>
+      dh.openRead(f.getPath)
+    }
+
+    dh.addListener {
+      case DocumentHandler.Opened(doc) => recent.add(file(doc.path))
+    }
+
     Root().add(
       Group("file", "File").add(
         Group("new", "New").add(
@@ -27,7 +38,7 @@ object MenuFactory {
           openDialog()
         }
       ).add(
-        Group("recent", "Open Recent")
+        recent.menu
       ).addLine().add(
         Item("close", "Close" -> (menu1 + VK_W))
       ).add(
