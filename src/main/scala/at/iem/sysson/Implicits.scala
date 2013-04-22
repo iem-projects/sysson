@@ -291,5 +291,10 @@ object Implicits {
     def path: String  = f.getPath
     def name: String  = f.getName
     def parent: File  = f.getParentFile
+    def nameWithoutExtension: String = {
+      val n = f.getName
+      val i = n.lastIndexOf('.')
+      if (i < 0) n else n.substring(0, i)
+    }
   }
 }

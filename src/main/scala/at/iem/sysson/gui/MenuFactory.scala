@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent
 import java.io.{RandomAccessFile, File, FilenameFilter}
 import scala.util.control.NonFatal
 import de.sciss.desktop.{RecentFiles, KeyStrokes, Menu}
+import scala.swing.Action
 
 object MenuFactory {
 
@@ -22,8 +23,25 @@ object MenuFactory {
       dh.openRead(f.getPath)
     }
 
+    val actionCloseAll = new Action("Close All") {
+      accelerator = Some(menu1 + shift + VK_W)
+      def apply() {
+        closeAll()
+      }
+    }
+
+    def checkCloseAll() {
+      actionCloseAll.enabled = dh.allDocuments.hasNext
+    }
+    checkCloseAll()
+
     dh.addListener {
-      case DocumentHandler.Opened(doc) => recent.add(file(doc.path))
+      case DocumentHandler.Opened(doc) =>
+        recent.add(doc.file)
+        checkCloseAll()
+
+      case DocumentHandler.Closed(doc) =>
+        checkCloseAll()
     }
 
     Root().add(
@@ -40,15 +58,9 @@ object MenuFactory {
       ).add(
         recent.menu
       ).addLine().add(
-        Item("close", "Close" -> (menu1 + VK_W))
+        Item("close", proxy("Close" -> (menu1 + VK_W)))
       ).add(
-        Item("close-all")("Close All" -> (menu1 + shift + VK_W)) {
-          closeAll()
-        } disable()
-//      ).addLine().add(
-//        Item("save", "Save" -> stroke(VK_S, meta))
-//      ).add(
-//        Item("save-as", "Save As..." -> stroke(VK_S, meta + shift))
+        Item("close-all", actionCloseAll)
       )
     ).add(
       Group("tools", "Tools").add(

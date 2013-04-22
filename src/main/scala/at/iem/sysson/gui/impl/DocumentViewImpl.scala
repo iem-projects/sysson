@@ -185,14 +185,30 @@ private[impl] object DocumentViewImpl {
 
     private val ggPlot = Button("Plot") {
       selectedVariable.foreach { v =>
-        val view  = ClimateView(v.selectAll)
-        new Frame {
-          title     = v.name
-          contents = view.component
-          size    = (600, 400)
-          centerOnScreen()
-          open()
+        val view        = ClimateView(v.selectAll)
+        lazy val docL   = document.addListener {
+          case Document.Closed(_) => w.dispose()
         }
+        lazy val w: Window = new WindowImpl {
+          def style       = Window.Regular
+          def handler     = SwingApplication.windowHandler
+          closeOperation  = Window.CloseDispose
+          title           = s"Plot : ${v.name}"
+          contents        = view.component
+          size            = (600, 400)
+          GUI.centerOnScreen(this)
+
+          bindMenu("file.close", Action(null) { dispose() })
+
+          override def dispose() {
+            document.removeListener(docL)
+            super.dispose()
+          }
+
+          front()
+        }
+        w
+        docL
       }
     }
 
@@ -213,19 +229,22 @@ private[impl] object DocumentViewImpl {
       def style   = Window.Regular
       def handler = SwingApplication.windowHandler
 
-      title     = document.path
+      title     = document.file.nameWithoutExtension
+      file      = Some(document.file)
       contents  = impl.component
       closeOperation = Window.CloseIgnore
       reactions += {
-        case WindowClosing(_) =>
+        case Window.Closing(_) =>
            // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
           document.close()
+        case Window.Activated(_) =>
+          DocumentViewHandler.instance.activeDocument = Some(document)
       }
-//      menuBar   = {
-//        val r = MenuFactory.root
-////        r("file")("close").actionFor(this) { ... }
-//        r.create(this)
-//      }
+
+      bindMenus(
+        "file.close" -> Action(null) { document.close() }
+      )
+
       pack()
       GUI.centerOnScreen(this)
       front()

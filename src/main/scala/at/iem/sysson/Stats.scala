@@ -12,7 +12,7 @@ import Implicits._
 object Stats {
   private val COOKIE  = 0x53746174
 
-  private val DEBUG   = true
+  private val DEBUG   = false
 
   private def debug(what: => String) {
     if (DEBUG) println(s"<cache> $what")

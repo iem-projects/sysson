@@ -3,6 +3,7 @@ package impl
 
 import ucar.nc2
 import de.sciss.model.impl.ModelImpl
+import java.io.File
 
 object DocumentImpl {
   import Implicits._
@@ -17,6 +18,8 @@ object DocumentImpl {
     extends Document with ModelImpl[Document.Update] {
 
     override def toString = "Document(" + data.getTitle + ")"
+
+    def file = new File(path)
 
     def close() {
       data.close()

@@ -12,17 +12,20 @@ import org.jfree.chart.plot.XYPlot
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
 import scala.Some
 import java.awt.Color
-import swing.{BorderPanel, Component, Alignment, Slider, Label, Swing}
+import scala.swing.{CheckBox, BorderPanel, Component, Alignment, Slider, Label, Swing}
 import Swing._
 import scalaswingcontrib.group.GroupPanel
 import collection.immutable.{IndexedSeq => IIdxSeq}
-import javax.swing.GroupLayout
-import swing.event.ValueChanged
+import javax.swing.{DefaultBoundedRangeModel, SpinnerNumberModel, JSpinner, GroupLayout}
+import scala.swing.event.{ButtonClicked, ValueChanged}
 import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
+import javax.swing.event.{ChangeEvent, ChangeListener}
+import javax.swing.JSpinner.NumberEditor
 
 object ClimateViewImpl {
-  private case class Reduction(name: Label, slider: Slider, value: Label)
+  private class Reduction(val dim: Int, val norm: CheckBox, val name: Label, val slider: Slider,
+                          val index: Component, val value: Label)
 
   private lazy val intensityScale: PaintScale = {
     val res = new LookupPaintScale(0.0, 1.0, Color.red)
@@ -76,26 +79,48 @@ object ClimateViewImpl {
 
     val data   = new MyMatrix(width, height)
 
-//    @inline def time() = System.currentTimeMillis()
+    //    @inline def time() = System.currentTimeMillis()
 
     def updateData() {
-//      val t1 = time()
-      val sec = red.zipWithIndex.foldLeft(section) { case (res, (d, idx)) =>
-        res in d.name.getOrElse("?") select redGUI(idx).slider.value
+      // the indices in each reduction dimension currently selected
+      val secIndices = redGUI.map(_.slider.value)
+
+      // producing the following 2-dimensional section
+      val sec = (red zip secIndices).foldLeft(section) { case (res, (d, idx)) =>
+        res in d.name.getOrElse("?") select idx
       }
+      // this variable can be read by the interpreter
       _currentSection = Some(sec)
-//      val t2 = time()
+
+      // read the raw data
       val arr0 = sec.readSafe().float1D
 
-      // if the statistics are available, make a global scale normalization, otherwise
-      // normalize the current frame.
+      // if the statistics are available, normalize according to checkboxes,
+      // otherwise normalize across the current frame.
       val arr = stats match {
         case Some(s) =>
-          arr0.linlin(s.total.min, s.total.max, sec.variable.fillValue)(0.0, 1.0)
-        case _ =>
+          // the names and indices of the dimensions which should be normalized
+          val normDims = redGUI.collect {
+            case r if r.norm.selected => red(r.dim).name.getOrElse("?") -> r.dim
+          }
+          // the minimum and maximum across the selected dimensions
+          // (or total min/max if there aren't any dimensions checked)
+          val (min, max) = if (normDims.isEmpty) s.total.min -> s.total.max else {
+            val counts = normDims.map { case (name, idx) => s.slices(name)(secIndices(idx)) }
+            counts match {
+              case head +: tail => tail.foldLeft(head.min -> head.max) {
+                case ((_min, _max), c) => math.max(_min, c.min) -> math.min(_max, c.max)
+              }
+            }
+          }
+          // println(s"min = $min, max = $max")
+          arr0.linlin(min, max, sec.variable.fillValue)(0.0, 1.0)
+
+        case _ => // no stats available yet, normalize current frame
           arr0.normalize(sec.variable.fillValue)
       }
-//      val t3 = time()
+
+      // fill the JFreeChart data matrix
       var x = 0; while(x < width) {
         var y = 0; while(y < height) {
           val z = arr(y * width + x)
@@ -104,61 +129,106 @@ object ClimateViewImpl {
           data.put(x, y, z)
         y += 1 }
       x += 1 }
+      // notify JFreeChart of the change, so it repaints the plot
       data.fireSeriesChanged()
-//      val t4 = time()
     }
 
+    // get the statistics from the cache manager
     import Stats.executionContext
     Stats.get(in).onSuccess {
-      case Stats(map) =>
+      case Stats(map) => GUI.defer {
+        // see if stats are available for the plotted variable
         val s = map.get(section.name)
         if (s.isDefined) {
           stats = s
-          updateData()
+          updateData()  // repaint with user defined normalization
+          // enable the user definable normalization (checkboxes)
+          redGUI.zipWithIndex.foreach { case (r, idx) =>
+            r.norm.selected = false
+            r.norm.enabled  = true
+            r.norm.listenTo(r.norm)
+            r.norm.reactions += {
+              case ButtonClicked(_) => updateData()
+            }
+          }
         }
+      }
     }
 
-    lazy val redGUI: IIdxSeq[Reduction] = red.map { d =>
-      val n   = d.name.getOrElse("?")
-      val lb  = new Label(n + ":") {
+    lazy val redGUI: IIdxSeq[Reduction] = red.zipWithIndex.map { case (d, idx) =>
+      val norm  = new CheckBox {
+        enabled   = false
+        selected  = true
+        tooltip   = "Normalize using the selected slice"
+      }
+      val n     = d.name.getOrElse("?")
+      val lb    = new Label(n + ":") {
         horizontalAlignment = Alignment.Trailing
         peer.putClientProperty("JComponent.sizeVariant", "small")
       }
       val m = valueFun(d, units = true)
+      val dimMax = d.size - 1
       val curr = new Label {
         peer.putClientProperty("JComponent.sizeVariant", "small")
-        text    = m(d.size - 1)
+        text    = m(dimMax)
         val szm = preferredSize
         text    = m(0)
         val sz0 = preferredSize
         preferredSize = (math.max(sz0.width, szm.width), math.max(sz0.height, szm.height))
       }
+      val spm = new SpinnerNumberModel(0, 0, dimMax, 1)
+      val slm = new DefaultBoundedRangeModel(0, 1, 0, dimMax)
       val sl  = new Slider {
-        min   = 0
-        max   = d.size - 1
-        value = 0
+        peer.setModel(slm)
+        //        min   = 0
+        //        max   = dimMax
+        //        value = 0
         peer.putClientProperty("JComponent.sizeVariant", "small")
         listenTo(this)
         reactions += {
           case ValueChanged(_) =>
             curr.text = m(value)
+
             if (!adjusting) updateData()
         }
       }
 
-      Reduction(lb, sl, curr)
+      slm.addChangeListener(new ChangeListener {
+        def stateChanged(e: ChangeEvent) {
+          spm.setValue(slm.getValue)
+        }
+      })
+      spm.addChangeListener(new ChangeListener {
+        def stateChanged(e: ChangeEvent) {
+          slm.setValue(spm.getValue.asInstanceOf[Int])
+        }
+      })
+
+      val spj = new JSpinner(spm) {
+        putClientProperty("JComponent.sizeVariant", "small")
+        // none of this works... stick to big font size then...
+        //        val ed = new NumberEditor(this)
+        //        ed.putClientProperty("JComponent.sizeVariant", "small")
+        //        ed.setFont(new java.awt.Font("Times", java.awt.Font.PLAIN, 16))
+        //        setEditor(ed)
+      }
+      val sp  = Component.wrap(spj)
+
+      new Reduction(idx, norm, lb, sl, sp, curr)
     }
 
     val redGroup  = new GroupPanel {
       theHorizontalLayout is Sequential(
+        Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.norm  )): _*),
         Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.name  )): _*),
         Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.slider)): _*),
+        Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.index )): _*),
         Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.value )): _*)
       )
 
       theVerticalLayout is Sequential(
         (redGUI.map { r =>
-          Parallel(Center)(r.name, r.slider, r.value): InGroup[GroupLayout#SequentialGroup]
+          Parallel(Center)(r.norm, r.name, r.slider, r.index, r.value): InGroup[GroupLayout#SequentialGroup]
         }): _*
       )
     }
@@ -166,7 +236,7 @@ object ClimateViewImpl {
     updateData()
 
     val renderer  = new XYBlockRenderer()
-//    val scale     = new GrayPaintScale(0.0, 1.0)
+    //    val scale     = new GrayPaintScale(0.0, 1.0)
     renderer.setPaintScale(intensityScale)
     val xAxis     = new NumberAxis("Longitude")
     xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits())
