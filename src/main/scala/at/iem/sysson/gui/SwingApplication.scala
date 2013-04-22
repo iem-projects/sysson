@@ -9,10 +9,6 @@ import swing.Swing
 object SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = sysson.Document
 
-  def quit() {
-    sys.exit()
-  }
-
   override def init() {
     val dh = DocumentHandler.instance
     dh.addListener {

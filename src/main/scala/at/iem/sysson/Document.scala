@@ -1,6 +1,7 @@
 package at.iem.sysson
 
 import ucar.nc2
+import de.sciss.model.Model
 
 object Document {
   type Listener = Model.Listener[Update]

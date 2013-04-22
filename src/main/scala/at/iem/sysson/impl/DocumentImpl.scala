@@ -2,6 +2,7 @@ package at.iem.sysson
 package impl
 
 import ucar.nc2
+import de.sciss.model.impl.ModelImpl
 
 object DocumentImpl {
   import Implicits._

@@ -3,6 +3,7 @@ package impl
 
 import de.sciss.osc
 import gui.{GUI, DocumentViewHandler}
+import de.sciss.model.impl.ModelImpl
 
 private[sysson] object NcviewSyncImpl {
   def apply(config: NcviewSync.Config): NcviewSync = new Impl(config)

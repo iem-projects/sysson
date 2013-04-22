@@ -1,6 +1,7 @@
 package at.iem.sysson
 
 import impl.{DocumentHandlerImpl => Impl}
+import de.sciss.model.Model
 
 object DocumentHandler {
   lazy val instance: DocumentHandler = Impl()

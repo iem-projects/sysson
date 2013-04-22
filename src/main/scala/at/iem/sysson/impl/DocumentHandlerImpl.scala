@@ -1,6 +1,8 @@
 package at.iem.sysson
 package impl
 
+import de.sciss.model.impl.ModelImpl
+
 private[sysson] object DocumentHandlerImpl {
   def apply(): DocumentHandler = new Impl
 

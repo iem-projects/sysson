@@ -2,9 +2,9 @@ package at.iem.sysson
 package sound
 package impl
 
-import at.iem.sysson.impl.ModelImpl
 import de.sciss.synth
 import synth.Server
+import de.sciss.model.impl.ModelImpl
 
 object AudioSystemImpl {
   lazy val instance: AudioSystem = {

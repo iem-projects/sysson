@@ -2,6 +2,7 @@ package at.iem.sysson
 
 import de.sciss.osc
 import impl.{NcviewSyncImpl => Impl}
+import de.sciss.model.Model
 
 object NcviewSync {
   /**
