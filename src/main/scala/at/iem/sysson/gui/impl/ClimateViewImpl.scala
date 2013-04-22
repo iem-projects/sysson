@@ -6,7 +6,7 @@ import ucar.nc2
 import org.jfree.chart.{JFreeChart, ChartPanel}
 import Implicits._
 import org.jfree.chart.renderer.xy.XYBlockRenderer
-import org.jfree.chart.renderer.{PaintScale, LookupPaintScale, GrayPaintScale}
+import org.jfree.chart.renderer.{PaintScale, LookupPaintScale}
 import org.jfree.chart.axis.NumberAxis
 import org.jfree.chart.plot.XYPlot
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
@@ -21,7 +21,6 @@ import scala.swing.event.{ButtonClicked, ValueChanged}
 import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
-import javax.swing.JSpinner.NumberEditor
 
 object ClimateViewImpl {
   private class Reduction(val dim: Int, val norm: CheckBox, val name: Label, val slider: Slider,
@@ -48,13 +47,14 @@ object ClimateViewImpl {
 
   def currentSection: Option[VariableSection] = _currentSection
 
-  def apply(section: VariableSection): ClimateView = {
-    val in = section.file
+  def apply(section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView = {
+    val in    = section.file
+    val vm    = in.variableMap
 
-    var stats =  Option.empty[Stats.Variable]
+    var stats = Option.empty[Stats.Variable]
 
     def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
-      in.variableMap.get(dim.name.getOrElse("?")) match {
+      vm.get(dim.name) match {
         case Some(v) if v.isFloat =>
           val dat = v.readSafe().float1D
           (i: Int) => f"${dat(i).toInt}%d${if (units) v.units.map(s => " " + s).getOrElse("") else ""}"
@@ -66,16 +66,16 @@ object ClimateViewImpl {
         case _ => (i: Int) => i.toString
       }
 
-    val lat     = section.dimensions.find { d =>
-      d.name.flatMap(in.variableMap.get _).flatMap(_.units) == Some("degrees_north")
-    } getOrElse sys.error("Did not find latitude dimension")
-    val lon     = section.dimensions.find { d =>
-      d.name.flatMap(in.variableMap.get _).flatMap(_.units) == Some("degrees_east")
-    } getOrElse sys.error("Did not find longitude dimension")
+    //    val yDim     = section.dimensions.find { d =>
+    //      d.name.flatMap(in.variableMap.get _).flatMap(_.units) == Some("degrees_north")
+    //    } getOrElse sys.error("Did not find latitude dimension")
+    //    val xDim     = section.dimensions.find { d =>
+    //      d.name.flatMap(in.variableMap.get _).flatMap(_.units) == Some("degrees_east")
+    //    } getOrElse sys.error("Did not find longitude dimension")
 
-    val red     = section.reducedDimensions.filterNot(d => d == lat || d == lon)
-    val width   = lon.size
-    val height  = lat.size
+    val red     = section.reducedDimensions.filterNot(d => d == yDim || d == xDim)
+    val width   = xDim.size
+    val height  = yDim.size
 
     val data   = new MyMatrix(width, height)
 
@@ -87,7 +87,7 @@ object ClimateViewImpl {
 
       // producing the following 2-dimensional section
       val sec = (red zip secIndices).foldLeft(section) { case (res, (d, idx)) =>
-        res in d.name.getOrElse("?") select idx
+        res in d.name select idx
       }
       // this variable can be read by the interpreter
       _currentSection = Some(sec)
@@ -101,16 +101,17 @@ object ClimateViewImpl {
         case Some(s) =>
           // the names and indices of the dimensions which should be normalized
           val normDims = redGUI.collect {
-            case r if r.norm.selected => red(r.dim).name.getOrElse("?") -> r.dim
+            case r if r.norm.selected => red(r.dim).name -> r.dim
           }
           // the minimum and maximum across the selected dimensions
           // (or total min/max if there aren't any dimensions checked)
           val (min, max) = if (normDims.isEmpty) s.total.min -> s.total.max else {
-            val counts = normDims.map { case (name, idx) => s.slices(name)(secIndices(idx)) }
+            val counts = normDims.flatMap { case (name, idx) => s.slices.get(name).map(_.apply(secIndices(idx))) }
             counts match {
               case head +: tail => tail.foldLeft(head.min -> head.max) {
                 case ((_min, _max), c) => math.max(_min, c.min) -> math.min(_max, c.max)
               }
+              case _ => s.total.min -> s.total.max
             }
           }
           // println(s"min = $min, max = $max")
@@ -161,8 +162,8 @@ object ClimateViewImpl {
         selected  = true
         tooltip   = "Normalize using the selected slice"
       }
-      val n     = d.name.getOrElse("?")
-      val lb    = new Label(n + ":") {
+      val n     = d.name
+      val lb    = new Label(n.capitalize + ":") {
         horizontalAlignment = Alignment.Trailing
         peer.putClientProperty("JComponent.sizeVariant", "small")
       }
@@ -238,11 +239,12 @@ object ClimateViewImpl {
     val renderer  = new XYBlockRenderer()
     //    val scale     = new GrayPaintScale(0.0, 1.0)
     renderer.setPaintScale(intensityScale)
-    val xAxis     = new NumberAxis("Longitude")
+
+    val xAxis     = new NumberAxis(xDim.name.capitalize) // vm.get(xDim.name).map(_.fullName).getOrElse(xDim.name))
     xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits())
     xAxis.setLowerMargin(0.0)
     xAxis.setUpperMargin(0.0)
-    val yAxis     = new NumberAxis("Latitude")
+    val yAxis     = new NumberAxis(yDim.name.capitalize) // vm.get(yDim.name).map(_.fullName).getOrElse(yDim.name))
     yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits())
     yAxis.setLowerMargin(0.0)
     yAxis.setUpperMargin(0.0)

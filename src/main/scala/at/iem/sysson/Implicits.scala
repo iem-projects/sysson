@@ -68,7 +68,8 @@ object Implicits {
   }
 
   implicit class SyRichDimension(peer: nc2.Dimension) {
-    def name          = Option(peer.getName)
+    def name          = nameOption.getOrElse("?")
+    def nameOption    = Option(peer.getName)
     def size          = peer.getLength
     def group         = Option(peer.getGroup)
   }
@@ -259,8 +260,8 @@ object Implicits {
         }
       i += 1 }
       val div = max - min
-      if (div == 0f) return Vector.fill(sz)(0f)
-      assert(div > 0f)
+      if (div <= 0f) return Vector.fill(sz)(0f)
+      // assert(div > 0f, s"max = $max, min = $min, div = $div")
       val mul = 1f / div
       peer.map(f => if (checkNaN(f)) f else (f - min) * mul)
     }

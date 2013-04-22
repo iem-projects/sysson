@@ -20,7 +20,11 @@ private[gui] final class LogWindowImpl extends LogWindow with WindowImpl {
   def style   = Window.Auxiliary
   def handler = SwingApplication.windowHandler
 
-  val log = LogPane()
+  val log = {
+    val cfg   = LogPane.Settings()
+    cfg.rows  = 24
+    LogPane(cfg)
+  }
 
   private val observer: OutputStream = new OutputStream {
     override def write(b: Array[Byte], off: Int, len: Int) {

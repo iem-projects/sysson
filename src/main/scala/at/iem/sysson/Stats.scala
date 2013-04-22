@@ -80,7 +80,7 @@ object Stats {
       val varMap    = doc.variableMap
       val statsMap  = varMap.collect { case (vrName, vr) if vr.isFloat || vr.isDouble =>
         // find the named dimensions which have variable entries.
-        val dims0: Set[nc2.Variable] = vr.reducedDimensions.flatMap(d => varMap.get(d.name.getOrElse("??")))(breakOut)
+        val dims0: Set[nc2.Variable] = vr.reducedDimensions.flatMap(d => varMap.get(d.name))(breakOut)
         // exclude the variable's self dimension. this
         // is present in all variables which acts as dimensions.
         // for example `plev` will have itself as its only dimension.

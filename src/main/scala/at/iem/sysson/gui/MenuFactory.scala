@@ -69,6 +69,12 @@ object MenuFactory {
         }
       )
     ).add(
+      Group("view", "View").add(
+        Item("clear-log")("Clear Log Window" -> (menu1 + shift + VK_P)) {
+          LogWindow.instance.log.clear()
+        }
+      )
+    ).add(
       Group("window", "Window")
     )
   }

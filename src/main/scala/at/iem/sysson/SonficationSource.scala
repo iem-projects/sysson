@@ -44,8 +44,8 @@ case class MatrixSource(section: VariableSection, rowDim: Int, columnDim: Int) e
 
   override def toString = {
     val dims    = section.reducedDimensions
-    val rowName = dims(rowDim   ).name.getOrElse(rowDim   )
-    val colName = dims(columnDim).name.getOrElse(columnDim)
+    val rowName = dims(rowDim   ).nameOption.getOrElse(rowDim   )
+    val colName = dims(columnDim).nameOption.getOrElse(columnDim)
     s"""$section.asMatrix(row: "$rowName", col: "$colName")"""
   }
 }

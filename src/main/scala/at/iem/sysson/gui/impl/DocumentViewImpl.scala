@@ -20,7 +20,7 @@ import Swing._
 import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
 import scalaswingcontrib.event.TreeNodeSelected
 import de.sciss.desktop.impl.WindowImpl
-import de.sciss.desktop.Window
+import de.sciss.desktop.{OptionPane, Window}
 
 private[impl] object DocumentViewImpl {
   import Implicits._
@@ -32,14 +32,14 @@ private[impl] object DocumentViewImpl {
   private final class GroupModel(root: nc2.Group)
     extends ExternalTreeModel[nc2.Group](root :: Nil, _.children) {
 
-//    def test(t: Tree[nc2.Group]) {
-//      // t.expandPath()
-//      // t.expandsSelectedPaths
-//      // t.getRowForPath()
-//      // t.model.pathToTreePath()
-//      // t.treePathToPath()
-//      // t.selection
-//    }
+    //    def test(t: Tree[nc2.Group]) {
+    //      // t.expandPath()
+    //      // t.expandsSelectedPaths
+    //      // t.getRowForPath()
+    //      // t.model.pathToTreePath()
+    //      // t.treePathToPath()
+    //      // t.selection
+    //    }
   }
 
   private object GroupRenderer extends DefaultTreeCellRenderer {
@@ -101,7 +101,7 @@ private[impl] object DocumentViewImpl {
         case 1 /* 2 */ => vr.description.getOrElse("")
         case 2 /* 3 */ => vr.dataType
         case 3 /* 4 */ => (vr.dimensions zip vr.shape) map {
-          case (dim, sz) => dim.name match {
+          case (dim, sz) => dim.nameOption match {
             case Some(name) => s"$name:$sz"
             case _ => sz.toString
           }
@@ -185,32 +185,92 @@ private[impl] object DocumentViewImpl {
 
     private val ggPlot = Button("Plot") {
       selectedVariable.foreach { v =>
-        val view        = ClimateView(v.selectAll)
-        lazy val docL   = document.addListener {
-          case Document.Closed(_) => w.dispose()
-        }
-        lazy val w: Window = new WindowImpl {
-          def style       = Window.Regular
-          def handler     = SwingApplication.windowHandler
-          closeOperation  = Window.CloseDispose
-          title           = s"Plot : ${v.name}"
-          contents        = view.component
-          size            = (600, 400)
-          GUI.centerOnScreen(this)
+        val in          = v.file
+        val vm          = in.variableMap
+        val dim         = v.dimensions // .filter(d => vm.get(d.name.getOrElse("?")).map(_.isFloat).getOrElse(false))
+        val red         = v.reducedDimensions
+        if (!v.isFloat) {
+          // abort if variable is not in floating point format
+          val opt = OptionPane.message(
+            message = s"Variable '${v.name}' is not in floating point format.",
+            messageType = OptionPane.Message.Info)
+          opt.show(Some(f))
 
-          bindMenu("file.close", Action(null) { dispose() })
+        } else if (dim.size < 2) {
+          // abort if there is less than two dimensions
+          val opt = OptionPane.message(
+            message = s"Variable '${v.name}' has ${if (dim.size == 0) "no dimensions" else "only one dimension"}.\nNeed at least two for a plot.",
+            messageType = OptionPane.Message.Info)
+          opt.show(Some(f))
+        } else {
+          // identify latitude and longitude by their unit names, and time by its dimension name
+          // (that seems to be working with the files we have)
+          val latOpt = red.find { d =>
+            in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_north")
+          }
+          val lonOpt = red.find { d =>
+            in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_east")
+          }
+          val timeOpt = red.find { d => d.name == "time" }
 
-          override def dispose() {
-            document.removeListener(docL)
-            super.dispose()
+          // first see if there are useful dimensions such as lon/lat
+          val xyOpt0 = (latOpt, lonOpt, timeOpt) match {
+            case (Some(lat), Some(lon), _)  => Some(lat -> lon)
+            // case (Some(lat), _, Some(tim))  => Some(lat -> tim)
+            // case (_, Some(lon), Some(tim))  => Some(lon -> tim) // does this make sense?
+            case _                          => None
           }
 
-          front()
+          // if not, ask the user which dims she wants to plot
+          val xyOpt = xyOpt0.orElse {
+            val infos = dim.map { d => s"${d.name} [${d.size}]" } .mkString(", ")
+            val pairs = dim.flatMap { dx =>
+              dim.collect { case dy if dy != dx => (dx, dy)
+              }
+            }
+
+            val names = pairs.map { case (dx, dy) => s"x = ${dx.name}, y = ${dy.name}" }
+
+            val opt = OptionPane(message = s"Select the dimensions of '${v.name}' to plot.\n$infos",
+              messageType = OptionPane.Message.Question,
+              optionType = OptionPane.Options.OkCancel, entries = names)
+            val res = opt.show(Some(f)).id
+            if (res >= 0) {
+              Some(pairs(res))
+            } else None
+          }
+
+          // open the actual plot if we got the dimensions
+          xyOpt.foreach { case (yDim, xDim) =>
+            val view        = ClimateView(v.selectAll, xDim = xDim, yDim = yDim)
+            lazy val docL   = document.addListener {
+              case Document.Closed(_) => w.dispose()
+            }
+            lazy val w: Window = new WindowImpl {
+              def style       = Window.Regular
+              def handler     = SwingApplication.windowHandler
+              closeOperation  = Window.CloseDispose
+              title           = s"Plot : ${v.name}"
+              contents        = view.component
+              size            = (600, 400)
+              GUI.centerOnScreen(this)
+
+              bindMenu("file.close", Action(null) { dispose() })
+
+              override def dispose() {
+                document.removeListener(docL)
+                super.dispose()
+              }
+
+              front()
+            }
+            w
+            docL
+          }
         }
-        w
-        docL
       }
     }
+    ggPlot.peer.putClientProperty("JButton.buttonType", "roundRect")
 
     val component = new BoxPanel(Orientation.Vertical) {
       contents ++= Seq(
@@ -225,7 +285,7 @@ private[impl] object DocumentViewImpl {
       )
     }
 
-    val f = new WindowImpl {
+    lazy val f: Window = new WindowImpl {
       def style   = Window.Regular
       def handler = SwingApplication.windowHandler
 
@@ -249,6 +309,8 @@ private[impl] object DocumentViewImpl {
       GUI.centerOnScreen(this)
       front()
     }
+
+    f // force
 
     def dispose() {
       f.dispose()

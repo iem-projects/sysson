@@ -26,7 +26,7 @@ object OSCSupport {
       val dims    = peer.dimensions
       val ranges  = peer.ranges
       val infos   = (dims zip ranges).zipWithIndex.flatMap { case ((dim, r), idx) =>
-        Vector(dim.name.getOrElse(idx), dim.size, r.first, r.last, r.stride)
+        Vector(dim.nameOption.getOrElse(idx), dim.size, r.first, r.last, r.stride)
       }
       val args    = peer.name +: dims.size +: (infos ++ (data.size +: data))
       val msg     = osc.Message("/sysson_matrix", args: _*)

@@ -115,7 +115,7 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
   override def toString = {
     val relevant = section.zipWithIndex.filterNot(_._1.isAll)
     val selected = if (relevant.isEmpty) variable.name else {
-      val relT      = relevant.map { case (r, idx) => s"${variable.getDimension(idx).name.getOrElse(idx)}: $r" }
+      val relT      = relevant.map { case (r, idx) => s"${variable.getDimension(idx).nameOption.getOrElse(idx)}: $r" }
       s"${variable.name} @ ${relT.mkString("[", ", ", "]")}"
     }
     if (scale == Scale.Identity) selected else s"$selected ; scale = $scale"

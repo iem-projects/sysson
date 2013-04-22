@@ -6,7 +6,8 @@ import ucar.nc2
 import impl.{ClimateViewImpl => Impl}
 
 object ClimateView {
-  def apply(section: VariableSection): ClimateView = Impl(section)
+  def apply(section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView =
+    Impl(section, xDim, yDim)
 
   def currentSection: Option[VariableSection] = Impl.currentSection
 }

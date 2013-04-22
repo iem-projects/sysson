@@ -31,7 +31,7 @@ object Export {
 
     def loop(v: nc2.Variable) {
       // first traverse dimensions on which this variable depends
-      val dimensions  = v.dimensions.flatMap(_.name)
+      val dimensions  = v.dimensions.map(_.name)
       varsDone += v.name
       val varsToDo    = dimensions.filterNot(varsDone.contains)
       varsToDo.foreach { name =>
@@ -51,7 +51,7 @@ object Export {
           val dataS = data.mkString(del)
           w.write(s"$prefix:val${del}$dataS\n")
         } else {
-          val dimName   = dims.head.name.get
+          val dimName   = dims.head.name
           val dimNameS  = "\"" + dimName.escape + "\""
           val num       = shape.head
           var i = 0

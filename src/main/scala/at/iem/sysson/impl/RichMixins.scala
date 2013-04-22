@@ -9,7 +9,7 @@ import at.iem.sysson.gui.Plot
 trait HasDimensions {
   import Implicits._
   def dimensions: IIdxSeq[nc2.Dimension]
-  def dimensionMap: Map[String, nc2.Dimension] = dimensions.map(d => d.name -> d)
+  def dimensionMap: Map[String, nc2.Dimension] = dimensions.map(d => d.nameOption -> d)
     .collect({ case (Some(name), d) => name -> d })(breakOut)
 }
 
