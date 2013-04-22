@@ -4,7 +4,7 @@ There is currently support for plots of variable sections reduced to two dimensi
 
 To open a plot from the GUI, select a floating point variable of at least two dimensions, and press the `Plot` button. Programmatic access is not yet implemented.
 
-The plot uses that statistics [cache](Cache) for scale normalization. If the cache is not available upon opening the plot, it will begin with per-frame normalization and issue the cache to be actualized. This is indicated by all the normalization check boxes being selected and disabled. Once the cache is ready, the check boxes become enabled.
+The plot uses that statistics [cache](Cache.md) for scale normalization. If the cache is not available upon opening the plot, it will begin with per-frame normalization and issue the cache to be actualized. This is indicated by all the normalization check boxes being selected and disabled. Once the cache is ready, the check boxes become enabled.
 
 The plot shows magnitudes on a psychooptically balanced scala from black via purple and green to yellow and white. The plotting is done through JFreeChart, and a context menu allows to export the current plot as an image file, and to zoom in and out.
 
