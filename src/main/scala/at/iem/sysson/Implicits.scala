@@ -6,6 +6,7 @@ import de.sciss.synth
 import synth.ugen
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import java.io.File
+import scala.concurrent.{Await, Future}
 
 object Implicits {
   final val all = OpenRange.all
@@ -296,6 +297,13 @@ object Implicits {
       val n = f.getName
       val i = n.lastIndexOf('.')
       if (i < 0) n else n.substring(0, i)
+    }
+  }
+
+  implicit class SyRichFuture[A](fut: Future[A]) {
+    def !! : A = {
+      import concurrent.duration._
+      Await.result(fut, 3.seconds)
     }
   }
 }
