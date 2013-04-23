@@ -95,8 +95,8 @@ object Stats {
           (_: Double) => true  // no fill values for non-float vars, accept all
         }
 
-        def sectionCounts(sel: VariableSection): PreCounts = {
-          val arr = sel.read()
+        def sectionCounts(sel: VariableSection): Counts = {
+          val arr = sel.readSafe()
           // val num = arr.size
           var sum = 0.0
           var min = Double.MaxValue
@@ -111,18 +111,18 @@ object Stats {
             }
           }
           val mean    = sum/num
-          var sqrDif  = 0.0
+          var sqrdif  = 0.0
           arr.double1Diterator.foreach { d =>
             if (accept(d)) {
               val dif = d - mean
-              sqrDif += dif * dif
+              sqrdif += dif * dif
             }
           }
-          // val stddev = math.sqrt(sqrDif/num)
-          PreCounts(num = num, min = min, max = max, sum = sum, sqrDif = sqrDif)
+          // val stddev = math.sqrt(sqrdif/num)
+          Counts(min = min, max = max, sum = sum, sqrdif = sqrdif, num = num, pool = 1)
         }
 
-        val preSlices: Map[String, IIdxSeq[PreCounts]] = dims.map(dim => {
+        val preSlices: Map[String, IIdxSeq[Counts]] = dims.map(dim => {
           // val redDims = dims - dim
           val counts  = Vector.tabulate(dim.size.toInt) { i =>
             val sel = vr in dim.name select i
@@ -132,11 +132,11 @@ object Stats {
         })(breakOut)
 
         val total = if (preSlices.isEmpty) { // run the iteration code again if the variable is 1-dimensional
-          sectionCounts(vr.selectAll).complete
+          sectionCounts(vr.selectAll) // .complete
         } else {                            // otherwise reconstruct total counts from partial counts
-          preSlices.head._2.reduce(_ combineWith _).complete
+          preSlices.head._2.reduce(_ combineWith _) // .complete
         }
-        val statsVar = Variable(vrName, total, preSlices.mapValues(_.map(_.complete)))
+        val statsVar = Variable(vrName, total, preSlices) // .mapValues(_.map(_.complete)))
         vrName -> statsVar
       }
       val stats = Stats(statsMap)
@@ -182,32 +182,70 @@ object Stats {
         import v._
         out.writeDouble(min)
         out.writeDouble(max)
-        out.writeDouble(mean)
-        out.writeDouble(stddev)
+        out.writeDouble(sum)
+        out.writeDouble(sqrdif)
+        out.writeLong  (num)
+        out.writeInt   (pool)
       }
 
       def read(in: DataInput): Counts = {
         val min     = in.readDouble()
         val max     = in.readDouble()
-        val mean    = in.readDouble()
-        val stddev  = in.readDouble()
-        Counts(min = min, max = max, mean = mean, stddev = stddev)
+        val sum     = in.readDouble()
+        val sqrdif  = in.readDouble()
+        val num     = in.readLong()
+        val pool    = in.readInt()
+        Counts(min = min, max = max, sum = sum, sqrdif = sqrdif, num = num, pool = pool)
       }
     }
   }
-  case class Counts(min: Double, max: Double, mean: Double, stddev: Double) {
-    override def toString = s"$productPrefix(min = ${min.toFloat}, max = ${max.toFloat}, mean = ${mean.toFloat}, stddev = ${stddev.toFloat})"
-  }
 
-  private case class PreCounts(num: Long, min: Double, max: Double, sum: Double, sqrDif: Double) {
-    def complete = Counts(min = min, max = max, mean = sum/num, stddev = math.sqrt(sqrDif/num))
-    def combineWith(that: PreCounts) = PreCounts(
-      num     = this.num + that.num,
+  //  case class Counts(min: Double, max: Double, mean: Double, stddev: Double) {
+  //    override def toString = s"$productPrefix(min = ${min.toFloat}, max = ${max.toFloat}, mean = ${mean.toFloat}, stddev = ${stddev.toFloat})"
+  //  }
+
+  /** Statistics for a given variable or sub-set of a variable.
+    *
+    * Mean and standard deviation are provided on the fly by methods `mean` and `stddev`.
+    * Multiple counts can be combined using the `combineWith` method.
+    *
+    * @param min    the minimum value of the (non-NaN) data points
+    * @param max    the maximum value of the data points
+    * @param sum    the sum across all data points
+    * @param sqrdif the sum of the squares of the differences between the data points and their mean
+    * @param num    the number of (non-NaN) data points accounted for
+    * @param pool   the number of counts which have been combined in this count (1 for a single count).
+    *               this is needed for the pooled standard deviation
+    */
+  case class Counts(min: Double, max: Double, sum: Double, sqrdif: Double, num: Long, pool: Int) {
+    // def complete = Counts(min = min, max = max, mean = sum/num, stddev = math.sqrt(sqrdif/num))
+
+    def combineWith(that: Counts) = Counts(
       min     = math.min(this.min, that.min),
       max     = math.max(this.max, that.max),
       sum     = this.sum + that.sum,
-      sqrDif  = this.sqrDif + that.sqrDif
+      sqrdif  = this.sqrdif + that.sqrdif,
+      num     = this.num + that.num,
+      pool    = this.pool + that.pool
     )
+
+    def isPooled = pool > 1
+    
+    def mean = sum/num
+
+    // sum of each sample variance multiplied by its sample size -1, then divided by sum of each sample size -1
+    // so we should track the number of samples, because that way it becomes:
+    // - nom = sum((x - x_mean)^2)
+    // - pooled = aggregated_nom / (aggregated_num - num_aggregations)
+
+    /** For a single count, the standard deviation, for a pooled count, the pooled standard deviation.
+      *
+      * See http://en.wikipedia.org/wiki/Pooled_variance
+      */
+    def stddev  = math.sqrt(sqrdif/(num - pool))
+
+    override def toString = s"$productPrefix(num = $num, min = ${min.toFloat}, max = ${max.toFloat}, " +
+      s"mean = ${mean.toFloat}, ${if (isPooled) "pooled " else ""}stddev = ${stddev.toFloat})"
   }
 
   object Variable {

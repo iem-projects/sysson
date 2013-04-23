@@ -19,8 +19,8 @@ object Session130423 extends SessionLike {
   def test1() {
     graphNNN("Cube1")(lonRange = (60 until 64), latRange = (30 until 34), plevRange = (2 until 6)) {
       (min, max, d, lon, lat, plev) =>
-      val freq  = d.linexp(min - 20, max, 200, 4000)
-      val pan   = lon.linlin(0, 3, -1, 1)
+      val freq  = d  .linexp(min - 20, max, 200, 4000)
+      val pan   = lon.linlin(       0,   3,  -1,    1)
       Pan2.ar(SinOsc.ar(freq) * 0.1, pan)
     }
   }
@@ -40,7 +40,7 @@ object Session130423 extends SessionLike {
     val v     = f.variableMap("ta")
     val sel1  = v    in "lon"  select lonRange
     val sel2  = sel1 in "lat"  select latRange
-    val sel2b  = sel2 in "plev" select plevRange
+    val sel2b = sel2 in "plev" select plevRange
 
     val sel3  = sel2b // in "time" select (0 until 250)
 

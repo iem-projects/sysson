@@ -37,7 +37,7 @@ object VariableSection {
 final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange], scale: Scale = Scale.Identity)
   extends impl.VariableLike {
 
-  def readSafe(): ma2.Array = variable.synchronized(variable.read(toSection))
+  def readSafe(): ma2.Array = file.synchronized(variable.read(toSection))
 
   def readScaled1D(): IIdxSeq[Float] = read().scaled1D(scale)
 
@@ -109,9 +109,6 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
   // ---- statistics ----
 
   /** Returns a statistics count for this variable section.
-    *
-    * __Warning__: Unless the section is the full variable, only the `min` and `max` fields
-    * of the returned object are valid, whereas `mean` and `stddev` cannot currently be broken down.
     */
   def stats: Future[Stats.Counts] = {
     import Stats.executionContext
@@ -120,8 +117,8 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
       val sv  = s.map.getOrElse(variable.name, sys.error(s"Statistics does not include variable ${variable.name}"))
       val red = section.zipWithIndex.filterNot(_._1.isAll)
       if (red.isEmpty) sv.total else {
-        var min   = Double.PositiveInfinity
-        var max   = Double.NegativeInfinity
+        var c     = Stats.Counts(min = Double.PositiveInfinity, max = Double.NegativeInfinity,
+          sum = 0.0, sqrdif = 0.0, num = 0L, pool = 0 /* ! */)
         val dims  = dimensions
         red.foreach { case (r, d) =>
           val dim   = dims(d)
@@ -129,11 +126,10 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
           val cr    = r.toClosedRange(0, slice.size)
           cr.foreach { idx =>
             val sl = slice(idx)
-            if (sl.min < min) min = sl.min
-            if (sl.max > max) max = sl.max
+            c      = c combineWith sl
           }
         }
-        Stats.Counts(min = min, max = max, mean = 0.0, stddev = 0.0)
+        c
       }
     }
   }

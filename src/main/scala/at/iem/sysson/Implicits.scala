@@ -108,7 +108,7 @@ object Implicits {
 
     // it would be good to shadow peer.read(), but because it takes precedence over
     // an equally named enriched method, there is no way to enforce this. use `readSafe` instead.
-    def readSafe()    = peer.synchronized(peer.read())
+    def readSafe() = file.synchronized(peer.read())
 
     def in(dim: String): VariableSection.In = selectAll.in(dim)
 
