@@ -8,7 +8,7 @@ import scala.concurrent._
 import duration._
 
 object Session130423 extends SessionLike {
-  rec = false
+  rec = true
 
   def run() {
     println("Run...")
@@ -19,8 +19,8 @@ object Session130423 extends SessionLike {
   def test1() {
     graphNNN("Cube1")(lonRange = (60 until 63), latRange = (30 until 33), plevRange = (2 until 5)) {
       (min, max, d, lon, lat, plev) =>
-      val freq = d.linexp(min - 20, max, 400, 800)
-      val pan = lon.linlin(0, 2, -1, 1)
+      val freq  = d.linexp(min - 20, max, 200, 4000)
+      val pan   = lon.linlin(0, 3, -1, 1)
       Pan2.ar(SinOsc.ar(freq) * 0.1, pan)
     }
   }
@@ -42,7 +42,7 @@ object Session130423 extends SessionLike {
     val sel2  = sel1 in "lat"  select latRange
     val sel2b  = sel2 in "plev" select plevRange
 
-    val sel3  = sel2b in "time" select (0 until 250)
+    val sel3  = sel2b // in "time" select (0 until 250)
 
     // val (min, max) = if (useGivenMinMax) (givenMin, givenMax) else sel3.minmax
     val stat  = sel3.stats.!!
@@ -58,17 +58,26 @@ object Session130423 extends SessionLike {
     val numLat    = latRange.size
     val numLon    = lonRange.size
     val numPlev   = plevRange.size
-    val numTime   = 250 // f.variableMap("time").size.toInt
+    val numTime   = f.variableMap("time").size.toInt
     val numLatLon = numLat * numLon
-    val numCh = sel3.shape.sum - numTime
-    assert(numCh == numLat + numLon + numPlev)
+    val numCh     = numLat * numLon * numPlev // sel3.shape.product / numTime
+    // assert(numCh == )
 
-    println(s"min = $min, max = $max, numCh = $numCh, data.size = ${data.size}, numLat = $numLat, numLon = $numLon, numPlev = $numPlev, numTime = $numTime")
+    println(f"min = $min%1.2f, max = $max%1.2f, numCh = $numCh, data.size = ${data.size}, numLat = $numLat, numLon = $numLon, numPlev = $numPlev, numTime = $numTime")
 
     val b     = Buffer()
     b.alloc(numFrames = numTime, numChannels = numCh)
-    b.setn(data)
-    sync()
+    val chunk = math.max(1, 8192/numCh)
+    var sent = 0
+    while (sent < numTime) {
+      val stop  = math.min(sent + chunk, numTime)
+      val off   = sent * numCh
+      val sub   = data.slice(off, stop * numCh)
+      println(s"Blip... $off + ${sub.size}")
+      b.setn(off -> sub)
+      sent = stop
+      sync()
+    }
 
 
     // [time][plev][lat][lon]
@@ -92,7 +101,7 @@ object Session130423 extends SessionLike {
             // val idx = lon * (latRange.size * plevRange.size) + lat * plevRange.size + plev
             val ch  = lon + (lat * numLon) + (plev * numLatLon)
             val d   = play \ ch // sound.MatrixIn.ar("data_" + idx)
-            // if (lon == 0 && lat == 0 && plev == 0) d.poll(label = "freq000")
+            // d.poll(trig = 1, label = s"freq$lon$lat$plev")
             sum += fun(min, max, d, lon, lat, plev)
           }
         }
