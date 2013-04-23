@@ -17,7 +17,7 @@ object Session130423 extends SessionLike {
 
   // (60 until 63, 30 until 33, 2 until 5)
   def test1() {
-    graphNNN("Cube1")(lonRange = (60 until 63), latRange = (30 until 33), plevRange = (2 until 5)) {
+    graphNNN("Cube1")(lonRange = (60 until 64), latRange = (30 until 34), plevRange = (2 until 6)) {
       (min, max, d, lon, lat, plev) =>
       val freq  = d.linexp(min - 20, max, 200, 4000)
       val pan   = lon.linlin(0, 3, -1, 1)
