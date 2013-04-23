@@ -36,6 +36,16 @@ The mean magnitude in the second pressure level:
     stats.slices("plev")(1).mean
 ```
 
+## Variable Sections
+
+Stats can be directly retrieved for a given variable section:
+
+```scala
+
+    val sec      = myVariable in "lat" select (0 to 10)
+    val secStats = sec.stats.!!
+```
+
 ## Disk location
 
 The caches are located in `$SYSSON_HOME/data/cache`. The cache is truncated to 1 MB at the moment.

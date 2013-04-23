@@ -6,6 +6,7 @@ import collection.immutable.{IndexedSeq => IIdxSeq}
 import Implicits._
 import collection.JavaConversions
 import at.iem.sysson.gui.Plot
+import scala.concurrent.Future
 
 object VariableSection {
   /** A transitory class specifying a variable section along with a dimension
@@ -103,6 +104,38 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
     val idx = variable.findDimensionIndex(n)
     if (idx < 0) throw new IllegalArgumentException(s"Variable '${variable.name}' has no dimension '$n'")
     idx
+  }
+
+  // ---- statistics ----
+
+  /** Returns a statistics count for this variable section.
+    *
+    * __Warning__: Unless the section is the full variable, only the `min` and `max` fields
+    * of the returned object are valid, whereas `mean` and `stddev` cannot currently be broken down.
+    */
+  def stats: Future[Stats.Counts] = {
+    import Stats.executionContext
+    Stats.get(variable.file).map { s =>
+      require(scale == Scale.Identity, "Scaled sections are not yet supported")
+      val sv  = s.map.getOrElse(variable.name, sys.error(s"Statistics does not include variable ${variable.name}"))
+      val red = section.zipWithIndex.filterNot(_._1.isAll)
+      if (red.isEmpty) sv.total else {
+        var min   = Double.PositiveInfinity
+        var max   = Double.NegativeInfinity
+        val dims  = dimensions
+        red.foreach { case (r, d) =>
+          val dim   = dims(d)
+          val slice = sv.slices(dim.name)
+          val cr    = r.toClosedRange(0, slice.size)
+          cr.foreach { idx =>
+            val sl = slice(idx)
+            if (sl.min < min) min = sl.min
+            if (sl.max > max) max = sl.max
+          }
+        }
+        Stats.Counts(min = min, max = max, mean = 0.0, stddev = 0.0)
+      }
+    }
   }
 
   // ---- conversion to sonifcation source ----

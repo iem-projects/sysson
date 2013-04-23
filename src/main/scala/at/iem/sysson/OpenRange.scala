@@ -36,4 +36,15 @@ final case class OpenRange(startOption: Option[Int], endOption: Option[Int], isI
     val byS     = if (step == 1) "" else s" by $step"
     s"($startS $moveS ${endS}$byS)"
   }
+
+  /** Note: `maxStop` is always _exclusive_ */
+  def toClosedRange(minStart: Int, maxStop: Int): Range = {
+    val start = math.max(minStart, startOption.getOrElse(minStart))
+    val end   = if (isInclusive) {
+      math.min(maxStop - 1, endOption.getOrElse(maxStop - 1))
+    } else {
+      math.min(maxStop, endOption.getOrElse(maxStop))
+    }
+    if (isInclusive) (start to end by step) else (start until end by step)
+  }
 }
