@@ -15,7 +15,7 @@ object Session130311 extends SessionLike {
   lazy val givenMin = 215.90529
   lazy val givenMax = 309.3748
 
-  def run() { test8() }
+  def run() { test3() }
 
   def test1() {
     val v   = f.variableMap("ta")
