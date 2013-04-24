@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name := "SysSon"
 
-version := "0.1.0-SNAPSHOT"
+version := "0.1.0"
 
 organization := "at.iem.sysson"
 
@@ -18,14 +18,14 @@ scalaVersion := "2.10.1"
 
 libraryDependencies ++= {
   Seq(
-    "de.sciss" %% "scalacollider" % "1.7.+",                    // client for SuperCollider
-    "de.sciss" %% "scalacolliderswing" % "1.7.+",               // some graphical features for ScalaCollider
+    "de.sciss" %% "scalacollider"           % "1.7.+",          // client for SuperCollider
+    "de.sciss" %% "scalacolliderswing"      % "1.7.+",          // some graphical features for ScalaCollider
     "de.sciss" %  "scalacolliderugens-spec" % "1.5.+",          // UGen specs used in the patcher class
-    "de.sciss" %% "scalaosc" % "1.1.1+",                        // Open Sound Control
-    "de.sciss" %% "desktop" % "0.3.1+",                         // application framework
-    "de.sciss" %  "intensitypalette" % "1.0.0",                 // colour palette
-    "de.sciss" %% "filecache" % "0.2.+",                        // caching statistics of data files
-    "org.jfree" % "jfreechart" % "1.0.14",                      // plotting
+    "de.sciss" %% "scalaosc"                % "1.1.1+",         // Open Sound Control
+    "de.sciss" %% "desktop"                 % "0.3.1+",         // application framework
+    "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
+    "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
+    "org.jfree" % "jfreechart"              % "1.0.14",         // plotting
     "com.github.benhutchison" % "scalaswingcontrib" % "1.5"     // some GUI widgets
   )
 }

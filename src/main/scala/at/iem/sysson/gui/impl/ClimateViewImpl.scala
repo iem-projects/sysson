@@ -2,12 +2,12 @@ package at.iem.sysson
 package gui
 package impl
 
-import ucar.nc2
+import ucar.{ma2, nc2}
 import org.jfree.chart.{JFreeChart, ChartPanel}
 import Implicits._
 import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.renderer.{PaintScale, LookupPaintScale}
-import org.jfree.chart.axis.NumberAxis
+import org.jfree.chart.axis.{SymbolAxis, NumberAxis}
 import org.jfree.chart.plot.XYPlot
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
 import scala.Some
@@ -240,14 +240,28 @@ object ClimateViewImpl {
     //    val scale     = new GrayPaintScale(0.0, 1.0)
     renderer.setPaintScale(intensityScale)
 
-    val xAxis     = new NumberAxis(xDim.name.capitalize) // vm.get(xDim.name).map(_.fullName).getOrElse(xDim.name))
-    xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits())
-    xAxis.setLowerMargin(0.0)
-    xAxis.setUpperMargin(0.0)
-    val yAxis     = new NumberAxis(yDim.name.capitalize) // vm.get(yDim.name).map(_.fullName).getOrElse(yDim.name))
-    yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits())
-    yAxis.setLowerMargin(0.0)
-    yAxis.setUpperMargin(0.0)
+    def createAxis(dim: nc2.Dimension): NumberAxis = {
+      val name  = dim.name
+      val nameC = name.capitalize
+      val res   = vm.get(name) match {
+        case Some(v) if v.isFloat || v.isDouble =>
+          val sz      = v.size.toInt
+          val arr     = v.readSafe()
+          val it      = arr.getIndexIterator
+          val labels  = Array.fill[String](sz)(it.next().toString)
+          new SymbolAxis(nameC, labels)
+
+        case _ =>
+          new NumberAxis(nameC)
+      }
+      res.setStandardTickUnits(NumberAxis.createIntegerTickUnits())
+      res.setLowerMargin(0.0)
+      res.setUpperMargin(0.0)
+      res
+    }
+
+    val xAxis     = createAxis(xDim)
+    val yAxis     = createAxis(yDim)
     val coll      = new MatrixSeriesCollection(data)
     val plot      = new XYPlot(coll, xAxis, yAxis, renderer)
 
