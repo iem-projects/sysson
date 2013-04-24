@@ -4,7 +4,7 @@ name := "SysSon"
 
 version := "0.1.0"
 
-organization := "at.iem.sysson"
+organization := "at.iem.sysson" // "de.sciss"  // this should be "at.iem.sysson", but it would require setting up another account on Sonatype. so let's just use my org
 
 description := "Sonification Server of the IEM SysSon project"
 
@@ -57,6 +57,36 @@ buildInfoKeys := Seq(name, organization, version, scalaVersion, description,
 )
 
 buildInfoPackage <<= organization
+
+// ---- publishing ----
+
+publishMavenStyle := true
+
+publishTo <<= version { (v: String) =>
+  Some(if (v endsWith "-SNAPSHOT")
+    "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+  else
+    "Sonatype Releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+  )
+}
+
+publishArtifact in Test := false
+
+pomIncludeRepository := { _ => false }
+
+pomExtra <<= name { n =>
+<scm>
+  <url>git@github.com:iem-projects/{n}.git</url>
+  <connection>scm:git:git@github.com:iem-projects/{n}.git</connection>
+</scm>
+<developers>
+  <developer>
+    <id>sciss</id>
+    <name>Hanns Holger Rutz</name>
+    <url>http://www.sciss.de</url>
+  </developer>
+</developers>
+}
 
 // ---- packaging (making standalones) ----
 
