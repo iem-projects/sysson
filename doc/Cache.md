@@ -46,6 +46,8 @@ Stats can be directly retrieved for a given variable section:
     val secStats = sec.stats.!!
 ```
 
+__Note__: If there are sections across multiple dimensions, the stats cover a _larger_ area than `sec` itself: They reflect the union set of all orthogonal per-dimension sections. For example, if there are 17 pressure levels and 72 latitudes, getting the stats for a section which selects `plev` from 4 to 6 and `lat` from 10 to 19 yields an object which is the union of the slice of `plev` from 4 to 6 across all latitudes with the slice of `lat` from 10 to 19 across all pressure levels. So the `mean`, `min`, `max` etc. values specifically are not the mean, min and max of the sectioned `3 * 10 = 30` values, but actually of the strips whose cross section represents those 30 values. The strips in this example have a combined size of `3 * 72 + 10 * 17 - 3 * 10 = 356`.
+
 ## Disk location
 
 The caches are located in `$SYSSON_HOME/data/cache`. The cache is truncated to 1 MB at the moment.
