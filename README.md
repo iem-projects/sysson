@@ -4,7 +4,7 @@ Repository for the software developed during the [SysSon Project](http://sysson.
 
 ## Installation
 
-The project is written in [Scala](http://www.scala-lang.org/) 2.10 and builds with the [Simple Build Bool](http://www.scala-sbt.org/) (sbt) 0.12.2. The included shell script `sbt` is sufficient to build the project as it will automatically download and locally install Scala and sbt.
+The project is written in [Scala](http://www.scala-lang.org/) 2.10 and builds with the [Simple Build Bool](http://www.scala-sbt.org/) (sbt) 0.12. The included shell script `sbt` is sufficient to build the project as it will automatically download and locally install Scala and sbt.
 
 Furthermore, the project requires Java and SuperCollider.
 
@@ -14,7 +14,7 @@ An installation of Java SDK 1.6 or higher is required. On OS X, you will already
 
 ### SuperCollider
 
-The recommended [SuperCollider](http://supercollider.sourceforge.net/) version is 3.6.2.
+The recommended [SuperCollider](http://supercollider.sourceforge.net/) version is 3.6.2 or newer.
 
 __TODO__: Setting up `SC_HOME`.
 
@@ -22,9 +22,7 @@ __TODO__: Setting up `SC_HOME`.
 
 First, open a terminal (bash), and go (`cd`) into the main project directory.
 
-All libraries are automatically installed by sbt, with the exception of `netcdf` which must be installed manually:
-
-    $ ./install_netcdf
+All libraries are automatically installed by sbt. __NOTE__: If you are upgrading an older version, make sure to remove `lib/netcdfAll-4.3.jar` if this file still exists. The NetCDF library is now automatically downloaded from a Maven repository.
 
 Then to build the project on __Windows and Linux__:
 

@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name := "SysSon"
 
-version := "0.1.0"
+version := "0.2.0"
 
 organization := "at.iem.sysson" // "de.sciss"  // this should be "at.iem.sysson", but it would require setting up another account on Sonatype. so let's just use my org
 
@@ -16,8 +16,12 @@ licenses := Seq("GPL v2+" -> url("http://www.gnu.org/licenses/gpl-2.0.txt"))
 
 scalaVersion := "2.10.1"
 
+// maven repository for NetCDF library
+resolvers += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
+
 libraryDependencies ++= {
   Seq(
+    "edu.ucar" %  "netcdf"                  % "4.3.16",
     "de.sciss" %% "scalacollider"           % "1.7.+",          // client for SuperCollider
     "de.sciss" %% "scalacolliderswing"      % "1.7.+",          // some graphical features for ScalaCollider
     "de.sciss" %  "scalacolliderugens-spec" % "1.5.+",          // UGen specs used in the patcher class
@@ -26,7 +30,8 @@ libraryDependencies ++= {
     "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
     "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
     "org.jfree" % "jfreechart"              % "1.0.14",         // plotting
-    "com.github.benhutchison" % "scalaswingcontrib" % "1.5"     // some GUI widgets
+    "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // some GUI widgets
+    "org.slf4j" % "slf4j-simple"            % "1.7.5"           // logging (used by netcdf)
   )
 }
 
