@@ -3,36 +3,34 @@ package impl
 
 import ucar.{nc2, ma2}
 import collection.breakOut
-import collection.immutable.{IndexedSeq => IIdxSeq}
-import at.iem.sysson.gui.Plot
 
 trait HasDimensions {
   import Implicits._
-  def dimensions: IIdxSeq[nc2.Dimension]
+  def dimensions: Vec[nc2.Dimension]
   def dimensionMap: Map[String, nc2.Dimension] = dimensions.map(d => d.nameOption -> d)
     .collect({ case (Some(name), d) => name -> d })(breakOut)
 }
 
 trait HasAttributes {
   import Implicits._
-  def attributes: IIdxSeq[nc2.Attribute]
+  def attributes: Vec[nc2.Attribute]
   def attributeMap: Map[String, nc2.Attribute] = attributes.map(a => a.name -> a)(breakOut)
 }
 
 trait HasVariables {
   import Implicits._
-  def variables: IIdxSeq[nc2.Variable]
+  def variables: Vec[nc2.Variable]
   def variableMap: Map[String, nc2.Variable] = variables.map(a => a.name -> a)(breakOut)
 }
 
 trait VariableLike extends HasDimensions {
   def name: String
   def dataType: ma2.DataType
-  def shape: IIdxSeq[Int]
+  def shape: Vec[Int]
 
   def size: Long
   def rank: Int
-  def ranges: IIdxSeq[ma2.Range]
+  def ranges: Vec[ma2.Range]
 
   def read(): ma2.Array = readSafe()
   def readSafe(): ma2.Array
@@ -40,18 +38,18 @@ trait VariableLike extends HasDimensions {
   // this requires reflection because stupidly there is no public accessor on nc2.Variable
   def file: nc2.NetcdfFile
 
-  private def effectiveDimIndices: IIdxSeq[Int] = {
+  private def effectiveDimIndices: Vec[Int] = {
     val sh  = shape
     (0 until rank).filter(sh(_) > 1)
   }
 
   def reducedRank   = shape.count(_ > 1)
   def reducedShape  = shape.filter(_ > 1)
-  def reducedDimensions: IIdxSeq[nc2.Dimension] = {
+  def reducedDimensions: Vec[nc2.Dimension] = {
     val dim = dimensions
     effectiveDimIndices.map(dim.apply)
   }
-  def reducedRanges: IIdxSeq[ma2.Range] = {
+  def reducedRanges: Vec[ma2.Range] = {
     val r = ranges
     effectiveDimIndices.map(r.apply)
   }

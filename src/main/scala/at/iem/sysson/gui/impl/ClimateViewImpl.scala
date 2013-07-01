@@ -2,7 +2,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import ucar.{ma2, nc2}
+import ucar.nc2
 import org.jfree.chart.{JFreeChart, ChartPanel}
 import Implicits._
 import org.jfree.chart.renderer.xy.XYBlockRenderer
@@ -15,7 +15,6 @@ import java.awt.Color
 import scala.swing.{CheckBox, BorderPanel, Component, Alignment, Slider, Label, Swing}
 import Swing._
 import scalaswingcontrib.group.GroupPanel
-import collection.immutable.{IndexedSeq => IIdxSeq}
 import javax.swing.{DefaultBoundedRangeModel, SpinnerNumberModel, JSpinner, GroupLayout}
 import scala.swing.event.{ButtonClicked, ValueChanged}
 import language.reflectiveCalls
@@ -156,7 +155,7 @@ object ClimateViewImpl {
       }
     }
 
-    lazy val redGUI: IIdxSeq[Reduction] = red.zipWithIndex.map { case (d, idx) =>
+    lazy val redGUI: Vec[Reduction] = red.zipWithIndex.map { case (d, idx) =>
       val norm  = new CheckBox {
         enabled   = false
         selected  = true
@@ -228,9 +227,9 @@ object ClimateViewImpl {
       )
 
       theVerticalLayout is Sequential(
-        (redGUI.map { r =>
+        redGUI.map { r =>
           Parallel(Center)(r.norm, r.name, r.slider, r.index, r.value): InGroup[GroupLayout#SequentialGroup]
-        }): _*
+        }: _*
       )
     }
 

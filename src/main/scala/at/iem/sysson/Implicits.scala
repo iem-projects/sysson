@@ -4,7 +4,6 @@ import ucar.{nc2, ma2}
 import collection.JavaConversions
 import de.sciss.synth
 import synth.ugen
-import collection.immutable.{IndexedSeq => IIdxSeq}
 import java.io.File
 import scala.concurrent.{Await, Future}
 
@@ -21,7 +20,7 @@ object Implicits {
   }
 
 //  implicit def sectionAll(v: nc2.Variable): VariableSection = {
-//    val s = IIdxSeq.fill(v.rank)(all) // new ma2.Section(v.getShape)
+//    val s = Vec.fill(v.rank)(all) // new ma2.Section(v.getShape)
 //    new VariableSection(v, s)
 //  }
 
@@ -52,7 +51,7 @@ object Implicits {
   }
 
   implicit class SyRichAttribute(peer: nc2.Attribute) {
-    def name          = peer.getName
+    def name          = peer.getShortName // getName
     def dataType      = peer.getDataType
     def size          = peer.getLength
     def values        = peer.getValues
@@ -60,7 +59,7 @@ object Implicits {
 
   implicit class SyRichGroup(peer: nc2.Group) extends impl.HasDimensions with impl.HasAttributes {
     import JavaConversions._
-    def name          = peer.getName
+    def name          = peer.getFullName  // getName
     def attributes    = peer.getAttributes.toIndexedSeq
     def dimensions    = peer.getDimensions.toIndexedSeq
     def variables     = peer.getVariables.toIndexedSeq
@@ -70,7 +69,7 @@ object Implicits {
 
   implicit class SyRichDimension(peer: nc2.Dimension) {
     def name          = nameOption.getOrElse("?")
-    def nameOption    = Option(peer.getName)
+    def nameOption    = Option(peer.getShortName) // getName
     def size          = peer.getLength
     def group         = Option(peer.getGroup)
   }
@@ -115,7 +114,7 @@ object Implicits {
     protected def scale = Scale.Identity
 
     def selectAll: VariableSection = {
-      val s = IIdxSeq.fill(rank)(all)
+      val s = Vec.fill(rank)(all)
       new VariableSection(peer, s)
     }
 
@@ -146,19 +145,19 @@ object Implicits {
       require(isDouble, s"Wrong element type (${peer.getElementType}); required: Double")
     }
 
-    def scaled1D(scale: Scale): IIdxSeq[Float] = {
+    def scaled1D(scale: Scale): Vec[Float] = {
       val it = float1DIter
       val sz = peer.getSize
       Vector.fill(sz.toInt)(scale(it.getFloatNext).toFloat)
     }
 
-    def float1D: IIdxSeq[Float] = {
+    def float1D: Vec[Float] = {
       val it = float1DIter
       val sz = peer.getSize
       Vector.fill(sz.toInt)(it.getFloatNext)
     }
 
-    def double1D: IIdxSeq[Double] = {
+    def double1D: Vec[Double] = {
       val it = double1DIter
       val sz = peer.getSize
       Vector.fill(sz.toInt)(it.getDoubleNext)
@@ -228,22 +227,22 @@ object Implicits {
     }
   }
 
-  implicit class SyRichFloatSeq(peer: IIdxSeq[Float]) {
-    def replaceNaNs(value: Float, fillValue: Float = Float.NaN): IIdxSeq[Float] = {
+  implicit class SyRichFloatSeq(peer: Vec[Float]) {
+    def replaceNaNs(value: Float, fillValue: Float = Float.NaN): Vec[Float] = {
       val checkNaN = checkNaNFun(fillValue)
       peer.map { f =>
         if (checkNaN(f)) value else f
       }
     }
 
-    def dropNaNs: IIdxSeq[Float] = dropNaNs(Float.NaN)
-    def dropNaNs(fillValue: Float): IIdxSeq[Float] = {
+    def dropNaNs: Vec[Float] = dropNaNs(Float.NaN)
+    def dropNaNs(fillValue: Float): Vec[Float] = {
       val checkNaN = checkNaNFun(fillValue)
       peer.filterNot(checkNaN)
     }
 
-    def normalize: IIdxSeq[Float] = normalize(Float.NaN)
-    def normalize(fillValue: Float): IIdxSeq[Float] = {
+    def normalize: Vec[Float] = normalize(Float.NaN)
+    def normalize(fillValue: Float): Vec[Float] = {
       val sz   = peer.size
       if( sz == 0 ) return peer
       var min  = Float.MaxValue
@@ -267,7 +266,7 @@ object Implicits {
       peer.map(f => if (checkNaN(f)) f else (f - min) * mul)
     }
 
-    def linlin(srcLo: Double = 0.0, srcHi: Double = 1.0, fillValue: Float = Float.NaN)(tgtLo: Double, tgtHi: Double): IIdxSeq[Float] = {
+    def linlin(srcLo: Double = 0.0, srcHi: Double = 1.0, fillValue: Float = Float.NaN)(tgtLo: Double, tgtHi: Double): Vec[Float] = {
       require(srcLo != srcHi, "Source range is zero (lo = " + srcLo + ", hi = " + srcHi + ")")
       require(tgtLo != tgtHi, "Target range is zero (lo = " + tgtLo + ", hi = " + tgtHi + ")")
       val checkNaN = checkNaNFun(fillValue)
@@ -277,28 +276,30 @@ object Implicits {
       peer.map(f => if (checkNaN(f)) f else ((f + add1) * mul + add2).toFloat)
     }
 
-    def asEnv(dur: Double, shape: synth.Env.ConstShape = synth.stepShape): ugen.EnvGen = {
+    def asEnv(dur: Double, shape: synth.Curve = synth.Curve.step): ugen.EnvGen = {
       import synth._
          import ugen._
       val sz = peer.size
       require(sz > 0, "Sequence is empty")
       val segDur  = dur / sz
-      val env = Env(peer.head, peer.tail.map(mag => Env.Seg(segDur, mag, shape)) :+ Env.Seg(segDur, peer.last, stepShape))
+      val env = Env(peer.head, peer.tail.map(mag =>
+        Env.Segment(segDur, mag, shape)) :+ Env.Segment(segDur, peer.last, Curve.step)
+      )
       EnvGen.ar(env, doneAction = freeSelf)
     }
   }
 
-  implicit class SyRichFile(f: File) {
-    def /(child: String): File = new File(f, child)
-    def path: String  = f.getPath
-    def name: String  = f.getName
-    def parent: File  = f.getParentFile
-    def nameWithoutExtension: String = {
-      val n = f.getName
-      val i = n.lastIndexOf('.')
-      if (i < 0) n else n.substring(0, i)
-    }
-  }
+  //  implicit class SyRichFile(f: File) {
+  //    def /(child: String): File = new File(f, child)
+  //    def path: String  = f.getPath
+  //    def name: String  = f.getName
+  //    def parent: File  = f.getParentFile
+  //    def nameWithoutExtension: String = {
+  //      val n = f.getName
+  //      val i = n.lastIndexOf('.')
+  //      if (i < 0) n else n.substring(0, i)
+  //    }
+  //  }
 
   implicit class SyRichFuture[A](fut: Future[A]) {
     def !! : A = {

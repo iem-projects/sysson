@@ -2,7 +2,6 @@ package at.iem.sysson
 
 import de.sciss.osc
 import java.net.InetSocketAddress
-import ucar.{nc2, ma2}
 
 object OSCSupport {
   import Implicits._

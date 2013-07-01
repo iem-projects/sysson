@@ -6,11 +6,10 @@ import swing._
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.JTree
-import collection.immutable.{IndexedSeq => IIdxSeq}
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
 import de.sciss.audiowidgets.Transport
-import swing.event.{WindowClosing, TableRowsSelected}
+import swing.event.TableRowsSelected
 import sound.AudioSystem
 import java.io.File
 import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFile}
@@ -21,6 +20,7 @@ import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
 import scalaswingcontrib.event.TreeNodeSelected
 import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.{OptionPane, Window}
+import de.sciss.file._
 
 private[impl] object DocumentViewImpl {
   import Implicits._
@@ -56,11 +56,11 @@ private[impl] object DocumentViewImpl {
   }
 
   private trait TableModel[A] extends AbstractTableModel {
-    def data: IIdxSeq[A]
+    def data: Vec[A]
     def getRowCount = data.size
   }
 
-  private final class AttrsModel(val data: IIdxSeq[nc2.Attribute]) extends TableModel[nc2.Attribute] {
+  private final class AttrsModel(val data: Vec[nc2.Attribute]) extends TableModel[nc2.Attribute] {
     def getColumnCount  = 2 // name, value representation
     override def getColumnName(col: Int) = (col: @switch) match {
       case 0 => "Name"
@@ -83,7 +83,7 @@ private[impl] object DocumentViewImpl {
     }
   }
 
-  private final class VarsModel(val data: IIdxSeq[nc2.Variable]) extends TableModel[nc2.Variable] {
+  private final class VarsModel(val data: Vec[nc2.Variable]) extends TableModel[nc2.Variable] {
     def getColumnCount = 5 // name, /* full-name, */ description, data-type, shape /* , size */
     override def getColumnName(col: Int) = (col: @switch) match {
       case 0 => "Name"
@@ -100,7 +100,7 @@ private[impl] object DocumentViewImpl {
 //        case 1 => attr.fullName
         case 1 /* 2 */ => vr.description.getOrElse("")
         case 2 /* 3 */ => vr.dataType
-        case 3 /* 4 */ => (vr.dimensions zip vr.shape) map {
+        case 3 /* 4 */ => (vr.dimensions zip vr.shape).map {
           case (dim, sz) => dim.nameOption match {
             case Some(name) => s"$name:$sz"
             case _ => sz.toString
@@ -129,8 +129,8 @@ private[impl] object DocumentViewImpl {
       peer.setVisibleRowCount(3)
     }
 
-    private var mGroupAttrs = new AttrsModel(IIdxSeq.empty)
-    private var mGroupVars  = new VarsModel(IIdxSeq.empty)
+    private var mGroupAttrs = new AttrsModel(Vec.empty)
+    private var mGroupVars  = new VarsModel(Vec.empty)
 
     private val tGroupAttrs = {
       val res                     = new Table()
@@ -186,7 +186,7 @@ private[impl] object DocumentViewImpl {
     private val ggPlot = Button("Plot") {
       selectedVariable.foreach { v =>
         val in          = v.file
-        val vm          = in.variableMap
+        // val vm          = in.variableMap
         val dim         = v.dimensions // .filter(d => vm.get(d.name.getOrElse("?")).map(_.isFloat).getOrElse(false))
         val red         = v.reducedDimensions
         if (!v.isFloat) {
@@ -289,7 +289,7 @@ private[impl] object DocumentViewImpl {
       def style   = Window.Regular
       def handler = SwingApplication.windowHandler
 
-      title     = document.file.nameWithoutExtension
+      title     = document.file.base
       file      = Some(document.file)
       contents  = impl.component
       closeOperation = Window.CloseIgnore
@@ -404,7 +404,7 @@ private[impl] object DocumentViewImpl {
                   }
                   Buffer.cue(server, fTmp.getAbsolutePath, numChannels = 1, completion = { (b: Buffer) =>
                     val synth = df.play(server, Seq("buf" -> b.id, "speed" -> frameRate, "dur" -> duration))
-                    synth.onEnd { b.close(b.freeMsg()) }
+                    synth.onEnd { b.close(Some(b.freeMsg())) }
                   })
 
                 } finally {

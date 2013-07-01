@@ -3,7 +3,6 @@ package util
 
 import ucar.nc2
 import java.io.{OutputStreamWriter, FileOutputStream, File}
-import collection.immutable.{IndexedSeq => IIdxSeq}
 
 object Export {
   /**
@@ -42,7 +41,7 @@ object Export {
       val dimStr  = dimensions.map(str => "\"" + str.escape + "\"").mkString(del)
       w.write(s""":var$del"${v.name.escape}"${units}$del:dim${del}$dimStr\n""")
 
-      def iter(sec: VariableSection, prefix: String, dims: IIdxSeq[nc2.Dimension], shape: IIdxSeq[Int]) {
+      def iter(sec: VariableSection, prefix: String, dims: Vec[nc2.Dimension], shape: Vec[Int]) {
 //        val rank      = sec.reducedRank
 //        if (rank <= 1) { }
         if (dims.size <= 1) {

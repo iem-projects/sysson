@@ -6,10 +6,10 @@ import de.sciss.synth._
 import concurrent.duration.Duration
 import io.{AudioFileSpec, AudioFile}
 import java.io.File
-import Implicits._
 import Ops._
 import de.sciss.{synth, osc}
 import sound.impl.{UGenGraphBuilderImpl => GraphB}
+import de.sciss.file._
 
 object SonificationImpl {
   private final val synthDefName = "$son_play"
@@ -61,11 +61,11 @@ object SonificationImpl {
           case Some(secs) if secs > 0 =>
             val sus = math.max(0, secs - 0.02)
             val rls = secs - sus
-            val env = Env.linen(attack = 0, sustain = sus, release = rls, shape = sinShape)
+            val env = Env.linen(attack = 0, sustain = sus, release = rls, curve = Curve.sine)
             res * EnvGen.ar(env, doneAction = freeSelf)
           case _ => res
         }
-        WrapOut(in = sig, fadeTime = 0.02f)
+        WrapOut(in = sig, fadeTime = Some(0.02f))
       })
 
     private def play(rate: Double, duration: Option[Double]): Synth = {
@@ -95,7 +95,7 @@ object SonificationImpl {
 
         // WARNING: sound file should be AIFF to allow for floating point sample rates
         val af        = AudioFile.openWrite(file, AudioFileSpec(numChannels = numChannels, sampleRate = rate))
-        ctls        :+= ((GraphB.bufCtlName(key) -> buf.id): ControlSetMap)
+        ctls        :+= (GraphB.bufCtlName(key) -> buf.id: ControlSetMap)
         val data      = source.section.readScaled1D() // XXX TODO: should read piece wise for large files
 
         try {
@@ -151,7 +151,7 @@ object SonificationImpl {
             def updateBuffer(trigVal: Int): (osc.Packet, Int) = {
               val trigEven    = trigVal % 2 == 0
               val bufOff      = if (trigEven) 0 else bufSizeH
-              val frame       = (trigVal * bufSizeHM) /* + startPos = 0 */ + (if (trigEven) 0 else GraphB.diskPad)
+              val frame       = trigVal * bufSizeHM /* + startPos = 0 */ + (if (trigEven) 0 else GraphB.diskPad)
               val readSz      = math.max(0, math.min(bufSizeH, numFrames - frame))
               val fillSz      = bufSizeH - readSz
               var ms          = List.empty[osc.Packet]
@@ -220,7 +220,7 @@ object SonificationImpl {
 //        val upd  = last.updateCompletion(Some(recvMsg))
 //        osc.Bundle.now((init :+ upd): _*)
 //      }
-      val bndl  = osc.Bundle.now((msgs :+ dfMsg): _*)
+      val bndl  = osc.Bundle.now(msgs :+ dfMsg: _*)
 
       s ! bndl
 
@@ -235,10 +235,11 @@ object SonificationImpl {
     }
 
     private def validateMatrixSpecs() {
-      mapping.foreach { case (key, source) =>
-        val spec = matrices.getOrElse(key, sys.error(s"Sonification contains source for unknown key '$key'"))
-        // XXX TODO : spec
-      }
+      // XXX TODO
+      //      mapping.foreach { case (key, source) =>
+      //        val spec = matrices.getOrElse(key, sys.error(s"Sonification contains source for unknown key '$key'"))
+      //        ???
+      //      }
     }
   }
 }

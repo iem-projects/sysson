@@ -17,7 +17,7 @@ object Session130423 extends SessionLike {
 
   // (60 until 63, 30 until 33, 2 until 5)
   def test1() {
-    graphNNN("Cube1")(lonRange = (60 until 64), latRange = (30 until 34), plevRange = (2 until 6)) {
+    graphNNN("Cube1")(lonRange = 60 until 64, latRange = 30 until 34, plevRange = 2 until 6) {
       (min, max, d, lon, lat, plev) =>
       val freq  = d  .linexp(min - 20, max, 200, 4000)
       val pan   = lon.linlin(       0,   3,  -1,    1)
@@ -99,7 +99,7 @@ object Session130423 extends SessionLike {
         for(lat <- 0 until numLat) {
           for(plev <- 0 until numPlev) {
             // val idx = lon * (latRange.size * plevRange.size) + lat * plevRange.size + plev
-            val ch  = lon + (lat * numLon) + (plev * numLatLon)
+            val ch  = lon + lat*numLon + plev*numLatLon
             val d   = play \ ch // sound.MatrixIn.ar("data_" + idx)
             // d.poll(trig = 1, label = s"freq$lon$lat$plev")
             sum += fun(min, max, d, lon, lat, plev)

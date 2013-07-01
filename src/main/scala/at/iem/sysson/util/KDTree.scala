@@ -1,16 +1,15 @@
-package at.iem.sysson.util
-
-import collection.immutable.{IndexedSeq => IIdxSeq}
+package at.iem.sysson
+package util
 
 object KDTree {
-  type Point[K] = IIdxSeq[K]
+  type Point[K] = Vec[K]
 
   def apply[K : Ordering, V](entries: (Point[K], V)*): KDTree[K, V] = {
     if (entries.isEmpty) return Nil
     val dim = entries.head._1.size
     require(dim >= 1)
 
-    def loop(xs: IIdxSeq[(Point[K], V)], axis: Int): KDTree[K, V] = {
+    def loop(xs: Vec[(Point[K], V)], axis: Int): KDTree[K, V] = {
       val sz = xs.size
       if (sz == 0) Nil
       else {

@@ -1,7 +1,7 @@
 package at.iem.sysson
 
 import sound.AudioSystem
-import Implicits._
+import de.sciss.file._
 import de.sciss.synth
 import synth._
 import io.SampleFormat

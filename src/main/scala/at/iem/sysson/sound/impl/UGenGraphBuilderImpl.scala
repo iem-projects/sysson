@@ -58,7 +58,7 @@ private[impl] object UGenGraphBuilderImpl {
             case _        => sys.error("Matrix must run at k- or a-rate")
           }
           val interp: GE  = if (diskUsesInterp) (phasorRate - 1.0).signum.abs * 3 + 1 else 1
-          val phasorTrig  = Trig1.kr(phasorK - (numFrames / 2), ControlDur.ir)
+          val phasorTrig  = Trig1.kr(phasorK - numFrames/2, ControlDur.ir)
           val clockTrig   = phasorTrig + TDelay.kr(phasorTrig, halfPeriod)
           SendTrig.kr(clockTrig, value = PulseCount.kr(clockTrig), id = diskTrigID)
 
@@ -71,7 +71,7 @@ private[impl] object UGenGraphBuilderImpl {
     def build(init: SynthGraph): (UGenGraph, Set[String]) = {
       val ug = UGenGraph.use(this) {
         var g = init // sonif.graph
-        var controlProxies = Set.empty[ControlProxyLike[_]]
+        var controlProxies = Set.empty[ControlProxyLike]
         while (g.nonEmpty) {
           controlProxies ++= g.controlProxies
           g = SynthGraph(g.sources.foreach(force(_)))

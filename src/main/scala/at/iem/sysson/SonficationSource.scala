@@ -1,7 +1,5 @@
 package at.iem.sysson
 
-import Implicits._
-
 sealed trait SonificationSource {
   def numColumns:   Int
   def numRows:      Int

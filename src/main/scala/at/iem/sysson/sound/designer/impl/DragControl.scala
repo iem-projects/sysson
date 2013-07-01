@@ -1,10 +1,12 @@
-package at.iem.sysson.sound.designer.impl
+package at.iem.sysson
+package sound
+package designer
+package impl
 
 import java.awt.event.MouseEvent
 import prefuse.controls.ControlAdapter
 import java.awt.geom.{Line2D, Ellipse2D, Area, Rectangle2D, Point2D}
 import prefuse.visual.VisualItem
-import collection.immutable.{IndexedSeq => IIdxSeq}
 import java.awt.{BasicStroke, Graphics2D, Point, Toolkit, Color, RenderingHints, Cursor}
 import java.awt.image.BufferedImage
 import javax.swing.SwingUtilities
@@ -109,7 +111,7 @@ final class DragControl(d: DesignerViewImpl) extends ControlAdapter {
 //println(s"mouse screen ${e.getPoint} - virt ${mousePoint}")
   }
 
-  private def findPort(seq: IIdxSeq[Rectangle2D], tx: Double, ty: Double): Int = seq.indexWhere { r =>
+  private def findPort(seq: Vec[Rectangle2D], tx: Double, ty: Double): Int = seq.indexWhere { r =>
     r.getMinX - 1 <= tx && r.getMaxX >= tx && r.getMinY - 1 <= ty && r.getMaxY >= ty
   }
 

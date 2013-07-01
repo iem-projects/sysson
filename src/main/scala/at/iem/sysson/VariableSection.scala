@@ -1,7 +1,6 @@
 package at.iem.sysson
 
 import ucar.{nc2, ma2}
-import collection.immutable.{IndexedSeq => IIdxSeq}
 
 import Implicits._
 import collection.JavaConversions
@@ -34,12 +33,12 @@ object VariableSection {
   * @param variable the original NetCDF variable
   * @param section  the range selection within the dimension
   */
-final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRange], scale: Scale = Scale.Identity)
+final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange], scale: Scale = Scale.Identity)
   extends impl.VariableLike {
 
   def readSafe(): ma2.Array = file.synchronized(variable.read(toSection))
 
-  def readScaled1D(): IIdxSeq[Float] = read().scaled1D(scale)
+  def readScaled1D(): Vec[Float] = read().scaled1D(scale)
 
   def applyScale(scale: Scale): VariableSection = copy(scale = scale)
 
@@ -58,7 +57,7 @@ final case class VariableSection(variable: nc2.Variable, section: IIdxSeq[OpenRa
     new ma2.Section(origin, shape)
   }
 
-  def ranges: IIdxSeq[ma2.Range] = {
+  def ranges: Vec[ma2.Range] = {
     import JavaConversions._
     toSection.getRanges.toIndexedSeq
   }

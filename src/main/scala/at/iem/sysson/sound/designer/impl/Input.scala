@@ -1,17 +1,19 @@
-package at.iem.sysson.sound.designer.impl
+package at.iem.sysson
+package sound
+package designer
+package impl
 
 import de.sciss.synth.{MaybeRate, UGenSpec}
-import collection.immutable.{IndexedSeq => IIdxSeq}
 
 private[impl] sealed trait Input
 private[impl] final class GraphElem(val spec: UGenSpec, val rate: MaybeRate) extends Input {
   def name                                        = spec.name
-  var inputs: IIdxSeq[Option[Input]]              = spec.args.map { a =>
+  var inputs: Vec[Option[Input]]              = spec.args.map { a =>
     a.defaults.get(rate).map(v => ConstElem(Vector(v)))
   }
-  var outputs: IIdxSeq[Option[(GraphElem, Int)]]  = IIdxSeq.fill(spec.outputs.size)(None)
+  var outputs: Vec[Option[(GraphElem, Int)]]  = Vec.fill(spec.outputs.size)(None)
   def numIns  = inputs.size
   def numOuts = outputs.size
 }
-private[impl] final case class ConstElem(values: IIdxSeq[UGenSpec.ArgumentValue]) extends Input
+private[impl] final case class ConstElem(values: Vec[UGenSpec.ArgumentValue]) extends Input
 

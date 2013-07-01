@@ -6,7 +6,6 @@ package impl
 import prefuse.{Visualization, Display}
 import swing.{BorderPanel, Action, Component, Frame}
 import javax.swing.{JTextField, JComponent}
-import gui.GUI
 import java.awt.event.{ActionEvent, ActionListener, KeyEvent}
 import java.awt.Rectangle
 import prefuse.data.Graph
@@ -213,7 +212,7 @@ private[designer] object DesignerViewImpl {
       )
     }
 
-    private val frame = new Frame {
+    /* private val frame = */ new Frame {
       title     = "Sound Designer"
       contents  = new BorderPanel {
         add(Component.wrap(display), BorderPanel.Position.Center)

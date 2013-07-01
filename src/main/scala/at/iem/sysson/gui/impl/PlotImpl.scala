@@ -6,5 +6,5 @@ import at.iem.sysson.impl.VariableLike
 import scala.swing.Component
 
 final class PlotImpl(section: VariableLike) extends Plot {
-  def component = ??? : Component
+  def component: Component = ???
 }

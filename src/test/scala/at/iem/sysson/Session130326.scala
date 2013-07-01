@@ -1,14 +1,11 @@
 package at.iem.sysson
 
-import collection.immutable.{IndexedSeq => IIdxSeq}
 import Implicits._
 import de.sciss.{osc, synth}
 import synth._
-import io.{AudioFileSpec, AudioFile}
 import ugen._
 import synth.Ops._
 import concurrent.duration._
-import java.io.File
 import concurrent.{Await, Future}
 
 object Session130326 extends SessionLike {
@@ -40,7 +37,7 @@ object Session130326 extends SessionLike {
     val numPlev = f.dimensionMap("plev").size
 
     val timeIdxs = 0 :: Nil
-    val plevIdxs = (0 until numPlev by 2)
+    val plevIdxs = 0 until numPlev by 2
     val rate    = 1.0/3
     val scan    = 'lat  // 'lon, 'lat, or 'zig as first scanning axis
 
@@ -64,7 +61,7 @@ object Session130326 extends SessionLike {
     val numPlev = f.dimensionMap("plev").size
 
     val timeIdxs = 0 :: Nil
-    val plevIdxs = (0 until numPlev by 2)
+    val plevIdxs = 0 until numPlev by 2
     val rate    = 1.0/3
     val scan    = 'zig  // 'lon, 'lat, or 'zig as first scanning axis
 
@@ -81,7 +78,7 @@ object Session130326 extends SessionLike {
     AMP     = 32
 
 //    val timeIdxs = (0 until (numTime/10) by 3)
-    val timeIdxs = (0 until numTime/30)
+    val timeIdxs = 0 until numTime/30
     val plevIdxs = 5 :: Nil // (0 until numPlev)
     val rates    = 1.0/3 :: Nil
     val scan     = 'lat  // 'lon, 'lat, or 'zig as first scanning axis
@@ -98,7 +95,7 @@ object Session130326 extends SessionLike {
     MOD     = true
     AMP     = 128
 
-    val timeIdxs = (0 until numTime/90)
+    val timeIdxs = 0 until numTime/90
     val plevIdxs = 5 :: Nil // (0 until numPlev)
     val rates    = 1.0/15 :: Nil
     val scan     = 'lat  // 'lon, 'lat, or 'zig as first scanning axis

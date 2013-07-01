@@ -1,10 +1,6 @@
 package at.iem.sysson
 package gui
 
-import swing.{Swing, Frame}
-import java.awt.{GraphicsEnvironment, Dimension}
-import javax.swing.WindowConstants
-import Swing._
 import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.Window
 

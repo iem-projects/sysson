@@ -1,11 +1,8 @@
 package at.iem.sysson
 
-import Implicits._
 import de.sciss.synth
 import synth._
 import ugen._
-import synth.Ops._
-import concurrent.duration._
 
 object MySession extends SessionLike {
   def run() {

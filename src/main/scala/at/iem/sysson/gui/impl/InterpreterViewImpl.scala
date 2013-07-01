@@ -2,11 +2,9 @@ package at.iem.sysson
 package gui
 package impl
 
-import de.sciss.scalainterpreter.{InterpreterPane, NamedParam, Interpreter, CodePane}
+import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
 import java.io.{IOException, FileInputStream, File}
-import swing.{Component, Frame}
-import javax.swing.WindowConstants
-import swing.event.WindowClosing
+import swing.Component
 import de.sciss.desktop.Window
 import de.sciss.desktop.impl.WindowImpl
 

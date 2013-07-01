@@ -1,6 +1,7 @@
 package at.iem.sysson
 
 import Implicits._
+import de.sciss.file._
 
 object Session130403 extends SessionLike {
   lazy val supercollider  = true   // if `true`, print array data for sclang

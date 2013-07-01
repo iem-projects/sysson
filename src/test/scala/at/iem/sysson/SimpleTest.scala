@@ -1,6 +1,6 @@
 package at.iem.sysson
 
-import Implicits._
+import de.sciss.file._
 
 object SimpleTest extends App {
   Main.main(new Array[String](0))

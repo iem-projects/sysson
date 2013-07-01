@@ -50,7 +50,7 @@ object DiskStreamTest extends App {
       val phasor      = Phasor.ar(speed = phasorRate, lo = pad, hi = numFrames - pad)
       val interp: GE  = if (userInterpolation) (phasorRate - 1.0).signum.abs * 3 + 1 else 1
       val bufReader   = BufRd.ar(numChannels, buf = inBuf, index = phasor, loop = 0, interp = interp)
-      val phasorTrig  = Trig1.kr(A2K.kr(phasor) - (numFrames / 2), ControlDur.ir) //
+      val phasorTrig  = Trig1.kr(A2K.kr(phasor) - numFrames/2, ControlDur.ir) //
       val clockTrig   = phasorTrig + TDelay.kr(phasorTrig, halfPeriod)
 
       SendTrig.kr(clockTrig, value = PulseCount.kr(clockTrig))
@@ -61,7 +61,7 @@ object DiskStreamTest extends App {
     def updateBuffer(buf: Buffer, trigVal: Int, completion: Option[osc.Packet] = None): (osc.Packet, Int) = {
       val trigEven    = trigVal % 2 == 0
       val bufOff      = if (trigEven) 0 else halfBufSize
-      val frame       = (trigVal * halfBufSizeM) + startPos + (if (trigEven) 0 else pad)
+      val frame       = trigVal * halfBufSizeM + startPos + (if (trigEven) 0 else pad)
       val readSz      = math.max(0, math.min(halfBufSize, frameMax - frame))
       val fillSz      = halfBufSize - readSz
       var ms          = List.empty[osc.Packet]

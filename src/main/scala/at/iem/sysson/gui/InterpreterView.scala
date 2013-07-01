@@ -4,7 +4,6 @@ package gui
 import swing.Component
 import impl.{InterpreterViewImpl => Impl}
 import ucar.nc2
-import Implicits._
 
 object InterpreterView {
   def apply(): InterpreterView = Impl()

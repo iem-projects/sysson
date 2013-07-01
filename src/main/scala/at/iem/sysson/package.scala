@@ -2,10 +2,11 @@ package at.iem
 
 import ucar.nc2
 import de.sciss.synth
-import java.io.File
+import de.sciss.file._
 
 package object sysson {
-  import Implicits._
+  val  Vec     = collection.immutable.IndexedSeq
+  type Vec[+A] = collection.immutable.IndexedSeq[A]
 
   /** The SysSon base directory is determined by the environment variable `SYSSON_HOME`. See the
     * `README.md` for more information.

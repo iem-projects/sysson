@@ -5,9 +5,9 @@ import de.sciss.filecache
 import java.io.File
 import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
 import collection.breakOut
-import collection.immutable.{IndexedSeq => IIdxSeq}
 import concurrent._
 import Implicits._
+import de.sciss.file._
 
 object Stats {
   private val COOKIE  = 0x53746174
@@ -89,7 +89,7 @@ object Stats {
           // is present in all variables which acts as dimensions.
           // for example `plev` will have itself as its only dimension.
           val dims = dims0 - vr
-          // then build the Map[String, IIdxSeq[Counts]] by iteratively reducing all dimensions but one, over which
+          // then build the Map[String, Vec[Counts]] by iteratively reducing all dimensions but one, over which
           // the stats are generated
 
           val accept = if (vr.isFloat) {
@@ -126,7 +126,7 @@ object Stats {
             Counts(min = min, max = max, sum = sum, sqrdif = sqrdif, num = num, pool = 1)
           }
 
-          val preSlices: Map[String, IIdxSeq[Counts]] = dims.map(dim => {
+          val preSlices: Map[String, Vec[Counts]] = dims.map(dim => {
             // val redDims = dims - dim
             val counts  = Vector.tabulate(dim.size.toInt) { i =>
               val sel = vr in dim.name select i
@@ -265,18 +265,18 @@ object Stats {
         import v._
         out.writeUTF(name)
         Counts.Serializer.write(total, out)
-        ImmutableSerializer.map[String, IIdxSeq[Counts]].write(slices, out)
+        ImmutableSerializer.map[String, Vec[Counts]].write(slices, out)
       }
 
       def read(in: DataInput): Variable = {
         val name    = in.readUTF()
         val total   = Counts.Serializer.read(in)
-        val slices  = ImmutableSerializer.map[String, IIdxSeq[Counts]].read(in)
+        val slices  = ImmutableSerializer.map[String, Vec[Counts]].read(in)
         Variable(name, total, slices)
       }
     }
   }
-  case class Variable(name: String, total: Counts, slices: Map[String, IIdxSeq[Counts]]) {
+  case class Variable(name: String, total: Counts, slices: Map[String, Vec[Counts]]) {
     override def toString = raw""""$name", total = $total${if (slices.isEmpty) "" else slices.keys.mkString(", slices = <", ",", ">")})"""
   }
 

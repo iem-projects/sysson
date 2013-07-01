@@ -20,7 +20,7 @@ object Session130311 extends SessionLike {
   def test1() {
     val v   = f.variableMap("ta")
     val t   = v in "time" select 700
-    val sel = ((t in "lat" select 0) in "lon" select 0)
+    val sel = (t in "lat" select 0) in "lon" select 0
     val h   = sel.read().float1D
     val h1  = h.drop(4)
 
@@ -125,7 +125,7 @@ object Session130311 extends SessionLike {
     assert(numChans == 144)
 
     val d = Vector.tabulate(numChans) { i =>
-      val sel = ((t in "lon" select i) in "plev" select 7)
+      val sel = (t in "lon" select i) in "plev" select 7
       val h = sel.read().float1D // .drop(4)
       h
     }
@@ -207,13 +207,13 @@ object Session130311 extends SessionLike {
 
     val ds = plevRange.map { plev =>
       val d0 = Vector.tabulate(numChans) { i =>
-         val sel = ((t in "lon" select i) in "plev" select plev)
+         val sel = (t in "lon" select i) in "plev" select plev
          val h = sel.read().float1D // .drop(4)
          h
       }
 
       val d = d0.map { dd => dd.map {
-        case value if (value > 1e4f) => 200f
+        case value if value > 1e4f => 200f
         case value => value
       }}
 

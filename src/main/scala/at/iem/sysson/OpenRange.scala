@@ -45,6 +45,6 @@ final case class OpenRange(startOption: Option[Int], endOption: Option[Int], isI
     } else {
       math.min(maxStop, endOption.getOrElse(maxStop))
     }
-    if (isInclusive) (start to end by step) else (start until end by step)
+    (if (isInclusive) start to end else start until end) by step
   }
 }
