@@ -69,7 +69,7 @@ buildInfoPackage <<= organization
 
 publishMavenStyle := true
 
-publishTo <<= version { (v: String) =>
+publishTo <<= version { v =>
   Some(if (v endsWith "-SNAPSHOT")
     "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
   else

@@ -63,11 +63,10 @@ object MenuFactory {
         Item("close-all", actionCloseAll)
       )
     ).add(
-      Group("tools", "Tools").add(
-        Item("designer")("Sound Designer..." -> (menu1 + VK_D)) {
-          openSoundDesigner()
-        }
-      )
+      Group("tools", "Tools")
+      //      .add(
+      //        Item("designer")("Sound Designer..." -> (menu1 + VK_D)) { openSoundDesigner() }
+      //      )
     ).add(
       Group("view", "View").add(
         Item("clear-log")("Clear Log Window" -> (menu1 + shift + VK_P)) {
@@ -115,9 +114,9 @@ object MenuFactory {
     DocumentHandler.instance.openRead(f.getPath)
   }
 
-  def openSoundDesigner() {
-    sound.designer.DesignerView()
-  }
+  //  def openSoundDesigner() {
+  //    sound.designer.DesignerView()
+  //  }
 
   def openInterpreter() {
     InterpreterView()
