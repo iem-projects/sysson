@@ -15,12 +15,11 @@ object OSCSupport {
     osc.UDP.Transmitter(cfg)
   }
 
-  def send(name: String, args: Any*) {
+  def send(name: String, args: Any*): Unit =
     trns.send(osc.Message(name, args: _*), target)
-  }
 
   implicit class OSCVarSect(val peer: VariableSection) extends AnyVal {
-    def send() {
+    def send(): Unit = {
       val data    = peer.readScaled1D()
       val dims    = peer.dimensions
       val ranges  = peer.ranges

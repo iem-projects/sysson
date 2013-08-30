@@ -32,7 +32,7 @@ private[impl] object DocumentViewImpl {
   private final class GroupModel(root: nc2.Group)
     extends ExternalTreeModel[nc2.Group](root :: Nil, _.children) {
 
-    //    def test(t: Tree[nc2.Group]) {
+    //    def test(t: Tree[nc2.Group]): Unit = {
     //      // t.expandPath()
     //      // t.expandsSelectedPaths
     //      // t.getRowForPath()
@@ -257,7 +257,7 @@ private[impl] object DocumentViewImpl {
 
               bindMenu("file.close", Action(null) { dispose() })
 
-              override def dispose() {
+              override def dispose(): Unit = {
                 document.removeListener(docL)
                 super.dispose()
               }
@@ -312,18 +312,16 @@ private[impl] object DocumentViewImpl {
 
     f // force
 
-    def dispose() {
-      f.dispose()
-    }
+    def dispose(): Unit = f.dispose()
 
-    private def groupSelected(g: nc2.Group) {
+    private def groupSelected(g: nc2.Group): Unit = {
       mGroupAttrs       = new AttrsModel(g.attributes)
       mGroupVars        = new VarsModel (g.variables )
       tGroupAttrs.model = mGroupAttrs
       tGroupVars.model  = mGroupVars
     }
 
-    private def selectGroup(group: nc2.Group) {
+    private def selectGroup(group: nc2.Group): Unit = {
       @tailrec def loop(path: Tree.Path[nc2.Group], g: nc2.Group): Tree.Path[nc2.Group] = {
         val p2 = g +: path
         g.parent match {
@@ -347,7 +345,7 @@ private[impl] object DocumentViewImpl {
       _selVar
     }
 
-    def selectedVariable_=(opt: Option[nc2.Variable]) {
+    def selectedVariable_=(opt: Option[nc2.Variable]): Unit = {
       GUI.requireEDT()
       _selVar = opt
       val sel = tGroupVars.selection.rows
@@ -362,16 +360,16 @@ private[impl] object DocumentViewImpl {
       }
     }
 
-    private def play() {
+    private def play(): Unit = {
       selectedVariable.foreach { vr =>
-//        println("rank = " + vr.rank)
+        //        println("rank = " + vr.rank)
         if (vr.dataType.isFloatingPoint) {
-//          (vr.rank: @switch) match {
-//            case 1 =>
-//            case 2 =>
-//            case 3 =>
-//            case _ =>
-//          }
+          //          (vr.rank: @switch) match {
+          //            case 1 =>
+          //            case 2 =>
+          //            case 3 =>
+          //            case _ =>
+          //          }
 
           // just for testing purposes
           val data1d    = vr.read.float1D

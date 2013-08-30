@@ -25,14 +25,12 @@ object MenuFactory {
 
     val actionCloseAll = new Action("Close All") {
       accelerator = Some(menu1 + shift + VK_W)
-      def apply() {
-        closeAll()
-      }
+      def apply(): Unit = closeAll()
     }
 
-    def checkCloseAll() {
+    def checkCloseAll(): Unit =
       actionCloseAll.enabled = dh.allDocuments.hasNext
-    }
+
     checkCloseAll()
 
     dh.addListener {
@@ -78,11 +76,9 @@ object MenuFactory {
     )
   }
 
-  def closeAll() {
-    DocumentHandler.instance.allDocuments.foreach(_.close())
-  }
+  def closeAll(): Unit = DocumentHandler.instance.allDocuments.foreach(_.close())
 
-  def openDialog() {
+  def openDialog(): Unit = {
     val dlg = new FileDialog(null: java.awt.Frame, "Open NetCDF File", FileDialog.LOAD)
     dlg.setFilenameFilter(new FilenameFilter {
       def accept(dir: File, name: String): Boolean = {
@@ -114,11 +110,8 @@ object MenuFactory {
     DocumentHandler.instance.openRead(f.getPath)
   }
 
-  //  def openSoundDesigner() {
+  //  def openSoundDesigner(): Unit =
   //    sound.designer.DesignerView()
-  //  }
 
-  def openInterpreter() {
-    InterpreterView()
-  }
+  def openInterpreter(): Unit = InterpreterView()
 }

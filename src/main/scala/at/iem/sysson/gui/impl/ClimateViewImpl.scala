@@ -37,9 +37,8 @@ object ClimateViewImpl {
   }
 
   private final class MyMatrix(width: Int, height: Int) extends MatrixSeries("Climate", height, width) {
-    def put(x: Int, y: Int, value: Float) {
+    def put(x: Int, y: Int, value: Float): Unit =
       data(y)(x) = value
-    }
   }
 
   private var _currentSection = Option.empty[VariableSection]
@@ -80,7 +79,7 @@ object ClimateViewImpl {
 
     //    @inline def time() = System.currentTimeMillis()
 
-    def updateData() {
+    def updateData(): Unit = {
       // the indices in each reduction dimension currently selected
       val secIndices = redGUI.map(_.slider.value)
 
@@ -194,14 +193,12 @@ object ClimateViewImpl {
       }
 
       slm.addChangeListener(new ChangeListener {
-        def stateChanged(e: ChangeEvent) {
+        def stateChanged(e: ChangeEvent): Unit =
           spm.setValue(slm.getValue)
-        }
       })
       spm.addChangeListener(new ChangeListener {
-        def stateChanged(e: ChangeEvent) {
+        def stateChanged(e: ChangeEvent): Unit =
           slm.setValue(spm.getValue.asInstanceOf[Int])
-        }
       })
 
       val spj = new JSpinner(spm) {

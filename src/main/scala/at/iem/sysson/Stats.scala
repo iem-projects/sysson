@@ -14,13 +14,11 @@ object Stats {
 
   private val DEBUG   = false
 
-  private def debug(what: => String) {
-    if (DEBUG) println(s"<cache> $what")
-  }
+  private def debug(what: => String): Unit = if (DEBUG) println(s"<cache> $what")
 
   private object CacheValue {
     implicit object Serializer extends ImmutableSerializer[CacheValue] {
-      def write(v: CacheValue, out: DataOutput) {
+      def write(v: CacheValue, out: DataOutput): Unit = {
         import v._
         out.writeInt(COOKIE)
         out.writeLong(size)
@@ -189,7 +187,7 @@ object Stats {
 
   object Counts {
     implicit object Serializer extends ImmutableSerializer[Counts] {
-      def write(v: Counts, out: DataOutput) {
+      def write(v: Counts, out: DataOutput): Unit = {
         import v._
         out.writeDouble(min)
         out.writeDouble(max)
@@ -261,7 +259,7 @@ object Stats {
 
   object Variable {
     implicit object Serializer extends ImmutableSerializer[Variable] {
-      def write(v: Variable, out: DataOutput) {
+      def write(v: Variable, out: DataOutput): Unit = {
         import v._
         out.writeUTF(name)
         Counts.Serializer.write(total, out)
@@ -281,7 +279,7 @@ object Stats {
   }
 
   implicit object Serializer extends ImmutableSerializer[Stats] {
-    def write(v: Stats, out: DataOutput) {
+    def write(v: Stats, out: DataOutput): Unit = {
       import v._
       out.writeInt(COOKIE)
       ImmutableSerializer.map[String, Variable].write(map, out)

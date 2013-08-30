@@ -28,7 +28,7 @@ private[sysson] object DocumentHandlerImpl {
       doc
     }
 
-    private def removeDoc(doc: Document) {
+    private def removeDoc(doc: Document): Unit = {
       sync.synchronized {
         val idx = all.indexOf(doc)
         assert(idx >= 0)

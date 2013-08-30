@@ -1,4 +1,7 @@
+import de.sciss.sbt.appbundle.AppBundlePlugin.appbundle
+import sbtassembly.Plugin.AssemblyKeys
 import AssemblyKeys._
+import sbtbuildinfo.Plugin.BuildInfoKey
 
 name := "SysSon"
 
@@ -22,15 +25,15 @@ resolvers += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/content
 libraryDependencies ++= {
   Seq(
     "edu.ucar" %  "netcdf"                  % "4.3.17",
-    "de.sciss" %% "scalacollider"           % "1.8.+",          // client for SuperCollider
-    "de.sciss" %% "scalacolliderswing"      % "1.8.+",          // some graphical features for ScalaCollider
-    "de.sciss" %  "scalacolliderugens-spec" % "1.6.+",          // UGen specs used in the patcher class
+    "de.sciss" %% "scalacollider"           % "1.9.+",          // client for SuperCollider
+    "de.sciss" %% "scalacolliderswing"      % "1.9.+",          // some graphical features for ScalaCollider
+    "de.sciss" %  "scalacolliderugens-spec" % "1.6.2+",         // UGen specs used in the patcher class
     "de.sciss" %% "scalaosc"                % "1.1.1+",         // Open Sound Control
-    "de.sciss" %% "desktop"                 % "0.3.2+",         // application framework
+    "de.sciss" %% "desktop"                 % "0.3.3+",         // application framework
     "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
     "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
     "de.sciss" %% "fileutil"                % "1.0.+",          // easy file name manipulation
-    "de.sciss" %% "swingplus"               % "0.0.+",          // GUI helpers
+    "de.sciss" %% "swingplus"               % "0.0.1+",         // GUI helpers
     "org.jfree" % "jfreechart"              % "1.0.14",         // plotting
     "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // some GUI widgets
     "org.slf4j" % "slf4j-simple"            % "1.7.5"           // logging (used by netcdf)

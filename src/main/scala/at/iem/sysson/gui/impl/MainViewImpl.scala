@@ -21,9 +21,7 @@ private[gui] object MainViewImpl {
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 
   private final class Impl extends MainView with DynamicView {
-    private def boot() {
-      AudioSystem.instance.start()
-    }
+    private def boot(): Unit = AudioSystem.instance.start()
 
     private lazy val serverStatus = new ServerStatusPanel {
       bootAction = Some(boot _)
@@ -32,17 +30,15 @@ private[gui] object MainViewImpl {
 //      background = Color.black
 //    }
 
-    private def deferAudioUpdated() {
-      defer {
-        val s = AudioSystem.instance.server
-        s match {
-          case Some(server: synth.Server) =>
-            serverStatus.server   = Some(server)
-          case Some(conn: synth.ServerConnection) =>
-            serverStatus.booting  = Some(conn)
-          case _ =>
-            serverStatus.server   = None
-        }
+    private def deferAudioUpdated(): Unit = defer {
+      val s = AudioSystem.instance.server
+      s match {
+        case Some(server: synth.Server) =>
+          serverStatus.server   = Some(server)
+        case Some(conn: synth.ServerConnection) =>
+          serverStatus.booting  = Some(conn)
+        case _ =>
+          serverStatus.server   = None
       }
     }
 
@@ -52,15 +48,14 @@ private[gui] object MainViewImpl {
       case AudioSystem.Stopped    => deferAudioUpdated()
     }
 
-    protected def componentOpened() {
+    protected def componentOpened(): Unit = {
       AudioSystem.instance.addListener(audioListener)
       deferAudioUpdated()
     }
 
 
-    protected def componentClosed() {
+    protected def componentClosed(): Unit =
       AudioSystem.instance.removeListener(audioListener)
-    }
 
     private lazy val mainMeters  = new PeakMeter {
       numChannels   = 2

@@ -9,7 +9,7 @@ import swing.Swing
 object SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = sysson.Document
 
-  override def init() {
+  override def init(): Unit = {
     val dh = DocumentHandler.instance
     dh.addListener {
       case DocumentHandler.Opened(doc) => Swing.onEDT(mkDocView(doc))

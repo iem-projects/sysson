@@ -47,7 +47,7 @@ object Implicits {
     def rootGroup     = peer.getRootGroup
     def variables     = peer.getVariables.toIndexedSeq
 
-    def exportAsCSV(file: File, delimiter: Char = ',') { util.Export.netcdfToCSV(file, peer, delimiter) }
+    def exportAsCSV(file: File, delimiter: Char = ','): Unit = util.Export.netcdfToCSV(file, peer, delimiter)
   }
 
   implicit class SyRichAttribute(peer: nc2.Attribute) {
@@ -137,13 +137,11 @@ object Implicits {
     def isFloat       = peer.getElementType == classOf[Float]
     def isDouble      = peer.getElementType == classOf[Double]
 
-    private def requireFloat() {
+    private def requireFloat(): Unit =
       require(isFloat, s"Wrong element type (${peer.getElementType}); required: Float")
-    }
 
-    private def requireDouble() {
+    private def requireDouble(): Unit =
       require(isDouble, s"Wrong element type (${peer.getElementType}); required: Double")
-    }
 
     def scaled1D(scale: Scale): Vec[Float] = {
       val it = float1DIter

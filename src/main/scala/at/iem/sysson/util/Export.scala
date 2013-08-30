@@ -11,7 +11,7 @@ object Export {
    * Followed by a break down of the matrix into vectors in the form of
    * [ :sel dim-name dim-index ]*N :val values
    */
-  def netcdfToCSV(out: File, in: nc2.NetcdfFile, delimiter: Char = ',') {
+  def netcdfToCSV(out: File, in: nc2.NetcdfFile, delimiter: Char = ','): Unit = {
     import Implicits._
 
     val del = delimiter.toString
@@ -28,7 +28,7 @@ object Export {
       }
     }
 
-    def loop(v: nc2.Variable) {
+    def loop(v: nc2.Variable): Unit = {
       // first traverse dimensions on which this variable depends
       val dimensions  = v.dimensions.map(_.name)
       varsDone += v.name
@@ -41,7 +41,7 @@ object Export {
       val dimStr  = dimensions.map(str => "\"" + str.escape + "\"").mkString(del)
       w.write(s""":var$del"${v.name.escape}"${units}$del:dim${del}$dimStr\n""")
 
-      def iter(sec: VariableSection, prefix: String, dims: Vec[nc2.Dimension], shape: Vec[Int]) {
+      def iter(sec: VariableSection, prefix: String, dims: Vec[nc2.Dimension], shape: Vec[Int]): Unit = {
 //        val rank      = sec.reducedRank
 //        if (rank <= 1) { }
         if (dims.size <= 1) {

@@ -7,11 +7,9 @@ import Swing._
 import de.sciss.desktop.Window
 
 object GUI {
-  def centerOnScreen(w: Window) {
-    placeWindow(w, 0.5f, 0.5f, 0)
-  }
+  def centerOnScreen(w: Window): Unit = placeWindow(w, 0.5f, 0.5f, 0)
 
-  def placeWindow(w: Window, horizontal: Float, vertical: Float, padding: Int) {
+  def placeWindow(w: Window, horizontal: Float, vertical: Float, padding: Int): Unit = {
     val ge  = GraphicsEnvironment.getLocalGraphicsEnvironment
     val bs  = ge.getMaximumWindowBounds
     val b   = w.size
@@ -20,9 +18,8 @@ object GUI {
     w.location = (x, y)
   }
 
-  def requireEDT() { require(EventQueue.isDispatchThread) }
+  def requireEDT(): Unit = require(EventQueue.isDispatchThread)
 
-  def defer(thunk: => Unit) {
+  def defer(thunk: => Unit): Unit =
     if (EventQueue.isDispatchThread) thunk else Swing.onEDT(thunk)
-  }
 }

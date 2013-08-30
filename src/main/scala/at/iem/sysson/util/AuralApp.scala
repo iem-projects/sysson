@@ -7,7 +7,7 @@ import de.sciss.osc.TCP
 trait AuralApp extends App {
   var s: Server = _
 
-  override def main(args: Array[String]) {
+  override def main(args: Array[String]): Unit = {
     val c       = Server.Config()
     c.transport = TCP
     c.pickPort()

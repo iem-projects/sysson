@@ -27,18 +27,18 @@ private[gui] final class LogWindowImpl extends LogWindow with WindowImpl {
   }
 
   private val observer: OutputStream = new OutputStream {
-    override def write(b: Array[Byte], off: Int, len: Int) {
+    override def write(b: Array[Byte], off: Int, len: Int): Unit = {
       log.makeDefault()               // detaches this observer
       log.outputStream.write(b, off, len)
       Swing.onEDT(frame.front())     // there we go
     }
 
-    def write(b: Int) {
+    def write(b: Int): Unit = {
       write(Array(b.toByte), 0, 1)
     }
   }
 
-  def observe() {
+  def observe(): Unit = {
     Console.setOut(observer)
     Console.setErr(observer)
   }

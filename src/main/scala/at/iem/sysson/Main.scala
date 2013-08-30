@@ -8,7 +8,7 @@ object Main extends App with Runnable {
 
   run()
 
-  lazy val name: String    = buildInfoString("name")
+  lazy val name   : String = buildInfoString("name"   )
   lazy val version: String = buildInfoString("version")
 
   private def buildInfoString(key: String): String = try {
@@ -19,7 +19,7 @@ object Main extends App with Runnable {
     case NonFatal(e) => "???"
   }
 
-  def run() {
+  def run(): Unit = {
     logInfo(s"Welcome to $name v$version")
     val ncview = NcviewSync()
     ncview.dump(on = true)
@@ -27,11 +27,11 @@ object Main extends App with Runnable {
 
     if (useGUI) {
       SwingApplication.main(Array.empty)
-//      // this is just for simple IDEA run configurations.
-//      // the app-bundle will have these already
-//      sys.props("com.apple.mrj.application.apple.menu.about.name")  = name
-//      sys.props("apple.laf.useScreenMenuBar")                       = "true"
-//      Swing.onEDT(gui.GUI.init())
+      //      // this is just for simple IDEA run configurations.
+      //      // the app-bundle will have these already
+      //      sys.props("com.apple.mrj.application.apple.menu.about.name")  = name
+      //      sys.props("apple.laf.useScreenMenuBar")                       = "true"
+      //      Swing.onEDT(gui.GUI.init())
     }
   }
 }

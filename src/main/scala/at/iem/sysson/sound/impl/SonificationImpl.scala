@@ -26,18 +26,16 @@ object SonificationImpl {
     override def toString = s"Sonification($name)${hashCode().toHexString}"
 
     def graph: () => GE = _graph
-    def graph_=(body: => GE) {
-      _graph = () => body
-    }
+    def graph_=(body: => GE): Unit = _graph = () => body
 
     def playOver(duration: Duration): Synth = {
-//      mapping.values.headOption.map(_.numColumns)
+      //      mapping.values.headOption.map(_.numColumns)
       val szs = mapping.values.collect {
         case r @ RowSource(_)           => r.numColumns
         case m @ MatrixSource(_, _, _)  => m.numColumns
       }
 
-//println(s"szs.headOption = ${szs.headOption}")
+      //println(s"szs.headOption = ${szs.headOption}")
 
       szs.headOption match {
         case Some(sz) =>
@@ -47,7 +45,7 @@ object SonificationImpl {
         case None =>
           play(rate = 1.0, duration = Some(duration.toMillis * 0.001))
       }
-//      val sz    = szs.headOption.getOrElse(sys.error("playOver requires at least one row vector"))
+      //      val sz    = szs.headOption.getOrElse(sys.error("playOver requires at least one row vector"))
     }
 
     def play(rate: Double): Synth = play(rate = rate, duration = None)
@@ -214,12 +212,12 @@ object SonificationImpl {
         sd.write(overwrite = true)
         sd.loadMsg(completion = newMsg)
       }
-//      val bndl    = if (msgs.isEmpty) newMsg else {
-//        val init = msgs.init
-//        val last = msgs.last
-//        val upd  = last.updateCompletion(Some(recvMsg))
-//        osc.Bundle.now((init :+ upd): _*)
-//      }
+      //      val bndl    = if (msgs.isEmpty) newMsg else {
+      //        val init = msgs.init
+      //        val last = msgs.last
+      //        val upd  = last.updateCompletion(Some(recvMsg))
+      //        osc.Bundle.now((init :+ upd): _*)
+      //      }
       val bndl  = osc.Bundle.now(msgs :+ dfMsg: _*)
 
       s ! bndl
@@ -227,14 +225,14 @@ object SonificationImpl {
       syn
     }
 
-    def _debug_writeDef() {
+    def _debug_writeDef(): Unit = {
       val dir     = file(sys.props("user.home")) / "Desktop"
       val (ug, _) = buildUGens(duration = None)
       val sd      = SynthDef(synthDefName, ug)
       sd.write(dir.getPath, overwrite = true)
     }
 
-    private def validateMatrixSpecs() {
+    private def validateMatrixSpecs(): Unit = {
       // XXX TODO
       //      mapping.foreach { case (key, source) =>
       //        val spec = matrices.getOrElse(key, sys.error(s"Sonification contains source for unknown key '$key'"))

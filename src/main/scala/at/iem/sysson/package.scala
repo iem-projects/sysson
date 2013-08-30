@@ -40,19 +40,14 @@ package object sysson {
   def file(path: String): File = new File(path)
 
   /** Boots the SuperCollider server. */
-  def boot() {
+  def boot(): Unit =
     synth.Server.boot() {
       case _ => ()   // don't do anything specific now
     }
-  }
 
-  def logInfo(what: => String) {
-    println("[info] " + what)
-  }
+  def logInfo(what: => String): Unit = println("[info] " + what)
 
-  def logWarn(what: => String) {
-    println("[warn] " + what)
-  }
+  def logWarn(what: => String): Unit = println("[warn] " + what)
 
   type Scale = Double => Double
 }

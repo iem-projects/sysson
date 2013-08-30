@@ -18,14 +18,13 @@ private[gui] object DocumentViewHandlerImpl {
     private var _active  = Option.empty[Document]
 
     def activeDocument = _active
-    def activeDocument_=(value: Option[Document]) {
+    def activeDocument_=(value: Option[Document]): Unit =
       if (_active != value) {
         _active = value
         value.foreach { doc =>
           dispatch(DocumentViewHandler.Activated(doc))
         }
       }
-    }
 
     def getView(doc: Document): Option[DocumentView] = {
       GUI.requireEDT()

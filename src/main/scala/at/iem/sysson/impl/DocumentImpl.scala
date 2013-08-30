@@ -21,7 +21,7 @@ object DocumentImpl {
 
     def file = new File(path)
 
-    def close() {
+    def close(): Unit = {
       data.close()
       dispatch(Document.Closed(this))
     }

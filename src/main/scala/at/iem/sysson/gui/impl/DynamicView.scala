@@ -9,15 +9,9 @@ trait DynamicView {
   protected def componentOpened(): Unit
   protected def componentClosed(): Unit
 
-  component.peer.addAncestorListener( new AncestorListener {
-    def ancestorAdded(e: AncestorEvent) {
-      componentOpened()
-    }
-
-    def ancestorRemoved(e: AncestorEvent) {
-      componentClosed()
-    }
-
-    def ancestorMoved(e: AncestorEvent) {}
+  component.peer.addAncestorListener(new AncestorListener {
+    def ancestorAdded  (e: AncestorEvent): Unit = componentOpened()
+    def ancestorRemoved(e: AncestorEvent): Unit = componentClosed()
+    def ancestorMoved  (e: AncestorEvent)       = ()
   })
 }

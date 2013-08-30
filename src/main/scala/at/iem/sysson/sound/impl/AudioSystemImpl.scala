@@ -21,20 +21,16 @@ object AudioSystemImpl {
 
     def server: Option[synth.ServerLike] = sync.synchronized(_server)
 
-    private def stopped() {
-      sync.synchronized {
-        _server = None
-        dispatch(AudioSystem.Stopped)
-      }
+    private def stopped(): Unit = sync.synchronized {
+      _server = None
+      dispatch(AudioSystem.Stopped)
     }
 
-    private def started(server: synth.Server) {
-      sync.synchronized {
-        _server = Some(server)
-        dispatch(AudioSystem.Started(server))
-        server.addListener {
-          case synth.Server.Offline => stopped()
-        }
+    private def started(server: synth.Server): Unit = sync.synchronized {
+      _server = Some(server)
+      dispatch(AudioSystem.Started(server))
+      server.addListener {
+        case synth.Server.Offline => stopped()
       }
     }
 
