@@ -74,7 +74,7 @@ private[impl] object UGenGraphBuilderImpl {
         var controlProxies = Set.empty[ControlProxyLike]
         while (g.nonEmpty) {
           controlProxies ++= g.controlProxies
-          g = SynthGraph(g.sources.foreach(force(_)))
+          g = SynthGraph(g.sources.foreach(force))
         }
         build(controlProxies)
       }

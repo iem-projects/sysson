@@ -4,7 +4,8 @@ import gui.SwingApplication
 import scala.util.control.NonFatal
 
 object Main extends App with Runnable {
-  final val useGUI = true
+  final val useNcview = false
+  final val useGUI    = true
 
   run()
 
@@ -21,9 +22,11 @@ object Main extends App with Runnable {
 
   def run(): Unit = {
     logInfo(s"Welcome to $name v$version")
-    val ncview = NcviewSync()
-    ncview.dump(on = true)
-    ncview.start()
+    if (useNcview) {
+      val ncview = NcviewSync()
+      ncview.dump(on = true)
+      ncview.start()
+    }
 
     if (useGUI) {
       SwingApplication.main(Array.empty)

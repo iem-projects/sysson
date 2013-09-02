@@ -12,14 +12,15 @@ import org.jfree.chart.plot.XYPlot
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
 import scala.Some
 import java.awt.Color
-import scala.swing.{CheckBox, BorderPanel, Component, Alignment, Slider, Label, Swing}
+import scala.swing.{FlowPanel, TextField, Button, BoxPanel, Orientation, CheckBox, BorderPanel, Component, Alignment, Slider, Label, Swing}
 import Swing._
 import scalaswingcontrib.group.GroupPanel
-import javax.swing.{DefaultBoundedRangeModel, SpinnerNumberModel, JSpinner, GroupLayout}
+import javax.swing.{TransferHandler, ImageIcon, DefaultBoundedRangeModel, SpinnerNumberModel, JSpinner, GroupLayout}
 import scala.swing.event.{ButtonClicked, ValueChanged}
 import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
+import javax.swing.TransferHandler.TransferSupport
 
 object ClimateViewImpl {
   private class Reduction(val dim: Int, val norm: CheckBox, val name: Label, val slider: Slider,
@@ -267,15 +268,58 @@ object ClimateViewImpl {
     val chart     = new JFreeChart(section.variable.description.getOrElse(section.variable.name), plot)
     chart.removeLegend()
     chart.setBackgroundPaint(Color.white)
-    val view    = new Impl(chart, redGroup)
+
+    val pSonif    = new BoxPanel(Orientation.Horizontal)
+    val ggSonifName = new TextField(16)
+    ggSonifName.editable = false
+    val pSonif2   = new FlowPanel(ggSonifName)
+    pSonif2.visible = false
+
+    val butSonif  = new Button(null: String) {
+      icon        = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
+      // foreground  = Color.gray
+      focusable   = false
+
+      peer.setTransferHandler(new TransferHandler {
+        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
+        override def canImport(support: TransferSupport): Boolean = {
+          val res =  if (support.isDataFlavorSupported(PatchFlavor) &&
+             ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
+            support.setDropAction(TransferHandler.LINK)
+            true
+          } else
+            false
+
+          // println(s"canImport? $res")
+          res
+        }
+
+        override def importData(support: TransferSupport): Boolean = {
+          val t             = support.getTransferable
+          val data          = t.getTransferData(PatchFlavor).asInstanceOf[Patch]
+          ggSonifName.text  = data.name
+          pSonif2.visible   = true
+
+
+          true
+        }
+      })
+    }
+    pSonif.contents += butSonif
+    pSonif.contents += pSonif2
+
+    val view    = new Impl(chart, redGroup, pSonif)
     view
   }
 
-  private final class Impl(chart: JFreeChart, redGroup: Component) extends ClimateView {
+  private final class Impl(chart: JFreeChart, redGroup: Component, pSonif: Component) extends ClimateView {
     private val main  = new ChartPanel(chart)
     val component = new BorderPanel {
       add(Component.wrap(main), BorderPanel.Position.Center)
-      add(redGroup, BorderPanel.Position.South)
+      add(new BorderPanel {
+        add(redGroup, BorderPanel.Position.Center)
+        add(pSonif  , BorderPanel.Position.South )
+      }, BorderPanel.Position.South)
     }
   }
 }

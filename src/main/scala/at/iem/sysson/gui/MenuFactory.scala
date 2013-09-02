@@ -48,6 +48,10 @@ object MenuFactory {
           Item("interpreter")("Interpreter..." -> (menu1 + VK_R)) {
             openInterpreter()
           }
+        ).add(
+          Item("library")("Library..." -> (menu1 + VK_L)) {
+            openLibrary()
+          }
         )
       ).add(
         Item("open")("Open..." -> (menu1 + VK_O)) {
@@ -114,4 +118,6 @@ object MenuFactory {
   //    sound.designer.DesignerView()
 
   def openInterpreter(): Unit = InterpreterView()
+
+  def openLibrary(): Unit = LibraryView(TestLibrary)
 }

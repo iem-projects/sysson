@@ -70,5 +70,5 @@ object SonifTest extends App {
     loop(0)
   }
 
-  as.whenBooted(play _)
+  as.whenBooted(play)
 }
