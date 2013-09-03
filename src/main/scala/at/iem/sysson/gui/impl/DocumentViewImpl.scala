@@ -162,26 +162,26 @@ private[impl] object DocumentViewImpl {
       }
     }
 
-    private val transport = Transport.makeButtonStrip {
-      import Transport._
-      Seq(
-        GoToBegin {
-          println("Go-to-begin")
-        },
-        Rewind {
-          println("Rewind")
-        },
-        Stop {
-          println("Stop")
-        },
-        Play {
-          play()
-        },
-        FastForward {
-          println("Fast-forward")
-        }
-      )
-    }
+    //    private val transport = Transport.makeButtonStrip {
+    //      import Transport._
+    //      Seq(
+    //        GoToBegin {
+    //          println("Go-to-begin")
+    //        },
+    //        Rewind {
+    //          println("Rewind")
+    //        },
+    //        Stop {
+    //          println("Stop")
+    //        },
+    //        Play {
+    //          play()
+    //        },
+    //        FastForward {
+    //          println("Fast-forward")
+    //        }
+    //      )
+    //    }
 
     private val ggPlot = Button("Plot") {
       selectedVariable.foreach { v =>
@@ -279,8 +279,8 @@ private[impl] object DocumentViewImpl {
         new ScrollPane(tGroupVars),
         new BoxPanel(Orientation.Horizontal) {
           contents += ggPlot
-          contents += HStrut(16)
-          contents += transport
+          // contents += HStrut(16)
+          // contents += transport
         }
       )
     }

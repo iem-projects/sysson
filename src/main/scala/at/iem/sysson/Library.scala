@@ -21,21 +21,23 @@ object TestLibrary extends Library {
       Library.Child(Patch("Test-Sonif", SynthGraph {
         import ugen._
         import graph._
-        val latRange  = UserSelectRange(Latitude)
-        val timeRange = UserSelectRange(Time)
-        val plev      = UserSelectValue(Pressure)
-        // val speed     = UserRotary(speedSpec)   // --> position, label etc. via view-map ?
+        val latRange  = SelectedRange(Latitude)
+        val timeRange = SelectedRange(Time)
+        val plev      = SelectedValue(Pressure)
+        // val speed     = RotaryKnob(speedSpec)   // --> position, label etc. via view-map ?
 
-        // val sel       = Var.select(latRange).select(timeRange).select(plev)
-        // val time      = timeRange.ar(freq)
-        val sig       = WhiteNoise.ar // sel.ar(time)
+        val sel       = Var().select(latRange, timeRange, plev).average(Longitude)
+        val freq      = 1.0 // speed.kr
+        val time      = timeRange.ar(freq)
+        val sig       = sel.ar(time)
+        // val sig       = WhiteNoise.ar // sel.ar(time)
 
-        // Pan2.ar(SinOsc.ar(sig), sig(Latitude).linlin(latRange.min, latRange.max, -1, 1))
+        Pan2.ar(SinOsc.ar(sig), sig.axis(Latitude).linlin(latRange.min, latRange.max, -1, 1))
       })),
 
       Library.Child(Patch("With-Altitude", SynthGraph {
         import graph._
-        UserSelectRange(Altitude)
+        SelectedRange(Altitude)
       }))
     )
   )

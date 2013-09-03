@@ -20,8 +20,8 @@ import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import javax.swing.TransferHandler.TransferSupport
-import de.sciss.audiowidgets.{DualRangeModel, DualRangeSlider}
-import at.iem.sysson.graph.{UserSelectValue, UserSelectRange}
+import de.sciss.audiowidgets.{Transport, DualRangeModel, DualRangeSlider}
+import at.iem.sysson.graph.{SelectedValue, SelectedRange}
 import collection.breakOut
 import de.sciss.desktop.OptionPane
 
@@ -296,12 +296,36 @@ object ClimateViewImpl {
     private val pSonif      = new BoxPanel(Orientation.Horizontal)
     private val ggSonifName = new TextField(16)
     ggSonifName.editable    = false
-    private val pSonif2     = new FlowPanel(ggSonifName)
+    ggSonifName.peer.putClientProperty("JComponent.sizeVariant", "small")
+
+    private val transport = Transport.makeButtonStrip {
+      import Transport._
+      Seq(
+        GoToBegin {
+          rtz()
+        },
+        //        Rewind {
+        //          println("Rewind")
+        //        },
+        Stop {
+          stop()
+        },
+        Play {
+          play()
+          //        },
+          //        FastForward {
+          //          println("Fast-forward")
+        }
+      )
+    }
+
+    private val pSonif2     = new FlowPanel(ggSonifName, transport)
     pSonif2.visible         = false
 
     private val butSonif    = new Button(null: String)
     butSonif.icon           = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
     butSonif.focusable      = false
+    butSonif.tooltip        = "Drop Sonification Patch From the Library Here"
 
     pSonif.contents += butSonif
     pSonif.contents += pSonif2
@@ -316,6 +340,18 @@ object ClimateViewImpl {
 
     private var _patch = Option.empty[Patch]
 
+    def play(): Unit = {
+      println("Play")
+    }
+
+    def stop(): Unit = {
+      println("Stop")
+    }
+
+    def rtz(): Unit = {
+      println("Return-to-zero")
+    }
+
     def patch: Option[Patch] = _patch
     def patch_=(value: Option[Patch]): Unit = {
       value match {
@@ -324,10 +360,11 @@ object ClimateViewImpl {
           pSonif2.visible   = true
           val interactiveVars = p.graph.sources.collect {
             // case i: UserInteraction => i
-            case UserSelectRange(v) => v
-            case UserSelectValue(v) => v
+            case SelectedRange(v) => v
+            case SelectedValue(v) => v
           }
-          val docVars = document.data.variables
+          // val docVars = document.data.variables
+          val docVars = section.dimensions.flatMap(d => document.variableMap.get(d.name))
           val (foundVars, missingVars) = interactiveVars.map(v => v -> v.find(docVars).map(_.name))
             .partition(_._2.isDefined)
           if (missingVars.nonEmpty) {
