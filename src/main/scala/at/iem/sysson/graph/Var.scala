@@ -1,13 +1,35 @@
-package at.iem.sysson.graph
+package at.iem.sysson
+package graph
 
-trait Var
+import ucar.nc2
+import Implicits._
 
-case object Time extends Var
+sealed trait Var {
+  def find(vars: Vec[nc2.Variable]): Option[nc2.Variable] = {
+    val n = ncName
+    vars.find(_.name == n)
+  }
 
-case object Latitude extends Var
+  /** Conventional Netcdf name */
+  protected def ncName: String
+}
 
-case object Longitude extends Var
+case object Time extends Var {
+  protected val ncName = "time"
+}
 
-case object Pressure extends Var
+case object Latitude extends Var {
+  protected val ncName = "lat"
+}
 
-case object Altitude extends Var
+case object Longitude extends Var {
+  protected val ncName = "lon"
+}
+
+case object Pressure extends Var {
+  protected val ncName = "plev"
+}
+
+case object Altitude extends Var {
+  protected val ncName = "alt"
+}

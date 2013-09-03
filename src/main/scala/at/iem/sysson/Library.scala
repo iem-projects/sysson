@@ -31,6 +31,11 @@ object TestLibrary extends Library {
         val sig       = WhiteNoise.ar // sel.ar(time)
 
         // Pan2.ar(SinOsc.ar(sig), sig(Latitude).linlin(latRange.min, latRange.max, -1, 1))
+      })),
+
+      Library.Child(Patch("With-Altitude", SynthGraph {
+        import graph._
+        UserSelectRange(Altitude)
       }))
     )
   )

@@ -242,7 +242,7 @@ private[impl] object DocumentViewImpl {
 
           // open the actual plot if we got the dimensions
           xyOpt.foreach { case (yDim, xDim) =>
-            val view        = ClimateView(v.selectAll, xDim = xDim, yDim = yDim)
+            val view        = ClimateView(document, v.selectAll, xDim = xDim, yDim = yDim)
             lazy val docL   = document.addListener {
               case Document.Closed(_) => w.dispose()
             }
