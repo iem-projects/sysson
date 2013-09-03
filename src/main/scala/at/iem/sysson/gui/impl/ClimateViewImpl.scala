@@ -21,9 +21,10 @@ import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import javax.swing.TransferHandler.TransferSupport
+import de.sciss.audiowidgets.{DualRangeModel, DualRangeSlider}
 
 object ClimateViewImpl {
-  private class Reduction(val dim: Int, val norm: CheckBox, val name: Label, val slider: Slider,
+  private class Reduction(val dim: Int, val norm: CheckBox, val name: Label, val slider: DualRangeSlider,
                           val index: Component, val value: Label)
 
   private lazy val intensityScale: PaintScale = {
@@ -177,29 +178,39 @@ object ClimateViewImpl {
         preferredSize = (math.max(sz0.width, szm.width), math.max(sz0.height, szm.height))
       }
       val spm = new SpinnerNumberModel(0, 0, dimMax, 1)
-      val slm = new DefaultBoundedRangeModel(0, 1, 0, dimMax)
-      val sl  = new Slider {
-        peer.setModel(slm)
-        //        min   = 0
-        //        max   = dimMax
-        //        value = 0
-        peer.putClientProperty("JComponent.sizeVariant", "small")
+      //      val slm = new DefaultBoundedRangeModel(0, 1, 0, dimMax)
+      //      val sl  = new Slider {
+      //        peer.setModel(slm)
+      //        //        min   = 0
+      //        //        max   = dimMax
+      //        //        value = 0
+      //        peer.putClientProperty("JComponent.sizeVariant", "small")
+      //        listenTo(this)
+      //        reactions += {
+      //          case ValueChanged(_) =>
+      //            curr.text = m(value)
+      //
+      //            if (!adjusting) updateData()
+      //        }
+      //      }
+      val slm = DualRangeModel(0, dimMax)
+      val sl  = new DualRangeSlider(slm) {
+        rangeVisible = false  // becomes visible due to sonification mappings
         listenTo(this)
         reactions += {
           case ValueChanged(_) =>
             curr.text = m(value)
-
-            if (!adjusting) updateData()
+            /* if (!valueIsAdjusting) */ updateData()
         }
       }
 
       slm.addChangeListener(new ChangeListener {
         def stateChanged(e: ChangeEvent): Unit =
-          spm.setValue(slm.getValue)
+          spm.setValue(slm.value)
       })
       spm.addChangeListener(new ChangeListener {
         def stateChanged(e: ChangeEvent): Unit =
-          slm.setValue(spm.getValue.asInstanceOf[Int])
+          slm.value = spm.getValue.asInstanceOf[Int]
       })
 
       val spj = new JSpinner(spm) {
