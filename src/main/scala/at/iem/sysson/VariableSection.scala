@@ -107,8 +107,7 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
 
   // ---- statistics ----
 
-  /** Returns a statistics count for this variable section.
-    */
+  /** Returns a statistics count for this variable section. */
   def stats: Future[Stats.Counts] = {
     import Stats.executionContext
     Stats.get(variable.file).map { s =>
