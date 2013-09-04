@@ -11,17 +11,25 @@ object Sonification {
   def apply(name: String): Sonification = Impl(name)
 
   case class MissingInput(key: String) extends RuntimeException(s"Missing sonification input for key '$key'")
+
+  final val DefaultVariable = "<default>"
 }
 trait Sonification {
   var name:     String
 //  var graph:    SynthGraph
   def graph:     () => GE
   def graph_=(body: => GE): Unit
-  var matrices: Map[String, MatrixSpec]
+  // var matrices: Map[String, MatrixSpec]
   var mapping:  Map[String, SonificationSource]
 
   def play    (rate:     Double  ): Synth
   def playOver(duration: Duration): Synth
+
+  // var selections: Map[String, (Int, Int)]
+
+  var variableMap: Map[String, VariableSection]
+
+  // var dimensionMap: Map[String, VariableSection]
 
   def _debug_writeDef(): Unit
 }

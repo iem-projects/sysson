@@ -42,8 +42,8 @@ case class SelectedRange(variable: VarRef) extends SelectedLike {
     */
   def play(freq: GE): SelectedRange.Playing = Impl.play(this, freq)
 
-  def ir: GE = Impl.ir(this)
-  def kr: GE = Impl.kr(this)
+  def values : GE = Impl.values (this)
+  def indices: GE = Impl.indices(this)
 
   /** Produces a graph element reflecting the low end of the range within the dimension's domain. */
   def startValue: GE = Impl.startValue(this)

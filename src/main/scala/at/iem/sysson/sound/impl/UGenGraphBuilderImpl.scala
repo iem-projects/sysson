@@ -6,9 +6,10 @@ import de.sciss.synth
 import synth.impl.BasicUGenGraphBuilder
 import synth._
 import ugen.ControlProxyLike
+import at.iem.sysson.graph.SelectedLike
 
-private[impl] object UGenGraphBuilderImpl {
-   def apply(sonif: Sonification, sg: SynthGraph): (UGenGraph, Set[String]) = new Impl(sonif).build(sg)
+object UGenGraphBuilderImpl {
+  def apply(sonif: Sonification, sg: SynthGraph): UGenGraphBuilder.Result = new Impl(sonif).build(sg)
 
   def bufCtlName (key: String): String = "$son_" + key
 //  def rateCtlName(key: String): String = "$son_" + key
@@ -27,6 +28,17 @@ private[impl] object UGenGraphBuilderImpl {
       val key = m.key
       sonif.mapping.getOrElse(key, throw Sonification.MissingInput(key))
     }
+
+    def addScalarSelection(range: SelectedLike): GE =
+      range.variable.find(sonif.variableMap)(_._2.variable).fold[GE] {
+        sys.error(s"Selection for ${range.variable} not specified")
+      } { case (name, section) =>
+        require(section.rank == 1, s"Selection for ${range.variable} must be one-dimensional")
+
+
+
+        ???
+      }
 
     def addMatrixIn(m: MatrixIn): GE = {
       import ugen._
@@ -68,7 +80,7 @@ private[impl] object UGenGraphBuilderImpl {
       }
     }
 
-    def build(init: SynthGraph): (UGenGraph, Set[String]) = {
+    def build(init: SynthGraph): UGenGraphBuilder.Result = {
       val ug = UGenGraph.use(this) {
         var g = init // sonif.graph
         var controlProxies = Set.empty[ControlProxyLike]
@@ -78,7 +90,8 @@ private[impl] object UGenGraphBuilderImpl {
         }
         build(controlProxies)
       }
-      (ug, usedMappings)
+      // (ug, usedMappings)
+      UGenGraphBuilder.Result(ug, Vec.empty)
     }
   }
 }

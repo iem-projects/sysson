@@ -8,7 +8,6 @@ import io.{AudioFileSpec, AudioFile}
 import java.io.File
 import Ops._
 import de.sciss.{synth, osc}
-import sound.impl.{UGenGraphBuilderImpl => GraphB}
 import de.sciss.file._
 
 object SonificationImpl {
@@ -20,12 +19,14 @@ object SonificationImpl {
 
   private final class Impl(var name: String) extends Sonification {
     private var _graph = () => 0f: GE
-    var matrices: Map[String, MatrixSpec]         = Map.empty
-    var mapping:  Map[String, SonificationSource] = Map.empty
+    // var matrices = Map.empty[String, MatrixSpec]
+
+    var mapping     = Map.empty[String, SonificationSource]
+    var variableMap = Map.empty[String, VariableSection   ]
 
     override def toString = s"Sonification($name)${hashCode().toHexString}"
 
-    def graph: () => GE = _graph
+    def graph:     () => GE        = _graph
     def graph_=(body: => GE): Unit = _graph = () => body
 
     def playOver(duration: Duration): Synth = {
@@ -50,8 +51,8 @@ object SonificationImpl {
 
     def play(rate: Double): Synth = play(rate = rate, duration = None)
 
-    private def buildUGens(duration: Option[Double]): (UGenGraph, Set[String]) =
-      GraphB(this, SynthGraph {
+    private def buildUGens(duration: Option[Double]): UGenGraphBuilder.Result =
+      UGenGraphBuilder(this, SynthGraph {
         import synth._
         import ugen._
         val res = _graph()
@@ -72,11 +73,13 @@ object SonificationImpl {
         case _ => sys.error("Audio system not running")
       }
       validateMatrixSpecs()
-      val (ug, keySet) = buildUGens(duration = duration)
-      val sd      = SynthDef(synthDefName, ug)
-      val syn     = Synth(s)
-      var ctls    = Vector.empty[ControlSetMap]
-      var msgs    = Vector.empty[osc.Message] // osc.Message with message.HasCompletion]
+      val res   = buildUGens(duration = duration)
+      val sd    = SynthDef(synthDefName, res.graph)
+      val syn   = Synth(s)
+      var ctls  = Vector.empty[ControlSetMap]
+      var msgs  = Vector.empty[osc.Message] // osc.Message with message.HasCompletion]
+
+      val keySet  = Set.empty[String] // XXX TODO
 
       keySet.foreach { key =>
         val source      = mapping(key)
@@ -93,7 +96,7 @@ object SonificationImpl {
 
         // WARNING: sound file should be AIFF to allow for floating point sample rates
         val af        = AudioFile.openWrite(file, AudioFileSpec(numChannels = numChannels, sampleRate = rate))
-        ctls        :+= (GraphB.bufCtlName(key) -> buf.id: ControlSetMap)
+        ??? // ctls        :+= (GraphB.bufCtlName(key) -> buf.id: ControlSetMap)
         val data      = source.section.readScaled1D() // XXX TODO: should read piece wise for large files
 
         try {
@@ -108,7 +111,7 @@ object SonificationImpl {
 
           } else { // row or matrix source; requires streaming
             val bufSizeHM     = math.max(32, math.ceil(rate).toInt)
-            val bufSizeH      = bufSizeHM + GraphB.diskPad
+            val bufSizeH      = bufSizeHM; ??? // + GraphB.diskPad
             val bufSize       = bufSizeH * 2
 
             val fBufSz        = math.min(8192, numFrames)
@@ -149,7 +152,7 @@ object SonificationImpl {
             def updateBuffer(trigVal: Int): (osc.Packet, Int) = {
               val trigEven    = trigVal % 2 == 0
               val bufOff      = if (trigEven) 0 else bufSizeH
-              val frame       = trigVal * bufSizeHM /* + startPos = 0 */ + (if (trigEven) 0 else GraphB.diskPad)
+              val frame       = trigVal * bufSizeHM /* + startPos = 0 */ + (if (trigEven) 0 else { ???; 0 } /* GraphB.diskPad */)
               val readSz      = math.max(0, math.min(bufSizeH, numFrames - frame))
               val fillSz      = bufSizeH - readSz
               var ms          = List.empty[osc.Packet]
@@ -226,9 +229,9 @@ object SonificationImpl {
     }
 
     def _debug_writeDef(): Unit = {
-      val dir     = file(sys.props("user.home")) / "Desktop"
-      val (ug, _) = buildUGens(duration = None)
-      val sd      = SynthDef(synthDefName, ug)
+      val dir   = file(sys.props("user.home")) / "Desktop"
+      val res   = buildUGens(duration = None)
+      val sd    = SynthDef(synthDefName, res.graph)
       sd.write(dir.getPath, overwrite = true)
     }
 

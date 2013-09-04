@@ -7,9 +7,9 @@ import de.sciss.synth
 import synth.{AudioRated, GE, UGenInLike}
 
 sealed trait VarRef {
-  def find(vars: Vec[nc2.Variable]): Option[nc2.Variable] = {
+  def find[A](vars: Iterable[A])(implicit view: A => nc2.Variable): Option[A] = {
     val n = ncName
-    vars.find(_.name == n)
+    vars.find(view(_).name == n)
   }
 
   /** Conventional Netcdf name */

@@ -122,7 +122,7 @@ object Implicits {
   }
 
   private def checkNaNFun(fillValue: Float): Float => Boolean = if (java.lang.Float.isNaN(fillValue))
-    java.lang.Float.isNaN _
+    java.lang.Float.isNaN
   else
     _ == fillValue
 
