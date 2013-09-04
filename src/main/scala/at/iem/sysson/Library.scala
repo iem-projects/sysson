@@ -28,11 +28,11 @@ object TestLibrary extends Library {
 
         val sel       = Var().select(latRange, timeRange, plev).average(Longitude)
         val freq      = 1.0 // speed.kr
-        val time      = timeRange.ar(freq)
-        val sig       = sel.ar(time)
+        val time      = timeRange.play(freq)
+        val sig       = sel.play(time)
         // val sig       = WhiteNoise.ar // sel.ar(time)
 
-        Pan2.ar(SinOsc.ar(sig), sig.axis(Latitude).linlin(latRange.min, latRange.max, -1, 1))
+        Pan2.ar(SinOsc.ar(sig), sig.axisValues(Latitude).linlin(latRange.startValue, latRange.endValue, -1, 1))
       })),
 
       Library.Child(Patch("With-Altitude", SynthGraph {

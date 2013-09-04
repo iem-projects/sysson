@@ -17,19 +17,13 @@ sealed trait VarRef {
 }
 
 object Var {
-  //  case class GE(variable: Var, time: SelectedRange.GE) extends synth.GE with AudioRated {
-  //    def axis(ref: VarRef): GE = ???
-  //
-  //    def expand: UGenInLike = ???
-  //  }
-
   trait GE extends synth.GE {
     def variable: Var
-    def axis(ref: VarRef): GE
+    def axisValues(ref: VarRef): GE
   }
 
-  trait AudioGE extends GE with AudioRated {
-    def time: SelectedRange.GE
+  trait Playing extends GE with AudioRated {
+    def time: SelectedRange.Playing
   }
 
   def apply(): Var = impl.VarImpl.Default
@@ -37,8 +31,11 @@ object Var {
 trait Var {
   def select(selections: SelectedLike*): Var
   def average(dim: VarRef): Var
+
   def ir: Var.GE
-  def ar(time: SelectedRange.GE): Var.AudioGE
+  def kr: Var.GE
+
+  def play(time: SelectedRange.Playing): Var.Playing
 }
 
 case object Time extends VarRef {

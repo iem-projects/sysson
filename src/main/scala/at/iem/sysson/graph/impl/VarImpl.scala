@@ -40,8 +40,9 @@ object VarImpl {
     }
 
     def ir: Var.GE = ???
+    def kr: Var.GE = ???
 
-    def ar(time: SelectedRange.GE): Var.AudioGE = ???
+    def play(time: SelectedRange.Playing): Var.Playing = ???
   }
 
   //private final class GEImpl
