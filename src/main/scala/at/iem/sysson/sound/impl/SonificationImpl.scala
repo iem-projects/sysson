@@ -9,6 +9,8 @@ import java.io.File
 import Ops._
 import de.sciss.{synth, osc}
 import de.sciss.file._
+import scala.concurrent.{ExecutionContext, Promise, Future, future, blocking}
+import Implicits._
 
 object SonificationImpl {
   private final val synthDefName = "$son_play"
@@ -66,6 +68,31 @@ object SonificationImpl {
         }
         WrapOut(in = sig, fadeTime = Some(0.02f))
       })
+
+    def prepare()(implicit context: ExecutionContext): Future[Sonification.Prepared] = {
+      val as  = AudioSystem.instance
+      if (!as.isBooting || as.isRunning) as.start() // this can start up during our preparations
+      //      val p   = Promise[Sonification.Prepared]()
+      //      p.future
+
+      val res = buildUGens(duration = None)
+      future {
+        res.sections.foreach { case section =>
+          // val data = section.readScaled1D()
+
+          // section.toSection
+          val v = section.variable
+          blocking {
+            val arr = section.peer.read()
+            val it  = arr.float1Diterator
+            val n   = arr.size
+
+          }
+        }
+
+        ???
+      }
+    }
 
     private def play(rate: Double, duration: Option[Double]): Synth = {
       val s = AudioSystem.instance.server match {

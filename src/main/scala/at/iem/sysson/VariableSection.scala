@@ -25,6 +25,8 @@ object VariableSection {
       }
     }
   }
+
+  // implicit def toNetCDF(section: VariableSection): ma2.Section = section.toSection
 }
 
 /** A variable section is a non destructive selection within the dimension of a variable,

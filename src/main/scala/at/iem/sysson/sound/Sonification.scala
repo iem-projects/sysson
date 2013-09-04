@@ -4,6 +4,7 @@ package sound
 import de.sciss.synth._
 import impl.{SonificationImpl => Impl}
 import concurrent.duration.Duration
+import scala.concurrent.{ExecutionContext, Future}
 
 object Sonification {
   val emptyGraph = SynthGraph(Vector.empty, Set.empty)
@@ -13,6 +14,10 @@ object Sonification {
   case class MissingInput(key: String) extends RuntimeException(s"Missing sonification input for key '$key'")
 
   final val DefaultVariable = "<default>"
+
+  trait Prepared {
+    def play(): Synth
+  }
 }
 trait Sonification {
   var name:     String
@@ -22,8 +27,10 @@ trait Sonification {
   // var matrices: Map[String, MatrixSpec]
   var mapping:  Map[String, SonificationSource]
 
-  def play    (rate:     Double  ): Synth
-  def playOver(duration: Duration): Synth
+  //  def play    (rate:     Double  ): Synth
+  //  def playOver(duration: Duration): Synth
+
+  def prepare()(implicit context: ExecutionContext): Future[Sonification.Prepared]
 
   // var selections: Map[String, (Int, Int)]
 

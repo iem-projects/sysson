@@ -6,7 +6,15 @@ import at.iem.sysson.graph.SelectedLike
 import impl.{UGenGraphBuilderImpl => Impl}
 
 object UGenGraphBuilder {
-  case class Result(graph: UGenGraph, sections: Vec[(String, VariableSection)])
+  /** @param control   the control name to use
+    * @param peer      the client side variable section
+    * @param stream    the index of the dimension to stream, of `-1` if using static buffer
+    */
+  case class Section(control: String, peer: VariableSection, stream: Int) {
+    def variable = peer.variable
+  }
+
+  case class Result(graph: UGenGraph, sections: Vec[Section])
 
   def apply(sonif: Sonification, sg: SynthGraph): Result = Impl(sonif, sg)
 }
