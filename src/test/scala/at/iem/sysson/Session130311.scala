@@ -256,7 +256,7 @@ object Session130311 extends SessionLike {
     val (min, max) = if (useGivenMinMax) (givenMin, givenMax) else sel3.minmax
 
     val son = sound.Sonification("Test")
-    son.graph = {
+    son.patch = Patch("Test", SynthGraph {
       var sum: GE = 0
       for(lon <- 0 until lonRange.size) {
         for(lat <- 0 until latRange.size) {
@@ -267,12 +267,12 @@ object Session130311 extends SessionLike {
           }
         }
       }
-      sum
-    }
+      WrapOut(sum)
+    })
 
     val numCells = lonRange.size * latRange.size * plevRange.size
 
-    (0 until numCells).foreach { i => son.matrices += ("data_" + i) -> sound.MatrixSpec() }
+    // (0 until numCells).foreach { i => son.matrices += ("data_" + i) -> sound.MatrixSpec() }
 
     for(lon <- 0 until lonRange.size) {
       for(lat <- 0 until latRange.size) {
@@ -287,7 +287,7 @@ object Session130311 extends SessionLike {
     }
 
     record(name) {
-      son.playOver(20.seconds)
+      ??? // son.playOver(20.seconds)
     }
   }
 }

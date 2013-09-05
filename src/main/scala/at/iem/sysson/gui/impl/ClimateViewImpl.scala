@@ -23,7 +23,11 @@ import javax.swing.TransferHandler.TransferSupport
 import de.sciss.audiowidgets.{Transport, DualRangeModel, DualRangeSlider}
 import at.iem.sysson.graph.{SelectedValue, SelectedRange}
 import collection.breakOut
-import de.sciss.desktop.OptionPane
+import de.sciss.desktop.{DialogSource, OptionPane}
+import de.sciss.synth.{Ops, Synth}
+import scala.concurrent.{ExecutionContext, Future}
+import at.iem.sysson.sound.Sonification
+import scala.util.control.NonFatal
 
 object ClimateViewImpl {
   private class Reduction(val dim: Int, val norm: CheckBox, val name: Label, val slider: DualRangeSlider,
@@ -298,7 +302,9 @@ object ClimateViewImpl {
     ggSonifName.editable    = false
     ggSonifName.peer.putClientProperty("JComponent.sizeVariant", "small")
 
-    private val transport = Transport.makeButtonStrip {
+    private var playing     = Option.empty[Future[Synth]]
+
+    private val transport   = Transport.makeButtonStrip {
       import Transport._
       Seq(
         GoToBegin {
@@ -341,15 +347,39 @@ object ClimateViewImpl {
     private var _patch = Option.empty[Patch]
 
     def play(): Unit = {
-      println("Play")
+      stop()
+      patch.foreach { p =>
+        val son          = Sonification(p.name)
+        son.patch        = p
+        son.variableMap += Sonification.DefaultVariable -> section
+        models.foreach { case (key, model) =>
+          val (start, end) = model.range
+          val section = document.variableMap(key) in key select (start to end)
+          son.variableMap += key -> section
+        }
+
+        import ExecutionContext.Implicits.global
+        val fut          = son.prepare().map(_.play())
+        playing          = Some(fut)
+        fut.onFailure {
+          case ex: Exception => DialogSource.Exception(ex -> s"Playing ${p.name}").show(None) // XXX TODO find window
+        }
+      }
     }
 
-    def stop(): Unit = {
-      println("Stop")
-    }
+    def stop(): Unit =
+      playing.foreach { fut =>
+        import ExecutionContext.Implicits.global
+        fut.onSuccess {
+          case synth =>
+            import Ops._
+            synth.free()
+        }
+        playing = None
+      }
 
     def rtz(): Unit = {
-      println("Return-to-zero")
+      println("NOT YET IMPLEMENTED: Return-to-zero")
     }
 
     def patch: Option[Patch] = _patch

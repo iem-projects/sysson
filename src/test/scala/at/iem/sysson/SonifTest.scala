@@ -1,8 +1,8 @@
 package at.iem.sysson
 
-import sound.{MatrixSpec, MatrixIn, Sonification, AudioSystem}
+import sound.{MatrixIn, Sonification, AudioSystem}
 import de.sciss.synth
-import synth.{Synth, Server}
+import de.sciss.synth.{SynthGraph, Synth, Server}
 import Implicits._
 import concurrent.{ExecutionContext, duration, future}
 import duration._
@@ -18,16 +18,17 @@ object SonifTest extends App {
   val iterations  = if (mode == "column") 10 else 0
 
   val son   = Sonification("test")
-  son.graph = {
+  son.patch = Patch("Test", SynthGraph {
     import synth._
     import ugen._
     val data  = MatrixIn.ar("vec")
     val clip  = data.max(0).min(1)
     val scale = clip.linexp(0, 1, 100, 10000)
     val sin   = SinOsc.ar(scale) * data.numRows.reciprocal.sqrt
-    Pan2.ar(Mix(sin))
-  }
-  son.matrices += "vec" -> MatrixSpec()
+    val sig   = Pan2.ar(Mix(sin))
+    WrapOut(sig)
+  })
+  // son.matrices += "vec" -> MatrixSpec()
 
   val f     = openDefault()
   val v     = f.variableMap("refr")
@@ -48,7 +49,7 @@ object SonifTest extends App {
       }
     }
     son.mapping += "vec" -> source
-    son playOver eachDur.seconds
+    ??? : Synth // son playOver eachDur.seconds
   }
 
   def play(s: Server) {

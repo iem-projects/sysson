@@ -22,7 +22,7 @@ object SonificationImpl {
   private final class PreparedBuffer(val section: UGenGraphBuilder.Section, val file: File, val spec: AudioFileSpec)
 
   private final class Impl(var name: String) extends Sonification {
-    private var _graph = () => 0f: GE
+    // private var _graph = () => 0f: GE
     // var matrices = Map.empty[String, MatrixSpec]
 
     var mapping     = Map.empty[String, SonificationSource]
@@ -30,8 +30,10 @@ object SonificationImpl {
 
     override def toString = s"Sonification($name)${hashCode().toHexString}"
 
-    def graph:     () => GE        = _graph
-    def graph_=(body: => GE): Unit = _graph = () => body
+    //    def graph:     () => GE        = _graph
+    //    def graph_=(body: => GE): Unit = _graph = () => body
+
+    var patch = Patch.empty
 
     def playOver(duration: Duration): Synth = {
       //      mapping.values.headOption.map(_.numColumns)
@@ -56,28 +58,31 @@ object SonificationImpl {
     def play(rate: Double): Synth = play(rate = rate, duration = None)
 
     private def buildUGens(duration: Option[Double]): UGenGraphBuilder.Result =
-      UGenGraphBuilder(this, SynthGraph {
-        import synth._
-        import ugen._
-        val res = _graph()
-        val sig = duration match {
-          case Some(secs) if secs > 0 =>
-            val sus = math.max(0, secs - 0.02)
-            val rls = secs - sus
-            val env = Env.linen(attack = 0, sustain = sus, release = rls, curve = Curve.sine)
-            res * EnvGen.ar(env, doneAction = freeSelf)
-          case _ => res
-        }
-        WrapOut(in = sig, fadeTime = Some(0.02f))
-      })
+      UGenGraphBuilder(this,
+        patch.graph
+        //        SynthGraph {
+        //          import synth._
+        //          import ugen._
+        //          val res = _graph()
+        //          val sig = duration match {
+        //            case Some(secs) if secs > 0 =>
+        //              val sus = math.max(0, secs - 0.02)
+        //              val rls = secs - sus
+        //              val env = Env.linen(attack = 0, sustain = sus, release = rls, curve = Curve.sine)
+        //              res * EnvGen.ar(env, doneAction = freeSelf)
+        //            case _ => res
+        //          }
+        //          WrapOut(in = sig, fadeTime = Some(0.02f))
+        //        }
+      )
 
     def prepare()(implicit context: ExecutionContext): Future[Sonification.Prepared] = {
       val as  = AudioSystem.instance
-      if (!as.isBooting || as.isRunning) as.start() // this can start up during our preparations
+      if (!as.isBooting && !as.isRunning) as.start() // this can start up during our preparations
 
-      val res       = buildUGens(duration = None)
-      val prepared: Future[Vec[PreparedBuffer]] = future {
-        res.sections.map { section =>
+      val prepared: Future[(UGenGraphBuilder.Result, Vec[PreparedBuffer])] = future {
+        val res = buildUGens(duration = None)
+        res -> res.sections.map { section =>
           blocking {
             val arr = section.peer.read()
             val n   = arr.getSize
@@ -133,7 +138,7 @@ object SonificationImpl {
 
       val p = Promise[Sonification.Prepared]()
       as.whenBooted { s =>
-        p completeWith prepared.map { buffers =>
+        p completeWith prepared.map { case (res, buffers) =>
           new Sonification.Prepared {
             def play(): Synth = {
               val sd    = SynthDef(synthDefName, res.graph)
@@ -149,7 +154,7 @@ object SonificationImpl {
                   b.file.delete()
                 }
 
-                ??? // ctls :+= (GraphB.bufCtlName(key) -> buf.id: ControlSetMap)
+                ctls :+= (b.section.controlName -> sBuf.id: ControlSetMap)
 
                 if (b.section.isStreaming) {
                   sys.error("Streaming not yet implemented")
@@ -361,7 +366,7 @@ object SonificationImpl {
       // XXX TODO
       //      mapping.foreach { case (key, source) =>
       //        val spec = matrices.getOrElse(key, sys.error(s"Sonification contains source for unknown key '$key'"))
-      //        ???
+      //        ...
       //      }
     }
   }

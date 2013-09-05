@@ -90,7 +90,7 @@ object Session130423 extends SessionLike {
     //...
 
     val son = sound.Sonification("Test")
-    son.graph = {
+    son.patch = Patch("Test", SynthGraph {
       var sum: GE = 0
       val speed = 1.0 / 4000.0
       // dur = numTime / (SampleRate * speed)
@@ -106,11 +106,11 @@ object Session130423 extends SessionLike {
           }
         }
       }
-      sum
-    }
+      WrapOut(sum)
+    })
 
     record(name) {
-      val synth = son.playOver(20.seconds)
+      val synth: Synth = ??? // son.playOver(20.seconds)
       synth.onEnd {
         b.free()
       }

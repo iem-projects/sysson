@@ -3,11 +3,10 @@ package sound
 
 import de.sciss.synth._
 import impl.{SonificationImpl => Impl}
-import concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 
 object Sonification {
-  val emptyGraph = SynthGraph(Vector.empty, Set.empty)
+  // val emptyGraph = SynthGraph(Vector.empty, Set.empty)
 
   def apply(name: String): Sonification = Impl(name)
 
@@ -20,23 +19,24 @@ object Sonification {
   }
 }
 trait Sonification {
-  var name:     String
-//  var graph:    SynthGraph
-  def graph:     () => GE
-  def graph_=(body: => GE): Unit
-  // var matrices: Map[String, MatrixSpec]
+  /** A user chosen name associated with the sonification. */
+  var name: String
+
+  /** The patch describing the audio signal processing of the sonification. */
+  var patch: Patch
+
+  /** OBSOLETE */
   var mapping:  Map[String, SonificationSource]
 
-  //  def play    (rate:     Double  ): Synth
-  //  def playOver(duration: Duration): Synth
-
+  /** Prepares the data to be sonified.
+    *
+    * @return a future of the prepared sonification, ready to play
+    */
   def prepare()(implicit context: ExecutionContext): Future[Sonification.Prepared]
 
-  // var selections: Map[String, (Int, Int)]
-
+  /** Maps between logical names and variable sections used as data source. */
   var variableMap: Map[String, VariableSection]
 
-  // var dimensionMap: Map[String, VariableSection]
-
+  /** Debugging method that writes the sonification's synth definition to a file on the user desktop. */
   def _debug_writeDef(): Unit
 }

@@ -19,10 +19,12 @@ object UGenGraphBuilderImpl {
   final val diskPad         = if (diskUsesInterp) 4 else 0
 
   private final class Impl(sonif: Sonification) extends BasicUGenGraphBuilder with UGenGraphBuilder {
+    import UGenGraphBuilder.Section
 
-    override def toString = s"UGenGraphBuilder(${sonif.name})@" + hashCode.toHexString
+    override def toString     = s"UGenGraphBuilder(${sonif.name})@" + hashCode.toHexString
 
-    private var usedMappings = Set.empty[String]
+    private var usedMappings  = Set.empty[String]
+    private var sections      = Vec.empty[Section]
 
     def getMatrixInSource(m: MatrixIn): SonificationSource = {
       val key = m.key
@@ -32,12 +34,19 @@ object UGenGraphBuilderImpl {
     def addScalarSelection(range: SelectedLike): GE =
       range.variable.find(sonif.variableMap)(_._2.variable).fold[GE] {
         sys.error(s"Selection for ${range.variable} not specified")
-      } { case (name, section) =>
-        require(section.rank == 1, s"Selection for ${range.variable} must be one-dimensional")
+      } {
+        case (name, section) =>
+          require(section.rank == 1, s"Selection for ${range.variable} must be one-dimensional")
 
+          val ctl         = section.shape.mkString(s"$$var_${section.name}_", "_", "")
+          val uSect       = Section(controlName = ctl, peer = section, stream = -1)
+          val numFramesL  = section.size
+          require(numFramesL <= 4096, s"Scalar selection too large ($numFramesL > 4096)")
+          val numFrames   = numFramesL.toInt
+          sections      :+= uSect
 
-
-        ???
+          import ugen._
+          Index.kr(buf = ctl.ir, in = 0 until numFrames)
       }
 
     def addMatrixIn(m: MatrixIn): GE = {
@@ -91,7 +100,7 @@ object UGenGraphBuilderImpl {
         build(controlProxies)
       }
       // (ug, usedMappings)
-      UGenGraphBuilder.Result(ug, Vec.empty)
+      UGenGraphBuilder.Result(ug, sections)
     }
   }
 }

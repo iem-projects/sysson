@@ -16,26 +16,33 @@ trait Library /* extends Model[Library.Update] */ {
 }
 
 object TestLibrary extends Library {
-  val root = Library.Branch("root",
+  import Library.{Child, Branch}
+  import ugen._
+  import graph._
+
+  val root = Branch("root",
     Vec(
-      Library.Child(Patch("Test-Sonif", SynthGraph {
-        import ugen._
-        import graph._
-        val latRange  = SelectedRange(Latitude)
-        val timeRange = SelectedRange(Time)
-        val plev      = SelectedValue(Pressure)
-        // val speed     = RotaryKnob(speedSpec)   // --> position, label etc. via view-map ?
-
-        val sel       = Var().select(latRange, timeRange, plev).average(Longitude)
-        val freq      = 1.0 // speed.kr
-        val time      = timeRange.play(freq)
-        val sig       = sel.play(time)
-        // val sig       = WhiteNoise.ar // sel.ar(time)
-
-        Pan2.ar(SinOsc.ar(sig), sig.axisValues(Latitude).linlin(latRange.startValue, latRange.endValue, -1, 1))
+      Child(Patch("Test-Static-Range", SynthGraph {
+        val plevRange = SelectedRange(Pressure)
+        plevRange.values.poll(Impulse.kr(0), label = "plev")
       })),
 
-      Library.Child(Patch("With-Altitude", SynthGraph {
+      //      Child(Patch("Test-Sonif", SynthGraph {
+      //        val latRange  = SelectedRange(Latitude)
+      //        val timeRange = SelectedRange(Time)
+      //        val plev      = SelectedValue(Pressure)
+      //        // val speed     = RotaryKnob(speedSpec)   // --> position, label etc. via view-map ?
+      //
+      //        val sel       = Var().select(latRange, timeRange, plev).average(Longitude)
+      //        val freq      = 1.0 // speed.kr
+      //        val time      = timeRange.play(freq)
+      //        val sig       = sel.play(time)
+      //        // val sig       = WhiteNoise.ar // sel.ar(time)
+      //
+      //        Pan2.ar(SinOsc.ar(sig), sig.axisValues(Latitude).linlin(latRange.startValue, latRange.endValue, -1, 1))
+      //      })),
+
+      Child(Patch("With-Altitude", SynthGraph {
         import graph._
         SelectedRange(Altitude)
       }))
