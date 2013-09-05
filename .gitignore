@@ -6,3 +6,4 @@ project/boot/
 .idea_modules/
 *.app
 *.jar
+dependency-graph.sbt

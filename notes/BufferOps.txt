@@ -1,0 +1,18 @@
+config.wireBuffers = 4096
+boot()
+
+val b = Buffer.alloc(s, numFrames = 1, numChannels = 1024)
+
+// high CPU usage
+val x = play {
+  val sig = BufRd.ar(buf = b.id, numChannels = 1024, index = 0)
+  Out.ar(0,Mix(sig)/1024)
+}
+
+x.free
+
+// relatively low CPU usage
+val x = play {
+  val sig = (0 until 1024).map(ch => Index.ar(buf = b.id + ch, in = ch))
+  Out.ar(0,Mix(sig)/1024)
+}

@@ -27,9 +27,7 @@ object MatrixIn {
 case class MatrixIn(rate: Rate, key: String) extends GE.Lazy {
   import MatrixIn._
 
-  protected def makeUGens: UGenInLike = {
-    builder.addMatrixIn(this)
-  }
+  protected def makeUGens: UGenInLike = builder.addMatrixIn(this)
 
   def numRows:    GE = NumRows   (this)
   def numColumns: GE = NumColumns(this)

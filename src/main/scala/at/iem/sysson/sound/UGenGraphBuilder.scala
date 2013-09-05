@@ -6,12 +6,15 @@ import at.iem.sysson.graph.SelectedLike
 import impl.{UGenGraphBuilderImpl => Impl}
 
 object UGenGraphBuilder {
-  /** @param control   the control name to use
+  /** XXX TODO: need to accommodate reductions such as averaging
+    *
+    * @param control   the control name to use
     * @param peer      the client side variable section
     * @param stream    the index of the dimension to stream, of `-1` if using static buffer
     */
   case class Section(control: String, peer: VariableSection, stream: Int) {
-    def variable = peer.variable
+    def variable    = peer.variable
+    def isStreaming = stream >= 0
   }
 
   case class Result(graph: UGenGraph, sections: Vec[Section])

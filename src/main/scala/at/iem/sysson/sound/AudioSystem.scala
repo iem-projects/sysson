@@ -14,14 +14,15 @@ object AudioSystem {
 
   sealed trait Update
   final case class Booting(connection: synth.ServerConnection) extends Update
-  final case class Started(server: synth.Server) extends Update
-  case object Stopped extends Update
+  final case class Started(server    : synth.Server          ) extends Update
+  case object      Stopped                                     extends Update
 
   type Listener = Model.Listener[Update]
 
   lazy val defaultConfig = {
-    val cfg       = synth.Server.Config()
-    cfg.transport = TCP
+    val cfg         = synth.Server.Config()
+    cfg.transport   = TCP   // allows larger SynthDefs somehow
+    cfg.wireBuffers = 4096  // make it possible to have massively multi-channel buffers
     cfg.pickPort()
     cfg.build
   }

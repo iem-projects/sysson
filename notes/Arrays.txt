@@ -1,0 +1,48 @@
+::::: regarding ma2.Array layout :::::
+
+ex. shape [2, 3, 4]
+
+val a = ma2.Array.factory(ma2.DataType.INT, Array[Int](2, 3, 4))
+(0 until a.size.toInt).foreach(i => a.setInt(i, i))
+
+
+index  dim: 0  1  2
+-------------------
+ 0          0  0  0
+ 1          0  0  1
+ 2          0  0  2
+ 3          0  0  3
+ 4          0  1  0
+ 5          0  1  1
+ 6          0  1  2
+ 7          0  1  3
+ 8          0  2  0
+ 9          0  2  1
+10          0  2  2
+11          0  2  3
+12          1  0  0
+13          1  0  1
+14          1  0  2
+15          1  0  3
+16          1  1  0
+17          1  1  1
+18          1  1  2
+19          1  1  3
+20          1  2  0
+21          1  2  1
+22          1  2  2
+23          1  2  3
+
+Linear index corresponds to flat array getter methods and index iterator.
+
+So with x, y, z being the indices of the successive dimensions, the linear index is
+
+    x * (y_size * z*size) + y * (z_size) + z
+
+Therefore, when the temporal unrolling dimension is dim 0, we can write the data straight into the AudioFile with numFrames = x_size and numChannels = y_size * z_size
+
+If the temporal dimension dim_t is > 0, we can transpose the array (which is a cheap view-only operation):
+
+val b = a.transpose(0, dim_t)
+
+__Note__: b.getIndexIterator will produce the correct transposed sequence, while a.getInt(<idx>) does not care about transpositions but will interpret the index argument with respect to its unaltered backing array.

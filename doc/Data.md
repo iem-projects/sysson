@@ -113,6 +113,8 @@ The whole matrix of a variable may be read through `v1.read`. To read sub sectio
 
 When using `f1d`, a multi-dimensional array is scanned along the order of its dimensions "breadth-first". For example, if the shape is `2 x 3 x 4`, the first two elements scan the first dimension where dimensions 2 and 3 are fixed at index 0, followed by the two elements in the first dimension where the second dimension is fixed at index 1 and the third dimension is fixed at index 0, etc.
 
+__Note__ (05-Sep-13): The previous paragraph might be _wrong_ and has to be verified. File `notes/Arrays.txt` suggests that the traversal is exactly the opposite, i.e. "depth-first".
+
 ## Sending Data via OSC
 
 To quickly hook up SuperCollider, PD, or ChucK, bulk data can be sent via OSC. The following illustrates this by sending data to the SuperCollider language.

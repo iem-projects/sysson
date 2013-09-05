@@ -19,6 +19,8 @@ object SonificationImpl {
 
   private final val codec = osc.PacketCodec().scsynth().build
 
+  private final class PreparedBuffer(val section: UGenGraphBuilder.Section, val file: File, val spec: AudioFileSpec)
+
   private final class Impl(var name: String) extends Sonification {
     private var _graph = () => 0f: GE
     // var matrices = Map.empty[String, MatrixSpec]
@@ -77,18 +79,60 @@ object SonificationImpl {
 
       val res = buildUGens(duration = None)
       future {
-        res.sections.foreach { case section =>
-          // val data = section.readScaled1D()
-
-          // section.toSection
-          val v = section.variable
+        val prepared = res.sections.map { section =>
           blocking {
             val arr = section.peer.read()
-            val it  = arr.float1Diterator
-            val n   = arr.size
+            val n   = arr.getSize
+            // if using streaming, we need probably:
+            // arr.transpose()
 
+            // cf. Arrays.txt for (de-)interleaving scheme
+
+            // - when not streaming, we use a monophonic linearised buffer (instead of a buffer
+            //   with one frame and arr.size channels).
+            // - when streaming, we use a channel per rank-product (excluding time dimension),
+            //   possibly allowing interpolations in BufRd.
+            val numFrames     = if (!section.isStreaming) n else arr.getIndexPrivate.getShape(section.stream)
+            val numChannelsL  = n / numFrames
+            require (numChannelsL <= 4096, s"The section $section would require too large number of channels ($numChannelsL > 4096)")
+            val numChannels   = numChannelsL.toInt
+
+            // XXX TODO: for small amounts of data, send it straight to the buffer using b_set
+            // instead going via a sound file which is more costly in terms of latency
+
+            val file          = File.createTempFile("sysson", ".aif")
+            // val path          = file.getAbsolutePath
+
+            // WARNING: sound file should be AIFF to allow for floating point sample rates
+            // (note: sample rate not used now)
+            val af            = AudioFile.openWrite(file, AudioFileSpec(numChannels = numChannels, sampleRate = 44100 /* rate */))
+            val fBufSize      = math.min(8192/numChannels, numFrames).toInt // file buffer
+            assert(fBufSize > 0)
+            val fBuf          = af.buffer(fBufSize)
+            var framesWritten = 0L
+            val t             = if (section.stream <= 0) arr else arr.transpose(0, section.stream)
+            val it            = t.float1Diterator
+            while (framesWritten < numFrames) {
+              val chunk = math.min(fBufSize, numFrames - framesWritten).toInt
+              var i = 0
+              while (i < chunk) {
+                var ch = 0
+                while (ch < numChannels) {
+                  fBuf(ch)(i) = it.next() // XXX TODO: would be better to have inner loop iterate for frames
+                  ch += 1
+                }
+                i += 1
+              }
+              af.write(fBuf, 0, chunk)
+              framesWritten += chunk
+            }
+            af.close()
+
+            new PreparedBuffer(section, file, af.spec)
           }
         }
+
+
 
         ???
       }
@@ -256,10 +300,10 @@ object SonificationImpl {
     }
 
     def _debug_writeDef(): Unit = {
-      val dir   = file(sys.props("user.home")) / "Desktop"
+      val dir   = userHome / "Desktop"
       val res   = buildUGens(duration = None)
       val sd    = SynthDef(synthDefName, res.graph)
-      sd.write(dir.getPath, overwrite = true)
+      sd.write(dir.path, overwrite = true)
     }
 
     private def validateMatrixSpecs(): Unit = {
