@@ -28,6 +28,7 @@ import de.sciss.synth.{Ops, Synth}
 import scala.concurrent.{ExecutionContext, Future}
 import at.iem.sysson.sound.Sonification
 import scala.util.control.NonFatal
+import scala.util.{Failure, Success}
 
 object ClimateViewImpl {
   private class Reduction(val dim: Int, val norm: CheckBox, val name: Label, val slider: DualRangeSlider,
@@ -348,6 +349,7 @@ object ClimateViewImpl {
 
     def play(): Unit = {
       stop()
+      markPlayStop(playing = true)
       patch.foreach { p =>
         val son          = Sonification(p.name)
         son.patch        = p
@@ -361,13 +363,27 @@ object ClimateViewImpl {
         import ExecutionContext.Implicits.global
         val fut          = son.prepare().map(_.play())
         playing          = Some(fut)
+        fut.onComplete {
+          case _ => GUI.defer {
+            // only react if we're still talking about the same synth
+            if (playing == Some(fut)) markPlayStop(playing = false)
+          }
+        }
         fut.onFailure {
-          case ex: Exception => DialogSource.Exception(ex -> s"Playing ${p.name}").show(None) // XXX TODO find window
+          case ex: Exception =>
+            DialogSource.Exception(ex -> s"Playing ${p.name}").show(None) // XXX TODO find window
+          case f => f.printStackTrace()
         }
       }
     }
 
-    def stop(): Unit =
+    private def markPlayStop(playing: Boolean) {
+      transport.button(Transport.Stop).get.selected = !playing
+      transport.button(Transport.Play).get.selected = playing
+    }
+
+    def stop(): Unit = {
+      markPlayStop(playing = false)
       playing.foreach { fut =>
         import ExecutionContext.Implicits.global
         fut.onSuccess {
@@ -377,6 +393,7 @@ object ClimateViewImpl {
         }
         playing = None
       }
+    }
 
     def rtz(): Unit = {
       println("NOT YET IMPLEMENTED: Return-to-zero")
@@ -438,5 +455,8 @@ object ClimateViewImpl {
         true
       }
     })
+
+    // ---- constructor ----
+    markPlayStop(playing = false)
   }
 }
