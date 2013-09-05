@@ -74,12 +74,10 @@ object SonificationImpl {
     def prepare()(implicit context: ExecutionContext): Future[Sonification.Prepared] = {
       val as  = AudioSystem.instance
       if (!as.isBooting || as.isRunning) as.start() // this can start up during our preparations
-      //      val p   = Promise[Sonification.Prepared]()
-      //      p.future
 
-      val res = buildUGens(duration = None)
-      future {
-        val prepared = res.sections.map { section =>
+      val res       = buildUGens(duration = None)
+      val prepared: Future[Vec[PreparedBuffer]] = future {
+        res.sections.map { section =>
           blocking {
             val arr = section.peer.read()
             val n   = arr.getSize
@@ -131,11 +129,64 @@ object SonificationImpl {
             new PreparedBuffer(section, file, af.spec)
           }
         }
-
-
-
-        ???
       }
+
+      val p = Promise[Sonification.Prepared]()
+      as.whenBooted { s =>
+        p completeWith prepared.map { buffers =>
+          new Sonification.Prepared {
+            def play(): Synth = {
+              val sd    = SynthDef(synthDefName, res.graph)
+              val syn   = Synth(s)
+              var msgs  = Vec.empty[osc.Message] // osc.Message with message.HasCompletion]
+              var ctls  = Vec.empty[ControlSetMap]
+
+              buffers.foreach { b =>
+                val sBuf  = Buffer(s)
+                syn.onEnd {
+                  if (b.section.isStreaming) sBuf.close() // file was streamed
+                  sBuf.free()
+                  b.file.delete()
+                }
+
+                ??? // ctls :+= (GraphB.bufCtlName(key) -> buf.id: ControlSetMap)
+
+                if (b.section.isStreaming) {
+                  sys.error("Streaming not yet implemented")
+
+                } else {
+                  val spec        = b.spec
+                  val numFrames  = spec.numFrames
+                  require (numFrames < 0x80000000L, s"Number of frames for $b.section is too large")
+                  val allocMsg    = sBuf.allocMsg(numFrames = numFrames.toInt, numChannels = spec.numChannels)
+                  val readMsg     = sBuf.readMsg(b.file.absolutePath)
+                  msgs          :+= allocMsg
+                  msgs          :+= readMsg
+                }
+              }
+
+              val newMsg  = syn.newMsg(synthDefName, args = ctls)
+              val recvMsg = sd.recvMsg(newMsg)
+              val dfMsg   = if (codec.encodedMessageSize(recvMsg) < 0x3FFF) recvMsg else {
+                sd.write(overwrite = true)
+                sd.loadMsg(completion = newMsg)
+              }
+              //      val bndl    = if (msgs.isEmpty) newMsg else {
+              //        val init = msgs.init
+              //        val last = msgs.last
+              //        val upd  = last.updateCompletion(Some(recvMsg))
+              //        osc.Bundle.now((init :+ upd): _*)
+              //      }
+              val bndl  = osc.Bundle.now(msgs :+ dfMsg: _*)
+
+              s ! bndl
+              syn
+            }
+          }
+        }
+      }
+
+      p.future
     }
 
     private def play(rate: Double, duration: Option[Double]): Synth = {
