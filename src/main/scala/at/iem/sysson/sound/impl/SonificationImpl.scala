@@ -21,6 +21,11 @@ object SonificationImpl {
 
   private final class PreparedBuffer(val section: UGenGraphBuilder.Section, val file: File, val spec: AudioFileSpec)
 
+  private final class SynthPreparation(val synth: Synth) {
+    var msgs  = Vec.empty[osc.Message]
+    var ctls  = Vec.empty[ControlSetMap]
+  }
+
   private final class Impl(var name: String) extends Sonification {
     // private var _graph = () => 0f: GE
     // var matrices = Map.empty[String, MatrixSpec]
@@ -143,8 +148,7 @@ object SonificationImpl {
             def play(): Synth = {
               val sd    = SynthDef(synthDefName, res.graph)
               val syn   = Synth(s)
-              var msgs  = Vec.empty[osc.Message] // osc.Message with message.HasCompletion]
-              var ctls  = Vec.empty[ControlSetMap]
+              val prep  = new SynthPreparation(syn)
 
               buffers.foreach { b =>
                 val sBuf  = Buffer(s)
@@ -154,10 +158,10 @@ object SonificationImpl {
                   b.file.delete()
                 }
 
-                ctls :+= (b.section.controlName -> sBuf.id: ControlSetMap)
+                prep.ctls :+= (b.section.controlName -> sBuf.id: ControlSetMap)
 
                 if (b.section.isStreaming) {
-                  sys.error("Streaming not yet implemented")
+                  prepareStreaming(prep, sBuf, b)
 
                 } else {
                   val spec        = b.spec
@@ -165,12 +169,12 @@ object SonificationImpl {
                   require (numFrames < 0x80000000L, s"Number of frames for $b.section is too large")
                   val allocMsg    = sBuf.allocMsg(numFrames = numFrames.toInt, numChannels = spec.numChannels)
                   val readMsg     = sBuf.readMsg(b.file.absolutePath)
-                  msgs          :+= allocMsg
-                  msgs          :+= readMsg
+                  prep.msgs     :+= allocMsg
+                  prep.msgs     :+= readMsg
                 }
               }
 
-              val newMsg  = syn.newMsg(synthDefName, args = ctls)
+              val newMsg  = syn.newMsg(synthDefName, args = prep.ctls)
               val recvMsg = sd.recvMsg(newMsg)
               val dfMsg   = if (codec.encodedMessageSize(recvMsg) < 0x3FFF) recvMsg else {
                 sd.write(overwrite = true)
@@ -182,7 +186,7 @@ object SonificationImpl {
               //        val upd  = last.updateCompletion(Some(recvMsg))
               //        osc.Bundle.now((init :+ upd): _*)
               //      }
-              val bndl  = osc.Bundle.now(msgs :+ dfMsg: _*)
+              val bndl  = osc.Bundle.now(prep.msgs :+ dfMsg: _*)
 
               s ! bndl
               syn
@@ -192,6 +196,86 @@ object SonificationImpl {
       }
 
       p.future
+    }
+
+    private def prepareStreaming(prep: SynthPreparation, sBuf: Buffer, b: PreparedBuffer): Unit = {
+      val spec          = b.spec
+      val numFrames     = spec.numFrames
+      val numChannels   = spec.numChannels
+
+      val rate = 44100.0/64   // XXX TODO how to determine the max frequency !?
+
+      // at least 32 samples, at most one second with respect to maximum assumed playback rate,
+      // unless total file length is smaller.
+      val bufSizeHM     = math.max(32, math.min((numFrames + 1)/2, math.ceil(rate).toInt).toInt)
+      val bufSizeH      = bufSizeHM + UGenGraphBuilderImpl.diskPad
+      val bufSize       = bufSizeH * 2
+
+      // ---- buffer updating function ----
+
+      // 'flatten'
+      def addPacket(p: osc.Packet) {
+        p match {
+          case osc.Bundle(_, pp @ _*)         => pp.foreach(addPacket)
+          case m @ osc.Message(_, args @ _*)  => prep.msgs :+= m
+        }
+      }
+
+      def updateBuffer(trigVal: Int): (osc.Packet, Int) = {
+        val trigEven    = trigVal % 2 == 0
+        val bufOff      = if (trigEven) 0 else bufSizeH
+        val frame       = trigVal * bufSizeHM /* + startPos = 0 */ + (if (trigEven) 0 else UGenGraphBuilderImpl.diskPad)
+        val readSz      = math.max(0, math.min(bufSizeH, numFrames - frame)).toInt
+        val fillSz      = bufSizeH - readSz
+        var ms          = List.empty[osc.Packet]
+
+        if (fillSz > 0) {
+          val m = sBuf.fillMsg((bufOff + readSz) * numChannels, fillSz * numChannels, 0f)
+          ms = m :: ms
+        }
+
+        if (readSz > 0) {
+          val m = sBuf.readMsg(
+            path            = b.file.absolutePath,
+            fileStartFrame  = frame,
+            numFrames       = readSz,
+            bufStartFrame   = bufOff,
+            leaveOpen       = false
+          )
+          ms = m :: ms
+        }
+
+        val p = ms match {
+          case single :: Nil  => single
+          case _              => osc.Bundle.now(ms: _*)
+        }
+
+        (p, frame)
+      }
+
+      // ---- register trig responder ----
+
+      val s         = sBuf.server
+      val trigResp  = message.Responder.add(s) {
+        case osc.Message("/tr", _ /* syn.id */, _ /* GraphB.diskTrigID */, trigValF: Float) =>
+          //                println(s"RECEIVED TR $trigValF...")
+        val trigVal = trigValF.toInt + 1
+          val (p, frame) = updateBuffer(trigVal)
+          //                println(s"...translating to frame $frame of $numFrames")
+          if (frame < numFrames + bufSizeH) {
+            s ! p
+          } else {
+            prep.synth.free()
+          }
+      }
+
+      // ---- generate initial buffer updates ----
+      val allocMsg      = sBuf.allocMsg(numFrames = bufSize, numChannels = numChannels)
+      prep.msgs       :+= allocMsg
+      addPacket(updateBuffer(0)._1)
+      addPacket(updateBuffer(1)._1)
+
+      prep.synth.onEnd { trigResp.remove() }
     }
 
     private def play(rate: Double, duration: Option[Double]): Synth = {
@@ -312,10 +396,10 @@ object SonificationImpl {
 
             val trigResp  = message.Responder.add(s) {
               case osc.Message("/tr", _ /* syn.id */, _ /* GraphB.diskTrigID */, trigValF: Float) =>
-//                println(s"RECEIVED TR $trigValF...")
-                val trigVal = trigValF.toInt + 1
+                //                println(s"RECEIVED TR $trigValF...")
+              val trigVal = trigValF.toInt + 1
                 val (p, frame) = updateBuffer(trigVal)
-//                println(s"...translating to frame $frame of $numFrames")
+                //                println(s"...translating to frame $frame of $numFrames")
                 if (frame < numFrames + bufSizeH) {
                   s ! p
                 } else {
