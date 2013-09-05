@@ -22,6 +22,7 @@ object SelectedRange {
   //    def expand: UGenInLike = ...
   //  }
 
+  // XXX TODO: should _not_ be a GE, but instead provide `values` and `indices` methods.
   trait Playing extends synth.GE with AudioRated {
     def range: SelectedRange
     def freq: synth.GE

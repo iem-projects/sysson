@@ -4,7 +4,7 @@ package graph
 import Implicits._
 import ucar.nc2
 import de.sciss.synth
-import synth.{AudioRated, GE, UGenInLike}
+import synth.AudioRated
 
 sealed trait VarRef {
   def find[A](vars: Iterable[A])(implicit view: A => nc2.Variable): Option[A] = {
@@ -19,6 +19,8 @@ sealed trait VarRef {
 object Var {
   trait GE extends synth.GE {
     def variable: Var
+
+    // XXX TODO should be axis().values and axis().indices
     def axisValues(ref: VarRef): GE
   }
 
@@ -27,6 +29,19 @@ object Var {
   }
 
   def apply(): Var = impl.VarImpl.Default
+
+  // ---- operations ----
+
+  sealed trait Op
+
+  sealed trait Reduction extends Op {
+    def variable: VarRef
+  }
+
+  final case class Select (selection: SelectedLike) extends Reduction {
+    def variable: VarRef = selection.variable
+  }
+  final case class Average(variable: VarRef) extends Reduction
 }
 trait Var {
   def select(selections: SelectedLike*): Var
@@ -36,6 +51,8 @@ trait Var {
   def kr: Var.GE
 
   def play(time: SelectedRange.Playing): Var.Playing
+
+  def operations: Vec[Var.Op]
 }
 
 case object Time extends VarRef {

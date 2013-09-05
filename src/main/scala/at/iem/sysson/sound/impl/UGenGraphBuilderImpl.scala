@@ -6,7 +6,8 @@ import de.sciss.synth
 import synth.impl.BasicUGenGraphBuilder
 import synth._
 import ugen.ControlProxyLike
-import at.iem.sysson.graph.SelectedLike
+import at.iem.sysson.graph.{Var, SelectedLike}
+import at.iem.sysson.graph.Var.Playing
 
 object UGenGraphBuilderImpl {
   def apply(sonif: Sonification, sg: SynthGraph): UGenGraphBuilder.Result = new Impl(sonif).build(sg)
@@ -88,6 +89,16 @@ object UGenGraphBuilderImpl {
       BufRd.ar(numChannels, buf = inBuf, index = phasor, loop = 0, interp = interp)
     }
 
+    def addAudioVariable(variable: Playing): GE = {
+      val section = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
+        sys.error(s"Default variable not specified"))
+
+
+
+      ???
+    }
+
+    // OBSOLETE
     def addMatrixIn(m: MatrixIn): GE = {
       import ugen._
       val key       = m.key

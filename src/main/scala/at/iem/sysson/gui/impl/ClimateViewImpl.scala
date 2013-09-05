@@ -363,11 +363,15 @@ object ClimateViewImpl {
         import ExecutionContext.Implicits.global
         val fut          = son.prepare().map(_.play())
         playing          = Some(fut)
+
+        def done(): Unit = GUI.defer {
+          // only react if we're still talking about the same synth
+          if (playing == Some(fut)) markPlayStop(playing = false)
+        }
+
         fut.onComplete {
-          case _ => GUI.defer {
-            // only react if we're still talking about the same synth
-            if (playing == Some(fut)) markPlayStop(playing = false)
-          }
+          case Success(synth) => synth.onEnd(done())
+          case _              => done()
         }
         fut.onFailure {
           case ex: Exception =>

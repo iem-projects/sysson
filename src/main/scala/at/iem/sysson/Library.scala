@@ -35,6 +35,25 @@ object TestLibrary extends Library {
         // plevRange.values.poll(Impulse.kr(0), label = "plev")
       })),
 
+      Child(Patch("Test-Sonif", SynthGraph {
+        val latRange  = SelectedRange(Latitude)
+        val lonRange  = SelectedRange(Longitude)
+        val timeRange = SelectedRange(Time)
+        val plev      = SelectedRange(Pressure)
+        // val speed     = RotaryKnob(speedSpec)   // --> position, label etc. via view-map ?
+
+        val sel       = Var().select(latRange, lonRange, timeRange, plev) // .average(Longitude)
+        val freq      = 1.0 // speed.kr
+        val time      = timeRange.play(freq)
+        val data      = sel.play(time)
+        // val sig       = WhiteNoise.ar // sel.ar(time)
+
+        val osc = SinOsc.ar(data)
+        WrapOut(Pan2.ar(Mix.mono(osc)))
+
+        // Pan2.ar(osc, sig.axisValues(Latitude).linlin(latRange.startValue, latRange.endValue, -1, 1))
+      })),
+
       //      Child(Patch("Test-Sonif", SynthGraph {
       //        val latRange  = SelectedRange(Latitude)
       //        val timeRange = SelectedRange(Time)

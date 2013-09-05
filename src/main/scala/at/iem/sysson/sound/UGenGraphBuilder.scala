@@ -2,7 +2,7 @@ package at.iem.sysson
 package sound
 
 import de.sciss.synth.{SynthGraph, GE, UGenGraph}
-import at.iem.sysson.graph.SelectedLike
+import at.iem.sysson.graph.{Var, SelectedLike}
 import impl.{UGenGraphBuilderImpl => Impl}
 
 object UGenGraphBuilder {
@@ -28,4 +28,5 @@ trait UGenGraphBuilder extends UGenGraph.Builder {
 
   def addScalarSelection(range: SelectedLike): GE
   def addAudioSelection (range: SelectedLike, freq: GE): GE
+  def addAudioVariable  (variable: Var.Playing): GE
 }
