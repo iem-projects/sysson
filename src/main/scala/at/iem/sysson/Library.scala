@@ -1,6 +1,6 @@
 package at.iem.sysson
 
-import de.sciss.synth.{SynthGraph, ugen}
+import de.sciss.synth.{GE, SynthGraph, ugen}
 
 object Library {
   sealed trait Node { def name: String }
@@ -25,6 +25,14 @@ object TestLibrary extends Library {
       Child(Patch("Test-Static-Range", SynthGraph {
         val plevRange = SelectedRange(Pressure)
         plevRange.values.poll(Impulse.kr(0), label = "plev")
+      })),
+
+      Child(Patch("Test-Dynamic-Range", SynthGraph {
+        val timeRange = SelectedRange(Time)
+        val freq      = 1.0 // speed.kr
+        val time: GE  = timeRange.play(freq)
+        time.poll(1)
+        // plevRange.values.poll(Impulse.kr(0), label = "plev")
       })),
 
       //      Child(Patch("Test-Sonif", SynthGraph {

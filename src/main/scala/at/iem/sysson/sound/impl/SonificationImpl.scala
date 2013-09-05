@@ -95,7 +95,7 @@ object SonificationImpl {
             //   with one frame and arr.size channels).
             // - when streaming, we use a channel per rank-product (excluding time dimension),
             //   possibly allowing interpolations in BufRd.
-            val numFrames     = if (!section.isStreaming) n else arr.getIndexPrivate.getShape(section.stream)
+            val numFrames     = if (!section.isStreaming) n else arr.getIndexPrivate.getShape(section.streamDim)
             val numChannelsL  = n / numFrames
             require (numChannelsL <= 4096, s"The section $section would require too large number of channels ($numChannelsL > 4096)")
             val numChannels   = numChannelsL.toInt
@@ -113,7 +113,7 @@ object SonificationImpl {
             assert(fBufSize > 0)
             val fBuf          = af.buffer(fBufSize)
             var framesWritten = 0L
-            val t             = if (section.stream <= 0) arr else arr.transpose(0, section.stream)
+            val t             = if (section.streamDim <= 0) arr else arr.transpose(0, section.streamDim)
             val it            = t.float1Diterator
             while (framesWritten < numFrames) {
               val chunk = math.min(fBufSize, numFrames - framesWritten).toInt

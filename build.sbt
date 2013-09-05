@@ -29,7 +29,7 @@ libraryDependencies ++= {
     "de.sciss" %% "scalacolliderswing"      % "1.9.+",          // some graphical features for ScalaCollider
     "de.sciss" %  "scalacolliderugens-spec" % "1.6.2+",         // UGen specs used in the patcher class
     "de.sciss" %% "scalaosc"                % "1.1.1+",         // Open Sound Control
-    "de.sciss" %% "desktop"                 % "0.3.3+",         // application framework
+    "de.sciss" %% "desktop"                 % "0.3.4+",         // application framework
     "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
     "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
     "de.sciss" %% "fileutil"                % "1.0.+",          // easy file name manipulation

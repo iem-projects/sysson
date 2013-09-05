@@ -10,11 +10,12 @@ object UGenGraphBuilder {
     *
     * @param controlName  the control name to use
     * @param peer         the client side variable section
-    * @param stream       the index of the dimension to stream, of `-1` if using static buffer
+    * @param streamDim    the index of the dimension to stream, of `-1` if using static buffer
+    * @param streamID     send-trig identifier for streamed sections
     */
-  case class Section(controlName: String, peer: VariableSection, stream: Int) {
+  case class Section(controlName: String, peer: VariableSection, streamDim: Int, streamID: Int) {
     def variable    = peer.variable
-    def isStreaming = stream >= 0
+    def isStreaming = streamDim >= 0
   }
 
   case class Result(graph: UGenGraph, sections: Vec[Section])
@@ -25,7 +26,6 @@ trait UGenGraphBuilder extends UGenGraph.Builder {
   def addMatrixIn(m: MatrixIn): GE
   def getMatrixInSource(m: MatrixIn): SonificationSource
 
-  // ---- TODO ----
-
   def addScalarSelection(range: SelectedLike): GE
+  def addAudioSelection (range: SelectedLike, freq: GE): GE
 }

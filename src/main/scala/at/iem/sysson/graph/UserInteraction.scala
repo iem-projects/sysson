@@ -13,8 +13,8 @@ sealed trait SelectedLike extends UserInteraction {
 }
 
 case class SelectedValue(variable: VarRef /*, default: */) extends SelectedLike {
-  def ir: GE = ???
-  def kr: GE = ???
+  def value: GE = ???
+  def index: GE = ???
 }
 
 object SelectedRange {

@@ -19,9 +19,10 @@ object SelectedRangeImpl {
   def indices   (range: SelectedRange): GE = ???
 
   private final case class PlayingImpl(range: SelectedRange, freq: synth.GE)
-    extends SelectedRange.Playing with GE.Lazy {
+    extends LazyImpl with SelectedRange.Playing {
 
-    protected def makeUGens: UGenInLike = ???
+    protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
+      b.addAudioSelection(range, freq)
   }
 
   private final case class ValuesImpl(range: SelectedRange) extends LazyImpl with ScalarRated {
