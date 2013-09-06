@@ -7,15 +7,16 @@ import synth.impl.BasicUGenGraphBuilder
 import synth._
 import ugen.ControlProxyLike
 import at.iem.sysson.graph.{Var, SelectedLike}
-import at.iem.sysson.graph.Var.Playing
+import Implicits._
 
 object UGenGraphBuilderImpl {
   def apply(sonif: Sonification, sg: SynthGraph): UGenGraphBuilder.Result = new Impl(sonif).build(sg)
 
+  // OBSOLETE
   def bufCtlName (key: String): String = "$son_" + key
   //  def rateCtlName(key: String): String = "$son_" + key
 
-  final val diskTrigID      = 0
+  // final val diskTrigID      = 0
   final val diskUsesInterp  = false
   final val diskPad         = if (diskUsesInterp) 4 else 0
 
@@ -60,15 +61,19 @@ object UGenGraphBuilderImpl {
     def addAudioSelection(range: SelectedLike, freq: GE): GE = withVariable(range) { (name, section) =>
       require1D(range, section)
 
-      val ctl         = ctlNameFromSection(section)
+      val ctl = ctlNameFromSection(section)
+      addAudioMatrix(controlName = ctl, freq = freq, section = section, streamDim = 0 /* there is only 1D */)
+    }
+
+    private def addAudioMatrix(controlName: String, freq: GE, section: VariableSection, streamDim: Int): GE = {
       val trigID      = sections.size // XXX TODO: bit hackish
-      val uSect       = Section(controlName = ctl, peer = section, streamDim = 0, streamID = trigID)
+      val uSect       = Section(controlName = controlName, peer = section, streamDim = streamDim, streamID = trigID)
       sections      :+= uSect
 
       import ugen._
-      val numChannels = 1 // XXX TODO when this method is reused for var-selections, use shape.product/time_dim.size
+      val numChannels = (section.size / section.shape(streamDim)).toInt
 
-      val inBuf       = ctl.ir
+      val inBuf       = controlName.ir
       val bufRate     = freq // BufSampleRate.ir(inBuf) // WARNING: sound file should be AIFF to allow for floating point sample rates
       val numFrames   = BufFrames.ir(inBuf)
       val phasorRate  = bufRate / SampleRate.ir // = BufRateScale .ir(inBuf)
@@ -89,13 +94,26 @@ object UGenGraphBuilderImpl {
       BufRd.ar(numChannels, buf = inBuf, index = phasor, loop = 0, interp = interp)
     }
 
-    def addAudioVariable(variable: Playing): GE = {
-      val section = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
+    def addAudioVariable(varPlay: Var.Playing): GE = {
+      val section0 = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
         sys.error(s"Default variable not specified"))
 
+      withVariable(varPlay.time.range) { (timeName, timeSection) =>
+        val timeDim = section0.dimensions.indexWhere(_.name == timeName)
+        require (timeDim >= 0, s"Time dimension $timeName is not part of $section0")
 
+        val section = (section0 /: varPlay.variable.operations) {
+          case (sect, Var.Select(selection)) =>
+            withVariable(selection) { (sectName, sectSect) =>
+              require1D(selection, sectSect)
+              sect in sectName select sectSect.section.head
+            }
+          case (sect, op) => sys.error(s"Currently unsupported operation $op for $sect")
+        }
 
-      ???
+        val ctl = ctlNameFromSection(section)
+        addAudioMatrix(controlName = ctl, freq = varPlay.time.freq, section = section, streamDim = timeDim)
+      }
     }
 
     // OBSOLETE
@@ -131,7 +149,7 @@ object UGenGraphBuilderImpl {
           val interp: GE  = if (diskUsesInterp) (phasorRate - 1.0).signum.abs * 3 + 1 else 1
           val phasorTrig  = Trig1.kr(phasorK - numFrames/2, ControlDur.ir)
           val clockTrig   = phasorTrig + TDelay.kr(phasorTrig, halfPeriod)
-          SendTrig.kr(clockTrig, value = PulseCount.kr(clockTrig), id = diskTrigID)
+          SendTrig.kr(clockTrig, value = PulseCount.kr(clockTrig), id = 0 /* diskTrigID */)
 
           // ---- actual signal ----
 

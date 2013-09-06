@@ -74,12 +74,12 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
     res
   }
 
-  def rank          = toSection.getRank
-  def shape         = toSection.getShape.toIndexedSeq
+  def rank            = toSection.getRank
+  lazy val shape      = toSection.getShape.toIndexedSeq
 
-  def name          = variable.name
-  def dataType      = variable.dataType
-  def dimensions    = variable.dimensions
+  def name            = variable.name
+  def dataType        = variable.dataType
+  lazy val dimensions = variable.dimensions
 
   /** Undoes all dimensional selections and reverts to the full matrix of the variable */
   def selectAll     = variable.selectAll
@@ -134,9 +134,10 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
     }
   }
 
-  // ---- conversion to sonifcation source ----
+  // ---- conversion to sonification source (OBSOLETE) ----
+
   def asColumn      = ColumnSource(this)
-  def asRow         = RowSource(this)
+  def asRow         = RowSource   (this)
 
   def asMatrix(row: String, column: String) =
     MatrixSource(this, rowDim = dimIdxByName(row), columnDim = dimIdxByName(column))
