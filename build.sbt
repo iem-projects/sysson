@@ -47,14 +47,16 @@ scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:impli
 
 // ---- runtime settings ----
 
-initialCommands in console := """import at.iem.sysson._
-import Implicits._
-import de.sciss.synth._
-import ugen._
-import Ops._
-import de.sciss.osc.Implicits._
-import concurrent.duration._
-"""
+initialCommands in console :=
+  """import at.iem.sysson._
+    |import Implicits._
+    |import de.sciss.synth._
+    |import ugen._
+    |import Ops._
+    |import de.sciss.osc.Implicits._
+    |import concurrent.duration._
+    |import ucar.{nc2, ma2}
+    |""".stripMargin
 
 // ---- build info source generator ----
 

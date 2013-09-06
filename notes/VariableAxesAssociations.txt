@@ -1,0 +1,54 @@
+::::: associating variable sections with their axes :::::
+
+the channel layout for >1 D data is shown in Arrays.txt
+
+so when we logically remove the temporal dimension from the shape, we find the reduced shape shape_red, and within it i = index_of_axis_dim
+
+if i == shape_red.size-1, i.e. the last dimension, then axis index = total_data_index % axis_selection_size
+
+if i == shape_red.size-2, i.e. the before-last dimension, then axis index = (total_data_index div shape_red(shape_red.size-1)) % axis_selection_size
+
+in general: (total_data_index div shape_red.drop(index_of_axis_dim + 1).product) % axis_selection_size
+
+::::: now how does SC multi-channel folding work :::::
+
+for instance
+
+(1 to 12) + (100 to 400 by 100)
+
+cf. https://gist.github.com/Sciss/6464775
+
+result is
+
+inter: 101
+inter: 202
+inter: 303
+inter: 404
+inter: 105
+inter: 206
+inter: 307
+inter: 408
+inter: 109
+inter: 210
+inter: 311
+inter: 412
+
+which means that with varPlaying.axis(<a>).values, we do not need to generate the full array of var-section-size, but only really one go through the axis-size, i.e. the "% axis_selection_size" bit is done automatically.
+
+- errr, no, wrong, we won't to do the _opposite_ motion, see next section
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+let's assume the monophonic buffer w/ Index.kr method again, containing for the respective axis the selected range.
+
+looking again at Arrays.txt, we cannot simply have axis_selection_size values linearly. intead we need to tabulate the var-section-size indices to match the axis_selection_size output proxies, _with the mere exception_ of the highest-index-dimension (which is already linear)
+
+more precisely, the pattern repeats (modulus) after shape_red.drop(index_of_axis_dim).product channels.
+
+hence:
+
+    val shape_red = ...
+    val axis_index = ...
+    val div = shape_red.drop(axis_index + 1).product  // note: List.empty[Int].product == 1
+    val axis_size = shape_red(axis_index)
+    Vec.tabulate(axis_size * div)(i => axis_signal \ (i/div))

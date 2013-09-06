@@ -35,11 +35,19 @@ object Var {
   // ---- axis -----
 
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
+
+  /** A reference to a dimensional axis with respect to a variable section.
+    * The difference between this and for instance SelectRange is that the
+    * graph element producing methods such as `values` and `indices` produce
+    * multi-channel signals which correctly align with the underlying variable section.
+    * This allows signal processing which combines each sample value from a
+    * variable with the corresponding axes elements.
+    */
   trait Axis {
-    def values : GE
-    def indices: GE
+    def values    : GE
+    def indices   : GE
     def startValue: GE
-    def endValue: GE
+    def endValue  : GE
   }
 
   // ---- operations ----
@@ -62,8 +70,12 @@ trait Var {
   def ir: Var.GE
   def kr: Var.GE
 
+  /** A special sectioning which unrolls one of the variable dimensions in time. */
   def play(time: SelectedRange.Playing): Var.Playing
 
+  /** The operations performed on the original input variable, such as taking slices,
+    * averaging over a dimension, etc.
+    */
   def operations: Vec[Var.Op]
 }
 

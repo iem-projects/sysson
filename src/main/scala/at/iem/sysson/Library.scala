@@ -43,6 +43,7 @@ object TestLibrary extends Library {
         // val speed     = RotaryKnob(speedSpec)   // --> position, label etc. via view-map ?
 
         val speed     = UserValue(key = "speed", default = 1.0)
+        val pitch     = UserValue(key = "freq-factor", default = 1.0)
 
         val sel       = Var().select(latRange, lonRange, timeRange, plev) // .average(Longitude)
         val freq      = speed.value
@@ -51,11 +52,11 @@ object TestLibrary extends Library {
         val data      = sel.play(time)
         // val sig       = WhiteNoise.ar // sel.ar(time)
 
+        val latAxis   = data.axis(Latitude)
         // NOT YET WORKING:
-        // val latAxis   = data.axis(Latitude)
         // val latAxisN  = (latAxis.values: GE).linlin(latAxis.startValue, latAxis.endValue, -1, 1)
 
-        val osc = SinOsc.ar(data)
+        val osc = SinOsc.ar(data * pitch.value)
         WrapOut(Pan2.ar(Mix.mono(osc) * 0.1))
 
         // Pan2.ar(osc, sig.axisValues(Latitude).linlin(latRange.startValue, latRange.endValue, -1, 1))
