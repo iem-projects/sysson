@@ -37,7 +37,7 @@ object VarImpl {
   private final case class PlayingImpl(variable: Impl, time: SelectedRange.Playing)
     extends LazyImpl with Var.Playing {
 
-    def axisValues(ref: VarRef): Var.GE = ???
+    def axis(ref: VarRef): Var.Axis = ???
 
     protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
       b.addAudioVariable(this)

@@ -45,10 +45,15 @@ object TestLibrary extends Library {
         val speed     = UserValue(key = "speed", default = 1.0)
 
         val sel       = Var().select(latRange, lonRange, timeRange, plev) // .average(Longitude)
-        val freq      = 1.0 // speed.kr
+        val freq      = speed.value
+        // freq.poll(Impulse.kr(0), label = "freq")
         val time      = timeRange.play(freq)
         val data      = sel.play(time)
         // val sig       = WhiteNoise.ar // sel.ar(time)
+
+        // NOT YET WORKING:
+        // val latAxis   = data.axis(Latitude)
+        // val latAxisN  = (latAxis.values: GE).linlin(latAxis.startValue, latAxis.endValue, -1, 1)
 
         val osc = SinOsc.ar(data)
         WrapOut(Pan2.ar(Mix.mono(osc) * 0.1))

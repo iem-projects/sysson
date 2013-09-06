@@ -146,8 +146,14 @@ object SonificationImpl {
               val syn   = Synth(s)
               val prep  = new SynthPreparation(syn)
 
-              userValueMap.foreach { case (key, value) =>
-                prep.ctls :+= (key -> value: ControlSetMap)
+              // userValueMap.foreach { case (key, value) =>
+              //   prep.ctls :+= (key -> value: ControlSetMap)
+              // }
+
+              res.userValues.foreach { uv =>
+                userValueMap.get(uv.peer.key).foreach { value =>
+                  prep.ctls :+= (uv.controlName -> value: ControlSetMap)
+                }
               }
 
               buffers.foreach { b =>
@@ -173,6 +179,8 @@ object SonificationImpl {
                   prep.msgs     :+= readMsg
                 }
               }
+
+              // println(prep.ctls)
 
               val newMsg  = syn.newMsg(synthDefName, args = prep.ctls)
               val recvMsg = sd.recvMsg(newMsg)

@@ -21,7 +21,9 @@ object Var {
     def variable: Var
 
     // XXX TODO should be axis().values and axis().indices
-    def axisValues(ref: VarRef): GE
+    // def axisValues(ref: VarRef): GE
+
+    def axis(ref: VarRef): Axis
   }
 
   trait Playing extends GE with AudioRated {
@@ -29,6 +31,16 @@ object Var {
   }
 
   def apply(): Var = impl.VarImpl.Default
+
+  // ---- axis -----
+
+  // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
+  trait Axis {
+    def values : GE
+    def indices: GE
+    def startValue: GE
+    def endValue: GE
+  }
 
   // ---- operations ----
 

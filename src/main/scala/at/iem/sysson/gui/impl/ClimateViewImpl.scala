@@ -372,6 +372,10 @@ object ClimateViewImpl {
           val section = document.variableMap(key) in key select (start to end)
           son.variableMap += key -> section
         }
+        userValues.foreach { case (key, model) =>
+          son.userValueMap += key -> model.getValue.asInstanceOf[Double]
+        }
+        // println(s"sonfication.userValueMap = ${son.userValueMap}")
 
         import ExecutionContext.Implicits.global
         val fut          = son.prepare().map(_.play())
@@ -445,15 +449,17 @@ object ClimateViewImpl {
             }
           }
 
-          val userValues = sources.collect {
+          val _userValues = sources.collect {
             case graph.UserValue(key, default) =>
               val m = new SpinnerNumberModel(default, Double.MinValue, Double.MaxValue, 0.1)
               key -> m
           }
 
+          userValues = _userValues.toMap
+
           // println(userValues.map(_._1).mkString(", "))
 
-          userValues.foreach { case (key, m) =>
+          _userValues.foreach { case (key, m) =>
             val lb = new Label(s"${key.capitalize}:")
             lb.peer.putClientProperty("JComponent.sizeVariant", "small")
             val spi = new Spinner(m)
