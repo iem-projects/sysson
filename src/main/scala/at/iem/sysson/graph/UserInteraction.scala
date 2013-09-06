@@ -1,6 +1,6 @@
 package at.iem.sysson.graph
 
-import de.sciss.synth.{UGenInLike, AudioRated, GE, Lazy}
+import de.sciss.synth.{AudioRated, GE, Lazy}
 import de.sciss.synth
 
 trait UserInteraction extends Lazy.Expander[Unit] {
@@ -75,4 +75,8 @@ case class SelectedRange(variable: VarRef) extends SelectedLike {
     * this selection.
     */
   def size: GE = stopIndex - startIndex
+}
+
+case class UserValue(key: String, default: Double) extends UserInteraction {
+  def value: GE = impl.UserValueImpl.value(this)
 }

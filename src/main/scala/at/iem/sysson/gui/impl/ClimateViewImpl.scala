@@ -21,14 +21,15 @@ import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import javax.swing.TransferHandler.TransferSupport
 import de.sciss.audiowidgets.{Transport, DualRangeModel, DualRangeSlider}
-import at.iem.sysson.graph.{SelectedValue, SelectedRange}
+import at.iem.sysson.graph
+import graph.{SelectedValue, SelectedRange}
 import collection.breakOut
 import de.sciss.desktop.{DialogSource, OptionPane}
 import de.sciss.synth.{Ops, Synth}
+import de.sciss.swingplus.Spinner
 import scala.concurrent.{ExecutionContext, Future}
 import at.iem.sysson.sound.Sonification
-import scala.util.control.NonFatal
-import scala.util.{Failure, Success}
+import scala.util.Success
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -309,10 +310,14 @@ object ClimateViewImpl {
 
     private val pSonif      = new BoxPanel(Orientation.Horizontal)
     private val ggSonifName = new TextField(16)
+    ggSonifName.maximumSize = ggSonifName.preferredSize
     ggSonifName.editable    = false
     ggSonifName.peer.putClientProperty("JComponent.sizeVariant", "small")
+    private val pUserValues = new BoxPanel(Orientation.Horizontal)  // cannot nest!: new FlowPanel()
 
     private var playing     = Option.empty[Future[Synth]]
+
+    private var userValues  = Map.empty[String, SpinnerNumberModel]
 
     private val transport   = Transport.makeButtonStrip {
       import Transport._
@@ -320,22 +325,21 @@ object ClimateViewImpl {
         GoToBegin {
           rtz()
         },
-        //        Rewind {
-        //          println("Rewind")
-        //        },
         Stop {
           stop()
         },
         Play {
           play()
-          //        },
-          //        FastForward {
-          //          println("Fast-forward")
         }
       )
     }
 
-    private val pSonif2     = new FlowPanel(ggSonifName, transport)
+    //private val pSonif2     = new FlowPanel(ggSonifName, transport, pUserValues)
+    private val pSonif2     = new BoxPanel(Orientation.Horizontal) {
+      contents += ggSonifName
+      contents += transport
+      contents += pUserValues
+    }
     pSonif2.visible         = false
 
     private val butSonif    = new Button(null: String)
@@ -416,9 +420,9 @@ object ClimateViewImpl {
     def patch_=(value: Option[Patch]): Unit = {
       value match {
         case Some(p) =>
-          ggSonifName.text  = p.name
-          pSonif2.visible   = true
-          val interactiveVars = p.graph.sources.collect {
+          ggSonifName.text    = p.name
+          val sources         = p.graph.sources
+          val interactiveVars = sources.collect {
             // case i: UserInteraction => i
             case SelectedRange(v) => v
             case SelectedValue(v) => v
@@ -441,8 +445,37 @@ object ClimateViewImpl {
             }
           }
 
+          val userValues = sources.collect {
+            case graph.UserValue(key, default) =>
+              val m = new SpinnerNumberModel(default, Double.MinValue, Double.MaxValue, 0.1)
+              key -> m
+          }
+
+          // println(userValues.map(_._1).mkString(", "))
+
+          userValues.foreach { case (key, m) =>
+            val lb = new Label(s"${key.capitalize}:")
+            lb.peer.putClientProperty("JComponent.sizeVariant", "small")
+            val spi = new Spinner(m)
+            val d   = spi.preferredSize
+            d.width = math.min(d.width, 80) // XXX TODO WTF
+            spi.preferredSize = d
+            spi.maximumSize   = d
+            pUserValues.contents += HStrut(8)
+            pUserValues.contents += lb
+            pUserValues.contents += spi
+          }
+
+          pUserValues.contents += HGlue
+          pUserValues.contents += HStrut(16)  // OS X resize gadget
+          pSonif2.visible     = true
+          pSonif2.revalidate()
+          pSonif2.repaint()
+
         case _ =>
           pSonif2.visible   = false
+          userValues        = Map.empty
+          pUserValues.contents.clear()
       }
       _patch = value
     }

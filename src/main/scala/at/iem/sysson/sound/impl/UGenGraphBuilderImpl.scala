@@ -6,7 +6,8 @@ import de.sciss.synth
 import synth.impl.BasicUGenGraphBuilder
 import synth._
 import ugen.ControlProxyLike
-import at.iem.sysson.graph.{Var, SelectedLike}
+import at.iem.sysson.graph
+import graph.{Var, SelectedLike}
 import Implicits._
 
 object UGenGraphBuilderImpl {
@@ -25,8 +26,11 @@ object UGenGraphBuilderImpl {
 
     override def toString     = s"UGenGraphBuilder(${sonif.name})@" + hashCode.toHexString
 
+    // OBSOLETE
     private var usedMappings  = Set.empty[String]
+
     private var sections      = Vec.empty[Section]
+    private var userValues    = Set.empty[UGenGraphBuilder.UserValue]
 
     def getMatrixInSource(m: MatrixIn): SonificationSource = {
       val key = m.key
@@ -43,6 +47,12 @@ object UGenGraphBuilderImpl {
 
     private def ctlNameFromSection(section: VariableSection): String =
       section.shape.mkString(s"$$var_${section.name}_", "_", "")
+
+    def addScalarUserValue(value: graph.UserValue): GE = {
+      val ctl = s"$$user_${value.key}"
+      userValues += UGenGraphBuilder.UserValue(controlName = ctl, peer = value)
+      ctl.ir(value.default)
+    }
 
     def addScalarSelection(range: SelectedLike): GE = withVariable(range) { (name, section) =>
       require1D(range, section)
@@ -168,7 +178,7 @@ object UGenGraphBuilderImpl {
         build(controlProxies)
       }
       // (ug, usedMappings)
-      UGenGraphBuilder.Result(ug, sections)
+      UGenGraphBuilder.Result(ug, sections, userValues)
     }
   }
 }

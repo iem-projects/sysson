@@ -42,6 +42,8 @@ object TestLibrary extends Library {
         val plev      = SelectedRange(Pressure)
         // val speed     = RotaryKnob(speedSpec)   // --> position, label etc. via view-map ?
 
+        val speed     = UserValue(key = "speed", default = 1.0)
+
         val sel       = Var().select(latRange, lonRange, timeRange, plev) // .average(Longitude)
         val freq      = 1.0 // speed.kr
         val time      = timeRange.play(freq)

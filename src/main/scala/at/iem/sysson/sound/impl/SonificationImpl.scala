@@ -27,16 +27,12 @@ object SonificationImpl {
   }
 
   private final class Impl(var name: String) extends Sonification {
-    // private var _graph = () => 0f: GE
-    // var matrices = Map.empty[String, MatrixSpec]
 
-    var mapping     = Map.empty[String, SonificationSource]
-    var variableMap = Map.empty[String, VariableSection   ]
+    var mapping       = Map.empty[String, SonificationSource]
+    var variableMap   = Map.empty[String, VariableSection   ]
+    var userValueMap  = Map.empty[String, Double            ]
 
     override def toString = s"Sonification($name)${hashCode().toHexString}"
-
-    //    def graph:     () => GE        = _graph
-    //    def graph_=(body: => GE): Unit = _graph = () => body
 
     var patch = Patch.empty
 
@@ -149,6 +145,10 @@ object SonificationImpl {
               val sd    = SynthDef(synthDefName, res.graph)
               val syn   = Synth(s)
               val prep  = new SynthPreparation(syn)
+
+              userValueMap.foreach { case (key, value) =>
+                prep.ctls :+= (key -> value: ControlSetMap)
+              }
 
               buffers.foreach { b =>
                 val sBuf  = Buffer(s)

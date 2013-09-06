@@ -3,7 +3,7 @@ package graph
 package impl
 
 import de.sciss.synth
-import de.sciss.synth.{ScalarRated, ControlRated, GE, UGenInLike}
+import de.sciss.synth.{ScalarRated, GE, UGenInLike}
 import at.iem.sysson.sound.UGenGraphBuilder
 
 object SelectedRangeImpl {
