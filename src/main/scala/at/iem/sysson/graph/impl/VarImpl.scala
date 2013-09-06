@@ -2,10 +2,9 @@ package at.iem.sysson
 package graph
 package impl
 
-import de.sciss.synth.{ScalarRated, UGenInLike}
+import de.sciss.synth.{GE, ScalarRated, UGenInLike}
 import at.iem.sysson.graph.Var
 import at.iem.sysson.sound.UGenGraphBuilder
-import at.iem.sysson.graph.Var.GE
 
 object VarImpl {
   def Default: Var = Impl(Vec.empty)
@@ -35,8 +34,8 @@ object VarImpl {
     def play(time: SelectedRange.Playing): Var.Playing = new PlayingImpl(this, time)
   }
 
-  private final case class AxisImpl(playing: Var.Playing) extends Var.Axis {
-    def values    : GE = ???
+  private final case class AxisImpl(playing: Var.Playing, ref: VarRef) extends Var.Axis {
+    def values    : GE = new AxisValuesImpl(this)
 
     def indices   : GE = ???
 
@@ -46,13 +45,14 @@ object VarImpl {
   }
 
   private final case class AxisValuesImpl(axis: AxisImpl) extends LazyImpl with ScalarRated {
-    protected def makeUGens(b: UGenGraphBuilder): UGenInLike = ???
+    protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
+      b.addScalarAxis(axis.playing, axis.ref)
   }
 
   private final case class PlayingImpl(variable: Impl, time: SelectedRange.Playing)
     extends LazyImpl with Var.Playing {
 
-    def axis(ref: VarRef): Var.Axis = new AxisImpl(this)
+    def axis(ref: VarRef): Var.Axis = new AxisImpl(this, ref)
 
     protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
       b.addAudioVariable(this)

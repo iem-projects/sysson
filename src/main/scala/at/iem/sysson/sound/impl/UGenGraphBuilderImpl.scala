@@ -7,7 +7,7 @@ import synth.impl.BasicUGenGraphBuilder
 import synth._
 import ugen.ControlProxyLike
 import at.iem.sysson.graph
-import graph.{Var, SelectedLike}
+import at.iem.sysson.graph.{VarRef, SelectedRange, Var, SelectedLike}
 import Implicits._
 
 object UGenGraphBuilderImpl {
@@ -32,14 +32,29 @@ object UGenGraphBuilderImpl {
     private var sections      = Vec.empty[Section]
     private var userValues    = Set.empty[UGenGraphBuilder.UserValue]
 
+    def build(init: SynthGraph): UGenGraphBuilder.Result = {
+      val ug = UGenGraph.use(this) {
+        var g = init // sonif.graph
+        var controlProxies = Set.empty[ControlProxyLike]
+        while (g.nonEmpty) {
+          controlProxies ++= g.controlProxies
+          g = SynthGraph(g.sources.foreach(force))
+        }
+        build(controlProxies)
+      }
+      // (ug, usedMappings)
+      UGenGraphBuilder.Result(ug, sections, userValues)
+    }
+
+    // OBSOLETE
     def getMatrixInSource(m: MatrixIn): SonificationSource = {
       val key = m.key
       sonif.mapping.getOrElse(key, throw Sonification.MissingInput(key))
     }
 
-    private def withVariable[A](range: SelectedLike)(fun: (String, VariableSection) => A): A =
-      range.variable.find(sonif.variableMap)(_._2.variable).fold[A] {
-        sys.error(s"Selection for ${range.variable} not specified")
+    private def withVariable[A](variable: VarRef)(fun: (String, VariableSection) => A): A =
+      variable.find(sonif.variableMap)(_._2.variable).fold[A] {
+        sys.error(s"Selection for $variable not specified")
       } (tup => fun(tup._1, tup._2))
 
     private def require1D(range: SelectedLike, section: VariableSection): Unit =
@@ -54,7 +69,7 @@ object UGenGraphBuilderImpl {
       ctl.ir(value.default)
     }
 
-    def addScalarSelection(range: SelectedLike): GE = withVariable(range) { (name, section) =>
+    def addScalarSelection(range: SelectedLike): GE = withVariable(range.variable) { (name, section) =>
       require1D(range, section)
 
       val ctl         = ctlNameFromSection(section)
@@ -68,7 +83,7 @@ object UGenGraphBuilderImpl {
       Index.kr(buf = ctl.ir, in = 0 until numFrames) // XXX TODO or should enforce audio-rate?
     }
 
-    def addAudioSelection(range: SelectedLike, freq: GE): GE = withVariable(range) { (name, section) =>
+    def addAudioSelection(range: SelectedLike, freq: GE): GE = withVariable(range.variable) { (name, section) =>
       require1D(range, section)
 
       val ctl = ctlNameFromSection(section)
@@ -108,13 +123,13 @@ object UGenGraphBuilderImpl {
       val section0 = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
         sys.error(s"Default variable not specified"))
 
-      withVariable(varPlay.time.range) { (timeName, timeSection) =>
+      withVariable(varPlay.time.range.variable) { (timeName, timeSection) =>
         val timeDim = section0.dimensions.indexWhere(_.name == timeName)
         require (timeDim >= 0, s"Time dimension $timeName is not part of $section0")
 
         val section = (section0 /: varPlay.variable.operations) {
           case (sect, Var.Select(selection)) =>
-            withVariable(selection) { (sectName, sectSect) =>
+            withVariable(selection.variable) { (sectName, sectSect) =>
               require1D(selection, sectSect)
               sect in sectName select sectSect.section.head
             }
@@ -125,6 +140,28 @@ object UGenGraphBuilderImpl {
         addAudioMatrix(controlName = ctl, freq = varPlay.time.freq, section = section, streamDim = timeDim)
       }
     }
+
+    // XXX TODO: DRY - addAudioVariable
+    def addScalarAxis(varPlay: Var.Playing, axis: VarRef): GE = {
+      // cf. VariableAxesAssociations.txt
+
+      val section0 = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
+        sys.error(s"Default variable not specified"))
+
+      withVariable(axis) { case (axisKey, axisSection) =>
+
+      }
+
+      //      val shape_red = ...
+      //      val axis_index = ...
+      //      val div = shape_red.drop(axis_index + 1).product  // note: List.empty[Int].product == 1
+      //      val axis_size = shape_red(axis_index)
+      //      Vec.tabulate(axis_size * div)(i => axis_signal \ (i/div))
+
+      ???
+    }
+
+    ////////////////////////////////////////////
 
     // OBSOLETE
     def addMatrixIn(m: MatrixIn): GE = {
@@ -165,20 +202,6 @@ object UGenGraphBuilderImpl {
 
           BufRd(m.rate, numChannels, buf = inBuf, index = phasor, loop = 0, interp = interp)
       }
-    }
-
-    def build(init: SynthGraph): UGenGraphBuilder.Result = {
-      val ug = UGenGraph.use(this) {
-        var g = init // sonif.graph
-        var controlProxies = Set.empty[ControlProxyLike]
-        while (g.nonEmpty) {
-          controlProxies ++= g.controlProxies
-          g = SynthGraph(g.sources.foreach(force))
-        }
-        build(controlProxies)
-      }
-      // (ug, usedMappings)
-      UGenGraphBuilder.Result(ug, sections, userValues)
     }
   }
 }

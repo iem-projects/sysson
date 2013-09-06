@@ -44,10 +44,10 @@ object Var {
     * variable with the corresponding axes elements.
     */
   trait Axis {
-    def values    : GE
-    def indices   : GE
-    def startValue: GE
-    def endValue  : GE
+    def values    : synth.GE
+    def indices   : synth.GE
+    def startValue: synth.GE
+    def endValue  : synth.GE
   }
 
   // ---- operations ----
