@@ -31,8 +31,9 @@ import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
 object ClimateViewImpl {
-  private class Reduction(val dim: Int, val norm: CheckBox, val name: Label, val slider: DualRangeSlider,
-                          val index: Component, val value: Label)
+  private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
+                          val slider: DualRangeSlider,
+                          val index: Component, val valueLabel: Label)
 
   private lazy val intensityScale: PaintScale = {
     val res = new LookupPaintScale(0.0, 1.0, Color.red)
@@ -108,7 +109,7 @@ object ClimateViewImpl {
         case Some(s) =>
           // the names and indices of the dimensions which should be normalized
           val normDims = redGUI.collect {
-            case r if r.norm.selected => red(r.dim).name -> r.dim
+            case r if r.norm.selected => r.name -> r.dim
           }
           // the minimum and maximum across the selected dimensions
           // (or total min/max if there aren't any dimensions checked)
@@ -163,20 +164,21 @@ object ClimateViewImpl {
       }
     }
 
-    lazy val redGUI: Vec[Reduction] = red.zipWithIndex.map { case (d, idx) =>
+    def mkReduction(dim: nc2.Dimension, idx: Int, update: Boolean): Reduction = {
       val norm  = new CheckBox {
         enabled   = false
         selected  = true
         tooltip   = "Normalize using the selected slice"
+        if (!update) visible = false
       }
-      val n     = d.name
-      val lb    = new Label(n.capitalize + ":") {
+      val name  = dim.name
+      val lb    = new Label(name.capitalize + ":") {
         horizontalAlignment = Alignment.Trailing
         peer.putClientProperty("JComponent.sizeVariant", "small")
       }
-      val m = valueFun(d, units = true)
-      val dimMax = d.size - 1
-      val curr = new Label {
+      val m       = valueFun(dim, units = true)
+      val dimMax  = dim.size - 1
+      val curr    = new Label {
         peer.putClientProperty("JComponent.sizeVariant", "small")
         text    = m(dimMax)
         val szm = preferredSize
@@ -185,30 +187,18 @@ object ClimateViewImpl {
         preferredSize = (math.max(sz0.width, szm.width), math.max(sz0.height, szm.height))
       }
       val spm = new SpinnerNumberModel(0, 0, dimMax, 1)
-      //      val slm = new DefaultBoundedRangeModel(0, 1, 0, dimMax)
-      //      val sl  = new Slider {
-      //        peer.setModel(slm)
-      //        //        min   = 0
-      //        //        max   = dimMax
-      //        //        value = 0
-      //        peer.putClientProperty("JComponent.sizeVariant", "small")
-      //        listenTo(this)
-      //        reactions += {
-      //          case ValueChanged(_) =>
-      //            curr.text = m(value)
-      //
-      //            if (!adjusting) updateData()
-      //        }
-      //      }
       val slm = DualRangeModel(0, dimMax)
       val sl  = new DualRangeSlider(slm) {
         rangeVisible = false  // becomes visible due to sonification mappings
+
         listenTo(this)
         reactions += {
           case ValueChanged(_) =>
             curr.text = m(value)
-            /* if (!valueIsAdjusting) */ updateData()
+            if (update) /* if (!valueIsAdjusting) */ updateData()
         }
+
+        // if (!update) valueVisible = false
       }
 
       slm.addChangeListener(new ChangeListener {
@@ -230,21 +220,31 @@ object ClimateViewImpl {
       }
       val sp  = Component.wrap(spj)
 
-      new Reduction(idx, norm, lb, sl, sp, curr)
+      new Reduction(name, idx, norm, lb, sl, sp, curr)
     }
+
+    lazy val redGUI: Vec[Reduction] = red.zipWithIndex.map { case (d, idx) =>
+      mkReduction(d, idx, update = true)
+    }
+
+    // this is all pretty ugly XXX TODO
+    val xDimRed = mkReduction(xDim, -1, update = false)
+    val yDimRed = mkReduction(yDim, -1, update = false)
+
+    lazy val redGUIAll = xDimRed +: yDimRed +: redGUI
 
     val redGroup  = new GroupPanel {
       theHorizontalLayout is Sequential(
-        Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.norm  )): _*),
-        Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.name  )): _*),
-        Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.slider)): _*),
-        Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.index )): _*),
-        Parallel(redGUI.map(r => add[GroupLayout#ParallelGroup](r.value )): _*)
+        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.norm      )): _*),
+        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.nameLabel )): _*),
+        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.slider    )): _*),
+        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.index     )): _*),
+        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.valueLabel)): _*)
       )
 
       theVerticalLayout is Sequential(
-        redGUI.map { r =>
-          Parallel(Center)(r.norm, r.name, r.slider, r.index, r.value): InGroup[GroupLayout#SequentialGroup]
+        redGUIAll.map { r =>
+          Parallel(Center)(r.norm, r.nameLabel, r.slider, r.index, r.valueLabel): InGroup[GroupLayout#SequentialGroup]
         }: _*
       )
     }
@@ -287,8 +287,17 @@ object ClimateViewImpl {
     chart.removeLegend()
     chart.setBackgroundPaint(Color.white)
 
-    val models: Map[String, DualRangeSlider] = redGUI.map(r => red(r.dim).name -> r.slider)(breakOut)
-    val view    = new Impl(document, section, models, chart, redGroup)
+    //    val xDimGUI = new FlowPanel(xDimRed.nameLabel, xDimRed.slider, xDimRed.index, xDimRed.valueLabel)
+    //    val yDimGUI = new FlowPanel(yDimRed.nameLabel, yDimRed.slider, yDimRed.index, yDimRed.valueLabel)
+    //    val dimPanel = new BoxPanel(Orientation.Vertical) {
+    //      contents += xDimGUI
+    //      contents += yDimGUI
+    //      contents += redGroup
+    //    }
+
+    val models: Map[String, DualRangeSlider] = redGUIAll.map(r => r.name -> r.slider)(breakOut)
+
+    val view    = new Impl(document, section, models, chart, /* dimPanel */ redGroup)
     view
   }
 
