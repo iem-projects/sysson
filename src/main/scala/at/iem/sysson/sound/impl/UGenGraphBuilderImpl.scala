@@ -57,8 +57,8 @@ object UGenGraphBuilderImpl {
         sys.error(s"Selection for $variable not specified")
       }
 
-    private def require1D(range: SelectedLike, section: VariableSection): Unit =
-      require(section.rank == 1, s"Selection for ${range.variable} must be one-dimensional")
+    private def require1D(section: VariableSection, variable: Any): Unit =
+      require(section.rank == 1, s"Selection for $variable must be one-dimensional")
 
     private def ctlNameFromSection(section: VariableSection): String =
       section.shape.mkString(s"$$var_${section.name}_", "_", "")
@@ -71,8 +71,11 @@ object UGenGraphBuilderImpl {
 
     def addScalarSelection(range: SelectedLike): GE = {
       val (_, section) = findVariable(range.variable)
-      require1D(range, section)
+      require1D(section, range.variable)
+      addScalarSection(section)
+    }
 
+    private def addScalarSection(section: VariableSection): GE = {
       val ctl         = ctlNameFromSection(section)
       val uSect       = Section(controlName = ctl, peer = section, streamDim = -1, streamID = -1)
       val numFramesL  = section.size
@@ -86,7 +89,7 @@ object UGenGraphBuilderImpl {
 
     def addAudioSelection(range: SelectedLike, freq: GE): GE = {
       val (_, section) = findVariable(range.variable)
-      require1D(range, section)
+      require1D(section, range.variable)
 
       val ctl = ctlNameFromSection(section)
       addAudioMatrix(controlName = ctl, freq = freq, section = section, streamDim = 0 /* there is only 1D */)
@@ -122,42 +125,70 @@ object UGenGraphBuilderImpl {
     }
 
     def addAudioVariable(varPlay: Var.Playing): GE = {
+      val section       = varSection(varPlay.variable)
+      val (timeName, _) = findVariable(varPlay.time.range.variable)
+      val timeDim = section.dimensions.indexWhere(_.name == timeName)
+      require (timeDim >= 0, s"Time dimension $timeName is not part of $section")
+
+      val ctl = ctlNameFromSection(section)
+      addAudioMatrix(controlName = ctl, freq = varPlay.time.freq, section = section, streamDim = timeDim)
+    }
+
+    private def varSection(variable: Var): VariableSection = {
       val section0 = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
         sys.error(s"Default variable not specified"))
 
-      val (timeName, _) = findVariable(varPlay.time.range.variable)
-      val timeDim = section0.dimensions.indexWhere(_.name == timeName)
-      require (timeDim >= 0, s"Time dimension $timeName is not part of $section0")
-
-      val section = (section0 /: varPlay.variable.operations) {
+      val section = (section0 /: variable.operations) {
         case (sect, Var.Select(selection)) =>
           val (sectName, sectSect) = findVariable(selection.variable)
-          require1D(selection, sectSect)
+          require1D(sectSect, selection.variable)
           sect in sectName select sectSect.section.head
 
         case (sect, op) => sys.error(s"Currently unsupported operation $op for $sect")
       }
 
-      val ctl = ctlNameFromSection(section)
-      addAudioMatrix(controlName = ctl, freq = varPlay.time.freq, section = section, streamDim = timeDim)
+      section
+    }
+
+    private def dimSection(variable: Var, dim: String): VariableSection = {
+      val vs        = varSection(variable)
+      dimSection(vs, dim)
+    }
+
+    private def dimSection(vs: VariableSection, dim: String): VariableSection = {
+      val dimIdx    = vs.dimensions.indexWhere(_.name == dim)
+      require(dimIdx >= 0, s"Section $vs does not contain dimension $dim")
+      val range     = vs.section(dimIdx)
+      val section0  = sonif.variableMap.getOrElse(dim, sys.error(s"Dimension $dim not found in variable map"))
+      require1D(section0, dim)
+      section0.copy(section = Vec(range))
     }
 
     // XXX TODO: DRY - addAudioVariable
     def addScalarAxis(varPlay: Var.Playing, axis: VarRef): GE = {
       // cf. VariableAxesAssociations.txt
 
-      val section0 = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
-        sys.error(s"Default variable not specified"))
+      val section0                = varSection(varPlay.variable)
 
-      val (axisKey, axisSection) = findVariable(axis)
+      val (axisName, _)           = findVariable(axis)
+      val (timeName, _)           = findVariable(varPlay.time.range.variable)
+      val dims                    = section0.dimensions
+      val timeDim                 = dims.indexWhere(_.name == timeName)
+      val axisDim0                = dims.indexWhere(_.name == axisName)
+      require (timeDim  >= 0, s"Time dimension $timeName is not part of $section0")
+      require (axisDim0 >= 0, s"Axis dimension $axisName is not part of $section0")
+      require (axisDim0 != timeDim, s"Axis $axisName is used for temporal unrolling")
+      val axisDim                 = if (axisDim0 < timeDim) axisDim0 else axisDim0 - 1  // after removing time
+      val shapeRed                = section0.shape.patch(timeDim, Vec.empty, 1)
+      val div                     = shapeRed.drop(axisDim + 1).product    // XXX TODO guard against overflow
+      val axisSize                = shapeRed(axisDim)
 
-      //      val shape_red = ...
-      //      val axis_index = ...
-      //      val div = shape_red.drop(axis_index + 1).product  // note: List.empty[Int].product == 1
-      //      val axis_size = shape_red(axis_index)
-      //      Vec.tabulate(axis_size * div)(i => axis_signal \ (i/div))
+      println(s"Reduced shape: $shapeRed, axisSize $axisSize, div $div")
 
-      ???
+      val axisSection             = dimSection(varPlay.variable, axisName)
+      val axisSignal: GE          = addScalarSection(axisSection)
+
+      Vec.tabulate(axisSize * div)(i => axisSignal \ (i/div))
     }
 
     ////////////////////////////////////////////

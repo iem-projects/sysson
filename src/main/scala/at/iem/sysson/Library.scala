@@ -53,6 +53,7 @@ object TestLibrary extends Library {
         // val sig       = WhiteNoise.ar // sel.ar(time)
 
         val latAxis   = data.axis(Latitude)
+        latAxis.values.poll(Impulse.kr(0), label = "lat")
         // NOT YET WORKING:
         // val latAxisN  = (latAxis.values: GE).linlin(latAxis.startValue, latAxis.endValue, -1, 1)
 

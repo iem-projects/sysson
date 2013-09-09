@@ -41,7 +41,7 @@ which means that with varPlaying.axis(<a>).values, we do not need to generate th
 
 let's assume the monophonic buffer w/ Index.kr method again, containing for the respective axis the selected range.
 
-looking again at Arrays.txt, we cannot simply have axis_selection_size values linearly. intead we need to tabulate the var-section-size indices to match the axis_selection_size output proxies, _with the mere exception_ of the highest-index-dimension (which is already linear)
+looking again at Arrays.txt, we cannot simply have axis_selection_size values linearly. instead we need to tabulate the var-section-size indices to match the axis_selection_size output proxies, _with the mere exception_ of the highest-index-dimension (which is already linear)
 
 more precisely, the pattern repeats (modulus) after shape_red.drop(index_of_axis_dim).product channels.
 
