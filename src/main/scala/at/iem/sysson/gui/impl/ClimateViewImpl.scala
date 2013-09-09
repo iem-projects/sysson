@@ -34,9 +34,9 @@ import Implicits._
 import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.renderer.{PaintScale, LookupPaintScale}
 import org.jfree.chart.axis.{SymbolAxis, NumberAxis}
-import org.jfree.chart.plot.XYPlot
+import org.jfree.chart.plot.{ValueMarker, IntervalMarker, XYPlot}
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
-import java.awt.Color
+import java.awt.{BasicStroke, Color}
 import scala.swing.{TextField, Button, BoxPanel, Orientation, CheckBox, BorderPanel, Component, Alignment, Label, Swing}
 import Swing._
 import scalaswingcontrib.group.GroupPanel
@@ -74,8 +74,7 @@ object ClimateViewImpl {
   }
 
   private final class MyMatrix(width: Int, height: Int) extends MatrixSeries("Climate", height, width) {
-    def put(x: Int, y: Int, value: Float): Unit =
-      data(y)(x) = value
+    def put(x: Int, y: Int, value: Float): Unit = data(y)(x) = value
   }
 
   private var _currentSection = Option.empty[VariableSection]
@@ -306,6 +305,51 @@ object ClimateViewImpl {
     val yAxis     = createAxis(yDim)
     val coll      = new MatrixSeriesCollection(data)
     val plot      = new XYPlot(coll, xAxis, yAxis, renderer)
+
+    def mkValueMarker(red: Reduction) = {
+      val res = new ValueMarker(0, new Color(0x00, 0x00, 0xFF, 0x3F),
+        new BasicStroke(1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 2f, Array[Float](2f, 2f), 0f))
+      red.slider.reactions += {
+        case ValueChanged(_) =>
+          val oldValue  = res.getValue
+          val newValue  = red.slider.value
+          if (newValue != oldValue) res.setValue(newValue)
+      }
+      res
+    }
+
+    def mkRangeMarker(red: Reduction) = {
+      val res = new IntervalMarker(0, 0, new Color(0x7F, 0x7F, 0x7F, 0x00), new BasicStroke(1f),
+        new Color(0x00, 0x00, 0xFF, 0x00), new BasicStroke(1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 2f,
+          Array[Float](4f, 4f), 0f), 1f)
+      var visible = false
+      red.slider.reactions += {
+        case ValueChanged(_) =>
+          val newVisible = red.slider.rangeVisible
+          if (visible != newVisible) {
+            visible = newVisible
+            res.setOutlinePaint(if (visible) new Color(0x00, 0x00, 0xFF, 0x3F) else new Color(0x00, 0x00, 0xFF, 0x00))
+          }
+          if (visible) {
+            val oldStart            = res.getStartValue
+            val oldEnd              = res.getEndValue
+            val (newStart, newEnd)  = red.slider.range
+            if (newStart != oldStart) res.setStartValue(newStart)
+            if (newEnd   != oldEnd  ) res.setEndValue  (newEnd  )
+          }
+      }
+      res
+    }
+
+    val xmValue = mkValueMarker(xDimRed)
+    val ymValue = mkValueMarker(yDimRed)
+    val xmRange = mkRangeMarker(xDimRed)
+    val ymRange = mkRangeMarker(yDimRed)
+
+    plot.addDomainMarker(xmValue)
+    plot.addRangeMarker (ymValue)
+    plot.addDomainMarker(xmRange)
+    plot.addRangeMarker (ymRange)
 
     plot.setBackgroundPaint(Color.lightGray)
     plot.setDomainGridlinesVisible(false)
