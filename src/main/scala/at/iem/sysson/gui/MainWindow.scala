@@ -36,15 +36,17 @@ object MainWindow {
   val placementPadding      = 20
 }
 class MainWindow extends WindowImpl {
-  val view  = MainView()
+  val view        = MainView()
 
-  def style   = Window.Regular
-  def handler = SwingApplication.windowHandler
+  def style       = Window.Regular
+  def handler     = SwingApplication.windowHandler
 
-  title     = s"${Main.name} v${Main.version}"
-  //size      = new Dimension(300, 200)
-  contents  = view.component
-  resizable = false
+  component.peer.getRootPane.putClientProperty("apple.awt.brushMetalLook", true)
+
+  title           = s"${Main.name} v${Main.version}"
+  //size          = new Dimension(300, 200)
+  contents        = view.component
+  resizable       = false
   closeOperation  = Window.CloseIgnore
   reactions += {
     case Window.Closing(_) => SwingApplication.quit()

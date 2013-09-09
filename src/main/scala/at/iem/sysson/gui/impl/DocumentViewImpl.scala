@@ -34,7 +34,6 @@ import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.JTree
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
-import de.sciss.audiowidgets.Transport
 import swing.event.TableRowsSelected
 import sound.AudioSystem
 import java.io.File
@@ -278,7 +277,7 @@ private[impl] object DocumentViewImpl {
               closeOperation  = Window.CloseDispose
               title           = s"Plot : ${v.name}"
               contents        = view.component
-              size            = (600, 400)
+              size            = (600, 600)
               GUI.centerOnScreen(this)
 
               bindMenu("file.close", Action(null) { dispose() })

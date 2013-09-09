@@ -37,7 +37,7 @@ import org.jfree.chart.axis.{SymbolAxis, NumberAxis}
 import org.jfree.chart.plot.{ValueMarker, IntervalMarker, XYPlot}
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
 import java.awt.{BasicStroke, Color}
-import scala.swing.{TextField, Button, BoxPanel, Orientation, CheckBox, BorderPanel, Component, Alignment, Label, Swing}
+import scala.swing.{ProgressBar, TextField, Button, BoxPanel, Orientation, CheckBox, BorderPanel, Component, Alignment, Label, Swing}
 import Swing._
 import scalaswingcontrib.group.GroupPanel
 import javax.swing.{TransferHandler, ImageIcon, SpinnerNumberModel, JSpinner, GroupLayout}
@@ -56,6 +56,8 @@ import de.sciss.swingplus.Spinner
 import scala.concurrent.{ExecutionContext, Future}
 import at.iem.sysson.sound.Sonification
 import scala.util.Success
+import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter, Calendar}
+import ucar.nc2.units.DateFormatter
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -87,15 +89,50 @@ object ClimateViewImpl {
 
     var stats = Option.empty[Stats.Variable]
 
+    //    @inline def mkValueString(v: nc2.Variable, d: Double, units: String): String =
+    //      f"$d%1.1f$units"
+
+    // XXX TODO: this should go somewhere else in a utility function
+    def mkUnitsString(v: nc2.Variable): Double => String =
+      v.units.fold((d: Double) => f"$d%1.2f") {
+        case "degrees_north"  => (d: Double) => if (d >= 0) f"$d%1.2f \u00B0N" else f"${-d}%1.2f \u00B0S"
+        case "degrees_east"   => (d: Double) => if (d >= 0) f"$d%1.2f \u00B0E" else f"${-d}%1.2f \u00B0W"
+        case "(0 - 1)"        => (d: Double) => f"${d * 100}%1.1f%%"
+        case "kg m-2 s-1"     => (d: Double) => f"$d%1.2f kg/(m\u00B2s)"
+        case "W m-2"          => (d: Double) => f"$d%1.2f W/m\u00B2"
+        case "m s-1"          => (d: Double) => f"$d%1.2f m/s"
+        case "Pa"             => (d: Double) => f"${d.toInt}%d Pa"
+        case units            =>
+          if (units.startsWith("days since")) {
+            val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(11))
+            (d: Double) => {
+              val dt = date.add(d, CalendarPeriod.Field.Day)
+              CalendarDateFormatter.toDateTimeString(dt)
+            }
+
+          } else if (units.startsWith("hours since")) {
+            val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(12))
+            (d: Double) => {
+              val dt = date.add(d, CalendarPeriod.Field.Hour)
+              CalendarDateFormatter.toDateTimeString(dt)
+            }
+
+          } else {
+            (d: Double) => f"$d%1.2f $units"
+          }
+      }
+
     def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
       vm.get(dim.name) match {
         case Some(v) if v.isFloat =>
           val dat = v.readSafe().float1D
-          (i: Int) => f"${dat(i).toInt}%d${if (units) v.units.map(s => " " + s).getOrElse("") else ""}"
+          val f   = mkUnitsString(v)
+          (i: Int) => f(dat(i))
 
         case Some(v) if v.isDouble  =>
           val dat = v.readSafe().double1D
-          (i: Int) => f"${dat(i).toInt}%d${if (units) v.units.map(s => " " + s).getOrElse("") else ""}"
+          val f   = mkUnitsString(v)
+          (i: Int) => f(dat(i))
 
         case _ => (i: Int) => i.toString
       }
@@ -404,9 +441,20 @@ object ClimateViewImpl {
       )
     }
 
+    private val ggSonifPrepare = new ProgressBar {
+      visible       = false
+      indeterminate = true
+      preferredSize = (24, 24)
+      peer.putClientProperty("JProgressBar.style", "circular")
+    }
+
     //private val pSonif2     = new FlowPanel(ggSonifName, transport, pUserValues)
     private val pSonif2     = new BoxPanel(Orientation.Horizontal) {
       contents += ggSonifName
+      contents += new OverlayPanel {
+        contents += RigidBox(ggSonifPrepare.preferredSize)
+        contents += ggSonifPrepare
+      }
       contents += transport
       contents += pUserValues
     }
@@ -450,12 +498,16 @@ object ClimateViewImpl {
         import ExecutionContext.Implicits.global
         val fut          = son.prepare().map(_.play())
         playing          = Some(fut)
+        ggSonifPrepare.visible = true
 
         def done(): Unit = GUI.defer {
           // only react if we're still talking about the same synth
           if (playing == Some(fut)) markPlayStop(playing = false)
         }
 
+        fut.onComplete {
+          case _ => GUI.defer(ggSonifPrepare.visible = false)
+        }
         fut.onComplete {
           case Success(synth) => synth.onEnd(done())
           case _              => done()

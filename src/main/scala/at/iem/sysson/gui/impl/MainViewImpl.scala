@@ -41,14 +41,14 @@ import synth.Server
 import de.sciss.desktop.impl.DynamicComponentImpl
 
 private[gui] object MainViewImpl {
-  def apply(): MainView = {
+  def apply(background: Option[Color] = None): MainView = {
     requireEDT()
-    new Impl
+    new Impl(background)
   }
 
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 
-  private final class Impl extends MainView with DynamicComponentImpl {
+  private final class Impl(bg: Option[Color]) extends MainView with DynamicComponentImpl {
     private def boot(): Unit = AudioSystem.instance.start()
 
     private lazy val serverStatus = new ServerStatusPanel {
@@ -125,14 +125,14 @@ private[gui] object MainViewImpl {
     }
 
     private lazy val box1 = new BoxPanel(Orientation.Horizontal) {
-      background = Color.white // .black
+      bg.foreach(background = _)
       contents += new Label(null, logo, Alignment.Center) {
         border = BorderFactory.createEmptyBorder(4, 4, 4, 4)
       }
     }
 
     lazy val component = new BoxPanel(Orientation.Vertical) {
-      background = Color.white // black
+      bg.foreach(background = _)
       contents += box1
       contents += mainMeters
       contents += RigidBox((2, 4))

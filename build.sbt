@@ -24,7 +24,7 @@ resolvers += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/content
 
 libraryDependencies ++= {
   Seq(
-    "edu.ucar" %  "netcdf"                  % "4.3.17",
+    "edu.ucar" %  "netcdf"                  % "4.3.18",
     "de.sciss" %% "scalacollider"           % "1.9.+",          // client for SuperCollider
     "de.sciss" %% "scalacolliderswing"      % "1.9.+",          // some graphical features for ScalaCollider
     "de.sciss" %  "scalacolliderugens-spec" % "1.6.2+",         // UGen specs used in the patcher class
