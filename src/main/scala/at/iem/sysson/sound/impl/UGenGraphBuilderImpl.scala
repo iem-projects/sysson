@@ -7,7 +7,7 @@ import synth.impl.BasicUGenGraphBuilder
 import synth._
 import ugen.ControlProxyLike
 import at.iem.sysson.graph
-import at.iem.sysson.graph.{VarRef, SelectedRange, Var, SelectedLike}
+import at.iem.sysson.graph.{VarRef, Var, SelectedLike}
 import Implicits._
 
 object UGenGraphBuilderImpl {
@@ -52,10 +52,10 @@ object UGenGraphBuilderImpl {
       sonif.mapping.getOrElse(key, throw Sonification.MissingInput(key))
     }
 
-    private def withVariable[A](variable: VarRef)(fun: (String, VariableSection) => A): A =
-      variable.find(sonif.variableMap)(_._2.variable).fold[A] {
+    private def findVariable[A](variable: VarRef): (String, VariableSection) =
+      variable.find(sonif.variableMap)(_._2.variable).getOrElse {
         sys.error(s"Selection for $variable not specified")
-      } (tup => fun(tup._1, tup._2))
+      }
 
     private def require1D(range: SelectedLike, section: VariableSection): Unit =
       require(section.rank == 1, s"Selection for ${range.variable} must be one-dimensional")
@@ -69,7 +69,8 @@ object UGenGraphBuilderImpl {
       ctl.ir(value.default)
     }
 
-    def addScalarSelection(range: SelectedLike): GE = withVariable(range.variable) { (name, section) =>
+    def addScalarSelection(range: SelectedLike): GE = {
+      val (_, section) = findVariable(range.variable)
       require1D(range, section)
 
       val ctl         = ctlNameFromSection(section)
@@ -83,7 +84,8 @@ object UGenGraphBuilderImpl {
       Index.kr(buf = ctl.ir, in = 0 until numFrames) // XXX TODO or should enforce audio-rate?
     }
 
-    def addAudioSelection(range: SelectedLike, freq: GE): GE = withVariable(range.variable) { (name, section) =>
+    def addAudioSelection(range: SelectedLike, freq: GE): GE = {
+      val (_, section) = findVariable(range.variable)
       require1D(range, section)
 
       val ctl = ctlNameFromSection(section)
@@ -123,22 +125,21 @@ object UGenGraphBuilderImpl {
       val section0 = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
         sys.error(s"Default variable not specified"))
 
-      withVariable(varPlay.time.range.variable) { (timeName, timeSection) =>
-        val timeDim = section0.dimensions.indexWhere(_.name == timeName)
-        require (timeDim >= 0, s"Time dimension $timeName is not part of $section0")
+      val (timeName, _) = findVariable(varPlay.time.range.variable)
+      val timeDim = section0.dimensions.indexWhere(_.name == timeName)
+      require (timeDim >= 0, s"Time dimension $timeName is not part of $section0")
 
-        val section = (section0 /: varPlay.variable.operations) {
-          case (sect, Var.Select(selection)) =>
-            withVariable(selection.variable) { (sectName, sectSect) =>
-              require1D(selection, sectSect)
-              sect in sectName select sectSect.section.head
-            }
-          case (sect, op) => sys.error(s"Currently unsupported operation $op for $sect")
-        }
+      val section = (section0 /: varPlay.variable.operations) {
+        case (sect, Var.Select(selection)) =>
+          val (sectName, sectSect) = findVariable(selection.variable)
+          require1D(selection, sectSect)
+          sect in sectName select sectSect.section.head
 
-        val ctl = ctlNameFromSection(section)
-        addAudioMatrix(controlName = ctl, freq = varPlay.time.freq, section = section, streamDim = timeDim)
+        case (sect, op) => sys.error(s"Currently unsupported operation $op for $sect")
       }
+
+      val ctl = ctlNameFromSection(section)
+      addAudioMatrix(controlName = ctl, freq = varPlay.time.freq, section = section, streamDim = timeDim)
     }
 
     // XXX TODO: DRY - addAudioVariable
@@ -148,9 +149,7 @@ object UGenGraphBuilderImpl {
       val section0 = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
         sys.error(s"Default variable not specified"))
 
-      withVariable(axis) { case (axisKey, axisSection) =>
-
-      }
+      val (axisKey, axisSection) = findVariable(axis)
 
       //      val shape_red = ...
       //      val axis_index = ...
