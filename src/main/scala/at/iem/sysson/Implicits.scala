@@ -1,3 +1,29 @@
+/*
+ *  Implicits.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Written by Hanns Holger Rutz.
+ *
+ *	This software is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2, june 1991 of the License, or (at your option) any later version.
+ *
+ *	This software is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *	General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public
+ *	License (gpl.txt) along with this software; if not, write to the Free Software
+ *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
+
 package at.iem.sysson
 
 import ucar.{nc2, ma2}
@@ -9,7 +35,8 @@ import scala.concurrent.{Await, Future}
 
 object Implicits {
   final val all = OpenRange.all
-//  final val at  = OpenRange.at
+
+  //  final val at  = OpenRange.at
 
   object end    // used in expressions such as 1 to end
   object start {
@@ -19,10 +46,10 @@ object Implicits {
     def until(e: end.type): OpenRange = OpenRange.all
   }
 
-//  implicit def sectionAll(v: nc2.Variable): VariableSection = {
-//    val s = Vec.fill(v.rank)(all) // new ma2.Section(v.getShape)
-//    new VariableSection(v, s)
-//  }
+  //  implicit def sectionAll(v: nc2.Variable): VariableSection = {
+  //    val s = Vec.fill(v.rank)(all) // new ma2.Section(v.getShape)
+  //    new VariableSection(v, s)
+  //  }
 
   // important: use name distinct from `RichInt` which would otherwise shadow enrichments from ScalaCollider
   implicit class SyRichInt(i: Int) {
@@ -131,8 +158,9 @@ object Implicits {
     def elementType   = peer.getElementType
     def rank          = peer.getRank
     def shape         = peer.getShape.toIndexedSeq
-//    def f1d_force: IndexedSeq[Float] = float1d(force = true)
-//    def f1d: IndexedSeq[Float] = float1d(force = true)
+
+    //    def f1d_force: IndexedSeq[Float] = float1d(force = true)
+    //    def f1d: IndexedSeq[Float] = float1d(force = true)
 
     def isFloat       = peer.getElementType == classOf[Float]
     def isDouble      = peer.getElementType == classOf[Double]
@@ -193,7 +221,7 @@ object Implicits {
 
     private def float1DIter: ma2.IndexIterator = {
       requireFloat()
-//      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
+      //      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
       val sz = peer.getSize
       require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
       peer.getIndexIterator
@@ -201,7 +229,7 @@ object Implicits {
 
     private def double1DIter: ma2.IndexIterator = {
       requireDouble()
-//      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
+      //      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
       val sz = peer.getSize
       require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
       peer.getIndexIterator

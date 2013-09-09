@@ -1,3 +1,29 @@
+/*
+ *  MainViewImpl.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Written by Hanns Holger Rutz.
+ *
+ *	This software is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2, june 1991 of the License, or (at your option) any later version.
+ *
+ *	This software is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *	General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public
+ *	License (gpl.txt) along with this software; if not, write to the Free Software
+ *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
+
 package at.iem.sysson
 package gui
 package impl
@@ -11,7 +37,8 @@ import Swing._
 import sound.AudioSystem
 import GUI.{defer, requireEDT}
 import de.sciss.{osc, synth}
-import synth.{Server, SynthDef}
+import synth.Server
+import de.sciss.desktop.impl.DynamicComponentImpl
 
 private[gui] object MainViewImpl {
   def apply(): MainView = {
@@ -21,15 +48,14 @@ private[gui] object MainViewImpl {
 
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 
-  private final class Impl extends MainView with DynamicView {
+  private final class Impl extends MainView with DynamicComponentImpl {
     private def boot(): Unit = AudioSystem.instance.start()
 
     private lazy val serverStatus = new ServerStatusPanel {
       bootAction = Some(boot _)
     }
-//    {
-//      background = Color.black
-//    }
+
+    //      background = Color.black
 
     private def deferAudioUpdated(): Unit = defer {
       val s = AudioSystem.instance.server
@@ -82,13 +108,13 @@ private[gui] object MainViewImpl {
       case AudioSystem.Stopped    => deferAudioUpdated()
     }
 
-    protected def componentOpened(): Unit = {
+    protected def componentShown(): Unit = {
       AudioSystem.instance.addListener(audioListener)
       deferAudioUpdated()
     }
 
 
-    protected def componentClosed(): Unit =
+    protected def componentHidden(): Unit =
       AudioSystem.instance.removeListener(audioListener)
 
     private lazy val mainMeters = new PeakMeter {
