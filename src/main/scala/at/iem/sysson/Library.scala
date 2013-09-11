@@ -82,8 +82,15 @@ object TestLibrary extends Library {
         // latAxis.values.poll(Impulse.kr(0), label = "lat")
         // NOT YET WORKING:
         // val latAxisN  = (latAxis.values: GE).linlin(latAxis.startValue, latAxis.endValue, -1, 1)
-        latAxis.poll(Impulse.kr(0), "lat")
-        val latAxisN  = latAxis.linlin(-90, 90, -1, 1)
+
+        // latAxis.poll(Impulse.kr(0), "lat")
+
+        val latMin    = Reduce.min(latAxis)
+        val latMax    = Reduce.max(latAxis)
+        val latAxisN  = latAxis.linlin(-90 /* latMin */, 90 /* latMax */, -1, 1)
+
+        latMin.poll(0, "lat-min")
+        latMax.poll(0, "lat-max")
 
         val osc: GE = SinOsc.ar(data * pitch.value)
         //WrapOut(Pan2.ar(Mix.mono(osc) * 0.1))

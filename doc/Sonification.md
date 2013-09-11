@@ -1,5 +1,7 @@
 # Sonification
 
+__NOTE__: Superseded by [Sonification2].
+
 There is currently a very simple interface for the data sonification. It is based on the idea that any multi dimensional variable can be broken down (through slicing) into either one dimensional vectors or two dimensional matrices. Of these, each dimension may be mapped to a spatial or temporal parameter in the sonification.
 
 A temporal parameter is one, where the vector or matrix dimension is unrolled in time at a given rate or over a given total duration.
