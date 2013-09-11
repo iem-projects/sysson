@@ -78,11 +78,12 @@ object TestLibrary extends Library {
         val data      = sel.play(time)
         // val sig       = WhiteNoise.ar // sel.ar(time)
 
-        val latAxis   = data.axis(Latitude)
+        val latAxis   = data.axis(Latitude).values: GE
         // latAxis.values.poll(Impulse.kr(0), label = "lat")
         // NOT YET WORKING:
         // val latAxisN  = (latAxis.values: GE).linlin(latAxis.startValue, latAxis.endValue, -1, 1)
-        val latAxisN  = (latAxis.values: GE).linlin(-90, 90, -1, 1)
+        latAxis.poll(Impulse.kr(0), "lat")
+        val latAxisN  = latAxis.linlin(-90, 90, -1, 1)
 
         val osc: GE = SinOsc.ar(data * pitch.value)
         //WrapOut(Pan2.ar(Mix.mono(osc) * 0.1))
