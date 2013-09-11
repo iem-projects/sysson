@@ -37,8 +37,13 @@ import de.sciss.{synth, osc}
 import de.sciss.file._
 import scala.concurrent.{ExecutionContext, Promise, Future, future, blocking}
 import Implicits._
+import de.sciss.synth.swing.SynthGraphPanel
+import at.iem.sysson.gui.GUI
 
 object SonificationImpl {
+  var DEBUG_GRAPH     = false
+  var DEBUG_WRITEDEF  = false
+
   private final val synthDefName = "$son_play"
 
   def apply(name: String): Sonification = new Impl(name)
@@ -109,6 +114,15 @@ object SonificationImpl {
 
       val prepared: Future[(UGenGraphBuilder.Result, Vec[PreparedBuffer])] = future {
         val res = buildUGens(duration = None)
+
+        if (DEBUG_GRAPH) {
+          GUI.defer {
+            val p = new SynthGraphPanel(patch.name, res.graph, forceDirected = true)
+            p.makeWindow().setVisible(true)
+          }
+        }
+        if (DEBUG_WRITEDEF) _debug_writeDef()
+
         res -> res.sections.map { section =>
           blocking {
             val arr = section.peer.read()

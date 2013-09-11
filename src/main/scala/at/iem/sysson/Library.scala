@@ -87,7 +87,8 @@ object TestLibrary extends Library {
 
         val osc: GE = SinOsc.ar(data * pitch.value)
         //WrapOut(Pan2.ar(Mix.mono(osc) * 0.1))
-        WrapOut(Pan2.ar(osc * 0.1, latAxisN))
+        val pan = Pan2.ar(osc * 0.1, latAxisN)
+        WrapOut(Mix(pan))
 
         // Pan2.ar(osc, sig.axisValues(Latitude).linlin(latRange.startValue, latRange.endValue, -1, 1))
       })),
