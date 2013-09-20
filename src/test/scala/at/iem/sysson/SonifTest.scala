@@ -18,7 +18,7 @@ object SonifTest extends App {
   val iterations  = if (mode == "column") 10 else 0
 
   val son   = Sonification("test")
-  son.patch = Patch("Test", SynthGraph {
+  son.patch = Patch.withoutSource("Test", SynthGraph {
     import synth._
     import ugen._
     val data  = MatrixIn.ar("vec")

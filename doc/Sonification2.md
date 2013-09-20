@@ -79,3 +79,4 @@ To use this value in the synth graph, `speed.value` is called.
 - Visual feedback of where the playback is, as well as pausing and cueing without expensive re-calculation of the data.
 - Synchronising multiple plots with different selections. The online sonifications should appear as proxies in the GUI so that we can "arrange" them, e.g. pan two of them to opposite sides etc.
 - Axis, guide lines and threshold trigger elements. A simplification could be to put them all into the same Synth or a group of paused Synths, and just trigger these online Synths (i.e., no dynamic scheduling of new synths).
+- GUI: should think about some form of docking framework

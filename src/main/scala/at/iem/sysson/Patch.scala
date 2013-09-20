@@ -27,9 +27,15 @@
 package at.iem.sysson
 
 import de.sciss.synth.SynthGraph
-import at.iem.sysson.gui.DragAndDrop
 
 object Patch {
-  val empty = Patch("<empty>", SynthGraph {})
+  val empty = withoutSource("<empty>", SynthGraph {})
+
+  case class Source(name: String, code: String)
+
+  def withoutSource(name: String, graph: SynthGraph): Patch =
+    Patch(source = Patch.Source(name = name, code = ""), graph = graph)
 }
-case class Patch(name: String, graph: SynthGraph)
+case class Patch(source: Patch.Source, graph: SynthGraph) {
+  def name = source.name
+}

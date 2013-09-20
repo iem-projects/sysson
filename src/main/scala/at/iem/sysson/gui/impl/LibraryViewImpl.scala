@@ -29,7 +29,7 @@ package gui
 package impl
 
 import scalaswingcontrib.tree.{Tree, ExternalTreeModel, TreeModel}
-import scala.swing.{ScrollPane, Swing}
+import scala.swing.{Component, ScrollPane, Swing}
 import scalaswingcontrib.event.TreeNodeSelected
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
@@ -66,7 +66,7 @@ object LibraryViewImpl {
           }
 
           val res = opt.map { patch =>
-            DragAndDrop.Transferable(PatchFlavor)(patch)
+            DragAndDrop.Transferable(PatchSourceFlavor)(patch)
           } .orNull
 
           // println(s"createTransferable: $res")
@@ -79,7 +79,7 @@ object LibraryViewImpl {
     val scroll    = new ScrollPane(tree)
     scroll.border = null
 
-    new Impl(library, tree)
+    new Impl(library, scroll)
   }
 
   private object LibraryRenderer extends DefaultTreeCellRenderer {
@@ -93,7 +93,7 @@ object LibraryViewImpl {
     }
   }
 
-  private final class Impl(val library: Library, val component: Tree[Library.Node]) extends LibraryView {
+  private final class Impl(val library: Library, val component: Component) extends LibraryView {
     impl =>
 
     private val f = new WindowImpl {

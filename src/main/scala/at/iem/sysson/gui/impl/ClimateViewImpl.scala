@@ -441,20 +441,18 @@ object ClimateViewImpl {
       )
     }
 
-    private val ggSonifPrepare = new ProgressBar {
+    private def mkIndetProgress() = new ProgressBar {
       visible       = false
       indeterminate = true
       preferredSize = (24, 24)
       peer.putClientProperty("JProgressBar.style", "circular")
     }
 
+    private val ggBusy  = mkIndetProgress()
+
     //private val pSonif2     = new FlowPanel(ggSonifName, transport, pUserValues)
     private val pSonif2     = new BoxPanel(Orientation.Horizontal) {
       contents += ggSonifName
-      contents += new OverlayPanel {
-        contents += RigidBox(ggSonifPrepare.preferredSize)
-        contents += ggSonifPrepare
-      }
       contents += transport
       contents += pUserValues
     }
@@ -466,6 +464,10 @@ object ClimateViewImpl {
     butSonif.tooltip        = "Drop Sonification Patch From the Library Here"
 
     pSonif.contents += butSonif
+    pSonif.contents += new OverlayPanel {
+      contents += RigidBox(ggBusy.preferredSize)
+      contents += ggBusy
+    }
     pSonif.contents += pSonif2
 
     val component = new BorderPanel {
@@ -498,7 +500,7 @@ object ClimateViewImpl {
         import ExecutionContext.Implicits.global
         val fut          = son.prepare().map(_.play())
         playing          = Some(fut)
-        ggSonifPrepare.visible = true
+        ggBusy.visible = true
 
         def done(): Unit = GUI.defer {
           // only react if we're still talking about the same synth
@@ -506,7 +508,7 @@ object ClimateViewImpl {
         }
 
         fut.onComplete {
-          case _ => GUI.defer(ggSonifPrepare.visible = false)
+          case _ => GUI.defer(ggBusy.visible = false)
         }
         fut.onComplete {
           case Success(synth) => synth.onEnd(done())
@@ -608,10 +610,10 @@ object ClimateViewImpl {
       _patch = value
     }
 
-    butSonif.peer.setTransferHandler(new TransferHandler {
+    butSonif.peer.setTransferHandler(new TransferHandler(null) {
       // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
       override def canImport(support: TransferSupport): Boolean = {
-        val res =  if (support.isDataFlavorSupported(PatchFlavor) &&
+        val res =  if (support.isDataFlavorSupported(PatchSourceFlavor) &&
            ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
           support.setDropAction(TransferHandler.LINK)
           true
@@ -623,9 +625,13 @@ object ClimateViewImpl {
       }
 
       override def importData(support: TransferSupport): Boolean = {
-        val t       = support.getTransferable
-        val data    = t.getTransferData(PatchFlavor).asInstanceOf[Patch]
-        patch       = Some(data)
+        val t           = support.getTransferable
+        val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
+        import ExecutionContext.Implicits.global
+        val fut         = Library.compile(source)
+        ggBusy.visible  = true
+        fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
+        fut.foreach { p => patch = Some(p) }
         true
       }
     })
