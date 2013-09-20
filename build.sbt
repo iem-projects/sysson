@@ -33,7 +33,8 @@ libraryDependencies ++= {
     // "de.sciss" %% "audiowidgets-swing"      % "1.3.1",          // some GUI widgets
     "org.jfree" % "jfreechart"              % "1.0.15",         // plotting
     "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // some GUI widgets
-    "org.slf4j" % "slf4j-simple"            % "1.7.5"           // logging (used by netcdf)
+    "org.slf4j" % "slf4j-simple"            % "1.7.5"          // logging (used by netcdf)
+    // "de.sciss" %% "play-json-sealed"        % "0.0.+"           // (transitory) JSON serialisation
   )
 }
 

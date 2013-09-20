@@ -38,13 +38,13 @@ import java.awt.datatransfer.Transferable
 import scalaswingcontrib.event.TreeNodeSelected
 
 object LibraryViewImpl {
-  def apply(library: Library): LibraryView = {
-    val tm = new ExternalTreeModel[Library.Node](library.root :: Nil, {
-      case Library.Branch(_, children) => children
-      case _ => Nil
-    })
+  private def mkTreeModel(library: Library) = new ExternalTreeModel[Library.Node](library.root :: Nil, {
+    case Library.Branch(_, children) => children
+    case _ => Nil
+  })
 
-    lazy val tree = new Tree(tm) {
+  def apply(library: Library): LibraryView = {
+    lazy val tree = new Tree(mkTreeModel(library)) {
       selection.mode  = Tree.SelectionMode.Single
       renderer        = Tree.Renderer.wrap(LibraryRenderer)
       listenTo(selection)
@@ -87,21 +87,38 @@ object LibraryViewImpl {
     def selectedNode: Option[Library.Node] =
       tree.selection.paths.headOption.flatMap(_.lastOption)
 
+    def selectedPath: Option[Vec[Library.Node]] =
+      tree.selection.paths.headOption
+
     lazy val ggAdd = Button("+") {
       val opt   = OptionPane.textInput(message = "Patch Name:", initial = "Patch")
       opt.title = "Add New Patch"
       opt.show(Some(impl.frame)).foreach { name =>
-        println(s"TODO: Add $name")
+        val p       = Patch.Source(name = name, code = "// Patch Synth Graph Code")
+        val b @ Library.Branch(_, _) = tree.model.roots.head
+        val newLib  = new Library {
+          val root = b.copy(children = b.children :+ Library.Child(p))
+        }
+        impl.library = newLib
       }
     }
     ggAdd.peer.putClientProperty("JButton.buttonType", "roundRect")
 
     lazy val ggDelete: Button = Button("\u2212") {
-      selectedNode.foreach {
-        case Library.Branch(name, children) =>
-          println(s"TODO: Delete")
-        case Library.Child(source) =>
-          println(s"TODO: Delete")
+      selectedNode.foreach { node =>
+        val opt = node match {
+          case Library.Branch(name, children) =>
+            OptionPane.confirmation(message = s"Delete branch '$name' with ${children.size} children?",
+              optionType = OptionPane.Options.OkCancel, messageType = OptionPane.Message.Warning)
+          case Library.Child(source) =>
+            OptionPane.confirmation(message = s"Delete patch '${source.name}'?",
+              optionType = OptionPane.Options.OkCancel, messageType = OptionPane.Message.Warning)
+        }
+        opt.title = "Delete Library Node"
+        val res = opt.show(Some(impl.frame))
+        if (res == OptionPane.Result.Ok) {
+          println(s"TODO: Delete $node")
+        }
       }
       ggDelete.enabled = false
       ggEdit  .enabled = false
@@ -110,9 +127,19 @@ object LibraryViewImpl {
     ggDelete.peer.putClientProperty("JButton.buttonType", "roundRect")
 
     lazy val ggEdit: Button = Button("Edit") {
-      selectedNode.foreach {
-        case Library.Child(source) =>
-          println(s"TODO: Edit ${source.name}")
+      selectedPath.foreach {
+        case oldPath @ parent :+ Library.Child(source) =>
+          PatchCodeFrameImpl(source.name, Code.SynthGraph(source.code)) { (newName, newCode) =>
+            val newChild: Library.Node = Library.Child(Patch.Source(name = newName, code = newCode))
+            val indices = oldPath.sliding(2, 1).map { case Seq(p: Library.Branch, c) => p.children.indexOf(c) }
+            val newRoot = (newChild /: (parent zip indices.toList)) {
+              case (c, (p: Library.Branch, idx)) => p.copy(children = p.children.updated(idx, c))
+            }
+            val newLib = new Library {
+              val root = newRoot.asInstanceOf[Library.Branch] // XXX TODO ugly
+            }
+            impl.library = newLib
+          }
         case _ =>
       }
     }
@@ -126,7 +153,7 @@ object LibraryViewImpl {
       add(butPanel, BorderPanel.Position.South )
     }
 
-    lazy val impl: Impl = new Impl(library, panel)
+    lazy val impl: Impl = new Impl(library, tree, panel)
     impl
   }
 
@@ -141,7 +168,9 @@ object LibraryViewImpl {
     }
   }
 
-  private final class Impl(val library: Library, val component: Component) extends LibraryView {
+  private final class Impl(private var _library: Library, tree: Tree[Library.Node],
+                           val component: Component)
+    extends LibraryView {
     impl =>
 
     val frame = new WindowImpl {
@@ -156,6 +185,13 @@ object LibraryViewImpl {
       pack()
       GUI.placeWindow(this, 1f, 0.25f, 20)
       front()
+    }
+
+    def library: Library = _library
+    def library_=(value: Library): Unit = {
+      _library    = value
+      tree.model  = mkTreeModel(value)
+      tree.expandAll()
     }
   }
 }
