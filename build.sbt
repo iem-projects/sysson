@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.3.0"
+version       := "0.4.0-SNAPSHOT"
 
 organization  := "at.iem.sysson" // "de.sciss"  // this should be "at.iem.sysson", but it would require setting up another account on Sonatype. so let's just use my org
 
