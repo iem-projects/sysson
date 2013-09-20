@@ -28,15 +28,14 @@ package at.iem.sysson
 package gui
 package impl
 
-import scalaswingcontrib.tree.{Tree, ExternalTreeModel, TreeModel}
-import scala.swing.{Component, ScrollPane, Swing}
-import scalaswingcontrib.event.TreeNodeSelected
-import ucar.nc2
+import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
+import scala.swing.{BorderPanel, FlowPanel, Button, Component, ScrollPane}
 import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.{JComponent, TransferHandler, JTree}
 import de.sciss.desktop.impl.WindowImpl
-import de.sciss.desktop.Window
+import de.sciss.desktop.{OptionPane, Window}
 import java.awt.datatransfer.Transferable
+import scalaswingcontrib.event.TreeNodeSelected
 
 object LibraryViewImpl {
   def apply(library: Library): LibraryView = {
@@ -45,16 +44,22 @@ object LibraryViewImpl {
       case _ => Nil
     })
 
-    val tree      = new Tree(tm) {
+    lazy val tree = new Tree(tm) {
       selection.mode  = Tree.SelectionMode.Single
       renderer        = Tree.Renderer.wrap(LibraryRenderer)
-      // listenTo(selection)
-      // reactions += {
-      //   case TreeNodeSelected(node: Library.Node) => // XXX TODO
-      // }
+      listenTo(selection)
+      reactions += {
+        case TreeNodeSelected(Library.Branch(_, _)) =>
+          ggDelete.enabled  = true
+          ggEdit  .enabled  = false
+
+        case TreeNodeSelected(Library.Child(_)) =>
+          ggDelete.enabled  = true
+          ggEdit  .enabled  = true
+      }
 
       dragEnabled     = true
-      peer.setTransferHandler(new TransferHandler {
+      peer.setTransferHandler(new TransferHandler(null) {
         // ---- export ----
 
         override def getSourceActions(c: JComponent): Int =
@@ -76,10 +81,53 @@ object LibraryViewImpl {
 
       expandAll()
     }
-    val scroll    = new ScrollPane(tree)
+    lazy val scroll = new ScrollPane(tree)
     scroll.border = null
 
-    new Impl(library, scroll)
+    def selectedNode: Option[Library.Node] =
+      tree.selection.paths.headOption.flatMap(_.lastOption)
+
+    lazy val ggAdd = Button("+") {
+      val opt   = OptionPane.textInput(message = "Patch Name:", initial = "Patch")
+      opt.title = "Add New Patch"
+      opt.show(Some(impl.frame)).foreach { name =>
+        println(s"TODO: Add $name")
+      }
+    }
+    ggAdd.peer.putClientProperty("JButton.buttonType", "roundRect")
+
+    lazy val ggDelete: Button = Button("\u2212") {
+      selectedNode.foreach {
+        case Library.Branch(name, children) =>
+          println(s"TODO: Delete")
+        case Library.Child(source) =>
+          println(s"TODO: Delete")
+      }
+      ggDelete.enabled = false
+      ggEdit  .enabled = false
+    }
+    ggDelete.enabled = false
+    ggDelete.peer.putClientProperty("JButton.buttonType", "roundRect")
+
+    lazy val ggEdit: Button = Button("Edit") {
+      selectedNode.foreach {
+        case Library.Child(source) =>
+          println(s"TODO: Edit ${source.name}")
+        case _ =>
+      }
+    }
+    ggEdit.enabled = false
+    ggEdit.peer.putClientProperty("JButton.buttonType", "roundRect")
+
+    lazy val butPanel = new FlowPanel(ggAdd, ggDelete, ggEdit)
+
+    lazy val panel = new BorderPanel {
+      add(tree    , BorderPanel.Position.Center)
+      add(butPanel, BorderPanel.Position.South )
+    }
+
+    lazy val impl: Impl = new Impl(library, panel)
+    impl
   }
 
   private object LibraryRenderer extends DefaultTreeCellRenderer {
@@ -96,17 +144,17 @@ object LibraryViewImpl {
   private final class Impl(val library: Library, val component: Component) extends LibraryView {
     impl =>
 
-    private val f = new WindowImpl {
+    val frame = new WindowImpl {
       frame =>
 
-      def style   = Window.Regular
-      def handler = SwingApplication.windowHandler
+      def style       = Window.Regular
+      def handler     = SwingApplication.windowHandler
 
-      title     = "Library"
-      contents  = impl.component
-      closeOperation = Window.CloseDispose
+      title           = "Library"
+      contents        = impl.component
+      closeOperation  = Window.CloseDispose
       pack()
-      GUI.placeWindow(this, 1f, 0.25f, 20) // .centerOnScreen(this)
+      GUI.placeWindow(this, 1f, 0.25f, 20)
       front()
     }
   }
