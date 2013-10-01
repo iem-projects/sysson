@@ -28,15 +28,60 @@ package at.iem.sysson
 
 import scala.concurrent.{blocking, Future}
 import scala.collection.mutable
+import de.sciss.model
+import model.Model
+import de.sciss.model.impl.ModelImpl
 
 object Library {
-  sealed trait Node { def name: String }
-  case class Branch(name: String, children: Vec[Node]) extends Node
-  case class Child(patch: Patch.Source) extends Node {
-    def name = patch.name
+  sealed trait Node {
+    var name: String
   }
 
-  // sealed trait Update
+  sealed trait Update {
+    def node: Node
+  }
+
+  object Branch {
+    sealed trait Update extends Library.Update {
+      def branch: Branch
+      def node = branch
+    }
+    sealed trait ChildUpdate extends Update {
+      def index: Int
+      def child: Node
+    }
+    case class Inserted   (branch: Branch, index: Int, child: Node) extends ChildUpdate
+    case class Removed    (branch: Branch, index: Int, child: Node) extends ChildUpdate
+    case class NodeChanged(branch: Branch, index: Int, child: Node, change: Library.Update) extends ChildUpdate
+    case class Renamed    (branch: Branch, change: model.Change[String])  extends Update
+
+    def apply(name: String, children: Node*): Branch = {
+      val res = new Impl(name)
+      children.foreach(res.insert(-1, _))
+      res
+    }
+  }
+  trait Branch extends Node with Model[Branch.Update] {
+    def children: Vec[Library.Node]
+    def insert(index: Int, child: Library.Node): Unit
+    def remove(index: Int): Unit
+  }
+
+  object Leaf {
+    sealed trait Update extends Library.Update {
+      def leaf: Leaf
+      def node = leaf
+    }
+
+    // case class Renamed(leaf: Leaf, change: Change[String]) extends Update
+    case class Changed(leaf: Leaf, source: model.Change[Patch.Source]) extends Update
+
+    def apply(source: Patch.Source): Leaf = new LeafImpl(source)
+  }
+  trait Leaf extends Node with Model[Leaf.Update] {
+    def source: Patch.Source
+    def name = source.name
+  }
 
   private val sync    = new AnyRef
   private val codeMap = new mutable.WeakHashMap[Patch.Source, Patch]
@@ -50,26 +95,85 @@ object Library {
     }
 
   } (Future.successful)
-}
-trait Library /* extends Model[Library.Update] */ {
-  def root: Library.Branch
-}
 
-object TestLibrary extends Library {
-  import Library.{Child, Branch}
+  def apply(name: String, children: Node*): Library = {
+    val res = new Impl(name)
+    children.foreach(res.insert(-1, _))
+    res
+  }
+
+  private final class Impl(name0: String) extends Library with ModelImpl[Branch.Update] {
+    private val sync = new AnyRef
+    private var _children = Vec.empty[Node]
+    private var _name = name0
+
+    def children = _children
+
+    def insert(index: Int, child: Node): Unit = sync.synchronized {
+      if (index >= _children.size) throw new IndexOutOfBoundsException(index.toString)
+
+      val idx = if (index < 0) _children.size else index
+      _children = _children.patch(idx, Vec(child), 0)
+      dispatch(Branch.Inserted(this, idx, child))
+    }
+
+    def remove(index: Int): Unit = sync.synchronized {
+      if (index < 0 || index >= _children.size) throw new IndexOutOfBoundsException(index.toString)
+
+      val child = _children(index)
+      _children = _children.patch(index, Vec.empty, 1)
+      dispatch(Branch.Removed(this, index, child))
+    }
+
+    def name = _name
+    def name_=(value: String): Unit = sync.synchronized {
+      val oldName = _name
+      if (oldName != value) {
+        _name = value
+        dispatch(Branch.Renamed(this, model.Change(oldName, value)))
+      }
+    }
+  }
+
+  private final class LeafImpl(source0: Patch.Source) extends Leaf with ModelImpl[Leaf.Update] {
+    private var _source = source0
+    private val sync = new AnyRef
+
+    def name_=(value: String): Unit = sync.synchronized {
+      if (name != value) {
+        source = source.copy(name = value)
+      }
+    }
+
+    def source = _source
+    def source_=(value: Patch.Source): Unit = sync.synchronized {
+      val oldSource = _source
+      if (oldSource != value) {
+        _source = value
+        dispatch(Leaf.Changed(this, model.Change(oldSource, value)))
+      }
+    }
+  }
+}
+trait Library extends Library.Branch
+
+object TestLibrary {
   // import de.sciss.synth.{GE, SynthGraph, ugen}
   // import ugen._
   // import graph._
 
-  val root = Branch("root",
-    Vec(
-      Child(Patch.Source("Test-Static-Range",
+  import Library.Leaf
+
+  def apply(): Library = {
+    val root = Library("test")
+    val children = Vec(
+      Leaf(Patch.Source("Test-Static-Range",
         """val plevRange = SelectedRange(Pressure)
           |plevRange.values.poll(Impulse.kr(0), label = "plev")
           |""".stripMargin
       )),
 
-      Child(Patch.Source("Test-Dynamic-Range",
+      Leaf(Patch.Source("Test-Dynamic-Range",
         """val timeRange = SelectedRange(Time)
           |val freq      = 1.0 // speed.kr
           |val time: GE  = timeRange.play(freq)
@@ -77,7 +181,7 @@ object TestLibrary extends Library {
           |""".stripMargin
       )),
 
-      Child(Patch.Source("Test-Sonif",
+      Leaf(Patch.Source("Test-Sonif",
         """val latRange  = SelectedRange(Latitude)
           |val lonRange  = SelectedRange(Longitude)
           |val timeRange = SelectedRange(Time)
@@ -117,10 +221,12 @@ object TestLibrary extends Library {
           |""".stripMargin
       )),
 
-      Child(Patch.Source("With-Altitude",
+      Leaf(Patch.Source("With-Altitude",
         """SelectedRange(Altitude)
           |""".stripMargin
       ))
     )
-  )
+    children.foreach(root.insert(-1, _))
+    root
+  }
 }

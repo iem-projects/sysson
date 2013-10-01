@@ -38,8 +38,8 @@ import java.awt.datatransfer.Transferable
 import scalaswingcontrib.event.TreeNodeSelected
 
 object LibraryViewImpl {
-  private def mkTreeModel(library: Library) = new ExternalTreeModel[Library.Node](library.root :: Nil, {
-    case Library.Branch(_, children) => children
+  private def mkTreeModel(library: Library) = new ExternalTreeModel[Library.Node](library :: Nil, {
+    case b: Library.Branch => b.children
     case _ => Nil
   })
 
@@ -49,11 +49,11 @@ object LibraryViewImpl {
       renderer        = Tree.Renderer.wrap(LibraryRenderer)
       listenTo(selection)
       reactions += {
-        case TreeNodeSelected(Library.Branch(_, _)) =>
+        case TreeNodeSelected(_: Library.Branch) =>
           ggDelete.enabled  = true
           ggEdit  .enabled  = false
 
-        case TreeNodeSelected(Library.Child(_)) =>
+        case TreeNodeSelected(_: Library.Leaf) =>
           ggDelete.enabled  = true
           ggEdit  .enabled  = true
       }
@@ -67,7 +67,7 @@ object LibraryViewImpl {
 
         override def createTransferable(c: JComponent): Transferable = {
           val opt = selection.paths.collectFirst {
-            case _ :+ Library.Child(patch) => patch
+            case _ :+ (l: Library.Leaf) => l.source
           }
 
           val res = opt.map { patch =>
@@ -95,11 +95,12 @@ object LibraryViewImpl {
       opt.title = "Add New Patch"
       opt.show(Some(impl.frame)).foreach { name =>
         val p       = Patch.Source(name = name, code = "// Patch Synth Graph Code")
-        val b @ Library.Branch(_, _) = tree.model.roots.head
-        val newLib  = new Library {
-          val root = b.copy(children = b.children :+ Library.Child(p))
-        }
-        impl.library = newLib
+        ???
+        //        val b @ Library.Branch(_, _) = tree.model.roots.head
+        //        val newLib  = new Library {
+        //          val root = b.copy(children = b.children :+ Library.Child(p))
+        //        }
+        //        impl.library = newLib
       }
     }
     ggAdd.peer.putClientProperty("JButton.buttonType", "roundRect")
@@ -107,11 +108,11 @@ object LibraryViewImpl {
     lazy val ggDelete: Button = Button("\u2212") {
       selectedNode.foreach { node =>
         val opt = node match {
-          case Library.Branch(name, children) =>
-            OptionPane.confirmation(message = s"Delete branch '$name' with ${children.size} children?",
+          case b: Library.Branch =>
+            OptionPane.confirmation(message = s"Delete branch '${b.name}' with ${b.children.size} children?",
               optionType = OptionPane.Options.OkCancel, messageType = OptionPane.Message.Warning)
-          case Library.Child(source) =>
-            OptionPane.confirmation(message = s"Delete patch '${source.name}'?",
+          case l: Library.Leaf =>
+            OptionPane.confirmation(message = s"Delete patch '${l.name}'?",
               optionType = OptionPane.Options.OkCancel, messageType = OptionPane.Message.Warning)
         }
         opt.title = "Delete Library Node"
@@ -128,17 +129,18 @@ object LibraryViewImpl {
 
     lazy val ggEdit: Button = Button("Edit") {
       selectedPath.foreach {
-        case oldPath @ parent :+ Library.Child(source) =>
-          PatchCodeFrameImpl(source.name, Code.SynthGraph(source.code)) { (newName, newCode) =>
-            val newChild: Library.Node = Library.Child(Patch.Source(name = newName, code = newCode))
-            val indices = oldPath.sliding(2, 1).map { case Seq(p: Library.Branch, c) => p.children.indexOf(c) }
-            val newRoot = (newChild /: (parent zip indices.toList)) {
-              case (c, (p: Library.Branch, idx)) => p.copy(children = p.children.updated(idx, c))
-            }
-            val newLib = new Library {
-              val root = newRoot.asInstanceOf[Library.Branch] // XXX TODO ugly
-            }
-            impl.library = newLib
+        case oldPath @ parent :+ (l: Library.Leaf) =>
+          PatchCodeFrameImpl(l.name, Code.SynthGraph(l.source.code)) { (newName, newCode) =>
+            ???
+            //            val newChild: Library.Node = Library.Leaf(Patch.Source(name = newName, code = newCode))
+            //            val indices = oldPath.sliding(2, 1).map { case Seq(p: Library.Branch, c) => p.children.indexOf(c) }
+            //            val newRoot = (newChild /: (parent zip indices.toList)) {
+            //              case (c, (p: Library.Branch, idx)) => p.copy(children = p.children.updated(idx, c))
+            //            }
+            //            val newLib = new Library {
+            //              val root = newRoot.asInstanceOf[Library.Branch] // XXX TODO ugly
+            //            }
+            //            impl.library = newLib
           }
         case _ =>
       }
