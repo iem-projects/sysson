@@ -89,6 +89,14 @@ object MenuFactory {
         Item("close", proxy("Close" -> (menu1 + VK_W)))
       ).add(
         Item("close-all", actionCloseAll)
+      ).add(
+        Item("save", proxy("Save" -> (menu1 + VK_S)))
+      )
+    ).add(
+      Group("edit", "Edit").add(
+        Item("undo", proxy("Undo" -> (menu1 + VK_Z)))
+      ).add(
+        Item("redo", proxy("Redo" -> (menu1 + shift + VK_Z)))
       )
     ).add(
       Group("tools", "Tools")

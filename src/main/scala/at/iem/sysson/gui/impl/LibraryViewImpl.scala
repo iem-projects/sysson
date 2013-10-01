@@ -29,11 +29,11 @@ package gui
 package impl
 
 import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
-import scala.swing.{BorderPanel, FlowPanel, Button, Component, ScrollPane}
+import scala.swing.{Action, BorderPanel, FlowPanel, Button, Component, ScrollPane}
 import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.{JComponent, TransferHandler, JTree}
-import de.sciss.desktop.impl.WindowImpl
-import de.sciss.desktop.{OptionPane, Window}
+import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
+import de.sciss.desktop.{UndoManager, OptionPane, Window}
 import java.awt.datatransfer.Transferable
 import scalaswingcontrib.event.TreeNodeSelected
 
@@ -173,7 +173,23 @@ object LibraryViewImpl {
     extends LibraryView {
     impl =>
 
-    val frame = new WindowImpl {
+    lazy val saveAction: Action = new Action(null) {
+      enabled = false
+      def apply(): Unit = ()
+    }
+
+    lazy val undoManager: UndoManager = new UndoManagerImpl {
+      private var _dirty = false
+      def dirty = _dirty
+      def dirty_=(value: Boolean): Unit =
+        if (_dirty != value) {  // crucial in init because we have two cyclic lazy vals (undoManager and frame)!
+          _dirty = value
+          frame.setDirtyFlag(value)
+          saveAction.enabled = value
+        }
+    }
+
+    object frame extends WindowImpl {
       frame =>
 
       def style       = Window.Regular
@@ -182,9 +198,17 @@ object LibraryViewImpl {
       title           = "Library"
       contents        = impl.component
       closeOperation  = Window.CloseDispose
+
+      bindMenus(
+        "file.save" -> saveAction,
+        "edit.undo" -> undoManager.undoAction,
+        "edit.redo" -> undoManager.redoAction
+      )
+
       pack()
       GUI.placeWindow(this, 1f, 0.25f, 20)
-      front()
+
+      def setDirtyFlag(value: Boolean): Unit = dirty = value
     }
 
     def library: Library = _library
@@ -193,5 +217,8 @@ object LibraryViewImpl {
       tree.model  = mkTreeModel(value)
       tree.expandAll()
     }
+
+    // ---- constructor ----
+    frame.front()
   }
 }
