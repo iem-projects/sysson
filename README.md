@@ -44,7 +44,7 @@ A fresh IDEA project is setup by running the following command in the terminal: 
 
 ## Getting Started
 
-See the different files in the `doc` directory.
+See the different files in the `doc` directory. The API documentation for just SysSon can be created by running `./sbt doc` in the main directory. A complete API documentation including the dependencies (ScalaOSC, ScalaCollider etc.) can be created by moving into the `site` directory (`cd site`) and running `../sbt unidoc`. The result will be found in `site/target/scala-2.10/unidoc/index.html`.
 
 ### SysSon home directory
 
