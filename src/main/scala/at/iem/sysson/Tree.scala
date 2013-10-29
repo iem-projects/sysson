@@ -14,6 +14,8 @@ object Tree {
     sealed trait Update[S <: Sys[S], Elem, Upd] extends Tree.Change[S, Elem, Upd] {
       def node: Node[S, Elem, Upd]
     }
+
+    sealed trait Modifiable[S <: Sys[S], Elem, Upd] extends Node[S, Elem, Upd]
   }
   sealed trait Node[S <: Sys[S], Elem, Upd]
 
@@ -29,12 +31,23 @@ object Tree {
     case class Removed [S <: Sys[S], Elem, Upd](idx: Int, node: Node[S, Elem, Upd])
     case class Modified[S <: Sys[S], Elem, Upd](idx: Int, node: Node.Update[S, Elem, Upd])
 
-    trait Modifiable[S <: Sys[S], Elem, Upd] extends Branch[S, Elem, Upd] {
-      def append (node: N)(implicit tx: S#Tx): Unit
-      def prepend(node: N)(implicit tx: S#Tx): Unit
-      def remove (node: N)(implicit tx: S#Tx): Boolean
-      def insert  (idx: Int, node: N)(implicit tx: S#Tx): Unit
-      def removeAt(idx: Int)(implicit tx: S#Tx): N
+    trait Modifiable[S <: Sys[S], Elem, Upd] extends Branch[S, Elem, Upd] with Node.Modifiable[S, Elem, Upd] {
+      type NM = Node.Modifiable[S, Elem, Upd]
+
+      def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, NM]
+
+      def append            (elem: Elem)(implicit tx: S#Tx): Leaf[S, Elem, Upd]
+      def prepend           (elem: Elem)(implicit tx: S#Tx): Leaf[S, Elem, Upd]
+      def insert  (idx: Int, elem: Elem)(implicit tx: S#Tx): Leaf[S, Elem, Upd]
+
+      def appendBranch ()       (implicit tx: S#Tx): Branch.Modifiable[S, Elem, Upd]
+      def prependBranch()       (implicit tx: S#Tx): Branch.Modifiable[S, Elem, Upd]
+      def insertBranch(idx: Int)(implicit tx: S#Tx): Branch.Modifiable[S, Elem, Upd]
+
+      def removeAt(idx: Int)(implicit tx: S#Tx): NM
+      def remove(elem: Elem)(implicit tx: S#Tx): Boolean
+
+      // def removeBranch ()(implicit tx: S#Tx): Branch.Modifiable[S, Elem, Upd]
     }
   }
   trait Branch[S <: Sys[S], Elem, Upd] extends Node[S, Elem, Upd] {
@@ -44,7 +57,9 @@ object Tree {
     def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, N]
     def isEmpty (implicit tx: S#Tx): Boolean
     def nonEmpty(implicit tx: S#Tx): Boolean
-    def apply(idx: Int)(implicit tx: S#Tx): Elem
+    def apply(idx: Int)(implicit tx: S#Tx): N
+    def indexOf(elem: Elem)(implicit tx: S#Tx): Int
+    def indexOfNode(node: N)(implicit tx: S#Tx): Boolean
 
     def changed: EventLike[S, Branch.Update[S, Elem, Upd]]
   }
@@ -56,12 +71,12 @@ object Tree {
       def node = leaf
     }
 
-    def apply[S <: Sys[S], Elem](implicit tx: S#Tx): Leaf[S, Elem, Unit] = ???
-
-    def apply[S <: Sys[S], Elem, Upd](eventView: Elem => EventLike[S, Upd])
-                                     (implicit tx: S#Tx): Leaf[S, Elem, Upd] = ???
+    //    def apply[S <: Sys[S], Elem](implicit tx: S#Tx): Leaf[S, Elem, Unit] = ???
+    //
+    //    def apply[S <: Sys[S], Elem, Upd](eventView: Elem => EventLike[S, Upd])
+    //                                     (implicit tx: S#Tx): Leaf[S, Elem, Upd] = ???
   }
-  trait Leaf[S <: Sys[S], Elem, Upd] extends Node[S, Elem, Upd] {
+  trait Leaf[S <: Sys[S], Elem, Upd] extends Node.Modifiable[S, Elem, Upd] {
     def value: Elem
     def changed: EventLike[S, Leaf.Update[S, Elem, Upd]]
   }
