@@ -1,51 +1,64 @@
 package at.iem.sysson
 
+import de.sciss.lucre.event.EventLike
+import de.sciss.lucre.synth.Sys
+import de.sciss.lucre.data
+import at.iem.sysson.Voodoo.TreeLike.Update
+
 object Voodoo {
   object TreeLike {
-    trait BranchLike[Node] {
-      def children: Iterator[Node]
+    trait BranchLike[S <: Sys[S], L, B] {
+      def children(implicit tx: S#Tx): data.Iterator[S#Tx, Either[L, B]] // Node]
     }
 
-    trait LeafLike[A] {
-      def value: A
+    trait LeafLike[Elem] {
+      def value: Elem
     }
+
+    case class Update[S <: Sys[S], Elem, Repr](tree: Repr, changes: Vec[Change[S, Elem]])
+
+    sealed trait Change[S <: Sys[S], Elem]
   }
-  trait TreeLike[A, Repr <: TreeLike[A, Repr]] {
-    sealed trait Node
+  trait TreeLike[S <: Sys[S], Elem, Repr /* <: TreeLike[S, Elem, Repr] */] {
+    type Leaf <: TreeLike.LeafLike[Elem]
 
-    // case class Leaf(value: A) extends Node
-    type Leaf <: TreeLike.LeafLike[A]
-
-    type Branch <: Node with TreeLike.BranchLike[Node]
+    type Branch <: TreeLike.BranchLike[S, Leaf, Branch]
 
     def root: Branch
+
+    def changed: EventLike[S, TreeLike.Update[S, Elem, Repr]]
   }
 
-  def test[A, T <: TreeLike[A, T]](tree: T): Unit = {
+  def test[S <: Sys[S], Elem, T <: TreeLike[S, Elem, T]](tree: T)(implicit tx: S#Tx): Unit = {
     tree.root.children.foreach {
-      case l: tree.Leaf => println(l.value)
+      case Left(l) => println(l.value)
       case _ =>
     }
   }
 
-  class SubTree[A] extends TreeLike[A, SubTree[A]] {
+  object SubTree {
+
+  }
+  class SubTree[S <: Sys[S], Elem] extends TreeLike[S, Elem, SubTree[S, Elem]] {
+    def changed: EventLike[S, Update[S, Elem, SubTree[S, Elem]]] = ???
+
     def root: Branch = new Branch {
-      def children: Iterator[Node] = ???
+      def children(implicit tx: S#Tx): data.Iterator[S#Tx, Either[Leaf, Branch]] = ???
       val name = "foo"
     }
 
-    trait Leaf extends TreeLike.LeafLike[A] {
+    trait Leaf extends TreeLike.LeafLike[Elem] {
       def name: String
     }
 
-    trait Branch extends Node with TreeLike.BranchLike[Node] {
+    trait Branch extends TreeLike.BranchLike[S, Leaf, Branch] {
       val name: String
     }
   }
 
-  def test2[A](tree: SubTree[A]): Unit = {
+  def test2[S <: Sys[S], Elem](tree: SubTree[S, Elem])(implicit tx: S#Tx): Unit = {
     tree.root.children.foreach {
-      case l: tree.Leaf => println(l.value)
+      case Left(l) => println(l.name)
       case _ =>
     }
   }
