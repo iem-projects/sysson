@@ -47,8 +47,7 @@ object TreeLike extends TreeTypes {
 
   sealed trait BranchChange[S <: Sys[S], BU, LU, B, L]
 
-  case class BranchChanged[S <: Sys[S], BU, LU, B, L](branch: B, change: BU)
-    extends BranchChange[S, BU, LU, B, L]
+  case class BranchChanged[S <: Sys[S], BU, LU, B, L](change: BU) extends BranchChange[S, BU, LU, B, L]
   
   sealed trait ChildUpdate[S <: Sys[S], BU, LU, B, L] extends BranchChange[S, BU, LU, B, L] {
     /** The position of the child among the children of the branch. */

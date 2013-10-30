@@ -3,7 +3,7 @@ package impl
 
 import de.sciss.lucre.synth.{InMemory, Sys}
 import de.sciss.lucre.{event => evt}
-import de.sciss.lucre.event.{Targets, Pull, EventLike}
+import de.sciss.lucre.event.{Pull, EventLike}
 import de.sciss.lucre.expr.Expr
 import de.sciss.lucre.{data, expr}
 import de.sciss.lucre.synth.expr.Strings
@@ -12,8 +12,8 @@ import de.sciss.serial.{DataOutput, DataInput}
 import de.sciss.lucre.stm.Mutable
 
 object LibraryImpl {
-  import TreeLike.{Node, IsLeaf, IsBranch}
-  import Library.{Leaf, Branch}
+  import TreeLike.{Node, IsLeaf, IsBranch, BranchChanged}
+  import Library.{Leaf, Branch, Update => U, BranchUpdate => BU, Renamed, LeafUpdate => LU, BranchChange}
 
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = {
     val targets = evt.Targets[S]
@@ -22,14 +22,16 @@ object LibraryImpl {
   }
 
   private type N [S <: Sys[S]] = Node[BranchImpl[S], LeafImpl[S]]
-  private type U [S <: Sys[S]] = TreeLike.Update[S, Unit, Unit, Library[S], Branch[S], Leaf[S]]
-  private type BU[S <: Sys[S]] = TreeLike.BranchUpdate[S, Unit, Unit, Branch[S], Leaf[S]]
+  private type NU[S <: Sys[S]] = TreeLike.NodeUpdate  [S, Renamed, LU, Branch[S], Leaf[S]]
 
   private def newBranch[S <: Sys[S]](name0: Expr[S, String])(implicit tx: S#Tx): BranchImpl[S] = {
     // val id    = tx.newID()
     val targets = evt.Targets[S]
     val name    = Strings.newVar(name0)
-    val ll      = expr.LinkedList.Modifiable[S, N[S]]
+    val ll      = expr.LinkedList.Modifiable[S, N[S], NU[S]] {
+      // case IsLeaf  (l) => l.changed
+      case IsBranch(b) => b.changed
+    }
     new BranchImpl(targets, name, ll)
   }
 
@@ -39,24 +41,38 @@ object LibraryImpl {
     implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, LeafImpl[S]] =
       anySer.asInstanceOf[serial.Serializer[S#Tx, S#Acc, LeafImpl[S]]]
 
+    def reader[S <: Sys[S]]: evt.Reader[S, LeafImpl[S]] = anySer.asInstanceOf[Ser[S]]
+
     private val anySer = new Ser[InMemory]
 
-    private final class Ser[S <: Sys[S]] extends serial.Serializer[S#Tx, S#Acc, LeafImpl[S]] {
+    def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): LeafImpl[S] = {
+      val targets = evt.Targets.read(in, access)
+      read(in, access, targets)
+    }
+
+    def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): LeafImpl[S] = {
+      val cookie  = in.readInt()
+      require(cookie == SER_VERSION, s"Unexpected cookie $cookie (should be $SER_VERSION)")
+      val name    = Strings.readVar(in, access)
+      val source  = Strings.readVar(in, access)
+      new LeafImpl(targets, name = name, source = source)
+    }
+
+    private final class Ser[S <: Sys[S]]
+      extends serial.Serializer[S#Tx, S#Acc, LeafImpl[S]] with evt.Reader[S, LeafImpl[S]] {
+
       def write(l: LeafImpl[S], out: DataOutput): Unit = l.write(out)
 
-      def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): LeafImpl[S] = {
-        val id      = tx.readID(in, access)
-        val cookie  = in.readInt()
-        require(cookie == SER_VERSION, s"Unexpected cookie $cookie (should be $SER_VERSION)")
-        val name    = Strings.readVar(in, access)
-        val source  = Strings.readVar(in, access)
-        new LeafImpl(id, name = name, source = source)
-      }
+      def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): LeafImpl[S] = LeafImpl.read(in, access)
+
+      def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): LeafImpl[S] =
+        LeafImpl.read(in, access, targets)
     }
   }
-  private final class LeafImpl[S <: Sys[S]](val id: S#ID, val name  : Expr.Var[S, String],
-                                                          val source: Expr.Var[S, String])
-    extends Leaf[S] with Mutable.Impl[S] {
+  private final class LeafImpl[S <: Sys[S]](val targets: evt.Targets[S],
+                                            val name  : Expr.Var[S, String],
+                                            val source: Expr.Var[S, String])
+    extends Leaf[S] /* with Mutable.Impl[S] */ with evt.impl.StandaloneLike[S, LU, LeafImpl[S]] {
 
     def writeData(out: DataOutput): Unit =  {
       out.writeInt(LeafImpl.SER_VERSION)
@@ -68,6 +84,22 @@ object LibraryImpl {
       name  .dispose()
       source.dispose()
     }
+
+    def disconnect()(implicit tx: S#Tx): Unit = {
+      name  .changed ---> this
+      source.changed ---> this
+    }
+
+    def connect()(implicit tx: S#Tx): Unit = {
+      name  .changed -/-> this
+      source.changed -/-> this
+    }
+
+    def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[LU] = {
+      ???
+    }
+
+    def reader: evt.Reader[S, LeafImpl[S]] = LeafImpl.reader[S]
   }
 
   private object BranchImpl {
@@ -89,7 +121,10 @@ object LibraryImpl {
       val cookie  = in.readInt()
       require(cookie == SER_VERSION, s"Unexpected cookie $cookie (should be $SER_VERSION)")
       val name    = Strings.readVar(in, access)
-      val ll      = expr.LinkedList.Modifiable.read[S, N[S]](in, access)
+      val ll      = expr.LinkedList.Modifiable.read[S, N[S], NU[S]] {
+        case IsLeaf  (l) => l.changed
+        case IsBranch(b) => b.changed
+      } (in, access)
       new BranchImpl(targets, name, ll)
     }
 
@@ -105,8 +140,8 @@ object LibraryImpl {
     }
   }
   private final class BranchImpl[S <: Sys[S]](val targets: evt.Targets[S], val name: Expr[S, String],
-                                              ll: expr.LinkedList.Modifiable[S, N[S], Unit])
-    extends Library.Branch[S] with /* Mutable.Impl[S] with */ evt.impl.StandaloneLike[S, U[S], BranchImpl[S]] {
+                                              ll: expr.LinkedList.Modifiable[S, N[S], NU[S]])
+    extends Library.Branch[S] with /* Mutable.Impl[S] with */ evt.impl.StandaloneLike[S, BU[S], BranchImpl[S]] {
 
     def size(implicit tx: S#Tx): Int = ll.size
 
@@ -124,10 +159,10 @@ object LibraryImpl {
     }
 
     def insertLeaf  (idx: Int, name0: Expr[S, String], source0: Expr[S, String])(implicit tx: S#Tx): Leaf[S] = {
-      val id      = tx.newID()
+      val targets = evt.Targets[S]
       val name    = Strings.newVar(name0  )
       val source  = Strings.newVar(source0)
-      val leaf    = new LeafImpl(id, name = name, source = source)
+      val leaf    = new LeafImpl(targets, name = name, source = source)
       ll.insert(idx, IsLeaf(leaf))
       leaf
     }
@@ -149,10 +184,36 @@ object LibraryImpl {
       ll  .dispose()
     }
 
-    def connect   ()(implicit tx: S#Tx) = ???
-    def disconnect()(implicit tx: S#Tx) = ???
+    def connect   ()(implicit tx: S#Tx): Unit = {
+      name.changed ---> this
+      ll  .changed ---> this
+    }
+    def disconnect()(implicit tx: S#Tx) : Unit = {
+      name.changed -/-> this
+      ll  .changed -/-> this
+    }
 
-    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[LibraryImpl.U[S]] = ???
+    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[BU[S]] = {
+      val nameEvt = name.changed
+      val llEvt   = ll  .changed
+      var bch     = Vec.empty[BranchChange[S]]
+      if (pull.isOrigin(nameEvt)) {
+        pull(nameEvt).foreach(ch => bch :+= BranchChanged(Renamed(ch)))
+      }
+
+      if (pull.isOrigin(llEvt)) pull(llEvt).fold(Vec.empty[BranchChange[S]]) { u =>
+        u.changes.map {
+          case expr.LinkedList.Added  (idx, n) => TreeLike.ChildInserted(idx, n)
+          case expr.LinkedList.Removed(idx, n) => TreeLike.ChildRemoved (idx, n)
+          case expr.LinkedList.Element(n, nu)  =>
+            val idx = u.list.indexOf(n)
+            TreeLike.ChildChanged(idx, nu)
+        }
+        ???
+      }
+
+      if (bch.isEmpty) None else Some(TreeLike.BranchUpdate(this, bch))
+    }
 
     def reader: evt.Reader[S, BranchImpl[S]] = BranchImpl.reader[S]
   }
@@ -192,19 +253,15 @@ object LibraryImpl {
       _root.dispose()
     }
 
-    def connect   ()(implicit tx: S#Tx): Unit = ??? // _root ---> this
-
-    def disconnect()(implicit tx: S#Tx): Unit = ??? // _root -/-> this
+    def connect   ()(implicit tx: S#Tx): Unit = _root ---> this
+    def disconnect()(implicit tx: S#Tx): Unit = _root -/-> this
 
     def reader: evt.Reader[S, Impl[S]] = LibraryImpl.reader[S]
 
-    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[U[S]] = {
-      // pull(root).map(???)
-      ???
-    }
+    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[U[S]] = pull(_root).map(TreeLike.Update(this, _))
 
     def root: Branch = _root
 
-    def changed: EventLike[S, U[S]] = ???
+    def changed: EventLike[S, U[S]] = this
   }
 }
