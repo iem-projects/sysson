@@ -14,12 +14,12 @@ trait TreeTypes {
 }
 
 //  trait TreeCompanion[T, L, B] {
-//    type Update[S <: Sys[S], Elem, Upd] = TreeLike.Update[S, Elem, Upd, T, L, B]
+//    type Update[S <: Sys[S], A, LU] = TreeLike.Update[S, A, BU, LU, T, L, B]
 //    val Update = TreeLike.Update
 //  }
 
 object TreeLike extends TreeTypes {
-  trait BranchLike[S <: Sys[S], Elem, B, L] {
+  trait BranchLike[S <: Sys[S], A, B, L] {
     // type N = Node[B, L]
 
     def size    (implicit tx: S#Tx): Int
@@ -30,54 +30,60 @@ object TreeLike extends TreeTypes {
     def indexOf(node: Node[B, L])(implicit tx: S#Tx): Int
     // def indexOfNode(node: N)(implicit tx: S#Tx): Int
 
-    // def changed: EventLike[S, Branch.Update[S, Elem, Upd]]
+    // def changed: EventLike[S, Branch.Update[S, A, LU]]
   }
 
-  trait LeafLike[Elem] {
-    def value: Elem
+  trait LeafLike[A] {
+    def value: A
   }
 
-  case class Update[S <: Sys[S], Elem, Upd, T, B, L](tree: T, branch: BranchUpdate[S, Upd, B, L])
+  case class Update[S <: Sys[S], BU, LU, T, B, L](tree: T, branch: BranchUpdate[S, BU, LU, B, L])
 
-  sealed trait NodeUpdate[S <: Sys[S], Upd, B, L]
+  sealed trait NodeUpdate[S <: Sys[S], BU, LU, B, L]
 
-  case class BranchUpdate[S <: Sys[S], Upd, B, L](branch: B, changes: Vec[BranchChange[S, Upd, B, L]])
-    extends NodeUpdate[S, Upd, B, L]
+  case class BranchUpdate[S <: Sys[S], BU, LU, B, L](branch: B, changes: Vec[BranchChange[S, BU, LU, B, L]])
+    extends NodeUpdate[S, BU, LU, B, L]
 
-  case class LeafUpdate[S <: Sys[S], Upd, B, L](leaf: L, change: Upd)
-    extends NodeUpdate[S, Upd, B, L]
+  case class LeafChanged[S <: Sys[S], BU, LU, B, L](leaf: L, change: LU)
+    extends NodeUpdate[S, BU, LU, B, L]
 
-  sealed trait BranchChange[S <: Sys[S], Upd, B, L] {
+  sealed trait BranchChange[S <: Sys[S], BU, LU, B, L]
+
+  case class BranchChanged[S <: Sys[S], BU, LU, B, L](branch: B, change: BU)
+    extends BranchChange[S, BU, LU, B, L]
+  
+  sealed trait ChildUpdate[S <: Sys[S], BU, LU, B, L] extends BranchChange[S, BU, LU, B, L] {
+    /** The position of the child among the children of the branch. */
     def idx: Int
   }
-  case class Inserted[S <: Sys[S], Upd, B, L](idx: Int, node: Node[L, B])
-    extends BranchChange[S, Upd, B, L]
+  case class ChildInserted[S <: Sys[S], BU, LU, B, L](idx: Int, node: Node[L, B])
+    extends ChildUpdate[S, BU, LU, B, L]
 
-  case class Removed[S <: Sys[S], Upd, B, L](idx: Int, node: Node[L, B])
-    extends BranchChange[S, Upd, B, L]
+  case class ChildRemoved[S <: Sys[S], BU, LU, B, L](idx: Int, node: Node[L, B])
+    extends ChildUpdate[S, BU, LU, B, L]
 
-  case class NodeChange[S <: Sys[S], Upd, B, L](idx: Int, update: NodeUpdate[S, Upd, L, B])
-    extends BranchChange[S, Upd, B, L]
+  case class ChildChanged[S <: Sys[S], BU, LU, B, L](idx: Int, update: NodeUpdate[S, BU, LU, L, B])
+    extends ChildUpdate[S, BU, LU, B, L]
 
-  sealed trait Change[S <: Sys[S], Elem]
+  sealed trait Change[S <: Sys[S], A]
 }
-trait TreeLike[S <: Sys[S], Elem, Upd, Repr] {
-  type Leaf   <: TreeLike.LeafLike[Elem]
-  type Branch <: TreeLike.BranchLike[S, Elem, Branch, Leaf]
+trait TreeLike[S <: Sys[S], A, BU, LU, Repr] {
+  type Leaf   <: TreeLike.LeafLike[A]
+  type Branch <: TreeLike.BranchLike[S, A, Branch, Leaf]
 
   def root: Branch
 
-  def changed: EventLike[S, TreeLike.Update[S, Elem, Upd, Repr, Branch, Leaf]]
+  def changed: EventLike[S, TreeLike.Update[S, BU, LU, Repr, Branch, Leaf]]
 }
 
 object SubTree extends TreeTypes {
-  // type Update[S <: Sys[S], Elem, Upd] = TreeLike.Update[S, Elem, Upd, SubTree[S, Elem, Upd], L, B]
+  // type Update[S <: Sys[S], A, LU] = TreeLike.Update[S, A, BU, LU, SubTree[S, A, LU], L, B]
 }
-class SubTree[S <: Sys[S], Elem, Upd] extends TreeLike[S, Elem, Upd, SubTree[S, Elem, Upd]] {
+class SubTree[S <: Sys[S], A, BU, LU] extends TreeLike[S, A, BU, LU, SubTree[S, A, BU, LU]] {
   import SubTree.Node
   import TreeLike.Update
 
-  def changed: EventLike[S, Update[S, Elem, Upd, SubTree[S, Elem, Upd], Branch, Leaf]] = ???
+  def changed: EventLike[S, Update[S, BU, LU, SubTree[S, A, BU, LU], Branch, Leaf]] = ???
 
   def root: Branch = new Branch {
     def children(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Branch, Leaf]] = ???
@@ -99,17 +105,17 @@ class SubTree[S <: Sys[S], Elem, Upd] extends TreeLike[S, Elem, Upd, SubTree[S, 
     // def indexOfNode(node: N)(implicit tx: S#Tx): Int = ???
   }
 
-  trait Leaf extends TreeLike.LeafLike[Elem] {
+  trait Leaf extends TreeLike.LeafLike[A] {
     def name: String
   }
 
-  trait Branch extends TreeLike.BranchLike[S, Elem, Branch, Leaf] {
+  trait Branch extends TreeLike.BranchLike[S, A, Branch, Leaf] {
     val name: String
   }
 }
 
 object TreeTest {
-  def test1[S <: Sys[S], Elem, Upd, T <: TreeLike[S, Elem, Upd, T]](tree: T)(implicit tx: S#Tx): Unit = {
+  def test1[S <: Sys[S], A, BU, LU, T <: TreeLike[S, A, BU, LU, T]](tree: T)(implicit tx: S#Tx): Unit = {
     import TreeLike.{IsLeaf, IsBranch}
 
     def printLeaves(b: T#Branch): Unit = b.iterator.foreach {
@@ -120,7 +126,7 @@ object TreeTest {
     printLeaves(tree.root)
   }
 
-  def test2[S <: Sys[S], Elem, Upd](tree: SubTree[S, Elem, Upd])(implicit tx: S#Tx): Unit = {
+  def test2[S <: Sys[S]](tree: SubTree[S, _, _, _])(implicit tx: S#Tx): Unit = {
     tree.root.iterator.foreach {
       case Left(l) => println(l.name)
       case _ =>

@@ -16,6 +16,6 @@ object Library {
 
   trait Leaf[S <: Sys[S]] extends TreeLike.LeafLike[Element] with NodeLike[S]
 }
-trait Library[S <: Sys[S]] extends TreeLike[S, Library.Element, Unit, Library[S]] {
+trait Library[S <: Sys[S]] extends TreeLike[S, Library.Element, Unit, Unit, Library[S]] {
 
 }
