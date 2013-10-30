@@ -27,8 +27,8 @@ object Voodoo {
       def isEmpty (implicit tx: S#Tx): Boolean
       def nonEmpty(implicit tx: S#Tx): Boolean
       def apply(idx: Int)(implicit tx: S#Tx): N
-      def indexOf(elem: Elem)(implicit tx: S#Tx): Int
-      def indexOfNode(node: N)(implicit tx: S#Tx): Boolean
+      def indexOf(node: N)(implicit tx: S#Tx): Int
+      // def indexOfNode(node: N)(implicit tx: S#Tx): Int
 
       // def changed: EventLike[S, Branch.Update[S, Elem, Upd]]
     }
@@ -86,7 +86,8 @@ object Voodoo {
 
     def root: Branch = new Branch {
       def children(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Leaf, Branch]] = ???
-      val name = "foo"
+
+      val name = "root"
 
       def size(implicit tx: S#Tx): Int = ???
 
@@ -98,9 +99,9 @@ object Voodoo {
 
       def apply(idx: Int)(implicit tx: S#Tx): N = ???
 
-      def indexOf(elem: Elem)(implicit tx: S#Tx): Int = ???
+      def indexOf(node: N)(implicit tx: S#Tx): Int = ???
 
-      def indexOfNode(node: this.type#N)(implicit tx: S#Tx): Boolean = ???
+      // def indexOfNode(node: N)(implicit tx: S#Tx): Int = ???
     }
 
     trait Leaf extends TreeLike.LeafLike[Elem] {
