@@ -628,7 +628,7 @@ object ClimateViewImpl {
         val t           = support.getTransferable
         val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
         import ExecutionContext.Implicits.global
-        val fut         = Library.compile(source)
+        val fut         = LibraryOLD.compile(source)
         ggBusy.visible  = true
         fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
         fut.foreach { p => patch = Some(p) }

@@ -32,7 +32,7 @@ import de.sciss.model
 import model.Model
 import de.sciss.model.impl.ModelImpl
 
-object Library {
+object LibraryOLD {
   sealed trait Node {
     var name: String
   }
@@ -42,7 +42,7 @@ object Library {
   }
 
   object Branch {
-    sealed trait Update extends Library.Update {
+    sealed trait Update extends LibraryOLD.Update {
       def branch: Branch
       def node = branch
     }
@@ -52,7 +52,7 @@ object Library {
     }
     case class Inserted   (branch: Branch, index: Int, child: Node) extends ChildUpdate
     case class Removed    (branch: Branch, index: Int, child: Node) extends ChildUpdate
-    case class NodeChanged(branch: Branch, index: Int, child: Node, change: Library.Update) extends ChildUpdate
+    case class NodeChanged(branch: Branch, index: Int, child: Node, change: LibraryOLD.Update) extends ChildUpdate
     case class Renamed    (branch: Branch, change: model.Change[String])  extends Update
 
     def apply(name: String, children: Node*): Branch = {
@@ -62,13 +62,13 @@ object Library {
     }
   }
   trait Branch extends Node with Model[Branch.Update] {
-    def children: Vec[Library.Node]
-    def insert(index: Int, child: Library.Node): Unit
+    def children: Vec[LibraryOLD.Node]
+    def insert(index: Int, child: LibraryOLD.Node): Unit
     def remove(index: Int): Unit
   }
 
   object Leaf {
-    sealed trait Update extends Library.Update {
+    sealed trait Update extends LibraryOLD.Update {
       def leaf: Leaf
       def node = leaf
     }
@@ -96,13 +96,13 @@ object Library {
 
   } (Future.successful)
 
-  def apply(name: String, children: Node*): Library = {
+  def apply(name: String, children: Node*): LibraryOLD = {
     val res = new Impl(name)
     children.foreach(res.insert(-1, _))
     res
   }
 
-  private final class Impl(name0: String) extends Library with ModelImpl[Branch.Update] {
+  private final class Impl(name0: String) extends LibraryOLD with ModelImpl[Branch.Update] {
     private val sync = new AnyRef
     private var _children = Vec.empty[Node]
     private var _name = name0
@@ -155,17 +155,17 @@ object Library {
     }
   }
 }
-trait Library extends Library.Branch
+trait LibraryOLD extends LibraryOLD.Branch
 
 object TestLibrary {
   // import de.sciss.synth.{GE, SynthGraph, ugen}
   // import ugen._
   // import graph._
 
-  import Library.Leaf
+  import LibraryOLD.Leaf
 
-  def apply(): Library = {
-    val root = Library("test")
+  def apply(): LibraryOLD = {
+    val root = LibraryOLD("test")
     val children = Vec(
       Leaf(Patch.Source("Test-Static-Range",
         """val plevRange = SelectedRange(Pressure)

@@ -26,14 +26,14 @@
 
 package at.iem.sysson.gui
 
-import at.iem.sysson.Library
+import at.iem.sysson.LibraryOLD
 import scala.swing.Component
 import impl.{LibraryViewImpl => Impl}
 
 object LibraryView {
-  def apply(library: Library): LibraryView = Impl(library)
+  def apply(library: LibraryOLD): LibraryView = Impl(library)
 }
 trait LibraryView {
   def component: Component
-  def library: Library
+  def library: LibraryOLD
 }

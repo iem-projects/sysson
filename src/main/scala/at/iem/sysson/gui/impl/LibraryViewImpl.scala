@@ -38,22 +38,22 @@ import java.awt.datatransfer.Transferable
 import scalaswingcontrib.event.TreeNodeSelected
 
 object LibraryViewImpl {
-  private def mkTreeModel(library: Library) = new ExternalTreeModel[Library.Node](library :: Nil, {
-    case b: Library.Branch => b.children
+  private def mkTreeModel(library: LibraryOLD) = new ExternalTreeModel[LibraryOLD.Node](library :: Nil, {
+    case b: LibraryOLD.Branch => b.children
     case _ => Nil
   })
 
-  def apply(library: Library): LibraryView = {
+  def apply(library: LibraryOLD): LibraryView = {
     lazy val tree = new Tree(mkTreeModel(library)) {
       selection.mode  = Tree.SelectionMode.Single
       renderer        = Tree.Renderer.wrap(LibraryRenderer)
       listenTo(selection)
       reactions += {
-        case TreeNodeSelected(_: Library.Branch) =>
+        case TreeNodeSelected(_: LibraryOLD.Branch) =>
           ggDelete.enabled  = true
           ggEdit  .enabled  = false
 
-        case TreeNodeSelected(_: Library.Leaf) =>
+        case TreeNodeSelected(_: LibraryOLD.Leaf) =>
           ggDelete.enabled  = true
           ggEdit  .enabled  = true
       }
@@ -67,7 +67,7 @@ object LibraryViewImpl {
 
         override def createTransferable(c: JComponent): Transferable = {
           val opt = selection.paths.collectFirst {
-            case _ :+ (l: Library.Leaf) => l.source
+            case _ :+ (l: LibraryOLD.Leaf) => l.source
           }
 
           val res = opt.map { patch =>
@@ -84,10 +84,10 @@ object LibraryViewImpl {
     lazy val scroll = new ScrollPane(tree)
     scroll.border = null
 
-    def selectedNode: Option[Library.Node] =
+    def selectedNode: Option[LibraryOLD.Node] =
       tree.selection.paths.headOption.flatMap(_.lastOption)
 
-    def selectedPath: Option[Vec[Library.Node]] =
+    def selectedPath: Option[Vec[LibraryOLD.Node]] =
       tree.selection.paths.headOption
 
     lazy val ggAdd = Button("+") {
@@ -108,10 +108,10 @@ object LibraryViewImpl {
     lazy val ggDelete: Button = Button("\u2212") {
       selectedNode.foreach { node =>
         val opt = node match {
-          case b: Library.Branch =>
+          case b: LibraryOLD.Branch =>
             OptionPane.confirmation(message = s"Delete branch '${b.name}' with ${b.children.size} children?",
               optionType = OptionPane.Options.OkCancel, messageType = OptionPane.Message.Warning)
-          case l: Library.Leaf =>
+          case l: LibraryOLD.Leaf =>
             OptionPane.confirmation(message = s"Delete patch '${l.name}'?",
               optionType = OptionPane.Options.OkCancel, messageType = OptionPane.Message.Warning)
         }
@@ -129,7 +129,7 @@ object LibraryViewImpl {
 
     lazy val ggEdit: Button = Button("Edit") {
       selectedPath.foreach {
-        case oldPath @ parent :+ (l: Library.Leaf) =>
+        case oldPath @ parent :+ (l: LibraryOLD.Leaf) =>
           PatchCodeFrameImpl(l.name, Code.SynthGraph(l.source.code)) { (newName, newCode) =>
             ???
             //            val newChild: Library.Node = Library.Leaf(Patch.Source(name = newName, code = newCode))
@@ -163,14 +163,14 @@ object LibraryViewImpl {
     override def getTreeCellRendererComponent(tree: JTree, value: Object, isSelected: Boolean, isExpanded: Boolean,
                                               isLeaf: Boolean, row: Int, hasFocus: Boolean): java.awt.Component = {
       val v2 = value match {
-        case n: Library.Node => n.name
+        case n: LibraryOLD.Node => n.name
         case _ => value
       }
       super.getTreeCellRendererComponent(tree, v2, isSelected, isExpanded, isLeaf, row, hasFocus)
     }
   }
 
-  private final class Impl(private var _library: Library, tree: Tree[Library.Node],
+  private final class Impl(private var _library: LibraryOLD, tree: Tree[LibraryOLD.Node],
                            val component: Component)
     extends LibraryView {
     impl =>
@@ -213,8 +213,8 @@ object LibraryViewImpl {
       def setDirtyFlag(value: Boolean): Unit = dirty = value
     }
 
-    def library: Library = _library
-    def library_=(value: Library): Unit = {
+    def library: LibraryOLD = _library
+    def library_=(value: LibraryOLD): Unit = {
       _library    = value
       tree.model  = mkTreeModel(value)
       tree.expandAll()
