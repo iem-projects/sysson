@@ -53,13 +53,13 @@ object TreeLike extends TreeTypes {
     /** The position of the child among the children of the branch. */
     def idx: Int
   }
-  case class ChildInserted[S <: Sys[S], BU, LU, B, L](idx: Int, node: Node[L, B])
+  case class ChildInserted[S <: Sys[S], BU, LU, B, L](idx: Int, node: Node[B, L])
     extends ChildUpdate[S, BU, LU, B, L]
 
-  case class ChildRemoved[S <: Sys[S], BU, LU, B, L](idx: Int, node: Node[L, B])
+  case class ChildRemoved[S <: Sys[S], BU, LU, B, L](idx: Int, node: Node[B, L])
     extends ChildUpdate[S, BU, LU, B, L]
 
-  case class ChildChanged[S <: Sys[S], BU, LU, B, L](idx: Int, update: NodeUpdate[S, BU, LU, L, B])
+  case class ChildChanged[S <: Sys[S], BU, LU, B, L](idx: Int, update: NodeUpdate[S, BU, LU, B, L])
     extends ChildUpdate[S, BU, LU, B, L]
 }
 trait TreeLike[S <: Sys[S], BU, LU, Repr] {

@@ -9,11 +9,10 @@ import de.sciss.lucre.{data, expr}
 import de.sciss.lucre.synth.expr.Strings
 import de.sciss.serial
 import de.sciss.serial.{DataOutput, DataInput}
-import de.sciss.lucre.stm.Mutable
 
 object LibraryImpl {
   import TreeLike.{IsLeaf, IsBranch, BranchChanged}
-  import Library.{Leaf, Branch, Update => U, BranchUpdate => BU, Renamed, LeafUpdate => LU, BranchChange}
+  import Library.{Leaf, Branch, Update => U, BranchUpdate => BU, Renamed, SourceChanged, LeafUpdate => LU, BranchChange, LeafChange}
 
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = {
     val targets = evt.Targets[S]
@@ -112,7 +111,14 @@ object LibraryImpl {
     }
 
     def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[NU[S]] = {
-      ???
+      val nameEvt = name.changed
+      val nameCh  = if (pull.isOrigin(nameEvt)) pull(nameEvt).map(Renamed) else None
+      val ch1     = nameCh.fold[Vec[LeafChange]](Vec.empty)(Vec(_))
+      val sourceEvt = source.changed
+      val sourceCh= if (pull.isOrigin(sourceEvt)) pull(sourceEvt).map(SourceChanged) else None
+      val ch2     = sourceCh.fold(ch1)(ch1 :+ _)
+
+      if (ch2.isEmpty) None else Some(TreeLike.LeafChanged(this, ch2))
     }
 
     // def reader: evt.Reader[S, LeafImpl[S]] = LeafImpl.reader[S]
@@ -218,13 +224,12 @@ object LibraryImpl {
 
       if (pull.isOrigin(llEvt)) pull(llEvt).fold(Vec.empty[BranchChange[S]]) { u =>
         u.changes.map {
-          case expr.LinkedList.Added  (idx, n) => TreeLike.ChildInserted(idx, n.toEither)
-          case expr.LinkedList.Removed(idx, n) => TreeLike.ChildRemoved (idx, n.toEither)
+          case expr.LinkedList.Added  (idx, n) => TreeLike.ChildInserted(idx, n.toEither): BranchChange[S]
+          case expr.LinkedList.Removed(idx, n) => TreeLike.ChildRemoved (idx, n.toEither): BranchChange[S]
           case expr.LinkedList.Element(n, nu)  =>
             val idx = u.list.indexOf(n)
             TreeLike.ChildChanged(idx, nu)
         }
-        ???
       }
 
       if (bch.isEmpty) None else Some(TreeLike.BranchUpdate(this, bch))
