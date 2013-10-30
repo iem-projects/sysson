@@ -5,13 +5,13 @@ import evt.EventLike
 import de.sciss.lucre.synth.Sys
 import impl.{TreeImpl => Impl}
 
-object Tree {
-  case class Update[S <: Sys[S], Elem, Upd](tree: Tree[S, Elem, Upd], changes: Vec[Change[S, Elem, Upd]])
+object TreeOLD {
+  case class Update[S <: Sys[S], Elem, Upd](tree: TreeOLD[S, Elem, Upd], changes: Vec[Change[S, Elem, Upd]])
 
   sealed trait Change[S <: Sys[S], Elem, Upd]
 
   object Node {
-    sealed trait Update[S <: Sys[S], Elem, Upd] extends Tree.Change[S, Elem, Upd] {
+    sealed trait Update[S <: Sys[S], Elem, Upd] extends TreeOLD.Change[S, Elem, Upd] {
       def node: Node[S, Elem, Upd]
     }
 
@@ -87,12 +87,12 @@ object Tree {
     def apply[S <: Sys[S], Elem, Upd](eventView: Elem => EventLike[S, Upd])
                                      (implicit tx: S#Tx): Modifiable[S, Elem, Upd] = ???
   }
-  trait Modifiable[S <: Sys[S], Elem, Upd] extends Tree[S, Elem, Upd] {
-    def root: Tree.Branch.Modifiable[S, Elem, Upd]
+  trait Modifiable[S <: Sys[S], Elem, Upd] extends TreeOLD[S, Elem, Upd] {
+    def root: TreeOLD.Branch.Modifiable[S, Elem, Upd]
   }
 }
-trait Tree[S <: Sys[S], Elem, Upd] extends stm.Mutable[S#ID, S#Tx] {
-  def root: Tree.Branch[S, Elem, Upd]
+trait TreeOLD[S <: Sys[S], Elem, Upd] extends stm.Mutable[S#ID, S#Tx] {
+  def root: TreeOLD.Branch[S, Elem, Upd]
 
-  def changed: EventLike[S, Tree.Update[S, Elem, Upd]]
+  def changed: EventLike[S, TreeOLD.Update[S, Elem, Upd]]
 }

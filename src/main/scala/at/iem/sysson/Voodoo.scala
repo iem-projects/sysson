@@ -6,28 +6,31 @@ import de.sciss.lucre.data
 import at.iem.sysson.Voodoo.TreeLike.Update
 
 object Voodoo {
-  val Node              = Either
-  type Node[+B, +L]     = Either[B, L]
-  val IsBranch          = Left
-  type IsBranch[+B, +L] = Left[B, L]
-  val IsLeaf            = Right
-  type IsLeaf[+B, +L]   = Right[B, L]
+  trait TreeTypes {
+    val Node              = Either
+    type Node[+B, +L]     = Either[B, L]
+    val IsBranch          = Left
+    type IsBranch[+B, +L] = Left[B, L]
+    val IsLeaf            = Right
+    type IsLeaf[+B, +L]   = Right[B, L]
+  }
 
+  // XXX TODO: should we develop this?
   trait TreeCompanion[T, L, B] {
     type Update[S <: Sys[S], Elem, Upd] = TreeLike.Update[S, Elem, Upd, T, L, B]
     val Update = TreeLike.Update
   }
 
-  object TreeLike {
+  object TreeLike extends TreeTypes {
     trait BranchLike[S <: Sys[S], Elem, B, L] {
-      type N = Node[B, L]
+      // type N = Node[B, L]
 
       def size    (implicit tx: S#Tx): Int
-      def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, N]
+      def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, Node[B, L]]
       def isEmpty (implicit tx: S#Tx): Boolean
       def nonEmpty(implicit tx: S#Tx): Boolean
-      def apply(idx: Int)(implicit tx: S#Tx): N
-      def indexOf(node: N)(implicit tx: S#Tx): Int
+      def apply(idx: Int)(implicit tx: S#Tx): Node[B, L]
+      def indexOf(node: Node[B, L])(implicit tx: S#Tx): Int
       // def indexOfNode(node: N)(implicit tx: S#Tx): Int
 
       // def changed: EventLike[S, Branch.Update[S, Elem, Upd]]
@@ -61,9 +64,8 @@ object Voodoo {
 
     sealed trait Change[S <: Sys[S], Elem]
   }
-  trait TreeLike[S <: Sys[S], Elem, Upd, Repr /* <: TreeLike[S, Elem, Repr] */] {
-    type Leaf <: TreeLike.LeafLike[Elem]
-
+  trait TreeLike[S <: Sys[S], Elem, Upd, Repr] {
+    type Leaf   <: TreeLike.LeafLike[Elem]
     type Branch <: TreeLike.BranchLike[S, Elem, Branch, Leaf]
 
     def root: Branch
@@ -72,34 +74,40 @@ object Voodoo {
   }
 
   def test[S <: Sys[S], Elem, Upd, T <: TreeLike[S, Elem, Upd, T]](tree: T)(implicit tx: S#Tx): Unit = {
-    tree.root.iterator.foreach {
-      case IsLeaf(l) => println(l.value)
-      case _ =>
+    import TreeLike.{IsLeaf, IsBranch}
+
+    def printLeaves(b: T#Branch): Unit = b.iterator.foreach {
+      case IsLeaf(l)    => println(l.value)
+      case IsBranch(c)  => printLeaves(c)
     }
+
+    printLeaves(tree.root)
   }
 
-  object SubTree {
+  object SubTree extends TreeTypes {
 
   }
   class SubTree[S <: Sys[S], Elem, Upd] extends TreeLike[S, Elem, Upd, SubTree[S, Elem, Upd]] {
+    import SubTree.{IsLeaf, Node}
+
     def changed: EventLike[S, Update[S, Elem, Upd, SubTree[S, Elem, Upd], Branch, Leaf]] = ???
 
     def root: Branch = new Branch {
-      def children(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Leaf, Branch]] = ???
+      def children(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Branch, Leaf]] = ???
 
       val name = "root"
 
       def size(implicit tx: S#Tx): Int = ???
 
-      def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, N] = ???
+      def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Branch, Leaf]] = ???
 
       def isEmpty(implicit tx: S#Tx): Boolean = ???
 
       def nonEmpty(implicit tx: S#Tx): Boolean = ???
 
-      def apply(idx: Int)(implicit tx: S#Tx): N = ???
+      def apply(idx: Int)(implicit tx: S#Tx): Node[Branch, Leaf] = ???
 
-      def indexOf(node: N)(implicit tx: S#Tx): Int = ???
+      def indexOf(node: Node[Branch, Leaf])(implicit tx: S#Tx): Int = ???
 
       // def indexOfNode(node: N)(implicit tx: S#Tx): Int = ???
     }
