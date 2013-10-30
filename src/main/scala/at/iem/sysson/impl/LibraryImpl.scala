@@ -3,12 +3,13 @@ package impl
 
 import de.sciss.lucre.synth.{InMemory, Sys}
 import de.sciss.lucre.{event => evt}
-import de.sciss.lucre.event.{Targets, Pull, EventLike}
+import de.sciss.lucre.event.{Pull, EventLike}
 import de.sciss.lucre.expr.Expr
 import de.sciss.lucre.{data, expr}
 import de.sciss.lucre.synth.expr.Strings
 import de.sciss.serial
 import de.sciss.serial.{DataOutput, DataInput}
+import scala.annotation.switch
 
 object LibraryImpl {
   import TreeLike.{IsLeaf, IsBranch, BranchChanged}
@@ -20,7 +21,6 @@ object LibraryImpl {
     new Impl(targets, root)
   }
 
-  // private type N [S <: Sys[S]] = Node[BranchImpl[S], LeafImpl[S]]
   private type NU[S <: Sys[S]] = TreeLike.NodeUpdate[S, Renamed, LU, Branch[S], Leaf[S]]
 
   private object NodeImpl {
@@ -33,11 +33,19 @@ object LibraryImpl {
     private final class Ser[S <: Sys[S]]
       extends serial.Serializer[S#Tx, S#Acc, NodeImpl[S]] with evt.Reader[S, NodeImpl[S]] {
 
-      def write(n: NodeImpl[S], out: DataOutput): Unit = ???
+      def write(n: NodeImpl[S], out: DataOutput): Unit = n.write(out)
 
-      def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): NodeImpl[S] with evt.Node[S] = ???
+      def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): NodeImpl[S] =
+        (in.readByte(): @switch) match {
+          case LEAF_COOKIE    => LeafImpl  .readIdentified(in, access, targets)
+          case BRANCH_COOKIE  => BranchImpl.readIdentified(in, access, targets)
+          case other          => sys.error(s"Unexpected cookie $other")
+        }
 
-      def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): NodeImpl[S] = ???
+      def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): NodeImpl[S] = {
+        val targets = evt.Targets.read(in, access)
+        read(in, access, targets)
+      }
     }
   }
   sealed trait NodeImpl[S <: Sys[S]] extends evt.impl.StandaloneLike[S, NU[S], NodeImpl[S]] {
@@ -48,49 +56,29 @@ object LibraryImpl {
 
   type N[S <: Sys[S]] = TreeLike.Node[Branch[S], Leaf[S]]
 
+  private final val IMPL_SER_VERSION  = 0x4C696200  // "Lib\0"
+  private final val NODE_SER_VERSION  = 0x4C69624E  // "LibN"
+  private final val BRANCH_COOKIE     = 1
+  private final val LEAF_COOKIE       = 0
+
   private object LeafImpl {
-    final val SER_VERSION = 0x4C69624C  // "LibL"
-
-    implicit def serializer[S <: Sys[S]]: evt.Serializer[S, Leaf /* Impl */[S]] =
-      anySer.asInstanceOf[evt.Serializer[S, Leaf /* Impl */[S]]]
-
-    def reader[S <: Sys[S]]: evt.Reader[S, LeafImpl[S]] = anySer.asInstanceOf[Ser[S]]
-
-    private val anySer = new Ser[InMemory]
-
-    def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): LeafImpl[S] = {
-      val targets = evt.Targets.read(in, access)
-      read(in, access, targets)
-    }
-
-    def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): LeafImpl[S] = {
-      val cookie  = in.readInt()
-      require(cookie == SER_VERSION, s"Unexpected cookie $cookie (should be $SER_VERSION)")
+    def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
+                                   (implicit tx: S#Tx): LeafImpl[S] = {
       val name    = Strings.readVar(in, access)
       val source  = Strings.readVar(in, access)
       new LeafImpl(targets, name = name, source = source)
-    }
-
-    private final class Ser[S <: Sys[S]]
-      extends serial.Serializer[S#Tx, S#Acc, Leaf /* Impl */[S]] with evt.Reader[S, LeafImpl[S]] {
-
-      def write(l: Leaf /* Impl */[S], out: DataOutput): Unit = l.write(out)
-
-      def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): LeafImpl[S] = LeafImpl.read(in, access)
-
-      def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): LeafImpl[S] =
-        LeafImpl.read(in, access, targets)
     }
   }
   private final class LeafImpl[S <: Sys[S]](val targets: evt.Targets[S],
                                             val name  : Expr.Var[S, String],
                                             val source: Expr.Var[S, String])
-    extends Leaf[S] with NodeImpl[S] /* with evt.impl.StandaloneLike[S, LU, LeafImpl[S]] */ {
+    extends Leaf[S] with NodeImpl[S] {
 
     def toEither = IsLeaf(this)
 
     def writeData(out: DataOutput): Unit =  {
-      out.writeInt(LeafImpl.SER_VERSION)
+      out.writeInt(NODE_SER_VERSION)
+      out.writeByte(LEAF_COOKIE)
       name  .write(out)
       source.write(out)
     }
@@ -120,42 +108,26 @@ object LibraryImpl {
 
       if (ch2.isEmpty) None else Some(TreeLike.LeafChanged(this, ch2))
     }
-
-    // def reader: evt.Reader[S, LeafImpl[S]] = LeafImpl.reader[S]
   }
 
   private object BranchImpl {
-    final val SER_VERSION = 0x4C696242  // "LibB"
-
-    implicit def serializer[S <: Sys[S]]: evt.Serializer[S, Branch /* Impl */[S]] =
-      anySer.asInstanceOf[evt.Serializer[S, Branch /* Impl */[S]]]
-
-    def reader[S <: Sys[S]]: evt.Reader[S, BranchImpl[S]] = anySer.asInstanceOf[Ser[S]]
-
-    private val anySer = new Ser[InMemory]
-
     def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): BranchImpl[S] = {
       val targets = evt.Targets.read(in, access)
       read(in, access, targets)
     }
 
-    def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): BranchImpl[S] = {
-      val cookie  = in.readInt()
-      require(cookie == SER_VERSION, s"Unexpected cookie $cookie (should be $SER_VERSION)")
+    private def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
+                                 (implicit tx: S#Tx): BranchImpl[S] = {
+      val cookie  = in.readByte()
+      require(cookie == BRANCH_COOKIE, s"Unexpected cookie $cookie (should be $BRANCH_COOKIE)")
+      readIdentified(in, access, targets)
+    }
+
+    def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
+                                   (implicit tx: S#Tx): BranchImpl[S] = {
       val name    = Strings.readVar(in, access)
       val ll      = expr.LinkedList.Modifiable.read[S, NodeImpl[S], NU[S]](identity)(in, access)
       new BranchImpl(targets, name, ll)
-    }
-
-    private final class Ser[S <: Sys[S]]
-      extends serial.Serializer[S#Tx, S#Acc, Branch /* Impl */[S]] with evt.Reader[S, BranchImpl[S]] {
-
-      def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): BranchImpl[S] =
-        BranchImpl.read(in, access, targets)
-
-      def write(b: Branch /* Impl */[S], out: DataOutput): Unit = b.write(out)
-
-      def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): BranchImpl[S] = BranchImpl.read(in, access)
     }
   }
   private final class BranchImpl[S <: Sys[S]](val targets: evt.Targets[S], val name: Expr[S, String],
@@ -195,7 +167,8 @@ object LibraryImpl {
     }
 
     def writeData(out: DataOutput): Unit = {
-      out.writeInt(BranchImpl.SER_VERSION)
+      out.writeInt(NODE_SER_VERSION)
+      out.writeByte(BRANCH_COOKIE)
       name.write(out)
       ll  .write(out)
     }
@@ -234,19 +207,14 @@ object LibraryImpl {
 
       if (bch.isEmpty) None else Some(TreeLike.BranchUpdate(this, bch))
     }
-
-    // def reader: evt.Reader[S, BranchImpl[S]] = BranchImpl.reader[S]
   }
 
   private def newBranch[S <: Sys[S]](name0: Expr[S, String])(implicit tx: S#Tx): BranchImpl[S] = {
-    // val id    = tx.newID()
     val targets = evt.Targets[S]
     val name    = Strings.newVar(name0)
     val ll      = expr.LinkedList.Modifiable[S, NodeImpl[S], NU[S]](identity)
     new BranchImpl(targets, name, ll)
   }
-
-  private final val IMPL_SER_VERSION = 0x4C696200  // "Lib\0"
 
   def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library[S]] =
     anySer.asInstanceOf[Ser[S]]
