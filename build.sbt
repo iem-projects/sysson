@@ -22,9 +22,10 @@ resolvers    += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/cont
 libraryDependencies ++= {
   Seq(
     "edu.ucar" %  "netcdf"                  % "4.3.18",
-    "de.sciss" %% "lucresynth"              % "2.0.+",          // sound system
+    // "de.sciss" %% "lucresynth"              % "2.0.+",          // sound system
     // "de.sciss" %% "lucredata"               % "2.2.1+",
-    "de.sciss" %% "lucreevent"              % "2.4.+",
+    // "de.sciss" %% "lucreevent"              % "2.4.+",
+    "de.sciss" %% "soundprocesses"          % "2.0.+",
     "de.sciss" %% "scalacolliderswing"      % "1.10.+",         // sound widgets, interpreter
     // "de.sciss" %  "scalacolliderugens-spec" % "1.7.+",       // UGen specs used in the patcher class
     "de.sciss" %% "desktop"                 % "0.3.4+",         // application framework
