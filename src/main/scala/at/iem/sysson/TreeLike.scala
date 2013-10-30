@@ -13,7 +13,7 @@ trait TreeTypes {
 }
 
 object TreeLike extends TreeTypes {
-  trait BranchLike[S <: Sys[S], B, L] {
+  trait Branch[S <: Sys[S], B, L] {
     def size    (implicit tx: S#Tx): Int
     def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, Node[B, L]]
     def isEmpty (implicit tx: S#Tx): Boolean
@@ -21,6 +21,19 @@ object TreeLike extends TreeTypes {
     def apply(idx: Int)(implicit tx: S#Tx): Node[B, L]
     def indexOf(node: Node[B, L])(implicit tx: S#Tx): Int
   }
+
+  //  trait ModifiableBranch[S <: Sys[S], B, L] extends Branch[S, B, L] {
+  //    def append            (elem: Elem)(implicit tx: S#Tx): Leaf[S, Elem, Upd]
+  //    def prepend           (elem: Elem)(implicit tx: S#Tx): Leaf[S, Elem, Upd]
+  //    def insert  (idx: Int, elem: Elem)(implicit tx: S#Tx): Leaf[S, Elem, Upd]
+  //
+  //    def appendBranch ()       (implicit tx: S#Tx): Branch.Modifiable[S, Elem, Upd]
+  //    def prependBranch()       (implicit tx: S#Tx): Branch.Modifiable[S, Elem, Upd]
+  //    def insertBranch(idx: Int)(implicit tx: S#Tx): Branch.Modifiable[S, Elem, Upd]
+  //
+  //    def removeAt(idx: Int)(implicit tx: S#Tx): NM
+  //    def remove(elem: Elem)(implicit tx: S#Tx): Boolean
+  //  }
 
   case class Update[S <: Sys[S], BU, LU, T, B, L](tree: T, branch: BranchUpdate[S, BU, LU, B, L])
 
@@ -52,7 +65,7 @@ object TreeLike extends TreeTypes {
 }
 trait TreeLike[S <: Sys[S], BU, LU, Repr] {
   type Leaf
-  type Branch <: TreeLike.BranchLike[S, Branch, Leaf]
+  type Branch <: TreeLike.Branch[S, Branch, Leaf]
 
   def root: Branch
 
@@ -89,7 +102,7 @@ class SubTree[S <: Sys[S], A, BU, LU] extends TreeLike[S, BU, LU, SubTree[S, A, 
     def name: String
   }
 
-  trait Branch extends TreeLike.BranchLike[S, Branch, Leaf] {
+  trait Branch extends TreeLike.Branch[S, Branch, Leaf] {
     val name: String
   }
 }
