@@ -21,14 +21,16 @@ object LibraryImpl {
     new Impl(targets, root)
   }
 
-  private type N[S <: Sys[S]] = Node[BranchImpl[S], LeafImpl[S]]
-  private type U[S <: Sys[S]] = TreeLike.Update[S, Unit, Unit, Library[S], Branch[S], Leaf[S]]
+  private type N [S <: Sys[S]] = Node[BranchImpl[S], LeafImpl[S]]
+  private type U [S <: Sys[S]] = TreeLike.Update[S, Unit, Unit, Library[S], Branch[S], Leaf[S]]
+  private type BU[S <: Sys[S]] = TreeLike.BranchUpdate[S, Unit, Unit, Branch[S], Leaf[S]]
 
   private def newBranch[S <: Sys[S]](name0: Expr[S, String])(implicit tx: S#Tx): BranchImpl[S] = {
-    val id    = tx.newID()
-    val name  = Strings.newVar(name0)
-    val ll    = expr.LinkedList.Modifiable[S, N[S]]
-    new BranchImpl(id, name, ll)
+    // val id    = tx.newID()
+    val targets = evt.Targets[S]
+    val name    = Strings.newVar(name0)
+    val ll      = expr.LinkedList.Modifiable[S, N[S]]
+    new BranchImpl(targets, name, ll)
   }
 
   private object LeafImpl {
@@ -56,13 +58,13 @@ object LibraryImpl {
                                                           val source: Expr.Var[S, String])
     extends Leaf[S] with Mutable.Impl[S] {
 
-    protected def writeData(out: DataOutput): Unit =  {
+    def writeData(out: DataOutput): Unit =  {
       out.writeInt(LeafImpl.SER_VERSION)
       name  .write(out)
       source.write(out)
     }
 
-    protected def disposeData()(implicit tx: S#Tx): Unit = {
+    def disposeData()(implicit tx: S#Tx): Unit = {
       name  .dispose()
       source.dispose()
     }
@@ -74,26 +76,37 @@ object LibraryImpl {
     implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, BranchImpl[S]] =
       anySer.asInstanceOf[serial.Serializer[S#Tx, S#Acc, BranchImpl[S]]]
 
+    def reader[S <: Sys[S]]: evt.Reader[S, BranchImpl[S]] = anySer.asInstanceOf[Ser[S]]
+
     private val anySer = new Ser[InMemory]
 
     def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): BranchImpl[S] = {
-      val id      = tx.readID(in, access)
+      val targets = evt.Targets.read(in, access)
+      read(in, access, targets)
+    }
+
+    def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): BranchImpl[S] = {
       val cookie  = in.readInt()
       require(cookie == SER_VERSION, s"Unexpected cookie $cookie (should be $SER_VERSION)")
       val name    = Strings.readVar(in, access)
       val ll      = expr.LinkedList.Modifiable.read[S, N[S]](in, access)
-      new BranchImpl(id, name, ll)
+      new BranchImpl(targets, name, ll)
     }
 
-    private final class Ser[S <: Sys[S]] extends serial.Serializer[S#Tx, S#Acc, BranchImpl[S]] {
+    private final class Ser[S <: Sys[S]]
+      extends serial.Serializer[S#Tx, S#Acc, BranchImpl[S]] with evt.Reader[S, BranchImpl[S]] {
+
+      def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): BranchImpl[S] =
+        BranchImpl.read(in, access, targets)
+
       def write(b: BranchImpl[S], out: DataOutput): Unit = b.write(out)
 
       def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): BranchImpl[S] = BranchImpl.read(in, access)
     }
   }
-  private final class BranchImpl[S <: Sys[S]](val id: S#ID, val name: Expr[S, String],
+  private final class BranchImpl[S <: Sys[S]](val targets: evt.Targets[S], val name: Expr[S, String],
                                               ll: expr.LinkedList.Modifiable[S, N[S], Unit])
-    extends Library.Branch[S] with Mutable.Impl[S] {
+    extends Library.Branch[S] with /* Mutable.Impl[S] with */ evt.impl.StandaloneLike[S, U[S], BranchImpl[S]] {
 
     def size(implicit tx: S#Tx): Int = ll.size
 
@@ -125,16 +138,23 @@ object LibraryImpl {
       branch
     }
 
-    protected def writeData(out: DataOutput): Unit = {
+    def writeData(out: DataOutput): Unit = {
       out.writeInt(BranchImpl.SER_VERSION)
       name.write(out)
       ll  .write(out)
     }
 
-    protected def disposeData()(implicit tx: S#Tx): Unit = {
+    def disposeData()(implicit tx: S#Tx): Unit = {
       name.dispose()
       ll  .dispose()
     }
+
+    def connect   ()(implicit tx: S#Tx) = ???
+    def disconnect()(implicit tx: S#Tx) = ???
+
+    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[LibraryImpl.U[S]] = ???
+
+    def reader: evt.Reader[S, BranchImpl[S]] = BranchImpl.reader[S]
   }
 
   private final val IMPL_SER_VERSION = 0x4C696200  // "Lib\0"
