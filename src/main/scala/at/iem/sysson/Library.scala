@@ -48,9 +48,9 @@ object Library {
   type LeafUpdate = Vec[LeafChange]
 
   type Update       [S <: Sys[S]] = TreeLike.Update      [S, Library[S]]
-  type BranchChange [S <: Sys[S]] = TreeLike.BranchChange[S, Renamed, LeafUpdate            , Branch[S], Leaf[S]]
-  type LeafChanged  [S <: Sys[S]] = TreeLike.LeafChanged [S, Renamed, LeafUpdate            , Branch[S], Leaf[S]]
-  type BranchUpdate [S <: Sys[S]] = TreeLike.BranchUpdate[S, Renamed, LeafUpdate            , Branch[S], Leaf[S]]
+  type BranchChange [S <: Sys[S]] = TreeLike.BranchChange[S, Library[S]]
+  type LeafChanged  [S <: Sys[S]] = TreeLike.LeafChanged [S, Library[S]]
+  type BranchUpdate [S <: Sys[S]] = TreeLike.BranchUpdate[S, Library[S]]
 
   trait Branch[S <: Sys[S]] extends TreeLike.Branch[S, Branch[S], Leaf[S]] with NodeLike[S] {
     def insertLeaf  (idx: Int, name: Expr[S, String], source: Expr[S, String])(implicit tx: S#Tx): Leaf[S]

@@ -34,32 +34,32 @@ object TreeLike extends TreeTypes {
   //    def remove(elem: Elem)(implicit tx: S#Tx): Boolean
   //  }
 
-  case class Update[S <: Sys[S], T <: TreeLike[S, T]](tree: T, branch: BranchUpdate[S, T#BU, T#LU, T#Branch, T#Leaf])
+  case class Update[S <: Sys[S], T <: TreeLike[S, T]](tree: T, branch: BranchUpdate[S, T])
 
-  sealed trait NodeUpdate[S <: Sys[S], BU, LU, B, L]
+  sealed trait NodeUpdate[S <: Sys[S], T <: TreeLike[S, T]]
 
-  case class BranchUpdate[S <: Sys[S], BU, LU, B, L](branch: B, changes: Vec[BranchChange[S, BU, LU, B, L]])
-    extends NodeUpdate[S, BU, LU, B, L]
+  case class BranchUpdate[S <: Sys[S], T <: TreeLike[S, T]](branch: T#Branch, changes: Vec[BranchChange[S, T]])
+    extends NodeUpdate[S, T]
 
-  case class LeafChanged[S <: Sys[S], BU, LU, B, L](leaf: L, change: LU)
-    extends NodeUpdate[S, BU, LU, B, L]
+  case class LeafChanged[S <: Sys[S], T <: TreeLike[S, T]](leaf: T#Leaf, change: T#LU)
+    extends NodeUpdate[S, T]
 
-  sealed trait BranchChange[S <: Sys[S], BU, LU, B, L]
+  sealed trait BranchChange[S <: Sys[S], T <: TreeLike[S, T]]
 
-  case class BranchChanged[S <: Sys[S], BU, LU, B, L](change: BU) extends BranchChange[S, BU, LU, B, L]
+  case class BranchChanged[S <: Sys[S], T <: TreeLike[S, T]](change: T#BU) extends BranchChange[S, T]
   
-  sealed trait ChildUpdate[S <: Sys[S], BU, LU, B, L] extends BranchChange[S, BU, LU, B, L] {
+  sealed trait ChildUpdate[S <: Sys[S], T <: TreeLike[S, T]] extends BranchChange[S, T] {
     /** The position of the child among the children of the branch. */
     def idx: Int
   }
-  case class ChildInserted[S <: Sys[S], BU, LU, B, L](idx: Int, node: Node[B, L])
-    extends ChildUpdate[S, BU, LU, B, L]
+  case class ChildInserted[S <: Sys[S], T <: TreeLike[S, T]](idx: Int, node: Node[T#Branch, T#Leaf])
+    extends ChildUpdate[S, T]
 
-  case class ChildRemoved[S <: Sys[S], BU, LU, B, L](idx: Int, node: Node[B, L])
-    extends ChildUpdate[S, BU, LU, B, L]
+  case class ChildRemoved[S <: Sys[S], T <: TreeLike[S, T]](idx: Int, node: Node[T#Branch, T#Leaf])
+    extends ChildUpdate[S, T]
 
-  case class ChildChanged[S <: Sys[S], BU, LU, B, L](idx: Int, update: NodeUpdate[S, BU, LU, B, L])
-    extends ChildUpdate[S, BU, LU, B, L]
+  case class ChildChanged[S <: Sys[S], T <: TreeLike[S, T]](idx: Int, update: NodeUpdate[S, T])
+    extends ChildUpdate[S, T]
 }
 trait TreeLike[S <: Sys[S], T <: TreeLike[S, T]] {
   type BU
