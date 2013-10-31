@@ -2,15 +2,17 @@ package at.iem.sysson
 package gui
 package impl
 
-import swing.{ScrollPane, Component}
+import scala.swing.{Label, ScrollPane, Component}
 import de.sciss.lucre.stm.{Disposable, IdentifierMap}
 import de.sciss.model.impl.ModelImpl
-import javax.swing.DropMode
-import de.sciss.treetable.{TreeTableSelectionChanged, TreeTableCellRenderer, TreeColumnModel, AbstractTreeModel, TreeTable}
+import javax.swing.{JTable, DropMode}
+import de.sciss.treetable.{j, TreeTableSelectionChanged, TreeTableCellRenderer, TreeColumnModel, AbstractTreeModel, TreeTable}
 import GUI.{fromTx => guiFromTx, requireEDT}
 import de.sciss.lucre.event.Sys
 import TreeLike.{IsBranch, IsLeaf}
 import at.iem.sysson.gui.TreeTableView.Handler
+import javax.swing.table.{DefaultTableCellRenderer, TableCellRenderer}
+import de.sciss.treetable.TreeTableCellRenderer.State
 
 object TreeTableViewImpl {
   private final val DEBUG = false
@@ -286,10 +288,12 @@ object TreeTableViewImpl {
       val tcm = new TreeColumnModel[V] {
         private val peer = handler.columns
 
-        def getValueAt(r: V, column: Int): Any = r match {
-          case node: VNode  => peer.getValueAt(node.data, column)
-          case _            => null // XXX correct?
-        }
+        def getValueAt(r: V, column: Int): Any = r
+
+        //        match {
+        //          case node: VNode  => peer.getValueAt(node.data, column)
+        //          case _            => println(s"----1---- $r"); null // XXX correct?
+        //        }
 
         def setValueAt(value: Any, r: V, column: Int): Unit = r match {
           case node: VNode  => peer.setValueAt(value, node.data, column)
@@ -297,7 +301,7 @@ object TreeTableViewImpl {
         }
 
         def getColumnName (column: Int): String   = peer.getColumnName (column)
-        def getColumnClass(column: Int): Class[_] = peer.getColumnClass(column)
+        def getColumnClass(column: Int): Class[_] = classOf[AnyRef] // classOf[V] // peer.getColumnClass(column)
 
         def columnCount: Int = peer.columnCount
 
@@ -311,19 +315,77 @@ object TreeTableViewImpl {
 
       t = new TreeTable(_model, tcm: TreeColumnModel[V])
       t.rootVisible = false
-      t.renderer    = new TreeTableCellRenderer {
+      val r = new DefaultTableCellRenderer with TreeTableCellRenderer {
+        // private lazy val lb = new Label
+        private lazy val wrapSelf = Component.wrap(this)
+
         def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int,
                                  state: TreeTableCellRenderer.State): Component = {
           value match {
-            case b: VBranchI  => handler.branchRenderer(view, b.data, row = row, column = column, state = state)
-            case l: VLeaf     => handler.leafRenderer  (view, l.data, row = row, column = column, state = state)
-            case _ => null
+            case b: VBranchI  =>
+              // println(s"branchRenderer(${b.data}, row = $row)")
+              handler.branchRenderer(view, b.data, row = row, column = column, state = state)
+            case l: VLeaf     =>
+              // println(s"leafRenderer(${l.data}, row = $row)")
+              handler.leafRenderer  (view, l.data, row = row, column = column, state = state)
+            case _ =>
+              // println(s"----2---- ${if (value == null) "null" else value.getClass}")
+              // lb // null
+              wrapSelf
           }
+
+
+
         }
       }
-      val tabCM = t.peer.getColumnModel
-      tabCM.getColumn(0).setPreferredWidth(176)
-      tabCM.getColumn(1).setPreferredWidth(256)
+
+      val rj = new DefaultTableCellRenderer with j.TreeTableCellRenderer {
+        def getTreeTableCellRendererComponent(treeTable: j.TreeTable, value: Any, selected: Boolean,
+                                              hasFocus: Boolean, row: Int, column: Int): java.awt.Component = {
+          val state = TreeTableCellRenderer.State(selected = selected, focused = hasFocus, tree = None)
+          r.getRendererComponent(t, value, row, column, state).peer
+        }
+
+        def getTreeTableCellRendererComponent(treeTable: j.TreeTable, value: Any, selected: Boolean,
+                                              hasFocus: Boolean, row: Int, column: Int,
+                                              expanded: Boolean, leaf: Boolean): java.awt.Component = {
+          val treeState = TreeTableCellRenderer.TreeState(expanded = expanded, leaf = leaf)
+          val state = TreeTableCellRenderer.State(selected = selected, focused = hasFocus, tree = Some(treeState))
+          r.getRendererComponent(t, value, row, column, state).peer
+        }
+      }
+
+      // t.renderer = r
+
+      //      val r1 = new DefaultTableCellRenderer with TreeTableCellRenderer {
+      //        def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int, state: State) = ??? : Component
+      //
+      //        override def getTableCellRendererComponent(table: JTable, value: Any, isSelected: Boolean, hasFocus: Boolean,
+      //                                                   row: Int, column: Int): java.awt.Component = {
+      //          val state = TreeTableCellRenderer.State(selected = isSelected, focused = hasFocus, tree = None)
+      //          value match {
+      //            case b: VBranchI  =>
+      //              // println(s"branchRenderer(${b.data}, row = $row)")
+      //              handler.branchRenderer(view, b.data, row = row, column = column, state = state).peer
+      //            case l: VLeaf     =>
+      //              // println(s"leafRenderer(${l.data}, row = $row)")
+      //              handler.leafRenderer  (view, l.data, row = row, column = column, state = state).peer
+      //            case _ =>
+      //              // println(s"----2---- ${if (value == null) "null" else value.getClass}")
+      //              super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column)
+      //          }
+      //        }
+      //      }
+
+      val cm = t.peer.getColumnModel
+      for (col <- 0 until handler.columns.columnCount) {
+        // assert(r.isInstanceOf[TreeTableCellRenderer])
+        cm.getColumn(col).setCellRenderer(rj)
+      }
+
+      //      val tabCM = t.peer.getColumnModel
+      //      tabCM.getColumn(0).setPreferredWidth(176)
+      //      tabCM.getColumn(1).setPreferredWidth(256)
 
       t.listenTo(t.selection)
       t.reactions += {

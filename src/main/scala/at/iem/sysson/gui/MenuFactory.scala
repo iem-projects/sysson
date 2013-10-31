@@ -33,6 +33,8 @@ import java.io.{RandomAccessFile, File, FilenameFilter}
 import scala.util.control.NonFatal
 import de.sciss.desktop.{RecentFiles, KeyStrokes, Menu}
 import scala.swing.Action
+import de.sciss.lucre.event.InMemory
+import de.sciss.lucre.synth.expr.ExprImplicits
 
 object MenuFactory {
 
@@ -153,5 +155,19 @@ object MenuFactory {
 
   def openInterpreter(): Unit = InterpreterView()
 
-  def openLibrary(): Unit = LibraryViewOLD(TestLibrary())
+  def openLibrary(): Unit = {
+    // LibraryViewOLD(TestLibrary())
+
+    type S  = InMemory
+    val sys = InMemory()
+    sys.step { implicit tx =>
+      val lib   = Library[S]
+      val imp   = ExprImplicits[S]
+      import imp._
+      lib.root.insertLeaf  (0, "Test-Leaf", "Test-Source")
+      val sub = lib.root.insertBranch(0, "Test-Branch")
+      sub.insertLeaf       (0, "Test-Child", "Test-Source")
+      /* val view = */ LibraryView(lib)
+    }
+  }
 }

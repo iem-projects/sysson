@@ -33,11 +33,12 @@ import de.sciss.lucre.stm
 import de.sciss.model.Change
 import de.sciss.serial.Writable
 import de.sciss.serial
+import de.sciss.lucre.stm.Identifiable
 
 object Library {
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = Impl[S]
 
-  sealed trait NodeLike[S <: Sys[S]] {
+  sealed trait NodeLike[S <: Sys[S]] extends Identifiable[S#ID] {
     def name: Expr[S, String]
   }
 
