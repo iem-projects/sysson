@@ -33,6 +33,7 @@ libraryDependencies ++= {
     "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
     "de.sciss" %% "fileutil"                % "1.0.+",          // easy file name manipulation
     "de.sciss" %% "swingplus"               % "0.0.1+",         // GUI helpers
+    "de.sciss" %% "treetable-scala"         % "1.3.+",          // GUI component
     // "de.sciss" %% "audiowidgets-swing"      % "1.3.1",          // some GUI widgets
     "org.jfree" % "jfreechart"              % "1.0.15",         // plotting
     "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // some GUI widgets

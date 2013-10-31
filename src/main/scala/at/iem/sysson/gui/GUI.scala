@@ -31,6 +31,9 @@ import java.awt.{GraphicsEnvironment, EventQueue}
 import swing.Swing
 import Swing._
 import de.sciss.desktop.Window
+import de.sciss.lucre.stm.Txn
+import scala.concurrent.stm.TxnLocal
+import scala.util.control.NonFatal
 
 object GUI {
   def centerOnScreen(w: Window): Unit = placeWindow(w, 0.5f, 0.5f, 0)
@@ -48,4 +51,22 @@ object GUI {
 
   def defer(thunk: => Unit): Unit =
     if (EventQueue.isDispatchThread) thunk else Swing.onEDT(thunk)
+
+  private val guiCode = TxnLocal(init = Vec.empty[() => Unit], afterCommit = handleGUI)
+
+  private def handleGUI(seq: Vec[() => Unit]): Unit = {
+    def exec(): Unit =
+      seq.foreach { fun =>
+        try {
+          fun()
+        } catch {
+          case NonFatal(e) => e.printStackTrace()
+        }
+      }
+
+    defer(exec())
+  }
+
+  def fromTx(body: => Unit)(implicit tx: Txn[_]): Unit =
+    guiCode.transform(_ :+ (() => body))(tx.peer)
 }
