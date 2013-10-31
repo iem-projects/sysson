@@ -23,54 +23,49 @@ object TreeTableViewImpl {
           new NodeView.Leaf(parent, data)
       }
 
-    sealed trait OrRoot[S <: Sys[S], T <: TreeLike[S, T], D] {
-      def parentOption: Option[NodeView.BranchOrRoot[S, T, D]]
-    }
+    sealed trait OrRoot[S <: Sys[S], T <: TreeLike[S, T], D]
 
     sealed trait BranchOrRoot[S <: Sys[S], T <: TreeLike[S, T], D] extends OrRoot[S, T, D] {
       /** The children of the folder. This variable _must only be accessed or updated_ on the event thread. */
       var children = Vec.empty[NodeView[S, T, D]]
     }
 
-    class Branch[S <: Sys[S], T <: TreeLike[S, T], D](val parent: BranchOrRoot[S, T, D], val data: D)
+    class Branch[S <: Sys[S], T <: TreeLike[S, T], D](val parent: BranchOrRoot[S, T, D], var data: D)
       extends BranchOrRoot[S, T, D] with NodeView[S, T, D]
 
-    class Root[S <: Sys[S], T <: TreeLike[S, T], D] extends BranchOrRoot[S, T, D] {
-      def parentOption = None
-    }
+    class Root[S <: Sys[S], T <: TreeLike[S, T], D] extends BranchOrRoot[S, T, D]
     
-    class Leaf[S <: Sys[S], T <: TreeLike[S, T], D](val parent: BranchOrRoot[S, T, D], val data: D)
+    class Leaf[S <: Sys[S], T <: TreeLike[S, T], D](val parent: BranchOrRoot[S, T, D], var data: D)
       extends NodeView[S, T, D]
   }
   private sealed trait NodeView[S <: Sys[S], T <: TreeLike[S, T], D] extends NodeView.OrRoot[S, T, D] {
-    def data: D
+    var data  : D
     def parent: NodeView.BranchOrRoot[S, T, D]
-    def parentOption = Some(parent)
   }
 
-  def apply[S <: Sys[S], T <: TreeLike[S, T], D](tree: T, config: TreeTableView.Config[S, T, D])
-                                             (implicit tx: S#Tx /*, cursor: Cursor[S] */): TreeTableView[S, T, D] = {
+  def apply[S <: Sys[S], T <: TreeLike[S, T], D](tree: T, handler: TreeTableView.Handler[S, T, D])
+                                             (implicit tx: S#Tx): TreeTableView       [S, T, D] = {
     type Branch = T#Branch
-    val _config = config
+    val _handler = handler
     val root: T#Branch = tree.root
     new Impl[S, T, D] {
       val mapViews  = tx.newInMemoryIDMap[VNode]  // folder IDs to renderers
       val rootView  = new NodeView.Root[S, T, D]
-      val config    = _config
+      val handler    = _handler
 
       private def buildMapView(f: Branch, fv: NodeView.BranchOrRoot[S, T, D]): Unit = {
         val tup = f.iterator.map { c =>
-          val data  = config.viewData(c)
+          val data  = handler.viewData(c)
           val v     = NodeView(fv, data, c)
           c -> v
         } .toIndexedSeq
         fv.children = tup.map(_._2)
         tup.foreach { case (c, cv) =>
-          val id = config.nodeID(c)
+          val id = handler.nodeID(c)
           mapViews.put(id, cv)
           (c, cv) match {
             case (IsBranch(cf), cfv: NodeView.Branch[S, T, D]) =>
-              buildMapView(cf /* .entity */, cfv)
+              buildMapView(cf, cfv)
             case _ =>
           }
         }
@@ -78,9 +73,7 @@ object TreeTableViewImpl {
       buildMapView(root, rootView)
 
       val observer: Disposable[S#Tx] = tree.changed.react { implicit tx => upd =>
-        // val c = rootView.convert(upd)
-        // folderUpdated(rootView, c)
-        ()
+        folderUpdated(rootView, upd.branch.changes)
       }
 
       guiFromTx {
@@ -93,26 +86,24 @@ object TreeTableViewImpl {
     extends ComponentHolder[Component] with TreeTableView[S, T, D] with ModelImpl[Any /* BranchView.Update[S] */] {
     view =>
 
-    type V        = NodeView.OrRoot   [S, T, D]
+    type V        = NodeView.OrRoot       [S, T, D]
     type VBranch  = NodeView.BranchOrRoot [S, T, D]
-    type VBranchI = NodeView.Branch     [S, T, D]
-    type VNode    = NodeView            [S, T, D]
+    type VBranchI = NodeView.Branch       [S, T, D]
+    type VNode    = NodeView              [S, T, D]
     type TPath    = TreeTable.Path[VBranch]
     type TNode    = TreeLike.Node[T#Branch, T#Leaf]
 
-    protected def rootView: NodeView.Root[S, T, D]
+    protected def rootView: NodeView.Root [S, T, D]
     protected def mapViews: IdentifierMap[S#ID, S#Tx, VNode]
-    // protected implicit def cursor: Cursor[S]
     protected def observer: Disposable[S#Tx]
-    // protected def document: Document[S]
-    protected def config: TreeTableView.Config[S, T, D]
+    protected def handler  : TreeTableView.Handler[S, T, D]
 
     private class ElementTreeModel extends AbstractTreeModel[V] {
       lazy val root: V = rootView // ! must be lazy. suckers....
 
       def getChildCount(parent: V): Int = parent match {
         case b: VBranch => b.children.size
-        case _ => 0
+        case _          => 0
       }
 
       def getChild(parent: V, index: Int): VNode = parent match {
@@ -121,16 +112,19 @@ object TreeTableViewImpl {
       }
 
       def isLeaf(node: V): Boolean = node match {
-        case b: VBranch => false // b.children.nonEmpty
-        case _ => true
+        case _: VBranch => false
+        case _          => true
       }
 
       def getIndexOfChild(parent: V, child: V): Int = parent match {
         case b: VBranch => b.children.indexOf(child)
-        case _ => sys.error(s"parent $parent is not a branch")
+        case _          => sys.error(s"parent $parent is not a branch")
       }
 
-      def getParent(node: V): Option[V] = node.parentOption
+      def getParent(node: V): Option[V] = node match {
+        case n: VNode => Some(n.parent)
+        case _        => None
+      }
 
       def valueForPathChanged(path: TreeTable.Path[V], newValue: V): Unit =
         println(s"valueForPathChanged($path, $newValue)")
@@ -167,9 +161,9 @@ object TreeTableViewImpl {
 
     def elemAdded(parent: VBranch, idx: Int, elem: TNode)(implicit tx: S#Tx): Unit = {
       if (DEBUG) println(s"elemAdded($parent, $idx $elem)")
-      val data  = config.viewData(elem)
+      val data  = handler.viewData(elem)
       val v     = NodeView[S, T, D](parent, data, elem)
-      val id    = config.nodeID(elem)
+      val id    = handler.nodeID(elem)
       mapViews.put(id, v)
 
       guiFromTx {
@@ -177,11 +171,9 @@ object TreeTableViewImpl {
       }
 
       (elem, v) match {
-        case (IsBranch(f), fv: VBranchI) =>
-          if (!f.isEmpty) {
-            f.iterator.toList.zipWithIndex.foreach { case (c, ci) =>
-              elemAdded(fv, ci, c)
-            }
+        case (IsBranch(f), fv: VBranchI) if !f.isEmpty =>
+          f.iterator.toList.zipWithIndex.foreach { case (c, ci) =>
+            elemAdded(fv, ci, c)
           }
 
         case _ =>
@@ -190,11 +182,11 @@ object TreeTableViewImpl {
 
     def elemRemoved(parent: VBranch, idx: Int, elem: TNode)(implicit tx: S#Tx): Unit = {
       if (DEBUG) println(s"elemRemoved($parent, $idx, $elem)")
-      val id  = config.nodeID(elem)
+      val id  = handler.nodeID(elem)
       mapViews.get(id).foreach { v =>
         (elem, v) match {
-          case (IsBranch(f), fv: VBranchI) =>
-            if (f.nonEmpty) f.iterator.toList.zipWithIndex.reverse.foreach { case (c, ci) =>
+          case (IsBranch(f), fv: VBranchI) if f.nonEmpty =>
+            f.iterator.toList.zipWithIndex.reverse.foreach { case (c, ci) =>
               elemRemoved(fv, ci, c)
             }
 
@@ -209,40 +201,39 @@ object TreeTableViewImpl {
       }
     }
 
-    def elemUpdated(elem: TNode, changes: Vec[Any /* Element.Change[S] */])(implicit tx: S#Tx): Unit = {
-      val id      = config.nodeID(elem)
+    def branchElemUpdated(b: T#Branch, upd: T#BU)(implicit tx: S#Tx): Unit = {
+      val id      = handler.nodeID(IsBranch(b))
       val viewOpt = mapViews.get(id)
       if (viewOpt.isEmpty) {
-        println(s"WARNING: No view for elem $elem")
+        println(s"WARNING: No view for branch $b")
       }
-//      viewOpt.foreach { v =>
-//        changes.foreach {
-//          case Element.Renamed(Change(_, newName)) =>
-//            guiFromTx {
-//              v.name = newName
-//              _model.elemUpdated(v)
-//            }
-//
-//          case Element.Entity(ch) =>
-//            v match {
-//              case fv: NodeView.Branch =>
-//                val upd = fv.tryConvert(ch)
-//                if (upd.isEmpty) println(s"WARNING: unhandled $elem -> $ch")
-//                folderUpdated(fv, upd)
-//
-//              case _ =>
-//                if (v.checkUpdate(ch)) guiFromTx(_model.elemUpdated(v))
-//            }
-//        }
-//      }
+      viewOpt.foreach { v =>
+        val oldData = v.data
+        val newData = handler.branchUpdate(b, upd, oldData)
+        if (newData != oldData) guiFromTx {
+          v.data = newData
+          _model.elemUpdated(v)
+        }
+      }
     }
 
-//    def folderUpdated(fv: NodeView.BranchLike[S, T], upd: Branch.Update[S])(implicit tx: S#Tx): Unit =
-//      upd.foreach {
-//        case Branch.Added  (idx, elem)      => elemAdded  (fv, idx, elem)
-//        case Branch.Removed(idx, elem)      => elemRemoved(fv, idx, elem)
-//        case Branch.Element(elem, elemUpd)  => elemUpdated(elem, elemUpd.changes)
-//      }
+    def folderUpdated(parent: VBranch, changes: Vec[TreeLike.BranchChange[S, T]])
+                     (implicit tx: S#Tx): Unit = changes.foreach {
+      case TreeLike.BranchChanged(bch)        => ??? // elemUpdated()
+      case TreeLike.ChildInserted(idx, child) => elemAdded  (parent, idx, child)
+      case TreeLike.ChildRemoved (idx, child) => elemRemoved(parent, idx, child)
+      case TreeLike.ChildChanged (idx, cch)   => cch match {
+        case TreeLike.BranchUpdate(parent1, bch1) =>
+          val id = handler.nodeID(IsBranch(parent1))
+          mapViews.get(id) match {
+            case Some(vparent1: VBranch) => folderUpdated(vparent1, bch1)
+            case _ => println(s"Warning: No view found for $parent1")
+          }
+
+        case TreeLike.LeafChanged(l, lch1) =>
+          ???
+      }
+    }
 
     def dispose()(implicit tx: S#Tx): Unit = {
       observer.dispose()
@@ -255,7 +246,7 @@ object TreeTableViewImpl {
       _model = new ElementTreeModel
 
       val tcm = new TreeColumnModel[V] {
-        private val peer = config.columns
+        private val peer = handler.columns
 
         def getValueAt(r: V, column: Int): Any = r match {
           case node: VNode => peer.getValueAt(node.data, column)
@@ -286,7 +277,7 @@ object TreeTableViewImpl {
         def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int,
                                  state: TreeTableCellRenderer.State): Component = {
           val node = value.asInstanceOf[VNode]
-          config.renderer(view, node.data, row = row, column = column, state = state)
+          handler.renderer(view, node.data, row = row, column = column, state = state)
         }
       }
       val tabCM = t.peer.getColumnModel
