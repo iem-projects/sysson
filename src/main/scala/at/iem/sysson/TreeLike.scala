@@ -5,20 +5,23 @@ import de.sciss.lucre.data
 
 trait TreeTypes {
   type Node[+B, +L]     = Either[B, L]
+  // type Node[S <: Sys[S], T <: TreeLike[S, T]] = Either[T#Branch, T#Leaf]
   val IsBranch          = Left
   type IsBranch[+B, +L] = Left[B, L]
+  // type IsBranch[S <: Sys[S], T <: TreeLike[S, T]] = Left[T#Branch, T#Leaf]
   val IsLeaf            = Right
   type IsLeaf[+B, +L]   = Right[B, L]
+  // type IsLeaf[S <: Sys[S], T <: TreeLike[S, T]] = Right[T#Branch, T#Leaf]
 }
 
 object TreeLike extends TreeTypes {
-  trait Branch[S <: Sys[S], B, L] {
+  trait Branch[S <: Sys[S], T <: TreeLike[S, T]] {
     def size    (implicit tx: S#Tx): Int
-    def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, Node[B, L]]
+    def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, Node[T#Branch, T#Leaf]]
     def isEmpty (implicit tx: S#Tx): Boolean
     def nonEmpty(implicit tx: S#Tx): Boolean
-    def apply(idx: Int)(implicit tx: S#Tx): Node[B, L]
-    def indexOf(node: Node[B, L])(implicit tx: S#Tx): Int
+    def apply(idx: Int)(implicit tx: S#Tx): Node[T#Branch, T#Leaf]
+    def indexOf(node: Node[T#Branch, T#Leaf])(implicit tx: S#Tx): Int
   }
 
   //  trait ModifiableBranch[S <: Sys[S], B, L] extends Branch[S, B, L] {
@@ -65,7 +68,7 @@ trait TreeLike[S <: Sys[S], T <: TreeLike[S, T]] {
   type BU
   type LU
   type Leaf
-  type Branch <: TreeLike.Branch[S, Branch, Leaf]
+  type Branch <: TreeLike.Branch[S, T]
 
   def root: T#Branch
 

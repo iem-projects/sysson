@@ -52,7 +52,7 @@ object Library {
   type LeafChanged  [S <: Sys[S]] = TreeLike.LeafChanged [S, Library[S]]
   type BranchUpdate [S <: Sys[S]] = TreeLike.BranchUpdate[S, Library[S]]
 
-  trait Branch[S <: Sys[S]] extends TreeLike.Branch[S, Branch[S], Leaf[S]] with NodeLike[S] {
+  trait Branch[S <: Sys[S]] extends TreeLike.Branch[S, Library[S]] with NodeLike[S] {
     def insertLeaf  (idx: Int, name: Expr[S, String], source: Expr[S, String])(implicit tx: S#Tx): Leaf[S]
     def insertBranch(idx: Int, name: Expr[S, String])(implicit tx: S#Tx): Branch[S]
   }
