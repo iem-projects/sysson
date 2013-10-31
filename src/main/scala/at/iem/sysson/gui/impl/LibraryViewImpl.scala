@@ -66,12 +66,16 @@ object LibraryViewImpl {
     def leafData  (leaf  : Library[S]#Leaf  )(implicit tx: S#Tx): LD = leaf  .name.value
 
     private val rendererJ = new DefaultTreeTableCellRenderer {
-      //      override def paintComponent(g: Graphics): Unit = {
-      //        // println(s"Background: $getBackground")
-      //        g.setColor(Color.red) //
-      //        g.fillRect(0, 0, getWidth, getHeight)
-      //        super.paintComponent(g)
-      //      }
+      var selected  = false
+      var viewJ     = null: de.sciss.treetable.j.TreeTable
+
+      override def paintComponent(g: Graphics): Unit = {
+        if (viewJ != null) {
+          g.setColor(if(selected) viewJ.getSelectionBackground else viewJ.getBackground)
+          g.fillRect(0, 0, getWidth, getHeight)
+        }
+        super.paintComponent(g)
+      }
     }
     private val renderer  = Component.wrap(rendererJ)
 
@@ -105,6 +109,8 @@ object LibraryViewImpl {
       }
       rendererJ.setText(data)
       // rendererJ.setBackground(Color.red)
+      rendererJ.selected  = state.selected
+      rendererJ.viewJ     = viewJ
       // rendererJ.setBackground(if(state.selected) viewJ.getSelectionBackground else viewJ.getBackground)
       renderer
     }
