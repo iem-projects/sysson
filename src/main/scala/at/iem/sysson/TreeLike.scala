@@ -34,7 +34,7 @@ object TreeLike extends TreeTypes {
   //    def remove(elem: Elem)(implicit tx: S#Tx): Boolean
   //  }
 
-  case class Update[S <: Sys[S], BU, LU, T, B, L](tree: T, branch: BranchUpdate[S, BU, LU, B, L])
+  case class Update[S <: Sys[S], T <: TreeLike[S, T]](tree: T, branch: BranchUpdate[S, T#BU, T#LU, T#Branch, T#Leaf])
 
   sealed trait NodeUpdate[S <: Sys[S], BU, LU, B, L]
 
@@ -69,7 +69,7 @@ trait TreeLike[S <: Sys[S], T <: TreeLike[S, T]] {
 
   def root: T#Branch
 
-  def changed: EventLike[S, TreeLike.Update[S, BU, LU, T, T#Branch, T#Leaf]]
+  def changed: EventLike[S, TreeLike.Update[S, T]]
 }
 
 //object SubTree extends TreeTypes {

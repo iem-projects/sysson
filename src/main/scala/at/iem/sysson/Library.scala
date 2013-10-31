@@ -47,7 +47,7 @@ object Library {
 
   type LeafUpdate = Vec[LeafChange]
 
-  type Update       [S <: Sys[S]] = TreeLike.Update      [S, Renamed, LeafUpdate, Library[S], Branch[S], Leaf[S]]
+  type Update       [S <: Sys[S]] = TreeLike.Update      [S, Library[S]]
   type BranchChange [S <: Sys[S]] = TreeLike.BranchChange[S, Renamed, LeafUpdate            , Branch[S], Leaf[S]]
   type LeafChanged  [S <: Sys[S]] = TreeLike.LeafChanged [S, Renamed, LeafUpdate            , Branch[S], Leaf[S]]
   type BranchUpdate [S <: Sys[S]] = TreeLike.BranchUpdate[S, Renamed, LeafUpdate            , Branch[S], Leaf[S]]

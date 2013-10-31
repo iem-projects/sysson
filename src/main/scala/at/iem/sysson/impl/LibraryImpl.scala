@@ -266,6 +266,8 @@ object LibraryImpl {
   private final class Impl[S <: Sys[S]](val targets: evt.Targets[S], _root: BranchImpl[S])
     extends Library[S] with evt.impl.StandaloneLike[S, U[S], Impl[S]] {
 
+    private type T = Library[S]
+
     def writeData(out: DataOutput): Unit = {
       out.writeInt(IMPL_SER_VERSION)
       _root.write(out)
@@ -280,7 +282,7 @@ object LibraryImpl {
 
     def reader: evt.Reader[S, Impl[S]] = LibraryImpl.reader[S]
 
-    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[U[S]] = pull(_root).map(TreeLike.Update(this, _))
+    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[U[S]] = pull(_root).map(TreeLike.Update[S, T](this, _))
 
     def root: Branch = _root
 
