@@ -5,10 +5,8 @@ package impl
 import swing.{ScrollPane, Component}
 import de.sciss.lucre.stm.{Disposable, IdentifierMap}
 import de.sciss.model.impl.ModelImpl
-import scala.util.control.NonFatal
-import javax.swing.{Icon, DropMode}
+import javax.swing.DropMode
 import de.sciss.treetable.{TreeTableSelectionChanged, TreeTableCellRenderer, TreeColumnModel, AbstractTreeModel, TreeTable}
-import de.sciss.treetable.TreeTableCellRenderer.TreeState
 import GUI.{fromTx => guiFromTx, requireEDT}
 import de.sciss.lucre.event.Sys
 import TreeLike.IsBranch
@@ -24,8 +22,8 @@ object TreeTableViewImpl {
       def name: String
       def parent: Option[NodeView.FolderLike[S, T, D]]
       def value: Any
-      def tryUpdate(value: Any)(implicit tx: S#Tx): Boolean
-      def icon: Icon
+      // def tryUpdate(value: Any)(implicit tx: S#Tx): Boolean
+      // def icon: Icon
     }
 
     sealed trait FolderLike[S <: Sys[S], T <: TreeLike[S, T], D] extends Renderer[S, T, D] {
@@ -281,40 +279,71 @@ object TreeTableViewImpl {
 
       _model = new ElementTreeModel
 
-      val colName = new TreeColumnModel.Column[VRend, String]("Name") {
-        def apply(node: VRend): String = node.name
+      //      val colName = new TreeColumnModel.Column[VRend, String]("Name") {
+      //        def apply(node: VRend): String = node.name
+      //
+      //        def update(node: VRend, value: String): Unit = ...
+      ////          node match {
+      ////            case v: NodeView[S, T] if value != v.name =>
+      ////              cursor.step { implicit tx =>
+      ////                val expr = ExprImplicits[S]
+      ////                import expr._
+      ////                v.element().name() = value
+      ////              }
+      ////            case _ =>
+      ////          }
+      //
+      //        def isEditable(node: VRend) = node match {
+      //          case b: VNode => false // EEE true
+      //          case _ => false // i.e. Root
+      //        }
+      //      }
 
-        def update(node: VRend, value: String): Unit = ???
-//          node match {
-//            case v: NodeView[S, T] if value != v.name =>
-//              cursor.step { implicit tx =>
-//                val expr = ExprImplicits[S]
-//                import expr._
-//                v.element().name() = value
-//              }
-//            case _ =>
-//          }
+      //      val colValue = new TreeColumnModel.Column[VRend, Any]("Value") {
+      //        def apply(node: VRend): Any = node.value
+      //
+      //        def update(node: VRend, value: Any): Unit =
+      //          ... // cursor.step { implicit tx => node.tryUpdate(value) }
+      //
+      //        def isEditable(node: VRend) = node match {
+      //          case b: VBranch => false
+      //          case _ => false // EEE true
+      //        }
+      //      }
 
-        def isEditable(node: VRend) = node match {
-          case b: VNode => false // EEE true
-          case _ => false // i.e. Root
+      //      val tcm = new TreeColumnModel.Tuple2[VRend, String, Any](colName, colValue) {
+      //        def getParent(node: VRend): Option[VRend] = node.parent
+      //      }
+
+      //      val tcm = new TreeColumnModel.TupleLike[VRend] {
+      //        protected def columns: Vec[TreeColumnModel.Column[VRend, _]] = config.columns
+      //        def getParent(node: VRend): Option[VRend] = node.parent
+      //      }
+
+      val tcm = new TreeColumnModel[VRend] {
+        private val peer = config.columns
+
+        def getValueAt(r: VRend, column: Int): Any = r match {
+          case node: VNode => peer.getValueAt(node.data, column)
+          case _ => () // XXX
         }
-      }
 
-      val colValue = new TreeColumnModel.Column[VRend, Any]("Value") {
-        def apply(node: VRend): Any = node.value
-
-        def update(node: VRend, value: Any): Unit =
-          ??? // cursor.step { implicit tx => node.tryUpdate(value) }
-
-        def isEditable(node: VRend) = node match {
-          case b: VBranch => false
-          case _ => false // EEE true
+        def setValueAt(value: Any, r: VRend, column: Int): Unit = r match {
+          case node: VNode => peer.setValueAt(value, node.data, column)
+          case _ => throw new IllegalStateException(s"Trying to alter $r")
         }
-      }
 
-      val tcm = new TreeColumnModel.Tuple2[VRend, String, Any](colName, colValue) {
-        def getParent(node: VRend): Option[VRend] = node.parent
+        def getColumnName (column: Int): String   = peer.getColumnName (column)
+        def getColumnClass(column: Int): Class[_] = peer.getColumnClass(column)
+
+        def columnCount: Int = peer.columnCount
+
+        def isCellEditable(r: VRend, column: Int): Boolean = r match {
+          case node: VNode => peer.isCellEditable(node.data, column)
+          case _ => false
+        }
+
+        def hierarchicalColumn: Int = peer.hierarchicalColumn
       }
 
       t = new TreeTable(_model, tcm: TreeColumnModel[VRend])
@@ -323,20 +352,22 @@ object TreeTableViewImpl {
         private val component = TreeTableCellRenderer.Default
         def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int,
                                  state: TreeTableCellRenderer.State): Component = {
-          val value1 = if (value != ()) value else null
-          val res = component.getRendererComponent(treeTable, value1, row = row, column = column, state = state)
-          if (row >= 0) state.tree match {
-            case Some(TreeState(false, true)) =>
-              // println(s"row = $row, col = $column")
-              try {
-                val node = t.getNode(row)
-                component.icon = node.icon
-              } catch {
-                case NonFatal(_) => // XXX TODO -- currently NPE probs; seems renderer is called before tree expansion with node missing
-              }
-            case _ =>
-          }
-          res // component
+          // val value1 = if (value != ()) value else null
+          val node = value.asInstanceOf[VNode]
+          config.renderer(view, node.data, row = row, column = column, state = state)
+          // val res = component.getRendererComponent(treeTable, value1, row = row, column = column, state = state)
+          //          if (row >= 0) state.tree match {
+          //            case Some(TreeState(false, true)) =>
+          //              // println(s"row = $row, col = $column")
+          //              try {
+          //                val node = t.getNode(row)
+          //                component.icon = node.icon
+          //              } catch {
+          //                case NonFatal(_) => // XXX TODO -- currently NPE probs; seems renderer is called before tree expansion with node missing
+          //              }
+          //            case _ =>
+          //          }
+          // res // component
         }
       }
       val tabCM = t.peer.getColumnModel
