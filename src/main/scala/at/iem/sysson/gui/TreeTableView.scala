@@ -1,13 +1,17 @@
 package at.iem.sysson
 package gui
 
+import de.sciss.lucre.event.Sys
+
 object TreeTableView {
-  trait ElementView
+  import TreeLike.Node
+
+  // trait ElementView
   
-  trait Config {
-    
+  trait Config[S <: Sys[S], T <: TreeLike[S, _, _, T]] {
+    def idView: Node[T#Branch, T#Leaf] => S#ID
   }
 }
-trait TreeTableView {
+trait TreeTableView[S <: Sys[S], T <: TreeLike[S, _, _, T]] {
 
 }

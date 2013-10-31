@@ -170,7 +170,8 @@ object LibraryImpl {
 
     def apply(idx: Int)(implicit tx: S#Tx): N[S] = ll(idx).toEither
 
-    def indexOf(node: N[S])(implicit tx: S#Tx): Int = node match {
+    def indexOf(node: N[S])(implicit tx: S#Tx): Int =
+      node match {
       case IsLeaf  (l: LeafImpl  [S]) => ll.indexOf(l)
       case IsBranch(b: BranchImpl[S]) => ll.indexOf(b)
       case _                          => -1

@@ -61,13 +61,13 @@ object TreeLike extends TreeTypes {
   case class ChildChanged[S <: Sys[S], BU, LU, B, L](idx: Int, update: NodeUpdate[S, BU, LU, B, L])
     extends ChildUpdate[S, BU, LU, B, L]
 }
-trait TreeLike[S <: Sys[S], BU, LU, Repr] {
+trait TreeLike[S <: Sys[S], BU, LU, T <: TreeLike[S, BU, LU, T]] {
   type Leaf
   type Branch <: TreeLike.Branch[S, Branch, Leaf]
 
-  def root: Branch
+  def root: T#Branch
 
-  def changed: EventLike[S, TreeLike.Update[S, BU, LU, Repr, Branch, Leaf]]
+  def changed: EventLike[S, TreeLike.Update[S, BU, LU, T, T#Branch, T#Leaf]]
 }
 
 //object SubTree extends TreeTypes {
