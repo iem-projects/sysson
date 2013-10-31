@@ -9,87 +9,71 @@ import javax.swing.DropMode
 import de.sciss.treetable.{TreeTableSelectionChanged, TreeTableCellRenderer, TreeColumnModel, AbstractTreeModel, TreeTable}
 import GUI.{fromTx => guiFromTx, requireEDT}
 import de.sciss.lucre.event.Sys
-import TreeLike.IsBranch
+import TreeLike.{IsBranch, IsLeaf}
 
 object TreeTableViewImpl {
   private final val DEBUG = false
 
   private object NodeView {
-    def apply[S <: Sys[S], T <: TreeLike[S, T], D](parent: FolderLike[S, T, D], data: D): NodeView[S, T, D] = ???
+    def apply[S <: Sys[S], T <: TreeLike[S, T], D](parent: BranchLike[S, T, D], data: D,
+                                                   c: TreeLike.Node[T#Branch, T#Leaf]): NodeView[S, T, D] = c match {
+        case IsBranch(cb) =>
+          new NodeView.Branch(parent, data)
+        case IsLeaf  (cl) =>
+          new NodeView.Leaf(parent, data)
+      }
 
     sealed trait Renderer[S <: Sys[S], T <: TreeLike[S, T], D] {
-      // private[gui] def componentFor(tree: Tree[_], info: Tree.Renderer.CellInfo): Component
-      def name: String
-      def parent: Option[NodeView.FolderLike[S, T, D]]
-      def value: Any
-      // def tryUpdate(value: Any)(implicit tx: S#Tx): Boolean
-      // def icon: Icon
+      def parent: Option[NodeView.BranchLike[S, T, D]]
     }
 
-    sealed trait FolderLike[S <: Sys[S], T <: TreeLike[S, T], D] extends Renderer[S, T, D] {
-      // def branchID(implicit tx: S#Tx) = folder.id
-
-      def folder(implicit tx: S#Tx): T#Branch
-
-      //      def tryConvert(upd: Any): Folder.Update[S] = upd match {
-      //        case ll: LinkedList.Update[_, _, _] =>
-      //          convert(ll.asInstanceOf[LinkedList.Update[S, Element[S], Element.Update[S]]])
-      //        case _ => Vector.empty
-      //      }
-
-      //      def convert(upd: LinkedList.Update[S, Element[S], Element.Update[S]]): _Folder.Update[S] =
-      //        upd.changes.map {
-      //          case LinkedList.Added  (idx, elem)  => _Folder.Added  (idx, elem)
-      //          case LinkedList.Removed(idx, elem)  => _Folder.Removed(idx, elem)
-      //          case LinkedList.Element(elem, eu)   => _Folder.Element(elem, eu)
-      //        }
-
+    sealed trait BranchLike[S <: Sys[S], T <: TreeLike[S, T], D] extends Renderer[S, T, D] {
       /** The children of the folder. This variable _must only be accessed or updated_ on the event thread. */
-      var children: Vec[NodeView[S, T, D]]
-
-      def value = ()
+      var children = Vec.empty[NodeView[S, T, D]]
     }
 
-    sealed trait Folder[S <: Sys[S], T <: TreeLike[S, T], D] extends FolderLike[S, T, D] with NodeView[S, T, D]
+    class Branch[S <: Sys[S], T <: TreeLike[S, T], D](parent0: BranchLike[S, T, D], val data: D)
+      extends BranchLike[S, T, D] with NodeView[S, T, D] {
 
-    object Root {
-      def apply[S <: Sys[S], T <: TreeLike[S, T], D](folder: T#Branch)(implicit tx: S#Tx): Root[S, T, D] = ???
+      def parent = Some(parent0)
     }
-    sealed trait Root[S <: Sys[S], T <: TreeLike[S, T], D] extends FolderLike[S, T, D]
+
+    class Root[S <: Sys[S], T <: TreeLike[S, T], D] extends BranchLike[S, T, D] {
+      def parent = None
+    }
+    
+    class Leaf[S <: Sys[S], T <: TreeLike[S, T], D](parent0: BranchLike[S, T, D], val data: D)
+      extends NodeView[S, T, D] {
+
+      def parent = Some(parent0)
+    }
   }
   private sealed trait NodeView[S <: Sys[S], T <: TreeLike[S, T], D] extends NodeView.Renderer[S, T, D] {
     def data: D
   }
-  // private trait ChildView [S <: Sys[S], T <: TreeLike[S, T], D] extends NV
-  // private trait BranchView[S <: Sys[S], T <: TreeLike[S, T], D] extends NV
 
   def apply[S <: Sys[S], T <: TreeLike[S, T], D](tree: T, config: TreeTableView.Config[S, T, D])
                                              (implicit tx: S#Tx /*, cursor: Cursor[S] */): TreeTableView[S, T, D] = {
-    type Folder = T#Branch
-    // type D      = config.Data
-
-    // val _doc    = document
-    // val _cursor = cursor
+    type Branch = T#Branch
     val _config = config
     val root: T#Branch = tree.root
     new Impl[S, T, D] {
-      // val cursor    = _cursor
       val mapViews  = tx.newInMemoryIDMap[VNode]  // folder IDs to renderers
-      val rootView  = NodeView.Root[S, T, D](root)
+      val rootView  = new NodeView.Root[S, T, D]
       val config    = _config
-      // val document  = _doc
 
-      private def buildMapView(f: Folder, fv: NodeView.FolderLike[S, T, D]): Unit = {
+      private def buildMapView(f: Branch, fv: NodeView.BranchLike[S, T, D]): Unit = {
         val tup = f.iterator.map { c =>
-          val data = config.viewData(c)
-          c -> NodeView[S, T, D](fv, data) // (tx)
+          val data  = config.viewData(c)
+          val v     = NodeView(fv, data, c)
+          c -> v
         } .toIndexedSeq
         fv.children = tup.map(_._2)
         tup.foreach { case (c, cv) =>
           val id = config.nodeID(c)
           mapViews.put(id, cv)
           (c, cv) match {
-            case (IsBranch(cf), cfv: NodeView.Folder[S, T, D]) =>
+            case (IsBranch(cf), cfv: NodeView.Branch[S, T, D]) =>
               buildMapView(cf /* .entity */, cfv)
             case _ =>
           }
@@ -110,12 +94,12 @@ object TreeTableViewImpl {
   }
 
   private abstract class Impl[S <: Sys[S], T <: TreeLike[S, T], D]
-    extends ComponentHolder[Component] with TreeTableView[S, T, D] with ModelImpl[Any /* FolderView.Update[S] */] {
+    extends ComponentHolder[Component] with TreeTableView[S, T, D] with ModelImpl[Any /* BranchView.Update[S] */] {
     view =>
 
     type VRend    = NodeView.Renderer   [S, T, D]
-    type VBranch  = NodeView.FolderLike [S, T, D]
-    type VBranchI = NodeView.Folder     [S, T, D]
+    type VBranch  = NodeView.BranchLike [S, T, D]
+    type VBranchI = NodeView.Branch     [S, T, D]
     type VNode    = NodeView            [S, T, D]
     type TPath    = TreeTable.Path[VBranch]
     type TNode    = TreeLike.Node[T#Branch, T#Leaf]
@@ -136,7 +120,7 @@ object TreeTableViewImpl {
       }
 
       def getChild(parent: VRend, index: Int): VNode = parent match {
-        case b: NodeView.FolderLike[S, T, D] => b.children(index)
+        case b: VBranch => b.children(index)
         case _ => sys.error(s"parent $parent is not a branch")
       }
 
@@ -188,7 +172,7 @@ object TreeTableViewImpl {
     def elemAdded(parent: VBranch, idx: Int, elem: TNode)(implicit tx: S#Tx): Unit = {
       if (DEBUG) println(s"elemAdded($parent, $idx $elem)")
       val data  = config.viewData(elem)
-      val v     = NodeView[S, T, D](parent, data)
+      val v     = NodeView[S, T, D](parent, data, elem)
       val id    = config.nodeID(elem)
       mapViews.put(id, v)
 
@@ -250,7 +234,7 @@ object TreeTableViewImpl {
 //
 //          case Element.Entity(ch) =>
 //            v match {
-//              case fv: NodeView.Folder =>
+//              case fv: NodeView.Branch =>
 //                val upd = fv.tryConvert(ch)
 //                if (upd.isEmpty) println(s"WARNING: unhandled $elem -> $ch")
 //                folderUpdated(fv, upd)
@@ -262,11 +246,11 @@ object TreeTableViewImpl {
 //      }
     }
 
-//    def folderUpdated(fv: NodeView.FolderLike[S, T], upd: Folder.Update[S])(implicit tx: S#Tx): Unit =
+//    def folderUpdated(fv: NodeView.BranchLike[S, T], upd: Branch.Update[S])(implicit tx: S#Tx): Unit =
 //      upd.foreach {
-//        case Folder.Added  (idx, elem)      => elemAdded  (fv, idx, elem)
-//        case Folder.Removed(idx, elem)      => elemRemoved(fv, idx, elem)
-//        case Folder.Element(elem, elemUpd)  => elemUpdated(elem, elemUpd.changes)
+//        case Branch.Added  (idx, elem)      => elemAdded  (fv, idx, elem)
+//        case Branch.Removed(idx, elem)      => elemRemoved(fv, idx, elem)
+//        case Branch.Element(elem, elemUpd)  => elemUpdated(elem, elemUpd.changes)
 //      }
 
     def dispose()(implicit tx: S#Tx): Unit = {
@@ -349,7 +333,7 @@ object TreeTableViewImpl {
       t = new TreeTable(_model, tcm: TreeColumnModel[VRend])
       t.rootVisible = false
       t.renderer    = new TreeTableCellRenderer {
-        private val component = TreeTableCellRenderer.Default
+        // private val component = TreeTableCellRenderer.Default
         def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int,
                                  state: TreeTableCellRenderer.State): Component = {
           // val value1 = if (value != ()) value else null
@@ -378,7 +362,7 @@ object TreeTableViewImpl {
       t.reactions += {
         case e: TreeTableSelectionChanged[_, _] =>  // this crappy untyped event doesn't help us at all
           // println(s"selection: $e")
-          // dispatch(FolderView.SelectionChanged(view, selection))
+          // dispatch(BranchView.SelectionChanged(view, selection))
         // case e => println(s"other: $e")
       }
       t.showsRootHandles  = true
@@ -393,8 +377,8 @@ object TreeTableViewImpl {
       //
       //        override def createTransferable(c: JComponent): Transferable = {
       //          val sel   = selection
-      //          val tSel  = DragAndDrop.Transferable(FolderView.selectionFlavor) {
-      //            new FolderView.SelectionDnDData(document, selection)
+      //          val tSel  = DragAndDrop.Transferable(BranchView.selectionFlavor) {
+      //            new BranchView.SelectionDnDData(document, selection)
       //          }
       //          // except for the general selection flavour, see if there is more specific types
       //          // (current Int and Code are supported)
@@ -423,7 +407,7 @@ object TreeTableViewImpl {
       //            case Some(tdl) =>
       //              // println(s"last = ${tdl.path.last}; column ${tdl.column}; isLeaf? ${t.treeModel.isLeaf(tdl.path.last)}")
       //              val locOk = tdl.index >= 0 || (tdl.column == 0 && (tdl.path.last match {
-      //                case _: NodeView.Folder[_] => true
+      //                case _: NodeView.Branch[_] => true
       //                case _                        => false
       //              }))
       //
@@ -435,7 +419,7 @@ object TreeTableViewImpl {
       //                // println(s"Action = ${support.getUserDropAction}")
       //
       //                support.isDataFlavorSupported(DataFlavor.javaFileListFlavor) ||
-      //                  (support.isDataFlavorSupported(FolderView.selectionFlavor) &&
+      //                  (support.isDataFlavorSupported(BranchView.selectionFlavor) &&
       //                   support.getUserDropAction == TransferHandler.MOVE)
       //
       //              } else {
@@ -446,17 +430,17 @@ object TreeTableViewImpl {
       //          }
       //
       //        // XXX TODO: not sure whether removal should be in exportDone or something
-      //        private def insertData(sel: FolderView.Selection[S], newParentView: Branch, idx: Int): Boolean = {
+      //        private def insertData(sel: BranchView.Selection[S], newParentView: Branch, idx: Int): Boolean = {
       //          // println(s"insert into $parent at index $idx")
       //
       //          def isNested(pv: Branch, cv: Branch): Boolean =
       //            pv == cv || pv.children.collect {
-      //              case pcv: NodeView.Folder => pcv
+      //              case pcv: NodeView.Branch => pcv
       //            }.exists(isNested(_, cv))
       //
       //          // make sure we are not moving a folder within itself (it will magically disappear :)
       //          val sel1 = sel.filter {
-      //            case (_, cv: NodeView.Folder) if isNested(cv, newParentView) => false
+      //            case (_, cv: NodeView.Branch) if isNested(cv, newParentView) => false
       //            case _ => true
       //          }
       //
@@ -483,9 +467,9 @@ object TreeTableViewImpl {
       //          true
       //        }
       //
-      //        private def importSelection(support: TransferSupport, parent: NodeView.FolderLike[S], index: Int): Boolean = {
-      //          val data = support.getTransferable.getTransferData(FolderView.selectionFlavor)
-      //            .asInstanceOf[FolderView.SelectionDnDData[S]]
+      //        private def importSelection(support: TransferSupport, parent: NodeView.BranchLike[S], index: Int): Boolean = {
+      //          val data = support.getTransferable.getTransferData(BranchView.selectionFlavor)
+      //            .asInstanceOf[BranchView.SelectionDnDData[S]]
       //          if (data.document == document) {
       //            val sel = data.selection
       //            insertData(sel, parent, index)
@@ -494,7 +478,7 @@ object TreeTableViewImpl {
       //          }
       //        }
       //
-      //        private def importFiles(support: TransferSupport, parent: NodeView.FolderLike[S], index: Int): Boolean = {
+      //        private def importFiles(support: TransferSupport, parent: NodeView.BranchLike[S], index: Int): Boolean = {
       //          import JavaConversions._
       //          val data  = support.getTransferable.getTransferData(DataFlavor.javaFileListFlavor)
       //            .asInstanceOf[java.util.List[File]].toList
@@ -526,9 +510,9 @@ object TreeTableViewImpl {
       //          t.dropLocation match {
       //            case Some(tdl) =>
       //              tdl.path.last match {
-      //                case parent: NodeView.FolderLike[S] =>
+      //                case parent: NodeView.BranchLike[S] =>
       //                  val idx = tdl.index
-      //                  if      (support.isDataFlavorSupported(FolderView.selectionFlavor   ))
+      //                  if      (support.isDataFlavorSupported(BranchView.selectionFlavor   ))
       //                    importSelection(support, parent, idx)
       //                  else if (support.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
       //                    importFiles    (support, parent, idx)
@@ -546,17 +530,17 @@ object TreeTableViewImpl {
       component     = scroll
     }
 
-//    def selection: FolderView.Selection[S] =
+//    def selection: BranchView.Selection[S] =
 //      t.selection.paths.collect({
 //        case PathExtrator(path, child) => (path, child)
 //      })(breakOut)
 //
 //    object PathExtrator {
-//      def unapply(path: Seq[Node]): Option[(Vec[NodeView.FolderLike[S]], NodeView[S])] =
+//      def unapply(path: Seq[Node]): Option[(Vec[NodeView.BranchLike[S]], NodeView[S])] =
 //        path match {
 //          case init :+ (last: NodeView[S]) =>
-//            val pre: Vec[NodeView.FolderLike[S]] = init.map({
-//              case g: NodeView.FolderLike[S] => g
+//            val pre: Vec[NodeView.BranchLike[S]] = init.map({
+//              case g: NodeView.BranchLike[S] => g
 //              case _ => return None
 //            })(breakOut)
 //            Some((/* _root +: */ pre, last))
