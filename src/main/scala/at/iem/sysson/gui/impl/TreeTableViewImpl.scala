@@ -15,7 +15,7 @@ object TreeTableViewImpl {
   private final val DEBUG = false
 
   private object NodeView {
-    def apply[S <: Sys[S], T <: TreeLike[S, T], D](parent: BranchLike[S, T, D], data: D,
+    def apply[S <: Sys[S], T <: TreeLike[S, T], D](parent: BranchOrRoot[S, T, D], data: D,
                                                    c: TreeLike.Node[T#Branch, T#Leaf]): NodeView[S, T, D] = c match {
         case IsBranch(cb) =>
           new NodeView.Branch(parent, data)
@@ -23,33 +23,29 @@ object TreeTableViewImpl {
           new NodeView.Leaf(parent, data)
       }
 
-    sealed trait Renderer[S <: Sys[S], T <: TreeLike[S, T], D] {
-      def parent: Option[NodeView.BranchLike[S, T, D]]
+    sealed trait OrRoot[S <: Sys[S], T <: TreeLike[S, T], D] {
+      def parentOption: Option[NodeView.BranchOrRoot[S, T, D]]
     }
 
-    sealed trait BranchLike[S <: Sys[S], T <: TreeLike[S, T], D] extends Renderer[S, T, D] {
+    sealed trait BranchOrRoot[S <: Sys[S], T <: TreeLike[S, T], D] extends OrRoot[S, T, D] {
       /** The children of the folder. This variable _must only be accessed or updated_ on the event thread. */
       var children = Vec.empty[NodeView[S, T, D]]
     }
 
-    class Branch[S <: Sys[S], T <: TreeLike[S, T], D](parent0: BranchLike[S, T, D], val data: D)
-      extends BranchLike[S, T, D] with NodeView[S, T, D] {
+    class Branch[S <: Sys[S], T <: TreeLike[S, T], D](val parent: BranchOrRoot[S, T, D], val data: D)
+      extends BranchOrRoot[S, T, D] with NodeView[S, T, D]
 
-      def parent = Some(parent0)
-    }
-
-    class Root[S <: Sys[S], T <: TreeLike[S, T], D] extends BranchLike[S, T, D] {
-      def parent = None
+    class Root[S <: Sys[S], T <: TreeLike[S, T], D] extends BranchOrRoot[S, T, D] {
+      def parentOption = None
     }
     
-    class Leaf[S <: Sys[S], T <: TreeLike[S, T], D](parent0: BranchLike[S, T, D], val data: D)
-      extends NodeView[S, T, D] {
-
-      def parent = Some(parent0)
-    }
+    class Leaf[S <: Sys[S], T <: TreeLike[S, T], D](val parent: BranchOrRoot[S, T, D], val data: D)
+      extends NodeView[S, T, D]
   }
-  private sealed trait NodeView[S <: Sys[S], T <: TreeLike[S, T], D] extends NodeView.Renderer[S, T, D] {
+  private sealed trait NodeView[S <: Sys[S], T <: TreeLike[S, T], D] extends NodeView.OrRoot[S, T, D] {
     def data: D
+    def parent: NodeView.BranchOrRoot[S, T, D]
+    def parentOption = Some(parent)
   }
 
   def apply[S <: Sys[S], T <: TreeLike[S, T], D](tree: T, config: TreeTableView.Config[S, T, D])
@@ -62,7 +58,7 @@ object TreeTableViewImpl {
       val rootView  = new NodeView.Root[S, T, D]
       val config    = _config
 
-      private def buildMapView(f: Branch, fv: NodeView.BranchLike[S, T, D]): Unit = {
+      private def buildMapView(f: Branch, fv: NodeView.BranchOrRoot[S, T, D]): Unit = {
         val tup = f.iterator.map { c =>
           val data  = config.viewData(c)
           val v     = NodeView(fv, data, c)
@@ -97,8 +93,8 @@ object TreeTableViewImpl {
     extends ComponentHolder[Component] with TreeTableView[S, T, D] with ModelImpl[Any /* BranchView.Update[S] */] {
     view =>
 
-    type VRend    = NodeView.Renderer   [S, T, D]
-    type VBranch  = NodeView.BranchLike [S, T, D]
+    type V        = NodeView.OrRoot   [S, T, D]
+    type VBranch  = NodeView.BranchOrRoot [S, T, D]
     type VBranchI = NodeView.Branch     [S, T, D]
     type VNode    = NodeView            [S, T, D]
     type TPath    = TreeTable.Path[VBranch]
@@ -111,32 +107,32 @@ object TreeTableViewImpl {
     // protected def document: Document[S]
     protected def config: TreeTableView.Config[S, T, D]
 
-    private class ElementTreeModel extends AbstractTreeModel[VRend] {
-      lazy val root: VRend = rootView // ! must be lazy. suckers....
+    private class ElementTreeModel extends AbstractTreeModel[V] {
+      lazy val root: V = rootView // ! must be lazy. suckers....
 
-      def getChildCount(parent: VRend): Int = parent match {
+      def getChildCount(parent: V): Int = parent match {
         case b: VBranch => b.children.size
         case _ => 0
       }
 
-      def getChild(parent: VRend, index: Int): VNode = parent match {
+      def getChild(parent: V, index: Int): VNode = parent match {
         case b: VBranch => b.children(index)
         case _ => sys.error(s"parent $parent is not a branch")
       }
 
-      def isLeaf(node: VRend): Boolean = node match {
+      def isLeaf(node: V): Boolean = node match {
         case b: VBranch => false // b.children.nonEmpty
         case _ => true
       }
 
-      def getIndexOfChild(parent: VRend, child: VRend): Int = parent match {
+      def getIndexOfChild(parent: V, child: V): Int = parent match {
         case b: VBranch => b.children.indexOf(child)
         case _ => sys.error(s"parent $parent is not a branch")
       }
 
-      def getParent(node: VRend): Option[VRend] = node.parent
+      def getParent(node: V): Option[V] = node.parentOption
 
-      def valueForPathChanged(path: TreeTable.Path[VRend], newValue: VRend): Unit =
+      def valueForPathChanged(path: TreeTable.Path[V], newValue: V): Unit =
         println(s"valueForPathChanged($path, $newValue)")
 
       def elemAdded(parent: VBranch, idx: Int, view: VNode): Unit = {
@@ -165,7 +161,7 @@ object TreeTableViewImpl {
     }
 
     private var _model: ElementTreeModel  = _
-    private var t: TreeTable[VRend, TreeColumnModel[VRend]] = _
+    private var t: TreeTable[V, TreeColumnModel[V]] = _
 
     def treeTable: TreeTable[_, _] = t
 
@@ -182,11 +178,8 @@ object TreeTableViewImpl {
 
       (elem, v) match {
         case (IsBranch(f), fv: VBranchI) =>
-          val fe    = f // .entity
-          // val path  = parent :+ gv
-          // branchAdded(path, gv)
-          if (!fe.isEmpty) {
-            fe.iterator.toList.zipWithIndex.foreach { case (c, ci) =>
+          if (!f.isEmpty) {
+            f.iterator.toList.zipWithIndex.foreach { case (c, ci) =>
               elemAdded(fv, ci, c)
             }
           }
@@ -201,9 +194,7 @@ object TreeTableViewImpl {
       mapViews.get(id).foreach { v =>
         (elem, v) match {
           case (IsBranch(f), fv: VBranchI) =>
-            // val path = parent :+ gl
-            val fe = f // .entity
-            if (fe.nonEmpty) fe.iterator.toList.zipWithIndex.reverse.foreach { case (c, ci) =>
+            if (f.nonEmpty) f.iterator.toList.zipWithIndex.reverse.foreach { case (c, ci) =>
               elemRemoved(fv, ci, c)
             }
 
@@ -263,56 +254,15 @@ object TreeTableViewImpl {
 
       _model = new ElementTreeModel
 
-      //      val colName = new TreeColumnModel.Column[VRend, String]("Name") {
-      //        def apply(node: VRend): String = node.name
-      //
-      //        def update(node: VRend, value: String): Unit = ...
-      ////          node match {
-      ////            case v: NodeView[S, T] if value != v.name =>
-      ////              cursor.step { implicit tx =>
-      ////                val expr = ExprImplicits[S]
-      ////                import expr._
-      ////                v.element().name() = value
-      ////              }
-      ////            case _ =>
-      ////          }
-      //
-      //        def isEditable(node: VRend) = node match {
-      //          case b: VNode => false // EEE true
-      //          case _ => false // i.e. Root
-      //        }
-      //      }
-
-      //      val colValue = new TreeColumnModel.Column[VRend, Any]("Value") {
-      //        def apply(node: VRend): Any = node.value
-      //
-      //        def update(node: VRend, value: Any): Unit =
-      //          ... // cursor.step { implicit tx => node.tryUpdate(value) }
-      //
-      //        def isEditable(node: VRend) = node match {
-      //          case b: VBranch => false
-      //          case _ => false // EEE true
-      //        }
-      //      }
-
-      //      val tcm = new TreeColumnModel.Tuple2[VRend, String, Any](colName, colValue) {
-      //        def getParent(node: VRend): Option[VRend] = node.parent
-      //      }
-
-      //      val tcm = new TreeColumnModel.TupleLike[VRend] {
-      //        protected def columns: Vec[TreeColumnModel.Column[VRend, _]] = config.columns
-      //        def getParent(node: VRend): Option[VRend] = node.parent
-      //      }
-
-      val tcm = new TreeColumnModel[VRend] {
+      val tcm = new TreeColumnModel[V] {
         private val peer = config.columns
 
-        def getValueAt(r: VRend, column: Int): Any = r match {
+        def getValueAt(r: V, column: Int): Any = r match {
           case node: VNode => peer.getValueAt(node.data, column)
           case _ => () // XXX
         }
 
-        def setValueAt(value: Any, r: VRend, column: Int): Unit = r match {
+        def setValueAt(value: Any, r: V, column: Int): Unit = r match {
           case node: VNode => peer.setValueAt(value, node.data, column)
           case _ => throw new IllegalStateException(s"Trying to alter $r")
         }
@@ -322,7 +272,7 @@ object TreeTableViewImpl {
 
         def columnCount: Int = peer.columnCount
 
-        def isCellEditable(r: VRend, column: Int): Boolean = r match {
+        def isCellEditable(r: V, column: Int): Boolean = r match {
           case node: VNode => peer.isCellEditable(node.data, column)
           case _ => false
         }
@@ -330,28 +280,13 @@ object TreeTableViewImpl {
         def hierarchicalColumn: Int = peer.hierarchicalColumn
       }
 
-      t = new TreeTable(_model, tcm: TreeColumnModel[VRend])
+      t = new TreeTable(_model, tcm: TreeColumnModel[V])
       t.rootVisible = false
       t.renderer    = new TreeTableCellRenderer {
-        // private val component = TreeTableCellRenderer.Default
         def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int,
                                  state: TreeTableCellRenderer.State): Component = {
-          // val value1 = if (value != ()) value else null
           val node = value.asInstanceOf[VNode]
           config.renderer(view, node.data, row = row, column = column, state = state)
-          // val res = component.getRendererComponent(treeTable, value1, row = row, column = column, state = state)
-          //          if (row >= 0) state.tree match {
-          //            case Some(TreeState(false, true)) =>
-          //              // println(s"row = $row, col = $column")
-          //              try {
-          //                val node = t.getNode(row)
-          //                component.icon = node.icon
-          //              } catch {
-          //                case NonFatal(_) => // XXX TODO -- currently NPE probs; seems renderer is called before tree expansion with node missing
-          //              }
-          //            case _ =>
-          //          }
-          // res // component
         }
       }
       val tabCM = t.peer.getColumnModel
@@ -369,183 +304,28 @@ object TreeTableViewImpl {
       t.expandPath(TreeTable.Path(_model.root))
       t.dragEnabled       = true
       t.dropMode          = DropMode.ON_OR_INSERT_ROWS
-      //      t.peer.setTransferHandler(new TransferHandler {
-      //        // ---- export ----
-      //
-      //        override def getSourceActions(c: JComponent): Int =
-      //          TransferHandler.COPY | TransferHandler.MOVE // dragging only works when MOVE is included. Why?
-      //
-      //        override def createTransferable(c: JComponent): Transferable = {
-      //          val sel   = selection
-      //          val tSel  = DragAndDrop.Transferable(BranchView.selectionFlavor) {
-      //            new BranchView.SelectionDnDData(document, selection)
-      //          }
-      //          // except for the general selection flavour, see if there is more specific types
-      //          // (current Int and Code are supported)
-      //          sel.headOption match {
-      //            case Some((_, elemView: NodeView.Int[S])) =>
-      //              val elem  = elemView.element
-      //              val tElem = DragAndDrop.Transferable(timeline.DnD.flavor) {
-      //                timeline.DnD.IntDrag[S](document, elem)
-      //              }
-      //              DragAndDrop.Transferable.seq(tSel, tElem)
-      //
-      //            case Some((_, elemView: NodeView.Code[S])) /* if elemView.value.id == Code.SynthGraph.id */ =>
-      //              val elem  = elemView.element
-      //              val tElem = DragAndDrop.Transferable(timeline.DnD.flavor) {
-      //                timeline.DnD.CodeDrag[S](document, elem)
-      //              }
-      //              DragAndDrop.Transferable.seq(tSel, tElem)
-      //
-      //            case _ => tSel
-      //          }
-      //        }
-      //
-      //        // ---- import ----
-      //        override def canImport(support: TransferSupport): Boolean =
-      //          t.dropLocation match {
-      //            case Some(tdl) =>
-      //              // println(s"last = ${tdl.path.last}; column ${tdl.column}; isLeaf? ${t.treeModel.isLeaf(tdl.path.last)}")
-      //              val locOk = tdl.index >= 0 || (tdl.column == 0 && (tdl.path.last match {
-      //                case _: NodeView.Branch[_] => true
-      //                case _                        => false
-      //              }))
-      //
-      //              if (locOk) {
-      //                // println("Supported flavours:")
-      //                // support.getDataFlavors.foreach(println)
-      //
-      //                // println(s"File? ${support.isDataFlavorSupported(java.awt.datatransfer.DataFlavor.javaFileListFlavor)}")
-      //                // println(s"Action = ${support.getUserDropAction}")
-      //
-      //                support.isDataFlavorSupported(DataFlavor.javaFileListFlavor) ||
-      //                  (support.isDataFlavorSupported(BranchView.selectionFlavor) &&
-      //                   support.getUserDropAction == TransferHandler.MOVE)
-      //
-      //              } else {
-      //                false
-      //              }
-      //
-      //            case _ => false
-      //          }
-      //
-      //        // XXX TODO: not sure whether removal should be in exportDone or something
-      //        private def insertData(sel: BranchView.Selection[S], newParentView: Branch, idx: Int): Boolean = {
-      //          // println(s"insert into $parent at index $idx")
-      //
-      //          def isNested(pv: Branch, cv: Branch): Boolean =
-      //            pv == cv || pv.children.collect {
-      //              case pcv: NodeView.Branch => pcv
-      //            }.exists(isNested(_, cv))
-      //
-      //          // make sure we are not moving a folder within itself (it will magically disappear :)
-      //          val sel1 = sel.filter {
-      //            case (_, cv: NodeView.Branch) if isNested(cv, newParentView) => false
-      //            case _ => true
-      //          }
-      //
-      //          // if we move children within the same folder, adjust the insertion index by
-      //          // decrementing it for any child which is above the insertion index, because
-      //          // we will first remove all children, then re-insert them.
-      //          val idx0 = if (idx >= 0) idx else newParentView.children.size
-      //          val idx1 = idx0 - sel1.count {
-      //            case (_ :+ `newParentView`, cv) => newParentView.children.indexOf(cv) <= idx0
-      //            case _ => false
-      //          }
-      //          // println(s"idx0 $idx0 idx1 $idx1")
-      //
-      //          cursor.step { implicit tx =>
-      //            val tup = sel1.map {
-      //              case (_ :+ pv, cv) => pv.folder -> cv.element()
-      //            }
-      //
-      //            val newParent = newParentView.folder
-      //            tup             .foreach { case  (oldParent, c)       => oldParent.remove(            c) }
-      //            tup.zipWithIndex.foreach { case ((_        , c), off) => newParent.insert(idx1 + off, c) }
-      //          }
-      //
-      //          true
-      //        }
-      //
-      //        private def importSelection(support: TransferSupport, parent: NodeView.BranchLike[S], index: Int): Boolean = {
-      //          val data = support.getTransferable.getTransferData(BranchView.selectionFlavor)
-      //            .asInstanceOf[BranchView.SelectionDnDData[S]]
-      //          if (data.document == document) {
-      //            val sel = data.selection
-      //            insertData(sel, parent, index)
-      //          } else {
-      //            false
-      //          }
-      //        }
-      //
-      //        private def importFiles(support: TransferSupport, parent: NodeView.BranchLike[S], index: Int): Boolean = {
-      //          import JavaConversions._
-      //          val data  = support.getTransferable.getTransferData(DataFlavor.javaFileListFlavor)
-      //            .asInstanceOf[java.util.List[File]].toList
-      //          val tup   = data.flatMap { f =>
-      //            Try(AudioFile.readSpec(f)).toOption.map(f -> _)
-      //          }
-      //          val trip  = tup.flatMap { case (f, spec) =>
-      //            findLocation(f).map { loc => (f, spec, loc) }
-      //          }
-      //
-      //          if (trip.nonEmpty) {
-      //            cursor.step { implicit tx =>
-      //              trip.foreach {
-      //                case (f, spec, locS) =>
-      //                  val loc = locS()
-      //                  loc.entity.modifiableOption.foreach { locM =>
-      //                    ElementActions.addAudioFile(parent.folder, index, locM, f, spec)
-      //                  }
-      //              }
-      //            }
-      //            true
-      //
-      //          } else {
-      //            false
-      //          }
-      //        }
-      //
-      //        override def importData(support: TransferSupport): Boolean =
-      //          t.dropLocation match {
-      //            case Some(tdl) =>
-      //              tdl.path.last match {
-      //                case parent: NodeView.BranchLike[S] =>
-      //                  val idx = tdl.index
-      //                  if      (support.isDataFlavorSupported(BranchView.selectionFlavor   ))
-      //                    importSelection(support, parent, idx)
-      //                  else if (support.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
-      //                    importFiles    (support, parent, idx)
-      //                  else false
-      //
-      //                case _ => false
-      //              }
-      //
-      //            case _ => false
-      //          }
-      //      })
 
       val scroll    = new ScrollPane(t)
       scroll.border = null
       component     = scroll
     }
 
-//    def selection: BranchView.Selection[S] =
-//      t.selection.paths.collect({
-//        case PathExtrator(path, child) => (path, child)
-//      })(breakOut)
-//
-//    object PathExtrator {
-//      def unapply(path: Seq[Node]): Option[(Vec[NodeView.BranchLike[S]], NodeView[S])] =
-//        path match {
-//          case init :+ (last: NodeView[S]) =>
-//            val pre: Vec[NodeView.BranchLike[S]] = init.map({
-//              case g: NodeView.BranchLike[S] => g
-//              case _ => return None
-//            })(breakOut)
-//            Some((/* _root +: */ pre, last))
-//          case _ => None
-//        }
-//    }
+    //    def selection: BranchView.Selection[S] =
+    //      t.selection.paths.collect({
+    //        case PathExtrator(path, child) => (path, child)
+    //      })(breakOut)
+    //
+    //    object PathExtrator {
+    //      def unapply(path: Seq[Node]): Option[(Vec[NodeView.BranchLike[S]], NodeView[S])] =
+    //        path match {
+    //          case init :+ (last: NodeView[S]) =>
+    //            val pre: Vec[NodeView.BranchLike[S]] = init.map({
+    //              case g: NodeView.BranchLike[S] => g
+    //              case _ => return None
+    //            })(breakOut)
+    //            Some((/* _root +: */ pre, last))
+    //          case _ => None
+    //        }
+    //    }
   }
 }
