@@ -64,9 +64,11 @@ object Library {
   implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library[S]] = Impl.serializer[S]
 }
 trait Library[S <: Sys[S]]
-  extends TreeLike[S, Library.Renamed, Library.LeafUpdate, Library[S]] with stm.Mutable[S#ID, S#Tx]
+  extends TreeLike[S, Library[S]] with stm.Mutable[S#ID, S#Tx]
   with Writable {
 
+  type BU     = Library.Renamed
+  type LU     = Library.LeafUpdate
   type Leaf   = Library.Leaf  [S]
   type Branch = Library.Branch[S]
 }

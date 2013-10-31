@@ -8,10 +8,10 @@ object TreeTableView {
 
   // trait ElementView
   
-  trait Config[S <: Sys[S], T <: TreeLike[S, _, _, T]] {
+  trait Config[S <: Sys[S], T <: TreeLike[S, T]] {
     def idView: Node[T#Branch, T#Leaf] => S#ID
   }
 }
-trait TreeTableView[S <: Sys[S], T <: TreeLike[S, _, _, T]] {
+trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T]] {
 
 }

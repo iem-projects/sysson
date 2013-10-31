@@ -61,7 +61,9 @@ object TreeLike extends TreeTypes {
   case class ChildChanged[S <: Sys[S], BU, LU, B, L](idx: Int, update: NodeUpdate[S, BU, LU, B, L])
     extends ChildUpdate[S, BU, LU, B, L]
 }
-trait TreeLike[S <: Sys[S], BU, LU, T <: TreeLike[S, BU, LU, T]] {
+trait TreeLike[S <: Sys[S], T <: TreeLike[S, T]] {
+  type BU
+  type LU
   type Leaf
   type Branch <: TreeLike.Branch[S, Branch, Leaf]
 
