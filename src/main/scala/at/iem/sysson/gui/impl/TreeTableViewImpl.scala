@@ -16,14 +16,6 @@ object TreeTableViewImpl {
   private final val DEBUG = false
 
   private object NodeView {
-    //    def apply[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](parent: BranchOrRoot[S, T, H], data: H#D,
-    //                                                   c: TreeLike.Node[T#Branch, T#Leaf]): NodeView[S, T, H] = c match {
-    //        case IsBranch(cb) =>
-    //          new NodeView.Branch(parent, data)
-    //        case IsLeaf  (cl) =>
-    //          new NodeView.Leaf(parent, data)
-    //      }
-
     sealed trait OrRoot[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]]
 
     sealed trait BranchOrRoot[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]] extends OrRoot[S, T, H] {
@@ -46,7 +38,6 @@ object TreeTableViewImpl {
     extends NodeView.OrRoot[S, T, H] {
 
     def data: H#D
-    // var data  : D
     def parent: NodeView.BranchOrRoot[S, T, H]
   }
 

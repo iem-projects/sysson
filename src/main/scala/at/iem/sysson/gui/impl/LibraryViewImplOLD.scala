@@ -37,13 +37,13 @@ import de.sciss.desktop.{UndoManager, OptionPane, Window}
 import java.awt.datatransfer.Transferable
 import scalaswingcontrib.event.TreeNodeSelected
 
-object LibraryViewImpl {
+object LibraryViewImplOLD {
   private def mkTreeModel(library: LibraryOLD) = new ExternalTreeModel[LibraryOLD.Node](library :: Nil, {
     case b: LibraryOLD.Branch => b.children
     case _ => Nil
   })
 
-  def apply(library: LibraryOLD): LibraryView = {
+  def apply(library: LibraryOLD): LibraryViewOLD = {
     lazy val tree = new Tree(mkTreeModel(library)) {
       selection.mode  = Tree.SelectionMode.Single
       renderer        = Tree.Renderer.wrap(LibraryRenderer)
@@ -172,7 +172,7 @@ object LibraryViewImpl {
 
   private final class Impl(private var _library: LibraryOLD, tree: Tree[LibraryOLD.Node],
                            val component: Component)
-    extends LibraryView {
+    extends LibraryViewOLD {
     impl =>
 
     lazy val saveAction: Action = new Action(null) {

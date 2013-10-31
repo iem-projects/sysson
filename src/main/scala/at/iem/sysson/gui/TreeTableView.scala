@@ -63,5 +63,6 @@ object TreeTableView {
                                              (implicit tx: S#Tx): TreeTableView[S, T, H] = Impl(tree, handler)
 }
 trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T], H <: TreeTableView.Handler[S, T, H]] {
+  def component: Component
   def treeTable: TreeTable[_, _]
 }

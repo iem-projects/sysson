@@ -153,5 +153,5 @@ object MenuFactory {
 
   def openInterpreter(): Unit = InterpreterView()
 
-  def openLibrary(): Unit = LibraryView(TestLibrary())
+  def openLibrary(): Unit = LibraryViewOLD(TestLibrary())
 }

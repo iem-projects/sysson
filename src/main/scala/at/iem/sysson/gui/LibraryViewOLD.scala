@@ -28,12 +28,12 @@ package at.iem.sysson.gui
 
 import at.iem.sysson.LibraryOLD
 import scala.swing.Component
-import impl.{LibraryViewImpl => Impl}
+import impl.{LibraryViewImplOLD => Impl}
 
-object LibraryView {
-  def apply(library: LibraryOLD): LibraryView = Impl(library)
+object LibraryViewOLD {
+  def apply(library: LibraryOLD): LibraryViewOLD = Impl(library)
 }
-trait LibraryView {
+trait LibraryViewOLD {
   def component: Component
   def library: LibraryOLD
 }
