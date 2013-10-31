@@ -2,16 +2,30 @@ package at.iem.sysson
 package gui
 
 import de.sciss.lucre.event.Sys
+import impl.{TreeTableViewImpl => Impl}
+import de.sciss.treetable.{TreeTable, TreeTableCellRenderer, TreeColumnModel}
+import scala.swing.Component
 
 object TreeTableView {
-  import TreeLike.Node
-
-  // trait ElementView
-  
   trait Config[S <: Sys[S], T <: TreeLike[S, T]] {
-    def idView: Node[T#Branch, T#Leaf] => S#ID
+    type Data
+    type Node = TreeLike.Node[T#Branch, T#Leaf]
+
+    def nodeID  (node: Node)(implicit tx: S#Tx): S#ID
+    def viewData(node: Node)(implicit tx: S#Tx): Data
+
+    def columns: TreeColumnModel[Data]
+
+    def renderer(view: TreeTableView[S, T], data: Data, row: Int, column: Int,
+                 state: TreeTableCellRenderer.State): Component
   }
+
+  //  def editable[S <: Sys[S], T <: TreeLike[S, T]](tree: T, config: Config[S, T])
+  //                                               (implicit tx: S#Tx, cursor: stm.Cursor[S]): TreeTableView[S, T] = ???
+
+  def apply[S <: Sys[S], T <: TreeLike[S, T]](tree: T, config: Config[S, T])
+                                             (implicit tx: S#Tx): TreeTableView[S, T] = Impl(tree, config)
 }
 trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T]] {
-
+  def treeTable: TreeTable[_, _]
 }

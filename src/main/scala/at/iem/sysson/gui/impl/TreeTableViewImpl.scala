@@ -65,15 +65,15 @@ object TreeTableViewImpl {
   private trait BranchView[S <: Sys[S], T <: TreeLike[S, T]] extends NodeView[S, T]
 
   def apply[S <: Sys[S], T <: TreeLike[S, T]](tree: T, config: TreeTableView.Config[S, T])
-                                             (implicit tx: S#Tx, cursor: Cursor[S]): TreeTableView[S, T] = {
+                                             (implicit tx: S#Tx /*, cursor: Cursor[S] */): TreeTableView[S, T] = {
     type Folder = T#Branch
 
     // val _doc    = document
-    val _cursor = cursor
+    // val _cursor = cursor
     val _config = config
     val root: T#Branch = tree.root
     new Impl[S, T] {
-      val cursor    = _cursor
+      // val cursor    = _cursor
       val mapViews  = tx.newInMemoryIDMap[NodeView[S, T]]  // folder IDs to renderers
       val rootView  = NodeView.Root[S, T](root)
       val config    = _config
@@ -117,7 +117,7 @@ object TreeTableViewImpl {
 
     protected def rootView: NodeView.Root[S, T]
     protected def mapViews: IdentifierMap[S#ID, S#Tx, NodeView[S, T]]
-    protected implicit def cursor: Cursor[S]
+    // protected implicit def cursor: Cursor[S]
     protected def observer: Disposable[S#Tx]
     // protected def document: Document[S]
     protected def config: TreeTableView.Config[S, T]
@@ -178,10 +178,12 @@ object TreeTableViewImpl {
     private var _model: ElementTreeModel  = _
     private var t: TreeTable[Node, TreeColumnModel[Node]] = _
 
+    def treeTable: TreeTable[_, _] = t
+
     def elemAdded(parent: NodeView.FolderLike[S, T], idx: Int, elem: TNode)(implicit tx: S#Tx): Unit = {
       if (DEBUG) println(s"elemAdded($parent, $idx $elem)")
       val v   = NodeView(parent, elem)
-      val id  = config.idView(elem)
+      val id  = config.nodeID(elem)
       mapViews.put(id, v)
 
       guiFromTx {
@@ -205,7 +207,7 @@ object TreeTableViewImpl {
 
     def elemRemoved(parent: NodeView.FolderLike[S, T], idx: Int, elem: TNode)(implicit tx: S#Tx): Unit = {
       if (DEBUG) println(s"elemRemoved($parent, $idx, $elem)")
-      val id  = config.idView(elem)
+      val id  = config.nodeID(elem)
       mapViews.get(id).foreach { v =>
         (elem, v) match {
           case (IsBranch(f), fv: NodeView.Folder[S, T]) =>
@@ -227,7 +229,7 @@ object TreeTableViewImpl {
     }
 
     def elemUpdated(elem: TNode, changes: Vec[Any /* Element.Change[S] */])(implicit tx: S#Tx): Unit = {
-      val id      = config.idView(elem)
+      val id      = config.nodeID(elem)
       val viewOpt = mapViews.get(id)
       if (viewOpt.isEmpty) {
         println(s"WARNING: No view for elem $elem")
@@ -286,7 +288,7 @@ object TreeTableViewImpl {
 //          }
 
         def isEditable(node: Node) = node match {
-          case b: NodeView[S, T] => true
+          case b: NodeView[S, T] => false // EEE true
           case _ => false // i.e. Root
         }
       }
@@ -295,11 +297,11 @@ object TreeTableViewImpl {
         def apply(node: Node): Any = node.value
 
         def update(node: Node, value: Any): Unit =
-          cursor.step { implicit tx => node.tryUpdate(value) }
+          ??? // cursor.step { implicit tx => node.tryUpdate(value) }
 
         def isEditable(node: Node) = node match {
           case b: NodeView.FolderLike[S, T] => false
-          case _ => true
+          case _ => false // EEE true
         }
       }
 
