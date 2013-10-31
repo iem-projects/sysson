@@ -27,9 +27,8 @@
 package at.iem.sysson
 package impl
 
-import de.sciss.lucre.synth.{InMemory, Sys}
 import de.sciss.lucre.{event => evt}
-import de.sciss.lucre.event.{Pull, EventLike}
+import de.sciss.lucre.event.{Pull, EventLike, InMemory, Sys}
 import de.sciss.lucre.expr.Expr
 import de.sciss.lucre.{data, expr}
 import de.sciss.lucre.synth.expr.Strings

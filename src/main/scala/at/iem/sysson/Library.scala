@@ -26,7 +26,7 @@
 
 package at.iem.sysson
 
-import de.sciss.lucre.synth.Sys
+import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.Expr
 import impl.{LibraryImpl => Impl}
 import de.sciss.lucre.stm

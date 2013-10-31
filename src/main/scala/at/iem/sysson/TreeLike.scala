@@ -1,7 +1,6 @@
 package at.iem.sysson
 
-import de.sciss.lucre.event.EventLike
-import de.sciss.lucre.synth.Sys
+import de.sciss.lucre.event.{EventLike, Sys}
 import de.sciss.lucre.data
 
 trait TreeTypes {
@@ -71,57 +70,57 @@ trait TreeLike[S <: Sys[S], BU, LU, Repr] {
   def changed: EventLike[S, TreeLike.Update[S, BU, LU, Repr, Branch, Leaf]]
 }
 
-object SubTree extends TreeTypes {
-}
-class SubTree[S <: Sys[S], A, BU, LU] extends TreeLike[S, BU, LU, SubTree[S, A, BU, LU]] {
-  import SubTree.Node
-  import TreeLike.Update
-
-  def changed: EventLike[S, Update[S, BU, LU, SubTree[S, A, BU, LU], Branch, Leaf]] = ???
-
-  def root: Branch = new Branch {
-    def children(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Branch, Leaf]] = ???
-
-    val name = "root"
-
-    def size(implicit tx: S#Tx): Int = ???
-
-    def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Branch, Leaf]] = ???
-
-    def isEmpty(implicit tx: S#Tx): Boolean = ???
-
-    def nonEmpty(implicit tx: S#Tx): Boolean = ???
-
-    def apply(idx: Int)(implicit tx: S#Tx): Node[Branch, Leaf] = ???
-
-    def indexOf(node: Node[Branch, Leaf])(implicit tx: S#Tx): Int = ???
-  }
-
-  trait Leaf {
-    def name: String
-  }
-
-  trait Branch extends TreeLike.Branch[S, Branch, Leaf] {
-    val name: String
-  }
-}
-
-object TreeTest {
-  def test1[S <: Sys[S], BU, LU, T <: TreeLike[S, BU, LU, T]](tree: T)(implicit tx: S#Tx): Unit = {
-    import TreeLike.{IsLeaf, IsBranch}
-
-    def printLeaves(b: T#Branch): Unit = b.iterator.foreach {
-      case IsLeaf(l)    => println(l)
-      case IsBranch(c)  => printLeaves(c)
-    }
-
-    printLeaves(tree.root)
-  }
-
-  def test2[S <: Sys[S]](tree: SubTree[S, _, _, _])(implicit tx: S#Tx): Unit = {
-    tree.root.iterator.foreach {
-      case Left(l) => println(l.name)
-      case _ =>
-    }
-  }
-}
+//object SubTree extends TreeTypes {
+//}
+//class SubTree[S <: Sys[S], A, BU, LU] extends TreeLike[S, BU, LU, SubTree[S, A, BU, LU]] {
+//  import SubTree.Node
+//  import TreeLike.Update
+//
+//  def changed: EventLike[S, Update[S, BU, LU, SubTree[S, A, BU, LU], Branch, Leaf]] = ???
+//
+//  def root: Branch = new Branch {
+//    def children(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Branch, Leaf]] = ???
+//
+//    val name = "root"
+//
+//    def size(implicit tx: S#Tx): Int = ???
+//
+//    def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, Node[Branch, Leaf]] = ???
+//
+//    def isEmpty(implicit tx: S#Tx): Boolean = ???
+//
+//    def nonEmpty(implicit tx: S#Tx): Boolean = ???
+//
+//    def apply(idx: Int)(implicit tx: S#Tx): Node[Branch, Leaf] = ???
+//
+//    def indexOf(node: Node[Branch, Leaf])(implicit tx: S#Tx): Int = ???
+//  }
+//
+//  trait Leaf {
+//    def name: String
+//  }
+//
+//  trait Branch extends TreeLike.Branch[S, Branch, Leaf] {
+//    val name: String
+//  }
+//}
+//
+//object TreeTest {
+//  def test1[S <: Sys[S], BU, LU, T <: TreeLike[S, BU, LU, T]](tree: T)(implicit tx: S#Tx): Unit = {
+//    import TreeLike.{IsLeaf, IsBranch}
+//
+//    def printLeaves(b: T#Branch): Unit = b.iterator.foreach {
+//      case IsLeaf(l)    => println(l)
+//      case IsBranch(c)  => printLeaves(c)
+//    }
+//
+//    printLeaves(tree.root)
+//  }
+//
+//  def test2[S <: Sys[S]](tree: SubTree[S, _, _, _])(implicit tx: S#Tx): Unit = {
+//    tree.root.iterator.foreach {
+//      case Left(l) => println(l.name)
+//      case _ =>
+//    }
+//  }
+//}
