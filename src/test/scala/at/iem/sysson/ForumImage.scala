@@ -7,8 +7,19 @@ import PConstants._
 import java.awt.event.{MouseEvent, ComponentEvent, ComponentAdapter}
 import Implicits._
 import de.sciss.numbers
+import processing.pdf.PGraphicsPDF
+import scala.annotation.tailrec
 
+/*
+requires the following additional jars from Processing:
+
+itext.jar
+pdf.jar
+
+ */
 object ForumImage extends SimpleSwingApplication {
+  def timeIdx = 100
+
   lazy val data = openDefault2()
 
   lazy val top: MainFrame = {
@@ -19,7 +30,7 @@ object ForumImage extends SimpleSwingApplication {
 
     // 0...16 ; 9 !
     val vec = (0 until numPlev).map { plev =>
-      val sel = (v in "time" select 100) in "plev" select plev
+      val sel = (v in "time" select timeIdx) in "plev" select plev
       // [plev][lat][lon]
       //sel.reducedDimensions.foreach(println)
       val dat = sel.readScaled1D()
@@ -82,14 +93,36 @@ class NoiseSphere(datAll: Vec[Vec[Vec[Float]]]) extends PApplet {
   var rx      = 0f
   var ry      = 0f
   var plevIdx = 0
+  var savePDF = false
 
   override def setup(): Unit = {
-    size(w, h, P3D)
+    size(w, h, OPENGL) // P3D
     noiseDetail(3)
     noLoop()
   }
 
   override def draw(): Unit = {
+    if(savePDF) {
+      // set up PGraphicsPDF for use with beginRaw()
+      import de.sciss.file._
+
+      @tailrec def mkFile(idx: Int = 1): File = {
+        val f = userHome / "Desktop" / s"ForumImage$idx.pdf"
+        if (f.exists()) mkFile(idx + 1) else f
+      }
+
+      val path  = mkFile().path
+      println(s"Writing '$path'...")
+      val pdf   = beginRaw(PDF, path).asInstanceOf[PGraphicsPDF]
+
+      // set default Illustrator stroke styles and paint background rect.
+      pdf.strokeJoin(MITER)
+      pdf.strokeCap(SQUARE)
+      pdf.fill(0)
+      pdf.noStroke()
+      pdf.rect(0,0, width,height)
+    }
+
     background(0)
     val wh = width / 2f
     val hh = height / 2f
@@ -113,17 +146,27 @@ class NoiseSphere(datAll: Vec[Vec[Vec[Float]]]) extends PApplet {
       // translate(100,0)
       popMatrix()
     }
+
+    if (savePDF) {
+      endRaw()
+      savePDF = false
+    }
   }
 
-
-  override def mousePressed(): Unit = {
-    plevIdx = (plevIdx + 1) % pelos.size
-  }
+  //  override def mousePressed(): Unit = {
+  //    plevIdx = (plevIdx + 1) % pelos.size
+  //  }
 
   override def mouseMoved(e: MouseEvent): Unit = {
     super.mouseMoved(e)
     redraw()
   }
+
+  override def keyPressed(): Unit =
+    if (key == 's') {
+      savePDF = true
+      redraw()
+    }
 
   class Pelo(z0: Float, phi0: Float, len: Float) {
     require(z0   >= 0f &&   z0 <= 1f, s"z0 is $z0")

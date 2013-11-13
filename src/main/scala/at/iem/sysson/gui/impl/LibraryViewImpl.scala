@@ -65,7 +65,7 @@ object LibraryViewImpl {
     def branchData(branch: Library[S]#Branch)(implicit tx: S#Tx): BD = branch.name.value
     def leafData  (leaf  : Library[S]#Leaf  )(implicit tx: S#Tx): LD = leaf  .name.value
 
-    private val rendererJ = new DefaultTreeTableCellRenderer {
+    private object rendererJ extends DefaultTreeTableCellRenderer {
       var selected  = false
       var viewJ     = null: de.sciss.treetable.j.TreeTable
 
