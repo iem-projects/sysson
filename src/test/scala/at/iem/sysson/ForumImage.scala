@@ -4,7 +4,7 @@ import scala.swing.event.WindowClosing
 import scala.swing.{SimpleSwingApplication, MainFrame}
 import processing.core.{PApplet, PConstants}
 import PConstants._
-import java.awt.event.{ComponentEvent, ComponentAdapter}
+import java.awt.event.{MouseEvent, ComponentEvent, ComponentAdapter}
 import Implicits._
 import de.sciss.numbers
 
@@ -17,17 +17,20 @@ object ForumImage extends SimpleSwingApplication {
     val numLat  = data.dimensionMap("lat" ).size
     val numLon  = data.dimensionMap("lon" ).size
 
-    val sel = (v in "time" select 100) in "plev" select 0
-    // [plev][lat][lon]
-    sel.reducedDimensions.foreach(println)
-    val dat = sel.readScaled1D()
-    //    println(dat.size)
-    val datn  = dat.normalize
-    val vec   = datn.grouped(numLat).toIndexedSeq
+    // 0...16 ; 9 !
+    val vec = (0 until numPlev).map { plev =>
+      val sel = (v in "time" select 100) in "plev" select plev
+      // [plev][lat][lon]
+      //sel.reducedDimensions.foreach(println)
+      val dat = sel.readScaled1D()
+      //    println(dat.size)
+      val datn  = dat.normalize
+      datn.grouped(numLat).toIndexedSeq
+    }
     mkFrame(vec)
   }
 
-  private def mkFrame(vec: Vec[Vec[Float]]): MainFrame = new MainFrame {
+  private def mkFrame(vec: Vec[Vec[Vec[Float]]]): MainFrame = new MainFrame {
     resizable = false
     pack()
     val embed = new NoiseSphere(vec)
@@ -58,53 +61,73 @@ object ForumImage extends SimpleSwingApplication {
   }
 }
 
-class NoiseSphere(dat: Vec[Vec[Float]]) extends PApplet {
-  val cuantos = 4000
-  val w       = 800
+class NoiseSphere(datAll: Vec[Vec[Vec[Float]]]) extends PApplet {
+  val w       = 1600
   val h       = 800
+  val dx      = 48 // 48
   val radio   = h / 4f
   // val pelos   = Array.tabulate(cuantos)(i => new Pelo((i.toFloat/(cuantos/11f))%1f, i.toFloat/(cuantos/13f)%1f))
-  val pelos   = dat.zipWithIndex.flatMap { case (latSlice, lat) =>
-    import numbers.Implicits._
-    latSlice.zipWithIndex.map { case (v, lon) =>
-      val z   = lat.linlin(0, dat     .size, 0, 1)
-      val phi = lon.linlin(0, latSlice.size, 0, 1)
-      val len = v  .linlin(0, 1.0f, 0.0f, 1.5f)
-      new Pelo(z0 = z, phi0 = phi, len = len)
+  val pelos   = datAll.map { dat=>
+    dat.zipWithIndex.flatMap { case (latSlice, lat) =>
+      import numbers.Implicits._
+      latSlice.zipWithIndex.map { case (v, lon) =>
+        val z   = lat.linlin(0, dat     .size, 0, 1)
+        val phi = lon.linlin(0, latSlice.size, 0, 1)
+        val len = v  .linlin(0, 1.0f, 0.0f, 1.41f)
+        new Pelo(z0 = z, phi0 = phi, len = len)
+      }
     }
   }
 
   var rx      = 0f
   var ry      = 0f
+  var plevIdx = 0
 
   override def setup(): Unit = {
     size(w, h, P3D)
     noiseDetail(3)
-    // noLoop()
+    noLoop()
   }
 
   override def draw(): Unit = {
     background(0)
     val wh = width / 2f
     val hh = height / 2f
-    translate(wh, hh)
+    pelos.zipWithIndex.collect { case (plevSlice, plev) if plev % 2 == 0 =>
+      pushMatrix()
+      translate(hh + (plev + 1) * dx, hh)
 
-    val rxp = (mouseX - wh) * 0.005f
-    val ryp = (mouseY - hh) * 0.005f
-    rx      = (rx * 0.9f) + (rxp * 0.1f)
-    ry      = (ry * 0.9f) + (ryp * 0.1f)
-    rotateY(rx)
-    rotateX(ry)
-    fill(0)
-    noStroke()
-    sphere(radio)
+      val rxp = (mouseX - wh) * 0.005f
+      val ryp = (mouseY - hh) * 0.005f
+      rx      = (rx * 0.9f) + (rxp * 0.1f)
+      ry      = (ry * 0.9f) + (ryp * 0.1f)
+      rotateY(rx)
+      rotateX(ry)
+      fill(0)
+      noStroke()
+      sphere(radio)
 
-    pelos.foreach(_.dibujar())
+      // pelos(plevIdx).foreach(_.dibujar())
+
+      plevSlice.foreach(_.dibujar())
+      // translate(100,0)
+      popMatrix()
+    }
+  }
+
+
+  override def mousePressed(): Unit = {
+    plevIdx = (plevIdx + 1) % pelos.size
+  }
+
+  override def mouseMoved(e: MouseEvent): Unit = {
+    super.mouseMoved(e)
+    redraw()
   }
 
   class Pelo(z0: Float, phi0: Float, len: Float) {
-    require(z0   >= 0f &&   z0 <= 1f)
-    require(phi0 >= 0f && phi0 <= 1f)
+    require(z0   >= 0f &&   z0 <= 1f, s"z0 is $z0")
+    require(phi0 >= 0f && phi0 <= 1f, s"phi0 is $phi0")
     import math.{asin, cos, sin}
 
     val z1    = (z0 * 2 - 1) * radio // random(-radio, radio)
