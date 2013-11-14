@@ -5,6 +5,7 @@ import de.sciss.lucre.event.Sys
 import impl.{TreeTableViewImpl => Impl}
 import de.sciss.treetable.{TreeTable, TreeTableCellRenderer, TreeColumnModel}
 import scala.swing.Component
+import de.sciss.model.Model
 
 object TreeTableView {
   trait Handler[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]] {
@@ -61,8 +62,24 @@ object TreeTableView {
 
   def apply[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](tree: T, handler: H)
                                              (implicit tx: S#Tx): TreeTableView[S, T, H] = Impl(tree, handler)
+
+  sealed trait Update
+  case object SelectionChanged extends Update
+
+  trait Node {
+    def isLeaf: Boolean
+  }
 }
-trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T], H <: TreeTableView.Handler[S, T, H]] {
+trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T], H <: TreeTableView.Handler[S, T, H]]
+  extends Model[TreeTableView.Update] {
+
+  /** Opaque view type corresponding with a node in the model. */
+  type Node <: TreeTableView.Node
+
   def component: Component
   def treeTable: TreeTable[_, _]
+  def selection: List[Node]
+
+  /** Maps from view to underlying model data. */
+  def data(view: Node)(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
 }

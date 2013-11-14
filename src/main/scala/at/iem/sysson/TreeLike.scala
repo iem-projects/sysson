@@ -2,6 +2,7 @@ package at.iem.sysson
 
 import de.sciss.lucre.event.{EventLike, Sys}
 import de.sciss.lucre.data
+import de.sciss.serial
 
 trait TreeTypes {
   type Node[+B, +L]     = Either[B, L]
@@ -73,6 +74,11 @@ trait TreeLike[S <: Sys[S], T <: TreeLike[S, T]] {
   def root: T#Branch
 
   def changed: EventLike[S, TreeLike.Update[S, T]]
+
+  // def nodeReader: serial.Reader[S#Tx, S#Acc, TreeLike.Node[T#Branch, T#Leaf]]
+
+  def branchSerializer: serial.Serializer[S#Tx, S#Acc, T#Branch]
+  def leafSerializer  : serial.Serializer[S#Tx, S#Acc, T#Leaf  ]
 }
 
 //object SubTree extends TreeTypes {

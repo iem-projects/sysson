@@ -5,15 +5,16 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.treetable.TreeTableCellRenderer.State
 import de.sciss.treetable.TreeColumnModel
-import scala.swing.{Swing, ScrollPane, Component}
+import scala.swing.{Orientation, BoxPanel, Button, FlowPanel, Swing, ScrollPane, Component}
 import de.sciss.model.Change
 import de.sciss.treetable.j.DefaultTreeTableCellRenderer
 import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.Window
-import java.awt.{Graphics, Color}
+import java.awt.Graphics
+import de.sciss.lucre.stm
 
 object LibraryViewImpl {
-  def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx): LibraryView[S] = {
+  def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
     val handler   = new Handler[S]
     val res       = new Impl(library, TreeTableView[S, Library[S], Handler[S]](library, handler))
     GUI.fromTx(res.guiInit())
@@ -21,13 +22,49 @@ object LibraryViewImpl {
   }
 
   private final class Impl[S <: Sys[S]](val library: Library[S], treeView: TreeTableView[S, Library[S], Handler[S]])
+                                       (implicit cursor: stm.Cursor[S])
     extends LibraryView[S] with ComponentHolder[Component] {
     impl =>
 
     def guiInit(): Unit = {
       val scroll = new ScrollPane(treeView.component)
       scroll.border = Swing.EmptyBorder
-      component = scroll
+
+      val ggView = Button("View") {
+        treeView.selection match {
+          case single :: Nil if single.isLeaf =>
+            cursor.step { implicit tx =>
+              treeView.data(single) match {
+                case TreeLike.IsLeaf(l) =>
+                  val name  = l.name.value
+                  val code  = l.source.value
+                  PatchCodeFrameImpl(name, Code.SynthGraph(code)) { (newName, newCode) =>
+                    ???
+                  }
+
+                case _ =>
+              }
+            }
+          case _ =>
+        }
+      }
+      ggView.enabled = false
+
+      treeView.addListener {
+        case TreeTableView.SelectionChanged =>
+          ggView.enabled = treeView.selection match {
+            case single :: Nil if single.isLeaf => true
+            case _ => false
+        }
+      }
+
+      val flow  = new FlowPanel(ggView)
+      val panel = new BoxPanel(Orientation.Vertical) {
+        contents += scroll
+        contents += flow
+      }
+
+      component = panel
 
       val f = new WindowImpl {
         frame =>
@@ -65,7 +102,7 @@ object LibraryViewImpl {
     def branchData(branch: Library[S]#Branch)(implicit tx: S#Tx): BD = branch.name.value
     def leafData  (leaf  : Library[S]#Leaf  )(implicit tx: S#Tx): LD = leaf  .name.value
 
-    private val rendererJ = new DefaultTreeTableCellRenderer {
+    private object rendererJ extends DefaultTreeTableCellRenderer {
       var selected  = false
       var viewJ     = null: de.sciss.treetable.j.TreeTable
 

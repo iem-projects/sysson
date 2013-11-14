@@ -38,7 +38,7 @@ import de.sciss.lucre.stm.Identifiable
 object Library {
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = Impl[S]
 
-  sealed trait NodeLike[S <: Sys[S]] extends Identifiable[S#ID] {
+  sealed trait NodeLike[S <: Sys[S]] extends stm.Mutable[S#ID, S#Tx] {
     def name: Expr[S, String]
   }
 

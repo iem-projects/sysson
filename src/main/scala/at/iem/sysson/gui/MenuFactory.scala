@@ -159,7 +159,7 @@ object MenuFactory {
     // LibraryViewOLD(TestLibrary())
 
     type S  = InMemory
-    val sys = InMemory()
+    implicit val sys = InMemory()
     sys.step { implicit tx =>
       val lib   = Library[S]
       val imp   = ExprImplicits[S]
