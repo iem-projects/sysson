@@ -66,20 +66,24 @@ object TreeTableView {
   sealed trait Update
   case object SelectionChanged extends Update
 
-  trait Node {
+  trait Node[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]] {
     def isLeaf: Boolean
+    // def isExpanded: Boolean
+
+    def renderData: H#D
+    def modelData()(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
   }
 }
 trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T], H <: TreeTableView.Handler[S, T, H]]
   extends Model[TreeTableView.Update] {
 
   /** Opaque view type corresponding with a node in the model. */
-  type Node <: TreeTableView.Node
+  type Node <: TreeTableView.Node[S, T, H]
 
   def component: Component
   def treeTable: TreeTable[_, _]
   def selection: List[Node]
 
-  /** Maps from view to underlying model data. */
-  def data(view: Node)(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
+  // /** Maps from view to underlying model data. */
+  // def data(view: Node)(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
 }

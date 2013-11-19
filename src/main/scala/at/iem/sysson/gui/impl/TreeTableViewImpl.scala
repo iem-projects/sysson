@@ -49,11 +49,11 @@ object TreeTableViewImpl {
     }
   }
   private sealed trait NodeView[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]]
-    extends NodeView.OrRoot[S, T, H] with TreeTableView.Node {
+    extends NodeView.OrRoot[S, T, H] with TreeTableView.Node[S, T, H] {
 
-    def renderData: H#D
+    // def renderData: H#D
     def parent: NodeView.BranchOrRoot[S, T, H]
-    def modelData()(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
+    // def modelData()(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
   }
 
   def apply[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](tree: T, handler: H)
@@ -172,7 +172,7 @@ object TreeTableViewImpl {
       case n: VNode => n
     } (breakOut)
 
-    def data(view: VNode)(implicit tx: S#Tx): TNode = view.modelData()
+    // def data(view: VNode)(implicit tx: S#Tx): TNode = view.modelData()
 
     def addElem(parent: VBranch, idx: Int, elem: TNode, refresh: Boolean)
                (branch: (T#Branch, VBranch) => Unit)(implicit tx: S#Tx): VNode = {

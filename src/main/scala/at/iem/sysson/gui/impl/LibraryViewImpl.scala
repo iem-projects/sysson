@@ -12,6 +12,7 @@ import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.Window
 import java.awt.Graphics
 import de.sciss.lucre.stm
+import de.sciss.lucre.synth.expr.ExprImplicits
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
@@ -30,16 +31,25 @@ object LibraryViewImpl {
       val scroll = new ScrollPane(treeView.component)
       scroll.border = Swing.EmptyBorder
 
+      val ggAdd = Button("Add") {
+
+      }
+
       val ggView = Button("View") {
         treeView.selection match {
           case single :: Nil if single.isLeaf =>
             cursor.step { implicit tx =>
-              treeView.data(single) match {
+              single.modelData() match {
                 case TreeLike.IsLeaf(l) =>
                   val name  = l.name.value
                   val code  = l.source.value
                   PatchCodeFrameImpl(name, Code.SynthGraph(code)) { (newName, newCode) =>
-                    ???
+                    cursor.step { implicit tx =>
+                      val expr    = ExprImplicits[S]
+                      import expr._
+                      l.name()    = newName
+                      l.source()  = newCode
+                    }
                   }
 
                 case _ =>
