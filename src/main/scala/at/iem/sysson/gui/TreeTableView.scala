@@ -81,7 +81,8 @@ trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T], H <: TreeTableView.Handler
   type Node <: TreeTableView.Node[S, T, H]
 
   def component: Component
-  def treeTable: TreeTable[_, _]
+  def treeTable: TreeTable[Node, _]
+
   def selection: List[Node]
 
   // /** Maps from view to underlying model data. */

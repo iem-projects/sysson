@@ -2,10 +2,10 @@ package at.iem.sysson
 package gui
 package impl
 
-import scala.swing.{ScrollPane, Component}
+import scala.swing.{Graphics2D, ScrollPane, Component}
 import de.sciss.lucre.stm.{Disposable, IdentifierMap}
 import de.sciss.model.impl.ModelImpl
-import javax.swing.DropMode
+import javax.swing.{Icon, DropMode}
 import de.sciss.treetable.{j, TreeTableSelectionChanged, TreeTableCellRenderer, TreeColumnModel, AbstractTreeModel, TreeTable}
 import GUI.{fromTx => guiFromTx, requireEDT}
 import de.sciss.lucre.event.Sys
@@ -14,36 +14,84 @@ import at.iem.sysson.gui.TreeTableView.Handler
 import javax.swing.table.DefaultTableCellRenderer
 import de.sciss.lucre.stm
 import collection.breakOut
+import java.awt.{RenderingHints, Color, Graphics}
+import java.awt.geom.GeneralPath
 
 object TreeTableViewImpl {
+  object Icons {
+    object AddItem extends Icon {
+      def getIconWidth  = 16
+      def getIconHeight = 16
+
+      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
+        g.setColor(Color.black)
+        g.fillRect(x    , y + 6, 16,  4)
+        g.fillRect(x + 6, y    ,  4, 16)
+      }
+    }
+
+    object RemoveItem extends Icon {
+      def getIconWidth  = 16
+      def getIconHeight = 16
+
+      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
+        g.setColor(Color.black)
+        g.fillRect(x, y + 6, 16, 4)
+      }
+    }
+
+    object ViewItem extends Icon {
+      def getIconWidth  = 16
+      def getIconHeight = 16
+
+      private val shape = new GeneralPath
+      shape.moveTo(0, 8)
+      shape.quadTo(8,  0, 16, 8)
+      shape.quadTo(8, 16,  0, 8)
+      shape.closePath()
+
+      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
+        val g2      = g.asInstanceOf[Graphics2D]
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+        val atOrig  = g2.getTransform
+        g2.setColor(Color.black)
+        g2.translate(x, y)
+        g2.fill(shape)
+        g2.setTransform(atOrig)
+      }
+    }
+  }
+
   private final val DEBUG = false
 
   private object NodeView {
     sealed trait OrRoot[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]]
 
-    sealed trait BranchOrRoot[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]] extends OrRoot[S, T, H] {
-      /** The children of the folder. This variable _must only be accessed or updated_ on the event thread. */
-      var children = Vec.empty[NodeView[S, T, H]]
-      var renderData: H#BD
-    }
+    //    sealed trait BranchOrRoot[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]] extends OrRoot[S, T, H] {
+    //      /** The children of the folder. This variable _must only be accessed or updated_ on the event thread. */
+    //      var children = Vec.empty[NodeView[S, T, H]]
+    //      var renderData: H#BD
+    //    }
 
-    class Branch[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](val parent: BranchOrRoot[S, T, H],
+    class Branch[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](val parentOption: Option[Branch[S, T, H]],
                                                                           var renderData: H#BD,
                                                                           src: stm.Source[S#Tx, T#Branch])
-      extends BranchOrRoot[S, T, H] with NodeView[S, T, H] {
+      extends /* BranchOrRoot[S, T, H] with */ NodeView[S, T, H] {
 
+      var children = Vec.empty[NodeView[S, T, H]]
       def modelData()(implicit tx: S#Tx) = TreeLike.IsBranch(src())
       def isLeaf = false
     }
 
-    class Root[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](var renderData: H#BD)
-      extends BranchOrRoot[S, T, H]
-    
-    class Leaf[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](val parent: BranchOrRoot[S, T, H],
+    //    class Root[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](var renderData: H#BD)
+    //      extends BranchOrRoot[S, T, H]
+
+    class Leaf[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](val parent: Branch[S, T, H],
                                                                         var renderData: H#LD,
                                                                         src: stm.Source[S#Tx, T#Leaf])
       extends NodeView[S, T, H] {
 
+      def parentOption = Some(parent)
       def modelData()(implicit tx: S#Tx) = TreeLike.IsLeaf(src())
       def isLeaf = true
     }
@@ -52,7 +100,7 @@ object TreeTableViewImpl {
     extends NodeView.OrRoot[S, T, H] with TreeTableView.Node[S, T, H] {
 
     // def renderData: H#D
-    def parent: NodeView.BranchOrRoot[S, T, H]
+    def parentOption: Option[NodeView.Branch[S, T, H]] // NodeView.BranchOrRoot[S, T, H]
     // def modelData()(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
   }
 
@@ -64,11 +112,14 @@ object TreeTableViewImpl {
     val _tree   = tree
     new Impl[S, T, H] {
       val mapViews  = tx.newInMemoryIDMap[VNode]  // folder IDs to renderers
-      val rootView  = new NodeView.Root[S, T, H](_handler.branchData(root))
+      // val rootView  = new NodeView.Root[S, T, H](_handler.branchData(root))
+      val rootView  = new NodeView.Branch[S, T, H](parentOption = None, renderData = _handler.branchData(root),
+        src = tx.newHandle(root)(_tree.branchSerializer))
+      mapViews.put(_handler.branchID(root), rootView)
       val handler   = _handler
       val tree      = _tree
 
-      private def buildMapView(f: Branch, fv: NodeView.BranchOrRoot[S, T, H]): Unit = {
+      private def buildMapView(f: Branch, fv: NodeView.Branch[S, T, H]): Unit = {
         val vs = f.iterator.map { c =>
           addElem(fv, -1, c, refresh = false) { (b, bv) =>
             buildMapView(b, bv)
@@ -92,50 +143,46 @@ object TreeTableViewImpl {
     extends ComponentHolder[Component] with TreeTableView[S, T, H] with ModelImpl[TreeTableView.Update] {
     view =>
 
-    type V        = NodeView.OrRoot       [S, T, H]
-    type VBranch  = NodeView.BranchOrRoot [S, T, H]
-    type VBranchI = NodeView.Branch       [S, T, H]
+    // type V        = NodeView.OrRoot       [S, T, H]
+    type VBranch  = NodeView.Branch       [S, T, H]
     type VLeaf    = NodeView.Leaf         [S, T, H]
     type VNode    = NodeView              [S, T, H]
     type TPath    = TreeTable.Path[VBranch]
     type TNode    = TreeLike.Node[T#Branch, T#Leaf]
     type Node     = VNode // alias in the interface
 
-    protected def rootView: NodeView.Root [S, T, H]
+    protected def rootView: NodeView[S, T, H] // .Root [S, T, H]
     protected def mapViews: IdentifierMap[S#ID, S#Tx, VNode]
     protected def observer: Disposable[S#Tx]
     protected def handler : H
     protected def tree    : T
 
-    private class ElementTreeModel extends AbstractTreeModel[V] {
-      lazy val root: V = rootView // ! must be lazy. suckers....
+    private class ElementTreeModel extends AbstractTreeModel[VNode] {
+      lazy val root: VNode = rootView // ! must be lazy. suckers....
 
-      def getChildCount(parent: V): Int = parent match {
+      def getChildCount(parent: VNode): Int = parent match {
         case b: VBranch => b.children.size
         case _          => 0
       }
 
-      def getChild(parent: V, index: Int): VNode = parent match {
+      def getChild(parent: VNode, index: Int): VNode = parent match {
         case b: VBranch => b.children(index)
         case _          => sys.error(s"parent $parent is not a branch")
       }
 
-      def isLeaf(node: V): Boolean = node match {
+      def isLeaf(node: VNode): Boolean = node match {
         case _: VBranch => false
         case _          => true
       }
 
-      def getIndexOfChild(parent: V, child: V): Int = parent match {
+      def getIndexOfChild(parent: VNode, child: VNode): Int = parent match {
         case b: VBranch => b.children.indexOf(child)
         case _          => sys.error(s"parent $parent is not a branch")
       }
 
-      def getParent(node: V): Option[V] = node match {
-        case n: VNode => Some(n.parent)
-        case _        => None
-      }
+      def getParent(node: VNode): Option[VNode] = node.parentOption
 
-      def valueForPathChanged(path: TreeTable.Path[V], newValue: V): Unit =
+      def valueForPathChanged(path: TreeTable.Path[VNode], newValue: VNode): Unit =
         println(s"valueForPathChanged($path, $newValue)")
 
       def elemAdded(parent: VBranch, idx: Int, view: VNode): Unit = {
@@ -164,13 +211,15 @@ object TreeTableViewImpl {
     }
 
     private var _model: ElementTreeModel  = _
-    private var t: TreeTable[V, TreeColumnModel[V]] = _
+    private var t: TreeTable[VNode, TreeColumnModel[VNode]] = _
 
-    def treeTable: TreeTable[_, _] = t
+    def treeTable: TreeTable[VNode, _] = t
 
-    def selection: List[VNode] = t.selection.paths.flatMap(_.lastOption).collect {
-      case n: VNode => n
-    } (breakOut)
+    def selection: List[VNode] = t.selection.paths.flatMap(_.lastOption)(breakOut)
+
+    //      .collect {
+    //      case n: VNode => n
+    //    } (breakOut)
 
     // def data(view: VNode)(implicit tx: S#Tx): TNode = view.modelData()
 
@@ -197,7 +246,7 @@ object TreeTableViewImpl {
           val data  = handler.branchData(b)
           val id    = handler.branchID(b)
           val src   = tx.newHandle(b)(tree.branchSerializer)
-          val _v    = new NodeView.Branch[S, T, H](parent, data, src)
+          val _v    = new NodeView.Branch[S, T, H](Some(parent), data, src)
           addView(id, _v)
           branch(b, _v)
           // buildMapView(b, _v)
@@ -233,7 +282,7 @@ object TreeTableViewImpl {
         case IsBranch(b) =>
           val id  = handler.branchID(b)
           if (b.nonEmpty) mapViews.get(id) match {
-            case Some(fv: VBranchI) =>
+            case Some(fv: VBranch) =>
               b.iterator.toList.zipWithIndex.reverse.foreach { case (c, ci) =>
                 elemRemoved(fv, ci, c)
               }
@@ -288,7 +337,7 @@ object TreeTableViewImpl {
         case upd1 @ TreeLike.BranchUpdate(parent1, _) =>
           val id = handler.branchID(parent1)
           mapViews.get(id) match {
-            case Some(vparent1: VBranch)  => folderUpdated(vparent1, upd1)
+            case Some(vparent1: VBranch) => folderUpdated(vparent1, upd1)
             case other                    => warnNoBranchView(parent1, other)
           }
 
@@ -306,17 +355,17 @@ object TreeTableViewImpl {
 
       _model = new ElementTreeModel
 
-      val tcm = new TreeColumnModel[V] {
+      val tcm = new TreeColumnModel[VNode] {
         private val peer = handler.columns
 
-        def getValueAt(r: V, column: Int): Any = r
+        def getValueAt(r: VNode, column: Int): Any = r
 
         //        match {
         //          case node: VNode  => peer.getValueAt(node.data, column)
         //          case _            => println(s"----1---- $r"); null // XXX correct?
         //        }
 
-        def setValueAt(value: Any, r: V, column: Int): Unit = r match {
+        def setValueAt(value: Any, r: VNode, column: Int): Unit = r match {
           case node: VNode  => peer.setValueAt(value, node.renderData, column)
           case _            => throw new IllegalStateException(s"Trying to alter $r")
         }
@@ -326,7 +375,7 @@ object TreeTableViewImpl {
 
         def columnCount: Int = peer.columnCount
 
-        def isCellEditable(r: V, column: Int): Boolean = r match {
+        def isCellEditable(r: VNode, column: Int): Boolean = r match {
           case node: VNode  => peer.isCellEditable(node.renderData, column)
           case _            => false
         }
@@ -334,7 +383,7 @@ object TreeTableViewImpl {
         def hierarchicalColumn: Int = peer.hierarchicalColumn
       }
 
-      t = new TreeTable(_model, tcm: TreeColumnModel[V])
+      t = new TreeTable(_model, tcm: TreeColumnModel[VNode])
       t.rootVisible = false
       val r = new DefaultTableCellRenderer with TreeTableCellRenderer {
         // private lazy val lb = new Label
@@ -343,7 +392,7 @@ object TreeTableViewImpl {
         def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int,
                                  state: TreeTableCellRenderer.State): Component = {
           value match {
-            case b: VBranchI  =>
+            case b: VBranch  =>
               // println(s"branchRenderer(${b.data}, row = $row)")
               handler.branchRenderer(view, b.renderData, row = row, column = column, state = state)
             case l: VLeaf     =>
@@ -385,7 +434,7 @@ object TreeTableViewImpl {
       //                                                   row: Int, column: Int): java.awt.Component = {
       //          val state = TreeTableCellRenderer.State(selected = isSelected, focused = hasFocus, tree = None)
       //          value match {
-      //            case b: VBranchI  =>
+      //            case b: VBranch  =>
       //              // println(s"branchRenderer(${b.data}, row = $row)")
       //              handler.branchRenderer(view, b.data, row = row, column = column, state = state).peer
       //            case l: VLeaf     =>

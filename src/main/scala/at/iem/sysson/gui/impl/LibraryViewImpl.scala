@@ -5,7 +5,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.treetable.TreeTableCellRenderer.State
 import de.sciss.treetable.TreeColumnModel
-import scala.swing.{Orientation, BoxPanel, Button, FlowPanel, Swing, ScrollPane, Component}
+import scala.swing.{Action, Orientation, BoxPanel, Button, FlowPanel, Swing, ScrollPane, Component}
 import de.sciss.model.Change
 import de.sciss.treetable.j.DefaultTreeTableCellRenderer
 import de.sciss.desktop.impl.WindowImpl
@@ -31,20 +31,39 @@ object LibraryViewImpl {
       val scroll = new ScrollPane(treeView.component)
       scroll.border = Swing.EmptyBorder
 
-      val ggAdd = Button("Add") {
+      val actionAdd = new Action(null) {
+        icon = TreeTableViewImpl.Icons.AddItem
 
+        def apply(): Unit = {
+          println("TODO: Add")
+        }
       }
+      val ggAdd = new Button(actionAdd)
 
-      val ggView = Button("View") {
-        treeView.selection match {
+      val actionRemove = new Action(null) {
+        enabled = false
+        icon    = TreeTableViewImpl.Icons.RemoveItem
+
+        def apply(): Unit = {
+          println("TODO: Remove")
+        }
+      }
+      val ggRemove = new Button(actionRemove)
+
+      val actionView = new Action(null) {
+        enabled = false
+
+        icon = TreeTableViewImpl.Icons.ViewItem
+
+        def apply(): Unit = treeView.selection match {
           case single :: Nil if single.isLeaf =>
-            cursor.step { implicit tx =>
+            impl.cursor.step { implicit tx =>
               single.modelData() match {
                 case TreeLike.IsLeaf(l) =>
                   val name  = l.name.value
                   val code  = l.source.value
                   PatchCodeFrameImpl(name, Code.SynthGraph(code)) { (newName, newCode) =>
-                    cursor.step { implicit tx =>
+                    impl.cursor.step { implicit tx =>
                       val expr    = ExprImplicits[S]
                       import expr._
                       l.name()    = newName
@@ -58,17 +77,17 @@ object LibraryViewImpl {
           case _ =>
         }
       }
-      ggView.enabled = false
+      val ggView = new Button(actionView)
 
       treeView.addListener {
         case TreeTableView.SelectionChanged =>
-          ggView.enabled = treeView.selection match {
+          actionView.enabled = treeView.selection match {
             case single :: Nil if single.isLeaf => true
             case _ => false
         }
       }
 
-      val flow  = new FlowPanel(ggView)
+      val flow  = new FlowPanel(ggAdd, ggRemove, ggView)
       val panel = new BoxPanel(Orientation.Vertical) {
         contents += scroll
         contents += flow
