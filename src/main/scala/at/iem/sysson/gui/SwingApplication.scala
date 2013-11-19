@@ -42,8 +42,8 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     }
     dh.allDocuments.foreach(mkDocView)
 
-    LogWindow.instance          // initializes it
-    System.setErr(Console.err)  // por que?
+    // LogWindow.instance          // initializes it
+    // System.setErr(Console.err)  // por que?
     new MainWindow
   }
 

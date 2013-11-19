@@ -47,6 +47,11 @@ object LibraryImpl {
 
   private type NU[S <: Sys[S]] = TreeLike.NodeUpdate[S, Library[S]]
 
+  private def readNodeCookie(in: DataInput): Unit = {
+    val ver     = in.readInt()
+    require(ver == NODE_SER_VERSION, s"Unexpected node version. Found $ver, required$NODE_SER_VERSION")
+  }
+
   private object NodeImpl {
     implicit def serializer[S <: Sys[S]]: evt.Serializer[S, NodeImpl[S]] = anySer.asInstanceOf[Ser[S]]
 
@@ -60,12 +65,14 @@ object LibraryImpl {
     }
 
     private def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
-                                 (implicit tx: S#Tx): NodeImpl[S] =
+                                 (implicit tx: S#Tx): NodeImpl[S] = {
+      readNodeCookie(in)
       (in.readByte(): @switch) match {
         case LEAF_COOKIE    => LeafImpl  .readIdentified(in, access, targets)
         case BRANCH_COOKIE  => BranchImpl.readIdentified(in, access, targets)
         case other          => sys.error(s"Unexpected cookie $other")
       }
+    }
 
     private val anySer = new Ser[InMemory]
 
@@ -118,6 +125,7 @@ object LibraryImpl {
 
     private def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
                                  (implicit tx: S#Tx): LeafImpl[S] = {
+      readNodeCookie(in)
       val cookie  = in.readByte()
       require(cookie == LEAF_COOKIE, s"Unexpected cookie $cookie (should be $LEAF_COOKIE)")
       readIdentified(in, access, targets)
@@ -188,6 +196,7 @@ object LibraryImpl {
 
     private def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
                                  (implicit tx: S#Tx): BranchImpl[S] = {
+      readNodeCookie(in)
       val cookie  = in.readByte()
       require(cookie == BRANCH_COOKIE, s"Unexpected cookie $cookie (should be $BRANCH_COOKIE)")
       readIdentified(in, access, targets)
@@ -303,6 +312,8 @@ object LibraryImpl {
     }
 
     def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Impl[S] = {
+      val ver     = in.readInt()
+      require(ver == IMPL_SER_VERSION, s"Unexpected library version. Found $ver, required $IMPL_SER_VERSION")
       val root    = BranchImpl.read(in, access)
       new Impl(targets, root)
     }

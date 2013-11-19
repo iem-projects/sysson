@@ -29,12 +29,15 @@ package gui
 
 import java.awt.FileDialog
 import java.awt.event.KeyEvent
-import java.io.{RandomAccessFile, File, FilenameFilter}
+import java.io.{RandomAccessFile, FilenameFilter}
 import scala.util.control.NonFatal
 import de.sciss.desktop.{RecentFiles, KeyStrokes, Menu}
 import scala.swing.Action
-import de.sciss.lucre.event.InMemory
+import de.sciss.lucre.event.Durable
 import de.sciss.lucre.synth.expr.ExprImplicits
+import de.sciss.lucre.stm.store.BerkeleyDB
+import de.sciss.file._
+import de.sciss.lucre.stm
 
 object MenuFactory {
 
@@ -155,19 +158,26 @@ object MenuFactory {
 
   def openInterpreter(): Unit = InterpreterView()
 
-  def openLibrary(): Unit = {
-    // LibraryViewOLD(TestLibrary())
-
-    type S  = InMemory
-    implicit val sys = InMemory()
-    sys.step { implicit tx =>
-      val lib   = Library[S]
-      val imp   = ExprImplicits[S]
-      import imp._
-      lib.root.insertLeaf  (0, "Test-Leaf", "Test-Source")
-      val sub = lib.root.insertBranch(0, "Test-Branch")
-      sub.insertLeaf       (0, "Test-Child", "Test-Source")
-      /* val view = */ LibraryView(lib)
-    }
+  private type S = Durable
+  private implicit lazy val system: S = {
+    val store = BerkeleyDB.factory(dir = syssonDir / "library")
+    Durable(store)
   }
+
+  private lazy val libraryH: stm.Source[S#Tx, Library[S]] =
+    system.root { implicit tx =>
+      val _lib  = Library[S]
+      //      val imp   = ExprImplicits[S]
+      //      import imp._
+      //      _lib.root.insertLeaf  (0, "Test-Leaf", "Test-Source")
+      //      val sub = _lib.root.insertBranch(0, "Test-Branch")
+      //      sub.insertLeaf       (0, "Test-Child", "Test-Source")
+      _lib
+    }
+
+  def openLibrary(): Unit =
+    system.step { implicit tx =>
+      val lib = libraryH()
+      LibraryView(lib)
+    }
 }

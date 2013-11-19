@@ -14,14 +14,14 @@ licenses      := Seq("GPL v2+" -> url("http://www.gnu.org/licenses/gpl-2.0.txt")
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.10.2"
+scalaVersion  := "2.10.3"
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
 
 libraryDependencies ++= {
   Seq(
-    "edu.ucar" %  "netcdf"                  % "4.3.18",
+    "edu.ucar" %  "netcdf"                  % "4.3.19",
     // "de.sciss" %% "lucresynth"              % "2.0.+",          // sound system
     // "de.sciss" %% "lucredata"               % "2.2.1+",
     // "de.sciss" %% "lucreevent"              % "2.4.+",
@@ -34,6 +34,8 @@ libraryDependencies ++= {
     "de.sciss" %% "fileutil"                % "1.1.+",          // easy file name manipulation
     "de.sciss" %% "swingplus"               % "0.0.1+",         // GUI helpers
     "de.sciss" %% "treetable-scala"         % "1.3.+",          // GUI component
+    "de.sciss" %% "lucrestm-bdb"            % "2.0.+",          // database used for library
+    "de.sciss" %% "serial"                  % "1.0.1+",         // important bug fix in 1.0.1!
     // "de.sciss" %% "audiowidgets-swing"      % "1.3.1",          // some GUI widgets
     "org.jfree" % "jfreechart"              % "1.0.15",         // plotting
     "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // some GUI widgets
