@@ -11,5 +11,5 @@ object LibraryView {
 }
 trait LibraryView[S <: Sys[S]] {
   def component: Component
-  def library: Library[S]
+  def library(implicit tx: S#Tx): Library[S]
 }

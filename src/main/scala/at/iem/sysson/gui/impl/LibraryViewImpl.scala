@@ -17,28 +17,69 @@ import de.sciss.lucre.synth.expr.ExprImplicits
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
     val handler   = new Handler[S]
-    val res       = new Impl(library, TreeTableView[S, Library[S], Handler[S]](library, handler))
+    val libH      = tx.newHandle(library)
+    val res       = new Impl(libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
     GUI.fromTx(res.guiInit())
     res
   }
 
-  private final class Impl[S <: Sys[S]](val library: Library[S], treeView: TreeTableView[S, Library[S], Handler[S]])
+  private final class Impl[S <: Sys[S]](libraryH: stm.Source[S#Tx, Library[S]],
+                                        treeView: TreeTableView[S, Library[S], Handler[S]])
                                        (implicit cursor: stm.Cursor[S])
     extends LibraryView[S] with ComponentHolder[Component] {
     impl =>
+
+    def library(implicit tx: S#Tx): Library[S] = libraryH()
 
     def guiInit(): Unit = {
       val scroll = new ScrollPane(treeView.component)
       scroll.border = Swing.EmptyBorder
 
-      val actionAdd = new Action(null) {
+      // def add(gen: S#Tx => TreeLike.Node[Library.Branch[S], Library.Leaf[S]]) ...
+
+      def insertionPoint()(implicit tx: S#Tx): (Library.Branch[S], Int) = {
+        val pOpt = treeView.treeTable.selection.paths.headOption.flatMap {
+          case path @ init :+ last =>
+            last.modelData() match {
+              case TreeLike.IsBranch(b) if treeView.treeTable.isExpanded(path) => Some(b -> 0)
+              case child => init match {
+                case _ :+ _parent =>
+                  _parent.modelData() match {
+                    case TreeLike.IsBranch(b) => Some(b -> (b.indexOf(child) + 1))
+                    case _ => None
+                  }
+
+                case _ => None
+              }
+            }
+          case _ => None
+        }
+        pOpt.getOrElse(library.root -> library.root.size)
+      }
+
+      val actionAddBranch = new Action("Folder") {
         icon = TreeTableViewImpl.Icons.AddItem
 
-        def apply(): Unit = {
-          println("TODO: Add")
+        def apply(): Unit = cursor.step { implicit tx =>
+          val (parent, idx) = insertionPoint()
+          val expr = ExprImplicits[S]
+          import expr._
+          parent.insertBranch(idx, "untitled folder")
         }
       }
-      val ggAdd = new Button(actionAdd)
+      val ggAddBranch = new Button(actionAddBranch)
+
+      val actionAddLeaf = new Action("Patch") {
+        icon = TreeTableViewImpl.Icons.AddItem
+
+        def apply(): Unit = cursor.step { implicit tx =>
+          val (parent, idx) = insertionPoint()
+          val expr = ExprImplicits[S]
+          import expr._
+          parent.insertLeaf(idx, name = "untitled patch", source = "// Sonification Synth Graph body here")
+        }
+      }
+      val ggAddLeaf = new Button(actionAddLeaf)
 
       val actionRemove = new Action(null) {
         enabled = false
@@ -87,7 +128,7 @@ object LibraryViewImpl {
         }
       }
 
-      val flow  = new FlowPanel(ggAdd, ggRemove, ggView)
+      val flow  = new FlowPanel(ggAddBranch, ggAddLeaf, ggRemove, ggView)
       val panel = new BoxPanel(Orientation.Vertical) {
         contents += scroll
         contents += flow
@@ -147,7 +188,7 @@ object LibraryViewImpl {
 
     object columns extends TreeColumnModel[String] {
       def setValueAt(value: Any, node: String, column: Int): Unit = {
-        ???
+        println(s"TODO: setValueAt($value, $node, $column)")
       }
 
       def getColumnName(column: Int) = "Name"
@@ -158,7 +199,7 @@ object LibraryViewImpl {
 
       def getValueAt(node: String, column: Int) = node
 
-      def isCellEditable(node: String, column: Int) = false
+      def isCellEditable(node: String, column: Int) = column == 0
 
       def hierarchicalColumn = 0
     }

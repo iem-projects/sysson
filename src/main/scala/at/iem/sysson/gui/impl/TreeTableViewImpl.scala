@@ -130,6 +130,7 @@ object TreeTableViewImpl {
       buildMapView(root, rootView)
 
       val observer: Disposable[S#Tx] = tree.changed.react { implicit tx => upd =>
+        // println(s"UPDATE:\n$upd")
         folderUpdated(rootView, upd.branch)
       }
 
@@ -170,10 +171,7 @@ object TreeTableViewImpl {
         case _          => sys.error(s"parent $parent is not a branch")
       }
 
-      def isLeaf(node: VNode): Boolean = node match {
-        case _: VBranch => false
-        case _          => true
-      }
+      def isLeaf(node: VNode): Boolean = node.isLeaf
 
       def getIndexOfChild(parent: VNode, child: VNode): Int = parent match {
         case b: VBranch => b.children.indexOf(child)
