@@ -157,12 +157,12 @@ object LibraryImpl {
       source.dispose()
     }
 
-    def disconnect()(implicit tx: S#Tx): Unit = {
+    def connect()(implicit tx: S#Tx): Unit = {
       name  .changed ---> this
       source.changed ---> this
     }
 
-    def connect()(implicit tx: S#Tx): Unit = {
+    def disconnect()(implicit tx: S#Tx): Unit = {
       name  .changed -/-> this
       source.changed -/-> this
     }
@@ -257,7 +257,7 @@ object LibraryImpl {
         case _ => sys.error(s"Not a node impl: $node")
       }
       ll.remove(ni)
-      // TODO: somehow there are still observers registered, which results in an exception: ni.dispose()
+      ni.dispose()
     }
 
     def writeData(out: DataOutput): Unit = {

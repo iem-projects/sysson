@@ -199,7 +199,8 @@ object LibraryViewImpl {
             case Expr.Var(v) =>
               val expr = ExprImplicits[S]
               import expr._
-              v() = value.toString
+              val s: Expr[S, String] = value.toString
+              v() = s
           }
         }
       }
