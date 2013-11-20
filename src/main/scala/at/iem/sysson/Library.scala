@@ -56,6 +56,8 @@ object Library {
   trait Branch[S <: Sys[S]] extends TreeLike.Branch[S, Library[S]] with NodeLike[S] {
     def insertLeaf  (idx: Int, name: Expr[S, String], source: Expr[S, String])(implicit tx: S#Tx): Leaf[S]
     def insertBranch(idx: Int, name: Expr[S, String])(implicit tx: S#Tx): Branch[S]
+    def removeAt    (idx: Int)(implicit tx: S#Tx): Unit
+    def remove      (node: TreeLike.Node[Branch[S], Leaf[S]])(implicit tx: S#Tx): Unit
   }
   trait Leaf[S <: Sys[S]] extends NodeLike[S] {
     def name  : Expr.Var[S, String]

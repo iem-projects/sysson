@@ -13,6 +13,8 @@ import de.sciss.desktop.Window
 import java.awt.Graphics
 import de.sciss.lucre.stm
 import de.sciss.lucre.synth.expr.ExprImplicits
+import scala.concurrent.stm.{TxnLocal, Ref}
+import de.sciss.lucre.expr.Expr
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
@@ -37,34 +39,15 @@ object LibraryViewImpl {
 
       // def add(gen: S#Tx => TreeLike.Node[Library.Branch[S], Library.Leaf[S]]) ...
 
-      def insertionPoint()(implicit tx: S#Tx): (Library.Branch[S], Int) = {
-        val pOpt = treeView.treeTable.selection.paths.headOption.flatMap {
-          case path @ init :+ last =>
-            last.modelData() match {
-              case TreeLike.IsBranch(b) if treeView.treeTable.isExpanded(path) => Some(b -> 0)
-              case child => init match {
-                case _ :+ _parent =>
-                  _parent.modelData() match {
-                    case TreeLike.IsBranch(b) => Some(b -> (b.indexOf(child) + 1))
-                    case _ => None
-                  }
-
-                case _ => None
-              }
-            }
-          case _ => None
-        }
-        pOpt.getOrElse(library.root -> library.root.size)
-      }
-
       val actionAddBranch = new Action("Folder") {
         icon = TreeTableViewImpl.Icons.AddItem
 
         def apply(): Unit = cursor.step { implicit tx =>
-          val (parent, idx) = insertionPoint()
+          val (parent, idx) = treeView.insertionPoint()
           val expr = ExprImplicits[S]
           import expr._
-          parent.insertBranch(idx, "untitled folder")
+          treeView.markInsertion()
+          /* val b = */ parent.insertBranch(idx, "untitled folder")
         }
       }
       val ggAddBranch = new Button(actionAddBranch)
@@ -73,10 +56,11 @@ object LibraryViewImpl {
         icon = TreeTableViewImpl.Icons.AddItem
 
         def apply(): Unit = cursor.step { implicit tx =>
-          val (parent, idx) = insertionPoint()
+          val (parent, idx) = treeView.insertionPoint()
           val expr = ExprImplicits[S]
           import expr._
-          parent.insertLeaf(idx, name = "untitled patch", source = "// Sonification Synth Graph body here")
+          treeView.markInsertion()
+          /* val l = */ parent.insertLeaf(idx, name = "untitled patch", source = "// Sonification Synth Graph body here")
         }
       }
       val ggAddLeaf = new Button(actionAddLeaf)
@@ -86,7 +70,14 @@ object LibraryViewImpl {
         icon    = TreeTableViewImpl.Icons.RemoveItem
 
         def apply(): Unit = {
-          println("TODO: Remove")
+          val sel = treeView.selection.flatMap(n => n.parentOption.map(_ -> n))
+          if (sel.nonEmpty) impl.cursor.step { implicit tx =>
+            sel.foreach { case (pv, cv) =>
+              val TreeLike.IsBranch(pm) = pv.modelData()
+              val cm                    = cv.modelData()
+              pm.remove(cm)
+            }
+          }
         }
       }
       val ggRemove = new Button(actionRemove)
@@ -122,9 +113,11 @@ object LibraryViewImpl {
 
       treeView.addListener {
         case TreeTableView.SelectionChanged =>
-          actionView.enabled = treeView.selection match {
+          val sel = treeView.selection
+          actionRemove.enabled = sel.nonEmpty
+          actionView  .enabled = sel match {
             case single :: Nil if single.isLeaf => true
-            case _ => false
+            case _                              => false
         }
       }
 
@@ -161,10 +154,21 @@ object LibraryViewImpl {
     }
   }
 
-  private final class Handler[S <: Sys[S]] extends TreeTableView.Handler[S, Library[S], Handler[S]] {
+  //  private final class NameView(var name: String) {
+  //    override def toString = name
+  //  }
+
+  private final class Handler[S <: Sys[S]](implicit cursor: stm.Cursor[S])
+    extends TreeTableView.Handler[S, Library[S], Handler[S]] {
+
+    type N  = TreeTableView.Node[S, Library[S], Handler[S]]
+
     type D  = String
     type BD = String
     type LD = String
+    //    type D  = NameView
+    //    type BD = NameView
+    //    type LD = NameView
 
     def branchID(branch: Library.Branch[S]): S#ID = branch.id
     def leafID  (leaf  : Library.Leaf  [S]): S#ID = leaf  .id
@@ -186,9 +190,18 @@ object LibraryViewImpl {
     }
     private val renderer  = Component.wrap(rendererJ)
 
-    object columns extends TreeColumnModel[String] {
-      def setValueAt(value: Any, node: String, column: Int): Unit = {
-        println(s"TODO: setValueAt($value, $node, $column)")
+    object columns extends TreeColumnModel[N] {
+      def setValueAt(value: Any, node: N, column: Int): Unit = {
+        // println(s"TODO: setValueAt($value, $node, $column)")
+        require(column == 0)
+        cursor.step { implicit tx =>
+          node.modelData().merge.name match {
+            case Expr.Var(v) =>
+              val expr = ExprImplicits[S]
+              import expr._
+              v() = value.toString
+          }
+        }
       }
 
       def getColumnName(column: Int) = "Name"
@@ -197,9 +210,9 @@ object LibraryViewImpl {
 
       def columnCount = 1
 
-      def getValueAt(node: String, column: Int) = node
+      def getValueAt(node: N, column: Int) = node.renderData
 
-      def isCellEditable(node: String, column: Int) = column == 0
+      def isCellEditable(node: N, column: Int) = column == 0
 
       def hierarchicalColumn = 0
     }

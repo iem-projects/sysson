@@ -24,7 +24,7 @@ object TreeTableView {
     def branchData(branch: T#Branch)(implicit tx: S#Tx): H#BD
     def leafData  (leaf  : T#Leaf  )(implicit tx: S#Tx): H#LD
 
-    def columns: TreeColumnModel[H#D]
+    def columns: TreeColumnModel[Node[S, T, H]]
 
     def branchRenderer(view: TreeTableView[S, T, H], data: H#BD, row: Int, column: Int,
                        state: TreeTableCellRenderer.State): Component
@@ -72,6 +72,7 @@ object TreeTableView {
 
     def renderData: H#D
     def modelData()(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
+    def parentOption: Option[Node[S, T, H]]
   }
 }
 trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T], H <: TreeTableView.Handler[S, T, H]]
@@ -84,6 +85,10 @@ trait TreeTableView[S <: Sys[S], T <: TreeLike[S, T], H <: TreeTableView.Handler
   def treeTable: TreeTable[Node, _]
 
   def selection: List[Node]
+
+  def insertionPoint()(implicit tx: S#Tx): (T#Branch, Int)
+
+  def markInsertion()(implicit tx: S#Tx): Unit
 
   // /** Maps from view to underlying model data. */
   // def data(view: Node)(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]

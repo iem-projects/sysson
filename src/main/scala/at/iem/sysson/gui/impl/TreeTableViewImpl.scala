@@ -14,8 +14,11 @@ import at.iem.sysson.gui.TreeTableView.Handler
 import javax.swing.table.DefaultTableCellRenderer
 import de.sciss.lucre.stm
 import collection.breakOut
-import java.awt.{RenderingHints, Color, Graphics}
+import java.awt.{EventQueue, RenderingHints, Color, Graphics}
 import java.awt.geom.GeneralPath
+import scala.concurrent.stm.TxnLocal
+import scala.annotation.tailrec
+import de.sciss.treetable.j.DefaultTreeTableCellEditor
 
 object TreeTableViewImpl {
   object Icons {
@@ -65,7 +68,7 @@ object TreeTableViewImpl {
   private final val DEBUG = false
 
   private object NodeView {
-    sealed trait OrRoot[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]]
+    // sealed trait OrRoot[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]]
 
     //    sealed trait BranchOrRoot[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]] extends OrRoot[S, T, H] {
     //      /** The children of the folder. This variable _must only be accessed or updated_ on the event thread. */
@@ -81,6 +84,8 @@ object TreeTableViewImpl {
       var children = Vec.empty[NodeView[S, T, H]]
       def modelData()(implicit tx: S#Tx) = TreeLike.IsBranch(src())
       def isLeaf = false
+
+      override def toString = s"Branch($src, $renderData)"
     }
 
     //    class Root[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](var renderData: H#BD)
@@ -94,10 +99,12 @@ object TreeTableViewImpl {
       def parentOption = Some(parent)
       def modelData()(implicit tx: S#Tx) = TreeLike.IsLeaf(src())
       def isLeaf = true
+
+      override def toString = s"Leaf($src, $renderData)"
     }
   }
   private sealed trait NodeView[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]]
-    extends NodeView.OrRoot[S, T, H] with TreeTableView.Node[S, T, H] {
+    extends /* NodeView.OrRoot[S, T, H] with */ TreeTableView.Node[S, T, H] {
 
     // def renderData: H#D
     def parentOption: Option[NodeView.Branch[S, T, H]] // NodeView.BranchOrRoot[S, T, H]
@@ -158,6 +165,8 @@ object TreeTableViewImpl {
     protected def handler : H
     protected def tree    : T
 
+    private val didInsert = TxnLocal(false)
+
     private class ElementTreeModel extends AbstractTreeModel[VNode] {
       lazy val root: VNode = rootView // ! must be lazy. suckers....
 
@@ -179,6 +188,17 @@ object TreeTableViewImpl {
       }
 
       def getParent(node: VNode): Option[VNode] = node.parentOption
+
+      def getPath(node: VNode): TreeTable.Path[VNode] = {
+        @tailrec def loop(n: VNode, res: TreeTable.Path[VNode]): TreeTable.Path[VNode] = {
+          val res1 = n +: res
+          n.parentOption match {
+            case Some(p) => loop(p, res1)
+            case _ => res1
+          }
+        }
+        loop(node, Vec.empty)
+      }
 
       def valueForPathChanged(path: TreeTable.Path[VNode], newValue: VNode): Unit =
         println(s"valueForPathChanged($path, $newValue)")
@@ -215,19 +235,46 @@ object TreeTableViewImpl {
 
     def selection: List[VNode] = t.selection.paths.flatMap(_.lastOption)(breakOut)
 
-    //      .collect {
-    //      case n: VNode => n
-    //    } (breakOut)
+    def markInsertion()(implicit tx: S#Tx): Unit = didInsert.update(true)(tx.peer)
 
-    // def data(view: VNode)(implicit tx: S#Tx): TNode = view.modelData()
-
-    def addElem(parent: VBranch, idx: Int, elem: TNode, refresh: Boolean)
+    def addElem(parent: VBranch, idx: Int, elem: TNode, refresh: Boolean, edit: Boolean = false)
                (branch: (T#Branch, VBranch) => Unit)(implicit tx: S#Tx): VNode = {
       def addView(id: S#ID, v: VNode): Unit = {
         mapViews.put(id, v)
 
         if (refresh) guiFromTx {
           _model.elemAdded(parent, idx, v)
+          if (edit) {
+            //            val sel = t.selection.paths
+            //            sel.clear()
+            val path = _model.getPath(v)
+            //            sel += path
+            //            EventQueue.invokeLater(new Runnable {
+            //              def run(): Unit =
+            // t.startEditingAtPath(path)
+            val row     = t.getRowForPath(path)
+            val column  = t.hierarchicalColumn
+            t.requestFocus()
+            //            val tj  = t.peer
+            //            val tje = tj.getCellEditor
+            //            tje.shouldSelectCell(new javax.swing.event.ListSelectionEvent(tj, row, row, true))
+            t.changeSelection(row, column, toggle = false, extend = false)
+            t.editCellAt     (row, column)
+
+            // TODO: this doesn't work yet, it doesn't activate the cursor, see TreeTable issue #12
+
+            //            val tej = t.peer.getEditorComponent
+            //            EventQueue.invokeLater(new Runnable {
+            //              def run(): Unit = tej.requestFocus()
+            //            })
+            //            tej match {
+            //              case tf: javax.swing.JTextField => ...
+            //              case _ =>
+            //            }
+
+            // })
+            // t.editCellAt(row, column)
+          }
         }
       }
 
@@ -253,9 +300,11 @@ object TreeTableViewImpl {
     }
 
     def elemAdded(parent: VBranch, idx: Int, elem: TNode)(implicit tx: S#Tx): Unit = {
-      if (DEBUG) println(s"elemAdded($parent, $idx $elem)")
+      val edit = didInsert.swap(false)(tx.peer)
 
-      addElem(parent, idx, elem, refresh = true) { (b, bv) =>
+      if (DEBUG) println(s"elemAdded($parent, $idx $elem); marked? $edit")
+
+      addElem(parent, idx, elem, refresh = true, edit = edit) { (b, bv) =>
         if (b.nonEmpty) b.iterator.toList.zipWithIndex.foreach { case (c, ci) =>
           elemAdded(bv, ci, c)
         }
@@ -320,6 +369,26 @@ object TreeTableViewImpl {
       }
     }
 
+    def insertionPoint()(implicit tx: S#Tx): (T#Branch, Int) = {
+      val pOpt = treeTable.selection.paths.headOption.flatMap {
+        case path @ init :+ last =>
+          last.modelData() match {
+            case TreeLike.IsBranch(b) if treeTable.isExpanded(path) => Some(b -> 0)
+            case child => init match {
+              case _ :+ _parent =>
+                _parent.modelData() match {
+                  case TreeLike.IsBranch(b) => Some(b -> (b.indexOf(child) + 1))
+                  case _ => None
+                }
+
+              case _ => None
+            }
+          }
+        case _ => None
+      }
+      pOpt.getOrElse(tree.root -> tree.root.size)
+    }
+
     private def warnNoBranchView(b: T#Branch, found: Any): Unit =
       println(s"Warning: should find a branch view for $b but got $found")
 
@@ -364,7 +433,7 @@ object TreeTableViewImpl {
         //        }
 
         def setValueAt(value: Any, r: VNode, column: Int): Unit = r match {
-          case node: VNode  => peer.setValueAt(value, node.renderData, column)
+          case node: VNode  => peer.setValueAt(value, node, column)
           case _            => throw new IllegalStateException(s"Trying to alter $r")
         }
 
@@ -374,7 +443,7 @@ object TreeTableViewImpl {
         def columnCount: Int = peer.columnCount
 
         def isCellEditable(r: VNode, column: Int): Boolean = r match {
-          case node: VNode  => peer.isCellEditable(node.renderData, column)
+          case node: VNode  => peer.isCellEditable(node, column)
           case _            => false
         }
 
@@ -401,9 +470,6 @@ object TreeTableViewImpl {
               // lb // null
               wrapSelf
           }
-
-
-
         }
       }
 
@@ -420,6 +486,37 @@ object TreeTableViewImpl {
           val treeState = TreeTableCellRenderer.TreeState(expanded = expanded, leaf = leaf)
           val state = TreeTableCellRenderer.State(selected = selected, focused = hasFocus, tree = Some(treeState))
           r.getRendererComponent(t, value, row, column, state).peer
+        }
+      }
+
+      val ej = new DefaultTreeTableCellEditor(new javax.swing.JTextField()) {
+        override def getTreeTableCellEditorComponent(treeTable: j.TreeTable, value: Any, selected: Boolean,
+                                                     row: Int, column: Int): java.awt.Component = {
+          val v1 = value match {
+            case b: VBranch  =>
+              // println(s"branchRenderer(${b.data}, row = $row)")
+              b.renderData
+            case l: VLeaf     =>
+              // println(s"leafRenderer(${l.data}, row = $row)")
+              l.renderData
+            case _ => value
+          }
+          super.getTreeTableCellEditorComponent(treeTable, v1, selected, row, column)
+        }
+
+        override def getTreeTableCellEditorComponent(treeTable: j.TreeTable, value: Any, selected: Boolean,
+                                                     row: Int, column: Int, expanded: Boolean,
+                                                     leaf: Boolean): java.awt.Component = {
+          val v1 = value match {
+            case b: VBranch  =>
+              // println(s"branchRenderer(${b.data}, row = $row)")
+              b.renderData
+            case l: VLeaf     =>
+              // println(s"leafRenderer(${l.data}, row = $row)")
+              l.renderData
+            case _ => value
+          }
+          super.getTreeTableCellEditorComponent(treeTable, v1, selected, row, column, expanded, leaf)
         }
       }
 
@@ -448,7 +545,9 @@ object TreeTableViewImpl {
       val cm = t.peer.getColumnModel
       for (col <- 0 until handler.columns.columnCount) {
         // assert(r.isInstanceOf[TreeTableCellRenderer])
-        cm.getColumn(col).setCellRenderer(rj)
+        val c = cm.getColumn(col)
+        c.setCellRenderer(rj)
+        c.setCellEditor  (ej)
       }
 
       //      val tabCM = t.peer.getColumnModel

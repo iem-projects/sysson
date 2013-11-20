@@ -33,7 +33,7 @@ libraryDependencies ++= {
     "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
     "de.sciss" %% "fileutil"                % "1.1.+",          // easy file name manipulation
     "de.sciss" %% "swingplus"               % "0.0.1+",         // GUI helpers
-    "de.sciss" %% "treetable-scala"         % "1.3.2+",         // GUI component
+    "de.sciss" %% "treetable-scala"         % "1.3.3+",         // GUI component
     "de.sciss" %% "lucrestm-bdb"            % "2.0.+",          // database used for library
     "de.sciss" %% "serial"                  % "1.0.1+",         // important bug fix in 1.0.1!
     // "de.sciss" %% "audiowidgets-swing"      % "1.3.1",          // some GUI widgets

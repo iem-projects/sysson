@@ -226,10 +226,10 @@ object LibraryImpl {
 
     def indexOf(node: N[S])(implicit tx: S#Tx): Int =
       node match {
-      case IsLeaf  (l: LeafImpl  [S]) => ll.indexOf(l)
-      case IsBranch(b: BranchImpl[S]) => ll.indexOf(b)
-      case _                          => -1
-    }
+        case IsLeaf  (l: LeafImpl  [S]) => ll.indexOf(l)
+        case IsBranch(b: BranchImpl[S]) => ll.indexOf(b)
+        case _                          => -1
+      }
 
     def insertLeaf  (idx: Int, name0: Expr[S, String], source0: Expr[S, String])(implicit tx: S#Tx): Leaf[S] = {
       val targets = evt.Targets[S]
@@ -244,6 +244,20 @@ object LibraryImpl {
       val branch = newBranch(name0)
       ll.insert(idx, branch)
       branch
+    }
+
+    def removeAt(idx: Int)(implicit tx: S#Tx): Unit = ll.removeAt(idx)
+
+    def remove(node: TreeLike.Node[Branch[S], Leaf[S]])(implicit tx: S#Tx): Unit = {
+      val ni = node match {
+        case IsLeaf  (l: LeafImpl  [S]) => l
+        case IsBranch(b: BranchImpl[S]) =>
+          while (!b.isEmpty) b.removeAt(b.size - 1)
+          b
+        case _ => sys.error(s"Not a node impl: $node")
+      }
+      ll.remove(ni)
+      // TODO: somehow there are still observers registered, which results in an exception: ni.dispose()
     }
 
     def writeData(out: DataOutput): Unit = {
@@ -271,12 +285,12 @@ object LibraryImpl {
       val nameEvt = name.changed
       val llEvt   = ll  .changed
       var bch     = Vec.empty[BranchChange[S]]
-      if (pull.isOrigin(nameEvt)) {
+      if (pull.contains(nameEvt)) {
         pull(nameEvt).foreach(ch => bch :+= BranchChanged[S, T](Renamed(ch)))
       }
 
-      if (pull.isOrigin(llEvt)) pull(llEvt).fold(Vec.empty[BranchChange[S]]) { u =>
-        u.changes.map {
+      if (pull.contains(llEvt)) pull(llEvt).foreach { u =>
+        bch ++= u.changes.map {
           case expr.LinkedList.Added  (idx, n) => TreeLike.ChildInserted[S, T](idx, n.toEither)
           case expr.LinkedList.Removed(idx, n) => TreeLike.ChildRemoved [S, T](idx, n.toEither)
           case expr.LinkedList.Element(n, nu)  =>
