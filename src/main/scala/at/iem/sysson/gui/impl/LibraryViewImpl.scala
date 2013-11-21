@@ -16,8 +16,10 @@ import de.sciss.lucre.synth.expr.ExprImplicits
 import scala.concurrent.stm.{TxnLocal, Ref}
 import de.sciss.lucre.expr.Expr
 import de.sciss.icons.raphael
-import javax.swing.Icon
+import javax.swing.{JComponent, TransferHandler, Icon}
 import java.awt.geom.Path2D
+import java.awt.datatransfer.Transferable
+import at.iem.sysson.Library.{Leaf, Branch}
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
@@ -118,6 +120,30 @@ object LibraryViewImpl {
             case _                              => false
         }
       }
+
+      treeView.treeTable.peer.setTransferHandler(new TransferHandler(null) {
+        // ---- export ----
+
+        override def getSourceActions(c: JComponent): Int =
+          TransferHandler.LINK | TransferHandler.COPY | TransferHandler.MOVE // dragging only works when MOVE is included. Why?
+
+        override def createTransferable(c: JComponent): Transferable = {
+          val opt = treeView.selection.collectFirst {
+            case n if n.isLeaf => n.modelData
+          }
+
+          val res = opt.map { patch =>
+            val drag = new LibraryNodeDrag {
+              type S1 = S
+              val cursor: stm.Cursor[S] = impl.cursor
+              val node: stm.Source[S#Tx, Either[Library.Branch[S], Library.Leaf[S]]] = patch
+            }
+            DragAndDrop.Transferable(LibraryNodeFlavor)(drag)
+          } .orNull
+          // println(s"createTransferable: $res")
+          res
+        }
+      })
 
       val flow  = new FlowPanel(ggAddBranch, ggAddLeaf, ggRemove, ggView)
       val panel = new BoxPanel(Orientation.Vertical) {

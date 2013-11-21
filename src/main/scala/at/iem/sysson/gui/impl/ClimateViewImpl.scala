@@ -613,7 +613,8 @@ object ClimateViewImpl {
     butSonif.peer.setTransferHandler(new TransferHandler(null) {
       // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
       override def canImport(support: TransferSupport): Boolean = {
-        val res =  if (support.isDataFlavorSupported(PatchSourceFlavor) &&
+        val res =
+          if (support.isDataFlavorSupported(LibraryNodeFlavor) &&
            ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
           support.setDropAction(TransferHandler.LINK)
           true
@@ -626,13 +627,22 @@ object ClimateViewImpl {
 
       override def importData(support: TransferSupport): Boolean = {
         val t           = support.getTransferable
-        val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
-        import ExecutionContext.Implicits.global
-        val fut         = LibraryOLD.compile(source)
-        ggBusy.visible  = true
-        fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
-        fut.foreach { p => patch = Some(p) }
-        true
+        // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
+        val drag      = t.getTransferData(LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
+        val sourceOpt = drag.cursor.step { implicit tx =>
+          drag.node() match {
+            case TreeLike.IsLeaf(l) => Some(Patch.Source(l.name.value, l.source.value))
+            case _ => None
+          }
+        }
+        sourceOpt.exists { case source =>
+          import ExecutionContext.Implicits.global
+          val fut         = Library.compile(source)
+          ggBusy.visible  = true
+          fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
+          fut.foreach { p => patch = Some(p) }
+          true
+        }
       }
     })
 

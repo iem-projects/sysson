@@ -37,13 +37,9 @@ object Document {
   final case class Closed(doc: Document) extends Update
 }
 
-/**
- * A document represents one open data file
- */
+/** A document represents one open data file. */
 trait Document extends Model[Document.Update] {
-  /**
-   * Path to the document's underlying file (NetCDF).
-   */
+  /** Path to the document's underlying file (NetCDF). */
   def path: String
 
   def file: File

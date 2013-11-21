@@ -28,12 +28,13 @@ package at.iem.sysson
 
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.Expr
-import impl.{LibraryImpl => Impl}
+import at.iem.sysson.impl.{LibraryImpl => Impl}
 import de.sciss.lucre.stm
-import de.sciss.model.Change
 import de.sciss.serial.Writable
 import de.sciss.serial
-import de.sciss.lucre.stm.Identifiable
+import scala.collection.mutable
+import de.sciss.model.Change
+import scala.concurrent.{blocking, Future}
 
 object Library {
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = Impl[S]
@@ -65,6 +66,20 @@ object Library {
   }
 
   implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library[S]] = Impl.serializer[S]
+
+  // ---- compilation ----
+  private val sync    = new AnyRef
+  private val codeMap = new mutable.WeakHashMap[Patch.Source, Patch]
+
+  def compile(source: Patch.Source): Future[Patch] = sync.synchronized(codeMap.get(source)).fold {
+    Code.future {
+      val graph = blocking { Code.SynthGraph(source.code).execute() }
+      val res   = Patch(source, graph)
+      sync.synchronized(codeMap.put(source, res))
+      res
+    }
+
+  } (Future.successful)
 }
 trait Library[S <: Sys[S]]
   extends TreeLike[S, Library[S]] with stm.Mutable[S#ID, S#Tx]

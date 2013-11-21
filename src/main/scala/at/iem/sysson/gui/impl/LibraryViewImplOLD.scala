@@ -65,18 +65,18 @@ object LibraryViewImplOLD {
         override def getSourceActions(c: JComponent): Int =
           TransferHandler.LINK | TransferHandler.COPY | TransferHandler.MOVE // dragging only works when MOVE is included. Why?
 
-        override def createTransferable(c: JComponent): Transferable = {
-          val opt = selection.paths.collectFirst {
-            case _ :+ (l: LibraryOLD.Leaf) => l.source
-          }
-
-          val res = opt.map { patch =>
-            DragAndDrop.Transferable(PatchSourceFlavor)(patch)
-          } .orNull
-
-          // println(s"createTransferable: $res")
-          res
-        }
+        //        override def createTransferable(c: JComponent): Transferable = {
+        //          val opt = selection.paths.collectFirst {
+        //            case _ :+ (l: LibraryOLD.Leaf) => l.source
+        //          }
+        //
+        //          val res = opt.map { patch =>
+        //            DragAndDrop.Transferable(PatchSourceFlavor)(patch)
+        //          } .orNull
+        //
+        //          // println(s"createTransferable: $res")
+        //          res
+        //        }
       })
 
       expandAll()

@@ -6,6 +6,7 @@ import impl.{TreeTableViewImpl => Impl}
 import de.sciss.treetable.{TreeTable, TreeTableCellRenderer, TreeColumnModel}
 import scala.swing.Component
 import de.sciss.model.Model
+import de.sciss.lucre.stm
 
 object TreeTableView {
   trait Handler[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]] {
@@ -71,7 +72,8 @@ object TreeTableView {
     // def isExpanded: Boolean
 
     def renderData: H#D
-    def modelData()(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
+    // def modelData()(implicit tx: S#Tx): TreeLike.Node[T#Branch, T#Leaf]
+    def modelData: stm.Source[S#Tx, TreeLike.Node[T#Branch, T#Leaf]]
     def parentOption: Option[Node[S, T, H]]
   }
 }

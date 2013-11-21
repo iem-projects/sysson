@@ -17,6 +17,7 @@ import collection.breakOut
 import scala.concurrent.stm.TxnLocal
 import scala.annotation.tailrec
 import de.sciss.treetable.j.DefaultTreeTableCellEditor
+import de.sciss.lucre.stm.Extensions._
 
 object TreeTableViewImpl {
   //  import scala.swing.Graphics2D
@@ -84,7 +85,7 @@ object TreeTableViewImpl {
       extends /* BranchOrRoot[S, T, H] with */ NodeView[S, T, H] {
 
       var children = Vec.empty[NodeView[S, T, H]]
-      def modelData()(implicit tx: S#Tx) = TreeLike.IsBranch(src())
+      val modelData = src.map(TreeLike.IsBranch.apply)
       def isLeaf = false
 
       override def toString = s"Branch($src, $renderData)"
@@ -99,7 +100,8 @@ object TreeTableViewImpl {
       extends NodeView[S, T, H] {
 
       def parentOption = Some(parent)
-      def modelData()(implicit tx: S#Tx) = TreeLike.IsLeaf(src())
+      // def modelData()(implicit tx: S#Tx) = TreeLike.IsLeaf(src())
+      val modelData = src.map(TreeLike.IsLeaf.apply)
       def isLeaf = true
 
       override def toString = s"Leaf($src, $renderData)"
