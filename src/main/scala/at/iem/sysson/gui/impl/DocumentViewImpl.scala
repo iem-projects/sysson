@@ -46,6 +46,7 @@ import scalaswingcontrib.event.TreeNodeSelected
 import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.{OptionPane, Window}
 import de.sciss.file._
+import de.sciss.icons.raphael
 
 private[impl] object DocumentViewImpl {
   import Implicits._
@@ -208,7 +209,7 @@ private[impl] object DocumentViewImpl {
     //      )
     //    }
 
-    private val ggPlot = Button("Plot") {
+    private val actionPlot = Action("Plot") {
       selectedVariable.foreach { v =>
         val in          = v.file
         // val vm          = in.variableMap
@@ -295,7 +296,7 @@ private[impl] object DocumentViewImpl {
         }
       }
     }
-    ggPlot.peer.putClientProperty("JButton.buttonType", "roundRect")
+    // ggPlot.peer.putClientProperty("JButton.buttonType", "roundRect")
 
     val component = new BoxPanel(Orientation.Vertical) {
       contents ++= Seq(
@@ -303,7 +304,7 @@ private[impl] object DocumentViewImpl {
         new ScrollPane(tGroupAttrs),
         new ScrollPane(tGroupVars),
         new BoxPanel(Orientation.Horizontal) {
-          contents += ggPlot
+          contents += GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
           // contents += HStrut(16)
           // contents += transport
         }

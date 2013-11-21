@@ -28,12 +28,16 @@ package at.iem.sysson
 package gui
 
 import java.awt.{GraphicsEnvironment, EventQueue}
-import swing.Swing
+import scala.swing.{Button, Action, Color, Swing}
 import Swing._
 import de.sciss.desktop.Window
 import de.sciss.lucre.stm.Txn
 import scala.concurrent.stm.TxnLocal
 import scala.util.control.NonFatal
+import de.sciss.icons.raphael
+import javax.swing.Icon
+import scala.swing.Swing.Icon
+import java.awt.geom.Path2D
 
 object GUI {
   def centerOnScreen(w: Window): Unit = placeWindow(w, 0.5f, 0.5f, 0)
@@ -65,6 +69,21 @@ object GUI {
       }
 
     defer(exec())
+  }
+
+  private def iconNormal(fun: Path2D => Unit): Icon =
+    raphael.Icon(extent = 20, fill = raphael.TexturePaint(24), shadow = raphael.WhiteShadow)(fun)
+
+  private def iconDisabled(fun: Path2D => Unit): Icon =
+    raphael.Icon(extent = 20, fill = new Color(0, 0, 0, 0x7F), shadow = raphael.WhiteShadow)(fun)
+
+  def toolButton(action: Action, iconFun: Path2D => Unit, tooltip: String = ""): Button = {
+    val res           = new Button(action)
+    res.icon          = iconNormal  (iconFun)
+    res.disabledIcon  = iconDisabled(iconFun)
+    res.peer.putClientProperty("JButton.buttonType", "textured")
+    if (!tooltip.isEmpty) res.tooltip = tooltip
+    res
   }
 
   def fromTx(body: => Unit)(implicit tx: Txn[_]): Unit =

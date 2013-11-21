@@ -128,22 +128,23 @@ object LibraryViewImplOLD {
     ggDelete.peer.putClientProperty("JButton.buttonType", "roundRect")
 
     lazy val ggEdit: Button = Button("Edit") {
-      selectedPath.foreach {
-        case oldPath @ parent :+ (l: LibraryOLD.Leaf) =>
-          PatchCodeFrameImpl(l.name, Code.SynthGraph(l.source.code)) { (newName, newCode) =>
-            ???
-            //            val newChild: Library.Node = Library.Leaf(Patch.Source(name = newName, code = newCode))
-            //            val indices = oldPath.sliding(2, 1).map { case Seq(p: Library.Branch, c) => p.children.indexOf(c) }
-            //            val newRoot = (newChild /: (parent zip indices.toList)) {
-            //              case (c, (p: Library.Branch, idx)) => p.copy(children = p.children.updated(idx, c))
-            //            }
-            //            val newLib = new Library {
-            //              val root = newRoot.asInstanceOf[Library.Branch] // XXX TODO ugly
-            //            }
-            //            impl.library = newLib
-          }
-        case _ =>
-      }
+      ???
+      //      selectedPath.foreach {
+      //        case oldPath @ parent :+ (l: LibraryOLD.Leaf) =>
+      //          PatchCodeFrameImpl(l.name, Code.SynthGraph(l.source.code)) { (newName, newCode) =>
+      //            ???
+      //            //            val newChild: Library.Node = Library.Leaf(Patch.Source(name = newName, code = newCode))
+      //            //            val indices = oldPath.sliding(2, 1).map { case Seq(p: Library.Branch, c) => p.children.indexOf(c) }
+      //            //            val newRoot = (newChild /: (parent zip indices.toList)) {
+      //            //              case (c, (p: Library.Branch, idx)) => p.copy(children = p.children.updated(idx, c))
+      //            //            }
+      //            //            val newLib = new Library {
+      //            //              val root = newRoot.asInstanceOf[Library.Branch] // XXX TODO ugly
+      //            //            }
+      //            //            impl.library = newLib
+      //          }
+      //        case _ =>
+      //      }
     }
     ggEdit.enabled = false
     ggEdit.peer.putClientProperty("JButton.buttonType", "roundRect")

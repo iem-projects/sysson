@@ -2,10 +2,10 @@ package at.iem.sysson
 package gui
 package impl
 
-import scala.swing.{Graphics2D, ScrollPane, Component}
+import scala.swing.{ScrollPane, Component}
 import de.sciss.lucre.stm.{Disposable, IdentifierMap}
 import de.sciss.model.impl.ModelImpl
-import javax.swing.{Icon, DropMode}
+import javax.swing.DropMode
 import de.sciss.treetable.{j, TreeTableSelectionChanged, TreeTableCellRenderer, TreeColumnModel, AbstractTreeModel, TreeTable}
 import GUI.{fromTx => guiFromTx, requireEDT}
 import de.sciss.lucre.event.Sys
@@ -14,56 +14,58 @@ import at.iem.sysson.gui.TreeTableView.Handler
 import javax.swing.table.DefaultTableCellRenderer
 import de.sciss.lucre.stm
 import collection.breakOut
-import java.awt.{EventQueue, RenderingHints, Color, Graphics}
-import java.awt.geom.GeneralPath
 import scala.concurrent.stm.TxnLocal
 import scala.annotation.tailrec
 import de.sciss.treetable.j.DefaultTreeTableCellEditor
 
 object TreeTableViewImpl {
-  object Icons {
-    object AddItem extends Icon {
-      def getIconWidth  = 16
-      def getIconHeight = 16
-
-      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
-        g.setColor(Color.black)
-        g.fillRect(x    , y + 6, 16,  4)
-        g.fillRect(x + 6, y    ,  4, 16)
-      }
-    }
-
-    object RemoveItem extends Icon {
-      def getIconWidth  = 16
-      def getIconHeight = 16
-
-      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
-        g.setColor(Color.black)
-        g.fillRect(x, y + 6, 16, 4)
-      }
-    }
-
-    object ViewItem extends Icon {
-      def getIconWidth  = 16
-      def getIconHeight = 16
-
-      private val shape = new GeneralPath
-      shape.moveTo(0, 8)
-      shape.quadTo(8,  0, 16, 8)
-      shape.quadTo(8, 16,  0, 8)
-      shape.closePath()
-
-      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
-        val g2      = g.asInstanceOf[Graphics2D]
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        val atOrig  = g2.getTransform
-        g2.setColor(Color.black)
-        g2.translate(x, y)
-        g2.fill(shape)
-        g2.setTransform(atOrig)
-      }
-    }
-  }
+  //  import scala.swing.Graphics2D
+  //  import javax.swing.Icon
+  //  import java.awt.{EventQueue, RenderingHints, Color, Graphics}
+  //  import java.awt.geom.GeneralPath
+  //  object Icons {
+  //    object AddItem extends Icon {
+  //      def getIconWidth  = 16
+  //      def getIconHeight = 16
+  //
+  //      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
+  //        g.setColor(Color.black)
+  //        g.fillRect(x    , y + 6, 16,  4)
+  //        g.fillRect(x + 6, y    ,  4, 16)
+  //      }
+  //    }
+  //
+  //    object RemoveItem extends Icon {
+  //      def getIconWidth  = 16
+  //      def getIconHeight = 16
+  //
+  //      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
+  //        g.setColor(Color.black)
+  //        g.fillRect(x, y + 6, 16, 4)
+  //      }
+  //    }
+  //
+  //    object ViewItem extends Icon {
+  //      def getIconWidth  = 16
+  //      def getIconHeight = 16
+  //
+  //      private val shape = new GeneralPath
+  //      shape.moveTo(0, 8)
+  //      shape.quadTo(8,  0, 16, 8)
+  //      shape.quadTo(8, 16,  0, 8)
+  //      shape.closePath()
+  //
+  //      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
+  //        val g2      = g.asInstanceOf[Graphics2D]
+  //        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+  //        val atOrig  = g2.getTransform
+  //        g2.setColor(Color.black)
+  //        g2.translate(x, y)
+  //        g2.fill(shape)
+  //        g2.setTransform(atOrig)
+  //      }
+  //    }
+  //  }
 
   private final val DEBUG = false
 

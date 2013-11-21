@@ -49,7 +49,7 @@ object LibraryImpl {
 
   private def readNodeCookie(in: DataInput): Unit = {
     val ver     = in.readInt()
-    require(ver == NODE_SER_VERSION, s"Unexpected node version. Found $ver, required$NODE_SER_VERSION")
+    require(ver == NODE_SER_VERSION, s"Unexpected node version. Found $ver, required $NODE_SER_VERSION")
   }
 
   private object NodeImpl {

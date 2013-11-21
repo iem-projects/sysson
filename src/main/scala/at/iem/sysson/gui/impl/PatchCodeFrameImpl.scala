@@ -10,20 +10,39 @@ import scala.concurrent.{ExecutionContext, Future}
 import Swing._
 import scala.util.Failure
 import scala.util.Success
+import de.sciss.lucre.stm
+import de.sciss.lucre.event.Sys
+import de.sciss.lucre.synth.expr.{Strings, ExprImplicits}
+import de.sciss.lucre.stm.Disposable
 
 object PatchCodeFrameImpl {
-  def apply(_name: String, _code: Code)(saveFun: (String, String) => Unit): Unit = {
-    new Impl {
+  def apply[S <: Sys[S]](entry: Library.Leaf[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): Unit = {
+    val name0   = entry.name.value
+    val source0 = entry.source.value
+    val sourceH = tx.newHandle(entry.source)(Strings.varSerializer)
+
+    val _code   = Code.SynthGraph(source0)
+
+    val res = new Impl[S] {
       // val document = doc
-      protected val name      = _name
       protected val contextName = _code.contextName
-      // protected val _cursor   = cursor
+      protected val _cursor   = cursor
       // protected val codeH     = tx.newHandle(elem.entity)(Codes.serializer)
       protected val codeID    = _code.id
 
-      protected def save(): Unit = saveFun(name, currentText)
+      protected def save(): Unit = {
+        val newCode = currentText
+        // saveFun(newCode)
+        cursor.step { implicit tx =>
+          val expr = ExprImplicits[S]
+          import expr._
+          // name is not editable right now in the patch code frame
+          // l.name()    = newName
+          sourceH()() = newCode
+        }
+      }
 
-      protected val codeCfg = {
+      protected lazy val codeCfg = {
         val b = CodePane.Config()
         b.text = _code.source
         b.build
@@ -41,16 +60,22 @@ object PatchCodeFrameImpl {
       //      }
 
       // guiFromTx(guiInit())
-      guiInit()
+
+      val observer = entry.name.changed.react { implicit tx => ch =>
+        GUI.fromTx {
+          name = ch.now
+        }
+      }
     }
+
+    GUI.fromTx(res.guiInit(name0))
   }
 
-  private abstract class Impl /* extends CodeFrame[S] */ {
+  private abstract class Impl[S <: Sys[S]] /* extends CodeFrame[S] */ {
     // protected def intpCfg: Interpreter.Config
     protected def codeCfg: CodePane.Config
-    protected def name: String
     protected def contextName: String
-    //protected def _cursor: stm.Cursor[S]
+    protected def _cursor: stm.Cursor[S]
     //protected def codeH: stm.Source[S#Tx, Expr[S, Code]]
     protected def codeID: Int
 
@@ -59,10 +84,19 @@ object PatchCodeFrameImpl {
     // private var intpPane: InterpreterPane = _
     private var futCompile = Option.empty[Future[Unit]]
     private var ggStatus: Label = _
+    protected def observer: Disposable[S#Tx]
 
-    private var component: Window = _
+    private var component: WindowImpl2 = _
 
     protected final def currentText: String = codePane.editor.getText
+
+    private var _name = ""
+
+    def name = _name
+    def name_=(value: String): Unit = {
+      _name = value
+      component.updateTitle(value)
+    }
 
     private def checkClose(): Unit = {
       if (futCompile.isDefined) {
@@ -91,9 +125,9 @@ object PatchCodeFrameImpl {
     protected def save(): Unit
 
     private def disposeFromGUI(): Unit = {
-      //      _cursor.step { implicit tx =>
-      //        disposeData()
-      //      }
+      _cursor.step { implicit tx =>
+        disposeData()
+      }
       component.dispose()
     }
 //
@@ -105,11 +139,11 @@ object PatchCodeFrameImpl {
 //      }
 //    }
 
-//    private def disposeData()(implicit tx: S#Tx): Unit = {
-//      // observer.dispose()
-//    }
+    private def disposeData()(implicit tx: S#Tx): Unit = {
+      observer.dispose()
+    }
 
-    def guiInit(): Unit = {
+    def guiInit(name0: String): Unit = {
       codePane  = CodePane(codeCfg)
       // intp      = Interpreter(intpCfg)
       // intpPane  = InterpreterPane.wrap(intp, codePane)
@@ -147,29 +181,37 @@ object PatchCodeFrameImpl {
 
       val panelBottom = new FlowPanel(FlowPanel.Alignment.Trailing)(HGlue, ggStatus, ggCompile, HStrut(16))
 
-      component = new WindowImpl {
-        frame =>
+      component = new WindowImpl2(panelBottom)
 
-        def style = Window.Auxiliary
+      name = name0
+      component.front()
+    }
 
-        def handler = SwingApplication.windowHandler
+    private class WindowImpl2(panelBottom: Component) extends WindowImpl {
+      frame =>
 
-        title           = s"$name : $contextName Code"
-        contents        = new BorderPanel {
-          add(Component.wrap(codePane.component), BorderPanel.Position.Center)
-          add(panelBottom, BorderPanel.Position.South)
-        }
-        closeOperation  = Window.CloseIgnore
+      def style = Window.Auxiliary
 
-        reactions += {
-          case Window.Closing(_) =>
-            checkClose()
-        }
+      def handler = SwingApplication.windowHandler
 
-        pack()
-        GUI.centerOnScreen(this)
-        front()
+      def updateTitle(name: String): Unit = {
+        title = s"$name : $contextName Code"
       }
+
+      contents        = new BorderPanel {
+        add(Component.wrap(codePane.component), BorderPanel.Position.Center)
+        add(panelBottom, BorderPanel.Position.South)
+      }
+      closeOperation  = Window.CloseIgnore
+
+      reactions += {
+        case Window.Closing(_) =>
+          checkClose()
+      }
+
+      pack()
+      GUI.centerOnScreen(this)
+      // front()
     }
   }
 }

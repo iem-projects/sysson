@@ -5,7 +5,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.treetable.TreeTableCellRenderer.State
 import de.sciss.treetable.TreeColumnModel
-import scala.swing.{Action, Orientation, BoxPanel, Button, FlowPanel, Swing, ScrollPane, Component}
+import scala.swing.{Color, Action, Orientation, BoxPanel, Button, FlowPanel, Swing, ScrollPane, Component}
 import de.sciss.model.Change
 import de.sciss.treetable.j.DefaultTreeTableCellRenderer
 import de.sciss.desktop.impl.WindowImpl
@@ -15,6 +15,9 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.synth.expr.ExprImplicits
 import scala.concurrent.stm.{TxnLocal, Ref}
 import de.sciss.lucre.expr.Expr
+import de.sciss.icons.raphael
+import javax.swing.Icon
+import java.awt.geom.Path2D
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
@@ -40,8 +43,6 @@ object LibraryViewImpl {
       // def add(gen: S#Tx => TreeLike.Node[Library.Branch[S], Library.Leaf[S]]) ...
 
       val actionAddBranch = new Action("Folder") {
-        icon = TreeTableViewImpl.Icons.AddItem
-
         def apply(): Unit = cursor.step { implicit tx =>
           val (parent, idx) = treeView.insertionPoint()
           val expr = ExprImplicits[S]
@@ -50,11 +51,9 @@ object LibraryViewImpl {
           /* val b = */ parent.insertBranch(idx, "untitled folder")
         }
       }
-      val ggAddBranch = new Button(actionAddBranch)
+      val ggAddBranch = GUI.toolButton(actionAddBranch, raphael.Shapes.Plus)
 
       val actionAddLeaf = new Action("Patch") {
-        icon = TreeTableViewImpl.Icons.AddItem
-
         def apply(): Unit = cursor.step { implicit tx =>
           val (parent, idx) = treeView.insertionPoint()
           val expr = ExprImplicits[S]
@@ -63,11 +62,10 @@ object LibraryViewImpl {
           /* val l = */ parent.insertLeaf(idx, name = "untitled patch", source = "// Sonification Synth Graph body here")
         }
       }
-      val ggAddLeaf = new Button(actionAddLeaf)
+      val ggAddLeaf = GUI.toolButton(actionAddLeaf, raphael.Shapes.Plus)
 
       val actionRemove = new Action(null) {
         enabled = false
-        icon    = TreeTableViewImpl.Icons.RemoveItem
 
         def apply(): Unit = {
           val sel = treeView.selection.flatMap(n => n.parentOption.map(_ -> n))
@@ -80,12 +78,10 @@ object LibraryViewImpl {
           }
         }
       }
-      val ggRemove = new Button(actionRemove)
+      val ggRemove = GUI.toolButton(actionRemove, raphael.Shapes.Minus, tooltip = "Delete Entry")
 
       val actionView = new Action(null) {
         enabled = false
-
-        icon = TreeTableViewImpl.Icons.ViewItem
 
         def apply(): Unit = treeView.selection match {
           case single :: Nil if single.isLeaf =>
@@ -94,14 +90,16 @@ object LibraryViewImpl {
                 case TreeLike.IsLeaf(l) =>
                   val name  = l.name.value
                   val code  = l.source.value
-                  PatchCodeFrameImpl(name, Code.SynthGraph(code)) { (newName, newCode) =>
-                    impl.cursor.step { implicit tx =>
-                      val expr    = ExprImplicits[S]
-                      import expr._
-                      l.name()    = newName
-                      l.source()  = newCode
-                    }
-                  }
+                  PatchCodeFrame(l)
+                //                  { newCode =>
+                //                    impl.cursor.step { implicit tx =>
+                //                      val expr    = ExprImplicits[S]
+                //                      import expr._
+                //                      // name is not editable right now in the patch code frame
+                //                      // l.name()    = newName
+                //                      l.source()  = newCode
+                //                    }
+                //                  }
 
                 case _ =>
               }
@@ -109,7 +107,7 @@ object LibraryViewImpl {
           case _ =>
         }
       }
-      val ggView = new Button(actionView)
+      val ggView = GUI.toolButton(actionView, raphael.Shapes.Edit, tooltip = "Edit Patch")
 
       treeView.addListener {
         case TreeTableView.SelectionChanged =>
