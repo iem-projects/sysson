@@ -108,12 +108,21 @@ The whole matrix of a variable may be read through `v1.read`. To read sub sectio
     arr1.shape                  // the shape of the read matrix, e.g. `1 x 10 x 18`
     val arr2 = arr1.reduce      // eliminate dimensions of size 1
     arr2.shape                  // e.g. is now `10 x 18`
-    val data = arr2.f1d         // force matrix into a 1-dimensional float vector
+    val data = arr2.float1d     // force matrix into a 1-dimensional float vector
 ```
 
-When using `f1d`, a multi-dimensional array is scanned along the order of its dimensions "breadth-first". For example, if the shape is `2 x 3 x 4`, the first two elements scan the first dimension where dimensions 2 and 3 are fixed at index 0, followed by the two elements in the first dimension where the second dimension is fixed at index 1 and the third dimension is fixed at index 0, etc.
+When using `float1d`, a multi-dimensional array is scanned along the order of its dimensions "breadth-first". For example, if the shape is `2 x 3 x 4`, the first two elements scan the first dimension where dimensions 2 and 3 are fixed at index 0, followed by the two elements in the first dimension where the second dimension is fixed at index 1 and the third dimension is fixed at index 0, etc.
 
 __Note__ (05-Sep-13): The previous paragraph might be _wrong_ and has to be verified. File `notes/Arrays.txt` suggests that the traversal is exactly the opposite, i.e. "depth-first".
+
+You can also copy the NetCDF array into a regular multidimensional array. This is currently a bit awkward syntax, but works as expected:
+
+```scala
+
+    val arr3 = arr2.copyToNDJavaArray.asInstanceOf[Array[Array[Float]]
+```
+
+The type to case to must correspond with the number of dimensions, e.g. `Array[Array[Float]]` for two-dimensional input array, `Array[Array[Array[Float]]]` for three dimensions etc. The elements can then accessed as follows: `arr3(index1)(index2)` with indices for each dimension.
 
 ## Sending Data via OSC
 
