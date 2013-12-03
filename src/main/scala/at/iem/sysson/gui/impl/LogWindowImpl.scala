@@ -31,7 +31,7 @@ package impl
 import swing.{Component, ScrollPane, Swing}
 import de.sciss.scalainterpreter.LogPane
 import java.io.OutputStream
-import javax.swing.{WindowConstants, BorderFactory}
+import javax.swing.BorderFactory
 import at.iem.sysson.gui.GUI
 import swing.event.WindowClosing
 import de.sciss.desktop.impl.WindowImpl
@@ -47,7 +47,7 @@ private[gui] final class LogWindowImpl extends LogWindow with WindowImpl {
   def handler = SwingApplication.windowHandler
 
   val log = {
-    val cfg   = LogPane.Settings()
+    val cfg   = LogPane.Config()
     cfg.rows  = 24
     LogPane(cfg)
   }

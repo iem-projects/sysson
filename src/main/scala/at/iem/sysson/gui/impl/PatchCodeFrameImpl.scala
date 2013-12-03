@@ -3,7 +3,7 @@ package gui
 package impl
 
 import de.sciss.desktop.{OptionPane, Window}
-import de.sciss.scalainterpreter.CodePane
+import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
 import de.sciss.desktop.impl.WindowImpl
 import scala.swing.{FlowPanel, BorderPanel, Swing, Label, Button, Component}
 import scala.concurrent.{ExecutionContext, Future}
@@ -16,6 +16,19 @@ import de.sciss.lucre.synth.expr.{Strings, ExprImplicits}
 import de.sciss.lucre.stm.Disposable
 
 object PatchCodeFrameImpl {
+  //  private lazy val intp = {
+  //    val intpCfg = Interpreter.Config()
+  //    intpCfg.imports = Code.SynthGraph.imports
+  //    Interpreter(intpCfg)
+  //  }
+
+  private lazy val intp = {
+    val intpCfg = Interpreter.Config()
+    intpCfg.imports = Code.SynthGraph.imports
+    // val paneCfg = InterpreterPane.Config()
+    Interpreter.async(intpCfg)
+  }
+
   def apply[S <: Sys[S]](entry: Library.Leaf[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): Unit = {
     val name0   = entry.name.value
     val source0 = entry.source.value
@@ -42,11 +55,13 @@ object PatchCodeFrameImpl {
         }
       }
 
+      // protected val initialText = _code.source
       protected lazy val codeCfg = {
         val b = CodePane.Config()
         b.text = _code.source
-        b.build
+        b.build()
       }
+
       //      protected val intpCfg = {
       //        val b = Interpreter.Config()
       //        b.imports = Seq(
@@ -74,12 +89,16 @@ object PatchCodeFrameImpl {
   private abstract class Impl[S <: Sys[S]] /* extends CodeFrame[S] */ {
     // protected def intpCfg: Interpreter.Config
     protected def codeCfg: CodePane.Config
+
+    // protected def initialText: String
+
     protected def contextName: String
     protected def _cursor: stm.Cursor[S]
     //protected def codeH: stm.Source[S#Tx, Expr[S, Code]]
     protected def codeID: Int
 
     private var codePane: CodePane        = _
+
     // private var intp    : Interpreter     = _
     // private var intpPane: InterpreterPane = _
     private var futCompile = Option.empty[Future[Unit]]
@@ -111,7 +130,7 @@ object PatchCodeFrameImpl {
           messageType = OptionPane.Message.Warning)
         opt.title = s"Close Code Editor - $name"
         opt.show(Some(component)) match {
-          case OptionPane.Result.No =>
+          case OptionPane.Result.No  =>
           case OptionPane.Result.Yes =>
             save()
 
@@ -144,7 +163,10 @@ object PatchCodeFrameImpl {
     }
 
     def guiInit(name0: String): Unit = {
-      codePane  = CodePane(codeCfg)
+      // codePane   = CodePane(codeCfg)
+      codePane      = CodePane(codeCfg)
+      val intpPane  = InterpreterPane.wrapAsync(intp, codePane)
+
       // intp      = Interpreter(intpCfg)
       // intpPane  = InterpreterPane.wrap(intp, codePane)
 
@@ -181,13 +203,13 @@ object PatchCodeFrameImpl {
 
       val panelBottom = new FlowPanel(FlowPanel.Alignment.Trailing)(HGlue, ggStatus, ggCompile, HStrut(16))
 
-      component = new WindowImpl2(panelBottom)
+      component = new WindowImpl2(Component.wrap(intpPane /* codePane */.component), panelBottom)
 
       name = name0
       component.front()
     }
 
-    private class WindowImpl2(panelBottom: Component) extends WindowImpl {
+    private class WindowImpl2(top: Component, panelBottom: Component) extends WindowImpl {
       frame =>
 
       def style = Window.Auxiliary
@@ -198,9 +220,9 @@ object PatchCodeFrameImpl {
         title = s"$name : $contextName Code"
       }
 
-      contents        = new BorderPanel {
-        add(Component.wrap(codePane.component), BorderPanel.Position.Center)
-        add(panelBottom, BorderPanel.Position.South)
+      contents = new BorderPanel {
+        add(top        , BorderPanel.Position.Center)
+        add(panelBottom, BorderPanel.Position.South )
       }
       closeOperation  = Window.CloseIgnore
 

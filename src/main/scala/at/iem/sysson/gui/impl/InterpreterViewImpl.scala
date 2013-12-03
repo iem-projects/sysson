@@ -44,31 +44,31 @@ private[gui] object InterpreterViewImpl {
       val codeCfg = CodePane.Config()
 
       val file = new File( /* new File( "" ).getAbsoluteFile.getParentFile, */ "interpreter.txt" )
-      if( file.isFile ) try {
-         val fis  = new FileInputStream( file )
-         val txt  = try {
-            val arr = new Array[ Byte ]( fis.available() )
-            fis.read( arr )
-            new String( arr, "UTF-8" )
-         } finally {
-            fis.close()
-         }
-         codeCfg.text = txt
+      if (file.isFile) try {
+        val fis = new FileInputStream(file)
+        val txt = try {
+          val arr = new Array[Byte](fis.available())
+          fis.read(arr)
+          new String(arr, "UTF-8")
+        } finally {
+          fis.close()
+        }
+        codeCfg.text = txt
 
       } catch {
-         case e: IOException => e.printStackTrace()
+        case e: IOException => e.printStackTrace()
       }
 
       val intpCfg = Interpreter.Config()
-      intpCfg.imports = Seq(
+      intpCfg.imports = List(
         "at.iem.sysson._",
-        "Implicits._",
+        "at.iem.sysson.Implicits._",
         "de.sciss.synth._",
-        "ugen._",
-        "Ops._",
+        "de.sciss.synth.ugen._",
+        "de.sciss.synth.Ops._",
         "de.sciss.osc.Implicits._",
-        "concurrent.duration._",
-        "gui.InterpreterView.Bindings._"
+        // "scala.concurrent.duration._",
+        "at.iem.sysson.gui.InterpreterView.Bindings._"
       )
 
 //      intpCfg.bindings = Seq( NamedParam( "replSupport", replSupport ))

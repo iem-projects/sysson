@@ -5,6 +5,7 @@ import impl.{CodeImpl => Impl}
 import scala.concurrent.Future
 import de.sciss.synth
 import scala.annotation.switch
+import collection.immutable.{Seq => ISeq}
 
 // shamelessly ripped from Mellite...
 object Code {
@@ -25,6 +26,8 @@ object Code {
   object SynthGraph {
     final val id    = 1
     final val name  = "Synth Graph"
+
+    def imports: ISeq[String] = Impl.Wrapper.SynthGraph.imports
   }
   final case class SynthGraph(source: String) extends Code {
     type In     = Unit

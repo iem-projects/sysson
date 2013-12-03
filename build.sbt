@@ -2,9 +2,9 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.4.0-SNAPSHOT"
+version       := "0.4.0"
 
-organization  := "at.iem.sysson" // "de.sciss"  // this should be "at.iem.sysson", but it would require setting up another account on Sonatype. so let's just use my org
+organization  := "at.iem.sysson"
 
 description   := "Sonification Server of the IEM SysSon project"
 
@@ -26,7 +26,7 @@ libraryDependencies ++= {
     // "de.sciss" %% "lucredata"               % "2.2.1+",
     // "de.sciss" %% "lucreevent"              % "2.4.+",
     "de.sciss" %% "soundprocesses"          % "2.0.+",
-    "de.sciss" %% "scalacolliderswing"      % "1.10.+",         // sound widgets, interpreter
+    "de.sciss" %% "scalacolliderswing"      % "1.11.+",         // sound widgets, interpreter
     // "de.sciss" %  "scalacolliderugens-spec" % "1.7.+",       // UGen specs used in the patcher class
     "de.sciss" %% "desktop"                 % "0.3.4+",         // application framework
     "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
