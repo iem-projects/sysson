@@ -2,11 +2,11 @@ package at.iem.sysson
 package gui
 package impl
 
-import de.sciss.desktop.{OptionPane, Window}
+import de.sciss.desktop.{UndoManager, OptionPane, Window}
 import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
 import de.sciss.desktop.impl.WindowImpl
 import scala.concurrent.{ExecutionContext, Future}
-import scala.swing.{FlowPanel, Component, Action, BorderPanel, Button, Label, Swing}
+import scala.swing.{ProgressBar, FlowPanel, Component, Action, BorderPanel, Button, Label, Swing}
 import Swing._
 import de.sciss.lucre.stm
 import de.sciss.lucre.event.Sys
@@ -17,6 +17,13 @@ import scala.util.Success
 import de.sciss.swingplus.Implicits._
 import java.beans.{PropertyChangeEvent, PropertyChangeListener}
 import de.sciss.syntaxpane.SyntaxDocument
+import at.iem.sysson.gui.edit.EditExprVar
+import de.sciss.icons.raphael
+import de.sciss.swingplus.OverlayPanel
+import de.sciss.swingplus.Implicits._
+import java.awt.Color
+import javax.swing.Icon
+import javax.swing.event.{UndoableEditEvent, UndoableEditListener}
 
 object PatchCodeFrameImpl {
   /** We use one shared interpreter for all patch code frames. */
@@ -26,7 +33,8 @@ object PatchCodeFrameImpl {
     Interpreter.async(cfg)
   }
 
-  def apply[S <: Sys[S]](entry: Library.Leaf[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): Unit = {
+  def apply[S <: Sys[S]](entry: Library.Leaf[S], undoManager: UndoManager)
+                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): Unit = {
     val name0   = entry.name.value
     val source0 = entry.source.value
     val sourceH = tx.newHandle(entry.source)(Strings.varSerializer)
@@ -40,12 +48,15 @@ object PatchCodeFrameImpl {
 
       protected def save(): Unit = {
         val newCode = currentText
-        cursor.step { implicit tx =>
+        val edit    = cursor.step { implicit tx =>
           val expr = ExprImplicits[S]
           import expr._
+          import Strings.{varSerializer, serializer}
           val source  = sourceH()
-          source()    = newCode
+          // source()    = newCode
+          EditExprVar("Change Source Code", source, newCode)
         }
+        undoManager.add(edit)
       }
 
       protected lazy val codeCfg = {
@@ -74,7 +85,6 @@ object PatchCodeFrameImpl {
     private var codePane: CodePane = _
 
     private var futCompile = Option.empty[Future[Unit]]
-    private var ggStatus: Label = _
     protected def observer: Disposable[S#Tx]
 
     private var component: WindowImpl2 = _
@@ -100,7 +110,7 @@ object PatchCodeFrameImpl {
 
     private def checkClose(): Unit = {
       if (futCompile.isDefined) {
-        ggStatus.text = "busy!"
+        // ggStatus.text = "busy!"
         return
       }
 
@@ -142,14 +152,50 @@ object PatchCodeFrameImpl {
       codePane        = CodePane(codeCfg)
       val iPane       = InterpreterPane.wrapAsync(interpreter, codePane)
 
-      ggStatus    = new Label(null)
+      val ggProgress = new ProgressBar() {
+        preferredSize = {
+          val d = preferredSize
+          d.width = math.min(32, d.width)
+          d
+        }
 
-      val ggCompile = Button("Compile") {
+        maximumSize = {
+          val d = maximumSize
+          d.width = math.min(32, d.width)
+          d
+        }
+
+        this.clientProps += "JProgressBar.style" -> "circular"
+        indeterminate = true
+
+        visible = false
+      }
+
+      val ggProgressInvis = Swing.RigidBox(ggProgress.preferredSize)
+
+      val progressPane = new OverlayPanel {
+        contents += ggProgress
+        contents += ggProgressInvis
+      }
+
+      val actionApply = Action("Apply")(save())
+      actionApply.enabled = false
+
+      var clearGreen = false
+
+      def compileIcon(colr: Option[Color]): Icon =
+        raphael.Icon(extent = 20, fill = colr.getOrElse(raphael.TexturePaint(24)),
+          shadow = raphael.WhiteShadow)(raphael.Shapes.Hammer)
+
+      lazy val actionCompile = Action("Compile") {
         if (futCompile.isDefined) {
-          ggStatus.text = "busy!"
+          // ggStatus.text = "busy!"
           return
         }
-        ggStatus.text = "..."
+
+        ggProgress      .visible = true
+        ggProgressInvis .visible = false
+
         val newCode = Code(codeID, currentText)
         val fut     = newCode.compileBody()
         futCompile  = Some(fut)
@@ -157,30 +203,62 @@ object PatchCodeFrameImpl {
         fut.onComplete { res =>
           GUI.defer {
             futCompile = None
-            val st = res match {
-              case Success(_) => "\u2713"
-              case Failure(Code.CompilationFailed()) =>
-                "error!"
-              case Failure(Code.CodeIncomplete()) =>
-                "incomplete!"
+            ggProgressInvis .visible = true
+            ggProgress      .visible = false
+            val iconColr = res match {
+              case Success(_) =>
+                clearGreen = true
+                new Color(0x00, 0xC0, 0x00) // "\u2713"
+              case Failure(Code.CompilationFailed()) => Color.red
+                // "error!"
+              case Failure(Code.CodeIncomplete()) => Color.orange
+                // "incomplete!"
               case Failure(e) =>
                 e.printStackTrace()
-                "error!"
+                Color.red
             }
-            ggStatus.text = st
+            ggCompile.icon = compileIcon(Some(iconColr))
           }
         }
       }
 
-      val panelBottom = new FlowPanel(FlowPanel.Alignment.Trailing)(HGlue, ggStatus, ggCompile, HStrut(16))
+      codePane.editor.getDocument.addUndoableEditListener(
+        new UndoableEditListener {
+          def undoableEditHappened(e: UndoableEditEvent): Unit = {
+            if (clearGreen) {
+              clearGreen = false
+              ggCompile.icon = compileIcon(None)
+            }
+          }
+        }
+      )
 
-      component = new WindowImpl2(Component.wrap(iPane.component), panelBottom)
+      lazy val ggApply  : Button = GUI.toolButton(actionApply  , raphael.Shapes.Check )
+      lazy val ggCompile: Button = GUI.toolButton(actionCompile, raphael.Shapes.Hammer)
+
+      val panelBottom = new FlowPanel(FlowPanel.Alignment.Trailing)(
+        HGlue, ggApply, ggCompile, progressPane) // HStrut(16))
+
+      val iPaneC  = iPane.component
+      val iPaneCW = Component.wrap(iPaneC)
+      val top     = iPaneC.getComponent(iPaneC.getComponentCount - 1) match {
+        case jc: javax.swing.JComponent =>
+          jc.add(panelBottom.peer)
+          iPaneCW
+        case _ => new BorderPanel {
+          add(iPaneCW    , BorderPanel.Position.Center)
+          add(panelBottom, BorderPanel.Position.South )
+        }
+      }
+
+      component   = new WindowImpl2(top, actionApply)
 
       name = name0
       component.front()
+      iPane.component.requestFocus()
     }
 
-    private class WindowImpl2(top: Component, panelBottom: Component) extends WindowImpl {
+    private class WindowImpl2(top: Component, /* panelBottom: Component, */ actionApply: Action) extends WindowImpl {
       frame =>
 
       def style = Window.Auxiliary
@@ -191,13 +269,14 @@ object PatchCodeFrameImpl {
         title = s"$name : $contextName Code"
       }
 
-      def setDirty(value: Boolean): Unit = dirty = value
+      // def setDirty(value: Boolean): Unit = dirty = value
       def getDirty = dirty
 
-      contents = new BorderPanel {
-        add(top        , BorderPanel.Position.Center)
-        add(panelBottom, BorderPanel.Position.South )
-      }
+      contents = top
+      //        new BorderPanel {
+      //        add(top        , BorderPanel.Position.Center)
+      //        add(panelBottom, BorderPanel.Position.South )
+      //      }
       closeOperation  = Window.CloseIgnore
 
       reactions += {
@@ -212,7 +291,11 @@ object PatchCodeFrameImpl {
       private val actionRedo  = editorMap.get("redo")
 
       doc.addPropertyChangeListener(SyntaxDocument.CAN_UNDO, new PropertyChangeListener {
-        def propertyChange(e: PropertyChangeEvent): Unit = dirty = doc.canUndo
+        def propertyChange(e: PropertyChangeEvent): Unit = {
+          val d               = doc.canUndo
+          dirty               = d
+          actionApply.enabled = d
+        }
       })
 
       //      doc.addUndoableEditListener(new UndoableEditListener {

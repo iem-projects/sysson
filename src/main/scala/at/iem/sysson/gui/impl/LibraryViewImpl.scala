@@ -17,7 +17,8 @@ import de.sciss.lucre.expr.Expr
 import de.sciss.icons.raphael
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
-import javax.swing.undo.{UndoableEdit, CannotUndoException, CannotRedoException, AbstractUndoableEdit}
+import javax.swing.undo.{CannotUndoException, CannotRedoException, AbstractUndoableEdit}
+import at.iem.sysson.gui.edit.EditExprVar
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
@@ -29,33 +30,6 @@ object LibraryViewImpl {
     val res       = new Impl[S](undoMgr, libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
     GUI.fromTx(res.guiInit())
     res
-  }
-
-  private class EditExpr[S <: Sys[S], A](name: String,
-                                         exprH  : stm.Source[S#Tx, Expr.Var [S, A]],
-                                         beforeH: stm.Source[S#Tx, Expr     [S, A]],
-                                         nowH   : stm.Source[S#Tx, Expr     [S, A]])(implicit cursor: stm.Cursor[S])
-    extends AbstractUndoableEdit {
-
-    override def undo(): Unit = {
-      super.undo()
-      cursor.step { implicit tx =>
-        val expr  = exprH()
-        expr()    = beforeH()
-      }
-    }
-
-    override def redo(): Unit = {
-      super.redo()
-      cursor.step { implicit tx => perform() }
-    }
-
-    def perform()(implicit tx: S#Tx): Unit = {
-      val expr  = exprH()
-      expr()    = nowH()
-    }
-
-    override def getPresentationName = name
   }
 
   private final class Impl[S <: Sys[S]](val undoManager: UndoManager,
@@ -162,7 +136,7 @@ object LibraryViewImpl {
           case single :: Nil if single.isLeaf =>
             impl.cursor.step { implicit tx =>
               single.modelData() match {
-                case TreeLike.IsLeaf(l) => PatchCodeFrame(l)
+                case TreeLike.IsLeaf(l) => PatchCodeFrame(l, undoManager)
                 case _                  =>
               }
             }
@@ -262,8 +236,7 @@ object LibraryViewImpl {
               import expr._
               import Strings.{serializer, varSerializer}
               val s: Expr[S, String] = value.toString
-              val edit = new EditExpr("Rename Node", tx.newHandle(v), beforeH = tx.newHandle(v()), nowH = tx.newHandle(s))
-              edit.perform()
+              val edit = EditExprVar("Rename Node", v, value = s)
               Some(edit)
 
             case _ => None

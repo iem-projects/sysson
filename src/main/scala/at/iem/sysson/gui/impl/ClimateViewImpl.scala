@@ -52,7 +52,7 @@ import graph.{SelectedValue, SelectedRange}
 import collection.breakOut
 import de.sciss.desktop.{DialogSource, OptionPane}
 import de.sciss.synth.{Ops, Synth}
-import de.sciss.swingplus.Spinner
+import de.sciss.swingplus.{OverlayPanel, Spinner}
 import scala.concurrent.{ExecutionContext, Future}
 import at.iem.sysson.sound.Sonification
 import scala.util.Success
