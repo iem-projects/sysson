@@ -12,7 +12,7 @@ import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
 import java.awt.Graphics
 import de.sciss.lucre.stm
-import de.sciss.lucre.synth.expr.ExprImplicits
+import de.sciss.lucre.synth.expr.{Strings, ExprImplicits}
 import de.sciss.lucre.expr.Expr
 import de.sciss.icons.raphael
 import javax.swing.{JComponent, TransferHandler}
@@ -21,24 +21,49 @@ import javax.swing.undo.{UndoableEdit, CannotUndoException, CannotRedoException,
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
-    val handler   = new Handler[S]
+    val undoMgr   = new UndoManagerImpl {
+      protected var dirty: Boolean = false
+    }
+    val handler   = new Handler[S](undoMgr)
     val libH      = tx.newHandle(library)
-    val res       = new Impl[S](libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
+    val res       = new Impl[S](undoMgr, libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
     GUI.fromTx(res.guiInit())
     res
   }
 
-  private final class Impl[S <: Sys[S]](libraryH: stm.Source[S#Tx, Library[S]],
+  private class EditExpr[S <: Sys[S], A](name: String,
+                                         exprH  : stm.Source[S#Tx, Expr.Var [S, A]],
+                                         beforeH: stm.Source[S#Tx, Expr     [S, A]],
+                                         nowH   : stm.Source[S#Tx, Expr     [S, A]])(implicit cursor: stm.Cursor[S])
+    extends AbstractUndoableEdit {
+
+    override def undo(): Unit = {
+      super.undo()
+      cursor.step { implicit tx =>
+        val expr  = exprH()
+        expr()    = beforeH()
+      }
+    }
+
+    override def redo(): Unit = {
+      super.redo()
+      cursor.step { implicit tx => perform() }
+    }
+
+    def perform()(implicit tx: S#Tx): Unit = {
+      val expr  = exprH()
+      expr()    = nowH()
+    }
+
+    override def getPresentationName = name
+  }
+
+  private final class Impl[S <: Sys[S]](val undoManager: UndoManager,
+                                        libraryH: stm.Source[S#Tx, Library[S]],
                                         treeView: TreeTableView[S, Library[S], Handler[S]])
                                        (implicit cursor: stm.Cursor[S])
     extends LibraryView[S] with ComponentHolder[Component] {
     impl =>
-
-    private val _undo = new UndoManagerImpl {
-      protected var dirty: Boolean = _
-    }
-
-    def undoManager: UndoManager = _undo
 
     def library(implicit tx: S#Tx): Library[S] = libraryH()
 
@@ -93,7 +118,7 @@ object LibraryViewImpl {
           _edit.perform()
           _edit
         }
-        _undo.add(edit)
+        undoManager.add(edit)
       }
 
       val actionAddBranch = new Action("Folder") {
@@ -194,7 +219,7 @@ object LibraryViewImpl {
   //    override def toString = name
   //  }
 
-  private final class Handler[S <: Sys[S]](implicit cursor: stm.Cursor[S])
+  private final class Handler[S <: Sys[S]](undo: UndoManager)(implicit cursor: stm.Cursor[S])
     extends TreeTableView.Handler[S, Library[S], Handler[S]] {
 
     type N  = TreeTableView.Node[S, Library[S], Handler[S]]
@@ -230,15 +255,21 @@ object LibraryViewImpl {
       def setValueAt(value: Any, node: N, column: Int): Unit = {
         // println(s"TODO: setValueAt($value, $node, $column)")
         require(column == 0)
-        cursor.step { implicit tx =>
+        val editOpt = cursor.step { implicit tx =>
           node.modelData().merge.name match {
             case Expr.Var(v) =>
               val expr = ExprImplicits[S]
               import expr._
+              import Strings.{serializer, varSerializer}
               val s: Expr[S, String] = value.toString
-              v() = s
+              val edit = new EditExpr("Rename Node", tx.newHandle(v), beforeH = tx.newHandle(v()), nowH = tx.newHandle(s))
+              edit.perform()
+              Some(edit)
+
+            case _ => None
           }
         }
+        editOpt.foreach(undo.add)
       }
 
       def getColumnName(column: Int) = "Name"
