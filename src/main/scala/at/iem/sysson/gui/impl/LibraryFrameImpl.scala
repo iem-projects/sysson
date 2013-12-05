@@ -44,7 +44,7 @@ object LibraryFrameImpl {
         //        })
 
         pack()
-        GUI.placeWindow(this, 1f, 0.25f, 20)
+        GUI.placeWindow(this, 1f, 0.5f, 20)
 
         // def setDirtyFlag(value: Boolean): Unit = dirty = value
       }

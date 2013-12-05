@@ -260,11 +260,11 @@ object LibraryImpl {
     def removeAt(idx: Int)(implicit tx: S#Tx): Unit = ll.removeAt(idx)
 
     def remove(node: NodeLike[S])(implicit tx: S#Tx): Unit = {
-      node match {
-        case b: Branch[S] =>
-          while (!b.isEmpty) b.removeAt(b.size - 1)
-        case _ =>
-      }
+      //      node match {
+      //        case b: Branch[S] =>
+      //          while (!b.isEmpty) b.removeAt(b.size - 1)
+      //        case _ =>
+      //      }
       ll.remove(node)
       // ni.dispose()
     }

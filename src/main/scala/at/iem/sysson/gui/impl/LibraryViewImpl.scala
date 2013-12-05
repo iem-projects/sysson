@@ -41,21 +41,18 @@ object LibraryViewImpl {
 
     def library(implicit tx: S#Tx): Library[S] = libraryH()
 
-    private class EditInsertNode(nodeType: String,
-                                 parentH: stm.Source[S#Tx, Library.Branch[S]],
-                                 index: Int,
-                                 childH: stm.Source[S#Tx, Library.NodeLike[S]])
+    // direction: true = insert, false = remove
+    private class EditNode protected(direction: Boolean,
+                                     parentH: stm.Source[S#Tx, Library.Branch[S]],
+                                     index: Int,
+                                     childH: stm.Source[S#Tx, Library.NodeLike[S]])
       extends AbstractUndoableEdit {
 
       override def undo(): Unit = {
         super.undo()
         cursor.step { implicit tx =>
-          val parent = parentH()
-          if (parent.size > index) {
-            parent.removeAt(index)
-          } else {
-            throw new CannotUndoException()
-          }
+          val success = if (direction) remove() else insert()
+          if (!success) throw new CannotUndoException()
         }
       }
 
@@ -64,17 +61,53 @@ object LibraryViewImpl {
         cursor.step { implicit tx => perform() }
       }
 
-      def perform()(implicit tx: S#Tx): Unit = {
+      override def die(): Unit = {
+        val hasBeenDone = canUndo
+        super.die()
+        if (!hasBeenDone) {
+          // XXX TODO: dispose()
+        }
+      }
+
+      private def insert()(implicit tx: S#Tx): Boolean = {
         val parent  = parentH()
         if (parent.size >= index) {
           val child = childH()
           parent.insert(index, child)
-        } else {
-          throw new CannotRedoException()
-        }
+          true
+        } else false
       }
 
+      private def remove()(implicit tx: S#Tx): Boolean = {
+        val parent = parentH()
+        if (parent.size > index) {
+          parent.removeAt(index)
+          true
+        } else false
+      }
+
+      def perform()(implicit tx: S#Tx): Unit = {
+        val success = if (direction) insert() else remove()
+        if (!success) throw new CannotRedoException()
+      }
+    }
+
+    private class EditInsertNode(nodeType: String,
+                                 parentH: stm.Source[S#Tx, Library.Branch[S]],
+                                 index: Int,
+                                 childH: stm.Source[S#Tx, Library.NodeLike[S]])
+      extends EditNode(true, parentH, index, childH) {
+
       override def getPresentationName = s"Insert $nodeType"
+    }
+
+    private class EditRemoveNode(nodeType: String,
+                                 parentH: stm.Source[S#Tx, Library.Branch[S]],
+                                 index: Int,
+                                 childH: stm.Source[S#Tx, Library.NodeLike[S]])
+      extends EditNode(false, parentH, index, childH) {
+
+      override def getPresentationName = s"Remove $nodeType"
     }
 
     def guiInit(): Unit = {
@@ -118,12 +151,26 @@ object LibraryViewImpl {
 
         def apply(): Unit = {
           val sel = treeView.selection.flatMap(n => n.parentOption.map(_ -> n))
-          if (sel.nonEmpty) impl.cursor.step { implicit tx =>
-            sel.foreach { case (pv, cv) =>
-              val TreeLike.IsBranch(pm) = pv.modelData()
-              val cm                    = cv.modelData()
-              pm.remove(cm.merge)
+          if (sel.nonEmpty) {
+            val editOpt = impl.cursor.step { implicit tx =>
+              sel.flatMap { case (pv, cv) =>
+                val TreeLike.IsBranch(pm) = pv.modelData()
+                val cm                    = cv.modelData()
+                val idx = pm.indexOf(cm)
+                if (idx >= 0) {
+                  val parentH   = tx.newHandle(pm)
+                  val childH    = tx.newHandle(cm.merge)
+                  val nodeType  = cm match {
+                    case TreeLike.IsBranch(_) => "Folder"
+                    case TreeLike.IsLeaf  (_) => "Patch"
+                  }
+                  val edit      = new EditRemoveNode(nodeType, parentH, idx, childH)
+                  edit.perform()
+                  Some(edit)
+                } else None
+              }
             }
+            editOpt.foreach(undoManager.add)
           }
         }
       }

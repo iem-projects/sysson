@@ -6,7 +6,7 @@ import de.sciss.desktop.{UndoManager, OptionPane, Window}
 import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
 import de.sciss.desktop.impl.WindowImpl
 import scala.concurrent.{ExecutionContext, Future}
-import scala.swing.{ProgressBar, FlowPanel, Component, Action, BorderPanel, Button, Label, Swing}
+import scala.swing.{ProgressBar, FlowPanel, Component, Action, BorderPanel, Button, Swing}
 import Swing._
 import de.sciss.lucre.stm
 import de.sciss.lucre.event.Sys
@@ -24,6 +24,7 @@ import de.sciss.swingplus.Implicits._
 import java.awt.Color
 import javax.swing.Icon
 import javax.swing.event.{UndoableEditEvent, UndoableEditListener}
+import de.sciss.lucre.expr.Expr
 
 object PatchCodeFrameImpl {
   /** We use one shared interpreter for all patch code frames. */
@@ -39,32 +40,9 @@ object PatchCodeFrameImpl {
     val source0 = entry.source.value
     val sourceH = tx.newHandle(entry.source)(Strings.varSerializer)
 
-    val _code   = Code.SynthGraph(source0)
+    val code    = Code.SynthGraph(source0)
 
-    val res = new Impl[S] {
-      protected val contextName = _code.contextName
-      protected val _cursor   = cursor
-      protected val codeID    = _code.id
-
-      protected def save(): Unit = {
-        val newCode = currentText
-        val edit    = cursor.step { implicit tx =>
-          val expr = ExprImplicits[S]
-          import expr._
-          import Strings.{varSerializer, serializer}
-          val source  = sourceH()
-          // source()    = newCode
-          EditExprVar("Change Source Code", source, newCode)
-        }
-        undoManager.add(edit)
-      }
-
-      protected lazy val codeCfg = {
-        val b = CodePane.Config()
-        b.text = _code.source
-        b.build
-      }
-
+    val res = new Impl[S](undoManager, code, sourceH) {
       val observer = entry.name.changed.react { implicit tx => ch =>
         GUI.fromTx {
           name = ch.now
@@ -75,12 +53,19 @@ object PatchCodeFrameImpl {
     GUI.fromTx(res.guiInit(name0))
   }
 
-  private abstract class Impl[S <: Sys[S]] {
-    protected def codeCfg: CodePane.Config
+  private abstract class Impl[S <: Sys[S]](undoManager: UndoManager, code: Code.SynthGraph,
+                                           sourceH: stm.Source[S#Tx, Expr.Var[S, String]])
+                                          (implicit cursor: stm.Cursor[S]) {
+    private val codeCfg = {
+      val b = CodePane.Config()
+      b.text = code.source
+      b.build
+    }
 
-    protected def contextName: String
-    protected def _cursor: stm.Cursor[S]
-    protected def codeID: Int
+    import code.{contextName, id => codeID}
+
+    // protected def contextName: String
+    // protected def codeID: Int
 
     private var codePane: CodePane = _
 
@@ -135,10 +120,28 @@ object PatchCodeFrameImpl {
       disposeFromGUI()
     }
 
-    protected def save(): Unit
+    // protected def save(): Unit
+
+    private def save(): Unit = {
+      val newCode = currentText
+      val edit    = cursor.step { implicit tx =>
+        val expr = ExprImplicits[S]
+        import expr._
+        import Strings.{varSerializer, serializer}
+        val source  = sourceH()
+        // source()    = newCode
+        EditExprVar("Change Source Code", source, newCode)
+      }
+      undoManager.add(edit)
+      // this doesn't work properly
+      // component.setDirty(value = false) // do not erase undo history
+
+      // so let's clear the undo history now...
+      codePane.editor.getDocument.asInstanceOf[SyntaxDocument].clearUndos()
+    }
 
     private def disposeFromGUI(): Unit = {
-      _cursor.step { implicit tx =>
+      cursor.step { implicit tx =>
         disposeData()
       }
       component.dispose()
@@ -224,17 +227,16 @@ object PatchCodeFrameImpl {
 
       codePane.editor.getDocument.addUndoableEditListener(
         new UndoableEditListener {
-          def undoableEditHappened(e: UndoableEditEvent): Unit = {
+          def undoableEditHappened(e: UndoableEditEvent): Unit =
             if (clearGreen) {
               clearGreen = false
               ggCompile.icon = compileIcon(None)
             }
-          }
         }
       )
 
-      lazy val ggApply  : Button = GUI.toolButton(actionApply  , raphael.Shapes.Check )
-      lazy val ggCompile: Button = GUI.toolButton(actionCompile, raphael.Shapes.Hammer)
+      lazy val ggApply  : Button = GUI.toolButton(actionApply  , raphael.Shapes.Check , tooltip = "Save text changes")
+      lazy val ggCompile: Button = GUI.toolButton(actionCompile, raphael.Shapes.Hammer, tooltip = "Verify that current buffer compiles")
 
       val panelBottom = new FlowPanel(FlowPanel.Alignment.Trailing)(
         HGlue, ggApply, ggCompile, progressPane) // HStrut(16))
@@ -269,7 +271,10 @@ object PatchCodeFrameImpl {
         title = s"$name : $contextName Code"
       }
 
-      // def setDirty(value: Boolean): Unit = dirty = value
+      def setDirty(value: Boolean): Unit = {
+        dirty               = value
+        actionApply.enabled = value
+      }
       def getDirty = dirty
 
       contents = top
@@ -291,11 +296,7 @@ object PatchCodeFrameImpl {
       private val actionRedo  = editorMap.get("redo")
 
       doc.addPropertyChangeListener(SyntaxDocument.CAN_UNDO, new PropertyChangeListener {
-        def propertyChange(e: PropertyChangeEvent): Unit = {
-          val d               = doc.canUndo
-          dirty               = d
-          actionApply.enabled = d
-        }
+        def propertyChange(e: PropertyChangeEvent): Unit = setDirty(doc.canUndo)
       })
 
       //      doc.addUndoableEditListener(new UndoableEditListener {
