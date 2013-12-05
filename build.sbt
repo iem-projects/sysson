@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.4.0"
+version       := "0.5.0-SNAPSHOT"
 
 organization  := "at.iem.sysson"
 
@@ -26,13 +26,13 @@ libraryDependencies ++= {
     // "de.sciss" %% "lucredata"               % "2.2.1+",
     // "de.sciss" %% "lucreevent"              % "2.4.+",
     "de.sciss" %% "soundprocesses"          % "2.0.+",
-    "de.sciss" %% "scalacolliderswing"      % "1.11.+",         // sound widgets, interpreter
+    "de.sciss" %% "scalacolliderswing"      % "1.12.+",         // sound widgets, interpreter
     // "de.sciss" %  "scalacolliderugens-spec" % "1.7.+",       // UGen specs used in the patcher class
     "de.sciss" %% "desktop"                 % "0.3.4+",         // application framework
     "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
     "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
     "de.sciss" %% "fileutil"                % "1.1.+",          // easy file name manipulation
-    "de.sciss" %% "swingplus"               % "0.0.1+",         // GUI helpers
+    "de.sciss" %% "swingplus"               % "0.0.2+",         // GUI helpers
     "de.sciss" %% "treetable-scala"         % "1.3.3+",         // GUI component
     "de.sciss" %% "lucrestm-bdb"            % "2.0.+",          // database used for library
     "de.sciss" %% "serial"                  % "1.0.1+",         // important bug fix in 1.0.1!

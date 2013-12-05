@@ -4,29 +4,28 @@ package impl
 
 import de.sciss.desktop.{OptionPane, Window}
 import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
-import de.sciss.desktop.impl.WindowImpl
-import scala.swing.{FlowPanel, BorderPanel, Swing, Label, Button, Component}
+import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.swing.{FlowPanel, Component, Action, BorderPanel, Button, Label, Swing}
 import Swing._
-import scala.util.Failure
-import scala.util.Success
 import de.sciss.lucre.stm
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.synth.expr.{Strings, ExprImplicits}
 import de.sciss.lucre.stm.Disposable
+import javax.{swing => js}
+import javax.swing.event.{DocumentEvent, DocumentListener, UndoableEditEvent, UndoableEditListener}
+import scala.util.Failure
+import scala.util.Success
+import de.sciss.swingplus.Implicits._
+import java.beans.{PropertyChangeEvent, PropertyChangeListener}
+import de.sciss.syntaxpane.SyntaxDocument
 
 object PatchCodeFrameImpl {
-  //  private lazy val intp = {
-  //    val intpCfg = Interpreter.Config()
-  //    intpCfg.imports = Code.SynthGraph.imports
-  //    Interpreter(intpCfg)
-  //  }
-
-  private lazy val intp = {
-    val intpCfg = Interpreter.Config()
-    intpCfg.imports = Code.SynthGraph.imports
-    // val paneCfg = InterpreterPane.Config()
-    Interpreter.async(intpCfg)
+  /** We use one shared interpreter for all patch code frames. */
+  private lazy val interpreter = {
+    val cfg     = Interpreter.Config()
+    cfg.imports = Code.SynthGraph.imports
+    Interpreter.async(cfg)
   }
 
   def apply[S <: Sys[S]](entry: Library.Leaf[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): Unit = {
@@ -37,44 +36,24 @@ object PatchCodeFrameImpl {
     val _code   = Code.SynthGraph(source0)
 
     val res = new Impl[S] {
-      // val document = doc
       protected val contextName = _code.contextName
       protected val _cursor   = cursor
-      // protected val codeH     = tx.newHandle(elem.entity)(Codes.serializer)
       protected val codeID    = _code.id
 
       protected def save(): Unit = {
         val newCode = currentText
-        // saveFun(newCode)
         cursor.step { implicit tx =>
           val expr = ExprImplicits[S]
           import expr._
-          // name is not editable right now in the patch code frame
-          // l.name()    = newName
           sourceH()() = newCode
         }
       }
 
-      // protected val initialText = _code.source
       protected lazy val codeCfg = {
         val b = CodePane.Config()
         b.text = _code.source
-        b.build()
+        b.build
       }
-
-      //      protected val intpCfg = {
-      //        val b = Interpreter.Config()
-      //        b.imports = Seq(
-      //          "de.sciss.mellite._",
-      //          "de.sciss.synth._",
-      //          "Ops._",
-      //          "concurrent.duration._",
-      //          "gui.InterpreterFrame.Bindings._"
-      //        )
-      //        b.build
-      //      }
-
-      // guiFromTx(guiInit())
 
       val observer = entry.name.changed.react { implicit tx => ch =>
         GUI.fromTx {
@@ -86,21 +65,15 @@ object PatchCodeFrameImpl {
     GUI.fromTx(res.guiInit(name0))
   }
 
-  private abstract class Impl[S <: Sys[S]] /* extends CodeFrame[S] */ {
-    // protected def intpCfg: Interpreter.Config
+  private abstract class Impl[S <: Sys[S]] {
     protected def codeCfg: CodePane.Config
-
-    // protected def initialText: String
 
     protected def contextName: String
     protected def _cursor: stm.Cursor[S]
-    //protected def codeH: stm.Source[S#Tx, Expr[S, Code]]
     protected def codeID: Int
 
-    private var codePane: CodePane        = _
+    private var codePane: CodePane = _
 
-    // private var intp    : Interpreter     = _
-    // private var intpPane: InterpreterPane = _
     private var futCompile = Option.empty[Future[Unit]]
     private var ggStatus: Label = _
     protected def observer: Disposable[S#Tx]
@@ -117,14 +90,26 @@ object PatchCodeFrameImpl {
       component.updateTitle(value)
     }
 
+    private val undo = new UndoManagerImpl {
+      private var _dirty = false
+      protected def dirty = _dirty
+      protected def dirty_=(value: Boolean): Unit = if (_dirty != value) {
+        _dirty = value
+        component.setDirty(value)
+      }
+    }
+
     private def checkClose(): Unit = {
       if (futCompile.isDefined) {
         ggStatus.text = "busy!"
         return
       }
 
-      val newText = currentText
-      if (newText != codeCfg.text && newText.stripMargin != "") {
+      //      val newText = currentText
+      //      val dirty   = newText != codeCfg.text && newText.stripMargin != ""
+      val dirty = component.getDirty
+
+      if (dirty) {
         val message = "The code has been edited.\nDo you want to save the changes?"
         val opt = OptionPane.confirmation(message = message, optionType = OptionPane.Options.YesNoCancel,
           messageType = OptionPane.Message.Warning)
@@ -149,28 +134,16 @@ object PatchCodeFrameImpl {
       }
       component.dispose()
     }
-//
-//    final def dispose()(implicit tx: S#Tx): Unit = {
-//      disposeData()
-//      guiFromTx {
-//        comp.dispose()
-//        // intp.dispose()
-//      }
-//    }
 
     private def disposeData()(implicit tx: S#Tx): Unit = {
       observer.dispose()
     }
 
     def guiInit(name0: String): Unit = {
-      // codePane   = CodePane(codeCfg)
-      codePane      = CodePane(codeCfg)
-      val intpPane  = InterpreterPane.wrapAsync(intp, codePane)
+      codePane        = CodePane(codeCfg)
+      val iPane       = InterpreterPane.wrapAsync(interpreter, codePane)
 
-      // intp      = Interpreter(intpCfg)
-      // intpPane  = InterpreterPane.wrap(intp, codePane)
-
-      ggStatus  = new Label(null)
+      ggStatus    = new Label(null)
 
       val ggCompile = Button("Compile") {
         if (futCompile.isDefined) {
@@ -199,11 +172,10 @@ object PatchCodeFrameImpl {
           }
         }
       }
-      // GUI.round(ggCompile)
 
       val panelBottom = new FlowPanel(FlowPanel.Alignment.Trailing)(HGlue, ggStatus, ggCompile, HStrut(16))
 
-      component = new WindowImpl2(Component.wrap(intpPane /* codePane */.component), panelBottom)
+      component = new WindowImpl2(Component.wrap(iPane.component), panelBottom)
 
       name = name0
       component.front()
@@ -220,6 +192,9 @@ object PatchCodeFrameImpl {
         title = s"$name : $contextName Code"
       }
 
+      def setDirty(value: Boolean): Unit = dirty = value
+      def getDirty = dirty
+
       contents = new BorderPanel {
         add(top        , BorderPanel.Position.Center)
         add(panelBottom, BorderPanel.Position.South )
@@ -231,9 +206,39 @@ object PatchCodeFrameImpl {
           checkClose()
       }
 
+      private val editor      = codePane.editor
+      private val doc         = editor.getDocument.asInstanceOf[SyntaxDocument]
+      private val editorMap   = editor.getActionMap
+      private val actionUndo  = editorMap.get("undo")
+      private val actionRedo  = editorMap.get("redo")
+
+      doc.addPropertyChangeListener(SyntaxDocument.CAN_UNDO, new PropertyChangeListener {
+        def propertyChange(e: PropertyChangeEvent): Unit = dirty = doc.canUndo
+      })
+
+      //      doc.addUndoableEditListener(new UndoableEditListener {
+      //        def undoableEditHappened(e: UndoableEditEvent): Unit = if (!dirty && e.getEdit.isSignificant) {
+      //          dirty = true
+      //        }
+      //      })
+      //      doc.addDocumentListener(new DocumentListener {
+      //        def insertUpdate (e: DocumentEvent): Unit = perform()
+      //        def removeUpdate (e: DocumentEvent): Unit = perform()
+      //        def changedUpdate(e: DocumentEvent): Unit = perform()
+      //
+      //        private def perform(): Unit = {
+      //          ... // if (dirty && doc.)
+      //        }
+      //      })
+
+      bindMenus(
+        "file.close" -> Action(null)(checkClose()),
+        "edit.undo"  -> Action.wrap(actionUndo),
+        "edit.redo"  -> Action.wrap(actionRedo)
+      )
+
       pack()
       GUI.centerOnScreen(this)
-      // front()
     }
   }
 }
