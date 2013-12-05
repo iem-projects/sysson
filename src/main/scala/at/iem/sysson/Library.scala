@@ -26,7 +26,8 @@
 
 package at.iem.sysson
 
-import de.sciss.lucre.event.Sys
+import de.sciss.lucre.{event => evt}
+import evt.{EventLike, Sys}
 import de.sciss.lucre.expr.Expr
 import at.iem.sysson.impl.{LibraryImpl => Impl}
 import de.sciss.lucre.stm
@@ -39,8 +40,15 @@ import scala.concurrent.{blocking, Future}
 object Library {
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = Impl[S]
 
+  object NodeLike {
+    implicit def serializer[S <: Sys[S]]: evt.Serializer[S, NodeLike[S]] = Impl.nodeSerializer[S]
+  }
   sealed trait NodeLike[S <: Sys[S]] extends stm.Mutable[S#ID, S#Tx] {
     def name: Expr[S, String]
+
+    def changed: EventLike[S, TreeLike.NodeUpdate[S, Library[S]]]
+
+    private[sysson] def toEither: TreeLike.Node[Branch[S], Leaf[S]]
   }
 
   sealed trait LeafChange
@@ -56,12 +64,16 @@ object Library {
 
   object Branch {
     implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Branch[S]] = Impl.branchSerializer[S]
+
+    def apply[S <: Sys[S]](name: Expr[S, String])(implicit tx: S#Tx): Branch[S] = Impl.newBranch(name)
   }
   trait Branch[S <: Sys[S]] extends TreeLike.Branch[S, Library[S]] with NodeLike[S] {
     def insertLeaf  (idx: Int, name: Expr[S, String], source: Expr[S, String])(implicit tx: S#Tx): Leaf[S]
     def insertBranch(idx: Int, name: Expr[S, String])(implicit tx: S#Tx): Branch[S]
     def removeAt    (idx: Int)(implicit tx: S#Tx): Unit
     def remove      (node: TreeLike.Node[Branch[S], Leaf[S]])(implicit tx: S#Tx): Unit
+
+    def changed: EventLike[S, TreeLike.BranchUpdate[S, Library[S]]]
   }
   object Leaf {
     implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Leaf[S]] = Impl.leafSerializer[S]

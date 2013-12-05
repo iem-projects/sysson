@@ -37,12 +37,24 @@ import scala.annotation.switch
 
 object LibraryImpl {
   import TreeLike.{IsLeaf, IsBranch, BranchChanged}
-  import Library.{Leaf, Branch, Update => U, BranchUpdate => BU, Renamed, SourceChanged, BranchChange, LeafChange}
+  import Library.{Leaf, Branch, Update => U, BranchUpdate => BU, Renamed, SourceChanged, BranchChange, LeafChange, NodeLike}
 
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = {
     val targets = evt.Targets[S]
     val root    = newBranch[S](Strings.newConst("root"))
     new Impl(targets, root)
+  }
+
+  def serializer      [S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library       [S]] = anySer.asInstanceOf[Ser[S]]
+  def branchSerializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library.Branch[S]] = BranchImpl.serializer[S]
+  def leafSerializer  [S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library.Leaf  [S]] = LeafImpl  .serializer[S]
+  def nodeSerializer  [S <: Sys[S]]: evt.Serializer[S, NodeLike[S]] = NodeImpl.serializer[S]
+
+  def newBranch[S <: Sys[S]](name0: Expr[S, String])(implicit tx: S#Tx): Branch[S] = {
+    val targets = evt.Targets[S]
+    val name    = Strings.newVar(name0)
+    val ll      = expr.LinkedList.Modifiable[S, NodeLike[S], NU[S]](_.changed)
+    new BranchImpl(targets, name, ll)
   }
 
   private type NU[S <: Sys[S]] = TreeLike.NodeUpdate[S, Library[S]]
@@ -53,19 +65,19 @@ object LibraryImpl {
   }
 
   private object NodeImpl {
-    implicit def serializer[S <: Sys[S]]: evt.Serializer[S, NodeImpl[S]] = anySer.asInstanceOf[Ser[S]]
+    implicit def serializer[S <: Sys[S]]: evt.Serializer[S, NodeLike[S]] = anySer.asInstanceOf[Ser[S]]
 
-    def reader[S <: Sys[S]]: evt.Reader[S, NodeImpl[S]] = anySer.asInstanceOf[Ser[S]]
+    def reader[S <: Sys[S]]: evt.Reader[S, NodeLike[S]] = anySer.asInstanceOf[Ser[S]]
 
     // def eitherReader[S <: Sys[S]]: serial.Reader[S#Tx, S#Acc, N[S]] = anyEitherReader.asInstanceOf[EitherReader[S]]
 
-    private def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): NodeImpl[S] = {
+    private def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): NodeLike[S] = {
       val targets = evt.Targets.read(in, access)
       read(in, access, targets)
     }
 
     private def read[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
-                                 (implicit tx: S#Tx): NodeImpl[S] = {
+                                 (implicit tx: S#Tx): NodeLike[S] with evt.Node[S] = {
       readNodeCookie(in)
       (in.readByte(): @switch) match {
         case LEAF_COOKIE    => LeafImpl  .readIdentified(in, access, targets)
@@ -83,25 +95,26 @@ object LibraryImpl {
     //    }
 
     private final class Ser[S <: Sys[S]]
-      extends serial.Serializer[S#Tx, S#Acc, NodeImpl[S]] with evt.Reader[S, NodeImpl[S]] {
+      extends serial.Serializer[S#Tx, S#Acc, NodeLike[S]] with evt.Reader[S, NodeLike[S]] {
 
-      def write(n: NodeImpl[S], out: DataOutput): Unit = n.write(out)
+      def write(n: NodeLike[S], out: DataOutput): Unit = n.write(out)
 
-      def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): NodeImpl[S] =
+      def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): NodeLike[S] with evt.Node[S] =
         NodeImpl.read(in, access, targets)
 
-      def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): NodeImpl[S] = NodeImpl.read(in, access)
+      def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): NodeLike[S] = NodeImpl.read(in, access)
     }
   }
-  sealed trait NodeImpl[S <: Sys[S]] extends evt.impl.StandaloneLike[S, NU[S], NodeImpl[S]] {
+  private sealed trait NodeImpl[S <: Sys[S]]
+    extends evt.impl.StandaloneLike[S, NU[S], NodeLike[S]] /* with NodeLike[S] */ {
+    _: NodeLike[S] =>
+
     type T = Library[S]
 
-    def reader: evt.Reader[S, NodeImpl[S]] = NodeImpl.reader[S]
-    def changed = this
-    def toEither: N[S]
+    def reader: evt.Reader[S, NodeLike[S]] = NodeImpl.reader[S]
   }
 
-  type N[S <: Sys[S]] = TreeLike.Node[Branch[S], Leaf[S]]
+  private type N[S <: Sys[S]] = TreeLike.Node[Branch[S], Leaf[S]]
 
   private final val IMPL_SER_VERSION  = 0x4C696200  // "Lib\0"
   private final val NODE_SER_VERSION  = 0x4C69624E  // "LibN"
@@ -144,6 +157,8 @@ object LibraryImpl {
     extends Leaf[S] with NodeImpl[S] {
 
     def toEither = IsLeaf(this)
+
+    def changed = this
 
     def writeData(out: DataOutput): Unit =  {
       out.writeInt(NODE_SER_VERSION)
@@ -205,15 +220,17 @@ object LibraryImpl {
     def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
                                    (implicit tx: S#Tx): BranchImpl[S] = {
       val name    = Strings.readVar(in, access)
-      val ll      = expr.LinkedList.Modifiable.read[S, NodeImpl[S], NU[S]](identity)(in, access)
+      val ll      = expr.LinkedList.Modifiable.read[S, NodeLike[S], NU[S]](_.changed)(in, access)
       new BranchImpl(targets, name, ll)
     }
   }
   private final class BranchImpl[S <: Sys[S]](val targets: evt.Targets[S], val name: Expr[S, String],
-                                              ll: expr.LinkedList.Modifiable[S, NodeImpl[S], NU[S]])
-    extends Library.Branch[S] with NodeImpl[S] with evt.impl.StandaloneLike[S, BU[S], NodeImpl[S] /* BranchImpl[S] */] {
+                                              ll: expr.LinkedList.Modifiable[S, NodeLike[S], NU[S]])
+    extends Library.Branch[S] with NodeImpl[S] with evt.impl.StandaloneLike[S, BU[S], NodeLike[S] /* BranchImpl[S] */] {
 
     def toEither = IsBranch(this)
+
+    def changed = this
 
     def size(implicit tx: S#Tx): Int = ll.size
 
@@ -303,17 +320,6 @@ object LibraryImpl {
     }
   }
 
-  private def newBranch[S <: Sys[S]](name0: Expr[S, String])(implicit tx: S#Tx): BranchImpl[S] = {
-    val targets = evt.Targets[S]
-    val name    = Strings.newVar(name0)
-    val ll      = expr.LinkedList.Modifiable[S, NodeImpl[S], NU[S]](identity)
-    new BranchImpl(targets, name, ll)
-  }
-
-  def serializer      [S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library       [S]] = anySer.asInstanceOf[Ser[S]]
-  def branchSerializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library.Branch[S]] = BranchImpl.serializer[S]
-  def leafSerializer  [S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library.Leaf  [S]] = LeafImpl  .serializer[S]
-
   private def reader[S <: Sys[S]]: evt.Reader[S, Impl[S]] = anySer.asInstanceOf[Ser[S]]
 
   private val anySer = new Ser[InMemory]
@@ -334,7 +340,7 @@ object LibraryImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](val targets: evt.Targets[S], _root: BranchImpl[S])
+  private final class Impl[S <: Sys[S]](val targets: evt.Targets[S], _root: Library.Branch[S])
     extends Library[S] with evt.impl.StandaloneLike[S, U[S], Impl[S]] {
 
     private type T = Library[S]
@@ -348,12 +354,13 @@ object LibraryImpl {
       _root.dispose()
     }
 
-    def connect   ()(implicit tx: S#Tx): Unit = _root ---> this
-    def disconnect()(implicit tx: S#Tx): Unit = _root -/-> this
+    def connect   ()(implicit tx: S#Tx): Unit = _root.changed ---> this
+    def disconnect()(implicit tx: S#Tx): Unit = _root.changed -/-> this
 
     def reader: evt.Reader[S, Impl[S]] = LibraryImpl.reader[S]
 
-    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[U[S]] = pull(_root).map(TreeLike.Update[S, T](this, _))
+    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[U[S]] =
+      pull(_root.changed).map(TreeLike.Update[S, T](this, _))
 
     def root: Branch = _root
 
