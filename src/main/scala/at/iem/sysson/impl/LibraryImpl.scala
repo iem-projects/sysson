@@ -57,6 +57,13 @@ object LibraryImpl {
     new BranchImpl(targets, name, ll)
   }
 
+  def newLeaf[S <: Sys[S]](name0: Expr[S, String], source0: Expr[S, String])(implicit tx: S#Tx): Leaf[S] = {
+    val targets = evt.Targets[S]
+    val name    = Strings.newVar(name0  )
+    val source  = Strings.newVar(source0)
+    new LeafImpl(targets, name = name, source = source)
+  }
+
   private type NU[S <: Sys[S]] = TreeLike.NodeUpdate[S, Library[S]]
 
   private def readNodeCookie(in: DataInput): Unit = {
@@ -248,33 +255,18 @@ object LibraryImpl {
         case _                          => -1
       }
 
-    def insertLeaf  (idx: Int, name0: Expr[S, String], source0: Expr[S, String])(implicit tx: S#Tx): Leaf[S] = {
-      val targets = evt.Targets[S]
-      val name    = Strings.newVar(name0  )
-      val source  = Strings.newVar(source0)
-      val leaf    = new LeafImpl(targets, name = name, source = source)
-      ll.insert(idx, leaf)
-      leaf
-    }
-
-    def insertBranch(idx: Int, name0: Expr[S, String])(implicit tx: S#Tx): Branch[S] = {
-      val branch = newBranch(name0)
-      ll.insert(idx, branch)
-      branch
-    }
+    def insert(idx: Int, node: NodeLike[S])(implicit tx: S#Tx): Unit = ll.insert(idx, node)
 
     def removeAt(idx: Int)(implicit tx: S#Tx): Unit = ll.removeAt(idx)
 
-    def remove(node: TreeLike.Node[Branch[S], Leaf[S]])(implicit tx: S#Tx): Unit = {
-      val ni = node match {
-        case IsLeaf  (l: LeafImpl  [S]) => l
-        case IsBranch(b: BranchImpl[S]) =>
+    def remove(node: NodeLike[S])(implicit tx: S#Tx): Unit = {
+      node match {
+        case b: Branch[S] =>
           while (!b.isEmpty) b.removeAt(b.size - 1)
-          b
-        case _ => sys.error(s"Not a node impl: $node")
+        case _ =>
       }
-      ll.remove(ni)
-      ni.dispose()
+      ll.remove(node)
+      // ni.dispose()
     }
 
     def writeData(out: DataOutput): Unit = {

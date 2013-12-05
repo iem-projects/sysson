@@ -42,9 +42,11 @@ object LibraryViewImpl {
 
     def library(implicit tx: S#Tx): Library[S] = libraryH()
 
-    private abstract class EditInsertNode extends AbstractUndoableEdit {
-      protected def parentH: stm.Source[S#Tx, Library.Branch[S]]
-      protected def index: Int
+    private class EditInsertNode(nodeType: String,
+                                 parentH: stm.Source[S#Tx, Library.Branch[S]],
+                                 index: Int,
+                                 childH: stm.Source[S#Tx, Library.NodeLike[S]])
+      extends AbstractUndoableEdit {
 
       override def undo(): Unit = {
         super.undo()
@@ -66,43 +68,14 @@ object LibraryViewImpl {
       def perform()(implicit tx: S#Tx): Unit = {
         val parent  = parentH()
         if (parent.size >= index) {
-          insert(parent, index)
+          val child = childH()
+          parent.insert(index, child)
         } else {
           throw new CannotRedoException()
         }
       }
 
-      protected def insert(parent: Library.Branch[S], index: Int)(implicit tx: S#Tx): Unit
-
-      protected def nodeType: String
-
       override def getPresentationName = s"Insert $nodeType"
-    }
-
-    private class EditInsertFolder(protected val parentH: stm.Source[S#Tx, Library.Branch[S]],
-                                   protected val index: Int)
-      extends EditInsertNode {
-
-      protected def insert(parent: Library.Branch[S], index: Int)(implicit tx: S#Tx): Unit = {
-        val expr    = ExprImplicits[S]
-        import expr._
-        parent.insertBranch(index, "untitled folder")
-      }
-
-      def nodeType = "Folder"
-    }
-
-    private class EditInsertPatch(protected val parentH: stm.Source[S#Tx, Library.Branch[S]],
-                                  protected val index: Int)
-      extends EditInsertNode {
-
-      protected def insert(parent: Library.Branch[S], index: Int)(implicit tx: S#Tx): Unit = {
-        val expr    = ExprImplicits[S]
-        import expr._
-        parent.insertLeaf(index, name = "untitled patch", source = "// Sonification Synth Graph body here")
-      }
-
-      def nodeType = "Patch"
     }
 
     def guiInit(): Unit = {
@@ -111,11 +84,12 @@ object LibraryViewImpl {
 
       // def add(gen: S#Tx => TreeLike.Node[Library.Branch[S], Library.Leaf[S]]) ...
 
-      def actionAdd(create: (stm.Source[S#Tx, Library.Branch[S]], Int) => EditInsertNode): Unit = {
+      def actionAdd(name: String)(create: (S#Tx) => Library.NodeLike[S]): Unit = {
         val edit = cursor.step { implicit tx =>
           val (parent, idx) = treeView.insertionPoint()
           treeView.markInsertion()
-          val _edit = create(tx.newHandle(parent), idx)
+          val childH  = tx.newHandle(create(tx))
+          val _edit   = new EditInsertNode(name, tx.newHandle(parent), idx, childH)
           _edit.perform()
           _edit
         }
@@ -123,12 +97,20 @@ object LibraryViewImpl {
       }
 
       val actionAddBranch = new Action("Folder") {
-        def apply(): Unit = actionAdd(new EditInsertFolder(_, _))
+        def apply(): Unit = {
+          val expr = ExprImplicits[S]
+          import expr._
+          actionAdd("Folder") { implicit tx => Library.Branch("untitled folder") }
+        }
       }
       val ggAddBranch = GUI.toolButton(actionAddBranch, raphael.Shapes.Plus)
 
       val actionAddLeaf = new Action("Patch") {
-        def apply(): Unit = actionAdd(new EditInsertPatch(_, _))
+        def apply(): Unit = {
+          val expr = ExprImplicits[S]
+          import expr._
+          actionAdd("Patch") { implicit tx => Library.Leaf("untitled patch", "// Sonification SynthGraph body here") }
+        }
       }
       val ggAddLeaf = GUI.toolButton(actionAddLeaf, raphael.Shapes.Plus)
 
@@ -141,7 +123,7 @@ object LibraryViewImpl {
             sel.foreach { case (pv, cv) =>
               val TreeLike.IsBranch(pm) = pv.modelData()
               val cm                    = cv.modelData()
-              pm.remove(cm)
+              pm.remove(cm.merge)
             }
           }
         }
