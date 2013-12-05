@@ -5,27 +5,25 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.treetable.TreeTableCellRenderer.State
 import de.sciss.treetable.TreeColumnModel
-import scala.swing.{Color, Action, Orientation, BoxPanel, Button, FlowPanel, Swing, ScrollPane, Component}
+import scala.swing.{Action, Orientation, BoxPanel, FlowPanel, Swing, ScrollPane, Component}
 import de.sciss.model.Change
 import de.sciss.treetable.j.DefaultTreeTableCellRenderer
-import de.sciss.desktop.impl.WindowImpl
-import de.sciss.desktop.Window
+import de.sciss.desktop.impl.UndoManagerImpl
+import de.sciss.desktop.UndoManager
 import java.awt.Graphics
 import de.sciss.lucre.stm
 import de.sciss.lucre.synth.expr.ExprImplicits
-import scala.concurrent.stm.{TxnLocal, Ref}
 import de.sciss.lucre.expr.Expr
 import de.sciss.icons.raphael
-import javax.swing.{JComponent, TransferHandler, Icon}
-import java.awt.geom.Path2D
+import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
-import at.iem.sysson.Library.{Leaf, Branch}
+import javax.swing.undo.{UndoableEdit, CannotUndoException, CannotRedoException, AbstractUndoableEdit}
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
     val handler   = new Handler[S]
     val libH      = tx.newHandle(library)
-    val res       = new Impl(libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
+    val res       = new Impl[S](libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
     GUI.fromTx(res.guiInit())
     res
   }
@@ -36,7 +34,76 @@ object LibraryViewImpl {
     extends LibraryView[S] with ComponentHolder[Component] {
     impl =>
 
+    private val _undo = new UndoManagerImpl {
+      protected var dirty: Boolean = _
+    }
+
+    def undoManager: UndoManager = _undo
+
     def library(implicit tx: S#Tx): Library[S] = libraryH()
+
+    private abstract class EditInsertNode extends AbstractUndoableEdit {
+      protected def parentH: stm.Source[S#Tx, Library.Branch[S]]
+      protected def index: Int
+
+      override def undo(): Unit = {
+        super.undo()
+        cursor.step { implicit tx =>
+          val parent = parentH()
+          if (parent.size > index) {
+            parent.removeAt(index)
+          } else {
+            throw new CannotUndoException()
+          }
+        }
+      }
+
+      override def redo(): Unit = {
+        super.redo()
+        cursor.step { implicit tx => perform() }
+      }
+
+      def perform()(implicit tx: S#Tx): Unit = {
+        val parent  = parentH()
+        if (parent.size >= index) {
+          insert(parent, index)
+        } else {
+          throw new CannotRedoException()
+        }
+      }
+
+      protected def insert(parent: Library.Branch[S], index: Int)(implicit tx: S#Tx): Unit
+
+      protected def nodeType: String
+
+      override def getPresentationName = s"Insert $nodeType"
+    }
+
+    private class EditInsertFolder(protected val parentH: stm.Source[S#Tx, Library.Branch[S]],
+                                   protected val index: Int)
+      extends EditInsertNode {
+
+      protected def insert(parent: Library.Branch[S], index: Int)(implicit tx: S#Tx): Unit = {
+        val expr    = ExprImplicits[S]
+        import expr._
+        parent.insertBranch(index, "untitled folder")
+      }
+
+      def nodeType = "Folder"
+    }
+
+    private class EditInsertPatch(protected val parentH: stm.Source[S#Tx, Library.Branch[S]],
+                                  protected val index: Int)
+      extends EditInsertNode {
+
+      protected def insert(parent: Library.Branch[S], index: Int)(implicit tx: S#Tx): Unit = {
+        val expr    = ExprImplicits[S]
+        import expr._
+        parent.insertLeaf(index, name = "untitled patch", source = "// Sonification Synth Graph body here")
+      }
+
+      def nodeType = "Patch"
+    }
 
     def guiInit(): Unit = {
       val scroll = new ScrollPane(treeView.component)
@@ -44,25 +111,24 @@ object LibraryViewImpl {
 
       // def add(gen: S#Tx => TreeLike.Node[Library.Branch[S], Library.Leaf[S]]) ...
 
-      val actionAddBranch = new Action("Folder") {
-        def apply(): Unit = cursor.step { implicit tx =>
+      def actionAdd(create: (stm.Source[S#Tx, Library.Branch[S]], Int) => EditInsertNode): Unit = {
+        val edit = cursor.step { implicit tx =>
           val (parent, idx) = treeView.insertionPoint()
-          val expr = ExprImplicits[S]
-          import expr._
           treeView.markInsertion()
-          /* val b = */ parent.insertBranch(idx, "untitled folder")
+          val _edit = create(tx.newHandle(parent), idx)
+          _edit.perform()
+          _edit
         }
+        _undo.add(edit)
+      }
+
+      val actionAddBranch = new Action("Folder") {
+        def apply(): Unit = actionAdd(new EditInsertFolder(_, _))
       }
       val ggAddBranch = GUI.toolButton(actionAddBranch, raphael.Shapes.Plus)
 
       val actionAddLeaf = new Action("Patch") {
-        def apply(): Unit = cursor.step { implicit tx =>
-          val (parent, idx) = treeView.insertionPoint()
-          val expr = ExprImplicits[S]
-          import expr._
-          treeView.markInsertion()
-          /* val l = */ parent.insertLeaf(idx, name = "untitled patch", source = "// Sonification Synth Graph body here")
-        }
+        def apply(): Unit = actionAdd(new EditInsertPatch(_, _))
       }
       val ggAddLeaf = GUI.toolButton(actionAddLeaf, raphael.Shapes.Plus)
 
@@ -89,21 +155,8 @@ object LibraryViewImpl {
           case single :: Nil if single.isLeaf =>
             impl.cursor.step { implicit tx =>
               single.modelData() match {
-                case TreeLike.IsLeaf(l) =>
-                  val name  = l.name.value
-                  val code  = l.source.value
-                  PatchCodeFrame(l)
-                //                  { newCode =>
-                //                    impl.cursor.step { implicit tx =>
-                //                      val expr    = ExprImplicits[S]
-                //                      import expr._
-                //                      // name is not editable right now in the patch code frame
-                //                      // l.name()    = newName
-                //                      l.source()  = newCode
-                //                    }
-                //                  }
-
-                case _ =>
+                case TreeLike.IsLeaf(l) => PatchCodeFrame(l)
+                case _                  =>
               }
             }
           case _ =>
@@ -152,29 +205,6 @@ object LibraryViewImpl {
       }
 
       component = panel
-
-      val f = new WindowImpl {
-        frame =>
-
-        def style       = Window.Regular
-        def handler     = SwingApplication.windowHandler
-
-        title           = "Library"
-        contents        = impl.component
-        closeOperation  = Window.CloseDispose
-
-        //        bindMenus(
-        //          "file.save" -> saveAction,
-        //          "edit.undo" -> undoManager.undoAction,
-        //          "edit.redo" -> undoManager.redoAction
-        //        )
-
-        pack()
-        GUI.placeWindow(this, 1f, 0.25f, 20)
-
-        def setDirtyFlag(value: Boolean): Unit = dirty = value
-      }
-      f.front()
     }
   }
 

@@ -36,7 +36,6 @@ import scala.concurrent.stm.TxnLocal
 import scala.util.control.NonFatal
 import de.sciss.icons.raphael
 import javax.swing.Icon
-import scala.swing.Swing.Icon
 import java.awt.geom.Path2D
 
 object GUI {

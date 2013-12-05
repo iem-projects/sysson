@@ -4,7 +4,7 @@ package impl
 
 import de.sciss.desktop.{OptionPane, Window}
 import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
-import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
+import de.sciss.desktop.impl.WindowImpl
 import scala.concurrent.{ExecutionContext, Future}
 import scala.swing.{FlowPanel, Component, Action, BorderPanel, Button, Label, Swing}
 import Swing._
@@ -12,8 +12,6 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.synth.expr.{Strings, ExprImplicits}
 import de.sciss.lucre.stm.Disposable
-import javax.{swing => js}
-import javax.swing.event.{DocumentEvent, DocumentListener, UndoableEditEvent, UndoableEditListener}
 import scala.util.Failure
 import scala.util.Success
 import de.sciss.swingplus.Implicits._
@@ -45,7 +43,8 @@ object PatchCodeFrameImpl {
         cursor.step { implicit tx =>
           val expr = ExprImplicits[S]
           import expr._
-          sourceH()() = newCode
+          val source  = sourceH()
+          source()    = newCode
         }
       }
 
@@ -90,14 +89,14 @@ object PatchCodeFrameImpl {
       component.updateTitle(value)
     }
 
-    private val undo = new UndoManagerImpl {
-      private var _dirty = false
-      protected def dirty = _dirty
-      protected def dirty_=(value: Boolean): Unit = if (_dirty != value) {
-        _dirty = value
-        component.setDirty(value)
-      }
-    }
+    //    private val undo = new UndoManagerImpl {
+    //      private var _dirty = false
+    //      protected def dirty = _dirty
+    //      protected def dirty_=(value: Boolean): Unit = if (_dirty != value) {
+    //        _dirty = value
+    //        component.setDirty(value)
+    //      }
+    //    }
 
     private def checkClose(): Unit = {
       if (futCompile.isDefined) {

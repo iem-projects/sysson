@@ -178,6 +178,6 @@ object MenuFactory {
   def openLibrary(): Unit =
     system.step { implicit tx =>
       val lib = libraryH()
-      LibraryView(lib)
+      LibraryFrame(lib)
     }
 }

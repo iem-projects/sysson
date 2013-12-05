@@ -54,11 +54,17 @@ object Library {
   type LeafChanged  [S <: Sys[S]] = TreeLike.LeafChanged [S, Library[S]]
   type BranchUpdate [S <: Sys[S]] = TreeLike.BranchUpdate[S, Library[S]]
 
+  object Branch {
+    implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Branch[S]] = Impl.branchSerializer[S]
+  }
   trait Branch[S <: Sys[S]] extends TreeLike.Branch[S, Library[S]] with NodeLike[S] {
     def insertLeaf  (idx: Int, name: Expr[S, String], source: Expr[S, String])(implicit tx: S#Tx): Leaf[S]
     def insertBranch(idx: Int, name: Expr[S, String])(implicit tx: S#Tx): Branch[S]
     def removeAt    (idx: Int)(implicit tx: S#Tx): Unit
     def remove      (node: TreeLike.Node[Branch[S], Leaf[S]])(implicit tx: S#Tx): Unit
+  }
+  object Leaf {
+    implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Leaf[S]] = Impl.leafSerializer[S]
   }
   trait Leaf[S <: Sys[S]] extends NodeLike[S] {
     def name  : Expr.Var[S, String]

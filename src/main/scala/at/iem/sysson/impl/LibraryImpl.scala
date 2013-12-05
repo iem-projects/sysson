@@ -310,8 +310,9 @@ object LibraryImpl {
     new BranchImpl(targets, name, ll)
   }
 
-  def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library[S]] =
-    anySer.asInstanceOf[Ser[S]]
+  def serializer      [S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library       [S]] = anySer.asInstanceOf[Ser[S]]
+  def branchSerializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library.Branch[S]] = BranchImpl.serializer[S]
+  def leafSerializer  [S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Library.Leaf  [S]] = LeafImpl  .serializer[S]
 
   private def reader[S <: Sys[S]]: evt.Reader[S, Impl[S]] = anySer.asInstanceOf[Ser[S]]
 

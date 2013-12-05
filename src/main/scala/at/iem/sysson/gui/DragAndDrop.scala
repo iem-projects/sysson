@@ -55,7 +55,7 @@ object DragAndDrop {
       }
     }
 
-    /** Creates a transferable by wrapping a sequence of existing transferables. */
+    /** Creates a transferable by wrapping a sequence of existing transferable objects. */
     def seq(xs: Transferable*): Transferable = new Transferable {
       def getTransferDataFlavors: Array[DataFlavor] = xs.flatMap(_.getTransferDataFlavors)(breakOut)
       def isDataFlavorSupported(_flavor: DataFlavor): Boolean = xs.exists(_.isDataFlavorSupported(_flavor))
