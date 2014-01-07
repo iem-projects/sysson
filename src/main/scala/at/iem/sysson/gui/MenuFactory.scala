@@ -30,7 +30,7 @@ package gui
 import java.awt.event.KeyEvent
 import java.io.{RandomAccessFile, FilenameFilter}
 import scala.util.control.NonFatal
-import de.sciss.desktop.{RecentFiles, KeyStrokes, Menu}
+import de.sciss.desktop.{KeyStrokes, Menu}
 import scala.swing.Action
 import de.sciss.lucre.event.Durable
 import de.sciss.lucre.stm.store.BerkeleyDB
@@ -48,10 +48,6 @@ object MenuFactory {
 
     val dh = DocumentHandler.instance
 
-    val recent = RecentFiles(SwingApplication.userPrefs("recent-docs")) { f =>
-      dh.openRead(f.getPath)
-    }
-
     val actionCloseAll = new Action("Close All") {
       accelerator = Some(menu1 + shift + VK_W)
       def apply(): Unit = closeAll()
@@ -64,7 +60,7 @@ object MenuFactory {
 
     dh.addListener {
       case DocumentHandler.Opened(doc) =>
-        recent.add(doc.dir)
+        // recent.add(doc.dir)
         checkCloseAll()
 
       case DocumentHandler.Closed(doc) =>
@@ -85,13 +81,9 @@ object MenuFactory {
             openLibrary()
           }
         )
-      ).add(
-        Item("open")("Open..." -> (menu1 + VK_O)) {
-          openDialog()
-        }
-      ).add(
-        recent.menu
-      ).addLine().add(
+      ).add(Item("open", ActionOpenWorkspace))
+      .add(ActionOpenWorkspace.recentMenu)
+      .addLine().add(
         Item("close", proxy("Close" -> (menu1 + VK_W)))
       ).add(
         Item("close-all", actionCloseAll)

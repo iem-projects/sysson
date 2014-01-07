@@ -28,9 +28,9 @@ package at.iem.sysson
 package gui
 
 import de.sciss.desktop.impl.SwingApplicationImpl
-import at.iem.sysson
 import de.sciss.desktop.Menu
-import swing.Swing
+import de.sciss.lucre.event.Sys
+import language.existentials
 
 object SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = DocumentHandler.Document  // sysson.DataSourceLike
@@ -38,9 +38,9 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
   override def init(): Unit = {
     val dh = DocumentHandler.instance
     dh.addListener {
-      case DocumentHandler.Opened(doc) => Swing.onEDT(mkDocView(doc))
+      case DocumentHandler.Opened(doc) => mkDocView(doc)
     }
-    dh.allDocuments.foreach(mkDocView)
+    dh.allDocuments.foreach(doc => mkDocView(doc))
 
     // keep using IntelliJ console when debugging
     if (!sys.props.getOrElse("sun.java.command", "?").contains("intellij")) {
@@ -50,9 +50,14 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     new MainWindow
   }
 
-  private def mkDocView(doc: Document): Unit = {
-    // impl.DocumentViewHandlerImpl.mkView(doc)
-    Console.err.println(s"TODO: Create view for workspace ${doc.name}")
+  // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
+  private def mkDocView(doc: Workspace[_]): Unit =
+    mkDocView1(doc.asInstanceOf[Workspace[S] forSome { type S <: Sys[S] }])
+
+  private def mkDocView1[S <: Sys[S]](doc: Workspace[S]): Unit = {
+    doc.cursor.step { implicit tx =>
+      impl.DocumentViewHandlerImpl.mkView(doc)
+    }
   }
 
   protected def menuFactory: Menu.Root = MenuFactory.root

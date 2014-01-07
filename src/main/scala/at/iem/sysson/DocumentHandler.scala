@@ -33,7 +33,7 @@ import language.existentials
 import evt.Sys
 
 object DocumentHandler {
-  type Document = Workspace[_] // WorkspaceLike
+  type Document = Workspace[_ <: Sys[_]] // WorkspaceLike
 
   lazy val instance: DocumentHandler = Impl()
 
