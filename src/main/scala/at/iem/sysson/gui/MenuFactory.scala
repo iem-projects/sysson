@@ -114,38 +114,6 @@ object MenuFactory {
 
   def closeAll(): Unit = ??? // DocumentHandler.instance.allDocuments.foreach(_.close())
 
-  def openDialog(): Unit = {
-    val dlg = new java.awt.FileDialog(null: java.awt.Frame, "Open NetCDF File", java.awt.FileDialog.LOAD)
-    dlg.setFilenameFilter(new FilenameFilter {
-      def accept(dir: File, name: String): Boolean = {
-        val f = new File(dir, name)
-        try {
-          // NOTE: NetcdfFile.canOpen is really crappily written, very slow. Therefore,
-          // make a short cut and just check for NetCDF cookies
-          // NetcdfFile.canOpen(f.getPath)
-          val r = new RandomAccessFile(f, "r")
-          try {
-            if (f.length() < 4) false else {
-              val cookie = r.readInt()
-              cookie == 0x43444601 || cookie == 0x43444602
-            }
-          } finally {
-            r.close()
-          }
-        } catch {
-          case NonFatal(_) => false
-        }
-      }
-    })
-    dlg.setVisible(true)
-    val parent  = dlg.getDirectory
-    val name    = dlg.getFile
-    if (parent == null || name == null) return
-
-    val f = new File(parent, name)
-    DocumentHandler.instance.openRead(f.getPath)
-  }
-
   //  def openSoundDesigner(): Unit =
   //    sound.designer.DesignerView()
 

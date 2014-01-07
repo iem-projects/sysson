@@ -40,7 +40,7 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     dh.addListener {
       case DocumentHandler.Opened(doc) => mkDocView(doc)
     }
-    dh.allDocuments.foreach(doc => mkDocView(doc))
+    dh.allDocuments.foreach(mkDocView)
 
     // keep using IntelliJ console when debugging
     if (!sys.props.getOrElse("sun.java.command", "?").contains("intellij")) {
@@ -54,11 +54,10 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
   private def mkDocView(doc: Workspace[_]): Unit =
     mkDocView1(doc.asInstanceOf[Workspace[S] forSome { type S <: Sys[S] }])
 
-  private def mkDocView1[S <: Sys[S]](doc: Workspace[S]): Unit = {
+  private def mkDocView1[S <: Sys[S]](doc: Workspace[S]): Unit =
     doc.cursor.step { implicit tx =>
       impl.DocumentViewHandlerImpl.mkView(doc)
     }
-  }
 
   protected def menuFactory: Menu.Root = MenuFactory.root
 }
