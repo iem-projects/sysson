@@ -34,9 +34,9 @@ object DocumentViewHandler {
   lazy val instance: DocumentViewHandler = Impl.instance // Impl()
 
   sealed trait Update
-  case class Activated(doc: Document) extends Update
+  case class Activated(doc: DataSourceLike) extends Update
 }
 trait DocumentViewHandler extends Model[DocumentViewHandler.Update] {
-  def getView(doc: Document): Option[DocumentView]
-  var activeDocument: Option[Document]
+  def getView(doc: DataSourceLike): Option[DocumentView]
+  var activeDocument: Option[DataSourceLike]
 }

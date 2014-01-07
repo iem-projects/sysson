@@ -32,7 +32,7 @@ import ucar.nc2
 import impl.{ClimateViewImpl => Impl}
 
 object ClimateView {
-  def apply(document: Document, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView =
+  def apply(document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView =
     Impl(document, section, xDim, yDim)
 
   def currentSection: Option[VariableSection] = Impl.currentSection
@@ -40,7 +40,7 @@ object ClimateView {
 trait ClimateView {
   def component: Component
 
-  def document: Document
+  def document: DataSourceLike
   def section : VariableSection
 
   var patch: Option[Patch]

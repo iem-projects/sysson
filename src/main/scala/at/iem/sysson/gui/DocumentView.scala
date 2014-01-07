@@ -34,7 +34,7 @@ object DocumentView {
 //  def apply(doc: Document): DocumentView = Impl(doc)
 }
 trait DocumentView {
-  def document: Document
+  def document: DataSourceLike
   def component: Component
   def selectedVariable: Option[nc2.Variable]
   def selectedVariable_=(opt: Option[nc2.Variable]): Unit

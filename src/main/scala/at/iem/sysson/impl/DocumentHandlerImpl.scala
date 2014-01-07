@@ -36,37 +36,38 @@ private[sysson] object DocumentHandlerImpl {
     override def toString = "DocumentHandler"
 
     private val sync  = new AnyRef
-    private var all   = Vector.empty[Document]
-    private var map   = Map.empty[String, Document] // path to document
+    private var all   = Vec.empty[DataSourceLike]
+    private var map   = Map.empty[String, DataSourceLike] // path to document
 
-    private val docListener: Document.Listener = {
-      case Document.Closed(doc) => removeDoc(doc)
+    //    private val docListener: DataSource.Listener = {
+    //      case DataSource.Closed(doc) => removeDoc(doc)
+    //    }
+
+    def openRead(path: String): DataSourceLike = {
+      ???
+//      val doc = DataSourceImpl.openRead(path)
+//      // doc.addListener(docListener)
+//      sync.synchronized {
+//        all :+= doc
+//        map  += path -> doc
+//      }
+//      dispatch(DocumentHandler.Opened(doc))
+//      doc
     }
 
-    def openRead(path: String): Document = {
-      val doc = DocumentImpl.openRead(path)
-      doc.addListener(docListener)
-      sync.synchronized {
-        all :+= doc
-        map  += path -> doc
-      }
-      dispatch(DocumentHandler.Opened(doc))
-      doc
-    }
-
-    private def removeDoc(doc: Document): Unit = {
+    private def removeDoc(doc: DataSourceLike): Unit = {
       sync.synchronized {
         val idx = all.indexOf(doc)
         assert(idx >= 0)
-        doc.removeListener(docListener)
+        // doc.removeListener(docListener)
         all  = all.patch(idx, Nil, 1)
         map -= doc.path
       }
       dispatch(DocumentHandler.Closed(doc))
     }
 
-    def allDocuments: Iterator[Document] = sync.synchronized( all.iterator )
+    def allDocuments: Iterator[DataSourceLike] = sync.synchronized( all.iterator )
 
-    def getDocument(path: String): Option[Document] = sync.synchronized(map.get(path))
+    def getDocument(path: String): Option[DataSourceLike] = sync.synchronized(map.get(path))
   }
 }

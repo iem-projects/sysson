@@ -1,5 +1,5 @@
 /*
- *  DocumentImpl.scala
+ *  Document.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
@@ -25,31 +25,37 @@
  */
 
 package at.iem.sysson
-package impl
 
 import ucar.nc2
-import de.sciss.model.impl.ModelImpl
+import de.sciss.model.Model
 import java.io.File
+// import impl.{DataSourceImpl => Impl}
+import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
+import de.sciss.lucre.event.Sys
+import de.sciss.lucre.stm.Mutable
 
-object DocumentImpl {
-  import Implicits._
+object DataSource {
+  //  type Listener = Model.Listener[Update]
+  //
+  //  sealed trait Update
+  //  final case class Closed(doc: DataSource) extends Update
 
-  def openRead(path: String): Document = {
-    val f   = nc2.NetcdfFile.open(path)
-    val vm  = f.variableMap // build that once
-    new Impl(path, f, vm)
-  }
+  // def openRead(path: String): DataSource = Impl.openRead(path)
 
-  private final class Impl(val path: String, val data: nc2.NetcdfFile, val variableMap: Map[String, nc2.Variable])
-    extends Document with ModelImpl[Document.Update] {
-
-    override def toString = "Document(" + data.getTitle + ")"
-
-    def file = new File(path)
-
-    def close(): Unit = {
-      data.close()
-      dispatch(Document.Closed(this))
-    }
-  }
+  // implicit def serializer: ImmutableSerializer[DataSource] = Impl.serializer
 }
+
+trait DataSourceLike {
+  /** Path to the document's underlying file (NetCDF). */
+  def path: String
+
+  def file: File
+
+  def data: nc2.NetcdfFile
+  def variableMap: Map[String, nc2.Variable]
+
+  // def close(): Unit
+}
+
+/** A document represents one open data file. */
+trait DataSource[S <: Sys[S]] extends DataSourceLike with Mutable[S#ID, S#Tx]

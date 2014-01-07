@@ -33,7 +33,7 @@ import de.sciss.desktop.Menu
 import swing.Swing
 
 object SwingApplication extends SwingApplicationImpl("SysSon") {
-  type Document = sysson.Document
+  type Document = sysson.DataSourceLike
 
   override def init(): Unit = {
     val dh = DocumentHandler.instance
@@ -50,7 +50,7 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     new MainWindow
   }
 
-  private def mkDocView(doc: Document): DocumentView = {
+  private def mkDocView(doc: DataSourceLike): DocumentView = {
     impl.DocumentViewHandlerImpl.mkView(doc)
   }
 

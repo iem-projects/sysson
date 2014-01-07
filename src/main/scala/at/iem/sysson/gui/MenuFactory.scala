@@ -119,7 +119,7 @@ object MenuFactory {
     )
   }
 
-  def closeAll(): Unit = DocumentHandler.instance.allDocuments.foreach(_.close())
+  def closeAll(): Unit = ??? // DocumentHandler.instance.allDocuments.foreach(_.close())
 
   def openDialog(): Unit = {
     val dlg = new FileDialog(null: java.awt.Frame, "Open NetCDF File", FileDialog.LOAD)

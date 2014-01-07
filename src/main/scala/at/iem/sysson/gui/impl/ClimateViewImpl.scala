@@ -83,7 +83,7 @@ object ClimateViewImpl {
 
   def currentSection: Option[VariableSection] = _currentSection
 
-  def apply(document: Document, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView = {
+  def apply(document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView = {
     val in    = section.file
     val vm    = in.variableMap
 
@@ -409,7 +409,7 @@ object ClimateViewImpl {
     view
   }
 
-  private final class Impl(val document: Document, val section: VariableSection, models: Map[String, DualRangeSlider],
+  private final class Impl(val document: DataSourceLike, val section: VariableSection, models: Map[String, DualRangeSlider],
                            chart: JFreeChart, redGroup: Component)
     extends ClimateView {
 

@@ -51,7 +51,7 @@ import de.sciss.icons.raphael
 private[impl] object DocumentViewImpl {
   import Implicits._
 
-  def apply(doc: Document): DocumentView with Disposable = new Impl(doc)
+  def apply(doc: DataSourceLike): DocumentView with Disposable = new Impl(doc)
 
   trait Disposable { def dispose(): Unit }
 
@@ -138,7 +138,7 @@ private[impl] object DocumentViewImpl {
     }
   }
 
-  private final class Impl(val document: Document)
+  private final class Impl(val document: DataSourceLike)
     extends DocumentView with Disposable {
 
     impl =>
@@ -269,9 +269,9 @@ private[impl] object DocumentViewImpl {
           // open the actual plot if we got the dimensions
           xyOpt.foreach { case (yDim, xDim) =>
             val view        = ClimateView(document, v.selectAll, xDim = xDim, yDim = yDim)
-            lazy val docL   = document.addListener {
-              case Document.Closed(_) => w.dispose()
-            }
+//            lazy val docL   = document.addListener {
+//              case DataSource.Closed(_) => w.dispose()
+//            }
             lazy val w: Window = new WindowImpl {
               def style       = Window.Regular
               def handler     = SwingApplication.windowHandler
@@ -284,14 +284,14 @@ private[impl] object DocumentViewImpl {
               bindMenu("file.close", Action(null) { dispose() })
 
               override def dispose(): Unit = {
-                document.removeListener(docL)
+//                document.removeListener(docL)
                 super.dispose()
               }
 
               front()
             }
             w
-            docL
+//            docL
           }
         }
       }
@@ -322,13 +322,15 @@ private[impl] object DocumentViewImpl {
       reactions += {
         case Window.Closing(_) =>
            // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
-          document.close()
+//          document.close()
         case Window.Activated(_) =>
           DocumentViewHandler.instance.activeDocument = Some(document)
       }
 
       bindMenus(
-        "file.close" -> Action(null) { document.close() }
+        "file.close" -> Action(null) {
+//          document.close()
+        }
       )
 
       pack()
