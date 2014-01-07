@@ -1,5 +1,5 @@
 /*
- *  DocumentHandler.scala
+ *  WorkspaceView.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -25,28 +25,17 @@
  */
 
 package at.iem.sysson
+package gui
 
-import impl.{DocumentHandlerImpl => Impl}
-import de.sciss.model.Model
-import de.sciss.lucre.{event => evt}
-import language.existentials
-import evt.Sys
+import swing.Component
+import impl.{WorkspaceViewImpl => Impl}
+import de.sciss.lucre.event.Sys
+import de.sciss.lucre.stm.Disposable
 
-object DocumentHandler {
-  type Document = Workspace[_] // WorkspaceLike
-
-  lazy val instance: DocumentHandler = Impl()
-
-  sealed trait Update
-  final case class Opened[S <: Sys[S]](doc: Workspace[S]) extends Update
-  final case class Closed[S <: Sys[S]](doc: Workspace[S]) extends Update
+object WorkspaceView {
+  def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = Impl(workspace)
 }
-trait DocumentHandler extends Model[DocumentHandler.Update] {
-  import DocumentHandler.Document
-
-  private[sysson] def addDocument[S <: Sys[S]](doc: Workspace[S]): Unit
-
-  def openRead(path: String): Document  // Workspace[evt.Durable]
-  def allDocuments: Iterator[Document]
-  def getDocument(path: String): Option[Document]
+trait WorkspaceView[S <: Sys[S]] extends Disposable[S#Tx] {
+  def workspace: Workspace[S]
+  def component: Component
 }

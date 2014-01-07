@@ -32,8 +32,8 @@ import java.awt.event.KeyEvent
 import de.sciss.desktop.{Menu, RecentFiles, FileDialog, KeyStrokes}
 import scala.util.control.NonFatal
 import java.io.File
-import de.sciss.lucre.synth.Sys
 import GUI.formatException
+import de.sciss.lucre.event.Sys
 
 object ActionOpenWorkspace extends Action("Open...") {
   import KeyStrokes._
@@ -50,7 +50,7 @@ object ActionOpenWorkspace extends Action("Open...") {
   /** Registers the document with the recent files menu and the document handler.
     * Does _not_ open a view directly. This should be done by listening to the document handler.
     */
-  def openGUI[S <: Sys[S]](doc: Document): Unit = {
+  def openGUI[S <: Sys[S]](doc: Workspace[S]): Unit = {
     recentFiles.add(doc.dir)
     DocumentHandler.instance.addDocument(doc)
   }

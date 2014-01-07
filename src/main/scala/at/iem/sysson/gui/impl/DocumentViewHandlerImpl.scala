@@ -29,22 +29,25 @@ package gui
 package impl
 
 import de.sciss.model.impl.ModelImpl
+import de.sciss.lucre.event.Sys
 
 private[gui] object DocumentViewHandlerImpl {
+  import DocumentHandler.Document
+
   def instance: DocumentViewHandler = impl
 
   private lazy val impl = new Impl
 
-  def mkView(doc: DataSourceLike): DataSourceView = impl.mkView(doc)
+  def mkView[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = impl.mkView(doc)
 
   private final class Impl extends DocumentViewHandler with ModelImpl[DocumentViewHandler.Update] {
     override def toString = "DocumentViewHandler"
 
-    private var map       = Map.empty[DataSourceLike, DataSourceView]
-    private var _active  = Option.empty[DataSourceLike]
+    private var map       = Map.empty[Document, WorkspaceView[_]]
+    private var _active  = Option.empty[Document]
 
     def activeDocument = _active
-    def activeDocument_=(value: Option[DataSourceLike]): Unit =
+    def activeDocument_=[S <: Sys[S]](value: Option[Workspace[S]]): Unit =
       if (_active != value) {
         _active = value
         value.foreach { doc =>
@@ -52,14 +55,14 @@ private[gui] object DocumentViewHandlerImpl {
         }
       }
 
-    def getView(doc: DataSourceLike): Option[DataSourceView] = {
+    def getView[S <: Sys[S]](doc: Workspace[S]): Option[WorkspaceView[S]] = {
       GUI.requireEDT()
-      map.get(doc)
+      map.get(doc).asInstanceOf[Option[WorkspaceView[S]]]
     }
 
-    def mkView(doc: DataSourceLike): DataSourceView = {
+    def mkView[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
       getView(doc).getOrElse {
-        val view = DataSourceViewImpl(doc)
+        val view = WorkspaceView(doc)
         map += doc -> view
 //        doc.addListener {
 //          case DataSource.Closed(_) => GUI.defer {

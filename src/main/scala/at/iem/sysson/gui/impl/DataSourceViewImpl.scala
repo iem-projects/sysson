@@ -257,7 +257,7 @@ private[impl] object DataSourceViewImpl {
 
             val opt = OptionPane(message = s"Select the dimensions of '${v.name}' to plot.\n$infos",
               messageType = OptionPane.Message.Question,
-              optionType = OptionPane.Options.OkCancel, entries = names)
+              optionType  = OptionPane.Options.OkCancel, entries = names)
             val res = opt.show(Some(f)).id
             if (res >= 0) {
               Some(pairs(res))
@@ -322,7 +322,7 @@ private[impl] object DataSourceViewImpl {
            // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
 //          document.close()
         case Window.Activated(_) =>
-          DocumentViewHandler.instance.activeDocument = Some(document)
+          // DocumentViewHandler.instance.activeDocument = Some(document)
       }
 
       bindMenus(

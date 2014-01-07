@@ -123,7 +123,7 @@ object WorkspaceImpl {
       tx.newInMemoryIDMap[NetcdfFile]
     }
 
-    private implicit object DataSourceSer extends MutableSerializer[S, DataSource[S]] {
+    implicit object dataSourceSerializer extends MutableSerializer[S, DataSource[S]] {
       protected def readData(in: DataInput, id: S#ID)(implicit tx: S#Tx): DataSource[S] = {
         val cookie = in.readLong()
         require(cookie == SOURCE_COOKIE,

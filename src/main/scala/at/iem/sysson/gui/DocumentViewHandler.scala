@@ -29,14 +29,22 @@ package gui
 
 import impl.{DocumentViewHandlerImpl => Impl}
 import de.sciss.model.Model
+import DocumentHandler.Document
+import de.sciss.lucre.event.Sys
 
 object DocumentViewHandler {
+  type View[S <: Sys[S]] = WorkspaceView[S]
+
   lazy val instance: DocumentViewHandler = Impl.instance // Impl()
 
   sealed trait Update
-  case class Activated(doc: DataSourceLike) extends Update
+  case class Activated[S <: Sys[S]](doc: Workspace[S]) extends Update
 }
 trait DocumentViewHandler extends Model[DocumentViewHandler.Update] {
-  def getView(doc: DataSourceLike): Option[DataSourceView]
-  var activeDocument: Option[DataSourceLike]
+  import DocumentViewHandler.View
+
+  def getView[S <: Sys[S]](doc: Workspace[S]): Option[View[_]]
+  // var activeDocument: Option[Document]
+  def activeDocument: Option[Document]
+  def activeDocument_=[S <: Sys[S]](doc: Option[Workspace[S]]): Unit
 }

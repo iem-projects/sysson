@@ -28,6 +28,7 @@ package at.iem.sysson
 package impl
 
 import de.sciss.model.impl.ModelImpl
+import de.sciss.lucre.event.Sys
 
 private[sysson] object DocumentHandlerImpl {
   import DocumentHandler.Document
@@ -57,7 +58,7 @@ private[sysson] object DocumentHandlerImpl {
 //      doc
     }
 
-    def addDocument(doc: Document): Unit = {
+    def addDocument[S <: Sys[S]](doc: Workspace[S]): Unit = {
       // doc.addListener(docListener)
       sync.synchronized {
         all :+= doc
@@ -66,7 +67,7 @@ private[sysson] object DocumentHandlerImpl {
       dispatch(DocumentHandler.Opened(doc))
     }
 
-    private def removeDoc(doc: Document): Unit = {
+    private def removeDoc[S <: Sys[S]](doc: Workspace[S]): Unit = {
       sync.synchronized {
         val idx = all.indexOf(doc)
         assert(idx >= 0)

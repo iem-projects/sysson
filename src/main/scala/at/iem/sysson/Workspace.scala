@@ -31,6 +31,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.LinkedList
 import de.sciss.file.File
 import impl.{WorkspaceImpl => Impl}
+import de.sciss.serial.Serializer
 
 object Workspace {
   /** File name extension (including leading period) */
@@ -62,6 +63,8 @@ sealed trait WorkspaceLike {
   def path: String
 
   def dataSources(implicit tx: System#Tx): LinkedList.Modifiable[System, DataSource[System], Unit]
+
+  implicit def dataSourceSerializer: Serializer[System#Tx, System#Acc, DataSource[System]]
 }
 trait Workspace[S <: Sys[S]] extends WorkspaceLike {
   type System = S
