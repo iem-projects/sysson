@@ -4,6 +4,7 @@ src_managed/
 project/boot/
 .idea/
 .idea_modules/
+*.iml
 *.app
 *.jar
 dependency-graph.sbt

@@ -1,0 +1,16 @@
+Patch Editor
+[OK]	- Auto Completion (Interpreter)
+	- Possible online help
+
+Library
+[OK]	- Undo Manager
+	- drag and drop elements
+
+Sonification
+	- react to patch updates
+	- render sound file
+	- time indicator
+
+Aural System
+	- main volume control, panik/mute
+	- master bus recorder

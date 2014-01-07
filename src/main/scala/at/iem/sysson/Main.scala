@@ -30,7 +30,7 @@ import gui.SwingApplication
 import scala.util.control.NonFatal
 
 object Main extends App with Runnable {
-  final val useNcview = false
+  final val useNcView = false
   final val useGUI    = true
 
   run()
@@ -48,10 +48,10 @@ object Main extends App with Runnable {
 
   def run(): Unit = {
     logInfo(s"Welcome to $name v$version")
-    if (useNcview) {
-      val ncview = NcviewSync()
-      ncview.dump(on = true)
-      ncview.start()
+    if (useNcView) {
+      val ncView = NcviewSync()
+      ncView.dump(on = true)
+      ncView.start()
     }
 
     if (useGUI) {
