@@ -1,5 +1,5 @@
 /*
- *  DocumentViewImpl.scala
+ *  DataSourceViewImpl.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -28,7 +28,6 @@ package at.iem.sysson
 package gui
 package impl
 
-import swing._
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.JTree
@@ -36,10 +35,10 @@ import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
 import swing.event.TableRowsSelected
 import sound.AudioSystem
-import java.io.File
 import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFile}
 import de.sciss.synth
 import synth.io.AudioFileSpec
+import scala.swing.{ScrollPane, BoxPanel, Orientation, Action, Table, Swing}
 import Swing._
 import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
 import scalaswingcontrib.event.TreeNodeSelected
@@ -48,10 +47,10 @@ import de.sciss.desktop.{OptionPane, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
 
-private[impl] object DocumentViewImpl {
+private[impl] object DataSourceViewImpl {
   import Implicits._
 
-  def apply(doc: DataSourceLike): DocumentView with Disposable = new Impl(doc)
+  def apply(doc: DataSourceLike): DataSourceView with Disposable = new Impl(doc)
 
   trait Disposable { def dispose(): Unit }
 
@@ -97,14 +96,13 @@ private[impl] object DocumentViewImpl {
       val attr = data(row)
       (col: @switch) match {
         case 0 => attr.name
-        case 1 => {
-//          val typ = attr.dataType
+        case 1 =>
+          //          val typ = attr.dataType
           if (attr.size == 1) {
             attr.values.getObject(0).toString
           } else {
             s"${attr.size} elements of type ${attr.dataType}"
           }
-        }
       }
     }
   }
@@ -139,7 +137,7 @@ private[impl] object DocumentViewImpl {
   }
 
   private final class Impl(val document: DataSourceLike)
-    extends DocumentView with Disposable {
+    extends DataSourceView with Disposable {
 
     impl =>
 
@@ -408,7 +406,7 @@ private[impl] object DocumentViewImpl {
 //            val noise     = frameRate < 200
             AudioSystem.instance.server match {
               case Some(server: synth.Server) =>
-                val fTmp  = File.createTempFile("sysson", ".aif")
+                val fTmp  = File.createTemp(prefix = "sysson", suffix = ".aif")
                 fTmp.deleteOnExit()
                 val afTmp = AudioFile.openWrite(fTmp,
                   AudioFileSpec(AudioFileType.AIFF, SampleFormat.Float, numChannels = 1, sampleRate = 44100, numFrames = dataLen))

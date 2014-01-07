@@ -1,5 +1,5 @@
 /*
- *  DocumentView.scala
+ *  DataSourceView.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -30,10 +30,10 @@ package gui
 import swing.Component
 import ucar.nc2
 
-object DocumentView {
+object DataSourceView {
 //  def apply(doc: Document): DocumentView = Impl(doc)
 }
-trait DocumentView {
+trait DataSourceView {
   def document: DataSourceLike
   def component: Component
   def selectedVariable: Option[nc2.Variable]

@@ -37,6 +37,6 @@ object DocumentViewHandler {
   case class Activated(doc: DataSourceLike) extends Update
 }
 trait DocumentViewHandler extends Model[DocumentViewHandler.Update] {
-  def getView(doc: DataSourceLike): Option[DocumentView]
+  def getView(doc: DataSourceLike): Option[DataSourceView]
   var activeDocument: Option[DataSourceLike]
 }

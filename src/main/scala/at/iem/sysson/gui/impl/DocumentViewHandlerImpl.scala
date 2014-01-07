@@ -35,12 +35,12 @@ private[gui] object DocumentViewHandlerImpl {
 
   private lazy val impl = new Impl
 
-  def mkView(doc: DataSourceLike): DocumentView = impl.mkView(doc)
+  def mkView(doc: DataSourceLike): DataSourceView = impl.mkView(doc)
 
   private final class Impl extends DocumentViewHandler with ModelImpl[DocumentViewHandler.Update] {
     override def toString = "DocumentViewHandler"
 
-    private var map       = Map.empty[DataSourceLike, DocumentView]
+    private var map       = Map.empty[DataSourceLike, DataSourceView]
     private var _active  = Option.empty[DataSourceLike]
 
     def activeDocument = _active
@@ -52,14 +52,14 @@ private[gui] object DocumentViewHandlerImpl {
         }
       }
 
-    def getView(doc: DataSourceLike): Option[DocumentView] = {
+    def getView(doc: DataSourceLike): Option[DataSourceView] = {
       GUI.requireEDT()
       map.get(doc)
     }
 
-    def mkView(doc: DataSourceLike): DocumentView = {
+    def mkView(doc: DataSourceLike): DataSourceView = {
       getView(doc).getOrElse {
-        val view = DocumentViewImpl(doc)
+        val view = DataSourceViewImpl(doc)
         map += doc -> view
 //        doc.addListener {
 //          case DataSource.Closed(_) => GUI.defer {
