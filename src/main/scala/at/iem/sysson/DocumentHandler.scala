@@ -2,7 +2,7 @@
  *  DocumentHandler.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
  *	This software is free software; you can redistribute it and/or
@@ -28,16 +28,21 @@ package at.iem.sysson
 
 import impl.{DocumentHandlerImpl => Impl}
 import de.sciss.model.Model
+import de.sciss.lucre.{event => evt}
 
 object DocumentHandler {
+  type Document = WorkspaceLike
+
   lazy val instance: DocumentHandler = Impl()
 
   sealed trait Update
-  final case class Opened(doc: DataSourceLike) extends Update
-  final case class Closed(doc: DataSourceLike) extends Update
+  final case class Opened(doc: Document) extends Update
+  final case class Closed(doc: Document) extends Update
 }
 trait DocumentHandler extends Model[DocumentHandler.Update] {
-  def openRead(path: String): DataSourceLike
-  def allDocuments: Iterator[DataSourceLike]
-  def getDocument(path: String): Option[DataSourceLike]
+  import DocumentHandler.Document
+
+  def openRead(path: String): Document  // Workspace[evt.Durable]
+  def allDocuments: Iterator[Document]
+  def getDocument(path: String): Option[Document]
 }

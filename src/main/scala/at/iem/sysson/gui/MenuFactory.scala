@@ -2,7 +2,7 @@
  *  MenuFactory.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
  *	This software is free software; you can redistribute it and/or
@@ -66,7 +66,7 @@ object MenuFactory {
 
     dh.addListener {
       case DocumentHandler.Opened(doc) =>
-        recent.add(doc.file)
+        recent.add(doc.dir)
         checkCloseAll()
 
       case DocumentHandler.Closed(doc) =>

@@ -2,7 +2,7 @@
  *  SonificationSource.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
  *	This software is free software; you can redistribute it and/or

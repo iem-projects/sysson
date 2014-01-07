@@ -2,7 +2,7 @@
  *  NcviewSyncImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
  *	This software is free software; you can redistribute it and/or
@@ -47,13 +47,13 @@ private[sysson] object NcviewSyncImpl {
 //          dispatch(NcviewSync.Open(path))
         DocumentHandler.instance.openRead(path)
 
-      case osc.Message("/var", path: String, name: String) => GUI.defer {
-        for {
-          doc  <- DocumentHandler.instance.getDocument(path)
-          vr   <- doc.variableMap.get(name)
-          view <- DocumentViewHandler.instance.getView(doc)
-        } view.selectedVariable = Some(vr)
-      }
+      //      case osc.Message("/var", path: String, name: String) => GUI.defer {
+      //        for {
+      //          doc  <- DocumentHandler.instance.getDocument(path)
+      //          vr   <- doc.variableMap.get(name)
+      //          view <- DocumentViewHandler.instance.getView(doc)
+      //        } view.selectedVariable = Some(vr)
+      //      }
 
       case _ => logWarn("Dropping unsupported OSC " + p)
     }

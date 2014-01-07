@@ -2,7 +2,7 @@
  *  SwingApplication.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
  *	This software is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ import de.sciss.desktop.Menu
 import swing.Swing
 
 object SwingApplication extends SwingApplicationImpl("SysSon") {
-  type Document = sysson.DataSourceLike
+  type Document = DocumentHandler.Document  // sysson.DataSourceLike
 
   override def init(): Unit = {
     val dh = DocumentHandler.instance
@@ -50,8 +50,8 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     new MainWindow
   }
 
-  private def mkDocView(doc: DataSourceLike): DocumentView = {
-    impl.DocumentViewHandlerImpl.mkView(doc)
+  private def mkDocView(doc: Document): DocumentView = {
+    ??? // impl.DocumentViewHandlerImpl.mkView(doc)
   }
 
   protected def menuFactory: Menu.Root = MenuFactory.root

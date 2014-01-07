@@ -2,7 +2,7 @@
  *  DocumentHandlerImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
  *	This software is free software; you can redistribute it and/or
@@ -30,20 +30,22 @@ package impl
 import de.sciss.model.impl.ModelImpl
 
 private[sysson] object DocumentHandlerImpl {
+  import DocumentHandler.Document
+
   def apply(): DocumentHandler = new Impl
 
   private final class Impl extends DocumentHandler with ModelImpl[DocumentHandler.Update] {
     override def toString = "DocumentHandler"
 
     private val sync  = new AnyRef
-    private var all   = Vec.empty[DataSourceLike]
-    private var map   = Map.empty[String, DataSourceLike] // path to document
+    private var all   = Vec.empty[Document]
+    private var map   = Map.empty[String, Document] // path to document
 
     //    private val docListener: DataSource.Listener = {
     //      case DataSource.Closed(doc) => removeDoc(doc)
     //    }
 
-    def openRead(path: String): DataSourceLike = {
+    def openRead(path: String): Document = {
       ???
 //      val doc = DataSourceImpl.openRead(path)
 //      // doc.addListener(docListener)
@@ -55,7 +57,7 @@ private[sysson] object DocumentHandlerImpl {
 //      doc
     }
 
-    private def removeDoc(doc: DataSourceLike): Unit = {
+    private def removeDoc(doc: Document): Unit = {
       sync.synchronized {
         val idx = all.indexOf(doc)
         assert(idx >= 0)
@@ -66,8 +68,7 @@ private[sysson] object DocumentHandlerImpl {
       dispatch(DocumentHandler.Closed(doc))
     }
 
-    def allDocuments: Iterator[DataSourceLike] = sync.synchronized( all.iterator )
-
-    def getDocument(path: String): Option[DataSourceLike] = sync.synchronized(map.get(path))
+    def allDocuments             : Iterator[Document] = sync.synchronized(all.iterator)
+    def getDocument(path: String): Option  [Document] = sync.synchronized(map.get(path))
   }
 }
