@@ -57,6 +57,15 @@ private[sysson] object DocumentHandlerImpl {
 //      doc
     }
 
+    def addDocument(doc: Document): Unit = {
+      // doc.addListener(docListener)
+      sync.synchronized {
+        all :+= doc
+        map  += doc.path -> doc
+      }
+      dispatch(DocumentHandler.Opened(doc))
+    }
+
     private def removeDoc(doc: Document): Unit = {
       sync.synchronized {
         val idx = all.indexOf(doc)

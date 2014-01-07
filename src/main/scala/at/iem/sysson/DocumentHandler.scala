@@ -42,6 +42,8 @@ object DocumentHandler {
 trait DocumentHandler extends Model[DocumentHandler.Update] {
   import DocumentHandler.Document
 
+  private[sysson] def addDocument(doc: Document): Unit
+
   def openRead(path: String): Document  // Workspace[evt.Durable]
   def allDocuments: Iterator[Document]
   def getDocument(path: String): Option[Document]

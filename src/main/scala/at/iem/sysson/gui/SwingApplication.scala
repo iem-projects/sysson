@@ -50,8 +50,9 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     new MainWindow
   }
 
-  private def mkDocView(doc: Document): DocumentView = {
-    ??? // impl.DocumentViewHandlerImpl.mkView(doc)
+  private def mkDocView(doc: Document): Unit = {
+    // impl.DocumentViewHandlerImpl.mkView(doc)
+    Console.err.println(s"TODO: Create view for workspace ${doc.name}")
   }
 
   protected def menuFactory: Menu.Root = MenuFactory.root

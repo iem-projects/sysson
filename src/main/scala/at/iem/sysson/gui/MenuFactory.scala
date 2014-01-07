@@ -27,14 +27,12 @@
 package at.iem.sysson
 package gui
 
-import java.awt.FileDialog
 import java.awt.event.KeyEvent
 import java.io.{RandomAccessFile, FilenameFilter}
 import scala.util.control.NonFatal
 import de.sciss.desktop.{RecentFiles, KeyStrokes, Menu}
 import scala.swing.Action
 import de.sciss.lucre.event.Durable
-import de.sciss.lucre.synth.expr.ExprImplicits
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.file._
 import de.sciss.lucre.stm
@@ -76,11 +74,14 @@ object MenuFactory {
     Root().add(
       Group("file", "File").add(
         Group("new", "New").add(
-          Item("interpreter")("Interpreter..." -> (menu1 + VK_R)) {
+          Item("new-workspace", ActionNewWorkspace) // ("Workspace..." -> (menu1 + VK_N)) {
+        ).addLine()
+        .add(
+          Item("new-interpreter")("Interpreter..." -> (menu1 + VK_R)) {
             openInterpreter()
           }
         ).add(
-          Item("library")("Library..." -> (menu1 + VK_L)) {
+          Item("new-library")("Library..." -> (menu1 + VK_L)) {
             openLibrary()
           }
         )
@@ -122,7 +123,7 @@ object MenuFactory {
   def closeAll(): Unit = ??? // DocumentHandler.instance.allDocuments.foreach(_.close())
 
   def openDialog(): Unit = {
-    val dlg = new FileDialog(null: java.awt.Frame, "Open NetCDF File", FileDialog.LOAD)
+    val dlg = new java.awt.FileDialog(null: java.awt.Frame, "Open NetCDF File", java.awt.FileDialog.LOAD)
     dlg.setFilenameFilter(new FilenameFilter {
       def accept(dir: File, name: String): Boolean = {
         val f = new File(dir, name)

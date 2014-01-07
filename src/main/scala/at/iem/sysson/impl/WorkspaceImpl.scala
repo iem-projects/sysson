@@ -114,6 +114,11 @@ object WorkspaceImpl {
   private final class Impl[S <: Sys[S]](val dir: File, val system: S,
                                         val cursor: stm.Cursor[S]) extends Workspace[S] {
 
+    def path: String  = dir.path
+    def name: String  = dir.base
+
+    override def toString = s"Workspace($name)"
+
     private val fileCache = cursor.step { implicit tx =>
       tx.newInMemoryIDMap[NetcdfFile]
     }

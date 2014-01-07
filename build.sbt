@@ -111,9 +111,10 @@ target in assembly  := baseDirectory.value    // make .jar file in the main dire
 seq(appbundle.settings: _*)
 
 appbundle.icon := {
+  // XXX TODO: DRY
   val base  = (resourceDirectory in Compile).value
   val sub   = organization.value.split('.')
-  val icn   = (base /: sub)(_ / _) / "icon512.png"
+  val icn   = (base /: sub)(_ / _) / "application512.png"
   Some(icn)
 }
 
@@ -122,3 +123,16 @@ appbundle.mainClass   := Some("at.iem.sysson.gui.SwingApplication")
 appbundle.javaOptions += "-Xmx2048m"
 
 appbundle.target      := baseDirectory.value      // make .app bundle in the main directory
+
+appbundle.documents   += {
+  // XXX TODO: DRY
+  val base  = (resourceDirectory in Compile).value
+  val sub   = organization.value.split('.')
+  appbundle.Document(
+    name       = "SysSon Workspace Document",
+    role       = appbundle.Document.Editor,
+    icon       = Some((base /: sub)(_ / _) / "workspace256.png"),
+    extensions = Seq("sysson"),
+    isPackage  = true
+  )
+}

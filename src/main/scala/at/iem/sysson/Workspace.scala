@@ -33,24 +33,37 @@ import de.sciss.file.File
 import impl.{WorkspaceImpl => Impl}
 
 object Workspace {
+  /** File name extension (including leading period) */
+  final val ext = ".sysson"
+
   // def empty[S <: Sys[S]]
   object Durable {
     def empty(dir: File): Workspace[evt.Durable] = Impl.emptyDurable(dir)
     def read (dir: File): Workspace[evt.Durable] = Impl.readDurable (dir)
   }
 }
+
+/** The workspace type for SysSon. A workspace is usually persisted on hard-disk.
+  * It contains a collection of data sources, plots and sonification instances.
+  */
 sealed trait WorkspaceLike {
   type System <: Sys[System]
 
+  /** The transactional cursor associated with this workspace. Typically this is `Durable`. */
   implicit def cursor: stm.Cursor[System]
 
+  /** The opaque (database) directory associated with the workspace. */
   def dir: File
 
+  /** The name of the workspace, which is its directory base name without extension. */
+  def name: String
+
+  /** Convenience method for `dir.path`. */
   def path: String
 
   def dataSources(implicit tx: System#Tx): LinkedList.Modifiable[System, DataSource[System], Unit]
 }
-trait Workspace[S <: Sys[S]] {
+trait Workspace[S <: Sys[S]] extends WorkspaceLike {
   type System = S
   //
   //  implicit def cursor: stm.Cursor[S]
