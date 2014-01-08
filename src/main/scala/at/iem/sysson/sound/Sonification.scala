@@ -66,6 +66,6 @@ trait Sonification {
   /** Maps between keys and user provided values. */
   var userValueMap: Map[String, Double]
 
-  /** Debugging method that writes the sonification's synth definition to a file on the user desktop. */
+  /** Debugging method that writes the sonification synth definition to a file on the user desktop. */
   def _debug_writeDef(): Unit
 }
