@@ -39,13 +39,16 @@ import de.sciss.lucre.synth.expr.ExprImplicits
 import de.sciss.icons.raphael
 import scala.util.control.NonFatal
 import java.io.RandomAccessFile
+import de.sciss.lucre.stm
+import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoableEdit}
 
 object WorkspaceViewImpl {
   import Implicits._
 
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
-    import workspace.{cursor, dataSourceSerializer}
-    implicit val llSer = LinkedList.serializer[S, DataSource[S]]
+    import workspace.cursor
+    implicit val ws     = workspace
+    implicit val llSer  = LinkedList.serializer[S, DataSource[S]]
     val dataSources = ListView[S, DataSource[S], Unit](workspace.dataSources)(_.file.name)
     val res = new Impl[S](workspace, dataSources)
     GUI.fromTx(res.guiInit())
@@ -67,12 +70,67 @@ object WorkspaceViewImpl {
     var component: Component = _
     private var frame: WindowImpl = _
 
+    import workspace.cursor
+
+    // XXX TODO: DRY (LibraryViewImpl)
+    // direction: true = insert, false = remove
+    private class EditNode[A] protected(direction: Boolean,
+                                     parentH: stm.Source[S#Tx, LinkedList.Modifiable[S, A, _]],
+                                     index: Int,
+                                     childH: stm.Source[S#Tx, A])
+      extends AbstractUndoableEdit {
+
+      override def undo(): Unit = {
+        super.undo()
+        cursor.step { implicit tx =>
+          val success = if (direction) remove() else insert()
+          if (!success) throw new CannotUndoException()
+        }
+      }
+
+      override def redo(): Unit = {
+        super.redo()
+        cursor.step { implicit tx => perform() }
+      }
+
+      override def die(): Unit = {
+        val hasBeenDone = canUndo
+        super.die()
+        if (!hasBeenDone) {
+          // XXX TODO: dispose()
+        }
+      }
+
+      private def insert()(implicit tx: S#Tx): Boolean = {
+        val parent  = parentH()
+        if (parent.size >= index) {
+          val child = childH()
+          parent.insert(index, child)
+          true
+        } else false
+      }
+
+      private def remove()(implicit tx: S#Tx): Boolean = {
+        val parent = parentH()
+        if (parent.size > index) {
+          parent.removeAt(index)
+          true
+        } else false
+      }
+
+      def perform()(implicit tx: S#Tx): Unit = {
+        val success = if (direction) insert() else remove()
+        if (!success) throw new CannotRedoException()
+      }
+    }
+
     def openSourceDialog(): Unit = {
       val dlg = FileDialog.open(title = txtAddDataSource)
       dlg.setFilter(util.NetCdfFileFilter)
       dlg.show(Some(frame)).foreach { f =>
         // DocumentHandler.instance.openRead(f.getPath)
         println(s"TODO: Add $f")
+
       }
     }
 

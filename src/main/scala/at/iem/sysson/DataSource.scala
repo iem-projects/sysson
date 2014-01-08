@@ -27,10 +27,9 @@
 package at.iem.sysson
 
 import ucar.nc2
-import de.sciss.model.Model
 import java.io.File
-// import impl.{DataSourceImpl => Impl}
-import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
+import impl.{DataSourceImpl => Impl}
+import de.sciss.serial.Serializer
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Mutable
 
@@ -43,6 +42,9 @@ object DataSource {
   // def openRead(path: String): DataSource = Impl.openRead(path)
 
   // implicit def serializer: ImmutableSerializer[DataSource] = Impl.serializer
+
+  implicit def serializer[S <: Sys[S]](implicit workspace: Workspace[S]): Serializer[S#Tx, S#Acc, DataSource[S]] =
+    Impl.serializer[S]
 }
 
 trait DataSourceLike {

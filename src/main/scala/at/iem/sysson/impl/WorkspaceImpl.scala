@@ -37,8 +37,6 @@ import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.lucre.expr.LinkedList
 import ucar.nc2
 import nc2.NetcdfFile
-import de.sciss.model.impl.ModelImpl
-import de.sciss.lucre.stm.{MutableSerializer, Mutable}
 
 object WorkspaceImpl {
   def readDurable(dir: File): Workspace[evt.Durable] = {
@@ -81,34 +79,11 @@ object WorkspaceImpl {
 
   private final val WORKSPACE_COOKIE  = 0x737973736F6E7730L   // "syssonw0"
 
-  private final val SOURCE_COOKIE     = 0x737973736F6E6430L   // "syssond0"
-
   private final class Data[S <: Sys[S]](val dataSource: LinkedList.Modifiable[S, DataSource[S], Unit]) {
     def write(out: DataOutput): Unit = {
       out.writeLong(WORKSPACE_COOKIE)
       dataSource.write(out)
     }
-  }
-
-  private final class DataSourceImpl[S <: Sys[S]](val id: S#ID, val path: String, val data: nc2.NetcdfFile,
-                                                  val variableMap: Map[String, nc2.Variable])
-    extends DataSource[S] /* with ModelImpl[DataSource.Update] */ with Mutable.Impl[S] {
-
-    override def toString = "DataSource(" + data.getTitle + ")"
-
-    def file = new File(path)
-
-    //    def close(): Unit = {
-    //      data.close()
-    //      dispatch(DataSource.Closed(this))
-    //    }
-
-    protected def writeData(out: DataOutput): Unit = {
-      out.writeLong(SOURCE_COOKIE)
-      out.writeUTF(path)
-    }
-
-    protected def disposeData()(implicit tx: S#Tx): Unit = ()
   }
 
   private final class Impl[S <: Sys[S]](val dir: File, val system: S,
@@ -117,24 +92,12 @@ object WorkspaceImpl {
     def path: String  = dir.path
     def name: String  = dir.base
 
+    implicit def workspace: Workspace[S] = this
+
     override def toString = s"Workspace($name)"
 
-    private val fileCache = cursor.step { implicit tx =>
+    val fileCache = cursor.step { implicit tx =>
       tx.newInMemoryIDMap[NetcdfFile]
-    }
-
-    implicit object dataSourceSerializer extends MutableSerializer[S, DataSource[S]] {
-      protected def readData(in: DataInput, id: S#ID)(implicit tx: S#Tx): DataSource[S] = {
-        val cookie = in.readLong()
-        require(cookie == SOURCE_COOKIE,
-          s"Unexpected cookie (found ${cookie.toHexString}, expected ${SOURCE_COOKIE.toHexString})")
-        val path  = in.readUTF()
-        val data  = fileCache.getOrElse(id, {
-          ???
-        })
-        import Implicits._
-        new DataSourceImpl(id, path, data, data.variableMap)
-      }
     }
 
     private implicit object DataSer extends Serializer[S#Tx, S#Acc, Data[S]] {

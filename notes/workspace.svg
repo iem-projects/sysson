@@ -139,5 +139,24 @@
          x="319.28571"
          y="266.64792"
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-family:Arial Narrow;-inkscape-font-specification:Arial Narrow Italic Condensed">Future</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="243.57143"
+       y="388.79074"
+       id="text4242"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4244"
+         x="243.57143"
+         y="388.79074">indices:</tspan><tspan
+         sodipodi:role="line"
+         x="243.57143"
+         y="403.79074"
+         id="tspan4246">- data sources to plots, to sonifications</tspan><tspan
+         sodipodi:role="line"
+         x="243.57143"
+         y="418.79074"
+         id="tspan4248">- DurableIDMap[LinkedList[S, Plot[S], _]]</tspan></text>
   </g>
 </svg>
