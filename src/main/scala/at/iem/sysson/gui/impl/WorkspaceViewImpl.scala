@@ -29,7 +29,7 @@ package gui
 package impl
 
 import de.sciss.synth
-import scala.swing.{FlowPanel, Component, BoxPanel, Orientation, Action, Swing}
+import scala.swing.{Label, FlowPanel, Component, BoxPanel, Orientation, Action, Swing}
 import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.{FileDialog, Window}
 import de.sciss.file._
@@ -50,7 +50,7 @@ object WorkspaceViewImpl {
     implicit val ws     = workspace
     implicit val llSer  = LinkedList.serializer[S, DataSource[S]]
     val dataSources = ListView[S, DataSource[S], Unit](workspace.dataSources)(_.file.name)
-    val res = new Impl[S](workspace, dataSources)
+    val res = new Impl[S](dataSources)(workspace)
     GUI.fromTx(res.guiInit())
     res
   }
@@ -61,8 +61,8 @@ object WorkspaceViewImpl {
   private final val txtRemoveDataSource = "Remove Data Source"
   private final val txtViewDataSource   = "View Data Source"
 
-  private final class Impl[S <: Sys[S]](val workspace: Workspace[S],
-                                        dataSources: ListView[S, DataSource[S], Unit])
+  private final class Impl[S <: Sys[S]](dataSources: ListView[S, DataSource[S], Unit])
+                                       (implicit val workspace: Workspace[S])
     extends WorkspaceView[S] {
 
     impl =>
@@ -129,8 +129,10 @@ object WorkspaceViewImpl {
       dlg.setFilter(util.NetCdfFileFilter)
       dlg.show(Some(frame)).foreach { f =>
         // DocumentHandler.instance.openRead(f.getPath)
-        println(s"TODO: Add $f")
-
+        cursor.step { implicit tx =>
+          val ds = DataSource[S](f.path)
+          workspace.dataSources.addLast(ds)
+        }
       }
     }
 
@@ -173,6 +175,7 @@ object WorkspaceViewImpl {
         title     = workspace.name
         file      = Some(workspace.dir)
         contents  = new BoxPanel(Orientation.Vertical) {
+          contents += new Label("Data Sources:")
           contents += impl.component
           contents += flow
         }

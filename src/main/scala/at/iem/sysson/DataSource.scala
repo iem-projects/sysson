@@ -43,6 +43,8 @@ object DataSource {
 
   // implicit def serializer: ImmutableSerializer[DataSource] = Impl.serializer
 
+  def apply[S <: Sys[S]](path: String)(implicit workspace: Workspace[S], tx: S#Tx): DataSource[S] = Impl(path)
+
   implicit def serializer[S <: Sys[S]](implicit workspace: Workspace[S]): Serializer[S#Tx, S#Acc, DataSource[S]] =
     Impl.serializer[S]
 }

@@ -91,21 +91,15 @@ object ListViewImpl {
       guiFromTx {
         view.addAll(items.map(show))
       }
-      ll.changed.react {
-        implicit tx => {
-          upd =>
-          //            case LinkedList.Added(   _, idx, elem )   => guiFromTx( view.add( idx, show( elem )))
-          //            case LinkedList.Removed( _, idx, elem )   => guiFromTx( view.remove( idx ))
-          //            case LinkedList.Element( li, upd )        =>
-          //               val ch = upd.foldLeft( Map.empty[ Int, String ]) { case (map0, (elem, _)) =>
-          //                  val idx = li.indexOf( elem )
-          //                  if( idx >= 0 ) {
-          //                     map0 + (idx -> show( elem ))
-          //                  } else map0
-          //               }
-          //               guiFromTx {
-          //                  ch.foreach { case (idx, str) => view.update( idx, str )}
-          //               }
+      ll.changed.react { implicit tx => upd => upd.changes.foreach {
+        case LinkedList.Added(  idx, elem)  => guiFromTx(view.add(idx, show(elem)))
+        case LinkedList.Removed(idx, elem)  => guiFromTx(view.remove(idx))
+        case LinkedList.Element(elem, _  )  =>
+          val idx = upd.list.indexOf(elem)
+          if (idx >= 0) {
+            val str = show(elem)
+            guiFromTx(view.update(idx, str))
+          }
         }
       }
     }
