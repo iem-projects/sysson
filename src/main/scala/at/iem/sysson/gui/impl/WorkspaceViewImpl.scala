@@ -28,17 +28,13 @@ package at.iem.sysson
 package gui
 package impl
 
-import de.sciss.synth
-import scala.swing.{TabbedPane, Label, FlowPanel, Component, BoxPanel, Orientation, Action, Swing}
-import de.sciss.desktop.impl.WindowImpl
-import de.sciss.desktop.{FileDialog, Window}
+import scala.swing.{TabbedPane, FlowPanel, Component, BoxPanel, Orientation, Action}
+import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
+import de.sciss.desktop.{UndoManager, FileDialog, Window}
 import de.sciss.file._
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.LinkedList
-import de.sciss.lucre.synth.expr.ExprImplicits
 import de.sciss.icons.raphael
-import scala.util.control.NonFatal
-import java.io.RandomAccessFile
 import de.sciss.lucre.stm
 import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoableEdit}
 
@@ -47,10 +43,14 @@ object WorkspaceViewImpl {
 
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
     import workspace.cursor
+    val undoMgr = new UndoManagerImpl {
+      protected var dirty: Boolean = false
+    }
+
     implicit val ws     = workspace
     implicit val llSer  = LinkedList.serializer[S, DataSource[S]]
     val dataSources = ListView[S, DataSource[S], Unit](workspace.dataSources)(_.file.name)
-    val res = new Impl[S](dataSources)(workspace)
+    val res = new Impl[S](undoMgr, dataSources)(workspace)
     GUI.fromTx(res.guiInit())
     res
   }
@@ -61,7 +61,7 @@ object WorkspaceViewImpl {
   private final val txtRemoveDataSource = "Remove Data Source"
   private final val txtViewDataSource   = "View Data Source"
 
-  private final class Impl[S <: Sys[S]](dataSources: ListView[S, DataSource[S], Unit])
+  private final class Impl[S <: Sys[S]](val undoManager: UndoManager, dataSources: ListView[S, DataSource[S], Unit])
                                        (implicit val workspace: Workspace[S])
     extends WorkspaceView[S] {
 
@@ -74,10 +74,10 @@ object WorkspaceViewImpl {
 
     // XXX TODO: DRY (LibraryViewImpl)
     // direction: true = insert, false = remove
-    private class EditNode[A] protected(direction: Boolean,
-                                     parentH: stm.Source[S#Tx, LinkedList.Modifiable[S, A, _]],
-                                     index: Int,
-                                     childH: stm.Source[S#Tx, A])
+    private class EditNode[A](direction: Boolean,
+                              parentFun: S#Tx => LinkedList.Modifiable[S, A, _],
+                              index: Int,
+                              childH: stm.Source[S#Tx, A])
       extends AbstractUndoableEdit {
 
       override def undo(): Unit = {
@@ -102,7 +102,7 @@ object WorkspaceViewImpl {
       }
 
       private def insert()(implicit tx: S#Tx): Boolean = {
-        val parent  = parentH()
+        val parent = parentFun(tx)
         if (parent.size >= index) {
           val child = childH()
           parent.insert(index, child)
@@ -111,7 +111,7 @@ object WorkspaceViewImpl {
       }
 
       private def remove()(implicit tx: S#Tx): Boolean = {
-        val parent = parentH()
+        val parent = parentFun(tx)
         if (parent.size > index) {
           parent.removeAt(index)
           true
@@ -124,15 +124,31 @@ object WorkspaceViewImpl {
       }
     }
 
+    private class EditInsertSource(index: Int, childH: stm.Source[S#Tx, DataSource[S]])
+      extends EditNode(true, workspace.dataSources(_), index, childH) {
+
+      override def getPresentationName = txtAddDataSource
+    }
+
+    private class EditRemoveSource(index: Int, childH: stm.Source[S#Tx, DataSource[S]])
+      extends EditNode(false, workspace.dataSources(_), index, childH) {
+
+      override def getPresentationName = txtRemoveDataSource
+    }
+
     def openSourceDialog(): Unit = {
       val dlg = FileDialog.open(title = txtAddDataSource)
       dlg.setFilter(util.NetCdfFileFilter)
       dlg.show(Some(frame)).foreach { f =>
-        // DocumentHandler.instance.openRead(f.getPath)
-        cursor.step { implicit tx =>
-          val ds = DataSource[S](f.path)
-          workspace.dataSources.addLast(ds)
+        val edit = cursor.step { implicit tx =>
+          val idx     = workspace.dataSources.size
+          val ds      = DataSource[S](f.path)
+          val childH  = tx.newHandle(ds)
+          val _edit   = new EditInsertSource(idx, childH)
+          _edit.perform()
+          _edit
         }
+        undoManager.add(edit)
       }
     }
 
@@ -148,7 +164,16 @@ object WorkspaceViewImpl {
         enabled = false
 
         def apply(): Unit = {
-          println("TODO: Remove")
+          val indices = dataSources.guiSelection
+          indices.headOption.foreach { idx => // XXX TODO: compound removal of multiple selection
+            val edit = cursor.step { implicit tx =>
+              val childH  = tx.newHandle(workspace.dataSources.apply(idx))
+              val _edit   = new EditRemoveSource(idx, childH)
+              _edit.perform()
+              _edit
+            }
+            undoManager.add(edit)
+          }
         }
       }
       val ggRemoveSource = GUI.toolButton(actionRemoveSource, raphael.Shapes.Minus, tooltip = txtRemoveDataSource)
@@ -157,9 +182,9 @@ object WorkspaceViewImpl {
         enabled = false
 
         def apply(): Unit = {
-          val sel = dataSources.guiSelection
-          if (sel.nonEmpty) cursor.step { implicit tx =>
-            sel.foreach { idx =>
+          val indices = dataSources.guiSelection
+          if (indices.nonEmpty) cursor.step { implicit tx =>
+            indices.foreach { idx =>
               dataSources.list.foreach { ll =>
                 val ds = ll(idx)
                 DataSourceView(ds)
@@ -176,6 +201,14 @@ object WorkspaceViewImpl {
         contents += dataSources.component
         contents += flow
       })
+
+      val liSources = dataSources.guiReact {
+        case ListView.SelectionChanged(indices) =>
+          val selected = indices.nonEmpty
+          ggRemoveSource.enabled = selected
+          ggViewSource  .enabled = selected
+      }
+      // XXX TODO: liSources.remove()
 
       val ggTab = new TabbedPane {
         pages += pageSources
@@ -200,9 +233,11 @@ object WorkspaceViewImpl {
         }
 
         bindMenus(
-          "file.close" -> Action(null) {
+          "file.close"  -> Action(null) {
             //          document.close()
-          }
+          },
+          "edit.undo"   -> undoManager.undoAction,
+          "edit.redo"   -> undoManager.redoAction
         )
 
         pack()

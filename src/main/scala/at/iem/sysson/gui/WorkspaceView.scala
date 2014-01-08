@@ -31,11 +31,15 @@ import swing.Component
 import impl.{WorkspaceViewImpl => Impl}
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
+import de.sciss.desktop.UndoManager
 
 object WorkspaceView {
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = Impl(workspace)
 }
 trait WorkspaceView[S <: Sys[S]] extends Disposable[S#Tx] {
   implicit def workspace: Workspace[S]
+
   def component: Component
+
+  def undoManager: UndoManager
 }
