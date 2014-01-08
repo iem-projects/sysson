@@ -33,10 +33,9 @@ object ListViewImpl {
 
   private final class Impl[S <: Sys[S], Elem, U](show: Elem => String)
                                                 (implicit cursor: Cursor[S], listSer: Serializer[S#Tx, S#Acc, LinkedList[S, Elem, U]])
-    extends ListView[S, Elem, U] {
+    extends ListView[S, Elem, U] with ComponentHolder[Component] {
     view =>
 
-    @volatile private var comp: Component = _
     @volatile private var ggList: swing.ListView[_] = _
 
     private val mList = new DefaultListModel
@@ -109,13 +108,6 @@ object ListViewImpl {
       viewObservers.foreach(_.tryApply(evt))
     }
 
-    def component: Component = {
-      requireEDT()
-      val res = comp
-      if (res == null) sys.error("Called component before GUI was initialized")
-      res
-    }
-
     def guiReact(fun: PartialFunction[ListView.Update, Unit]): Removable = {
       requireEDT()
       val obs = new Observer(fun)
@@ -130,7 +122,6 @@ object ListViewImpl {
 
     def guiInit(): Unit = {
       requireEDT()
-      require(comp == null, "Initialization called twice")
       //         val rend = new DefaultListCellRenderer {
       //            override def getListCellRendererComponent( c: JList, elem: Any, idx: Int, selected: Boolean, focused: Boolean ) : awt.Component = {
       //               super.getListCellRendererComponent( c, showFun( elem.asInstanceOf[ Elem ]), idx, selected, focused )
@@ -144,7 +135,7 @@ object ListViewImpl {
         }
       }
 
-      comp = new ScrollPane(ggList)
+      component = new ScrollPane(ggList)
     }
 
     def clear(): Unit = mList.clear()

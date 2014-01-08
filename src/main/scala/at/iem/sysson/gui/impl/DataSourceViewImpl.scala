@@ -34,11 +34,7 @@ import javax.swing.JTree
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
 import swing.event.TableRowsSelected
-import sound.AudioSystem
-import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFile}
-import de.sciss.synth
-import synth.io.AudioFileSpec
-import scala.swing.{ScrollPane, BoxPanel, Orientation, Action, Table, Swing}
+import scala.swing.{Component, ScrollPane, BoxPanel, Orientation, Action, Table, Swing}
 import Swing._
 import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
 import scalaswingcontrib.event.TreeNodeSelected
@@ -46,11 +42,16 @@ import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.{OptionPane, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
+import de.sciss.lucre.event.Sys
 
-private[impl] object DataSourceViewImpl {
+object DataSourceViewImpl {
   import Implicits._
 
-  def apply(doc: DataSourceLike): DataSourceView with Disposable = new Impl(doc)
+  def apply[S <: Sys[S]](doc: DataSource[S])(implicit tx: S#Tx): DataSourceView with Disposable = {
+    val res = new Impl(doc)
+    GUI.fromTx(res.guiInit())
+    res
+  }
 
   trait Disposable { def dispose(): Unit }
 
@@ -137,214 +138,201 @@ private[impl] object DataSourceViewImpl {
   }
 
   private final class Impl(val document: DataSourceLike)
-    extends DataSourceView with Disposable {
+    extends DataSourceView with Disposable with ComponentHolder[Component] {
 
     impl =>
 
     private var _selVar = Option.empty[nc2.Variable]
-    private val mGroups = new GroupModel(document.data.rootGroup)
-    private val tGroups = new Tree(mGroups) {
-      selection.mode = Tree.SelectionMode.Single
-      renderer = Tree.Renderer.wrap(GroupRenderer)
-      listenTo(selection)
-      reactions += {
-        case TreeNodeSelected(g: nc2.Group) => groupSelected(g)
-      }
-      peer.setVisibleRowCount(3)
-    }
+
+    private var frame: Window = _
 
     private var mGroupAttrs = new AttrsModel(Vec.empty)
-    private var mGroupVars  = new VarsModel(Vec.empty)
+    private var mGroupVars  = new VarsModel (Vec.empty)
 
-    private val tGroupAttrs = {
-      val res                     = new Table()
-      res.selection.intervalMode  = Table.IntervalMode.Single
-      res.model                   = mGroupAttrs
-      res
-    }
+    private var tGroupAttrs: Table = _
+    private var tGroupVars : Table = _
 
-    private val tGroupVars = new Table() {
-      selection.intervalMode  = Table.IntervalMode.Single
-      model                   = mGroupVars
-      listenTo(selection)
-      reactions += {
-        case TableRowsSelected(_, range, adjusting) if !adjusting =>
-          val vro   = if (range.isEmpty) None else {
-            val data  = mGroupVars.data
-//            val row   = range.end // weird scala-swing convention! screw the range, let's use the leadIndex instead
-            val row = selection.rows.leadIndex
-//            println("IDX =" + row)
-            if (row >= 0 && data.size > row) Some(data(row)) else None
-          }
-          deafTo(selection) // avoid feedback
-          try {
-//            println("SELECTING" + vro.map(_.name))
-            selectedVariable = vro
-          } finally {
-            listenTo(selection)
-          }
+    private var tGroups    : Tree[nc2.Group]  = _
+
+    def guiInit(): Unit = {
+      GUI.requireEDT()
+
+      val mGroups = new GroupModel(document.data.rootGroup)
+      tGroups = new Tree(mGroups) {
+        selection.mode = Tree.SelectionMode.Single
+        renderer = Tree.Renderer.wrap(GroupRenderer)
+        listenTo(selection)
+        reactions += {
+          case TreeNodeSelected(g: nc2.Group) => groupSelected(g)
+        }
+        peer.setVisibleRowCount(3)
       }
-    }
 
-    //    private val transport = Transport.makeButtonStrip {
-    //      import Transport._
-    //      Seq(
-    //        GoToBegin {
-    //          println("Go-to-begin")
-    //        },
-    //        Rewind {
-    //          println("Rewind")
-    //        },
-    //        Stop {
-    //          println("Stop")
-    //        },
-    //        Play {
-    //          play()
-    //        },
-    //        FastForward {
-    //          println("Fast-forward")
-    //        }
-    //      )
-    //    }
+      tGroupAttrs = {
+        val res                     = new Table()
+        res.selection.intervalMode  = Table.IntervalMode.Single
+        res.model                   = mGroupAttrs
+        res
+      }
 
-    private val actionPlot = Action("Plot") {
-      selectedVariable.foreach { v =>
-        val in          = v.file
-        // val vm          = in.variableMap
-        val dim         = v.dimensions // .filter(d => vm.get(d.name.getOrElse("?")).map(_.isFloat).getOrElse(false))
-        val red         = v.reducedDimensions
-        if (!v.isFloat) {
-          // abort if variable is not in floating point format
-          val opt = OptionPane.message(
-            message = s"Variable '${v.name}' is not in floating point format.",
-            messageType = OptionPane.Message.Info)
-          opt.show(Some(f))
+      tGroupVars = new Table() {
+        selection.intervalMode  = Table.IntervalMode.Single
+        model                   = mGroupVars
+        listenTo(selection)
+        reactions += {
+          case TableRowsSelected(_, range, adjusting) if !adjusting =>
+            val vro   = if (range.isEmpty) None else {
+              val data  = mGroupVars.data
+              // val row   = range.end // weird scala-swing convention! screw the range, let's use the leadIndex instead
+              val row = selection.rows.leadIndex
+              if (row >= 0 && data.size > row) Some(data(row)) else None
+            }
+            deafTo(selection) // avoid feedback
+            try {
+              selectedVariable = vro
+            } finally {
+              listenTo(selection)
+            }
+        }
+      }
 
-        } else if (dim.size < 2) {
-          // abort if there is less than two dimensions
-          val opt = OptionPane.message(
-            message = s"Variable '${v.name}' has ${if (dim.size == 0) "no dimensions" else "only one dimension"}.\nNeed at least two for a plot.",
-            messageType = OptionPane.Message.Info)
-          opt.show(Some(f))
-        } else {
-          // identify latitude and longitude by their unit names, and time by its dimension name
-          // (that seems to be working with the files we have)
-          val latOpt = red.find { d =>
-            in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_north")
-          }
-          val lonOpt = red.find { d =>
-            in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_east")
-          }
-          val timeOpt = red.find { d => d.name == "time" }
+      val actionPlot = Action("Plot") {
+        selectedVariable.foreach { v =>
+          val in          = v.file
+          // val vm          = in.variableMap
+          val dim         = v.dimensions // .filter(d => vm.get(d.name.getOrElse("?")).map(_.isFloat).getOrElse(false))
+          val red         = v.reducedDimensions
+          if (!v.isFloat) {
+            // abort if variable is not in floating point format
+            val opt = OptionPane.message(
+              message = s"Variable '${v.name}' is not in floating point format.",
+              messageType = OptionPane.Message.Info)
+            opt.show(Some(frame))
 
-          // first see if there are useful dimensions such as lon/lat
-          val xyOpt0 = (latOpt, lonOpt, timeOpt) match {
-            case (Some(lat), Some(lon), _)  => Some(lat -> lon)
-            // case (Some(lat), _, Some(tim))  => Some(lat -> tim)
-            // case (_, Some(lon), Some(tim))  => Some(lon -> tim) // does this make sense?
-            case _                          => None
-          }
+          } else if (dim.size < 2) {
+            // abort if there is less than two dimensions
+            val opt = OptionPane.message(
+              message = s"Variable '${v.name}' has ${if (dim.size == 0) "no dimensions" else "only one dimension"}.\nNeed at least two for a plot.",
+              messageType = OptionPane.Message.Info)
+            opt.show(Some(frame))
+          } else {
+            // identify latitude and longitude by their unit names, and time by its dimension name
+            // (that seems to be working with the files we have)
+            val latOpt = red.find { d =>
+              in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_north")
+            }
+            val lonOpt = red.find { d =>
+              in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_east")
+            }
+            val timeOpt = red.find { d => d.name == "time" }
 
-          // if not, ask the user which dims she wants to plot
-          val xyOpt = xyOpt0.orElse {
-            val infos = dim.map { d => s"${d.name} [${d.size}]" } .mkString(", ")
-            val pairs = dim.flatMap { dx =>
-              dim.collect { case dy if dy != dx => (dx, dy)
-              }
+            // first see if there are useful dimensions such as lon/lat
+            val xyOpt0 = (latOpt, lonOpt, timeOpt) match {
+              case (Some(lat), Some(lon), _)  => Some(lat -> lon)
+              // case (Some(lat), _, Some(tim))  => Some(lat -> tim)
+              // case (_, Some(lon), Some(tim))  => Some(lon -> tim) // does this make sense?
+              case _                          => None
             }
 
-            val names = pairs.map { case (dx, dy) => s"x = ${dx.name}, y = ${dy.name}" }
-
-            val opt = OptionPane(message = s"Select the dimensions of '${v.name}' to plot.\n$infos",
-              messageType = OptionPane.Message.Question,
-              optionType  = OptionPane.Options.OkCancel, entries = names)
-            val res = opt.show(Some(f)).id
-            if (res >= 0) {
-              Some(pairs(res))
-            } else None
-          }
-
-          // open the actual plot if we got the dimensions
-          xyOpt.foreach { case (yDim, xDim) =>
-            val view        = ClimateView(document, v.selectAll, xDim = xDim, yDim = yDim)
-//            lazy val docL   = document.addListener {
-//              case DataSource.Closed(_) => w.dispose()
-//            }
-            lazy val w: Window = new WindowImpl {
-              def style       = Window.Regular
-              def handler     = SwingApplication.windowHandler
-              closeOperation  = Window.CloseDispose
-              title           = s"Plot : ${v.name}"
-              contents        = view.component
-              size            = (600, 600)
-              GUI.centerOnScreen(this)
-
-              bindMenu("file.close", Action(null) { dispose() })
-
-              override def dispose(): Unit = {
-//                document.removeListener(docL)
-                super.dispose()
+            // if not, ask the user which dims she wants to plot
+            val xyOpt = xyOpt0.orElse {
+              val infos = dim.map { d => s"${d.name} [${d.size}]" } .mkString(", ")
+              val pairs = dim.flatMap { dx =>
+                dim.collect { case dy if dy != dx => (dx, dy)
+                }
               }
 
-              front()
+              val names = pairs.map { case (dx, dy) => s"x = ${dx.name}, y = ${dy.name}" }
+
+              val opt = OptionPane(message = s"Select the dimensions of '${v.name}' to plot.\n$infos",
+                messageType = OptionPane.Message.Question,
+                optionType  = OptionPane.Options.OkCancel, entries = names)
+              val res = opt.show(Some(frame)).id
+              if (res >= 0) {
+                Some(pairs(res))
+              } else None
             }
-            w
-//            docL
+
+            // open the actual plot if we got the dimensions
+            xyOpt.foreach { case (yDim, xDim) =>
+              val view        = ClimateView(document, v.selectAll, xDim = xDim, yDim = yDim)
+  //            lazy val docL   = document.addListener {
+  //              case DataSource.Closed(_) => w.dispose()
+  //            }
+              lazy val w: Window = new WindowImpl {
+                def style       = Window.Regular
+                def handler     = SwingApplication.windowHandler
+                closeOperation  = Window.CloseDispose
+                title           = s"Plot : ${v.name}"
+                contents        = view.component
+                size            = (600, 600)
+                GUI.centerOnScreen(this)
+
+                bindMenu("file.close", Action(null) { dispose() })
+
+                override def dispose(): Unit = {
+  //                document.removeListener(docL)
+                  super.dispose()
+                }
+
+                front()
+              }
+              w
+  //            docL
+            }
           }
         }
       }
-    }
-    // ggPlot.peer.putClientProperty("JButton.buttonType", "roundRect")
+      // ggPlot.peer.putClientProperty("JButton.buttonType", "roundRect")
 
-    val component = new BoxPanel(Orientation.Vertical) {
-      contents ++= Seq(
-        new ScrollPane(tGroups),
-        new ScrollPane(tGroupAttrs),
-        new ScrollPane(tGroupVars),
-        new BoxPanel(Orientation.Horizontal) {
-          contents += GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
-          // contents += HStrut(16)
-          // contents += transport
-        }
-      )
-    }
-
-    lazy val f: Window = new WindowImpl {
-      def style   = Window.Regular
-      def handler = SwingApplication.windowHandler
-
-      title     = document.file.base
-      file      = Some(document.file)
-      contents  = impl.component
-      closeOperation = Window.CloseIgnore
-      reactions += {
-        case Window.Closing(_) =>
-           // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
-//          document.close()
-        case Window.Activated(_) =>
-          // DocumentViewHandler.instance.activeDocument = Some(document)
+      component = new BoxPanel(Orientation.Vertical) {
+        contents ++= Seq(
+          new ScrollPane(tGroups),
+          new ScrollPane(tGroupAttrs),
+          new ScrollPane(tGroupVars),
+          new BoxPanel(Orientation.Horizontal) {
+            contents += GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
+            // contents += HStrut(16)
+            // contents += transport
+          }
+        )
       }
 
-      bindMenus(
-        "file.close" -> Action(null) {
-//          document.close()
-        }
-      )
+      frame = new WindowImpl {
+        def style   = Window.Regular
+        def handler = SwingApplication.windowHandler
 
-      pack()
-      GUI.centerOnScreen(this)
-      front()
+        title     = document.file.base
+        file      = Some(document.file)
+        contents  = impl.component
+        closeOperation = Window.CloseIgnore
+        reactions += {
+          case Window.Closing(_) =>
+             // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
+  //          document.close()
+          case Window.Activated(_) =>
+            // DocumentViewHandler.instance.activeDocument = Some(document)
+        }
+
+        bindMenus(
+          "file.close" -> Action(null) {
+  //          document.close()
+          }
+        )
+
+        pack()
+        GUI.centerOnScreen(this)
+        front()
+      }
     }
 
-    f // force
-
-    def dispose(): Unit = f.dispose()
+    def dispose(): Unit = frame.dispose()
 
     private def groupSelected(g: nc2.Group): Unit = {
       mGroupAttrs       = new AttrsModel(g.attributes)
       mGroupVars        = new VarsModel (g.variables )
       tGroupAttrs.model = mGroupAttrs
-      tGroupVars.model  = mGroupVars
+      tGroupVars .model = mGroupVars
     }
 
     private def selectGroup(group: nc2.Group): Unit = {
@@ -383,62 +371,6 @@ private[impl] object DataSourceViewImpl {
 
         case None =>
           if (sel.size != 0) sel.clear()
-      }
-    }
-
-    private def play(): Unit = {
-      selectedVariable.foreach { vr =>
-        //        println("rank = " + vr.rank)
-        if (vr.dataType.isFloatingPoint) {
-          //          (vr.rank: @switch) match {
-          //            case 1 =>
-          //            case 2 =>
-          //            case 3 =>
-          //            case _ =>
-          //          }
-
-          // just for testing purposes
-          val data1d    = vr.read.float1D
-          val dataLen   = data1d.size
-          if (dataLen > 0) {
-            val duration  = 5.0
-            val frameRate = duration / dataLen
-//            val noise     = frameRate < 200
-            AudioSystem.instance.server match {
-              case Some(server: synth.Server) =>
-                val fTmp  = File.createTemp(prefix = "sysson", suffix = ".aif")
-                fTmp.deleteOnExit()
-                val afTmp = AudioFile.openWrite(fTmp,
-                  AudioFileSpec(AudioFileType.AIFF, SampleFormat.Float, numChannels = 1, sampleRate = 44100, numFrames = dataLen))
-                try {
-                  val dataN = Array(data1d.dropNaNs.normalize.toArray)
-                  afTmp.write(dataN)
-                  afTmp.close()
-                  import synth._
-                  import ugen._
-                  import Ops._
-                  val df = SynthDef("temp") {
-                    val disk  = VDiskIn.ar(1, "buf".ir, "speed".ir(1), loop = 0)
-  //                  val n     = "noise".ir
-  //                  val noise = LFNoise1.
-  //                  val sig   = Select.ar(n, Seq(disk, disk * noise))
-                    val sig   = SinOsc.ar(disk.linexp(0, 1, 300, 3000))
-                    Line.kr(0, 0, dur = "dur".ir, doneAction = freeSelf)
-                    Out.ar(0, Pan2.ar(sig))
-                  }
-                  Buffer.cue(server, fTmp.getAbsolutePath, numChannels = 1, completion = { (b: Buffer) =>
-                    val synth = df.play(server, Seq("buf" -> b.id, "speed" -> frameRate, "dur" -> duration))
-                    synth.onEnd { b.close(Some(b.freeMsg())) }
-                  })
-
-                } finally {
-                  if (afTmp.isOpen) afTmp.close()
-                }
-
-              case _ =>
-            }
-          }
-        }
       }
     }
   }

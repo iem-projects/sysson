@@ -29,13 +29,14 @@ package gui
 
 import swing.Component
 import ucar.nc2
+import de.sciss.lucre.event.Sys
+import impl.{DataSourceViewImpl => Impl}
 
 object DataSourceView {
-//  def apply(doc: Document): DocumentView = Impl(doc)
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx): DataSourceView = Impl(source)
 }
 trait DataSourceView {
   def document: DataSourceLike
   def component: Component
-  def selectedVariable: Option[nc2.Variable]
-  def selectedVariable_=(opt: Option[nc2.Variable]): Unit
+  var selectedVariable: Option[nc2.Variable]
 }

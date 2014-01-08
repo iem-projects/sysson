@@ -29,7 +29,7 @@ package gui
 package impl
 
 import de.sciss.synth
-import scala.swing.{Label, FlowPanel, Component, BoxPanel, Orientation, Action, Swing}
+import scala.swing.{TabbedPane, Label, FlowPanel, Component, BoxPanel, Orientation, Action, Swing}
 import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.{FileDialog, Window}
 import de.sciss.file._
@@ -137,11 +137,7 @@ object WorkspaceViewImpl {
     }
 
     def guiInit(): Unit = {
-      component = new BoxPanel(Orientation.Vertical) {
-        contents ++= Seq(
-          dataSources.component
-        )
-      }
+      GUI.requireEDT()
 
       val actionAddSource = new Action(null) {
         def apply(): Unit = openSourceDialog()
@@ -161,12 +157,31 @@ object WorkspaceViewImpl {
         enabled = false
 
         def apply(): Unit = {
-          println("TODO: View")
+          val sel = dataSources.guiSelection
+          if (sel.nonEmpty) cursor.step { implicit tx =>
+            sel.foreach { idx =>
+              dataSources.list.foreach { ll =>
+                val ds = ll(idx)
+                DataSourceView(ds)
+              }
+            }
+          }
         }
       }
       val ggViewSource = GUI.toolButton(actionViewSource, raphael.Shapes.View, tooltip = txtViewDataSource)
 
       val flow  = new FlowPanel(ggAddSource, ggRemoveSource, ggViewSource)
+
+      val pageSources = new TabbedPane.Page("Data Sources", new BoxPanel(Orientation.Vertical) {
+        contents += dataSources.component
+        contents += flow
+      })
+
+      val ggTab = new TabbedPane {
+        pages += pageSources
+      }
+
+      component = ggTab
 
       frame = new WindowImpl {
         def style   = Window.Regular
@@ -174,11 +189,7 @@ object WorkspaceViewImpl {
 
         title     = workspace.name
         file      = Some(workspace.dir)
-        contents  = new BoxPanel(Orientation.Vertical) {
-          contents += new Label("Data Sources:")
-          contents += impl.component
-          contents += flow
-        }
+        contents  = ggTab
         closeOperation = Window.CloseIgnore
         reactions += {
           case Window.Closing(_) =>
