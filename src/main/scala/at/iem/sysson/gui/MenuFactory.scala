@@ -98,6 +98,9 @@ object MenuFactory {
       )
     ).add(
       Group("tools", "Tools")
+        .add(
+          Item("sonif-declaration")("Sonification Declaration TEST..." -> (menu1 + VK_D)) { sonif.DeclarationEditor() }
+        )
       //      .add(
       //        Item("designer")("Sound Designer..." -> (menu1 + VK_D)) { openSoundDesigner() }
       //      )

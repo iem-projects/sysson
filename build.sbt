@@ -34,6 +34,7 @@ libraryDependencies ++= Seq(
   "org.jfree" % "jfreechart"              % "1.0.15",         // plotting
   "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // some GUI widgets
   "de.sciss" %% "raphael-icons"           % "1.0.+",          // tool icons
+  "de.sciss" %% "guiflitz"                % "0.2.+",
   "org.slf4j" % "slf4j-simple"            % "1.7.5"           // logging (used by netcdf)
 )
 
