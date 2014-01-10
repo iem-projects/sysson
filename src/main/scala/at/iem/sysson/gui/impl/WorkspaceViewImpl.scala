@@ -28,7 +28,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import scala.swing.{TabbedPane, FlowPanel, Component, BoxPanel, Orientation, Action}
+import scala.swing.{Button, Swing, TabbedPane, FlowPanel, Component, BoxPanel, Orientation, Action}
 import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
 import de.sciss.desktop.{UndoManager, FileDialog, Window}
 import de.sciss.file._
@@ -37,6 +37,9 @@ import de.sciss.lucre.expr.LinkedList
 import de.sciss.icons.raphael
 import de.sciss.lucre.stm
 import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoableEdit}
+import javax.swing.{TransferHandler, ImageIcon}
+import javax.swing.TransferHandler.TransferSupport
+import scala.concurrent.ExecutionContext
 
 object WorkspaceViewImpl {
   import Implicits._
@@ -197,10 +200,11 @@ object WorkspaceViewImpl {
 
       val flow  = new FlowPanel(ggAddSource, ggRemoveSource, ggViewSource)
 
-      val pageSources = new TabbedPane.Page("Data Sources", new BoxPanel(Orientation.Vertical) {
+      val pageSources = new BoxPanel(Orientation.Vertical) {
         contents += dataSources.component
         contents += flow
-      })
+        border    = Swing.TitledBorder(Swing.EtchedBorder, "Data Sources")
+      }
 
       val liSources = dataSources.guiReact {
         case ListView.SelectionChanged(indices) =>
@@ -210,8 +214,57 @@ object WorkspaceViewImpl {
       }
       // XXX TODO: liSources.remove()
 
-      val ggTab = new TabbedPane {
-        pages += pageSources
+      //      val ggTab = new TabbedPane {
+      //        pages += pageSources
+      //      }
+
+      val butSonif        = new Button(null: String)
+      butSonif.icon       = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
+      butSonif.focusable  = false
+      butSonif.tooltip    = "Drop Sonification Patch From the Library Here"
+
+      butSonif.peer.setTransferHandler(new TransferHandler(null) {
+        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
+        override def canImport(support: TransferSupport): Boolean = {
+          val res =
+            if (support.isDataFlavorSupported(LibraryNodeFlavor) &&
+              ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
+              support.setDropAction(TransferHandler.LINK)
+              true
+            } else
+              false
+
+          // println(s"canImport? $res")
+          res
+        }
+
+        override def importData(support: TransferSupport): Boolean = {
+          val t           = support.getTransferable
+          // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
+          val drag      = t.getTransferData(LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
+          val sourceOpt = drag.cursor.step { implicit tx =>
+            drag.node() match {
+              case TreeLike.IsLeaf(l) => Some(Patch.Source(l.name.value, l.source.value))
+              case _ => None
+            }
+          }
+          println(s"TODO: Add $sourceOpt")
+
+          //          sourceOpt.exists { case source =>
+          //            import ExecutionContext.Implicits.global
+          //            val fut         = Library.compile(source)
+          //            ggBusy.visible  = true
+          //            fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
+          //            fut.foreach { p => patch = Some(p) }
+          //            true
+          //          }
+          sourceOpt.isDefined
+        }
+      })
+
+      val ggTab = new BoxPanel(Orientation.Vertical) {
+        contents += pageSources
+        contents += butSonif
       }
 
       component = ggTab
