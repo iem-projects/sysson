@@ -1,6 +1,6 @@
 package at.iem.sysson
 
-import de.sciss.lucre.event.{EventLike, Sys}
+import de.sciss.lucre.event.{Publisher, Sys}
 import de.sciss.lucre.data
 import de.sciss.serial
 
@@ -65,17 +65,13 @@ object TreeLike extends TreeTypes {
   case class ChildChanged[S <: Sys[S], T <: TreeLike[S, T]](idx: Int, update: NodeUpdate[S, T])
     extends ChildUpdate[S, T]
 }
-trait TreeLike[S <: Sys[S], T <: TreeLike[S, T]] {
+trait TreeLike[S <: Sys[S], T <: TreeLike[S, T]] extends Publisher[S, TreeLike.Update[S, T]] {
   type BU
   type LU
   type Leaf
   type Branch <: TreeLike.Branch[S, T]
 
   def root: T#Branch
-
-  def changed: EventLike[S, TreeLike.Update[S, T]]
-
-  // def nodeReader: serial.Reader[S#Tx, S#Acc, TreeLike.Node[T#Branch, T#Leaf]]
 
   def branchSerializer: serial.Serializer[S#Tx, S#Acc, T#Branch]
   def leafSerializer  : serial.Serializer[S#Tx, S#Acc, T#Leaf  ]

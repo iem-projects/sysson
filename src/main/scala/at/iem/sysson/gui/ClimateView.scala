@@ -43,5 +43,5 @@ trait ClimateView {
   def document: DataSourceLike
   def section : VariableSection
 
-  var patch: Option[Patch]
+  var patch: Option[PatchOLD]
 }

@@ -53,7 +53,7 @@ object LibraryImpl {
   def newBranch[S <: Sys[S]](name0: Expr[S, String])(implicit tx: S#Tx): Branch[S] = {
     val targets = evt.Targets[S]
     val name    = Strings.newVar(name0)
-    val ll      = expr.LinkedList.Modifiable[S, NodeLike[S], NU[S]](_.changed)
+    val ll      = expr.List.Modifiable[S, NodeLike[S], NU[S]]
     new BranchImpl(targets, name, ll)
   }
 
@@ -227,12 +227,12 @@ object LibraryImpl {
     def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
                                    (implicit tx: S#Tx): BranchImpl[S] = {
       val name    = Strings.readVar(in, access)
-      val ll      = expr.LinkedList.Modifiable.read[S, NodeLike[S], NU[S]](_.changed)(in, access)
+      val ll      = expr.List.Modifiable.read[S, NodeLike[S], NU[S]](in, access)
       new BranchImpl(targets, name, ll)
     }
   }
   private final class BranchImpl[S <: Sys[S]](val targets: evt.Targets[S], val name: Expr[S, String],
-                                              ll: expr.LinkedList.Modifiable[S, NodeLike[S], NU[S]])
+                                              ll: expr.List.Modifiable[S, NodeLike[S], NU[S]])
     extends Library.Branch[S] with NodeImpl[S] with evt.impl.StandaloneLike[S, BU[S], NodeLike[S] /* BranchImpl[S] */] {
 
     def toEither = IsBranch(this)
@@ -300,9 +300,9 @@ object LibraryImpl {
 
       if (pull.contains(llEvt)) pull(llEvt).foreach { u =>
         bch ++= u.changes.map {
-          case expr.LinkedList.Added  (idx, n) => TreeLike.ChildInserted[S, T](idx, n.toEither)
-          case expr.LinkedList.Removed(idx, n) => TreeLike.ChildRemoved [S, T](idx, n.toEither)
-          case expr.LinkedList.Element(n, nu)  =>
+          case expr.List.Added  (idx, n) => TreeLike.ChildInserted[S, T](idx, n.toEither)
+          case expr.List.Removed(idx, n) => TreeLike.ChildRemoved [S, T](idx, n.toEither)
+          case expr.List.Element(n, nu)  =>
             val idx = u.list.indexOf(n)
             TreeLike.ChildChanged(idx, nu)
         }

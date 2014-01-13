@@ -28,14 +28,14 @@ package at.iem.sysson
 
 import de.sciss.synth.SynthGraph
 
-object Patch {
+object PatchOLD {
   val empty = withoutSource("<empty>", SynthGraph {})
 
   case class Source(name: String, code: String)
 
-  def withoutSource(name: String, graph: SynthGraph): Patch =
-    Patch(source = Patch.Source(name = name, code = ""), graph = graph)
+  def withoutSource(name: String, graph: SynthGraph): PatchOLD =
+    PatchOLD(source = PatchOLD.Source(name = name, code = ""), graph = graph)
 }
-case class Patch(source: Patch.Source, graph: SynthGraph) {
+case class PatchOLD(source: PatchOLD.Source, graph: SynthGraph) {
   def name = source.name
 }

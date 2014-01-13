@@ -33,7 +33,7 @@ import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
 import de.sciss.desktop.{UndoManager, FileDialog, Window}
 import de.sciss.file._
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.LinkedList
+import de.sciss.lucre.expr.List
 import de.sciss.icons.raphael
 import de.sciss.lucre.stm
 import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoableEdit}
@@ -52,8 +52,8 @@ object WorkspaceViewImpl {
     }
 
     implicit val ws         = workspace
-    implicit val llSrcSer   = LinkedList.serializer[S, DataSource[S]   ]
-    implicit val llSpcSer   = LinkedList.serializer[S, SonificationSpec]
+    implicit val llSrcSer   = List.serializer[S, DataSource[S]   ]
+    implicit val llSpcSer   = List.serializer[S, SonificationSpec]
     val dataSources = ListView[S, DataSource[S]   , Unit](workspace.dataSources)(_.file.name)
     val sonifSpecs  = ListView[S, SonificationSpec, Unit](workspace.sonifSpecs )(_ => "TODO")
     val res = new Impl[S](undoMgr, dataSources, sonifSpecs)(workspace)
@@ -86,7 +86,7 @@ object WorkspaceViewImpl {
     // XXX TODO: DRY (LibraryViewImpl)
     // direction: true = insert, false = remove
     private class EditNode[A](direction: Boolean,
-                              parentFun: S#Tx => LinkedList.Modifiable[S, A, _],
+                              parentFun: S#Tx => List.Modifiable[S, A, _],
                               index: Int,
                               childH: stm.Source[S#Tx, A])
       extends AbstractUndoableEdit {
@@ -279,7 +279,7 @@ object WorkspaceViewImpl {
           val drag      = t.getTransferData(LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
           val sourceOpt = drag.cursor.step { implicit tx =>
             drag.node() match {
-              case TreeLike.IsLeaf(l) => Some(Patch.Source(l.name.value, l.source.value))
+              case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
               case _ => None
             }
           }

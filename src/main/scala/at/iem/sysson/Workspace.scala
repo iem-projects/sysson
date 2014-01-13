@@ -28,7 +28,7 @@ package at.iem.sysson
 
 import de.sciss.lucre.{event => evt, stm}
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.LinkedList
+import de.sciss.lucre.expr.List
 import de.sciss.file.File
 import impl.{WorkspaceImpl => Impl}
 import de.sciss.serial.Serializer
@@ -65,9 +65,8 @@ sealed trait WorkspaceLike {
   /** Convenience method for `dir.path`. */
   def path: String
 
-  def dataSources(implicit tx: System#Tx): LinkedList.Modifiable[System, DataSource[System], Unit]
-
-  def sonifSpecs(implicit tx: System#Tx): LinkedList.Modifiable[System, SonificationSpec, Unit]
+  def dataSources(implicit tx: System#Tx): List.Modifiable[System, DataSource[System], Unit]
+  def sonifSpecs (implicit tx: System#Tx): List.Modifiable[System, SonificationSpec  , Unit]
 
   // implicit def dataSourceSerializer: Serializer[System#Tx, System#Acc, DataSource[System]]
 
@@ -80,5 +79,5 @@ trait Workspace[S <: Sys[S]] extends WorkspaceLike {
   //
   //  def dir: File
   //
-  //  def dataSources(implicit tx: S#Tx): LinkedList.Modifiable[S, DataSource[S], Unit]
+  //  def dataSources(implicit tx: S#Tx): List.Modifiable[S, DataSource[S], Unit]
 }

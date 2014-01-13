@@ -90,7 +90,7 @@ object Session130423 extends SessionLike {
     //...
 
     val son = sound.SonificationOLD("Test")
-    son.patch = Patch.withoutSource("Test", SynthGraph {
+    son.patch = PatchOLD.withoutSource("Test", SynthGraph {
       var sum: GE = 0
       val speed = 1.0 / 4000.0
       // dur = numTime / (SampleRate * speed)

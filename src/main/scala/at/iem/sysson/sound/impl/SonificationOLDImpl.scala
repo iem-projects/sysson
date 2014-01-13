@@ -65,7 +65,7 @@ object SonificationOLDImpl {
 
     override def toString = s"Sonification($name)${hashCode().toHexString}"
 
-    var patch = Patch.empty
+    var patch = PatchOLD.empty
 
     def playOver(duration: Duration): Synth = {
       //      mapping.values.headOption.map(_.numColumns)

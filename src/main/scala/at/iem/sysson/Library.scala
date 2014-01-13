@@ -27,7 +27,7 @@
 package at.iem.sysson
 
 import de.sciss.lucre.{event => evt}
-import evt.{EventLike, Sys}
+import de.sciss.lucre.event.{Publisher, EventLike, Sys}
 import de.sciss.lucre.expr.Expr
 import at.iem.sysson.impl.{LibraryImpl => Impl}
 import de.sciss.lucre.stm
@@ -43,10 +43,10 @@ object Library {
   object NodeLike {
     implicit def serializer[S <: Sys[S]]: evt.Serializer[S, NodeLike[S]] = Impl.nodeSerializer[S]
   }
-  sealed trait NodeLike[S <: Sys[S]] extends stm.Mutable[S#ID, S#Tx] {
-    def name: Expr[S, String]
+  sealed trait NodeLike[S <: Sys[S]]
+    extends stm.Mutable[S#ID, S#Tx] with Publisher[S, TreeLike.NodeUpdate[S, Library[S]]]{
 
-    def changed: EventLike[S, TreeLike.NodeUpdate[S, Library[S]]]
+    def name: Expr[S, String]
 
     private[sysson] def toEither: TreeLike.Node[Branch[S], Leaf[S]]
   }
@@ -67,12 +67,12 @@ object Library {
 
     def apply[S <: Sys[S]](name: Expr[S, String])(implicit tx: S#Tx): Branch[S] = Impl.newBranch(name)
   }
-  trait Branch[S <: Sys[S]] extends TreeLike.Branch[S, Library[S]] with NodeLike[S] {
+  trait Branch[S <: Sys[S]]
+    extends TreeLike.Branch[S, Library[S]] with NodeLike[S] with Publisher[S, TreeLike.BranchUpdate[S, Library[S]]] {
+
     def insert  (idx: Int, node: NodeLike[S])(implicit tx: S#Tx): Unit
     def removeAt(idx: Int)(implicit tx: S#Tx): Unit
     def remove  (node: NodeLike[S])(implicit tx: S#Tx): Unit
-
-    def changed: EventLike[S, TreeLike.BranchUpdate[S, Library[S]]]
   }
   object Leaf {
     implicit def serializer[S <: Sys[S]]: serial.Serializer[S#Tx, S#Acc, Leaf[S]] = Impl.leafSerializer[S]
@@ -89,12 +89,12 @@ object Library {
 
   // ---- compilation ----
   private val sync    = new AnyRef
-  private val codeMap = new mutable.WeakHashMap[Patch.Source, Patch]
+  private val codeMap = new mutable.WeakHashMap[PatchOLD.Source, PatchOLD]
 
-  def compile(source: Patch.Source): Future[Patch] = sync.synchronized(codeMap.get(source)).fold {
+  def compile(source: PatchOLD.Source): Future[PatchOLD] = sync.synchronized(codeMap.get(source)).fold {
     Code.future {
       val graph = blocking { Code.SynthGraph(source.code).execute() }
-      val res   = Patch(source, graph)
+      val res   = PatchOLD(source, graph)
       sync.synchronized(codeMap.put(source, res))
       res
     }

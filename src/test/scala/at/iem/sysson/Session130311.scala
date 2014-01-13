@@ -256,7 +256,7 @@ object Session130311 extends SessionLike {
     val (min, max) = if (useGivenMinMax) (givenMin, givenMax) else sel3.minmax
 
     val son = sound.SonificationOLD("Test")
-    son.patch = Patch.withoutSource("Test", SynthGraph {
+    son.patch = PatchOLD.withoutSource("Test", SynthGraph {
       var sum: GE = 0
       for(lon <- 0 until lonRange.size) {
         for(lat <- 0 until latRange.size) {

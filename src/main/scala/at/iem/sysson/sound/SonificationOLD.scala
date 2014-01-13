@@ -49,7 +49,7 @@ trait SonificationOLD {
   var name: String
 
   /** The patch describing the audio signal processing of the sonification. */
-  var patch: Patch
+  var patch: PatchOLD
 
   /** OBSOLETE */
   var mapping:  Map[String, SonificationSource]

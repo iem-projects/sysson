@@ -34,7 +34,7 @@ import de.sciss.lucre.stm
 import java.io.{FileNotFoundException, IOException}
 import de.sciss.file._
 import de.sciss.lucre.stm.store.BerkeleyDB
-import de.sciss.lucre.expr.LinkedList
+import de.sciss.lucre.expr.List
 import ucar.nc2
 import nc2.NetcdfFile
 import at.iem.sysson.sound.SonificationSpec
@@ -60,8 +60,8 @@ object WorkspaceImpl {
 
   private final val WORKSPACE_COOKIE  = 0x737973736F6E7700L   // "syssonw\0"
 
-  private final class Data[S <: Sys[S]](val dataSources: LinkedList.Modifiable[S, DataSource[S]   , Unit],
-                                        val sonifSpecs : LinkedList.Modifiable[S, SonificationSpec, Unit]) {
+  private final class Data[S <: Sys[S]](val dataSources: List.Modifiable[S, DataSource[S]   , Unit],
+                                        val sonifSpecs : List.Modifiable[S, SonificationSpec, Unit]) {
     def write(out: DataOutput): Unit = {
       out.writeLong(WORKSPACE_COOKIE)
       dataSources.write(out)
@@ -90,20 +90,20 @@ object WorkspaceImpl {
         val cookie = in.readLong()
         require(cookie == WORKSPACE_COOKIE,
           s"Unexpected cookie (found ${cookie.toHexString}, expected ${WORKSPACE_COOKIE.toHexString})")
-        val dataSources = LinkedList.Modifiable.read[S, DataSource[S]]   (in, access)
-        val sonifSpecs  = LinkedList.Modifiable.read[S, SonificationSpec](in, access)
+        val dataSources = List.Modifiable.read[S, DataSource[S]]   (in, access)
+        val sonifSpecs  = List.Modifiable.read[S, SonificationSpec](in, access)
         new Data(dataSources, sonifSpecs)
       }
     }
 
     private val data: stm.Source[S#Tx, Data[S]] = system.root { implicit tx =>
-      val dataSources = LinkedList.Modifiable[S, DataSource[S]   ]
-      val sonifSpecs  = LinkedList.Modifiable[S, SonificationSpec]
+      val dataSources = List.Modifiable[S, DataSource[S]   ]
+      val sonifSpecs  = List.Modifiable[S, SonificationSpec]
       new Data[S](dataSources, sonifSpecs)
     }
 
-    def dataSources(implicit tx: S#Tx): LinkedList.Modifiable[S, DataSource[S]   , Unit] = data().dataSources
+    def dataSources(implicit tx: S#Tx): List.Modifiable[S, DataSource[S]   , Unit] = data().dataSources
 
-    def sonifSpecs (implicit tx: S#Tx): LinkedList.Modifiable[S, SonificationSpec, Unit] = data().sonifSpecs
+    def sonifSpecs (implicit tx: S#Tx): List.Modifiable[S, SonificationSpec, Unit] = data().sonifSpecs
   }
 }

@@ -478,7 +478,7 @@ object ClimateViewImpl {
       }, BorderPanel.Position.South)
     }
 
-    private var _patch = Option.empty[Patch]
+    private var _patch = Option.empty[PatchOLD]
 
     def play(): Unit = {
       stop()
@@ -544,8 +544,8 @@ object ClimateViewImpl {
       println("NOT YET IMPLEMENTED: Return-to-zero")
     }
 
-    def patch: Option[Patch] = _patch
-    def patch_=(value: Option[Patch]): Unit = {
+    def patch: Option[PatchOLD] = _patch
+    def patch_=(value: Option[PatchOLD]): Unit = {
       value match {
         case Some(p) =>
           ggSonifName.text    = p.name
@@ -631,7 +631,7 @@ object ClimateViewImpl {
         val drag      = t.getTransferData(LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
         val sourceOpt = drag.cursor.step { implicit tx =>
           drag.node() match {
-            case TreeLike.IsLeaf(l) => Some(Patch.Source(l.name.value, l.source.value))
+            case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
             case _ => None
           }
         }
