@@ -40,7 +40,7 @@ import Implicits._
 import de.sciss.synth.swing.SynthGraphPanel
 import at.iem.sysson.gui.GUI
 
-object SonificationImpl {
+object SonificationOLDImpl {
   var DEBUG_GRAPH     = false
   var DEBUG_WRITEDEF  = false
 
