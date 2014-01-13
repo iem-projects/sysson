@@ -1,6 +1,6 @@
 package at.iem.sysson
 
-import sound.{MatrixIn, Sonification, AudioSystem}
+import sound.{MatrixIn, SonificationOLD, AudioSystem}
 import de.sciss.synth
 import de.sciss.synth.{SynthGraph, Synth, Server}
 import Implicits._
@@ -17,7 +17,7 @@ object SonifTest extends App {
   val eachDur     = if (mode != "column") 10.0 else 3.0
   val iterations  = if (mode == "column") 10 else 0
 
-  val son   = Sonification("test")
+  val son   = SonificationOLD("test")
   son.patch = Patch.withoutSource("Test", SynthGraph {
     import synth._
     import ugen._

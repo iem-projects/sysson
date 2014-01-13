@@ -54,7 +54,7 @@ import de.sciss.desktop.{DialogSource, OptionPane}
 import de.sciss.synth.{Ops, Synth}
 import de.sciss.swingplus.{OverlayPanel, Spinner}
 import scala.concurrent.{ExecutionContext, Future}
-import at.iem.sysson.sound.Sonification
+import at.iem.sysson.sound.SonificationOLD
 import scala.util.Success
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter, Calendar}
 import ucar.nc2.units.DateFormatter
@@ -484,9 +484,9 @@ object ClimateViewImpl {
       stop()
       markPlayStop(playing = true)
       patch.foreach { p =>
-        val son          = Sonification(p.name)
+        val son          = SonificationOLD(p.name)
         son.patch        = p
-        son.variableMap += Sonification.DefaultVariable -> section
+        son.variableMap += SonificationOLD.DefaultVariable -> section
         models.foreach { case (key, model) =>
           val (start, end) = model.range
           val section = document.variableMap(key) in key select (start to end)

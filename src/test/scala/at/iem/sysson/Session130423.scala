@@ -89,7 +89,7 @@ object Session130423 extends SessionLike {
     //           numLat-1  numLon-1
     //...
 
-    val son = sound.Sonification("Test")
+    val son = sound.SonificationOLD("Test")
     son.patch = Patch.withoutSource("Test", SynthGraph {
       var sum: GE = 0
       val speed = 1.0 / 4000.0

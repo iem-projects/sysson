@@ -37,7 +37,7 @@ import at.iem.sysson.graph.{VarRef, Var, SelectedLike}
 import Implicits._
 
 object UGenGraphBuilderImpl {
-  def apply(sonif: Sonification, sg: SynthGraph): UGenGraphBuilder.Result = new Impl(sonif).build(sg)
+  def apply(sonif: SonificationOLD, sg: SynthGraph): UGenGraphBuilder.Result = new Impl(sonif).build(sg)
 
   // OBSOLETE
   def bufCtlName (key: String): String = "$son_" + key
@@ -47,7 +47,7 @@ object UGenGraphBuilderImpl {
   final val diskUsesInterp  = false
   final val diskPad         = if (diskUsesInterp) 4 else 0
 
-  private final class Impl(sonif: Sonification) extends BasicUGenGraphBuilder with UGenGraphBuilder {
+  private final class Impl(sonif: SonificationOLD) extends BasicUGenGraphBuilder with UGenGraphBuilder {
     import UGenGraphBuilder.Section
 
     override def toString     = s"UGenGraphBuilder(${sonif.name})@" + hashCode.toHexString
@@ -75,7 +75,7 @@ object UGenGraphBuilderImpl {
     // OBSOLETE
     def getMatrixInSource(m: MatrixIn): SonificationSource = {
       val key = m.key
-      sonif.mapping.getOrElse(key, throw Sonification.MissingInput(key))
+      sonif.mapping.getOrElse(key, throw SonificationOLD.MissingInput(key))
     }
 
     private def findVariable[A](variable: VarRef): (String, VariableSection) =
@@ -161,7 +161,7 @@ object UGenGraphBuilderImpl {
     }
 
     private def varSection(variable: Var): VariableSection = {
-      val section0 = sonif.variableMap.getOrElse(Sonification.DefaultVariable,
+      val section0 = sonif.variableMap.getOrElse(SonificationOLD.DefaultVariable,
         sys.error(s"Default variable not specified"))
 
       val section = (section0 /: variable.operations) {

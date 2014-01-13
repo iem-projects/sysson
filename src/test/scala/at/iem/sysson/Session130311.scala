@@ -255,7 +255,7 @@ object Session130311 extends SessionLike {
     val sel3  = sel2 in "plev" select plevRange
     val (min, max) = if (useGivenMinMax) (givenMin, givenMax) else sel3.minmax
 
-    val son = sound.Sonification("Test")
+    val son = sound.SonificationOLD("Test")
     son.patch = Patch.withoutSource("Test", SynthGraph {
       var sum: GE = 0
       for(lon <- 0 until lonRange.size) {

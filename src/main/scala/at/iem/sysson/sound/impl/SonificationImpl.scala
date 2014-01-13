@@ -46,7 +46,7 @@ object SonificationImpl {
 
   private final val synthDefName = "$son_play"
 
-  def apply(name: String): Sonification = new Impl(name)
+  def apply(name: String): SonificationOLD = new Impl(name)
 
   private final val codec = osc.PacketCodec().scsynth().build
 
@@ -57,7 +57,7 @@ object SonificationImpl {
     var ctls  = Vec.empty[ControlSetMap]
   }
 
-  private final class Impl(var name: String) extends Sonification {
+  private final class Impl(var name: String) extends SonificationOLD {
 
     var mapping       = Map.empty[String, SonificationSource]
     var variableMap   = Map.empty[String, VariableSection   ]
@@ -108,7 +108,7 @@ object SonificationImpl {
         //        }
       )
 
-    def prepare()(implicit context: ExecutionContext): Future[Sonification.Prepared] = {
+    def prepare()(implicit context: ExecutionContext): Future[SonificationOLD.Prepared] = {
       val as  = AudioSystem.instance
       if (!as.isBooting && !as.isRunning) as.start() // this can start up during our preparations
 
@@ -177,10 +177,10 @@ object SonificationImpl {
         }
       }
 
-      val p = Promise[Sonification.Prepared]()
+      val p = Promise[SonificationOLD.Prepared]()
       as.whenBooted { s =>
         p completeWith prepared.map { case (res, buffers) =>
-          new Sonification.Prepared {
+          new SonificationOLD.Prepared {
             def play(): Synth = {
               val sd    = SynthDef(synthDefName, res.graph)
               val syn   = Synth(s)

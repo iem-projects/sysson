@@ -31,10 +31,10 @@ import de.sciss.synth._
 import impl.{SonificationImpl => Impl}
 import scala.concurrent.{ExecutionContext, Future}
 
-object Sonification {
+object SonificationOLD {
   // val emptyGraph = SynthGraph(Vector.empty, Set.empty)
 
-  def apply(name: String): Sonification = Impl(name)
+  def apply(name: String): SonificationOLD = Impl(name)
 
   case class MissingInput(key: String) extends RuntimeException(s"Missing sonification input for key '$key'")
 
@@ -44,7 +44,7 @@ object Sonification {
     def play(): Synth
   }
 }
-trait Sonification {
+trait SonificationOLD {
   /** A user chosen name associated with the sonification. */
   var name: String
 
@@ -58,7 +58,7 @@ trait Sonification {
     *
     * @return a future of the prepared sonification, ready to play
     */
-  def prepare()(implicit context: ExecutionContext): Future[Sonification.Prepared]
+  def prepare()(implicit context: ExecutionContext): Future[SonificationOLD.Prepared]
 
   /** Maps between logical names and variable sections used as data source. */
   var variableMap: Map[String, VariableSection]

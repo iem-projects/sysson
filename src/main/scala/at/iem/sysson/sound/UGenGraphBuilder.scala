@@ -49,7 +49,7 @@ object UGenGraphBuilder {
 
   case class Result(graph: UGenGraph, sections: Vec[Section], userValues: Set[UserValue])
 
-  def apply(sonif: Sonification, sg: SynthGraph): Result = Impl(sonif, sg)
+  def apply(sonif: SonificationOLD, sg: SynthGraph): Result = Impl(sonif, sg)
 }
 trait UGenGraphBuilder extends UGenGraph.Builder {
   def addMatrixIn(m: MatrixIn): GE
