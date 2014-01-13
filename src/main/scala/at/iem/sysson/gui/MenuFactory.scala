@@ -28,8 +28,6 @@ package at.iem.sysson
 package gui
 
 import java.awt.event.KeyEvent
-import java.io.{RandomAccessFile, FilenameFilter}
-import scala.util.control.NonFatal
 import de.sciss.desktop.{KeyStrokes, Menu}
 import scala.swing.Action
 import de.sciss.lucre.event.Durable
@@ -98,9 +96,9 @@ object MenuFactory {
       )
     ).add(
       Group("tools", "Tools")
-        .add(
-          Item("sonif-declaration")("Sonification Declaration TEST..." -> (menu1 + VK_D)) { sonif.DeclarationEditor() }
-        )
+        // .add(
+        //   Item("sonif-declaration")("Sonification Declaration TEST..." -> (menu1 + VK_D)) { sonif.DeclarationEditor() }
+        // )
       //      .add(
       //        Item("designer")("Sound Designer..." -> (menu1 + VK_D)) { openSoundDesigner() }
       //      )

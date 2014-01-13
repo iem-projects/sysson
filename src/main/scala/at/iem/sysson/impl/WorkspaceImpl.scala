@@ -37,6 +37,7 @@ import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.lucre.expr.LinkedList
 import ucar.nc2
 import nc2.NetcdfFile
+import at.iem.sysson.sound.SonificationSpec
 
 object WorkspaceImpl {
   def readDurable(dir: File): Workspace[evt.Durable] = {
@@ -54,35 +55,17 @@ object WorkspaceImpl {
     val fact  = BerkeleyDB.factory(dir, createIfNecessary = create)
     implicit val system: S = evt.Durable(fact)
 
-    //    val access = system.root[Data[S]] { implicit tx =>
-    //      val dataSource = LinkedList.Modifiable[S, DataSource]
-    //      new Data[S](dataSource)
-    //    }
-
-    // implicit val cfTpe  = reflect.runtime.universe.typeOf[S]
     new Impl[S](dir, system, /* access, */ system)
   }
 
-  //  private implicit def dataSer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Data[S]] = new DataSer[S]
-  //
-  //  private class DataSer[S <: Sys[S]] extends Serializer[S#Tx, S#Acc, Data[S]] {
-  //    def write(data: Data[S], out: DataOutput): Unit = data.write(out)
-  //
-  //    def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): Data[S] = {
-  //      val cookie = in.readLong()
-  //      require(cookie == WORKSPACE_COOKIE,
-  //        s"Unexpected cookie (found ${cookie.toHexString}, expected ${WORKSPACE_COOKIE.toHexString})")
-  //      val dataSource = LinkedList.Modifiable.read[S, DataSource](in, access)
-  //      new Data(dataSource)
-  //    }
-  //  }
+  private final val WORKSPACE_COOKIE  = 0x737973736F6E7700L   // "syssonw\0"
 
-  private final val WORKSPACE_COOKIE  = 0x737973736F6E7730L   // "syssonw0"
-
-  private final class Data[S <: Sys[S]](val dataSource: LinkedList.Modifiable[S, DataSource[S], Unit]) {
+  private final class Data[S <: Sys[S]](val dataSources: LinkedList.Modifiable[S, DataSource[S]   , Unit],
+                                        val sonifSpecs : LinkedList.Modifiable[S, SonificationSpec, Unit]) {
     def write(out: DataOutput): Unit = {
       out.writeLong(WORKSPACE_COOKIE)
-      dataSource.write(out)
+      dataSources.write(out)
+      sonifSpecs .write(out)
     }
   }
 
@@ -107,16 +90,20 @@ object WorkspaceImpl {
         val cookie = in.readLong()
         require(cookie == WORKSPACE_COOKIE,
           s"Unexpected cookie (found ${cookie.toHexString}, expected ${WORKSPACE_COOKIE.toHexString})")
-        val dataSource = LinkedList.Modifiable.read[S, DataSource[S]](in, access)
-        new Data(dataSource)
+        val dataSources = LinkedList.Modifiable.read[S, DataSource[S]]   (in, access)
+        val sonifSpecs  = LinkedList.Modifiable.read[S, SonificationSpec](in, access)
+        new Data(dataSources, sonifSpecs)
       }
     }
 
     private val data: stm.Source[S#Tx, Data[S]] = system.root { implicit tx =>
-      val dataSource = LinkedList.Modifiable[S, DataSource[S]]
-      new Data[S](dataSource)
+      val dataSources = LinkedList.Modifiable[S, DataSource[S]   ]
+      val sonifSpecs  = LinkedList.Modifiable[S, SonificationSpec]
+      new Data[S](dataSources, sonifSpecs)
     }
 
-    def dataSources(implicit tx: S#Tx): LinkedList.Modifiable[S, DataSource[S], Unit] = data().dataSource
+    def dataSources(implicit tx: S#Tx): LinkedList.Modifiable[S, DataSource[S]   , Unit] = data().dataSources
+
+    def sonifSpecs (implicit tx: S#Tx): LinkedList.Modifiable[S, SonificationSpec, Unit] = data().sonifSpecs
   }
 }

@@ -28,6 +28,7 @@ package at.iem.sysson.graph
 
 import de.sciss.synth.{AudioRated, GE, Lazy}
 import de.sciss.synth
+import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
 
 trait UserInteraction extends Lazy.Expander[Unit] {
   protected final def makeUGens = ()
@@ -103,6 +104,26 @@ case class SelectedRange(variable: VarRef) extends SelectedLike {
   def size: GE = stopIndex - startIndex
 }
 
+object UserValue {
+  private final val USER_COOKIE = 0x75737200  // "usr\0"
+
+  implicit object serializer extends ImmutableSerializer[UserValue] {
+    def read(in: DataInput): UserValue = {
+      val cookie = in.readInt()
+      require(cookie == USER_COOKIE,
+        s"Unexpected cookie (expected ${USER_COOKIE.toHexString}, found ${cookie.toHexString})")
+      val key     = in.readUTF()
+      val default = in.readDouble()
+      UserValue(key, default)
+    }
+
+    def write(v: UserValue, out: DataOutput): Unit = {
+      out.writeInt(USER_COOKIE)
+      out.writeUTF(v.key)
+      out.writeDouble(v.default)
+    }
+  }
+}
 case class UserValue(key: String, default: Double) extends UserInteraction {
   def value: GE = impl.UserValueImpl.value(this)
 }

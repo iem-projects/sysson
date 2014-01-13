@@ -34,6 +34,7 @@ import impl.{WorkspaceImpl => Impl}
 import de.sciss.serial.Serializer
 import de.sciss.lucre.stm.IdentifierMap
 import ucar.nc2.NetcdfFile
+import at.iem.sysson.sound.SonificationSpec
 
 object Workspace {
   /** File name extension (including leading period) */
@@ -65,6 +66,8 @@ sealed trait WorkspaceLike {
   def path: String
 
   def dataSources(implicit tx: System#Tx): LinkedList.Modifiable[System, DataSource[System], Unit]
+
+  def sonifSpecs(implicit tx: System#Tx): LinkedList.Modifiable[System, SonificationSpec, Unit]
 
   // implicit def dataSourceSerializer: Serializer[System#Tx, System#Acc, DataSource[System]]
 

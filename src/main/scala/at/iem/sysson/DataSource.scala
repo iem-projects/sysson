@@ -34,15 +34,6 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Mutable
 
 object DataSource {
-  //  type Listener = Model.Listener[Update]
-  //
-  //  sealed trait Update
-  //  final case class Closed(doc: DataSource) extends Update
-
-  // def openRead(path: String): DataSource = Impl.openRead(path)
-
-  // implicit def serializer: ImmutableSerializer[DataSource] = Impl.serializer
-
   def apply[S <: Sys[S]](path: String)(implicit workspace: Workspace[S], tx: S#Tx): DataSource[S] = Impl(path)
 
   implicit def serializer[S <: Sys[S]](implicit workspace: Workspace[S]): Serializer[S#Tx, S#Acc, DataSource[S]] =

@@ -35,7 +35,7 @@ import de.sciss.lucre.stm.{MutableSerializer, Mutable}
 import scala.concurrent.stm.Txn
 
 object DataSourceImpl {
-  private final val SOURCE_COOKIE = 0x737973736F6E6430L   // "syssond0"
+  private final val SOURCE_COOKIE = 0x737973736F6E6400L   // "syssond\0"
 
   def apply[S <: Sys[S]](path: String)(implicit workspace: Workspace[S], tx: S#Tx): DataSource[S] = {
     val id = tx.newID()

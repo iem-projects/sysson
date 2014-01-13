@@ -31,6 +31,7 @@ import Implicits._
 import ucar.nc2
 import de.sciss.synth
 import synth.AudioRated
+import de.sciss.serial.ImmutableSerializer
 
 sealed trait VarRef {
   def find[A](vars: Iterable[A])(implicit view: A => nc2.Variable): Option[A] = {
@@ -56,7 +57,18 @@ object Var {
     def time: SelectedRange.Playing
   }
 
-  def apply(): Var = impl.VarImpl.Default
+  // def apply(): Var = impl.VarImpl.Default
+
+  /** Declares a new sonification variable (data source).
+    *
+    * @param name         Logical name by which the source is referred to
+    * @param dims         List of specifications of required dimensions
+    * @param higherRank   Whether a matrix rank higher than `dimensions.size` is permitted
+    */
+  def apply(name: String, dims: Vec[Dim], higherRank: Boolean = false): Var =
+    impl.VarImpl(name, dims, higherRank)
+
+  implicit def serializer: ImmutableSerializer[Var] = impl.VarImpl.serializer
 
   // ---- axis -----
 
@@ -89,7 +101,14 @@ object Var {
   }
   final case class Average(variable: VarRef) extends Reduction
 }
-trait Var {
+trait Var extends UserInteraction {
+  /** Logical name by which the source is referred to */
+  def name: String
+  /** List of specifications of required dimensions */
+  def dims: Vec[Dim]
+  /** Whether a matrix rank higher than `dimensions.size` is permitted */
+  def higherRank: Boolean
+
   def select(selections: SelectedLike*): Var
   def average(dim: VarRef): Var
 

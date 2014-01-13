@@ -31,14 +31,39 @@ package impl
 import de.sciss.synth.{GE, ScalarRated, UGenInLike}
 import at.iem.sysson.graph.Var
 import at.iem.sysson.sound.UGenGraphBuilder
+import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
 
 object VarImpl {
-  def Default: Var = Impl(Vec.empty)
+  // def Default: Var = Impl(Vec.empty)
 
-  private final case class Impl(operations: Vec[Var.Op]) extends Var {
+  private final val VAR_COOKIE = 0x76617200 // "var\0"
+
+  def apply(name: String, dims: Vec[Dim], higherRank: Boolean): Var = Impl(name)(dims, higherRank, Vec.empty)
+
+  implicit object serializer extends ImmutableSerializer[Var] {
+    def read(in: DataInput): Var = {
+      val cookie = in.readInt()
+      require(cookie == VAR_COOKIE,
+        s"Unexpected cookie (expected ${VAR_COOKIE.toHexString}, found ${cookie.toHexString})")
+      val name        = in.readUTF()
+      val dims        = ImmutableSerializer.indexedSeq[Dim].read(in)
+      val higherRank  = in.readBoolean()
+      Var(name, dims, higherRank)
+    }
+
+    def write(v: Var, out: DataOutput): Unit = {
+      out.writeInt(VAR_COOKIE)
+      out.writeUTF(v.name)
+      ImmutableSerializer.indexedSeq[Dim].write(v.dims, out)
+      out.writeBoolean(v.higherRank)
+    }
+  }
+
+  private final case class Impl(name: String)(val dims: Vec[Dim], val higherRank: Boolean,
+                                              val operations: Vec[Var.Op]) extends Var {
     private def select1(selection: SelectedLike): Impl = {
       requireUnusedReduction(selection.variable)
-      copy(operations = operations :+ Var.Select(selection))
+      copy()(dims = dims, higherRank = higherRank, operations = operations :+ Var.Select(selection))
     }
 
     private def requireUnusedReduction(v: VarRef): Unit =
@@ -51,7 +76,7 @@ object VarImpl {
 
     def average(dim: VarRef): Var = {
       requireUnusedReduction(dim)
-      copy(operations = operations :+ Var.Average(dim))
+      copy()(dims = dims, higherRank = higherRank, operations = operations :+ Var.Average(dim))
     }
 
     def ir: Var.GE = ???
