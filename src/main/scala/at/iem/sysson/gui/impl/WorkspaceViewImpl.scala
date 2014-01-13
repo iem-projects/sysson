@@ -40,6 +40,7 @@ import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoa
 import javax.swing.{TransferHandler, ImageIcon}
 import javax.swing.TransferHandler.TransferSupport
 import scala.concurrent.ExecutionContext
+import at.iem.sysson.sound.SonificationSpec
 
 object WorkspaceViewImpl {
   import Implicits._
@@ -50,10 +51,12 @@ object WorkspaceViewImpl {
       protected var dirty: Boolean = false
     }
 
-    implicit val ws     = workspace
-    implicit val llSer  = LinkedList.serializer[S, DataSource[S]]
-    val dataSources = ListView[S, DataSource[S], Unit](workspace.dataSources)(_.file.name)
-    val res = new Impl[S](undoMgr, dataSources)(workspace)
+    implicit val ws         = workspace
+    implicit val llSrcSer   = LinkedList.serializer[S, DataSource[S]   ]
+    implicit val llSpcSer   = LinkedList.serializer[S, SonificationSpec]
+    val dataSources = ListView[S, DataSource[S]   , Unit](workspace.dataSources)(_.file.name)
+    val sonifSpecs  = ListView[S, SonificationSpec, Unit](workspace.sonifSpecs )(_ => "TODO")
+    val res = new Impl[S](undoMgr, dataSources, sonifSpecs)(workspace)
     GUI.fromTx(res.guiInit())
     res
   }
@@ -64,7 +67,12 @@ object WorkspaceViewImpl {
   private final val txtRemoveDataSource = "Remove Data Source"
   private final val txtViewDataSource   = "View Data Source"
 
-  private final class Impl[S <: Sys[S]](val undoManager: UndoManager, dataSources: ListView[S, DataSource[S], Unit])
+  private final val txtRemoveSonficSpec = "Remove Sonification Specification"
+  private final val txtViewSonifSpec    = "View Sonification Specification"
+
+  private final class Impl[S <: Sys[S]](val undoManager: UndoManager, 
+                                        dataSources: ListView[S, DataSource[S]   , Unit],
+                                        sonifSpecs : ListView[S, SonificationSpec, Unit])
                                        (implicit val workspace: Workspace[S])
     extends WorkspaceView[S] {
 
@@ -198,13 +206,7 @@ object WorkspaceViewImpl {
       }
       val ggViewSource = GUI.toolButton(actionViewSource, raphael.Shapes.View, tooltip = txtViewDataSource)
 
-      val flow  = new FlowPanel(ggAddSource, ggRemoveSource, ggViewSource)
-
-      val pageSources = new BoxPanel(Orientation.Vertical) {
-        contents += dataSources.component
-        contents += flow
-        border    = Swing.TitledBorder(Swing.EtchedBorder, "Data Sources")
-      }
+      val flowSource  = new FlowPanel(ggAddSource, ggRemoveSource, ggViewSource)
 
       val liSources = dataSources.guiReact {
         case ListView.SelectionChanged(indices) =>
@@ -214,9 +216,42 @@ object WorkspaceViewImpl {
       }
       // XXX TODO: liSources.remove()
 
-      //      val ggTab = new TabbedPane {
-      //        pages += pageSources
-      //      }
+      val pageSources = new BoxPanel(Orientation.Vertical) {
+        contents += dataSources.component
+        contents += flowSource
+        border    = Swing.TitledBorder(Swing.EtchedBorder, "Data Sources")
+      }
+
+      val actionRemoveSpec = new Action(null) {
+        enabled = false
+
+        def apply(): Unit = {
+          val indices = sonifSpecs.guiSelection
+          indices.headOption.foreach { idx => // XXX TODO: compound removal of multiple selection
+            println("TODO: remove spec")
+          }
+        }
+      }
+      val ggRemoveSpec = GUI.toolButton(actionRemoveSpec, raphael.Shapes.Minus, tooltip = txtRemoveDataSource)
+
+      val actionViewSpec = new Action(null) {
+        enabled = false
+
+        def apply(): Unit = {
+          val indices = sonifSpecs.guiSelection
+          if (indices.nonEmpty) {
+            println("TODO: View Sonif Spec")
+          }
+        }
+      }
+      val ggViewSpec = GUI.toolButton(actionViewSpec, raphael.Shapes.View, tooltip = txtViewDataSource)
+
+      val liSpecs = sonifSpecs.guiReact {
+        case ListView.SelectionChanged(indices) =>
+          val selected = indices.nonEmpty
+          ggRemoveSpec.enabled = selected
+          ggViewSpec  .enabled = selected
+      }
 
       val butSonif        = new Button(null: String)
       butSonif.icon       = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
@@ -262,9 +297,21 @@ object WorkspaceViewImpl {
         }
       })
 
+      val flowSpec = new FlowPanel(butSonif, ggRemoveSpec, ggViewSpec)
+
+      val pageSpecs = new BoxPanel(Orientation.Vertical) {
+        contents += sonifSpecs.component
+        contents += flowSpec
+        border    = Swing.TitledBorder(Swing.EtchedBorder, "Sonification Specs")
+      }
+
+      //      val ggTab = new TabbedPane {
+      //        pages += pageSources
+      //      }
+
       val ggTab = new BoxPanel(Orientation.Vertical) {
         contents += pageSources
-        contents += butSonif
+        contents += pageSpecs
       }
 
       component = ggTab

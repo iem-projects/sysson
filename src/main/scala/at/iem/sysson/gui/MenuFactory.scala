@@ -36,7 +36,6 @@ import de.sciss.file._
 import de.sciss.lucre.stm
 
 object MenuFactory {
-
   def root: Menu.Root = _root
 
   private lazy val _root = {
