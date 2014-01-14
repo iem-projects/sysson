@@ -4,7 +4,7 @@ package sound
 import de.sciss.lucre.{event => evt}
 import evt.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
-import de.sciss.lucre.data.SkipList
+import de.sciss.model
 import de.sciss.lucre.expr
 import de.sciss.synth.proc.{Attribute, Attributes}
 import impl.{SonificationImpl => Impl}
@@ -56,15 +56,16 @@ object Sonification {
   // -------------------------------------------------------
 
   object Source {
-    sealed trait Update[S <: Sys[S]]
+    sealed trait Update[S <: Sys[S]] { def source: Source[S] }
+    final case class DimsChanged[S <: Sys[S]](source: Source[S],
+                                              update: expr.Map.Update[S, String, Expr[S, String], model.Change[String]])
+      extends Update[S]
 
     implicit def serializer[S <: Sys[S]]: evt.Serializer[S, Source[S]] = ???
   }
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
     def data: DataSource[S]
-    // def dims: Map[String, String]
-    // XXX TODO: Ops. Perhaps this could be covered by having DataSource behave like an expression?
-    def dims: SkipList.Map[S, String, Expr[S, String]]
+    def dims: expr.Map[S, String, Expr[S, String], model.Change[String]]
   }
 }
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {

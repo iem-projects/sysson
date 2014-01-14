@@ -38,6 +38,8 @@ object DataSource {
 
   implicit def serializer[S <: Sys[S]](implicit workspace: Workspace[S]): Serializer[S#Tx, S#Acc, DataSource[S]] =
     Impl.serializer[S]
+
+  // def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx, workspace: Workspace[S])
 }
 
 trait DataSourceLike {

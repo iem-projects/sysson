@@ -3,15 +3,58 @@ package sound
 package impl
 
 import de.sciss.lucre.{event => evt, expr}
-import de.sciss.lucre.event.{InMemory, Event, Sys}
-import at.iem.sysson.sound.Sonification.AttributeKey
-import de.sciss.synth.proc.Attribute
+import de.sciss.lucre.event.{Reader, Pull, EventLike, InMemory, Event, Sys}
+import at.iem.sysson.sound.Sonification.{Source, AttributeKey}
+import de.sciss.synth.proc.{ExprImplicits, Attribute}
 import scala.annotation.switch
 import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.data.SkipList
+import de.sciss.lucre.expr.Expr
+import de.sciss.model
+import de.sciss.lucre.synth.expr.Strings
 
 object SonificationImpl {
-  private final val SER_VERSION = 0x536f6e00  // "Son\0"
+  private final val SER_VERSION = 0x53726300  // "Src\0"
+
+  private final class SourceSer[S <: Sys[S]] extends evt.NodeSerializer[S, Source[S]] {
+    def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Source[S] = {
+      implicit val str = Strings.serializer[S]
+      val cookie = in.readInt()
+      require(cookie == SER_VERSION,
+        s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
+      val data = ??? // DataSource.serializer.write(out)
+      val dims = expr.Map.read[S, String, Expr[S, String], model.Change[String]](in, access)
+      new SourceImpl(targets, data, dims)
+    }
+  }
+
+  private final class SourceImpl[S <: Sys[S]](protected val targets: evt.Targets[S],
+                                        val data: DataSource[S],
+                                        val dims: expr.Map[S, String, Expr[S, String], model.Change[String]])
+    extends Source[S]
+    with evt.impl.StandaloneLike[S, Source.Update[S], Source[S]] {
+    source =>
+
+    def disconnect()(implicit tx: S#Tx): Unit = dims.changed ---> this
+    def connect   ()(implicit tx: S#Tx): Unit = dims.changed -/-> this
+
+    protected def disposeData()(implicit tx: S#Tx): Unit = dims.dispose()
+
+    protected def writeData(out: DataOutput): Unit = {
+      out.writeInt(SER_VERSION)
+      data.write(out)
+      dims.write(out)
+    }
+
+    def changed: EventLike[S, Source.Update[S]] = this
+
+    protected def reader: Reader[S, Source[S]] = ???
+
+    def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[Source.Update[S]] =
+      pull(dims.changed).map { u =>
+        Source.DimsChanged(source, u)
+      }
+  }
 
   def apply[S <: Sys[S]](implicit tx: S#Tx): Sonification[S] = new New[S]
 
@@ -106,7 +149,7 @@ object SonificationImpl {
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
     protected val targets       = evt.Targets[S](tx0)
     val patch                   = Patch[S]
-    val sources                 = expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
+    val sources                 = expr.Map.Modifiable[S, String, Source[S], Source.Update[S]]
     protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry]
   }
 
@@ -120,7 +163,7 @@ object SonificationImpl {
     }
 
     val patch                   = Patch.read(in, access)
-    val sources                 = expr.Map.read[S, String, Sonification.Source[S], Sonification.Source.Update[S]](in, access)
+    val sources                 = expr.Map.read[S, String, Source[S], Source.Update[S]](in, access)
     protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry](in, access)
   }
 }
