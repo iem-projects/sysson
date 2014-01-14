@@ -163,11 +163,13 @@ object SonificationImpl {
     final protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
       patch       .write(out)
+      sources     .write(out)
       attributeMap.write(out)
     }
 
     final protected def disposeData()(implicit tx: S#Tx): Unit = {
       patch       .dispose()
+      sources     .dispose()
       attributeMap.dispose()
     }
 
