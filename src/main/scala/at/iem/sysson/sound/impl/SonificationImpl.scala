@@ -16,7 +16,7 @@ import de.sciss.lucre.synth.expr.Strings
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"
 
-  private def sourceSerializer[S <: Sys[S]]: evt.NodeSerializer[S, Source[S]] = anySourceSer.asInstanceOf[SourceSer[S]]
+  def sourceSerializer[S <: Sys[S]]: evt.NodeSerializer[S, Source[S]] = anySourceSer.asInstanceOf[SourceSer[S]]
 
   private val anySourceSer = new SourceSer[evt.InMemory]
 
@@ -26,7 +26,7 @@ object SonificationImpl {
       val cookie = in.readInt()
       require(cookie == SER_VERSION,
         s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
-      val data = ??? // DataSource.serializer.write(out)
+      val data = DataSource.read(in, access)
       val dims = expr.Map.read[S, String, Expr[S, String], model.Change[String]](in, access)
       new SourceImpl(targets, data, dims)
     }

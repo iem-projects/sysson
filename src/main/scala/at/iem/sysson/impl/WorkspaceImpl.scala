@@ -38,6 +38,7 @@ import de.sciss.lucre.expr.List
 import ucar.nc2
 import nc2.NetcdfFile
 import at.iem.sysson.sound.SonificationSpec
+import scala.concurrent.stm.TMap
 
 object WorkspaceImpl {
   def readDurable(dir: File): Workspace[evt.Durable] = {
@@ -79,9 +80,11 @@ object WorkspaceImpl {
 
     override def toString = s"Workspace($name)"
 
-    val fileCache = cursor.step { implicit tx =>
-      tx.newInMemoryIDMap[NetcdfFile]
-    }
+    //    val fileCache = cursor.step { implicit tx =>
+    //      tx.newInMemoryIDMap[NetcdfFile]
+    //    }
+
+    val fileCache = TMap.empty[File, nc2.NetcdfFile]
 
     private implicit object DataSer extends Serializer[S#Tx, S#Acc, Data[S]] {
       def write(data: Data[S], out: DataOutput): Unit = data.write(out)

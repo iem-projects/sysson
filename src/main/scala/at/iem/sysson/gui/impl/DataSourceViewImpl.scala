@@ -138,7 +138,8 @@ object DataSourceViewImpl {
     }
   }
 
-  private final class Impl(val document: DataSourceLike, data: nc2.NetcdfFile)
+  private final class Impl[S <: Sys[S]](val document: DataSourceLike, data: nc2.NetcdfFile)
+                                       (implicit workspace: Workspace[S])
     extends DataSourceView with Disposable with ComponentHolder[Component] {
 
     impl =>
@@ -256,10 +257,9 @@ object DataSourceViewImpl {
 
             // open the actual plot if we got the dimensions
             xyOpt.foreach { case (yDim, xDim) =>
-              val view        = ClimateView(document, v.selectAll, xDim = xDim, yDim = yDim)
-  //            lazy val docL   = document.addListener {
-  //              case DataSource.Closed(_) => w.dispose()
-  //            }
+              val view = workspace.cursor.step { implicit tx =>
+                ClimateView(document, v.selectAll, xDim = xDim, yDim = yDim)
+              }
               lazy val w: Window = new WindowImpl {
                 def style       = Window.Regular
                 def handler     = SwingApplication.windowHandler

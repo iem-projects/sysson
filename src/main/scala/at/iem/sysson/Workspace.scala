@@ -35,6 +35,7 @@ import de.sciss.serial.Serializer
 import de.sciss.lucre.stm.IdentifierMap
 import ucar.nc2.NetcdfFile
 import at.iem.sysson.sound.SonificationSpec
+import scala.concurrent.stm.TMap
 
 object Workspace {
   /** File name extension (including leading period) */
@@ -70,7 +71,9 @@ sealed trait WorkspaceLike {
 
   // implicit def dataSourceSerializer: Serializer[System#Tx, System#Acc, DataSource[System]]
 
-  private[sysson] def fileCache: IdentifierMap[System#ID, System#Tx, NetcdfFile]
+  // private[sysson] def fileCache: IdentifierMap[System#ID, System#Tx, NetcdfFile]
+
+  private[sysson] def fileCache: TMap[File, NetcdfFile]
 }
 trait Workspace[S <: Sys[S]] extends WorkspaceLike {
   type System = S

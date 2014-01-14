@@ -28,47 +28,43 @@ package at.iem.sysson
 package impl
 
 import ucar.nc2
-import java.io.File
 import de.sciss.serial.{Serializer, DataInput, DataOutput}
 import de.sciss.lucre.{event => evt}
 import evt.Sys
-import de.sciss.lucre.stm.MutableSerializer
 import ucar.nc2.NetcdfFile
+import scala.concurrent.stm.Txn
+import de.sciss.file._
 
 object DataSourceImpl {
   private final val SOURCE_COOKIE = 0x737973736F6E6400L   // "syssond\0"
 
   def apply[S <: Sys[S]](path: String)(implicit tx: S#Tx): DataSource[S] = new Impl(path)
 
-//  private def instantiate[S <: Sys[S]](id: S#ID, path: String)
-//                                      (implicit workspace: Workspace[S], tx: S#Tx): DataSource[S] = {
-//    import workspace.fileCache
-//    val data  = fileCache.getOrElse(id, {
-//      val f = nc2.NetcdfFile.open(path).setImmutable()
-//      fileCache.put(id, f)
-//      tx.afterCommit()
-//      Txn.afterRollback { _ =>
-//        f.close() // a bit tricky doing I/O inside a transaction...
-//      } (tx.peer)
-//      f
-//    })
-//    import Implicits._
-//    new Impl(id, path)
-//  }
+  private def resolveFile[S <: Sys[S]](workspace: Workspace[S], file: File)(implicit tx: S#Tx): nc2.NetcdfFile =
+    workspace.fileCache.get(file)(tx.peer).getOrElse {
+      val net = nc2.NetcdfFile.open(file.path).setImmutable()
+      workspace.fileCache.put(file, net)(tx.peer)
+      Txn.afterRollback { _ =>
+        net.close() // a bit tricky doing I/O inside a transaction...
+      } (tx.peer)
+      net
+    }
 
   implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, DataSource[S]] =
     anySer.asInstanceOf[Ser[S]]
 
+  def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): DataSource[S] = {
+    val cookie = in.readLong()
+    require(cookie == SOURCE_COOKIE,
+      s"Unexpected cookie (found ${cookie.toHexString}, expected ${SOURCE_COOKIE.toHexString})")
+    val path  = in.readUTF()
+    new Impl(path) // instantiate(id, path)
+  }
+
   private val anySer = new Ser[evt.InMemory]
 
   private class Ser[S <: Sys[S]] extends Serializer[S#Tx, S#Acc, DataSource[S]] {
-    def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): DataSource[S] = {
-      val cookie = in.readLong()
-      require(cookie == SOURCE_COOKIE,
-        s"Unexpected cookie (found ${cookie.toHexString}, expected ${SOURCE_COOKIE.toHexString})")
-      val path  = in.readUTF()
-      new Impl(path) // instantiate(id, path)
-    }
+    def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): DataSource[S] = DataSourceImpl.read(in, access)
 
     def write(source: DataSource[S], out: DataOutput): Unit = source.write(out)
   }
@@ -85,8 +81,7 @@ object DataSourceImpl {
       out.writeUTF(path)
     }
 
-    // protected def disposeData()(implicit tx: S#Tx): Unit = ()
-
-    def data[S1 <: Sys[S1]](workspace: Workspace[S1])(implicit tx: S1#Tx): NetcdfFile = ???
+    def data[S1 <: Sys[S1]](workspace: Workspace[S1])(implicit tx: S1#Tx): NetcdfFile =
+      resolveFile(workspace, file)
   }
 }

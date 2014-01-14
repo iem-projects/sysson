@@ -30,10 +30,12 @@ package gui
 import swing.Component
 import ucar.nc2
 import impl.{ClimateViewImpl => Impl}
+import de.sciss.lucre.event.Sys
 
 object ClimateView {
-  def apply(document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView =
-    ??? // Impl(document, section, xDim, yDim)
+  def apply[S <: Sys[S]](document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
+           (implicit workspace: Workspace[S], tx: S#Tx): ClimateView =
+    Impl(document, section, xDim, yDim)
 
   def currentSection: Option[VariableSection] = Impl.currentSection
 }
