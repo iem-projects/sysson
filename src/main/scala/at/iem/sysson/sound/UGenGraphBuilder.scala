@@ -57,7 +57,7 @@ trait UGenGraphBuilder extends UGenGraph.Builder {
 
   def addScalarSelection(range: SelectedLike          ): GE
   def addAudioSelection (range: SelectedLike, freq: GE): GE
-  def addAudioVariable  (variable: Var.Playing        ): GE
+  def addAudioVariable  (variable: Var.Play           ): GE
   def addScalarUserValue(value: graph.UserValue       ): GE
-  def addScalarAxis     (variable: Var.Playing, axis: VarRef): GE
+  def addScalarAxis     (variable: Var.Play, axis: VarRef): GE
 }

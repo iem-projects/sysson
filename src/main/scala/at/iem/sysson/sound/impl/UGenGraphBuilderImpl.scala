@@ -150,7 +150,7 @@ object UGenGraphBuilderImpl {
       BufRd.ar(numChannels, buf = inBuf, index = phasor, loop = 0, interp = interp)
     }
 
-    def addAudioVariable(varPlay: Var.Playing): GE = {
+    def addAudioVariable(varPlay: Var.Play): GE = {
       val section       = varSection(varPlay.variable)
       val (timeName, _) = findVariable(varPlay.time.range.variable)
       val timeDim = section.dimensions.indexWhere(_.name == timeName)
@@ -191,7 +191,7 @@ object UGenGraphBuilderImpl {
     }
 
     // XXX TODO: DRY - addAudioVariable
-    def addScalarAxis(varPlay: Var.Playing, axis: VarRef): GE = {
+    def addScalarAxis(varPlay: Var.Play, axis: VarRef): GE = {
       // cf. VariableAxesAssociations.txt
 
       val section0                = varSection(varPlay.variable)

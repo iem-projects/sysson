@@ -51,9 +51,13 @@ object SelectedRange {
   //  }
 
   // XXX TODO: should _not_ be a GE, but instead provide `values` and `indices` methods.
-  trait Playing extends synth.GE with AudioRated {
-    def range: SelectedRange
-    def freq: synth.GE
+  case class Play(range: SelectedRange, freq: synth.GE)
+    extends impl.LazyImpl with AudioRated {
+
+    override def productPrefix = "SelectedRange$Play"
+
+    protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
+      b.addAudioSelection(range, freq)
   }
 }
 
@@ -69,7 +73,7 @@ case class SelectedRange(variable: VarRef) extends SelectedLike {
     *
     * @param  freq  a graph element specifying the frequency in samples per second with which to unroll.
     */
-  def play(freq: GE): SelectedRange.Playing = Impl.play(this, freq)
+  def play(freq: GE): SelectedRange.Play = SelectedRange.Play(this, freq)
 
   def values : GE = Impl.values (this)
   def indices: GE = Impl.indices(this)

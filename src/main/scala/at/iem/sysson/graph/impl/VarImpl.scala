@@ -58,28 +58,4 @@ object VarImpl {
       out.writeBoolean(v.higherRank)
     }
   }
-
-  private final case class AxisImpl(playing: Var.Playing, ref: VarRef) extends Var.Axis {
-    def values    : GE = new AxisValuesImpl(this)
-
-    def indices   : GE = ???
-
-    def startValue: GE = ???
-
-    def endValue  : GE = ???
-  }
-
-  private final case class AxisValuesImpl(axis: AxisImpl) extends LazyImpl with ScalarRated {
-    protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
-      b.addScalarAxis(axis.playing, axis.ref)
-  }
-
-  /* private */ final case class PlayingImpl(variable: Var, time: SelectedRange.Playing)
-    extends LazyImpl with Var.Playing {
-
-    def axis(ref: VarRef): Var.Axis = new AxisImpl(this, ref)
-
-    protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
-      b.addAudioVariable(this)
-  }
 }

@@ -1,9 +1,10 @@
 package at.iem.sysson.graph
 
 import de.sciss.synth
-import de.sciss.synth.AudioRated
+import de.sciss.synth.{ScalarRated, UGenInLike, AudioRated}
 import at.iem.sysson._
 import de.sciss.serial.ImmutableSerializer
+import at.iem.sysson.sound.UGenGraphBuilder
 
 object Var {
   trait GE extends synth.GE {
@@ -15,8 +16,14 @@ object Var {
     def axis(ref: VarRef): Axis
   }
 
-  trait Playing extends GE with AudioRated {
-    def time: SelectedRange.Playing
+  case class Play(variable: Var, time: SelectedRange.Play)
+    extends impl.LazyImpl with AudioRated {
+
+    override def productPrefix = "Var$Play"
+
+    def axis(ref: VarRef): Var.Axis = Var.Axis(this, ref)
+
+    protected def makeUGens(b: UGenGraphBuilder): UGenInLike = b.addAudioVariable(this)
   }
 
   // def apply(): Var = impl.VarImpl.Default
@@ -36,6 +43,15 @@ object Var {
 
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
 
+  object Axis {
+    case class Values(axis: Var.Axis) extends impl.LazyImpl with ScalarRated {
+      override def productPrefix = "Var$Axis$Values"
+
+      protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
+        b.addScalarAxis(axis.playing, axis.ref)
+    }
+  }
+
   /** A reference to a dimensional axis with respect to a variable section.
     * The difference between this and for instance SelectRange is that the
     * graph element producing methods such as `values` and `indices` produce
@@ -43,12 +59,19 @@ object Var {
     * This allows signal processing which combines each sample value from a
     * variable with the corresponding axes elements.
     */
-  trait Axis {
-    def values    : synth.GE
-    def indices   : synth.GE
-    def startValue: synth.GE
-    def endValue  : synth.GE
+  case class Axis(playing: Var.Play, ref: VarRef) {
+    override def productPrefix = "Var$Axis"
+
+    def values    : synth.GE = Axis.Values(this)
+
+    def indices   : synth.GE = ???
+
+    def startValue: synth.GE = ???
+
+    def endValue  : synth.GE = ???
   }
+
+
 
   // ---- operations ----
 
@@ -92,7 +115,7 @@ object Var {
     def ir: Var.GE = ???
     def kr: Var.GE = ???
 
-    def play(time: SelectedRange.Playing): Var.Playing = new impl.VarImpl.PlayingImpl(this, time)
+    def play(time: SelectedRange.Play): Var.Play = Var.Play(this, time)
   }
 }
 trait Var extends UserInteraction {
@@ -110,7 +133,7 @@ trait Var extends UserInteraction {
   def kr: Var.GE
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
-  def play(time: SelectedRange.Playing): Var.Playing
+  def play(time: SelectedRange.Play): Var.Play
 
   /** The operations performed on the original input variable, such as taking slices,
     * averaging over a dimension, etc.
