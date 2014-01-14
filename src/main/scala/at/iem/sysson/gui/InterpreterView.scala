@@ -47,7 +47,7 @@ object InterpreterView {
       ???
     }
 
-    def doc: nc2.NetcdfFile = document.data
+    // def doc: nc2.NetcdfFile = document.data
 
     def selectedVariable: nc2.Variable = ???
 //      DocumentViewHandler.instance.getView(document).getOrElse(sys.error("No document view")).selectedVariable

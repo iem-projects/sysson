@@ -29,30 +29,33 @@ package at.iem.sysson
 import ucar.nc2
 import java.io.File
 import impl.{DataSourceImpl => Impl}
-import de.sciss.serial.Serializer
+import de.sciss.serial.{Writable, Serializer}
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Mutable
 
 object DataSource {
-  def apply[S <: Sys[S]](path: String)(implicit workspace: Workspace[S], tx: S#Tx): DataSource[S] = Impl(path)
+  def apply[S <: Sys[S]](path: String)(implicit tx: S#Tx): DataSource[S] = Impl(path)
 
-  implicit def serializer[S <: Sys[S]](implicit workspace: Workspace[S]): Serializer[S#Tx, S#Acc, DataSource[S]] =
+  implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, DataSource[S]] =
     Impl.serializer[S]
 
   // def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx, workspace: Workspace[S])
+
 }
 
-trait DataSourceLike {
+trait DataSourceLike extends Writable {
   /** Path to the document's underlying file (NetCDF). */
   def path: String
 
   def file: File
 
-  def data: nc2.NetcdfFile
-  def variableMap: Map[String, nc2.Variable]
+//  def data: nc2.NetcdfFile
+//  def variableMap: Map[String, nc2.Variable]
+
+  def data[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): nc2.NetcdfFile
 
   // def close(): Unit
 }
 
 /** A document represents one open data file. */
-trait DataSource[S <: Sys[S]] extends DataSourceLike with Mutable[S#ID, S#Tx]
+trait DataSource[S <: Sys[S]] extends DataSourceLike  // Mutable[S#ID, S#Tx]

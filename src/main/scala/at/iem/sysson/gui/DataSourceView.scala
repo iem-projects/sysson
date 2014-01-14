@@ -33,7 +33,8 @@ import de.sciss.lucre.event.Sys
 import impl.{DataSourceViewImpl => Impl}
 
 object DataSourceView {
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx): DataSourceView = Impl(source)
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView =
+    Impl(source)
 }
 trait DataSourceView {
   def document: DataSourceLike

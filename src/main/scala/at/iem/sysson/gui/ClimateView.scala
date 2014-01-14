@@ -33,7 +33,7 @@ import impl.{ClimateViewImpl => Impl}
 
 object ClimateView {
   def apply(document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView =
-    Impl(document, section, xDim, yDim)
+    ??? // Impl(document, section, xDim, yDim)
 
   def currentSection: Option[VariableSection] = Impl.currentSection
 }

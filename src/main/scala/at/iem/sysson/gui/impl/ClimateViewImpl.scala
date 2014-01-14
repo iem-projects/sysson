@@ -58,6 +58,7 @@ import at.iem.sysson.sound.SonificationOLD
 import scala.util.Success
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter, Calendar}
 import ucar.nc2.units.DateFormatter
+import de.sciss.lucre.event.Sys
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -83,46 +84,98 @@ object ClimateViewImpl {
 
   def currentSection: Option[VariableSection] = _currentSection
 
-  def apply(document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension): ClimateView = {
-    val in    = section.file
-    val vm    = in.variableMap
+  def apply[S <: Sys[S]](document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
+           (implicit workspace: Workspace[S], tx: S#Tx): ClimateView = {
+    val data  = document.data(workspace)
+    val view  = new Impl(document, data, section, xDim, yDim)
+    GUI.fromTx(view.guiInit())
+    view
+  }
 
-    var stats = Option.empty[Stats.Variable]
-
-    //    @inline def mkValueString(v: nc2.Variable, d: Double, units: String): String =
-    //      f"$d%1.1f$units"
-
-    // XXX TODO: this should go somewhere else in a utility function
-    def mkUnitsString(v: nc2.Variable): Double => String =
-      v.units.fold((d: Double) => f"$d%1.2f") {
-        case "degrees_north"  => (d: Double) => if (d >= 0) f"$d%1.2f \u00B0N" else f"${-d}%1.2f \u00B0S"
-        case "degrees_east"   => (d: Double) => if (d >= 0) f"$d%1.2f \u00B0E" else f"${-d}%1.2f \u00B0W"
-        case "(0 - 1)"        => (d: Double) => f"${d * 100}%1.1f%%"
-        case "kg m-2 s-1"     => (d: Double) => f"$d%1.2f kg/(m\u00B2s)"
-        case "W m-2"          => (d: Double) => f"$d%1.2f W/m\u00B2"
-        case "m s-1"          => (d: Double) => f"$d%1.2f m/s"
-        case "Pa"             => (d: Double) => f"${d.toInt}%d Pa"
-        case units            =>
-          if (units.startsWith("days since")) {
-            val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(11))
-            (d: Double) => {
-              val dt = date.add(d, CalendarPeriod.Field.Day)
-              CalendarDateFormatter.toDateTimeString(dt)
-            }
-
-          } else if (units.startsWith("hours since")) {
-            val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(12))
-            (d: Double) => {
-              val dt = date.add(d, CalendarPeriod.Field.Hour)
-              CalendarDateFormatter.toDateTimeString(dt)
-            }
-
-          } else {
-            (d: Double) => f"$d%1.2f $units"
+  // XXX TODO: this should go somewhere else in a utility function
+  private def mkUnitsString(v: nc2.Variable): Double => String =
+    v.units.fold((d: Double) => f"$d%1.2f") {
+      case "degrees_north"  => (d: Double) => if (d >= 0) f"$d%1.2f \u00B0N" else f"${-d}%1.2f \u00B0S"
+      case "degrees_east"   => (d: Double) => if (d >= 0) f"$d%1.2f \u00B0E" else f"${-d}%1.2f \u00B0W"
+      case "(0 - 1)"        => (d: Double) => f"${d * 100}%1.1f%%"
+      case "kg m-2 s-1"     => (d: Double) => f"$d%1.2f kg/(m\u00B2s)"
+      case "W m-2"          => (d: Double) => f"$d%1.2f W/m\u00B2"
+      case "m s-1"          => (d: Double) => f"$d%1.2f m/s"
+      case "Pa"             => (d: Double) => f"${d.toInt}%d Pa"
+      case units            =>
+        if (units.startsWith("days since")) {
+          val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(11))
+          (d: Double) => {
+            val dt = date.add(d, CalendarPeriod.Field.Day)
+            CalendarDateFormatter.toDateTimeString(dt)
           }
-      }
 
-    def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
+        } else if (units.startsWith("hours since")) {
+          val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(12))
+          (d: Double) => {
+            val dt = date.add(d, CalendarPeriod.Field.Hour)
+            CalendarDateFormatter.toDateTimeString(dt)
+          }
+
+        } else {
+          (d: Double) => f"$d%1.2f $units"
+        }
+    }
+
+  private def mkValueMarker(red: Reduction) = {
+    val res = new ValueMarker(0, new Color(0x00, 0x00, 0xFF, 0x3F),
+      new BasicStroke(1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 2f, Array[Float](2f, 2f), 0f))
+    red.slider.reactions += {
+      case ValueChanged(_) =>
+        val oldValue  = res.getValue
+        val newValue  = red.slider.value
+        if (newValue != oldValue) res.setValue(newValue)
+    }
+    res
+  }
+
+  private def mkRangeMarker(red: Reduction) = {
+    val res = new IntervalMarker(0, 0, new Color(0x7F, 0x7F, 0x7F, 0x00), new BasicStroke(1f),
+      new Color(0x00, 0x00, 0xFF, 0x00), new BasicStroke(1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 2f,
+        Array[Float](4f, 4f), 0f), 1f)
+    var visible = false
+    red.slider.reactions += {
+      case ValueChanged(_) =>
+        val newVisible = red.slider.rangeVisible
+        if (visible != newVisible) {
+          visible = newVisible
+          res.setOutlinePaint(if (visible) new Color(0x00, 0x00, 0xFF, 0x3F) else new Color(0x00, 0x00, 0xFF, 0x00))
+        }
+        if (visible) {
+          val oldStart            = res.getStartValue
+          val oldEnd              = res.getEndValue
+          val (newStart, newEnd)  = red.slider.range
+          if (newStart != oldStart) res.setStartValue(newStart)
+          if (newEnd   != oldEnd  ) res.setEndValue  (newEnd  )
+        }
+    }
+    res
+  }
+
+  private final class Impl(val document: DataSourceLike, net: nc2.NetcdfFile, val section: VariableSection,
+                           xDim: nc2.Dimension, yDim: nc2.Dimension)
+    extends ClimateView with ComponentHolder[Component] {
+
+    //    models: Map[String, DualRangeSlider],
+    //    chart: JFreeChart, redGroup: Component
+
+    private val red     = section.reducedDimensions.filterNot(d => d == yDim || d == xDim)
+    private val width   = xDim.size
+    private val height  = yDim.size
+
+    private val in      = section.file
+    private val vm      = in.variableMap
+
+    private var stats   = Option.empty[Stats.Variable]
+
+    private val data    = new MyMatrix(width, height)
+
+    private def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
       vm.get(dim.name) match {
         case Some(v) if v.isFloat =>
           val dat = v.readSafe().float1D
@@ -137,97 +190,31 @@ object ClimateViewImpl {
         case _ => (i: Int) => i.toString
       }
 
-    //    val yDim     = section.dimensions.find { d =>
-    //      d.name.flatMap(in.variableMap.get _).flatMap(_.units) == Some("degrees_north")
-    //    } getOrElse sys.error("Did not find latitude dimension")
-    //    val xDim     = section.dimensions.find { d =>
-    //      d.name.flatMap(in.variableMap.get _).flatMap(_.units) == Some("degrees_east")
-    //    } getOrElse sys.error("Did not find longitude dimension")
-
-    val red     = section.reducedDimensions.filterNot(d => d == yDim || d == xDim)
-    val width   = xDim.size
-    val height  = yDim.size
-
-    val data   = new MyMatrix(width, height)
-
-    //    @inline def time() = System.currentTimeMillis()
-
-    def updateData(): Unit = {
-      // the indices in each reduction dimension currently selected
-      val secIndices = redGUI.map(_.slider.value)
-
-      // producing the following 2-dimensional section
-      val sec = (red zip secIndices).foldLeft(section) { case (res, (d, idx)) =>
-        res in d.name select idx
-      }
-      // this variable can be read by the interpreter
-      _currentSection = Some(sec)
-
-      // read the raw data
-      val arr0 = sec.readSafe().float1D
-
-      // if the statistics are available, normalize according to checkboxes,
-      // otherwise normalize across the current frame.
-      val arr = stats match {
-        case Some(s) =>
-          // the names and indices of the dimensions which should be normalized
-          val normDims = redGUI.collect {
-            case r if r.norm.selected => r.name -> r.dim
-          }
-          // the minimum and maximum across the selected dimensions
-          // (or total min/max if there aren't any dimensions checked)
-          val (min, max) = if (normDims.isEmpty) s.total.min -> s.total.max else {
-            val counts = normDims.flatMap { case (name, idx) => s.slices.get(name).map(_.apply(secIndices(idx))) }
-            counts match {
-              case head +: tail => tail.foldLeft(head.min -> head.max) {
-                case ((_min, _max), c) => math.max(_min, c.min) -> math.min(_max, c.max)
+    private def spawnStats(): Unit = {
+      // get the statistics from the cache manager
+      import Stats.executionContext
+      Stats.get(in).onSuccess {
+        case Stats(map) => GUI.defer {
+          // see if stats are available for the plotted variable
+          val s = map.get(section.name)
+          if (s.isDefined) {
+            stats = s
+            updateData()  // repaint with user defined normalization
+            // enable the user definable normalization (checkboxes)
+            redGUI.zipWithIndex.foreach { case (r, idx) =>
+              r.norm.selected = false
+              r.norm.enabled  = true
+              r.norm.listenTo(r.norm)
+              r.norm.reactions += {
+                case ButtonClicked(_) => updateData()
               }
-              case _ => s.total.min -> s.total.max
-            }
-          }
-          // println(s"min = $min, max = $max")
-          arr0.linlin(min, max, sec.variable.fillValue)(0.0, 1.0)
-
-        case _ => // no stats available yet, normalize current frame
-          arr0.normalize(sec.variable.fillValue)
-      }
-
-      // fill the JFreeChart data matrix
-      var x = 0; while(x < width) {
-        var y = 0; while(y < height) {
-          val z = arr(y * width + x)
-          // data.setZValue(x, y, z)
-          // data.update(y, x, z)
-          data.put(x, y, z)
-        y += 1 }
-      x += 1 }
-      // notify JFreeChart of the change, so it repaints the plot
-      data.fireSeriesChanged()
-    }
-
-    // get the statistics from the cache manager
-    import Stats.executionContext
-    Stats.get(in).onSuccess {
-      case Stats(map) => GUI.defer {
-        // see if stats are available for the plotted variable
-        val s = map.get(section.name)
-        if (s.isDefined) {
-          stats = s
-          updateData()  // repaint with user defined normalization
-          // enable the user definable normalization (checkboxes)
-          redGUI.zipWithIndex.foreach { case (r, idx) =>
-            r.norm.selected = false
-            r.norm.enabled  = true
-            r.norm.listenTo(r.norm)
-            r.norm.reactions += {
-              case ButtonClicked(_) => updateData()
             }
           }
         }
       }
     }
 
-    def mkReduction(dim: nc2.Dimension, idx: Int, update: Boolean): Reduction = {
+    private def mkReduction(dim: nc2.Dimension, idx: Int, update: Boolean): Reduction = {
       val norm  = new CheckBox {
         enabled   = false
         selected  = true
@@ -286,39 +273,7 @@ object ClimateViewImpl {
       new Reduction(name, idx, norm, lb, sl, sp, curr)
     }
 
-    lazy val redGUI: Vec[Reduction] = red.zipWithIndex.map { case (d, idx) =>
-      mkReduction(d, idx, update = true)
-    }
-
-    // this is all pretty ugly XXX TODO
-    val xDimRed = mkReduction(xDim, -1, update = false)
-    val yDimRed = mkReduction(yDim, -1, update = false)
-
-    lazy val redGUIAll = xDimRed +: yDimRed +: redGUI
-
-    val redGroup  = new GroupPanel {
-      theHorizontalLayout is Sequential(
-        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.norm      )): _*),
-        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.nameLabel )): _*),
-        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.slider    )): _*),
-        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.index     )): _*),
-        Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.valueLabel)): _*)
-      )
-
-      theVerticalLayout is Sequential(
-        redGUIAll.map { r =>
-          Parallel(Center)(r.norm, r.nameLabel, r.slider, r.index, r.valueLabel): InGroup[GroupLayout#SequentialGroup]
-        }: _*
-      )
-    }
-
-    updateData()
-
-    val renderer  = new XYBlockRenderer()
-    //    val scale     = new GrayPaintScale(0.0, 1.0)
-    renderer.setPaintScale(intensityScale)
-
-    def createAxis(dim: nc2.Dimension): NumberAxis = {
+    private def createAxis(dim: nc2.Dimension): NumberAxis = {
       val name  = dim.name
       val nameC = name.capitalize
       val res   = vm.get(name) match {
@@ -338,107 +293,228 @@ object ClimateViewImpl {
       res
     }
 
-    val xAxis     = createAxis(xDim)
-    val yAxis     = createAxis(yDim)
-    val coll      = new MatrixSeriesCollection(data)
-    val plot      = new XYPlot(coll, xAxis, yAxis, renderer)
+    private def updateData(): Unit = {
+      // the indices in each reduction dimension currently selected
+      val secIndices = redGUI.map(_.slider.value)
 
-    def mkValueMarker(red: Reduction) = {
-      val res = new ValueMarker(0, new Color(0x00, 0x00, 0xFF, 0x3F),
-        new BasicStroke(1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 2f, Array[Float](2f, 2f), 0f))
-      red.slider.reactions += {
-        case ValueChanged(_) =>
-          val oldValue  = res.getValue
-          val newValue  = red.slider.value
-          if (newValue != oldValue) res.setValue(newValue)
+      // producing the following 2-dimensional section
+      val sec = (red zip secIndices).foldLeft(section) { case (res, (d, idx)) =>
+        res in d.name select idx
       }
-      res
+      // this variable can be read by the interpreter
+      _currentSection = Some(sec)
+
+      // read the raw data
+      val arr0 = sec.readSafe().float1D
+
+      // if the statistics are available, normalize according to checkboxes,
+      // otherwise normalize across the current frame.
+      val arr = stats match {
+        case Some(s) =>
+          // the names and indices of the dimensions which should be normalized
+          val normDims = redGUI.collect {
+            case r if r.norm.selected => r.name -> r.dim
+          }
+          // the minimum and maximum across the selected dimensions
+          // (or total min/max if there aren't any dimensions checked)
+          val (min, max) = if (normDims.isEmpty) s.total.min -> s.total.max else {
+            val counts = normDims.flatMap { case (name, idx) => s.slices.get(name).map(_.apply(secIndices(idx))) }
+            counts match {
+              case head +: tail => tail.foldLeft(head.min -> head.max) {
+                case ((_min, _max), c) => math.max(_min, c.min) -> math.min(_max, c.max)
+              }
+              case _ => s.total.min -> s.total.max
+            }
+          }
+          // println(s"min = $min, max = $max")
+          arr0.linlin(min, max, sec.variable.fillValue)(0.0, 1.0)
+
+        case _ => // no stats available yet, normalize current frame
+          arr0.normalize(sec.variable.fillValue)
+      }
+
+      // fill the JFreeChart data matrix
+      var x = 0; while(x < width) {
+        var y = 0; while(y < height) {
+          val z = arr(y * width + x)
+          // data.setZValue(x, y, z)
+          // data.update(y, x, z)
+          data.put(x, y, z)
+          y += 1 }
+        x += 1 }
+      // notify JFreeChart of the change, so it repaints the plot
+      data.fireSeriesChanged()
     }
 
-    def mkRangeMarker(red: Reduction) = {
-      val res = new IntervalMarker(0, 0, new Color(0x7F, 0x7F, 0x7F, 0x00), new BasicStroke(1f),
-        new Color(0x00, 0x00, 0xFF, 0x00), new BasicStroke(1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 2f,
-          Array[Float](4f, 4f), 0f), 1f)
-      var visible = false
-      red.slider.reactions += {
-        case ValueChanged(_) =>
-          val newVisible = red.slider.rangeVisible
-          if (visible != newVisible) {
-            visible = newVisible
-            res.setOutlinePaint(if (visible) new Color(0x00, 0x00, 0xFF, 0x3F) else new Color(0x00, 0x00, 0xFF, 0x00))
-          }
-          if (visible) {
-            val oldStart            = res.getStartValue
-            val oldEnd              = res.getEndValue
-            val (newStart, newEnd)  = red.slider.range
-            if (newStart != oldStart) res.setStartValue(newStart)
-            if (newEnd   != oldEnd  ) res.setEndValue  (newEnd  )
-          }
-      }
-      res
-    }
+    private var models: Map[String, DualRangeSlider] = _
 
-    val xmValue = mkValueMarker(xDimRed)
-    val ymValue = mkValueMarker(yDimRed)
-    val xmRange = mkRangeMarker(xDimRed)
-    val ymRange = mkRangeMarker(yDimRed)
-
-    plot.addDomainMarker(xmValue)
-    plot.addRangeMarker (ymValue)
-    plot.addDomainMarker(xmRange)
-    plot.addRangeMarker (ymRange)
-
-    plot.setBackgroundPaint(Color.lightGray)
-    plot.setDomainGridlinesVisible(false)
-    plot.setRangeGridlinePaint(Color.white)
-    val chart     = new JFreeChart(section.variable.description.getOrElse(section.variable.name), plot)
-    chart.removeLegend()
-    chart.setBackgroundPaint(Color.white)
-
-    //    val xDimGUI = new FlowPanel(xDimRed.nameLabel, xDimRed.slider, xDimRed.index, xDimRed.valueLabel)
-    //    val yDimGUI = new FlowPanel(yDimRed.nameLabel, yDimRed.slider, yDimRed.index, yDimRed.valueLabel)
-    //    val dimPanel = new BoxPanel(Orientation.Vertical) {
-    //      contents += xDimGUI
-    //      contents += yDimGUI
-    //      contents += redGroup
-    //    }
-
-    val models: Map[String, DualRangeSlider] = redGUIAll.map(r => r.name -> r.slider)(breakOut)
-
-    val view    = new Impl(document, section, models, chart, /* dimPanel */ redGroup)
-    view
-  }
-
-  private final class Impl(val document: DataSourceLike, val section: VariableSection, models: Map[String, DualRangeSlider],
-                           chart: JFreeChart, redGroup: Component)
-    extends ClimateView {
-
-    private val main        = new ChartPanel(chart)
-
-    private val pSonif      = new BoxPanel(Orientation.Horizontal)
-    private val ggSonifName = new TextField(16)
-    ggSonifName.maximumSize = ggSonifName.preferredSize
-    ggSonifName.editable    = false
-    ggSonifName.peer.putClientProperty("JComponent.sizeVariant", "small")
-    private val pUserValues = new BoxPanel(Orientation.Horizontal)  // cannot nest!: new FlowPanel()
-
-    private var playing     = Option.empty[Future[Synth]]
+    private var redGUI: Vec[Reduction] = _
 
     private var userValues  = Map.empty[String, SpinnerNumberModel]
 
-    private val transport   = Transport.makeButtonStrip {
-      import Transport._
-      Seq(
-        GoToBegin {
-          rtz()
-        },
-        Stop {
-          stop()
-        },
-        Play {
-          play()
+    private var ggSonifName: TextField = _
+
+    private var playing     = Option.empty[Future[Synth]]
+
+    private var ggBusy: ProgressBar = _
+
+    private var transport: Component with Transport.ButtonStrip = _
+
+    private var pUserValues: BoxPanel = _
+
+    private var pSonif2: BoxPanel = _
+
+    def guiInit(): Unit = {
+      GUI.requireEDT()
+      spawnStats()
+
+      // this is all pretty ugly XXX TODO
+      val xDimRed = mkReduction(xDim, -1, update = false)
+      val yDimRed = mkReduction(yDim, -1, update = false)
+
+      redGUI = red.zipWithIndex.map { case (d, idx) =>
+        mkReduction(d, idx, update = true)
+      }
+
+      lazy val redGUIAll = xDimRed +: yDimRed +: redGUI
+
+      val redGroup  = new GroupPanel {
+        theHorizontalLayout is Sequential(
+          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.norm      )): _*),
+          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.nameLabel )): _*),
+          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.slider    )): _*),
+          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.index     )): _*),
+          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.valueLabel)): _*)
+        )
+
+        theVerticalLayout is Sequential(
+          redGUIAll.map { r =>
+            Parallel(Center)(r.norm, r.nameLabel, r.slider, r.index, r.valueLabel): InGroup[GroupLayout#SequentialGroup]
+          }: _*
+        )
+      }
+
+      updateData()
+
+      val renderer  = new XYBlockRenderer()
+      //    val scale     = new GrayPaintScale(0.0, 1.0)
+      renderer.setPaintScale(intensityScale)
+
+      val xAxis     = createAxis(xDim)
+      val yAxis     = createAxis(yDim)
+      val coll      = new MatrixSeriesCollection(data)
+      val plot      = new XYPlot(coll, xAxis, yAxis, renderer)
+
+      val xmValue = mkValueMarker(xDimRed)
+      val ymValue = mkValueMarker(yDimRed)
+      val xmRange = mkRangeMarker(xDimRed)
+      val ymRange = mkRangeMarker(yDimRed)
+
+      plot.addDomainMarker(xmValue)
+      plot.addRangeMarker (ymValue)
+      plot.addDomainMarker(xmRange)
+      plot.addRangeMarker (ymRange)
+
+      plot.setBackgroundPaint(Color.lightGray)
+      plot.setDomainGridlinesVisible(false)
+      plot.setRangeGridlinePaint(Color.white)
+      val chart     = new JFreeChart(section.variable.description.getOrElse(section.variable.name), plot)
+      chart.removeLegend()
+      chart.setBackgroundPaint(Color.white)
+
+      models = redGUIAll.map(r => r.name -> r.slider)(breakOut)
+
+      val main        = new ChartPanel(chart)
+
+      val pSonif      = new BoxPanel(Orientation.Horizontal)
+      ggSonifName     = new TextField(16)
+      ggSonifName.maximumSize = ggSonifName.preferredSize
+      ggSonifName.editable    = false
+      ggSonifName.peer.putClientProperty("JComponent.sizeVariant", "small")
+      pUserValues = new BoxPanel(Orientation.Horizontal)  // cannot nest!: new FlowPanel()
+
+      transport   = Transport.makeButtonStrip {
+        import Transport._
+        Seq(
+          GoToBegin {
+            rtz()
+          },
+          Stop {
+            stop()
+          },
+          Play {
+            play()
+          }
+        )
+      }
+
+      ggBusy = mkIndetProgress()
+
+      pSonif2     = new BoxPanel(Orientation.Horizontal) {
+        contents += ggSonifName
+        contents += transport
+        contents += pUserValues
+      }
+      pSonif2.visible         = false
+
+      val butSonif    = new Button(null: String)
+      butSonif.icon           = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
+      butSonif.focusable      = false
+      butSonif.tooltip        = "Drop Sonification Patch From the Library Here"
+
+      pSonif.contents += butSonif
+      pSonif.contents += new OverlayPanel {
+        contents += RigidBox(ggBusy.preferredSize)
+        contents += ggBusy
+      }
+      pSonif.contents += pSonif2
+
+      butSonif.peer.setTransferHandler(new TransferHandler(null) {
+        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
+        override def canImport(support: TransferSupport): Boolean = {
+          val res =
+            if (support.isDataFlavorSupported(LibraryNodeFlavor) &&
+              ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
+              support.setDropAction(TransferHandler.LINK)
+              true
+            } else
+              false
+
+          // println(s"canImport? $res")
+          res
         }
-      )
+
+        override def importData(support: TransferSupport): Boolean = {
+          val t           = support.getTransferable
+          // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
+          val drag      = t.getTransferData(LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
+          val sourceOpt = drag.cursor.step { implicit tx =>
+            drag.node() match {
+              case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
+              case _ => None
+            }
+          }
+          sourceOpt.exists { case source =>
+            import ExecutionContext.Implicits.global
+            val fut         = Library.compile(source)
+            ggBusy.visible  = true
+            fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
+            fut.foreach { p => patch = Some(p) }
+            true
+          }
+        }
+      })
+
+      component = new BorderPanel {
+        add(Component.wrap(main), BorderPanel.Position.Center)
+        add(new BorderPanel {
+          add(redGroup, BorderPanel.Position.Center)
+          add(pSonif  , BorderPanel.Position.South )
+        }, BorderPanel.Position.South)
+      }
+
+      // ---- constructor ----
+      markPlayStop(playing = false)
     }
 
     private def mkIndetProgress() = new ProgressBar {
@@ -446,36 +522,6 @@ object ClimateViewImpl {
       indeterminate = true
       preferredSize = (24, 24)
       peer.putClientProperty("JProgressBar.style", "circular")
-    }
-
-    private val ggBusy  = mkIndetProgress()
-
-    //private val pSonif2     = new FlowPanel(ggSonifName, transport, pUserValues)
-    private val pSonif2     = new BoxPanel(Orientation.Horizontal) {
-      contents += ggSonifName
-      contents += transport
-      contents += pUserValues
-    }
-    pSonif2.visible         = false
-
-    private val butSonif    = new Button(null: String)
-    butSonif.icon           = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
-    butSonif.focusable      = false
-    butSonif.tooltip        = "Drop Sonification Patch From the Library Here"
-
-    pSonif.contents += butSonif
-    pSonif.contents += new OverlayPanel {
-      contents += RigidBox(ggBusy.preferredSize)
-      contents += ggBusy
-    }
-    pSonif.contents += pSonif2
-
-    val component = new BorderPanel {
-      add(Component.wrap(main), BorderPanel.Position.Center)
-      add(new BorderPanel {
-        add(redGroup, BorderPanel.Position.Center)
-        add(pSonif  , BorderPanel.Position.South )
-      }, BorderPanel.Position.South)
     }
 
     private var _patch = Option.empty[PatchOLD]
@@ -489,7 +535,7 @@ object ClimateViewImpl {
         son.variableMap += SonificationOLD.DefaultVariable -> section
         models.foreach { case (key, model) =>
           val (start, end) = model.range
-          val section = document.variableMap(key) in key select (start to end)
+          val section = net.variableMap(key) in key select (start to end)
           son.variableMap += key -> section
         }
         userValues.foreach { case (key, model) =>
@@ -556,7 +602,7 @@ object ClimateViewImpl {
             case SelectedValue(v) => v
           }
           // val docVars = document.data.variables
-          val docVars = section.dimensions.flatMap(d => document.variableMap.get(d.name))
+          val docVars = section.dimensions.flatMap(d => net.variableMap.get(d.name))
           val (foundVars, missingVars) = interactiveVars.map(v => v -> v.find(docVars).map(_.name))
             .partition(_._2.isDefined)
           if (missingVars.nonEmpty) {
@@ -609,44 +655,5 @@ object ClimateViewImpl {
       }
       _patch = value
     }
-
-    butSonif.peer.setTransferHandler(new TransferHandler(null) {
-      // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
-      override def canImport(support: TransferSupport): Boolean = {
-        val res =
-          if (support.isDataFlavorSupported(LibraryNodeFlavor) &&
-           ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
-          support.setDropAction(TransferHandler.LINK)
-          true
-        } else
-          false
-
-        // println(s"canImport? $res")
-        res
-      }
-
-      override def importData(support: TransferSupport): Boolean = {
-        val t           = support.getTransferable
-        // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
-        val drag      = t.getTransferData(LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
-        val sourceOpt = drag.cursor.step { implicit tx =>
-          drag.node() match {
-            case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
-            case _ => None
-          }
-        }
-        sourceOpt.exists { case source =>
-          import ExecutionContext.Implicits.global
-          val fut         = Library.compile(source)
-          ggBusy.visible  = true
-          fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
-          fut.foreach { p => patch = Some(p) }
-          true
-        }
-      }
-    })
-
-    // ---- constructor ----
-    markPlayStop(playing = false)
   }
 }

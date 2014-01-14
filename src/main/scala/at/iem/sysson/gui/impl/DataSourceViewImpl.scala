@@ -47,8 +47,9 @@ import de.sciss.lucre.event.Sys
 object DataSourceViewImpl {
   import Implicits._
 
-  def apply[S <: Sys[S]](doc: DataSource[S])(implicit tx: S#Tx): DataSourceView with Disposable = {
-    val res = new Impl(doc)
+  def apply[S <: Sys[S]](doc: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView with Disposable = {
+    val data  = doc.data(workspace)
+    val res   = new Impl(doc, data)
     GUI.fromTx(res.guiInit())
     res
   }
@@ -137,7 +138,7 @@ object DataSourceViewImpl {
     }
   }
 
-  private final class Impl(val document: DataSourceLike)
+  private final class Impl(val document: DataSourceLike, data: nc2.NetcdfFile)
     extends DataSourceView with Disposable with ComponentHolder[Component] {
 
     impl =>
@@ -157,7 +158,7 @@ object DataSourceViewImpl {
     def guiInit(): Unit = {
       GUI.requireEDT()
 
-      val mGroups = new GroupModel(document.data.rootGroup)
+      val mGroups = new GroupModel(data.rootGroup)
       tGroups = new Tree(mGroups) {
         selection.mode = Tree.SelectionMode.Single
         renderer = Tree.Renderer.wrap(GroupRenderer)
