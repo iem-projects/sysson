@@ -22,7 +22,7 @@ object Patch {
   // ---- event types ----
 
   /** An update is a sequence of changes */
-  final case class Update[S <: Sys[S]](proc: Patch[S], changes: Vec[Change[S]])
+  final case class Update[S <: Sys[S]](patch: Patch[S], changes: Vec[Change[S]])
 
   /** A change is either a state change, or a scan or a grapheme change */
   sealed trait Change[S <: Sys[S]]

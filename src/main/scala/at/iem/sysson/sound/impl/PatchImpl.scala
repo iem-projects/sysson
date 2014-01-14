@@ -5,12 +5,9 @@ package impl
 import de.sciss.lucre.data.SkipList
 import de.sciss.lucre.{event => evt}
 import evt.{InMemory, Sys, Event}
-import de.sciss.synth.proc.impl.KeyMapImpl
-import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
-import de.sciss.synth.proc.{SynthGraphs, Attributes, Attribute}
-import de.sciss.synth.proc
+import de.sciss.serial.{DataOutput, DataInput}
+import de.sciss.synth.proc.{SynthGraphs, Attribute}
 import scala.annotation.switch
-import scala.collection.breakOut
 import at.iem.sysson.sound.Patch.AttributeKey
 import language.higherKinds
 
@@ -32,98 +29,25 @@ object PatchImpl {
       new Read[S](in, access, targets)
   }
 
-  private type AttributeEntry[S <: Sys[S]] = KeyMapImpl.Entry[S, String, Attribute[S], Attribute.Update[S]]
-
-  private type I = InMemory
-
-  implicit def attributeEntryInfo[S <: Sys[S]]: KeyMapImpl.ValueInfo[S, String, Attribute[S], Attribute.Update[S]] =
-    anyAttributeEntryInfo.asInstanceOf[KeyMapImpl.ValueInfo[S, String, Attribute[S], Attribute.Update[S]]]
-
-  private val anyAttributeEntryInfo = new KeyMapImpl.ValueInfo[I, String, Attribute[I], Attribute.Update[I]] {
-    def valueEvent(value: Attribute[I]) = value.changed
-
-    val keySerializer   = ImmutableSerializer.String
-    val valueSerializer = Attribute.serializer[I]
-  }
-
-  private sealed trait Impl[S <: Sys[S]] extends Patch[S] {
+  private sealed trait Impl[S <: Sys[S]] extends Patch[S] with HasAttributes[S, Patch[S]] {
     patch =>
 
-    protected def attributeMap: SkipList.Map[S, String, AttributeEntry[S]]
+    type Update       = Patch.Update[S]
+    type Change       = Patch.Change[S]
+    type StateChange  = Patch.StateChange[S]
 
-    // ---- key maps ----
+    final protected def reader: evt.Reader[S, Patch[S]] = PatchImpl.serializer
 
-    sealed trait PatchEvent {
-      final protected def reader: evt.Reader[S, Patch[S]] = PatchImpl.serializer
-      final def node: Patch[S] with evt.Node[S] = patch
-    }
+    final protected def AssociationAdded  (key: String) = Patch.AssociationAdded  [S](AttributeKey(key))
+    final protected def AssociationRemoved(key: String) = Patch.AssociationRemoved[S](AttributeKey(key))
+    final protected def AttributeChange   (key: String, u: Attribute.Update[S]) = Patch.AttributeChange(key, u.element, u.change)
 
-    sealed trait KeyMap[Value, ValueUpd, OuterUpd]
-      extends evt.impl.EventImpl [S, OuterUpd, Patch[S]]
-      with evt.InvariantEvent    [S, OuterUpd, Patch[S]]
-      with PatchEvent
-      with proc.impl.KeyMapImpl[S, String, Value, ValueUpd] {
-      protected def wrapKey(key: String): Patch.AssociativeKey
-
-      // ---- keymapimpl details ----
-
-      final protected def fire(added: Set[String], removed: Set[String])(implicit tx: S#Tx): Unit = {
-        val seqAdd: Vec[Patch.StateChange[S]] = added  .map(key => Patch.AssociationAdded  [S](wrapKey(key)))(breakOut)
-        val seqRem: Vec[Patch.StateChange[S]] = removed.map(key => Patch.AssociationRemoved[S](wrapKey(key)))(breakOut)
-        // convention: first the removals, then the additions. thus, overwriting a key yields
-        // successive removal and addition of the same key.
-        val seq = if (seqAdd.isEmpty) seqRem else if (seqRem.isEmpty) seqAdd else seqRem ++ seqAdd
-
-        StateEvent(Patch.Update(patch, seq))
-      }
-
-      final protected def isConnected(implicit tx: S#Tx): Boolean = patch.targets.nonEmpty
-    }
-
-    object attributes extends Attributes.Modifiable[S] with KeyMap[Attribute[S], Attribute.Update[S], Patch.Update[S]] {
-      final val slot = 0
-
-      protected def wrapKey(key: String) = AttributeKey(key)
-
-      def put(key: String, value: Attribute[S])(implicit tx: S#Tx): Unit = add(key, value)
-
-      def contains(key: String)(implicit tx: S#Tx): Boolean = map.contains(key)
-
-      def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Patch.Update[S]] = {
-        val changes = foldUpdate(pull)
-        if (changes.isEmpty) None
-        else Some(Patch.Update(patch,
-          changes.map({
-            case (key, u) => Patch.AttributeChange(key, u.element, u.change)
-          })(breakOut)))
-      }
-
-      protected def map: SkipList.Map[S, String, Entry] = attributeMap
-
-      protected def valueInfo = attributeEntryInfo[S]
-
-      def apply[Attr[~ <: Sys[~]] <: Attribute[_]](key: String)(implicit tx: S#Tx,
-                                                                tag: reflect.ClassTag[Attr[S]]): Option[Attr[S]#Peer] =
-        get(key) match {
-          // cf. stackoverflow #16377741
-          case Some(attr) => tag.unapply(attr).map(_.peer) // Some(attr.peer)
-          case _          => None
-        }
-    }
-
-    private object StateEvent
-      extends evt.impl.TriggerImpl[S, Patch.Update[S], Patch[S]]
-      with evt.InvariantEvent     [S, Patch.Update[S], Patch[S]]
-      with evt.impl.Root          [S, Patch.Update[S]]
-      with PatchEvent {
-
-      final val slot = 2
-    }
+    final protected def Update(changes: Vec[Change]) = Patch.Update(patch, changes)
 
     object changed
-      extends evt.impl.EventImpl[S, Patch.Update[S], Patch[S]]
-      with evt.InvariantEvent   [S, Patch.Update[S], Patch[S]]
-      with PatchEvent {
+      extends evt.impl.EventImpl[S, Update, Patch[S]]
+      with evt.InvariantEvent   [S, Update, Patch[S]]
+      with SelfEvent {
 
       final val slot = 3
 
@@ -138,14 +62,14 @@ object PatchImpl {
         StateEvent    -/-> this
       }
 
-      def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Patch.Update[S]] = {
+      def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Update] = {
         // val graphOpt = if (graphemes .isSource(pull)) graphemes .pullUpdate(pull) else None
         val graphCh  = graph.changed
         val graphOpt = if (pull.contains(graphCh   )) pull(graphCh   ) else None
         val attrOpt  = if (pull.contains(attributes)) pull(attributes) else None
         val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
 
-        val seq0 = graphOpt.fold(Vec.empty[Patch.Change[S]]) { u =>
+        val seq0 = graphOpt.fold(Vec.empty[Change]) { u =>
           Vec(Patch.GraphChange(u))
         }
         val seq1 = attrOpt.fold(seq0) { u =>
@@ -154,7 +78,7 @@ object PatchImpl {
         val seq3 = stateOpt.fold(seq1) { u =>
           if (seq1.isEmpty) u.changes else seq1 ++ u.changes
         }
-        if (seq3.isEmpty) None else Some(Patch.Update(patch, seq3))
+        if (seq3.isEmpty) None else Some(Update(seq3))
       }
     }
 
@@ -178,10 +102,12 @@ object PatchImpl {
     override def toString() = "Patch" + id
   }
 
+  import HasAttributes.attributeEntryInfo
+
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
     protected val targets       = evt.Targets[S](tx0)
     val graph                   = SynthGraphs.newVar(SynthGraphs.empty)
-    protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry[S]]
+    protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry]
   }
 
   private final class Read[S <: Sys[S]](in: DataInput, access: S#Acc, protected val targets: evt.Targets[S])
@@ -194,6 +120,6 @@ object PatchImpl {
     }
 
     val graph                   = SynthGraphs.readVar(in, access)
-    protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry[S]](in, access)
+    protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry](in, access)
   }
 }

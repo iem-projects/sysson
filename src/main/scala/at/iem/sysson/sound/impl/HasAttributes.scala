@@ -29,14 +29,13 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
 
   // ---- abstract ----
 
-  type Update
-  type Change
-  type StateChange <: Change
+  protected type Update
+  protected type Change
 
-  def Update(changes: Vec[Change]): Update
-  def AssociationAdded  (key: String): StateChange
-  def AssociationRemoved(key: String): StateChange
-  def AttributeChange   (key: String, u: Attribute.Update[S]): StateChange
+  protected def Update(changes: Vec[Change]): Update
+  protected def AssociationAdded  (key: String): Change
+  protected def AssociationRemoved(key: String): Change
+  protected def AttributeChange   (key: String, u: Attribute.Update[S]): Change
 
   protected def reader: evt.Reader[S, Repr]
 
@@ -45,9 +44,9 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
   // ---- impl ----
   import HasAttributes.attributeEntryInfo
 
-  private type AttributeEntry = KeyMapImpl.Entry[S, String, Attribute[S], Attribute.Update[S]]
+  protected type AttributeEntry = KeyMapImpl.Entry[S, String, Attribute[S], Attribute.Update[S]]
 
-  sealed trait SelfEvent {
+  /* sealed */ protected trait SelfEvent {
     final protected def reader: evt.Reader[S, Repr] = self.reader
     final def node: Repr = self
   }
@@ -61,8 +60,8 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
     // ---- keymapimpl details ----
 
     final protected def fire(added: Set[String], removed: Set[String])(implicit tx: S#Tx): Unit = {
-      val seqAdd: Vec[StateChange] = added  .map(key => AssociationAdded  (key))(breakOut)
-      val seqRem: Vec[StateChange] = removed.map(key => AssociationRemoved(key))(breakOut)
+      val seqAdd: Vec[Change] = added  .map(key => AssociationAdded  (key))(breakOut)
+      val seqRem: Vec[Change] = removed.map(key => AssociationRemoved(key))(breakOut)
       // convention: first the removals, then the additions. thus, overwriting a key yields
       // successive removal and addition of the same key.
       val seq = if (seqAdd.isEmpty) seqRem else if (seqRem.isEmpty) seqAdd else seqRem ++ seqAdd
@@ -102,7 +101,7 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
       }
   }
 
-  private object StateEvent
+  protected object StateEvent
     extends evt.impl.TriggerImpl[S, Update, Repr]
     with evt.InvariantEvent     [S, Update, Repr]
     with evt.impl.Root          [S, Update]
