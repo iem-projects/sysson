@@ -3,9 +3,9 @@ package sound
 package impl
 
 import de.sciss.lucre.{event => evt, expr}
-import de.sciss.lucre.event.{Reader, Pull, EventLike, InMemory, Event, Sys}
+import de.sciss.lucre.event.{Pull, EventLike, InMemory, Event, Sys}
 import at.iem.sysson.sound.Sonification.{Source, AttributeKey}
-import de.sciss.synth.proc.{ExprImplicits, Attribute}
+import de.sciss.synth.proc.Attribute
 import scala.annotation.switch
 import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.data.SkipList
@@ -15,6 +15,10 @@ import de.sciss.lucre.synth.expr.Strings
 
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"
+
+  private def sourceSerializer[S <: Sys[S]]: evt.NodeSerializer[S, Source[S]] = anySourceSer.asInstanceOf[SourceSer[S]]
+
+  private val anySourceSer = new SourceSer[evt.InMemory]
 
   private final class SourceSer[S <: Sys[S]] extends evt.NodeSerializer[S, Source[S]] {
     def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Source[S] = {
@@ -48,7 +52,7 @@ object SonificationImpl {
 
     def changed: EventLike[S, Source.Update[S]] = this
 
-    protected def reader: Reader[S, Source[S]] = ???
+    protected def reader: evt.Reader[S, Source[S]] = sourceSerializer
 
     def pullUpdate(pull: Pull[S])(implicit tx: S#Tx): Option[Source.Update[S]] =
       pull(dims.changed).map { u =>
