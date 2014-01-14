@@ -28,7 +28,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import scala.swing.{Button, Swing, TabbedPane, FlowPanel, Component, BoxPanel, Orientation, Action}
+import scala.swing.{ProgressBar, Button, Swing, TabbedPane, FlowPanel, Component, BoxPanel, Orientation, Action}
 import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
 import de.sciss.desktop.{UndoManager, FileDialog, Window}
 import de.sciss.file._
@@ -40,7 +40,9 @@ import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoa
 import javax.swing.{TransferHandler, ImageIcon}
 import javax.swing.TransferHandler.TransferSupport
 import scala.concurrent.ExecutionContext
-import at.iem.sysson.sound.{Sonification, SonificationSpec}
+import at.iem.sysson.sound.{Keys, Sonification, SonificationSpec}
+import de.sciss.synth.proc.{Attribute, ExprImplicits}
+import de.sciss.lucre.synth.expr.Strings
 
 object WorkspaceViewImpl {
   import Implicits._
@@ -67,8 +69,9 @@ object WorkspaceViewImpl {
   private final val txtRemoveDataSource = "Remove Data Source"
   private final val txtViewDataSource   = "View Data Source"
 
-  private final val txtRemoveSonficSpec = "Remove Sonification Specification"
-  private final val txtViewSonifSpec    = "View Sonification Specification"
+  private final val txtAddSonif         = "Add Sonification"
+  private final val txtRemoveSonif      = "Remove Sonification"
+  private final val txtViewSonif        = "View Sonification"
 
   private final class Impl[S <: Sys[S]](val undoManager: UndoManager, 
                                         dataSources  : ListView[S, DataSource  [S], Unit],
@@ -147,6 +150,12 @@ object WorkspaceViewImpl {
       override def getPresentationName = txtRemoveDataSource
     }
 
+    private class EditInsertSonification(index: Int, childH: stm.Source[S#Tx, Sonification[S]])
+      extends EditNode(true, workspace.sonifications(_), index, childH) {
+
+      override def getPresentationName = txtAddSonif
+    }
+
     def openSourceDialog(): Unit = {
       val dlg = FileDialog.open(title = txtAddDataSource)
       dlg.setFilter(util.NetCdfFileFilter)
@@ -161,6 +170,23 @@ object WorkspaceViewImpl {
         }
         undoManager.add(edit)
       }
+    }
+
+    // creates and adds a Sonification instance
+    def addSonification(patch: PatchOLD): Unit = {
+      val imp   = ExprImplicits[S]
+      import imp._
+      val edit = cursor.step { implicit tx =>
+        val idx   = workspace.sonifications.size
+        val sonif = Sonification[S]
+        sonif.patch.graph() = patch.graph
+        sonif.attributes.put(Keys.attrName, Attribute.String.apply(Strings.newVar(patch.name)))
+        val childH  = tx.newHandle(sonif)
+        val _edit   = new EditInsertSonification(idx, childH)
+        _edit.perform()
+        _edit
+      }
+      undoManager.add(edit)
     }
 
     def guiInit(): Unit = {
@@ -258,6 +284,8 @@ object WorkspaceViewImpl {
       butSonif.focusable  = false
       butSonif.tooltip    = "Drop Sonification Patch From the Library Here"
 
+      val ggBusy          = new SpinningProgressBar
+
       butSonif.peer.setTransferHandler(new TransferHandler(null) {
         // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
         override def canImport(support: TransferSupport): Boolean = {
@@ -283,26 +311,24 @@ object WorkspaceViewImpl {
               case _ => None
             }
           }
-          println(s"TODO: Add $sourceOpt")
 
-          //          sourceOpt.exists { case source =>
-          //            import ExecutionContext.Implicits.global
-          //            val fut         = Library.compile(source)
-          //            ggBusy.visible  = true
-          //            fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
-          //            fut.foreach { p => patch = Some(p) }
-          //            true
-          //          }
-          sourceOpt.isDefined
+          sourceOpt.exists { case source =>
+            import ExecutionContext.Implicits.global
+            val fut         = Library.compile(source)
+            ggBusy.spinning = true
+            fut.onComplete(_ => ggBusy.spinning = false)
+            fut.foreach(addSonification)
+            true
+          }
         }
       })
 
-      val flowSpec = new FlowPanel(butSonif, ggRemoveSpec, ggViewSpec)
+      val flowSpec = new FlowPanel(ggBusy, butSonif, ggRemoveSpec, ggViewSpec)
 
       val pageSpecs = new BoxPanel(Orientation.Vertical) {
         contents += sonifications.component
         contents += flowSpec
-        border    = Swing.TitledBorder(Swing.EtchedBorder, "Sonification Specs")
+        border    = Swing.TitledBorder(Swing.EtchedBorder, "Sonifications")
       }
 
       //      val ggTab = new TabbedPane {
@@ -341,7 +367,7 @@ object WorkspaceViewImpl {
         )
 
         pack()
-        GUI.centerOnScreen(this)
+        GUI.placeWindow(this, 0f, 0.5f, 8)
         front()
       }
     }

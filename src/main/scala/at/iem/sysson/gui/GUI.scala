@@ -28,7 +28,7 @@ package at.iem.sysson
 package gui
 
 import java.awt.{GraphicsEnvironment, EventQueue}
-import scala.swing.{Button, Action, Color, Swing}
+import scala.swing.{ProgressBar, Button, Action, Color, Swing}
 import Swing._
 import de.sciss.desktop.Window
 import de.sciss.lucre.stm.Txn

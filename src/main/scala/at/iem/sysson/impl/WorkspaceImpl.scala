@@ -36,8 +36,7 @@ import de.sciss.file._
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.lucre.expr.List
 import ucar.nc2
-import nc2.NetcdfFile
-import at.iem.sysson.sound.{Sonification, SonificationSpec}
+import at.iem.sysson.sound.Sonification
 import scala.concurrent.stm.TMap
 
 object WorkspaceImpl {
@@ -79,10 +78,6 @@ object WorkspaceImpl {
     implicit def workspace: Workspace[S] = this
 
     override def toString = s"Workspace($name)"
-
-    //    val fileCache = cursor.step { implicit tx =>
-    //      tx.newInMemoryIDMap[NetcdfFile]
-    //    }
 
     val fileCache = TMap.empty[File, nc2.NetcdfFile]
 
