@@ -34,7 +34,7 @@ import impl.{WorkspaceImpl => Impl}
 import de.sciss.serial.Serializer
 import de.sciss.lucre.stm.IdentifierMap
 import ucar.nc2.NetcdfFile
-import at.iem.sysson.sound.SonificationSpec
+import at.iem.sysson.sound.{Sonification, SonificationSpec}
 import scala.concurrent.stm.TMap
 
 object Workspace {
@@ -66,8 +66,8 @@ sealed trait WorkspaceLike {
   /** Convenience method for `dir.path`. */
   def path: String
 
-  def dataSources(implicit tx: System#Tx): List.Modifiable[System, DataSource[System], Unit]
-  def sonifSpecs (implicit tx: System#Tx): List.Modifiable[System, SonificationSpec  , Unit]
+  def dataSources  (implicit tx: System#Tx): List.Modifiable[System, DataSource  [System], Unit]
+  def sonifications(implicit tx: System#Tx): List.Modifiable[System, Sonification[System], Sonification.Update[System]]
 
   // implicit def dataSourceSerializer: Serializer[System#Tx, System#Acc, DataSource[System]]
 

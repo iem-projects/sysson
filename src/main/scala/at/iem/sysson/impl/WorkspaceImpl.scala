@@ -37,7 +37,7 @@ import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.lucre.expr.List
 import ucar.nc2
 import nc2.NetcdfFile
-import at.iem.sysson.sound.SonificationSpec
+import at.iem.sysson.sound.{Sonification, SonificationSpec}
 import scala.concurrent.stm.TMap
 
 object WorkspaceImpl {
@@ -61,12 +61,12 @@ object WorkspaceImpl {
 
   private final val WORKSPACE_COOKIE  = 0x737973736F6E7700L   // "syssonw\0"
 
-  private final class Data[S <: Sys[S]](val dataSources: List.Modifiable[S, DataSource[S]   , Unit],
-                                        val sonifSpecs : List.Modifiable[S, SonificationSpec, Unit]) {
+  private final class Data[S <: Sys[S]](val dataSources  : List.Modifiable[S, DataSource  [S], Unit],
+                                        val sonifications: List.Modifiable[S, Sonification[S], Sonification.Update[S]]) {
     def write(out: DataOutput): Unit = {
       out.writeLong(WORKSPACE_COOKIE)
-      dataSources.write(out)
-      sonifSpecs .write(out)
+      dataSources  .write(out)
+      sonifications.write(out)
     }
   }
 
@@ -93,20 +93,22 @@ object WorkspaceImpl {
         val cookie = in.readLong()
         require(cookie == WORKSPACE_COOKIE,
           s"Unexpected cookie (found ${cookie.toHexString}, expected ${WORKSPACE_COOKIE.toHexString})")
-        val dataSources = List.Modifiable.read[S, DataSource[S]]   (in, access)
-        val sonifSpecs  = List.Modifiable.read[S, SonificationSpec](in, access)
-        new Data(dataSources, sonifSpecs)
+        val dataSources   = List.Modifiable.read[S, DataSource  [S]](in, access)
+        val sonifications = List.Modifiable.read[S, Sonification[S], Sonification.Update[S]](in, access)
+        new Data(dataSources, sonifications)
       }
     }
 
     private val data: stm.Source[S#Tx, Data[S]] = system.root { implicit tx =>
-      val dataSources = List.Modifiable[S, DataSource[S]   ]
-      val sonifSpecs  = List.Modifiable[S, SonificationSpec]
-      new Data[S](dataSources, sonifSpecs)
+      val dataSources   = List.Modifiable[S, DataSource  [S]]
+      val sonifications = List.Modifiable[S, Sonification[S], Sonification.Update[S]]
+      new Data[S](dataSources, sonifications)
     }
 
-    def dataSources(implicit tx: S#Tx): List.Modifiable[S, DataSource[S]   , Unit] = data().dataSources
+    def dataSources  (implicit tx: S#Tx): List.Modifiable[S, DataSource  [S], Unit] =
+      data().dataSources
 
-    def sonifSpecs (implicit tx: S#Tx): List.Modifiable[S, SonificationSpec, Unit] = data().sonifSpecs
+    def sonifications(implicit tx: S#Tx): List.Modifiable[S, Sonification[S], Sonification.Update[S]] =
+      data().sonifications
   }
 }
