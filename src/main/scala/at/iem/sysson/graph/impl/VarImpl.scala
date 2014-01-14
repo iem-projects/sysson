@@ -38,7 +38,7 @@ object VarImpl {
 
   private final val VAR_COOKIE = 0x76617200 // "var\0"
 
-  def apply(name: String, dims: Vec[Dim], higherRank: Boolean): Var = Impl(name)(dims, higherRank, Vec.empty)
+  // def apply(name: String, dims: Vec[Dim], higherRank: Boolean): Var = Impl(name)(dims, higherRank, Vec.empty)
 
   implicit object serializer extends ImmutableSerializer[Var] {
     def read(in: DataInput): Var = {
@@ -59,32 +59,6 @@ object VarImpl {
     }
   }
 
-  private final case class Impl(name: String)(val dims: Vec[Dim], val higherRank: Boolean,
-                                              val operations: Vec[Var.Op]) extends Var {
-    private def select1(selection: SelectedLike): Impl = {
-      requireUnusedReduction(selection.variable)
-      copy()(dims = dims, higherRank = higherRank, operations = operations :+ Var.Select(selection))
-    }
-
-    private def requireUnusedReduction(v: VarRef): Unit =
-      require(!operations.exists {
-        case r: Var.Reduction if r.variable == v => true
-        case _ => false
-      }, s"Dimension $v has already been selected or reduced")
-
-    def select(selections: SelectedLike*): Var = (this /: selections)(_ select1 _)
-
-    def average(dim: VarRef): Var = {
-      requireUnusedReduction(dim)
-      copy()(dims = dims, higherRank = higherRank, operations = operations :+ Var.Average(dim))
-    }
-
-    def ir: Var.GE = ???
-    def kr: Var.GE = ???
-
-    def play(time: SelectedRange.Playing): Var.Playing = new PlayingImpl(this, time)
-  }
-
   private final case class AxisImpl(playing: Var.Playing, ref: VarRef) extends Var.Axis {
     def values    : GE = new AxisValuesImpl(this)
 
@@ -100,7 +74,7 @@ object VarImpl {
       b.addScalarAxis(axis.playing, axis.ref)
   }
 
-  private final case class PlayingImpl(variable: Impl, time: SelectedRange.Playing)
+  /* private */ final case class PlayingImpl(variable: Var, time: SelectedRange.Playing)
     extends LazyImpl with Var.Playing {
 
     def axis(ref: VarRef): Var.Axis = new AxisImpl(this, ref)
