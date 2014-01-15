@@ -1,5 +1,5 @@
 /*
- *  LibraryFrame.scala
+ *  SonificationView.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -28,14 +28,20 @@ package at.iem.sysson
 package gui
 
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.stm
+import scala.swing.Component
+import at.iem.sysson.sound.Sonification
+import de.sciss.lucre.stm.Disposable
+import impl.{SonificationViewImpl => Impl}
+import de.sciss.desktop.UndoManager
 
-import impl.{LibraryFrameImpl => Impl}
-
-object LibraryFrame {
-  def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryFrame[S] =
-    Impl(library)
+object SonificationView {
+  def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
+                        (implicit tx: S#Tx): SonificationView[S] = Impl(workspace, sonification)
 }
-trait LibraryFrame[S <: Sys[S]] {
-  def view: LibraryView[S]
+trait SonificationView[S <: Sys[S]] extends Disposable[S#Tx] {
+  def component: Component
+  def workspace: Workspace[S]
+  def undoManager: UndoManager
+
+  def sonification(implicit tx: S#Tx): Sonification[S]
 }

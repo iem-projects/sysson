@@ -46,6 +46,7 @@ import de.sciss.lucre.synth.expr.Strings
 import de.sciss.model.Change
 import de.sciss.swingplus.Separator
 
+// XXX TODO: factor out frame
 object WorkspaceViewImpl {
   import Implicits._
 
@@ -304,7 +305,12 @@ object WorkspaceViewImpl {
         def apply(): Unit = {
           val indices = sonifications.guiSelection
           if (indices.nonEmpty) {
-            println("TODO: View Sonif Spec")
+            cursor.step { implicit tx =>
+              indices.foreach { idx =>
+                val sonif = workspace.sonifications.apply(idx)
+                SonificationFrame(workspace, sonif)
+              }
+            }
           }
         }
       }
