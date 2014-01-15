@@ -49,9 +49,15 @@ object SonificationViewImpl {
       import workspace.cursor
       StringExprEditor(expr, "Name")
     }
+
+    // val p       = sonification.patch
+    // val graph0  = p.graph.value
+
     val res = new Impl(workspace, sonifH, nameView, undoMgr)
     // workspace.addDependent(res)
-    GUI.fromTx(res.guiInit())
+    GUI.fromTx {
+      res.guiInit()
+    }
     res
   }
 
