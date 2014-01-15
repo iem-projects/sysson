@@ -45,7 +45,8 @@ private[sysson] object NcviewSyncImpl {
       case osc.Bundle(time, ps @ _*) => ps.foreach(p1 => act(p1, sender))
       case osc.Message("/open", path: String) =>
 //          dispatch(NcviewSync.Open(path))
-        DocumentHandler.instance.openRead(path)
+//        DocumentHandler.instance.openRead(path)
+        println("TODO: open document")
 
       //      case osc.Message("/var", path: String, name: String) => GUI.defer {
       //        for {

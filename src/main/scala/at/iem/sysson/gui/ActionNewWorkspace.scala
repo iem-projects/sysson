@@ -51,11 +51,7 @@ object ActionNewWorkspace extends Action("Workspace...") {
 
   def apply(): Unit =
     FileDialog.save(title = s"Location for $fullName").show(None).foreach { folder0 =>
-      val name    = folder0.getName
-      val folder  = if (name.toLowerCase.endsWith(Workspace.ext))
-        folder0
-      else
-        new File(folder0.getParentFile, s"$name${Workspace.ext}")
+      val folder  = folder0.replaceExt(Workspace.ext)
 
       if (folder.exists()) {
         if (Dialog.showConfirmation(
@@ -67,7 +63,7 @@ object ActionNewWorkspace extends Action("Workspace...") {
 
         if (!deleteRecursive(folder)) {
           Dialog.showMessage(
-            message     = s"Unable to delete existing file ${folder.getPath}",
+            message     = s"Unable to delete existing file ${folder.path}",
             title       = fullName,
             messageType = Dialog.Message.Error
           )

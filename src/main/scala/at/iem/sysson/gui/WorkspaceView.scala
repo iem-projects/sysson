@@ -42,4 +42,6 @@ trait WorkspaceView[S <: Sys[S]] extends Disposable[S#Tx] {
   def component: Component
 
   def undoManager: UndoManager
+
+  def front(): Unit
 }

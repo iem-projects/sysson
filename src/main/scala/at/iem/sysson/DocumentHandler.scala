@@ -31,9 +31,10 @@ import de.sciss.model.Model
 import de.sciss.lucre.{event => evt}
 import language.existentials
 import evt.Sys
+import de.sciss.file.File
 
 object DocumentHandler {
-  type Document = Workspace[_ <: Sys[_]] // WorkspaceLike
+  type Document = Workspace[_ <: Sys[_]]
 
   lazy val instance: DocumentHandler = Impl()
 
@@ -44,9 +45,11 @@ object DocumentHandler {
 trait DocumentHandler extends Model[DocumentHandler.Update] {
   import DocumentHandler.Document
 
-  private[sysson] def addDocument[S <: Sys[S]](doc: Workspace[S]): Unit
+  private[sysson] def addDocument[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): Unit
 
-  def openRead(path: String): Document  // Workspace[evt.Durable]
+  // def openRead(path: String): Document
   def allDocuments: Iterator[Document]
-  def getDocument(path: String): Option[Document]
+  def getDocument(folder: File): Option[Document]
+
+  def isEmpty: Boolean
 }

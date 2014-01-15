@@ -29,6 +29,10 @@ package impl
 
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.stm.Disposable
+import scala.concurrent.stm.{Ref => STMRef, TMap}
+import at.iem.sysson.gui.GUI
+import de.sciss.file.File
 
 private[sysson] object DocumentHandlerImpl {
   import DocumentHandler.Document
@@ -38,47 +42,39 @@ private[sysson] object DocumentHandlerImpl {
   private final class Impl extends DocumentHandler with ModelImpl[DocumentHandler.Update] {
     override def toString = "DocumentHandler"
 
-    private val sync  = new AnyRef
-    private var all   = Vec.empty[Document]
-    private var map   = Map.empty[String, Document] // path to document
+    private val all   = STMRef(Vec.empty[Document])
+    private val map   = TMap.empty[File, Document] // path to document
 
-    //    private val docListener: DataSource.Listener = {
-    //      case DataSource.Closed(doc) => removeDoc(doc)
-    //    }
+    // def openRead(path: String): Document = ...
 
-    def openRead(path: String): Document = {
-      ???
-//      val doc = DataSourceImpl.openRead(path)
-//      // doc.addListener(docListener)
-//      sync.synchronized {
-//        all :+= doc
-//        map  += path -> doc
-//      }
-//      dispatch(DocumentHandler.Opened(doc))
-//      doc
-    }
-
-    def addDocument[S <: Sys[S]](doc: Workspace[S]): Unit = {
+    def addDocument[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): Unit = {
       // doc.addListener(docListener)
-      sync.synchronized {
-        all :+= doc
-        map  += doc.path -> doc
-      }
-      dispatch(DocumentHandler.Opened(doc))
+      val p = doc.file
+      require(!map.contains(p)(tx.peer), s"Workspace for path '$p' is already registered")
+      all.transform(_ :+ doc)(tx.peer)
+      map.+=(p -> doc)(tx.peer)
+
+      doc.addDependent(new Disposable[S#Tx] {
+        def dispose()(implicit tx: S#Tx): Unit = removeDoc(doc)
+      })
+
+      GUI.fromTx(dispatch(DocumentHandler.Opened(doc)))
     }
 
-    private def removeDoc[S <: Sys[S]](doc: Workspace[S]): Unit = {
-      sync.synchronized {
-        val idx = all.indexOf(doc)
-        assert(idx >= 0)
-        // doc.removeListener(docListener)
-        all  = all.patch(idx, Nil, 1)
-        map -= doc.path
-      }
-      dispatch(DocumentHandler.Closed(doc))
+    private def removeDoc[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): Unit = {
+      all.transform { in =>
+        val idx = in.indexOf(doc)
+        require(idx >= 0, s"Workspace for path '${doc.path}' was not registered")
+        in.patch(idx, Nil, 1)
+      } (tx.peer)
+      map.-=(doc.file)(tx.peer)
+
+      GUI.fromTx(dispatch(DocumentHandler.Closed(doc)))
     }
 
-    def allDocuments             : Iterator[Document] = sync.synchronized(all.iterator)
-    def getDocument(path: String): Option  [Document] = sync.synchronized(map.get(path))
+    def allDocuments: Iterator[Document] = all.single().iterator
+    def getDocument(file: File): Option[Document] = map.single.get(file)
+
+    def isEmpty: Boolean = map.single.isEmpty
   }
 }

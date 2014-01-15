@@ -30,10 +30,11 @@ package gui
 import java.awt.event.KeyEvent
 import de.sciss.desktop.{KeyStrokes, Menu}
 import scala.swing.Action
-import de.sciss.lucre.event.Durable
+import de.sciss.lucre.event.{Sys, Durable}
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.file._
 import de.sciss.lucre.stm
+import language.existentials
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -50,8 +51,7 @@ object MenuFactory {
       def apply(): Unit = closeAll()
     }
 
-    def checkCloseAll(): Unit =
-      actionCloseAll.enabled = dh.allDocuments.hasNext
+    def checkCloseAll(): Unit = actionCloseAll.enabled = !dh.isEmpty
 
     checkCloseAll()
 
@@ -112,7 +112,14 @@ object MenuFactory {
     )
   }
 
-  def closeAll(): Unit = ??? // DocumentHandler.instance.allDocuments.foreach(_.close())
+  def closeAll(): Unit = {
+    val docs = DocumentHandler.instance.allDocuments
+
+    // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
+    def screwYou[S <: Sys[S]](doc: Workspace[S]): Unit = doc.cursor.step { implicit tx => doc.dispose() }
+
+    docs.foreach(doc => screwYou(doc.asInstanceOf[Workspace[~] forSome { type ~ <: Sys[~] }]))
+  }
 
   //  def openSoundDesigner(): Unit =
   //    sound.designer.DesignerView()

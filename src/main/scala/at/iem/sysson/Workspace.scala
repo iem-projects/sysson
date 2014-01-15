@@ -31,15 +31,14 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.List
 import de.sciss.file.File
 import impl.{WorkspaceImpl => Impl}
-import de.sciss.serial.Serializer
-import de.sciss.lucre.stm.IdentifierMap
+import de.sciss.lucre.stm.Disposable
 import ucar.nc2.NetcdfFile
-import at.iem.sysson.sound.{Sonification, SonificationSpec}
+import at.iem.sysson.sound.Sonification
 import scala.concurrent.stm.TMap
 
 object Workspace {
-  /** File name extension (including leading period) */
-  final val ext = ".sysson"
+  /** File name extension (excluding leading period) */
+  final val ext = "sysson"
 
   // def empty[S <: Sys[S]]
   object Durable {
@@ -51,14 +50,12 @@ object Workspace {
 /** The workspace type for SysSon. A workspace is usually persisted on hard-disk.
   * It contains a collection of data sources, plots and sonification instances.
   */
-sealed trait WorkspaceLike {
-  type System <: Sys[System]
-
+trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] {
   /** The transactional cursor associated with this workspace. Typically this is `Durable`. */
-  implicit def cursor: stm.Cursor[System]
+  implicit def cursor: stm.Cursor[S]
 
   /** The opaque (database) directory associated with the workspace. */
-  def dir: File
+  def file: File
 
   /** The name of the workspace, which is its directory base name without extension. */
   def name: String
@@ -66,21 +63,15 @@ sealed trait WorkspaceLike {
   /** Convenience method for `dir.path`. */
   def path: String
 
-  def dataSources  (implicit tx: System#Tx): List.Modifiable[System, DataSource  [System], Unit]
-  def sonifications(implicit tx: System#Tx): List.Modifiable[System, Sonification[System], Sonification.Update[System]]
+  def dataSources  (implicit tx: S#Tx): List.Modifiable[S, DataSource  [S], Unit]
+  def sonifications(implicit tx: S#Tx): List.Modifiable[S, Sonification[S], Sonification.Update[S]]
 
-  // implicit def dataSourceSerializer: Serializer[System#Tx, System#Acc, DataSource[System]]
-
-  // private[sysson] def fileCache: IdentifierMap[System#ID, System#Tx, NetcdfFile]
+  /** Adds a dependent which is disposed just before the workspace is disposed.
+    *
+    * @param dep  the dependent. This must be an _ephemeral_ object.
+    */
+  private[sysson] def addDependent   (dep: Disposable[S#Tx])(implicit tx: S#Tx): Unit
+  private[sysson] def removeDependent(dep: Disposable[S#Tx])(implicit tx: S#Tx): Unit
 
   private[sysson] def fileCache: TMap[File, NetcdfFile]
-}
-trait Workspace[S <: Sys[S]] extends WorkspaceLike {
-  type System = S
-  //
-  //  implicit def cursor: stm.Cursor[S]
-  //
-  //  def dir: File
-  //
-  //  def dataSources(implicit tx: S#Tx): List.Modifiable[S, DataSource[S], Unit]
 }

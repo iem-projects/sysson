@@ -37,7 +37,9 @@ import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.lucre.expr.List
 import ucar.nc2
 import at.iem.sysson.sound.Sonification
-import scala.concurrent.stm.TMap
+import scala.concurrent.stm.{Ref => STMRef, Txn, TMap}
+import de.sciss.lucre.stm.Disposable
+import scala.util.control.NonFatal
 
 object WorkspaceImpl {
   def readDurable(dir: File): Workspace[evt.Durable] = {
@@ -69,17 +71,18 @@ object WorkspaceImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](val dir: File, val system: S,
+  private final class Impl[S <: Sys[S]](val file: File, val system: S,
                                         val cursor: stm.Cursor[S]) extends Workspace[S] {
 
-    def path: String  = dir.path
-    def name: String  = dir.base
+    def path: String  = file.path
+    def name: String  = file.base
 
     implicit def workspace: Workspace[S] = this
 
     override def toString = s"Workspace($name)"
 
     val fileCache = TMap.empty[File, nc2.NetcdfFile]
+    private val dependents = STMRef(Vec.empty[Disposable[S#Tx]])
 
     private implicit object DataSer extends Serializer[S#Tx, S#Acc, Data[S]] {
       def write(data: Data[S], out: DataOutput): Unit = data.write(out)
@@ -105,5 +108,40 @@ object WorkspaceImpl {
 
     def sonifications(implicit tx: S#Tx): List.Modifiable[S, Sonification[S], Sonification.Update[S]] =
       data().sonifications
+
+    def addDependent   (dep: Disposable[S#Tx])(implicit tx: S#Tx): Unit =
+      dependents.transform(_ :+ dep)(tx.peer)
+
+    def removeDependent(dep: Disposable[S#Tx])(implicit tx: S#Tx): Unit =
+      dependents.transform { in =>
+        val idx = in.indexOf(dep)
+        require(idx >= 0, s"Dependent $dep was not registered")
+        in.patch(idx, Nil, 1)
+      } (tx.peer)
+
+    def dispose()(implicit tx: S#Tx): Unit = {
+      // first dispose all dependents
+      val deps = dependents.get(tx.peer)
+      deps.foreach(_.dispose())
+      dependents.update(Vec.empty)(tx.peer)
+      // grap the file cache entries
+      val nets = fileCache.snapshot /* (tx.peer) */.valuesIterator
+      // clear the file cache map
+      fileCache.retain((_, _) => false)(tx.peer)  // direct method instead of `clear()`
+      // if the transaction is successful...
+      Txn.afterCommit { _ =>
+        // ...actually close the files
+        nets.foreach { net =>
+          try {
+            net.close()
+          } catch {
+            case NonFatal(e) => e.printStackTrace()
+          }
+        }
+
+        // ...and close the database
+        system.close()
+      } (tx.peer)
+    }
   }
 }

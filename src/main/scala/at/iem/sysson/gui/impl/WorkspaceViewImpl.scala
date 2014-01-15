@@ -28,7 +28,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import scala.swing.{ProgressBar, Button, Swing, TabbedPane, FlowPanel, Component, BoxPanel, Orientation, Action}
+import scala.swing.{Button, Swing, FlowPanel, Component, BoxPanel, Orientation, Action}
 import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
 import de.sciss.desktop.{UndoManager, FileDialog, Window}
 import de.sciss.file._
@@ -40,7 +40,7 @@ import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoa
 import javax.swing.{TransferHandler, ImageIcon}
 import javax.swing.TransferHandler.TransferSupport
 import scala.concurrent.ExecutionContext
-import at.iem.sysson.sound.{Keys, Sonification, SonificationSpec}
+import at.iem.sysson.sound.{Keys, Sonification}
 import de.sciss.synth.proc.{Attribute, ExprImplicits}
 import de.sciss.lucre.synth.expr.Strings
 import de.sciss.model.Change
@@ -82,6 +82,7 @@ object WorkspaceViewImpl {
     val dataSources         = ListView[S, DataSource  [S], Unit                  , String](workspace.dataSources  , dataSourcesHndl)
     val sonifications       = ListView[S, Sonification[S], Sonification.Update[S], String](workspace.sonifications, sonificationsHndl)
     val res = new Impl[S](undoMgr, dataSources, sonifications)(workspace)
+    workspace.addDependent(res)
     GUI.fromTx(res.guiInit())
     res
   }
@@ -185,6 +186,8 @@ object WorkspaceViewImpl {
       override def getPresentationName = txtRemoveSonif
     }
 
+    def front(): Unit = frame.front()
+
     def openSourceDialog(): Unit = {
       val dlg = FileDialog.open(title = txtAddDataSource)
       dlg.setFilter(util.NetCdfFileFilter)
@@ -263,13 +266,13 @@ object WorkspaceViewImpl {
 
       val flowSource  = new FlowPanel(ggAddSource, ggRemoveSource, ggViewSource)
 
-      val liSources = dataSources.addListener {
+      // note: listener is released upon `dataSources.dispose()`
+      /* val liSources = */ dataSources.addListener {
         case ListView.SelectionChanged(indices) =>
           val selected = indices.nonEmpty
           ggRemoveSource.enabled = selected
           ggViewSource  .enabled = selected
       }
-      // XXX TODO: liSources.remove()
 
       val pageSources = new BoxPanel(Orientation.Vertical) {
         contents += dataSources.component
@@ -307,7 +310,8 @@ object WorkspaceViewImpl {
       }
       val ggViewSonif = GUI.toolButton(actionViewSonif, raphael.Shapes.View, tooltip = txtViewSonif)
 
-      val liSpecs = sonifications.addListener {
+      // note: listener is released upon `sonifications.dispose()`
+      /* val liSonif = */ sonifications.addListener {
         case ListView.SelectionChanged(indices) =>
           val selected = indices.nonEmpty
           ggRemoveSonif.enabled = selected
@@ -366,10 +370,6 @@ object WorkspaceViewImpl {
         border    = Swing.TitledBorder(Swing.EmptyBorder(4), "Sonifications")
       }
 
-      //      val ggTab = new TabbedPane {
-      //        pages += pageSources
-      //      }
-
       val ggTab = new BoxPanel(Orientation.Vertical) {
         contents += pageSources
         contents += Separator()
@@ -383,21 +383,17 @@ object WorkspaceViewImpl {
         def handler = SwingApplication.windowHandler
 
         title     = workspace.name
-        file      = Some(workspace.dir)
+        file      = Some(workspace.file)
         contents  = ggTab
         closeOperation = Window.CloseIgnore
         reactions += {
-          case Window.Closing(_) =>
-          // this will be recognized by the DocumentViewHandler which invokes dispose() on this view subsequently:
-          //          document.close()
+          case Window.Closing(_) => disposeDoc()
           case Window.Activated(_) =>
             DocumentViewHandler.instance.activeDocument = Some(workspace)
         }
 
         bindMenus(
-          "file.close"  -> Action(null) {
-            //          document.close()
-          },
+          "file.close"  -> Action(null)(disposeDoc()),
           "edit.undo"   -> undoManager.undoAction,
           "edit.redo"   -> undoManager.redoAction
         )
@@ -408,6 +404,23 @@ object WorkspaceViewImpl {
       }
     }
 
-    def dispose()(implicit tx: S#Tx): Unit = GUI.fromTx(frame.dispose())
+    private var didClose = false
+    private def disposeDoc(): Unit = if (!didClose) {
+      GUI.requireEDT()
+      cursor.step { implicit tx =>
+        workspace.dispose()   // this will invoke our dispose function, and consequently close the window
+      }
+      didClose = true
+    }
+
+    def dispose()(implicit tx: S#Tx): Unit = {
+      workspace.removeDependent(this)
+      dataSources  .dispose()
+      sonifications.dispose()
+      GUI.fromTx {
+        frame.dispose()
+        didClose = true
+      }
+    }
   }
 }
