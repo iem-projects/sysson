@@ -43,9 +43,13 @@ import scala.concurrent.ExecutionContext
 import at.iem.sysson.sound.{Keys, Sonification, SonificationSpec}
 import de.sciss.synth.proc.{Attribute, ExprImplicits}
 import de.sciss.lucre.synth.expr.Strings
+import de.sciss.model.Change
+import de.sciss.swingplus.Separator
 
 object WorkspaceViewImpl {
   import Implicits._
+
+  // private final class DataSourceHandler[S <: Sys[S]] extends ListView.Handler
 
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
     import workspace.cursor
@@ -56,8 +60,27 @@ object WorkspaceViewImpl {
     implicit val ws         = workspace
     implicit val llSrcSer   = List.serializer[S, DataSource  [S]]
     implicit val llSpcSer   = List.serializer[S, Sonification[S], Sonification.Update[S]]
-    val dataSources         = ListView[S, DataSource  [S], Unit                  ](workspace.dataSources  )(_.file.name)
-    val sonifications       = ListView[S, Sonification[S], Sonification.Update[S]](workspace.sonifications)(_ => "TODO")
+    val dataSourcesHndl     = ListView.Handler[S, DataSource[S]](implicit tx => _.file.name)
+
+    val untitled = "<untitled>"
+
+    def sonifName(son: Sonification[S])(implicit tx: S#Tx): Option[String] =
+      son.attributes[Attribute.String](Keys.attrName).map(_.value)
+
+    val sonificationsHndl   = ListView.Handler[S, Sonification[S], Sonification.Update[S]] {
+      implicit tx => sonifName(_).getOrElse(untitled)
+    } {
+      implicit tx => { (son, upd) =>
+        (Option.empty[String] /: upd.changes) {
+          case (_, Sonification.AttributeAdded  (Keys.attrName)) => sonifName(son)
+          case (_, Sonification.AttributeRemoved(Keys.attrName)) => Some(untitled)
+          case (_, Sonification.AttributeChange (Keys.attrName, _, Change(_, name: String))) => Some(name)
+          case (x, _) => x
+        }
+      }
+    }
+    val dataSources         = ListView[S, DataSource  [S], Unit                  , String](workspace.dataSources  , dataSourcesHndl)
+    val sonifications       = ListView[S, Sonification[S], Sonification.Update[S], String](workspace.sonifications, sonificationsHndl)
     val res = new Impl[S](undoMgr, dataSources, sonifications)(workspace)
     GUI.fromTx(res.guiInit())
     res
@@ -150,10 +173,16 @@ object WorkspaceViewImpl {
       override def getPresentationName = txtRemoveDataSource
     }
 
-    private class EditInsertSonification(index: Int, childH: stm.Source[S#Tx, Sonification[S]])
+    private class EditInsertSonif(index: Int, childH: stm.Source[S#Tx, Sonification[S]])
       extends EditNode(true, workspace.sonifications(_), index, childH) {
 
       override def getPresentationName = txtAddSonif
+    }
+
+    private class EditRemoveSonif(index: Int, childH: stm.Source[S#Tx, Sonification[S]])
+      extends EditNode(false, workspace.sonifications(_), index, childH) {
+
+      override def getPresentationName = txtRemoveSonif
     }
 
     def openSourceDialog(): Unit = {
@@ -182,7 +211,7 @@ object WorkspaceViewImpl {
         sonif.patch.graph() = patch.graph
         sonif.attributes.put(Keys.attrName, Attribute.String.apply(Strings.newVar(patch.name)))
         val childH  = tx.newHandle(sonif)
-        val _edit   = new EditInsertSonification(idx, childH)
+        val _edit   = new EditInsertSonif(idx, childH)
         _edit.perform()
         _edit
       }
@@ -234,7 +263,7 @@ object WorkspaceViewImpl {
 
       val flowSource  = new FlowPanel(ggAddSource, ggRemoveSource, ggViewSource)
 
-      val liSources = dataSources.guiReact {
+      val liSources = dataSources.addListener {
         case ListView.SelectionChanged(indices) =>
           val selected = indices.nonEmpty
           ggRemoveSource.enabled = selected
@@ -245,22 +274,28 @@ object WorkspaceViewImpl {
       val pageSources = new BoxPanel(Orientation.Vertical) {
         contents += dataSources.component
         contents += flowSource
-        border    = Swing.TitledBorder(Swing.EtchedBorder, "Data Sources")
+        border    = Swing.TitledBorder(Swing.EmptyBorder(4), "Data Sources")
       }
 
-      val actionRemoveSpec = new Action(null) {
+      val actionRemoveSonif = new Action(null) {
         enabled = false
 
         def apply(): Unit = {
           val indices = sonifications.guiSelection
           indices.headOption.foreach { idx => // XXX TODO: compound removal of multiple selection
-            println("TODO: remove spec")
+            val edit = cursor.step { implicit tx =>
+              val childH  = tx.newHandle(workspace.sonifications.apply(idx))
+              val _edit   = new EditRemoveSonif(idx, childH)
+              _edit.perform()
+              _edit
+            }
+            undoManager.add(edit)
           }
         }
       }
-      val ggRemoveSpec = GUI.toolButton(actionRemoveSpec, raphael.Shapes.Minus, tooltip = txtRemoveDataSource)
+      val ggRemoveSonif = GUI.toolButton(actionRemoveSonif, raphael.Shapes.Minus, tooltip = txtRemoveSonif)
 
-      val actionViewSpec = new Action(null) {
+      val actionViewSonif = new Action(null) {
         enabled = false
 
         def apply(): Unit = {
@@ -270,13 +305,13 @@ object WorkspaceViewImpl {
           }
         }
       }
-      val ggViewSpec = GUI.toolButton(actionViewSpec, raphael.Shapes.View, tooltip = txtViewDataSource)
+      val ggViewSonif = GUI.toolButton(actionViewSonif, raphael.Shapes.View, tooltip = txtViewSonif)
 
-      val liSpecs = sonifications.guiReact {
+      val liSpecs = sonifications.addListener {
         case ListView.SelectionChanged(indices) =>
           val selected = indices.nonEmpty
-          ggRemoveSpec.enabled = selected
-          ggViewSpec  .enabled = selected
+          ggRemoveSonif.enabled = selected
+          ggViewSonif  .enabled = selected
       }
 
       val butSonif        = new Button(null: String)
@@ -323,12 +358,12 @@ object WorkspaceViewImpl {
         }
       })
 
-      val flowSpec = new FlowPanel(ggBusy, butSonif, ggRemoveSpec, ggViewSpec)
+      val flowSpec = new FlowPanel(ggBusy, butSonif, ggRemoveSonif, ggViewSonif)
 
       val pageSpecs = new BoxPanel(Orientation.Vertical) {
         contents += sonifications.component
         contents += flowSpec
-        border    = Swing.TitledBorder(Swing.EtchedBorder, "Sonifications")
+        border    = Swing.TitledBorder(Swing.EmptyBorder(4), "Sonifications")
       }
 
       //      val ggTab = new TabbedPane {
@@ -337,6 +372,7 @@ object WorkspaceViewImpl {
 
       val ggTab = new BoxPanel(Orientation.Vertical) {
         contents += pageSources
+        contents += Separator()
         contents += pageSpecs
       }
 

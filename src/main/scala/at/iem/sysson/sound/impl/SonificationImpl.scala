@@ -30,7 +30,7 @@ package impl
 
 import de.sciss.lucre.{event => evt, expr}
 import de.sciss.lucre.event.{Pull, EventLike, InMemory, Event, Sys}
-import at.iem.sysson.sound.Sonification.{Source, AttributeKey}
+import at.iem.sysson.sound.Sonification.Source
 import de.sciss.synth.proc.Attribute
 import scala.annotation.switch
 import de.sciss.serial.{DataInput, DataOutput}
@@ -109,8 +109,8 @@ object SonificationImpl {
 
     final protected def reader: evt.Reader[S, Sonification[S]] = SonificationImpl.serializer
 
-    final protected def AssociationAdded  (key: String) = Sonification.AssociationAdded  [S](AttributeKey(key))
-    final protected def AssociationRemoved(key: String) = Sonification.AssociationRemoved[S](AttributeKey(key))
+    final protected def AssociationAdded  (key: String) = Sonification.AttributeAdded  [S](key)
+    final protected def AssociationRemoved(key: String) = Sonification.AttributeRemoved[S](key)
     final protected def AttributeChange   (key: String, u: Attribute.Update[S]) =
       Sonification.AttributeChange(key, u.element, u.change)
 

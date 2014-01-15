@@ -1,3 +1,29 @@
+/*
+ *  ListViewImpl.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
+ *  Written by Hanns Holger Rutz.
+ *
+ *	This software is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2, june 1991 of the License, or (at your option) any later version.
+ *
+ *	This software is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *	General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public
+ *	License (gpl.txt) along with this software; if not, write to the Free Software
+ *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
+
 package at.iem.sysson
 package gui
 package impl
@@ -12,38 +38,37 @@ import concurrent.stm.{Ref => STMRef}
 import swing.event.ListSelectionChanged
 import de.sciss.serial.Serializer
 import GUI.{fromTx => guiFromTx, requireEDT}
+import at.iem.sysson.gui.ListView.Handler
+import de.sciss.model.impl.ModelImpl
 
 object ListViewImpl {
-  def empty[S <: Sys[S], Elem, U](show: Elem => String)
+  def empty[S <: Sys[S], Elem, U, Data](handler: Handler[S, Elem, U, Data])
                                  (implicit tx: S#Tx, cursor: Cursor[S],
                                   serializer: Serializer[S#Tx, S#Acc, List[S, Elem, U]]): ListView[S, Elem, U] = {
-    val view = new Impl[S, Elem, U](show)
+    val view = new Impl[S, Elem, U, Data](handler)
     guiFromTx {
       view.guiInit()
     }
     view
   }
 
-  def apply[S <: Sys[S], Elem, U](list: List[S, Elem, U])(show: Elem => String)
+  def apply[S <: Sys[S], Elem, U, Data](list: List[S, Elem, U], handler: Handler[S, Elem, U, Data])
                                  (implicit tx: S#Tx, cursor: Cursor[S],
                                   serializer: Serializer[S#Tx, S#Acc, List[S, Elem, U]]): ListView[S, Elem, U] = {
-    val view = empty[S, Elem, U](show)
+    val view = empty[S, Elem, U, Data](handler)
     view.list_=(Some(list))
     view
   }
 
-  private final class Impl[S <: Sys[S], Elem, U](show: Elem => String)
+  private final class Impl[S <: Sys[S], Elem, U, Data](handler: Handler[S, Elem, U, Data])
                                                 (implicit cursor: Cursor[S], listSer: Serializer[S#Tx, S#Acc, List[S, Elem, U]])
-    extends ListView[S, Elem, U] with ComponentHolder[Component] {
+    extends ListView[S, Elem, U] with ComponentHolder[Component] with ModelImpl[ListView.Update] {
     view =>
 
-    @volatile private var ggList: swing.ListView[_] = _
+    private var ggList: swing.ListView[Data] = _
 
     private val mList = new DefaultListModel
 
-    private var viewObservers = Vec.empty[Observer]
-
-    // private val current = STMRef( Option.empty[ (S#Acc, List[ S, Elem, U ], Disposable[ S#Tx ])])
     private val current = STMRef(Option.empty[(Source[S#Tx, List[S, Elem, U]], Disposable[S#Tx])])
 
     def list(implicit tx: S#Tx): Option[List[S, Elem, U]] = {
@@ -65,20 +90,6 @@ object ListViewImpl {
       current.set(newValue)(tx.peer)
     }
 
-    private final class Observer(fun: PartialFunction[ListView.Update, Unit]) extends Removable {
-      obs =>
-
-      def remove(): Unit =
-        viewObservers = viewObservers.filterNot(_ == obs)
-
-      def tryApply(evt: ListView.Update): Unit =
-        try {
-          if (fun.isDefinedAt(evt)) fun(evt)
-        } catch {
-          case e: Exception => e.printStackTrace()
-        }
-    }
-
     private def disposeObserver(obs: Disposable[S#Tx])(implicit tx: S#Tx): Unit = {
       obs.dispose()
       guiFromTx {
@@ -87,18 +98,19 @@ object ListViewImpl {
     }
 
     private def createObserver(ll: List[S, Elem, U])(implicit tx: S#Tx): Disposable[S#Tx] = {
-      val items = ll.iterator.toIndexedSeq
+      val items = ll.iterator.map(handler.data).toIndexedSeq
       guiFromTx {
-        view.addAll(items.map(show))
+        view.addAll(items)
       }
       ll.changed.react { implicit tx => upd => upd.changes.foreach {
-        case List.Added(  idx, elem)  => guiFromTx(view.add(idx, show(elem)))
+        case List.Added(  idx, elem)  => val item = handler.data(elem); guiFromTx(view.add(idx, item))
         case List.Removed(idx, elem)  => guiFromTx(view.remove(idx))
-        case List.Element(elem, _  )  =>
+        case List.Element(elem, eu )  =>
           val idx = upd.list.indexOf(elem)
           if (idx >= 0) {
-            val str = show(elem)
-            guiFromTx(view.update(idx, str))
+            handler.dataUpdate(elem, eu).foreach { item =>
+              guiFromTx(view.update(idx, item))
+            }
           }
         }
       }
@@ -106,14 +118,7 @@ object ListViewImpl {
 
     private def notifyViewObservers(current: Vec[Int]): Unit = {
       val evt = ListView.SelectionChanged(current)
-      viewObservers.foreach(_.tryApply(evt))
-    }
-
-    def guiReact(fun: PartialFunction[ListView.Update, Unit]): Removable = {
-      requireEDT()
-      val obs = new Observer(fun)
-      viewObservers :+= obs
-      obs
+      dispatch(evt)
     }
 
     def guiSelection: Vec[Int] = {
@@ -128,7 +133,7 @@ object ListViewImpl {
       //               super.getListCellRendererComponent( c, showFun( elem.asInstanceOf[ Elem ]), idx, selected, focused )
       //            }
       //         }
-      ggList = new swing.ListView {
+      ggList = new swing.ListView[Data] {
         peer.setModel(mList)
         listenTo(selection)
         reactions += {
@@ -141,24 +146,25 @@ object ListViewImpl {
 
     def clear(): Unit = mList.clear()
 
-    def addAll(items: Vec[String]): Unit = {
+    def addAll(items: Vec[Data]): Unit = {
       mList.clear()
       items.foreach(mList.addElement)
     }
 
-    def add(idx: Int, item: String): Unit =
+    def add(idx: Int, item: Data): Unit =
       mList.add(idx, item)
 
     def remove(idx: Int): Unit =
       mList.remove(idx)
 
-    def update(idx: Int, item: String): Unit =
-      mList.set(idx, item)
+    def update(idx: Int, newItem: Data): Unit = {
+      mList.set(idx, newItem)
+    }
 
     def dispose()(implicit tx: S#Tx): Unit = {
       list_=(None)
       guiFromTx {
-        viewObservers = Vec.empty
+        releaseListeners()
       }
     }
   }

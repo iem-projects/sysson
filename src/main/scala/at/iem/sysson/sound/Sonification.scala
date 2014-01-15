@@ -59,20 +59,10 @@ object Sonification {
 
   /** An associative change is either adding or removing an association */
   sealed trait AssociativeChange[S <: Sys[S]] extends StateChange[S] {
-    def key: AssociativeKey
+    def key: String
   }
-  final case class AssociationAdded  [S <: Sys[S]](key: AssociativeKey) extends AssociativeChange[S]
-  final case class AssociationRemoved[S <: Sys[S]](key: AssociativeKey) extends AssociativeChange[S]
-
-  /** An associative key is either a grapheme or a scan key */
-  sealed trait AssociativeKey { def name: String }
-  final case class ScanKey(name: String) extends AssociativeKey {
-    override def toString = s"[scan: $name]"
-  }
-
-  final case class AttributeKey(name: String) extends AssociativeKey {
-    override def toString = s"[attribute: $name]"
-  }
+  final case class AttributeAdded  [S <: Sys[S]](key: String) extends AssociativeChange[S]
+  final case class AttributeRemoved[S <: Sys[S]](key: String) extends AssociativeChange[S]
 
   final case class AttributeChange[S <: Sys[S]](key: String, attribute: Attribute[S], change: Any)
     extends Change[S] {
