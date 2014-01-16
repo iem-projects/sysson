@@ -31,35 +31,41 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import de.sciss.swingplus.Spinner
-import de.sciss.lucre.synth.expr.Doubles
+import de.sciss.lucre.synth.expr.{Strings, Doubles}
 import de.sciss.lucre.expr.{Expr, Type}
 import de.sciss.desktop.UndoManager
-import de.sciss.lucre.stm
+import de.sciss.lucre.{expr, stm}
 import javax.swing.{JSpinner, SpinnerNumberModel}
-import scala.swing.{TextComponent, Component}
+import scala.swing.TextComponent
+import scala.swing.event.ValueChanged
+import at.iem.sysson.gui.edit.{EditExprMap, EditExprVar}
+import de.sciss.model.Change
+import de.sciss.serial.Serializer
 
 object DoubleExprEditor {
-  def apply[S <: Sys[S]](expr: Expr[S, Double], name: String, width: Int = 160)
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): DoubleExprEditor[S] = {
-    import Doubles._
+  //  def apply[S <: Sys[S]](expr: Expr[S, Double], name: String, width: Int = 160)
+  //                        (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): DoubleExprEditor[S]
 
-    val exprH = expr match {
-      case Expr.Var(exprV) => Some(tx.newHandle(exprV))
-      case _ => None
-    }
-    val value0 = expr.value
-    val res = new Impl[S](exprH, value0 = value0, editName = name, maxWidth = width)
-    res.observer = expr.changed.react {
-      implicit tx => res.update(_)
+  def apply[S <: Sys[S], A](map: expr.Map[S, A, Expr[S, Double], Change[Double]], key: A, default: Double,
+                            name: String, width: Int = 160)
+                        (implicit tx: S#Tx, keySerializer: Serializer[S#Tx, S#Acc, A],
+                         cursor: stm.Cursor[S], undoManager: UndoManager): DoubleExprEditor[S] = {
+    implicit val valueSer  = Doubles.serializer[S]
+    val mapH      = map.modifiableOption.map(tx.newHandle(_))
+    val value0    = map.get(key).map(_.value).getOrElse(default)
+    val res       = new Impl[S, A](mapH, key = key, value0 = value0, editName = name, maxWidth = width)
+    res.observer  = map.changed.react {
+      implicit tx => ??? // res.update(_)
     }
 
     GUI.fromTx(res.guiInit())
     res
   }
 
-  private final class Impl[S <: Sys[S]](val exprH: Option[stm.Source[S#Tx, Expr.Var[S, Double]]], value0: Double,
-                                        val editName: String, maxWidth: Int)
-                                       (implicit val cursor: stm.Cursor[S], val undoManager: UndoManager)
+  private final class Impl[S <: Sys[S], A](mapH: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, A, Expr[S, Double], Change[Double]]]],
+                                           key: A, value0: Double, editName: String, maxWidth: Int)
+                                       (implicit keySerializer: Serializer[S#Tx, S#Acc, A],
+                                        cursor: stm.Cursor[S], undoManager: UndoManager)
     extends DoubleExprEditor[S] with ExprEditor[S, Double, Spinner] {
 
     protected var value = value0
@@ -68,11 +74,28 @@ object DoubleExprEditor {
 
     protected val tpe: Type[Double] = Doubles
 
-    protected def valueToComponent(): Unit = ???
+    protected def valueToComponent(): Unit = sp.value = value
+
+    private var sp: Spinner = _
+
+    protected def commit(newValue: Double): Unit = {
+      if (value != newValue) {
+        mapH.foreach { h =>
+          val edit = cursor.step { implicit tx =>
+            import Doubles.newConst
+            implicit val d = Doubles
+            EditExprMap[S, A, Double](s"Change $editName", map = h(), key = key, value = Some(newConst[S](newValue)))
+          }
+          undoManager.add(edit)
+        }
+        value = newValue
+      }
+      clearDirty()
+    }
 
     protected def createComponent(): Spinner = {
       val spm   = new SpinnerNumberModel(value, Double.MinValue, Double.MaxValue, 0.1)
-      val sp    = new Spinner(spm)
+      sp        = new Spinner(spm)
       val d1    = sp.preferredSize
       d1.width  = math.min(d1.width, maxWidth) // XXX TODO WTF
       sp.preferredSize = d1
@@ -89,15 +112,15 @@ object DoubleExprEditor {
           observeDirty(txt)
         case _ =>
       }
+      sp.listenTo(sp)
+      sp.reactions += {
+        case ValueChanged(_) =>
+          sp.value match {
+            case value: Double => commit(value)
+            case _ =>
+          }
+      }
 
-  //    dirty       = Some(DirtyBorder(txt))
-  //
-  //    txt.listenTo(txt)
-  //    txt.reactions += {
-  //      case EditDone(_) => commit(txt.text)
-  //    }
-  //    observeDirty(txt.peer)
-  //    txt
       sp
     }
   }

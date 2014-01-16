@@ -36,6 +36,7 @@ import de.sciss.desktop.UndoManager
 import scala.swing.event.EditDone
 import de.sciss.lucre.expr.{Type, Expr}
 import de.sciss.lucre.synth.expr.Strings
+import at.iem.sysson.gui.edit.EditExprVar
 
 object StringExprEditor {
   def apply[S <: Sys[S]](expr: Expr[S, String], name: String, columns: Int = 16)
@@ -53,18 +54,34 @@ object StringExprEditor {
     res
   }
 
-  private final class Impl[S <: Sys[S]](val exprH: Option[stm.Source[S#Tx, Expr.Var[S, String]]], value0: String,
-                                        val editName: String, columns0: Int)
-                                       (implicit val cursor: stm.Cursor[S], val undoManager: UndoManager)
+  private final class Impl[S <: Sys[S]](exprH: Option[stm.Source[S#Tx, Expr.Var[S, String]]], value0: String,
+                                        editName: String, columns0: Int)
+                                       (implicit cursor: stm.Cursor[S], undoManager: UndoManager)
     extends StringExprEditor[S] with ExprEditor[S, String, TextField] {
 
     protected var value = value0
 
     var observer: Disposable[S#Tx] = _
 
-    protected val tpe: Type[String] = Strings
+    // protected val tpe: Type[String] = Strings
 
     protected def valueToComponent(): Unit = component.text = value
+
+    // should be called when the GUI component has been edited. this will update `value`,
+    // transactionally update the expression (if editable), and register an undoable edit
+    protected def commit(newValue: String): Unit = {
+      if (value != newValue) {
+        exprH.foreach { h =>
+          val edit = cursor.step { implicit tx =>
+            import Strings.{serializer, varSerializer, newConst}
+            EditExprVar[S, String](s"Change $editName", expr = h(), value = newConst(newValue))
+          }
+          undoManager.add(edit)
+        }
+        value = newValue
+      }
+      clearDirty()
+    }
 
     protected def createComponent(): TextField = {
       val txt     = new TextField(value, columns0)

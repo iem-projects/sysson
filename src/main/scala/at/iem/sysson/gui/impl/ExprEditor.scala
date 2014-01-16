@@ -29,7 +29,6 @@ package gui
 package impl
 
 import scala.swing.{TextComponent, Component}
-import javax.swing.text.JTextComponent
 import de.sciss.lucre.stm.Disposable
 import at.iem.sysson.gui.edit.EditExprVar
 import de.sciss.model.Change
@@ -51,14 +50,19 @@ trait ExprEditor[S <: Sys[S], A, Comp <: Component] extends ComponentHolder[Comp
 
   // must be implemented by updating the GUI component with the current `value`
   protected def valueToComponent(): Unit
-  // if the expression is a variable, Some(var), otherwise None
-  protected def exprH: Option[stm.Source[S#Tx, Expr.Var[S, A]]]
-  protected implicit def cursor: stm.Cursor[S]
-  protected def undoManager: UndoManager
-  // the type name that is used for undoable edits, e.g. `String`
-  protected def editName: String
-  // the expression type system
-  protected val tpe: Type[A]
+
+  //  // if the expression is a variable, Some(var), otherwise None
+  //  protected def exprH: Option[stm.Source[S#Tx, Expr.Var[S, A]]]
+
+  // protected implicit def cursor: stm.Cursor[S]
+
+  // protected def undoManager: UndoManager
+
+  //  // the type name that is used for undoable edits, e.g. `String`
+  //  protected def editName: String
+
+  //  // the expression type system
+  //  protected val tpe: Type[A]
 
   // must be implemented by creating the GUI component
   protected def createComponent(): Comp
@@ -87,22 +91,6 @@ trait ExprEditor[S <: Sys[S], A, Comp <: Component] extends ComponentHolder[Comp
       def undoableEditHappened(e: UndoableEditEvent): Unit = dirty.foreach(_.visible = true)
     })
 
-  // should be called when the GUI component has been edited. this will update `value`,
-  // transactionally update the expression (if editable), and register an undoable edit
-  final protected def commit(newValue: A): Unit = {
-    if (value != newValue) {
-      exprH.foreach { h =>
-        val edit = cursor.step { implicit tx =>
-          import tpe.{serializer, varSerializer}
-          EditExprVar[S, A](s"Change $editName", expr = h(), value = tpe.newConst(newValue))
-        }
-        undoManager.add(edit)
-      }
-      value = newValue
-    }
-    clearDirty()
-  }
-  
   final def guiInit(): Unit =
     component = createComponent()
 
