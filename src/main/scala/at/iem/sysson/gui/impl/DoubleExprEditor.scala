@@ -55,7 +55,12 @@ object DoubleExprEditor {
     val value0    = map.get(key).map(_.value).getOrElse(default)
     val res       = new Impl[S, A](mapH, key = key, value0 = value0, editName = name, maxWidth = width)
     res.observer  = map.changed.react {
-      implicit tx => ??? // res.update(_)
+      implicit tx => upd => upd.changes.foreach {
+        case expr.Map.Added  (`key`, expr)                  => res.update(expr.value)
+        // case expr.Map.Removed(`key`, expr)                  => res.update(ha?)
+        case expr.Map.Element(`key`, expr, Change(_, now))  => res.update(now       )
+        case _ =>
+      }
     }
 
     GUI.fromTx(res.guiInit())
@@ -74,7 +79,11 @@ object DoubleExprEditor {
 
     protected val tpe: Type[Double] = Doubles
 
-    protected def valueToComponent(): Unit = sp.value = value
+    protected def valueToComponent(): Unit =
+      if (sp.value != value) {
+        // println("valueToComponent()")
+        sp.value = value
+      }
 
     private var sp: Spinner = _
 
@@ -109,14 +118,17 @@ object DoubleExprEditor {
         case e: JSpinner.DefaultEditor =>
           val txt = new TextComponent { override lazy val peer = e.getTextField }
           dirty   = Some(DirtyBorder(txt))
-          observeDirty(txt)
+          // THIS SHIT JUST DOESN'T WORK, FUCK YOU SWING
+          // observeDirty(txt)
         case _ =>
       }
       sp.listenTo(sp)
       sp.reactions += {
         case ValueChanged(_) =>
           sp.value match {
-            case value: Double => commit(value)
+            case v: Double =>
+              // println(s"CHANGED $v")
+              commit(v)
             case _ =>
           }
       }

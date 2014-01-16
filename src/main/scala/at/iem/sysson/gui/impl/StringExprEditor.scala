@@ -34,9 +34,10 @@ import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.stm
 import de.sciss.desktop.UndoManager
 import scala.swing.event.EditDone
-import de.sciss.lucre.expr.{Type, Expr}
+import de.sciss.lucre.expr.Expr
 import de.sciss.lucre.synth.expr.Strings
 import at.iem.sysson.gui.edit.EditExprVar
+import de.sciss.model.Change
 
 object StringExprEditor {
   def apply[S <: Sys[S]](expr: Expr[S, String], name: String, columns: Int = 16)
@@ -48,7 +49,9 @@ object StringExprEditor {
     }
     val value0    = expr.value
     val res       = new Impl[S](exprH, value0 = value0, editName = name, columns0 = columns)
-    res.observer  = expr.changed.react { implicit tx => res.update(_) }
+    res.observer  = expr.changed.react { implicit tx => {
+      case Change(_, now) => res.update(now)
+    }}
 
     GUI.fromTx(res.guiInit())
     res
@@ -65,7 +68,7 @@ object StringExprEditor {
 
     // protected val tpe: Type[String] = Strings
 
-    protected def valueToComponent(): Unit = component.text = value
+    protected def valueToComponent(): Unit = if (component.text != value) component.text = value
 
     // should be called when the GUI component has been edited. this will update `value`,
     // transactionally update the expression (if editable), and register an undoable edit

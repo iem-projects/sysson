@@ -54,7 +54,7 @@ object SonificationViewImpl {
       StringExprEditor(expr, "Name")
     }
 
-    val res = new Impl(workspace, sonifH, nameView, undoMgr)
+    val res = new Impl(workspace, sonifH, nameView)
     // workspace.addDependent(res)
     GUI.fromTx {
       res.guiInit()
@@ -68,8 +68,10 @@ object SonificationViewImpl {
   }
 
   private final class Impl[S <: Sys[S]](val workspace: Workspace[S], sonifH: stm.Source[S#Tx, Sonification[S]],
-                                        nameView: Option[StringExprEditor[S]], val undoManager: UndoManager)
+                                        nameView: Option[StringExprEditor[S]])(implicit val undoManager: UndoManager)
     extends SonificationView[S] with ComponentHolder[Component] {
+
+    import workspace.cursor
 
     def sonification(implicit tx: S#Tx): Sonification[S] = sonifH()
 
@@ -77,27 +79,18 @@ object SonificationViewImpl {
 
     def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
       val sonif       = sonifH()
+      val controls    = sonif.controls
       val userValues  = g.sources.collect {
         case graph.UserValue(key, default) =>
-          val value = sonif.controls.get(key).map(_.value).getOrElse(default)
-          (key, value)
+          // val value   = controls.get(key).map(_.value).getOrElse(default)
+          val view    = DoubleExprEditor(controls, key, default, key.capitalize)
+          (key, /* value, */ view)
       }
 
       GUI.fromTx {
-        val gg = userValues.map { case (key, value) =>
+        val gg = userValues.map { case (key, /* value, */ view) =>
           val lb    = new Label(s"$key:", null, Alignment.Trailing)
-          val spm   = new SpinnerNumberModel(value, Double.MinValue, Double.MaxValue, 0.1)
-          val sp    = new Spinner(spm)
-          val d1    = sp.preferredSize
-          d1.width  = math.min(d1.width, 160) // XXX TODO WTF
-          sp.preferredSize = d1
-          val d2    = sp.maximumSize
-          d2.width  = math.min(d2.width, 160)
-          sp.maximumSize   = d2
-          val d3    = sp.minimumSize
-          d3.width  = math.min(d3.width, 160)
-          sp.minimumSize = d3
-          // println(s"pref ${sp.preferredSize}; max ${sp.maximumSize}; min ${sp.minimumSize}")
+          val sp    = view.component
           (lb, sp)
         }
 

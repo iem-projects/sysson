@@ -37,6 +37,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{Type, Expr}
 import de.sciss.lucre.stm
 import de.sciss.desktop.UndoManager
+import java.awt.event.{KeyEvent, KeyListener, FocusEvent, FocusListener}
 
 //object ExprEditor {
 //
@@ -77,19 +78,40 @@ trait ExprEditor[S <: Sys[S], A, Comp <: Component] extends ComponentHolder[Comp
   protected def clearDirty(): Unit = dirty.foreach(_.visible = false)
 
   // called when the expression changes, so that the change will be reflected in the GUI
-  final def update(ch: Change[A])(implicit tx: S#Tx): Unit =
-    if (value != ch.now) GUI.fromTx {
-      value           = ch.now
+  final def update(newValue: A)(implicit tx: S#Tx): Unit =
+    if (value != newValue) GUI.fromTx {
+      value = newValue
       valueToComponent()
       clearDirty()
     }
 
   // installs an edit listener for the given text component which will flag `dirty` upon the first change
   // to the component's document
-  final protected def observeDirty(text: TextComponent): Unit =
-    text.peer.getDocument.addUndoableEditListener(new UndoableEditListener {
-      def undoableEditHappened(e: UndoableEditEvent): Unit = dirty.foreach(_.visible = true)
+  final protected def observeDirty(text: TextComponent): Unit = {
+    // the fucking JSpinner implementation removes and re-inserts its text when focused,
+    // at least with aqua LaF. this means that two undoable edits are fired which are
+    // completely pointless and idiotically marked as "significant". In order to skip
+    // them, we register focus and key listeners.
+    val j = text.peer
+    var valid = false
+    j.getDocument.addUndoableEditListener(new UndoableEditListener {
+      def undoableEditHappened(e: UndoableEditEvent): Unit = {
+        if (valid) {
+          // println(s"UNDOABLE EDIT: ${e.getEdit}")
+          dirty.foreach(_.visible = true)
+        }
+      }
     })
+    text.peer.addFocusListener(new FocusListener {
+      def focusLost  (e: FocusEvent) = ()
+      def focusGained(e: FocusEvent): Unit = valid = false
+    })
+    text.peer.addKeyListener(new KeyListener {
+      def keyReleased(e: KeyEvent): Unit = ()
+      def keyPressed (e: KeyEvent): Unit = valid = true
+      def keyTyped   (e: KeyEvent): Unit = ()
+    })
+  }
 
   final def guiInit(): Unit =
     component = createComponent()
