@@ -30,13 +30,8 @@ package impl
 
 import scala.swing.{TextComponent, Component}
 import de.sciss.lucre.stm.Disposable
-import at.iem.sysson.gui.edit.EditExprVar
-import de.sciss.model.Change
 import javax.swing.event.{UndoableEditEvent, UndoableEditListener}
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.{Type, Expr}
-import de.sciss.lucre.stm
-import de.sciss.desktop.UndoManager
 import java.awt.event.{KeyEvent, KeyListener, FocusEvent, FocusListener}
 
 //object ExprEditor {
@@ -93,24 +88,24 @@ trait ExprEditor[S <: Sys[S], A, Comp <: Component] extends ComponentHolder[Comp
     // completely pointless and idiotically marked as "significant". In order to skip
     // them, we register focus and key listeners.
     val j = text.peer
-    var valid = false
+    // var valid = true // false
     j.getDocument.addUndoableEditListener(new UndoableEditListener {
       def undoableEditHappened(e: UndoableEditEvent): Unit = {
-        if (valid) {
+        // if (valid) {
           // println(s"UNDOABLE EDIT: ${e.getEdit}")
           dirty.foreach(_.visible = true)
-        }
+        // }
       }
     })
-    text.peer.addFocusListener(new FocusListener {
-      def focusLost  (e: FocusEvent) = ()
-      def focusGained(e: FocusEvent): Unit = valid = false
-    })
-    text.peer.addKeyListener(new KeyListener {
-      def keyReleased(e: KeyEvent): Unit = ()
-      def keyPressed (e: KeyEvent): Unit = valid = true
-      def keyTyped   (e: KeyEvent): Unit = ()
-    })
+    //    text.peer.addFocusListener(new FocusListener {
+    //      def focusLost  (e: FocusEvent) = ()
+    //      def focusGained(e: FocusEvent): Unit = valid = false
+    //    })
+    //    text.peer.addKeyListener(new KeyListener {
+    //      def keyReleased(e: KeyEvent): Unit = ()
+    //      def keyPressed (e: KeyEvent): Unit = valid = true
+    //      def keyTyped   (e: KeyEvent): Unit = ()
+    //    })
   }
 
   final def guiInit(): Unit =

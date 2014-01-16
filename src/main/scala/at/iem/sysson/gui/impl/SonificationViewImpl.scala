@@ -35,11 +35,11 @@ import scala.swing.{Alignment, Swing, Orientation, BoxPanel, Label, FlowPanel, C
 import de.sciss.synth.proc.Attribute
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
-import de.sciss.swingplus.{Spinner, Separator}
+import de.sciss.swingplus.Separator
 import de.sciss.audiowidgets.Transport
 import de.sciss.synth.SynthGraph
 import scalaswingcontrib.group.GroupPanel
-import javax.swing.{SpinnerNumberModel, GroupLayout}
+import javax.swing.GroupLayout
 import language.reflectiveCalls
 
 object SonificationViewImpl {
@@ -78,16 +78,35 @@ object SonificationViewImpl {
     private var pControls: FlowPanel = _
 
     def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
-      val sonif       = sonifH()
+      val sonif = sonifH()
+
+      // ---- sources tx ----
+
+      val sources = g.sources.collect {
+        case vr: graph.Var =>
+          // vr.name
+          // vr.dims
+          // vr.higherRank
+          // vr.operations
+          vr
+      }
+
+      // ---- controls tx ----
+
       val controls    = sonif.controls
       val userValues  = g.sources.collect {
         case graph.UserValue(key, default) =>
-          // val value   = controls.get(key).map(_.value).getOrElse(default)
-          val view    = DoubleExprEditor(controls, key, default, key.capitalize)
-          (key, /* value, */ view)
+          val view = DoubleExprEditor(controls, key, default, key.capitalize)
+          (key, view)
       }
 
       GUI.fromTx {
+        // ---- sources gui ----
+
+
+
+        // ---- controls gui ----
+
         val gg = userValues.map { case (key, /* value, */ view) =>
           val lb    = new Label(s"$key:", null, Alignment.Trailing)
           val sp    = view.component
@@ -108,6 +127,9 @@ object SonificationViewImpl {
         }
         pControls.contents.clear()
         pControls.contents += p
+
+        // ----
+
         component.revalidate()
       }
     }

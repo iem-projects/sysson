@@ -324,51 +324,26 @@ object WorkspaceViewImpl {
           ggViewSonif  .enabled = selected
       }
 
-      val butSonif        = new Button(null: String)
-      butSonif.icon       = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
-      butSonif.focusable  = false
-      butSonif.tooltip    = "Drop Sonification Patch From the Library Here"
-
-      val ggBusy          = new SpinningProgressBar
-
-      butSonif.peer.setTransferHandler(new TransferHandler(null) {
-        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
-        override def canImport(support: TransferSupport): Boolean = {
-          val res =
-            if (support.isDataFlavorSupported(LibraryNodeFlavor) &&
-              ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
-              support.setDropAction(TransferHandler.LINK)
-              true
-            } else
-              false
-
-          // println(s"canImport? $res")
-          res
-        }
-
-        override def importData(support: TransferSupport): Boolean = {
-          val t           = support.getTransferable
-          // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
-          val drag      = t.getTransferData(LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
-          val sourceOpt = drag.cursor.step { implicit tx =>
-            drag.node() match {
-              case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
-              case _ => None
-            }
-          }
-
-          sourceOpt.exists { case source =>
-            import ExecutionContext.Implicits.global
-            val fut         = Library.compile(source)
-            ggBusy.spinning = true
-            fut.onComplete(_ => ggBusy.spinning = false)
-            fut.foreach(addSonification)
-            true
+      val ggBusy    = new SpinningProgressBar
+      val butSonif  = DropButton[LibraryNodeDrag](LibraryNodeFlavor, "Sonification Patch From the Library") { drag =>
+        val sourceOpt = drag.cursor.step { implicit tx =>
+          drag.node() match {
+            case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
+            case _ => None
           }
         }
-      })
 
-      val flowSpec = new FlowPanel(ggBusy, butSonif, ggRemoveSonif, ggViewSonif)
+        sourceOpt.exists { case source =>
+          import ExecutionContext.Implicits.global
+          val fut         = Library.compile(source)
+          ggBusy.spinning = true
+          fut.onComplete(_ => ggBusy.spinning = false)
+          fut.foreach(addSonification)
+          true
+        }
+      }
+
+      val flowSpec  = new FlowPanel(ggBusy, butSonif, ggRemoveSonif, ggViewSonif)
 
       val pageSpecs = new BoxPanel(Orientation.Vertical) {
         contents += sonifications.component
