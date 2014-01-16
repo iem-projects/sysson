@@ -87,7 +87,8 @@ object Sonification {
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
   def patch: Patch[S] // PatchOLD.Source
 
-  def sources: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
+  def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
+  def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
 
   /** A scalar attribute map */
   def attributes: Attributes.Modifiable[S]

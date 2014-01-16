@@ -31,12 +31,16 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.{Keys, Sonification}
 import de.sciss.lucre.stm
-import scala.swing.{Swing, Orientation, BoxPanel, Label, FlowPanel, Component}
+import scala.swing.{Alignment, Swing, Orientation, BoxPanel, Label, FlowPanel, Component}
 import de.sciss.synth.proc.Attribute
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
-import de.sciss.swingplus.Separator
+import de.sciss.swingplus.{Spinner, Separator}
 import de.sciss.audiowidgets.Transport
+import de.sciss.synth.SynthGraph
+import scalaswingcontrib.group.GroupPanel
+import javax.swing.{SpinnerNumberModel, GroupLayout}
+import language.reflectiveCalls
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
@@ -50,14 +54,16 @@ object SonificationViewImpl {
       StringExprEditor(expr, "Name")
     }
 
-    // val p       = sonification.patch
-    // val graph0  = p.graph.value
-
     val res = new Impl(workspace, sonifH, nameView, undoMgr)
     // workspace.addDependent(res)
     GUI.fromTx {
       res.guiInit()
     }
+
+    val p       = sonification.patch
+    val graph0  = p.graph.value
+    res.updateGraph(graph0)
+
     res
   }
 
@@ -66,6 +72,52 @@ object SonificationViewImpl {
     extends SonificationView[S] with ComponentHolder[Component] {
 
     def sonification(implicit tx: S#Tx): Sonification[S] = sonifH()
+
+    private var pControls: FlowPanel = _
+
+    def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
+      val sonif       = sonifH()
+      val userValues  = g.sources.collect {
+        case graph.UserValue(key, default) =>
+          val value = sonif.controls.get(key).map(_.value).getOrElse(default)
+          (key, value)
+      }
+
+      GUI.fromTx {
+        val gg = userValues.map { case (key, value) =>
+          val lb    = new Label(s"$key:", null, Alignment.Trailing)
+          val spm   = new SpinnerNumberModel(value, Double.MinValue, Double.MaxValue, 0.1)
+          val sp    = new Spinner(spm)
+          val d1    = sp.preferredSize
+          d1.width  = math.min(d1.width, 160) // XXX TODO WTF
+          sp.preferredSize = d1
+          val d2    = sp.maximumSize
+          d2.width  = math.min(d2.width, 160)
+          sp.maximumSize   = d2
+          val d3    = sp.minimumSize
+          d3.width  = math.min(d3.width, 160)
+          sp.minimumSize = d3
+          // println(s"pref ${sp.preferredSize}; max ${sp.maximumSize}; min ${sp.minimumSize}")
+          (lb, sp)
+        }
+
+        val p = new GroupPanel {
+          theHorizontalLayout is Sequential(
+            Parallel(gg.map(tup => add[GroupLayout#ParallelGroup](tup._1)): _*),
+            Parallel(gg.map(tup => add[GroupLayout#ParallelGroup](tup._2)): _*)
+          )
+
+          theVerticalLayout is Sequential(
+            gg.map { tup =>
+              Parallel(Baseline)(tup._1, tup._2): InGroup[GroupLayout#SequentialGroup]
+            }: _*
+          )
+        }
+        pControls.contents.clear()
+        pControls.contents += p
+        component.revalidate()
+      }
+    }
 
     def guiInit(): Unit = {
       // ---- Header ----
@@ -79,7 +131,7 @@ object SonificationViewImpl {
 
       // ---- Controls ----
 
-      val pControls = new FlowPanel()
+      pControls = new FlowPanel()
       pControls.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Controls")
 
       // ---- Transport ----

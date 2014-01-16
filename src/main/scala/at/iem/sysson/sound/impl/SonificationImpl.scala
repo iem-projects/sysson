@@ -37,7 +37,7 @@ import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.data.SkipList
 import de.sciss.lucre.expr.Expr
 import de.sciss.model
-import de.sciss.lucre.synth.expr.Strings
+import de.sciss.lucre.synth.expr.{Doubles, Strings}
 
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"
@@ -134,6 +134,7 @@ object SonificationImpl {
         StateEvent    -/-> this
       }
 
+      // XXX TODO: for completeness, should forward changes to sources and controls!
       def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Update] = {
         // val patchOpt = if (graphemes .isSource(pull)) graphemes .pullUpdate(pull) else None
         val patchCh  = patch.changed
@@ -164,12 +165,14 @@ object SonificationImpl {
       out.writeInt(SER_VERSION)
       patch       .write(out)
       sources     .write(out)
+      controls    .write(out)
       attributeMap.write(out)
     }
 
     final protected def disposeData()(implicit tx: S#Tx): Unit = {
       patch       .dispose()
       sources     .dispose()
+      controls    .dispose()
       attributeMap.dispose()
     }
 
@@ -182,6 +185,10 @@ object SonificationImpl {
     protected val targets       = evt.Targets[S](tx0)
     val patch                   = Patch[S]
     val sources                 = expr.Map.Modifiable[S, String, Source[S], Source.Update[S]]
+    val controls                = {
+      implicit val ser = Doubles.serializer[S]
+      expr.Map.Modifiable[S, String, Expr[S, Double], model.Change[Double]]
+    }
     protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry]
   }
 
@@ -196,6 +203,10 @@ object SonificationImpl {
 
     val patch                   = Patch.read(in, access)
     val sources                 = expr.Map.read[S, String, Source[S], Source.Update[S]](in, access)
+    val controls                = {
+      implicit val ser = Doubles.serializer[S]
+      expr.Map.read[S, String, Expr[S, Double], model.Change[Double]](in, access)
+    }
     protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry](in, access)
   }
 }
