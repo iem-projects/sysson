@@ -458,7 +458,7 @@ object ClimateViewImpl {
       pSonif2.visible         = false
 
       val butSonif    = new Button(null: String)
-      butSonif.icon           = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
+      butSonif.icon           = Icons.Target(24)
       butSonif.focusable      = false
       butSonif.tooltip        = "Drop Sonification Patch From the Library Here"
 

@@ -3,15 +3,14 @@ package gui
 package impl
 
 import scala.swing.Button
-import javax.swing.{TransferHandler, ImageIcon}
+import javax.swing.TransferHandler
 import javax.swing.TransferHandler.TransferSupport
 import java.awt.datatransfer.DataFlavor
 
 object DropButton {
   def apply[A](flavor: DataFlavor, tooltip: String)(imp: A => Boolean): Button = {
     val but        = new Button(null: String)
-    // XXX TODO: vector graphics: Target_icon.svg ; grey out for disabled state
-    but.icon       = new ImageIcon(Main.getClass.getResource("dropicon16.png"))
+    but.icon       = Icons.Target(24)
     but.focusable  = false
     but.tooltip    = s"Drop $tooltip Here"
 

@@ -113,7 +113,7 @@ object SonificationViewImpl {
           (lb, sp)
         }
 
-        val p = new GroupPanel {
+        val pCtl = new GroupPanel {
           theHorizontalLayout is Sequential(
             Parallel(gg.map(tup => add[GroupLayout#ParallelGroup](tup._1)): _*),
             Parallel(gg.map(tup => add[GroupLayout#ParallelGroup](tup._2)): _*)
@@ -126,7 +126,7 @@ object SonificationViewImpl {
           )
         }
         pControls.contents.clear()
-        pControls.contents += p
+        pControls.contents += pCtl
 
         // ----
 
