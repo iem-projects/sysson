@@ -78,6 +78,8 @@ object Sonification {
       extends Update[S]
 
     implicit def serializer[S <: Sys[S]]: evt.Serializer[S, Source[S]] = Impl.sourceSerializer
+
+    def apply[S <: Sys[S]](dataSource: DataSource[S])(implicit tx: S#Tx): Source[S] = Impl.applySource(dataSource)
   }
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
     def data: DataSource[S]

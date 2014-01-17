@@ -42,6 +42,7 @@ import scalaswingcontrib.group.GroupPanel
 import javax.swing.GroupLayout
 import language.reflectiveCalls
 import at.iem.sysson.gui.DragAndDrop.DataSourceDrag
+import at.iem.sysson.gui.edit.EditMutableMap
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
@@ -106,14 +107,30 @@ object SonificationViewImpl {
         // ---- mapping gui ----
 
         val ggMap = mapping.map { vr =>
-          val lb    = new Label(s"${vr.name}:")
+          val key   = vr.name
+          val lb    = new Label(s"$key:")
           val drop  = new TextField(16)
           drop.editable = false
           drop.border   = Swing.CompoundBorder(outside = drop.border,
             inside = IconBorder(Icons.Target(DropButton.IconSize)))
-          DropButton.installTransferHandler[DataSourceDrag](drop, DragAndDrop.DataSourceFlavor) { drag =>
-            println("TODO: import")
-            true
+          DropButton.installTransferHandler[DataSourceDrag](drop, DragAndDrop.DataSourceFlavor) { drag0 =>
+            if (drag0.workspace == workspace) {
+              val drag  = drag0.asInstanceOf[DataSourceDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
+              val editOpt = cursor.step { implicit tx =>
+                val sonif = sonifH()
+                sonif.sources.modifiableOption.map { map =>
+                  val data    = drag.source()
+                  val source  = Sonification.Source(data)
+                  EditMutableMap("Assign Data Source", map, key, Some(source))
+                }
+              }
+              editOpt.foreach(undoManager.add)
+              editOpt.isDefined
+
+            } else {
+              println("ERROR: Cannot drag data sources across workspaces")
+              false
+            }
           }
           (lb, drop)
         }

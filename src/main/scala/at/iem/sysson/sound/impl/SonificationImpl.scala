@@ -44,6 +44,13 @@ object SonificationImpl {
 
   def sourceSerializer[S <: Sys[S]]: evt.NodeSerializer[S, Source[S]] = anySourceSer.asInstanceOf[SourceSer[S]]
 
+  def applySource[S <: Sys[S]](dataSource: DataSource[S])(implicit tx: S#Tx): Source[S] = {
+    implicit val str = Strings.serializer[S]
+    val targets = evt.Targets[S]
+    val dims    = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
+    new SourceImpl(targets, dataSource, dims)
+  }
+
   private val anySourceSer = new SourceSer[evt.InMemory]
 
   private final class SourceSer[S <: Sys[S]] extends evt.NodeSerializer[S, Source[S]] {
