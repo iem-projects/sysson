@@ -23,8 +23,8 @@ object DropButton {
     component.peer.setTransferHandler(new TransferHandler(null) {
       // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
       override def canImport(support: TransferSupport): Boolean = component.enabled && {
-        println(support.getDataFlavors.mkString("---supported flavours:---\n ", "\n ", ""))
-        println(s"drop actions: ${support.getSourceDropActions}")
+        // println(support.getDataFlavors.mkString("---supported flavours:---\n ", "\n ", ""))
+        // println(s"drop actions: ${support.getSourceDropActions}")
 
         val res =
           if (support.isDataFlavorSupported(flavor) &&
@@ -33,8 +33,8 @@ object DropButton {
             true
           } else
             false
-  
-        println(s"canImport? $res")
+
+        // println(s"canImport? $res")
         res
       }
   

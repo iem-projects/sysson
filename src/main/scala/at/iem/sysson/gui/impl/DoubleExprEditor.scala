@@ -51,9 +51,9 @@ object DoubleExprEditor {
                         (implicit tx: S#Tx, keySerializer: Serializer[S#Tx, S#Acc, A],
                          cursor: stm.Cursor[S], undoManager: UndoManager): DoubleExprEditor[S] = {
     implicit val valueSer  = Doubles.serializer[S]
-    val mapH      = map.modifiableOption.map(tx.newHandle(_))
+    val mapHOpt   = map.modifiableOption.map(tx.newHandle(_))
     val value0    = map.get(key).map(_.value).getOrElse(default)
-    val res       = new Impl[S, A](mapH, key = key, value0 = value0, editName = name, maxWidth = width)
+    val res       = new Impl[S, A](mapHOpt, key = key, value0 = value0, editName = name, maxWidth = width)
     res.observer  = map.changed.react {
       implicit tx => upd => upd.changes.foreach {
         case expr.Map.Added  (`key`, expr)                  => res.update(expr.value)
@@ -67,7 +67,7 @@ object DoubleExprEditor {
     res
   }
 
-  private final class Impl[S <: Sys[S], A](mapH: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, A, Expr[S, Double], Change[Double]]]],
+  private final class Impl[S <: Sys[S], A](mapHOpt: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, A, Expr[S, Double], Change[Double]]]],
                                            key: A, value0: Double, editName: String, maxWidth: Int)
                                        (implicit keySerializer: Serializer[S#Tx, S#Acc, A],
                                         cursor: stm.Cursor[S], undoManager: UndoManager)
@@ -89,11 +89,11 @@ object DoubleExprEditor {
 
     protected def commit(newValue: Double): Unit = {
       if (value != newValue) {
-        mapH.foreach { h =>
+        mapHOpt.foreach { mapH =>
           val edit = cursor.step { implicit tx =>
             import Doubles.newConst
             implicit val d = Doubles
-            EditExprMap[S, A, Double](s"Change $editName", map = h(), key = key, value = Some(newConst[S](newValue)))
+            EditExprMap[S, A, Double](s"Change $editName", map = mapH(), key = key, value = Some(newConst[S](newValue)))
           }
           undoManager.add(edit)
         }

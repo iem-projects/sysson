@@ -234,7 +234,7 @@ usage () {
   cat <<EOM
 Usage: $script_name [options]
 
-  -h | -help         print this message
+  -mapH | -help         print this message
   -v | -verbose      this runner is chattier
   -d | -debug        set sbt log level to Debug
   -q | -quiet        set sbt log level to Error
@@ -328,7 +328,7 @@ process_args ()
   }
   while [[ $# -gt 0 ]]; do
     case "$1" in
-       -h|-help) usage; exit 1 ;;
+       -mapH|-help) usage; exit 1 ;;
     -v|-verbose) verbose=true && log_level=Info && shift ;;
       -d|-debug) debug=true && log_level=Debug && shift ;;
       -q|-quiet) quiet=true && log_level=Error && shift ;;

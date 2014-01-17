@@ -80,20 +80,29 @@ object SonificationViewImpl {
     private var pMapping : FlowPanel = _
     private var pControls: FlowPanel = _
 
+    // XXX TODO: private val graphDisposables = STMRef[Vec[Disposable[S#Tx]]]
+
     def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
       val sonif = sonifH()
 
-      // ---- mapping tx ----
+      // XXX TODO: graphDisposables.swap(Vec.empty).foreach(_.dispose())
 
-      val mapping = g.sources.collect {
+      // ---- sources/mapping tx ----
+
+      val mapping = sonif.sources
+      val sources = g.sources.collect {
         case vr: graph.Var =>
+          val key   = vr.name
           // vr.name
           // vr.dims
           // vr.higherRank
           // vr.operations
-          vr
-      }
 
+          val view = SonificationSourceView(workspace, mapping, key)
+
+          (key, view)
+      }
+      
       // ---- controls tx ----
 
       val controls    = sonif.controls
@@ -103,35 +112,14 @@ object SonificationViewImpl {
           (key, view)
       }
 
+      // XXX TODO: graphDisposables.transform(_ ++ userValues.map(_._2))
+
       GUI.fromTx {
-        // ---- mapping gui ----
+        // ---- sources/mapping gui ----
 
-        val ggMap = mapping.map { vr =>
-          val key   = vr.name
+        val ggMap = sources.map { case (key, view) =>
           val lb    = new Label(s"$key:")
-          val drop  = new TextField(16)
-          drop.editable = false
-          drop.border   = Swing.CompoundBorder(outside = drop.border,
-            inside = IconBorder(Icons.Target(DropButton.IconSize)))
-          DropButton.installTransferHandler[DataSourceDrag](drop, DragAndDrop.DataSourceFlavor) { drag0 =>
-            if (drag0.workspace == workspace) {
-              val drag  = drag0.asInstanceOf[DataSourceDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
-              val editOpt = cursor.step { implicit tx =>
-                val sonif = sonifH()
-                sonif.sources.modifiableOption.map { map =>
-                  val data    = drag.source()
-                  val source  = Sonification.Source(data)
-                  EditMutableMap("Assign Data Source", map, key, Some(source))
-                }
-              }
-              editOpt.foreach(undoManager.add)
-              editOpt.isDefined
-
-            } else {
-              println("ERROR: Cannot drag data sources across workspaces")
-              false
-            }
-          }
+          val drop  = view.component
           (lb, drop)
         }
 
