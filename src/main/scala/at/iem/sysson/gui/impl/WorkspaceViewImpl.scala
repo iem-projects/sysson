@@ -62,7 +62,7 @@ object WorkspaceViewImpl {
     implicit val ws         = workspace
     implicit val llSrcSer   = List.serializer[S, DataSource  [S]]
     implicit val llSpcSer   = List.serializer[S, Sonification[S], Sonification.Update[S]]
-    val dataSourcesHndl     = ListView.Handler[S, DataSource[S]](implicit tx => _.file.name)
+    val dataSourcesHndl     = ListView.Handler[S, DataSource[S]](implicit tx => _.file.base)
 
     val untitled = "<untitled>"
 

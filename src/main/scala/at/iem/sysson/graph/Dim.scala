@@ -56,7 +56,7 @@ object Dim {
   case class Play(dim: Dim, freq: synth.GE)
     extends impl.LazyImpl with AudioRated {
 
-    override def productPrefix = "SelectedDim$Play"
+    override def productPrefix = "Dim$Play"
 
     protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
       ??? // b.addAudioSelection(dim, freq)
@@ -64,10 +64,10 @@ object Dim {
 }
 /** Specification of a data source dimension
   *
-  * @param v        Data source to which this dimension refers
+  * @param variable Data source to which this dimension refers
   * @param name     Logical name by which the dimension is referred to
   */
-case class Dim(v: Var, name: String)
+case class Dim(variable: Var, name: String)
   extends UserInteraction {
 
   /** Produces a graph element which unrolls the selected range in time, using the dimension's domain value.

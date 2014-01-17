@@ -36,18 +36,18 @@ object Var {
   trait GE extends synth.GE {
     def variable: Var
 
-    // XXX TODO should be axis().values and axis().indices
-    // def axisValues(ref: VarRef): GE
-
-    def axis(ref: VarRef): Axis
+    def axis(dim: Dim): Axis
   }
 
   case class Play(variable: Var, time: Dim.Play)
-    extends impl.LazyImpl with AudioRated {
+    extends impl.LazyImpl with GE with AudioRated {
 
     override def productPrefix = "Var$Play"
 
-    def axis(ref: VarRef): Var.Axis = Var.Axis(this, ref)
+    def axis(dim: Dim): Var.Axis = {
+      require (dim.variable == variable, s"Dimension ${dim.name} does not belong to variable $variable")
+      Var.Axis(this, dim.name)
+    }
 
     protected def makeUGens(b: UGenGraphBuilder): UGenInLike = b.addAudioVariable(this)
   }
@@ -77,7 +77,7 @@ object Var {
       override def productPrefix = "Var$Axis$Values"
 
       protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
-        b.addScalarAxis(axis.playing, axis.ref)
+        ??? // b.addScalarAxis(axis.playing, axis.ref)
     }
   }
 
@@ -88,7 +88,7 @@ object Var {
     * This allows signal processing which combines each sample value from a
     * variable with the corresponding axes elements.
     */
-  case class Axis(playing: Var.Play, ref: VarRef) {
+  case class Axis(playing: Var.Play, dim: String) {
     override def productPrefix = "Var$Axis"
 
     def values    : synth.GE = Axis.Values(this)

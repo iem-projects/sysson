@@ -1,0 +1,7 @@
+The idea would be to "post constraints" like relations, e.g.
+
+    val sel       = Var("v1")
+    val dimTime   = sel.dim("time")
+    dimTime.size #< 100
+
+etc.

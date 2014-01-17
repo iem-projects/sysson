@@ -1,0 +1,23 @@
+// theoretical model 17-Jan-14
+// this compiles according to the API
+// but the implementation is pending
+
+val speed     = UserValue("speed"      , 10)
+val pitch     = UserValue("freq-factor", 1)
+
+val v         = Var("source")
+val dimTime   = v.dim("time")
+val dimPan    = v.dim("pan" )
+val freq      = speed.value
+
+val time      = dimTime.play(freq)
+val data      = v.play(time)
+
+val latAxis   = data.axis(dimPan).values
+val latMin    = Reduce.min(latAxis)
+val latMax    = Reduce.max(latAxis)
+val latAxisN  = latAxis.linlin(latMin, latMax, -1, 1)
+
+val osc = SinOsc.ar(data * pitch.value)
+val pan = Pan2.ar(osc * 0.1, latAxisN)
+WrapOut(Mix(pan))
