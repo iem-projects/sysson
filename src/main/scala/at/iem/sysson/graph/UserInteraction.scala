@@ -26,12 +26,12 @@
 
 package at.iem.sysson.graph
 
-import de.sciss.synth.{UGenInLike, ScalarRated, AudioRated, GE, Lazy}
+import de.sciss.synth.{HasSideEffect, UGenInLike, ScalarRated, AudioRated, GE, Lazy}
 import de.sciss.synth
 import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
 import at.iem.sysson.sound.UGenGraphBuilder
 
-trait UserInteraction extends Lazy.Expander[Unit] {
+trait UserInteraction extends Lazy.Expander[Unit] with HasSideEffect {
   protected final def makeUGens = ()
 }
 

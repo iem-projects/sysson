@@ -42,7 +42,7 @@ object Var {
     def axis(ref: VarRef): Axis
   }
 
-  case class Play(variable: Var, time: SelectedDim.Play)
+  case class Play(variable: Var, time: Dim.Play)
     extends impl.LazyImpl with AudioRated {
 
     override def productPrefix = "Var$Play"
@@ -57,14 +57,13 @@ object Var {
   /** Declares a new sonification variable (data source).
     *
     * @param name         Logical name by which the source is referred to
-    * @param dims         List of specifications of required dimensions
     * @param higherRank   Whether a matrix rank higher than `dimensions.size` is permitted
     */
-  def apply(name: String, dims: Vec[Dim], higherRank: Boolean = false, operations: Vec[Var.Op] = Vec.empty): Var =
-    Impl(name, dims, higherRank, operations)
+  def apply(name: String, /* dims: Vec[Dim], */ higherRank: Boolean = false): Var =
+    Impl(name, higherRank)
 
-  def unapply(vr: Var): Option[(String, Vec[Dim], Boolean, Vec[Var.Op])] = Some(
-    vr.name, vr.dims, vr.higherRank, vr.operations
+  def unapply(vr: Var): Option[(String, /* Vec[Dim], */ Boolean /*, Vec[Var.Op] */)] = Some(
+    vr.name, vr.higherRank
   )
 
   implicit def serializer: ImmutableSerializer[Var] = impl.VarImpl.serializer
@@ -118,56 +117,65 @@ object Var {
 
   // -------- VarImpl --------
 
-  private final case class Impl(name: String, dims: Vec[Dim], higherRank: Boolean,
-                                              operations: Vec[Var.Op]) extends Var {
+  private final case class Impl(name: String, higherRank: Boolean)
+    extends Var {
+
     override def productPrefix = "Var"
 
-    private def select1(selection: SelectedLike): Impl = {
-      requireUnusedReduction(selection.variable)
-      copy(operations = operations :+ Var.Select(selection))
-    }
 
-    private def requireUnusedReduction(v: VarRef): Unit =
-      require(!operations.exists {
-        case r: Var.Reduction if r.variable == v => true
-        case _ => false
-      }, s"Dimension $v has already been selected or reduced")
 
-    def select(selections: SelectedLike*): Var = (this /: selections)(_ select1 _)
+    //    private def select1(selection: SelectedLike): Impl = {
+    //      requireUnusedReduction(selection.variable)
+    //      copy(operations = operations :+ Var.Select(selection))
+    //    }
 
-    def average(dim: VarRef): Var = {
-      requireUnusedReduction(dim)
-      copy(operations = operations :+ Var.Average(dim))
-    }
+    //    private def requireUnusedReduction(v: VarRef): Unit =
+    //      require(!operations.exists {
+    //        case r: Var.Reduction if r.variable == v => true
+    //        case _ => false
+    //      }, s"Dimension $v has already been selected or reduced")
+
+    //    def select(selections: SelectedLike*): Var = (this /: selections)(_ select1 _)
+    //
+    //    def average(dim: VarRef): Var = {
+    //      requireUnusedReduction(dim)
+    //      copy(operations = operations :+ Var.Average(dim))
+    //    }
+
+    def dim(name: String): Dim = Dim(this, name)
 
     def ir: Var.GE = ???
     def kr: Var.GE = ???
 
-    def play(time: SelectedDim.Play): Var.Play = Var.Play(this, time)
+    def play(time: Dim.Play): Var.Play = Var.Play(this, time)
   }
 }
 trait Var extends UserInteraction {
   /** Logical name by which the source is referred to */
   def name: String
-  /** List of specifications of required dimensions */
-  def dims: Vec[Dim]
+
+  // /** List of specifications of required dimensions */
+  // def dims: Vec[Dim]
+
+  def dim(name: String): Dim
+
   /** Whether a matrix rank higher than `dimensions.size` is permitted */
   def higherRank: Boolean
 
-  def select(selections: SelectedLike*): Var
-  def average(dim: VarRef): Var
+  //  def select(selections: SelectedLike*): Var
+  //  def average(dim: VarRef): Var
 
   def ir: Var.GE
   def kr: Var.GE
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
-  def play(time: SelectedDim.Play): Var.Play
+  def play(time: Dim.Play): Var.Play
 
   // /** Creates a dimension reference */
-  // def dim(dim: Dim): SelectedDim
+  // def dim(dim: Dim): Dim
 
-  /** The operations performed on the original input variable, such as taking slices,
-    * averaging over a dimension, etc.
-    */
-  def operations: Vec[Var.Op]
+  //  /** The operations performed on the original input variable, such as taking slices,
+  //    * averaging over a dimension, etc.
+  //    */
+  //  def operations: Vec[Var.Op]
 }

@@ -164,14 +164,15 @@ object UGenGraphBuilderImpl {
       val section0 = sonif.variableMap.getOrElse(SonificationOLD.DefaultVariable,
         sys.error(s"Default variable not specified"))
 
-      val section = (section0 /: variable.operations) {
-        case (sect, Var.Select(selection)) =>
-          val (sectName, sectSect) = findVariable(selection.variable)
-          require1D(sectSect, selection.variable)
-          sect in sectName select sectSect.section.head
-
-        case (sect, op) => sys.error(s"Currently unsupported operation $op for $sect")
-      }
+      val section = section0
+      //      (section0 /: variable.operations) {
+      //        case (sect, Var.Select(selection)) =>
+      //          val (sectName, sectSect) = findVariable(selection.variable)
+      //          require1D(sectSect, selection.variable)
+      //          sect in sectName select sectSect.section.head
+      //
+      //        case (sect, op) => sys.error(s"Currently unsupported operation $op for $sect")
+      //      }
 
       section
     }

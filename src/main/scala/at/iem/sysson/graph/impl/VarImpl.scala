@@ -46,15 +46,15 @@ object VarImpl {
       require(cookie == VAR_COOKIE,
         s"Unexpected cookie (expected ${VAR_COOKIE.toHexString}, found ${cookie.toHexString})")
       val name        = in.readUTF()
-      val dims        = ImmutableSerializer.indexedSeq[Dim].read(in)
+      // val dims        = ImmutableSerializer.indexedSeq[Dim].read(in)
       val higherRank  = in.readBoolean()
-      Var(name, dims, higherRank)
+      Var(name, /* dims, */ higherRank)
     }
 
     def write(v: Var, out: DataOutput): Unit = {
       out.writeInt(VAR_COOKIE)
       out.writeUTF(v.name)
-      ImmutableSerializer.indexedSeq[Dim].write(v.dims, out)
+      // ImmutableSerializer.indexedSeq[Dim].write(v.dims, out)
       out.writeBoolean(v.higherRank)
     }
   }

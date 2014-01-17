@@ -27,42 +27,33 @@
 package at.iem.sysson.graph
 
 import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
-import de.sciss.synth.{GE, UGenInLike, AudioRated, Optional}
+import de.sciss.synth.{HasSideEffect, Lazy, GE, UGenInLike, AudioRated, Optional}
 import de.sciss.synth
 import at.iem.sysson.sound.UGenGraphBuilder
 
 object Dim {
   private final val DIM_COOKIE = 0x64696D00 // "dim\0"
 
-  implicit object serializer extends ImmutableSerializer[Dim] {
-    def read(in: DataInput): Dim = {
-      val cookie = in.readInt()
-      require(cookie == DIM_COOKIE,
-        s"Unexpected cookie (expected ${DIM_COOKIE.toHexString}, found ${cookie.toHexString})")
-      val name    = in.readUTF()
-      val minSize = ImmutableSerializer.option[Int].read(in)
-      val maxSize = ImmutableSerializer.option[Int].read(in)
-      Dim(name, minSize = minSize, maxSize = maxSize)
-    }
+  //  implicit object serializer extends ImmutableSerializer[Dim] {
+  //    def read(in: DataInput): Dim = {
+  //      val cookie = in.readInt()
+  //      require(cookie == DIM_COOKIE,
+  //        s"Unexpected cookie (expected ${DIM_COOKIE.toHexString}, found ${cookie.toHexString})")
+  //      val name    = in.readUTF()
+  //      val minSize = ImmutableSerializer.option[Int].read(in)
+  //      val maxSize = ImmutableSerializer.option[Int].read(in)
+  //      Dim(name, minSize = minSize, maxSize = maxSize)
+  //    }
+  //
+  //    def write(dim: Dim, out: DataOutput): Unit = {
+  //      out.writeInt(DIM_COOKIE)
+  //      out.writeUTF(dim.name)
+  //      ImmutableSerializer.option[Int].write(dim.minSize, out)
+  //      ImmutableSerializer.option[Int].write(dim.maxSize, out)
+  //    }
+  //  }
 
-    def write(dim: Dim, out: DataOutput): Unit = {
-      out.writeInt(DIM_COOKIE)
-      out.writeUTF(dim.name)
-      ImmutableSerializer.option[Int].write(dim.minSize, out)
-      ImmutableSerializer.option[Int].write(dim.maxSize, out)
-    }
-  }
-}
-/** Specification of a data source dimension
-  *
-  * @param name     Logical name by which the dimension is referred to
-  * @param minSize  Minimum domain size, or none
-  * @param maxSize  Maximum domain size, or none
-  */
-case class Dim(name: String, minSize: Optional[Int] = None, maxSize: Optional[Int] = None)
-
-object SelectedDim {
-  case class Play(dim: SelectedDim, freq: synth.GE)
+  case class Play(dim: Dim, freq: synth.GE)
     extends impl.LazyImpl with AudioRated {
 
     override def productPrefix = "SelectedDim$Play"
@@ -71,12 +62,19 @@ object SelectedDim {
       ??? // b.addAudioSelection(dim, freq)
   }
 }
-case class SelectedDim(v: Var, dim: Dim) {
+/** Specification of a data source dimension
+  *
+  * @param v        Data source to which this dimension refers
+  * @param name     Logical name by which the dimension is referred to
+  */
+case class Dim(v: Var, name: String)
+  extends UserInteraction {
+
   /** Produces a graph element which unrolls the selected range in time, using the dimension's domain value.
     *
     * @param  freq  a graph element specifying the frequency in samples per second with which to unroll.
     */
-  def play(freq: GE): SelectedDim.Play = SelectedDim.Play(this, freq)
+  def play(freq: GE): Dim.Play = Dim.Play(this, freq)
 
   def values : GE = ??? // Impl.values (this)
   def indices: GE = ??? // Impl.indices(this)
