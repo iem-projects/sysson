@@ -59,6 +59,7 @@ import scala.util.Success
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter, Calendar}
 import ucar.nc2.units.DateFormatter
 import de.sciss.lucre.event.Sys
+import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -473,7 +474,7 @@ object ClimateViewImpl {
         // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
         override def canImport(support: TransferSupport): Boolean = {
           val res =
-            if (support.isDataFlavorSupported(LibraryNodeFlavor) &&
+            if (support.isDataFlavorSupported(DragAndDrop.LibraryNodeFlavor) &&
               ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
               support.setDropAction(TransferHandler.LINK)
               true
@@ -487,7 +488,7 @@ object ClimateViewImpl {
         override def importData(support: TransferSupport): Boolean = {
           val t           = support.getTransferable
           // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
-          val drag      = t.getTransferData(LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
+          val drag      = t.getTransferData(DragAndDrop.LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
           val sourceOpt = drag.cursor.step { implicit tx =>
             drag.node() match {
               case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))

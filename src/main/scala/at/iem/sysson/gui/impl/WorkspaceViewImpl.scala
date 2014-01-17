@@ -28,7 +28,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import scala.swing.{Button, Swing, FlowPanel, Component, BoxPanel, Orientation, Action}
+import scala.swing.{Swing, FlowPanel, Component, BoxPanel, Orientation, Action}
 import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
 import de.sciss.desktop.{UndoManager, FileDialog, Window}
 import de.sciss.file._
@@ -37,14 +37,15 @@ import de.sciss.lucre.expr.List
 import de.sciss.icons.raphael
 import de.sciss.lucre.stm
 import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoableEdit}
-import javax.swing.{TransferHandler, ImageIcon}
-import javax.swing.TransferHandler.TransferSupport
 import scala.concurrent.ExecutionContext
 import at.iem.sysson.sound.{Keys, Sonification}
 import de.sciss.synth.proc.{Attribute, ExprImplicits}
 import de.sciss.lucre.synth.expr.Strings
 import de.sciss.model.Change
 import de.sciss.swingplus.Separator
+import at.iem.sysson.gui.DragAndDrop.{DataSourceDrag, LibraryNodeDrag, LibraryNodeFlavor}
+import javax.swing.{JComponent, TransferHandler}
+import java.awt.datatransfer.Transferable
 
 // XXX TODO: factor out frame
 object WorkspaceViewImpl {
@@ -264,6 +265,33 @@ object WorkspaceViewImpl {
         }
       }
       val ggViewSource = GUI.toolButton(actionViewSource, raphael.Shapes.View, tooltip = txtViewDataSource)
+
+      dataSources.view.peer.setTransferHandler(new TransferHandler {
+        // ---- export ----
+
+        // dragging only works when MOVE _and_ COPY are included. Why?
+        override def getSourceActions(c: JComponent): Int =
+          TransferHandler.LINK | TransferHandler.COPY | TransferHandler.MOVE
+
+        override def createTransferable(c: JComponent): Transferable = {
+          // println("createTransferable")
+          dataSources.guiSelection.headOption.flatMap { idx =>
+            val hOpt = cursor.step { implicit tx =>
+              dataSources.list.flatMap { li => li.get(idx).map(tx.newHandle(_)) }
+            }
+            hOpt.map { sourceH =>
+              // println("AQUI")
+              DragAndDrop.Transferable(DragAndDrop.DataSourceFlavor) {
+                new DataSourceDrag {
+                  type S1 = S
+                  val workspace = impl.workspace
+                  val source    = sourceH
+                }
+              }
+            }
+          } .orNull
+        }
+      })
 
       val flowSource  = new FlowPanel(ggAddSource, ggRemoveSource, ggViewSource)
 

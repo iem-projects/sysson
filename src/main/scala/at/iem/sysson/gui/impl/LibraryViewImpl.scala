@@ -19,6 +19,7 @@ import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
 import javax.swing.undo.{CannotUndoException, CannotRedoException, AbstractUndoableEdit}
 import at.iem.sysson.gui.edit.EditExprVar
+import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
@@ -219,7 +220,7 @@ object LibraryViewImpl {
               val cursor: stm.Cursor[S] = impl.cursor
               val node: stm.Source[S#Tx, Either[Library.Branch[S], Library.Leaf[S]]] = patch
             }
-            DragAndDrop.Transferable(LibraryNodeFlavor)(drag)
+            DragAndDrop.Transferable(DragAndDrop.LibraryNodeFlavor)(drag)
           } .orNull
           // println(s"createTransferable: $res")
           res

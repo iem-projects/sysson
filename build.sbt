@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
   "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
   "de.sciss" %% "fileutil"                % "1.1.+",          // easy file name manipulation
-  "de.sciss" %% "swingplus"               % "0.0.2+",         // GUI helpers
+  "de.sciss" %% "swingplus"               % "0.0.3+",         // GUI helpers
   "de.sciss" %% "treetable-scala"         % "1.3.4+",         // GUI component
   "de.sciss" %% "lucrestm-bdb"            % "2.0.+",          // database used for library
   "de.sciss" %% "serial"                  % "1.0.1+",         // important bug fix in 1.0.1!

@@ -40,6 +40,7 @@ import de.sciss.serial.Serializer
 import GUI.{fromTx => guiFromTx, requireEDT}
 import at.iem.sysson.gui.ListView.Handler
 import de.sciss.model.impl.ModelImpl
+import de.sciss.swingplus.Implicits._
 
 object ListViewImpl {
   def empty[S <: Sys[S], Elem, U, Data](handler: Handler[S, Elem, U, Data])
@@ -66,16 +67,15 @@ object ListViewImpl {
     view =>
 
     private var ggList: swing.ListView[Data] = _
-
-    private val mList = new DefaultListModel
-
+    private val mList   = new DefaultListModel
     private val current = STMRef(Option.empty[(Source[S#Tx, List[S, Elem, U]], Disposable[S#Tx])])
 
-    def list(implicit tx: S#Tx): Option[List[S, Elem, U]] = {
+    def view = ggList
+
+    def list(implicit tx: S#Tx): Option[List[S, Elem, U]] =
       current.get(tx.peer).map {
         case (h, _) => h()
       }
-    }
 
     def list_=(newOption: Option[List[S, Elem, U]])(implicit tx: S#Tx): Unit = {
       current.get(tx.peer).foreach {
@@ -134,6 +134,7 @@ object ListViewImpl {
       //            }
       //         }
       ggList = new swing.ListView[Data] {
+        this.dragEnabled = true
         peer.setModel(mList)
         listenTo(selection)
         reactions += {

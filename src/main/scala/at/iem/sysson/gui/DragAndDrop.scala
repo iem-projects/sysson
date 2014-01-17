@@ -29,12 +29,34 @@ package gui
 
 import java.awt.datatransfer.{UnsupportedFlavorException, Transferable, DataFlavor}
 import collection.breakOut
+import de.sciss.lucre.event.Sys
+import de.sciss.lucre.stm
 
 object DragAndDrop {
   sealed trait Flavor[+A] extends DataFlavor
 
   def internalFlavor[A](implicit ct: reflect.ClassTag[A]): Flavor[A] =
     new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + ";class=\"" + ct.runtimeClass.getName + "\"") with Flavor[A]
+
+  // ---- specific flavors ----
+
+  val LibraryNodeFlavor = internalFlavor[LibraryNodeDrag]
+
+  trait LibraryNodeDrag {
+    type S1 <: Sys[S1]
+    def cursor: stm.Cursor[S1]
+    def node: stm.Source[S1#Tx, Either[Library.Branch[S1], Library.Leaf[S1]]]
+  }
+
+  val DataSourceFlavor = internalFlavor[DataSourceDrag]
+
+  trait DataSourceDrag {
+    type S1 <: Sys[S1]
+    def workspace: Workspace[S1]
+    def source: stm.Source[S1#Tx, DataSource[S1]]
+  }
+
+  // ----
 
   object Transferable {
     /** Creates a transferable for one particular flavor. */

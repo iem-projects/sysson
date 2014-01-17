@@ -31,7 +31,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.{Keys, Sonification}
 import de.sciss.lucre.stm
-import scala.swing.{Alignment, Swing, Orientation, BoxPanel, Label, FlowPanel, Component}
+import scala.swing.{TextField, Alignment, Swing, Orientation, BoxPanel, Label, FlowPanel, Component}
 import de.sciss.synth.proc.Attribute
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
@@ -41,6 +41,7 @@ import de.sciss.synth.SynthGraph
 import scalaswingcontrib.group.GroupPanel
 import javax.swing.GroupLayout
 import language.reflectiveCalls
+import at.iem.sysson.gui.DragAndDrop.DataSourceDrag
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
@@ -75,14 +76,15 @@ object SonificationViewImpl {
 
     def sonification(implicit tx: S#Tx): Sonification[S] = sonifH()
 
+    private var pMapping : FlowPanel = _
     private var pControls: FlowPanel = _
 
     def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
       val sonif = sonifH()
 
-      // ---- sources tx ----
+      // ---- mapping tx ----
 
-      val sources = g.sources.collect {
+      val mapping = g.sources.collect {
         case vr: graph.Var =>
           // vr.name
           // vr.dims
@@ -101,13 +103,39 @@ object SonificationViewImpl {
       }
 
       GUI.fromTx {
-        // ---- sources gui ----
+        // ---- mapping gui ----
 
+        val ggMap = mapping.map { vr =>
+          val lb    = new Label(s"${vr.name}:")
+          val drop  = new TextField(16)
+          drop.editable = false
+          drop.border   = Swing.CompoundBorder(outside = drop.border,
+            inside = IconBorder(Icons.Target(DropButton.IconSize)))
+          DropButton.installTransferHandler[DataSourceDrag](drop, DragAndDrop.DataSourceFlavor) { drag =>
+            println("TODO: import")
+            true
+          }
+          (lb, drop)
+        }
 
+        val pMap = new GroupPanel {
+          theHorizontalLayout is Sequential(
+            Parallel(ggMap.map(tup => add[GroupLayout#ParallelGroup](tup._1)): _*),
+            Parallel(ggMap.map(tup => add[GroupLayout#ParallelGroup](tup._2)): _*)
+          )
+
+          theVerticalLayout is Sequential(
+            ggMap.map { tup =>
+              Parallel(Baseline)(tup._1, tup._2): InGroup[GroupLayout#SequentialGroup]
+            }: _*
+          )
+        }
+        pMapping.contents.clear()
+        pMapping.contents += pMap
 
         // ---- controls gui ----
 
-        val gg = userValues.map { case (key, /* value, */ view) =>
+        val ggCtl = userValues.map { case (key, /* value, */ view) =>
           val lb    = new Label(s"$key:", null, Alignment.Trailing)
           val sp    = view.component
           (lb, sp)
@@ -115,12 +143,12 @@ object SonificationViewImpl {
 
         val pCtl = new GroupPanel {
           theHorizontalLayout is Sequential(
-            Parallel(gg.map(tup => add[GroupLayout#ParallelGroup](tup._1)): _*),
-            Parallel(gg.map(tup => add[GroupLayout#ParallelGroup](tup._2)): _*)
+            Parallel(ggCtl.map(tup => add[GroupLayout#ParallelGroup](tup._1)): _*),
+            Parallel(ggCtl.map(tup => add[GroupLayout#ParallelGroup](tup._2)): _*)
           )
 
           theVerticalLayout is Sequential(
-            gg.map { tup =>
+            ggCtl.map { tup =>
               Parallel(Baseline)(tup._1, tup._2): InGroup[GroupLayout#SequentialGroup]
             }: _*
           )
@@ -141,7 +169,7 @@ object SonificationViewImpl {
 
       // ---- Mapping ----
 
-      val pMapping = new FlowPanel()
+      pMapping    = new FlowPanel()
       pMapping.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Mapping")
 
       // ---- Controls ----
