@@ -29,7 +29,7 @@ package sound
 
 import de.sciss.synth.{SynthGraph, GE, UGenGraph}
 import at.iem.sysson.graph
-import at.iem.sysson.graph.{VarRef, SelectedRange, Var, SelectedLike}
+import at.iem.sysson.graph.{VarRef, Var, SelectedLike}
 import impl.{UGenGraphBuilderImpl => Impl}
 
 object UGenGraphBuilder {

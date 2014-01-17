@@ -152,7 +152,7 @@ object UGenGraphBuilderImpl {
 
     def addAudioVariable(varPlay: Var.Play): GE = {
       val section       = varSection(varPlay.variable)
-      val (timeName, _) = findVariable(varPlay.time.range.variable)
+      val (timeName, _) = findVariable(???) // varPlay.time.dim.variable)
       val timeDim = section.dimensions.indexWhere(_.name == timeName)
       require (timeDim >= 0, s"Time dimension $timeName is not part of $section")
 
@@ -197,7 +197,7 @@ object UGenGraphBuilderImpl {
       val section0                = varSection(varPlay.variable)
 
       val (axisName, _)           = findVariable(axis)
-      val (timeName, _)           = findVariable(varPlay.time.range.variable)
+      val (timeName, _)           = findVariable(???) // varPlay.time.dim.variable)
       val dims                    = section0.dimensions
       val timeDim                 = dims.indexWhere(_.name == timeName)
       val axisDim0                = dims.indexWhere(_.name == axisName)

@@ -40,7 +40,7 @@ import java.awt.{BasicStroke, Color}
 import scala.swing.{ProgressBar, TextField, Button, BoxPanel, Orientation, CheckBox, BorderPanel, Component, Alignment, Label, Swing}
 import Swing._
 import scalaswingcontrib.group.GroupPanel
-import javax.swing.{TransferHandler, ImageIcon, SpinnerNumberModel, JSpinner, GroupLayout}
+import javax.swing.{TransferHandler, SpinnerNumberModel, JSpinner, GroupLayout}
 import scala.swing.event.{ButtonClicked, ValueChanged}
 import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
@@ -48,16 +48,14 @@ import javax.swing.event.{ChangeEvent, ChangeListener}
 import javax.swing.TransferHandler.TransferSupport
 import de.sciss.audiowidgets.{Transport, DualRangeModel, DualRangeSlider}
 import at.iem.sysson.graph
-import graph.{SelectedValue, SelectedRange}
 import collection.breakOut
-import de.sciss.desktop.{DialogSource, OptionPane}
+import de.sciss.desktop.DialogSource
 import de.sciss.synth.{Ops, Synth}
-import de.sciss.swingplus.{OverlayPanel, Spinner}
+import de.sciss.swingplus.OverlayPanel
 import scala.concurrent.{ExecutionContext, Future}
 import at.iem.sysson.sound.SonificationOLD
 import scala.util.Success
-import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter, Calendar}
-import ucar.nc2.units.DateFormatter
+import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 
@@ -593,67 +591,67 @@ object ClimateViewImpl {
 
     def patch: Option[PatchOLD] = _patch
     def patch_=(value: Option[PatchOLD]): Unit = {
-      value match {
-        case Some(p) =>
-          ggSonifName.text    = p.name
-          val sources         = p.graph.sources
-          val interactiveVars = sources.collect {
-            // case i: UserInteraction => i
-            case SelectedRange(v) => v
-            case SelectedValue(v) => v
-          }
-          // val docVars = document.data.variables
-          val docVars = section.dimensions.flatMap(d => net.variableMap.get(d.name))
-          val (foundVars, missingVars) = interactiveVars.map(v => v -> v.find(docVars).map(_.name))
-            .partition(_._2.isDefined)
-          if (missingVars.nonEmpty) {
-            val msg = "The patch requires the following dimensions\nwhich are not part of this view:\n" +
-              missingVars.map(_._1).mkString("\n  ", "\n  ", "")
-            val opt = OptionPane.message(message = msg, messageType = OptionPane.Message.Error)
-            opt.show(None)
-          } else {
-            val nameSet: Set[String] = foundVars.collect {
-              case (_, Some(name)) => name
-            } (breakOut)
-            models.foreach { case (key, sli) =>
-              sli.rangeVisible = nameSet.contains(key)
-            }
-          }
-
-          val _userValues = sources.collect {
-            case graph.UserValue(key, default) =>
-              val m = new SpinnerNumberModel(default, Double.MinValue, Double.MaxValue, 0.1)
-              key -> m
-          }
-
-          userValues = _userValues.toMap
-
-          // println(userValues.map(_._1).mkString(", "))
-
-          _userValues.foreach { case (key, m) =>
-            val lb = new Label(s"${key.capitalize}:")
-            lb.peer.putClientProperty("JComponent.sizeVariant", "small")
-            val spi = new Spinner(m)
-            val d   = spi.preferredSize
-            d.width = math.min(d.width, 80) // XXX TODO WTF
-            spi.preferredSize = d
-            spi.maximumSize   = d
-            pUserValues.contents += HStrut(8)
-            pUserValues.contents += lb
-            pUserValues.contents += spi
-          }
-
-          pUserValues.contents += HGlue
-          pUserValues.contents += HStrut(16)  // OS X resize gadget
-          pSonif2.visible     = true
-          pSonif2.revalidate()
-          pSonif2.repaint()
-
-        case _ =>
-          pSonif2.visible   = false
-          userValues        = Map.empty
-          pUserValues.contents.clear()
-      }
+//      value match {
+//        case Some(p) =>
+//          ggSonifName.text    = p.name
+//          val sources         = p.graph.sources
+//          val interactiveVars = sources.collect {
+//            // case i: UserInteraction => i
+//            case SelectedRange(v) => v
+//            case SelectedValue(v) => v
+//          }
+//          // val docVars = document.data.variables
+//          val docVars = section.dimensions.flatMap(d => net.variableMap.get(d.name))
+//          val (foundVars, missingVars) = interactiveVars.map(v => v -> v.find(docVars).map(_.name))
+//            .partition(_._2.isDefined)
+//          if (missingVars.nonEmpty) {
+//            val msg = "The patch requires the following dimensions\nwhich are not part of this view:\n" +
+//              missingVars.map(_._1).mkString("\n  ", "\n  ", "")
+//            val opt = OptionPane.message(message = msg, messageType = OptionPane.Message.Error)
+//            opt.show(None)
+//          } else {
+//            val nameSet: Set[String] = foundVars.collect {
+//              case (_, Some(name)) => name
+//            } (breakOut)
+//            models.foreach { case (key, sli) =>
+//              sli.rangeVisible = nameSet.contains(key)
+//            }
+//          }
+//
+//          val _userValues = sources.collect {
+//            case graph.UserValue(key, default) =>
+//              val m = new SpinnerNumberModel(default, Double.MinValue, Double.MaxValue, 0.1)
+//              key -> m
+//          }
+//
+//          userValues = _userValues.toMap
+//
+//          // println(userValues.map(_._1).mkString(", "))
+//
+//          _userValues.foreach { case (key, m) =>
+//            val lb = new Label(s"${key.capitalize}:")
+//            lb.peer.putClientProperty("JComponent.sizeVariant", "small")
+//            val spi = new Spinner(m)
+//            val d   = spi.preferredSize
+//            d.width = math.min(d.width, 80) // XXX TODO WTF
+//            spi.preferredSize = d
+//            spi.maximumSize   = d
+//            pUserValues.contents += HStrut(8)
+//            pUserValues.contents += lb
+//            pUserValues.contents += spi
+//          }
+//
+//          pUserValues.contents += HGlue
+//          pUserValues.contents += HStrut(16)  // OS X resize gadget
+//          pSonif2.visible     = true
+//          pSonif2.revalidate()
+//          pSonif2.repaint()
+//
+//        case _ =>
+//          pSonif2.visible   = false
+//          userValues        = Map.empty
+//          pUserValues.contents.clear()
+//      }
       _patch = value
     }
   }

@@ -42,7 +42,7 @@ object Var {
     def axis(ref: VarRef): Axis
   }
 
-  case class Play(variable: Var, time: SelectedRange.Play)
+  case class Play(variable: Var, time: SelectedDim.Play)
     extends impl.LazyImpl with AudioRated {
 
     override def productPrefix = "Var$Play"
@@ -83,7 +83,7 @@ object Var {
   }
 
   /** A reference to a dimensional axis with respect to a variable section.
-    * The difference between this and for instance SelectRange is that the
+    * The difference between this and for instance `SelectDim` is that the
     * graph element producing methods such as `values` and `indices` produce
     * multi-channel signals which correctly align with the underlying variable section.
     * This allows signal processing which combines each sample value from a
@@ -143,7 +143,7 @@ object Var {
     def ir: Var.GE = ???
     def kr: Var.GE = ???
 
-    def play(time: SelectedRange.Play): Var.Play = Var.Play(this, time)
+    def play(time: SelectedDim.Play): Var.Play = Var.Play(this, time)
   }
 }
 trait Var extends UserInteraction {
@@ -161,7 +161,10 @@ trait Var extends UserInteraction {
   def kr: Var.GE
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
-  def play(time: SelectedRange.Play): Var.Play
+  def play(time: SelectedDim.Play): Var.Play
+
+  // /** Creates a dimension reference */
+  // def dim(dim: Dim): SelectedDim
 
   /** The operations performed on the original input variable, such as taking slices,
     * averaging over a dimension, etc.
