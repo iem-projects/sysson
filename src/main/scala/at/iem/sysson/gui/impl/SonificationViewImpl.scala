@@ -41,8 +41,6 @@ import de.sciss.synth.SynthGraph
 import scalaswingcontrib.group.GroupPanel
 import javax.swing.GroupLayout
 import language.reflectiveCalls
-import at.iem.sysson.gui.DragAndDrop.DataSourceDrag
-import at.iem.sysson.gui.edit.EditMutableMap
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])

@@ -45,6 +45,7 @@ case class SelectedValue(variable: VarRef /*, default: */) extends SelectedLike 
   def index: GE = ???
 }
 
+@deprecated("Replaced by Dim")
 object SelectedRange {
   //  case class GE(range: SelectedRange, freq: synth.GE) extends synth.GE with AudioRated {
   //    def expand: UGenInLike = ...
@@ -66,6 +67,7 @@ object SelectedRange {
   *
   * @param variable the variable for which the selection is made
   */
+@deprecated("Replaced by Dim")
 case class SelectedRange(variable: VarRef) extends SelectedLike {
   import impl.{SelectedRangeImpl => Impl}
 

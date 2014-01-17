@@ -27,6 +27,9 @@
 package at.iem.sysson.graph
 
 import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
+import de.sciss.synth.{UGenInLike, AudioRated, Optional}
+import de.sciss.synth
+import at.iem.sysson.sound.UGenGraphBuilder
 
 object Dim {
   private final val DIM_COOKIE = 0x64696D00 // "dim\0"
@@ -49,6 +52,15 @@ object Dim {
       ImmutableSerializer.option[Int].write(dim.maxSize, out)
     }
   }
+
+  case class Play(dim: Dim, freq: synth.GE)
+    extends impl.LazyImpl with AudioRated {
+
+    override def productPrefix = "Dim$Play"
+
+    protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
+      ??? // b.addAudioSelection(dim, freq)
+  }
 }
 /** Specification of a data source dimension
   *
@@ -56,4 +68,4 @@ object Dim {
   * @param minSize  Minimum domain size, or none
   * @param maxSize  Maximum domain size, or none
   */
-case class Dim(name: String, minSize: Option[Int], maxSize: Option[Int])
+case class Dim(name: String, minSize: Optional[Int] = None, maxSize: Optional[Int] = None)
