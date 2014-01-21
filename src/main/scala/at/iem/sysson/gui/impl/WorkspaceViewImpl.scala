@@ -81,8 +81,8 @@ object WorkspaceViewImpl {
         }
       }
     }
-    val dataSources         = ListView[S, DataSource  [S], Unit                  , String](workspace.dataSources  , dataSourcesHndl)
-    val sonifications       = ListView[S, Sonification[S], Sonification.Update[S], String](workspace.sonifications, sonificationsHndl)
+    val dataSources   = ListView[S, DataSource  [S], Unit                  , String](workspace.dataSources  , dataSourcesHndl  )
+    val sonifications = ListView[S, Sonification[S], Sonification.Update[S], String](workspace.sonifications, sonificationsHndl)
     val res = new Impl[S](undoMgr, dataSources, sonifications)(workspace)
     workspace.addDependent(res)
     GUI.fromTx(res.guiInit())

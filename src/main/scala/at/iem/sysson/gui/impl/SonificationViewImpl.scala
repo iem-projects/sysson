@@ -92,11 +92,12 @@ object SonificationViewImpl {
         case vr: graph.Var =>
           val key   = vr.name
           // vr.name
-          // vr.dims
           // vr.higherRank
-          // vr.operations
+          val dimKeys = g.sources.collect {
+            case graph.Dim(`vr`, dimKey) => dimKey
+          }
 
-          val view = SonificationSourceView(workspace, mapping, key)
+          val view = SonificationSourceView(workspace, mapping, key, dimKeys)
 
           (key, view)
       }

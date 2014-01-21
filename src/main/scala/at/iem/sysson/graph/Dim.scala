@@ -32,7 +32,7 @@ import de.sciss.synth
 import at.iem.sysson.sound.UGenGraphBuilder
 
 object Dim {
-  private final val DIM_COOKIE = 0x64696D00 // "dim\0"
+  // private final val DIM_COOKIE = 0x64696D00 // "dim\0"
 
   //  implicit object serializer extends ImmutableSerializer[Dim] {
   //    def read(in: DataInput): Dim = {
