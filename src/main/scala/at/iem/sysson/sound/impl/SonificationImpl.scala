@@ -66,7 +66,7 @@ object SonificationImpl {
   }
 
   private final class SourceImpl[S <: Sys[S]](protected val targets: evt.Targets[S],
-                                        val data: DataSource[S],
+                                        val matrix: DataSource[S],
                                         val dims: expr.Map[S, String, Expr[S, String], model.Change[String]])
     extends Source[S]
     with evt.impl.StandaloneLike[S, Source.Update[S], Source[S]] {
@@ -79,7 +79,7 @@ object SonificationImpl {
 
     protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
-      data.write(out)
+      matrix.write(out)
       dims.write(out)
     }
 

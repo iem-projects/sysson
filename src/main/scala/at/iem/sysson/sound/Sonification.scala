@@ -82,7 +82,7 @@ object Sonification {
     def apply[S <: Sys[S]](dataSource: DataSource[S])(implicit tx: S#Tx): Source[S] = Impl.applySource(dataSource)
   }
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
-    def data: DataSource[S]
+    def matrix: DataSource[S] // XXX TODO: continue here: this should become Matrix[S]
     def dims: expr.Map[S, String, Expr[S, String], model.Change[String]]
   }
 }

@@ -53,7 +53,7 @@ object UGenGraphBuilder {
 }
 trait UGenGraphBuilder extends UGenGraph.Builder {
   def addMatrixIn(m: MatrixIn): GE
-  def getMatrixInSource(m: MatrixIn): SonificationSource
+  def getMatrixInSource(m: MatrixIn): SonificationSourceOLD
 
   def addScalarSelection(range: SelectedLike          ): GE
   def addAudioSelection (range: SelectedLike, freq: GE): GE

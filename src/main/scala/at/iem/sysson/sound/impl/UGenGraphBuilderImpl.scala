@@ -73,7 +73,7 @@ object UGenGraphBuilderImpl {
     }
 
     // OBSOLETE
-    def getMatrixInSource(m: MatrixIn): SonificationSource = {
+    def getMatrixInSource(m: MatrixIn): SonificationSourceOLD = {
       val key = m.key
       sonif.mapping.getOrElse(key, throw SonificationOLD.MissingInput(key))
     }

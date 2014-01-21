@@ -59,7 +59,7 @@ object SonificationOLDImpl {
 
   private final class Impl(var name: String) extends SonificationOLD {
 
-    var mapping       = Map.empty[String, SonificationSource]
+    var mapping       = Map.empty[String, SonificationSourceOLD]
     var variableMap   = Map.empty[String, VariableSection   ]
     var userValueMap  = Map.empty[String, Double            ]
 

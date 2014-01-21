@@ -52,7 +52,7 @@ trait SonificationOLD {
   var patch: PatchOLD
 
   /** OBSOLETE */
-  var mapping:  Map[String, SonificationSource]
+  var mapping:  Map[String, SonificationSourceOLD]
 
   /** Prepares the data to be sonified.
     *

@@ -86,7 +86,7 @@ object SonificationSourceView {
 
     def updateSource(source: Option[Sonification.Source[S]])(implicit tx: S#Tx): Unit = {
       val tup = source.map { source =>
-        val data      = source.data
+        val data      = source.matrix
         val _dataName = data.file.base
         val net       = data.data(workspace)
         val _dims     = net.dimensionMap

@@ -1,5 +1,5 @@
 /*
- *  SonificationSource.scala
+ *  SonificationSourceOLD.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -27,14 +27,14 @@
 package at.iem.sysson
 
 // OBSOLETE
-sealed trait SonificationSource {
+sealed trait SonificationSourceOLD {
   def numColumns:   Int
   def numRows:      Int
   def section:      VariableSection
   def isTransposed: Boolean
 }
 
-case class ColumnSource(section: VariableSection) extends SonificationSource {
+case class ColumnSource(section: VariableSection) extends SonificationSourceOLD {
   require(section.reducedRank == 1, s"Reduced rank must be 1 for a column source: $section")
 
   lazy val size     = section.reducedShape.head
@@ -45,7 +45,7 @@ case class ColumnSource(section: VariableSection) extends SonificationSource {
   override def toString = s"$section.asColumn"
 }
 
-case class RowSource(section: VariableSection) extends SonificationSource {
+case class RowSource(section: VariableSection) extends SonificationSourceOLD {
   require(section.reducedRank == 1, s"Reduced rank must be 1 for a row source: $section")
 
   lazy val size     = section.reducedShape.head
@@ -56,7 +56,7 @@ case class RowSource(section: VariableSection) extends SonificationSource {
   override def toString = s"$section.asRow"
 }
 
-case class MatrixSource(section: VariableSection, rowDim: Int, columnDim: Int) extends SonificationSource {
+case class MatrixSource(section: VariableSection, rowDim: Int, columnDim: Int) extends SonificationSourceOLD {
   import Implicits._
 
   require(section.reducedRank == 2, s"Reduced rank must be 2 for a matrix source: $section")
