@@ -24,11 +24,11 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson
+package at.iem.sysson.legacy
 
 import de.sciss.osc
-import impl.{NcviewSyncImpl => Impl}
 import de.sciss.model.Model
+import impl.{NcviewSyncImpl => Impl}
 
 object NcviewSync {
   /** Creates a new Ncview sonification server.

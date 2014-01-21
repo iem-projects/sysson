@@ -28,6 +28,7 @@ package at.iem.sysson
 
 import gui.SwingApplication
 import scala.util.control.NonFatal
+import at.iem.sysson.legacy.NcviewSync
 
 object Main extends App with Runnable {
   final val useNcView = false

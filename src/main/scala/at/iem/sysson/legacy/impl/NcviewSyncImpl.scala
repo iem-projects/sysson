@@ -24,12 +24,13 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson
-package impl
+package at.iem.sysson.legacy.impl
 
 import de.sciss.osc
-import gui.{GUI, DocumentViewHandler}
 import de.sciss.model.impl.ModelImpl
+import at.iem.sysson.legacy.NcviewSync
+import at.iem.sysson._
+import scala.Some
 
 private[sysson] object NcviewSyncImpl {
   def apply(config: NcviewSync.Config): NcviewSync = new Impl(config)
