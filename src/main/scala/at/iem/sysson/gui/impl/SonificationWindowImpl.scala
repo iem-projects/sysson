@@ -1,5 +1,5 @@
 /*
- *  SonificationFrameImpl.scala
+ *  SonificationWindowImpl.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -34,9 +34,9 @@ import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.Window
 import scala.swing.Action
 
-object SonificationFrameImpl {
+object SonificationWindowImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
-                        (implicit tx: S#Tx): SonificationFrame[S] = {
+                        (implicit tx: S#Tx): SonificationWindow[S] = {
     val view  = SonificationView(workspace, sonification)
     val res   = new Impl(workspace, view)
     workspace.addDependent(res)
@@ -45,7 +45,7 @@ object SonificationFrameImpl {
   }
 
   private final class Impl[S <: Sys[S]](val workspace: Workspace[S], val view: SonificationView[S])
-    extends SonificationFrame[S] with ComponentHolder[Window] {
+    extends SonificationWindow[S] with ComponentHolder[Window] {
 
     def frame: Window = component
 

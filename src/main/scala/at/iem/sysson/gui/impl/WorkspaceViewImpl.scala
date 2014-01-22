@@ -336,7 +336,7 @@ object WorkspaceViewImpl {
             cursor.step { implicit tx =>
               indices.foreach { idx =>
                 val sonif = workspace.sonifications.apply(idx)
-                SonificationFrame(workspace, sonif)
+                SonificationWindow(workspace, sonif)
               }
             }
           }

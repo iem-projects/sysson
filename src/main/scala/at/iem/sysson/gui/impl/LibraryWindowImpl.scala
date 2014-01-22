@@ -1,5 +1,5 @@
 /*
- *  LibraryFrameImpl.scala
+ *  LibraryWindowImpl.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -33,15 +33,15 @@ import de.sciss.lucre.stm
 import de.sciss.desktop.impl.WindowImpl
 import de.sciss.desktop.Window
 
-object LibraryFrameImpl {
-  def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryFrame[S] = {
+object LibraryWindowImpl {
+  def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryWindow[S] = {
     val view  = LibraryView(library)
     val res   = new Impl(view)
     GUI.fromTx(res.guiInit())
     res
   }
 
-  private final class Impl[S <: Sys[S]](val view: LibraryView[S]) extends LibraryFrame[S] {
+  private final class Impl[S <: Sys[S]](val view: LibraryView[S]) extends LibraryWindow[S] {
     def guiInit(): Unit = {
       val undoManager = view.undoManager
 

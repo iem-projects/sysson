@@ -58,15 +58,6 @@ object DataSourceViewImpl {
 
   private final class GroupModel(root: nc2.Group)
     extends ExternalTreeModel[nc2.Group](root :: Nil, _.children) {
-
-    //    def test(t: Tree[nc2.Group]): Unit = {
-    //      // t.expandPath()
-    //      // t.expandsSelectedPaths
-    //      // t.getRowForPath()
-    //      // t.model.pathToTreePath()
-    //      // t.treePathToPath()
-    //      // t.selection
-    //    }
   }
 
   private object GroupRenderer extends DefaultTreeCellRenderer {

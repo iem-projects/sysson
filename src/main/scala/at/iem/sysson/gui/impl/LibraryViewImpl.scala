@@ -184,7 +184,7 @@ object LibraryViewImpl {
           case single :: Nil if single.isLeaf =>
             impl.cursor.step { implicit tx =>
               single.modelData() match {
-                case TreeLike.IsLeaf(l) => PatchCodeFrame(l, undoManager)
+                case TreeLike.IsLeaf(l) => PatchCodeWindow(l, undoManager)
                 case _                  =>
               }
             }

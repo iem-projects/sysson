@@ -26,7 +26,7 @@ import javax.swing.Icon
 import javax.swing.event.{UndoableEditEvent, UndoableEditListener}
 import de.sciss.lucre.expr.Expr
 
-object PatchCodeFrameImpl {
+object PatchCodeWindowImpl {
   /** We use one shared interpreter for all patch code frames. */
   private lazy val interpreter = {
     val cfg     = Interpreter.Config()

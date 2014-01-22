@@ -1,5 +1,5 @@
 /*
- *  SonificationFrame.scala
+ *  LibraryWindow.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -24,21 +24,18 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson.gui
+package at.iem.sysson
+package gui
 
 import de.sciss.lucre.event.Sys
-import impl.{SonificationFrameImpl => Impl}
-import at.iem.sysson.Workspace
-import at.iem.sysson.sound.Sonification
-import de.sciss.lucre.stm.Disposable
-import de.sciss.desktop.Window
+import de.sciss.lucre.stm
 
-object SonificationFrame {
-  def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
-                        (implicit tx: S#Tx): SonificationFrame[S] =
-    Impl(workspace, sonification)
+import impl.{LibraryWindowImpl => Impl}
+
+object LibraryWindow {
+  def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryWindow[S] =
+    Impl(library)
 }
-trait SonificationFrame[S <: Sys[S]] extends Disposable[S#Tx] {
-  def view: SonificationView[S]
-  def frame: Window
+trait LibraryWindow[S <: Sys[S]] {
+  def view: LibraryView[S]
 }
