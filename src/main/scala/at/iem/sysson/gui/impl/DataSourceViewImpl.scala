@@ -18,7 +18,7 @@ package impl
 
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
-import javax.swing.JTree
+import javax.swing.{JComponent, TransferHandler, JTree}
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
 import swing.event.TableRowsSelected
@@ -32,6 +32,8 @@ import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
+import java.awt.datatransfer.Transferable
+import at.iem.sysson.gui.DragAndDrop.DataSourceVarDrag
 
 object DataSourceViewImpl {
   import Implicits._
@@ -117,11 +119,12 @@ object DataSourceViewImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](docH: stm.Source[S#Tx, DataSource[S]], val file: File, data: nc2.NetcdfFile)
+  private final class Impl[S <: Sys[S]](sourceH: stm.Source[S#Tx, DataSource[S]], val file: File, data: nc2.NetcdfFile)
                                        (implicit val workspace: Workspace[S])
     extends DataSourceView[S] with ComponentHolder[Component] {
-
     impl =>
+    
+    import workspace.cursor
 
     private var _selVar = Option.empty[nc2.Variable]
 
@@ -133,7 +136,7 @@ object DataSourceViewImpl {
 
     private var tGroups    : Tree[nc2.Group]  = _
 
-    def source(implicit tx: S#Tx) = docH()
+    def source(implicit tx: S#Tx) = sourceH()
 
     def guiInit(): Unit = {
       GUI.requireEDT()
@@ -175,6 +178,30 @@ object DataSourceViewImpl {
               listenTo(selection)
             }
         }
+        
+        peer.setDragEnabled(true)
+        peer.setTransferHandler(new TransferHandler {
+          // ---- export ----
+
+          // dragging only works when MOVE _and_ COPY are included. Why?
+          override def getSourceActions(c: JComponent): Int =
+            TransferHandler.LINK | TransferHandler.COPY | TransferHandler.MOVE
+
+          override def createTransferable(c: JComponent): Transferable = {
+            selectedVariable.map { vr =>
+              val varH = impl.cursor.step { implicit tx =>
+                tx.newHandle(DataSource.Variable(sourceH(), vr.name))
+              }
+              DragAndDrop.Transferable(DragAndDrop.DataSourceVarFlavor) {
+                new DataSourceVarDrag {
+                  type S1 = S
+                  val workspace = impl.workspace
+                  val variable  = varH
+                }
+              }
+            } .orNull
+          }
+        })
       }
 
       val actionPlot = Action("Plot") {
@@ -236,7 +263,7 @@ object DataSourceViewImpl {
 
             // open the actual plot if we got the dimensions
             xyOpt.foreach { case (yDim, xDim) =>
-              val view = workspace.cursor.step { implicit tx =>
+              val view = cursor.step { implicit tx =>
                 ClimateView(source, v.selectAll, xDim = xDim, yDim = yDim)
               }
               lazy val w: desktop.Window = new desktop.impl.WindowImpl {
@@ -263,6 +290,8 @@ object DataSourceViewImpl {
         }
       }
 
+      tGroups.selectInterval(0, 0)
+
       component = new BoxPanel(Orientation.Vertical) {
         contents ++= Seq(
           new ScrollPane(tGroups),
@@ -276,8 +305,6 @@ object DataSourceViewImpl {
     }
 
     def dispose()(implicit tx: S#Tx) = () // : Unit = GUI.fromTx(disposeGUI())
-
-    // private def disposeGUI(): Unit = frame.dispose()
 
     private def groupSelected(g: nc2.Group): Unit = {
       mGroupAttrs       = new AttrsModel(g.attributes)
