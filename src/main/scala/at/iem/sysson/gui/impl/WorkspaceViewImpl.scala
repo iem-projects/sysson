@@ -244,7 +244,7 @@ object WorkspaceViewImpl {
             indices.foreach { idx =>
               dataSources.list.foreach { ll =>
                 val ds = ll(idx)
-                DataSourceView(ds)
+                DataSourceWindow(ds)
               }
             }
           }

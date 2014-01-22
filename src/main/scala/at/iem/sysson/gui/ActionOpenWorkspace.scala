@@ -58,10 +58,8 @@ object ActionOpenWorkspace extends Action("Open...") {
   def perform(folder: File): Unit =
     DocumentHandler.instance.getDocument(folder).fold(openRead(folder)) { doc0 =>
       // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
-      def screwYou[S <: Sys[S]](doc: Workspace[S]): Unit = DocumentViewHandler.instance.getView(doc).foreach { view =>
-        ???
-        // .front()
-      }
+      def screwYou[S <: Sys[S]](doc: Workspace[S]): Unit = DocumentViewHandler.instance.getWindow(doc)
+        .foreach(_.window.front())
 
       screwYou(doc0.asInstanceOf[Workspace[~] forSome { type ~ <: Sys[~] }])
     }

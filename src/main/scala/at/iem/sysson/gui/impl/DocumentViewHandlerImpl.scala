@@ -18,6 +18,8 @@ package impl
 
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.stm.Disposable
+import scala.concurrent.stm.TMap
 
 private[gui] object DocumentViewHandlerImpl {
   import DocumentHandler.Document
@@ -26,40 +28,42 @@ private[gui] object DocumentViewHandlerImpl {
 
   private lazy val impl = new Impl
 
-  def mkView[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = impl.mkView(doc)
+  def mkWindow[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceWindow[S] = impl.mkWindow(doc)
 
   private final class Impl extends DocumentViewHandler with ModelImpl[DocumentViewHandler.Update] {
     override def toString = "DocumentViewHandler"
 
-    private var map       = Map.empty[Document, WorkspaceView[_]]
-    private var _active  = Option.empty[Document]
+    private var map     = TMap.empty[Document, WorkspaceWindow[_]]
+    private var _active = Option.empty[Document]
 
     def activeDocument = _active
-    def activeDocument_=[S <: Sys[S]](value: Option[Workspace[S]]): Unit =
+    def activeDocument_=[S <: Sys[S]](value: Option[Workspace[S]]): Unit = {
+      GUI.requireEDT()
       if (_active != value) {
         _active = value
         value.foreach { doc =>
           dispatch(DocumentViewHandler.Activated(doc))
         }
       }
+    }
 
-    def getView[S <: Sys[S]](doc: Workspace[S]): Option[WorkspaceView[S]] = {
+    def getWindow[S <: Sys[S]](doc: Workspace[S]): Option[WorkspaceWindow[S]] = {
       GUI.requireEDT()
-      map.get(doc).asInstanceOf[Option[WorkspaceView[S]]]
+      map.single.get(doc).asInstanceOf[Option[WorkspaceWindow[S]]]
     }
 
-    def mkView[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
-      getView(doc).getOrElse {
-        val view = WorkspaceView(doc)
-        map += doc -> view
-//        doc.addListener {
-//          case DataSource.Closed(_) => GUI.defer {
-//            view.dispose()
-//            map -= doc
-//          }
-//        }
-        view
+    def mkWindow[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceWindow[S] =
+      map.get(doc)(tx.peer).asInstanceOf[Option[WorkspaceWindow[S]]].getOrElse {
+        val w = WorkspaceWindow(doc)
+        map.put(doc, w)(tx.peer)
+        doc.addDependent(new Disposable[S#Tx] {
+          def dispose()(implicit tx: S#Tx): Unit = GUI.fromTx {
+            logInfo(s"Remove view map entry for ${doc.name}")
+            map.single.remove(doc)
+            if (_active == Some(doc)) activeDocument = None
+          }
+        })
+        w
       }
-    }
   }
 }

@@ -17,6 +17,13 @@ package at.iem
 import ucar.nc2
 import de.sciss.synth
 import de.sciss.file._
+import scala.concurrent.stm.{Txn, InTxn}
+import java.util.{Date, Locale}
+import java.text.SimpleDateFormat
+import scala.annotation.elidable
+import scala.annotation.elidable._
+import scala.Some
+import de.sciss.lucre.stm.TxnLike
 
 package object sysson {
   val  Vec     = collection.immutable.IndexedSeq
@@ -59,9 +66,18 @@ package object sysson {
       case _ => ()   // don't do anything specific now
     }
 
-  def logInfo(what: => String): Unit = println("[info] " + what)
+  private lazy val logHeader = new SimpleDateFormat("[d MMM yyyy, HH:mm''ss.SSS] 'SysSon'", Locale.US)
 
-  def logWarn(what: => String): Unit = println("[warn] " + what)
+  var showLog = true
+
+  @elidable(INFO)    private[sysson] def logInfo(what: => String): Unit = log("info", what)
+  @elidable(WARNING) private[sysson] def logWarn(what: => String): Unit = log("warn", what)
+
+  private def log(level: String, what: => String): Unit =
+    if (showLog) println(s"${logHeader.format(new Date())} - $level - $what")
+
+  @elidable(INFO)    private[sysson] def logInfoTx(what: => String)(implicit tx: TxnLike): Unit =
+    Txn.afterCommit(_ => logInfo(what))(tx.peer)
 
   type Scale = Double => Double
 }

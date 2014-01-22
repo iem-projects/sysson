@@ -15,18 +15,15 @@
 package at.iem.sysson
 package gui
 
-import swing.Component
 import ucar.nc2
 import de.sciss.lucre.event.Sys
 import impl.{DataSourceViewImpl => Impl}
-import de.sciss.lucre.stm.Disposable
 
 object DataSourceView {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] =
     Impl(source)
 }
-trait DataSourceView[S <: Sys[S]] extends Disposable[S#Tx] {
+trait DataSourceView[S <: Sys[S]] extends View.Workspace[S] with View.File {
   def source(implicit tx: S#Tx): DataSource[S]
-  def component: Component
   var selectedVariable: Option[nc2.Variable]
 }

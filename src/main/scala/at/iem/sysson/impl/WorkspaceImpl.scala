@@ -108,6 +108,7 @@ object WorkspaceImpl {
       } (tx.peer)
 
     def dispose()(implicit tx: S#Tx): Unit = {
+      logInfoTx(s"Dispose workspace $name")
       // first dispose all dependents
       val deps = dependents.get(tx.peer)
       deps.foreach(_.dispose())

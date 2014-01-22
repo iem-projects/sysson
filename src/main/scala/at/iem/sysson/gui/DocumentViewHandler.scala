@@ -21,17 +21,15 @@ import DocumentHandler.Document
 import de.sciss.lucre.event.Sys
 
 object DocumentViewHandler {
-  type View[S <: Sys[S]] = WorkspaceView[S]
+  type View[S <: Sys[S]] = WorkspaceWindow[S]
 
-  lazy val instance: DocumentViewHandler = Impl.instance // Impl()
+  lazy val instance: DocumentViewHandler = Impl.instance
 
   sealed trait Update
   case class Activated[S <: Sys[S]](doc: Workspace[S]) extends Update
 }
 trait DocumentViewHandler extends Model[DocumentViewHandler.Update] {
-  import DocumentViewHandler.View
-
-  def getView[S <: Sys[S]](doc: Workspace[S]): Option[View[_]]
+  def getWindow[S <: Sys[S]](doc: Workspace[S]): Option[DocumentViewHandler.View[_]]
   // var activeDocument: Option[Document]
   def activeDocument: Option[Document]
   def activeDocument_=[S <: Sys[S]](doc: Option[Workspace[S]]): Unit

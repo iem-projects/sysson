@@ -55,6 +55,7 @@ object PatchCodeViewImpl {
     def dirty = _dirty
     def dirty_=(value: Boolean): Unit = if (_dirty != value) {
       _dirty = value
+      actionApply.enabled = value
       dispatch(PatchCodeView.DirtyChange(value))
     }
 
@@ -67,8 +68,8 @@ object PatchCodeViewImpl {
     import code.{id => codeID}
 
     private var codePane: CodePane = _
-
     private var futCompile = Option.empty[Future[Unit]]
+    private var actionApply: Action = _
 
     def isCompiling: Boolean = {
       GUI.requireEDT()
@@ -130,7 +131,7 @@ object PatchCodeViewImpl {
         contents += ggProgressInvis
       }
 
-      val actionApply = Action("Apply")(save())
+      actionApply = Action("Apply")(save())
       actionApply.enabled = false
 
       var clearGreen = false

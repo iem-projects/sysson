@@ -1,3 +1,17 @@
+/*
+ *  WindowImpl.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
+ *  Written by Hanns Holger Rutz.
+ *
+ *	This software is published under the GNU General Public License v2+
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
+
 package at.iem.sysson.gui
 package impl
 
@@ -76,6 +90,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
   // /** Subclasses may override this if they invoke `super.guiInit()` first. */
   private def guiInit(): Unit = {
     val f       = new WindowImpl.Peer(view, impl, undoRedoActions)
+    title0.foreach(f.setTitle)
     component   = f
     windowImpl  = f
     val (ph, pv, pp) = placement
@@ -122,7 +137,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
     if (checkClose()) disposeFromGUI()
   }
 
-  final def dispose()(implicit tx: S#Tx): Unit = {
+  def dispose()(implicit tx: S#Tx): Unit = {
     view match {
       case wv: View.Workspace[S] => wv.workspace.removeDependent(this)
       case _ =>

@@ -44,7 +44,7 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
 
   private def mkDocView1[S <: Sys[S]](doc: Workspace[S]): Unit =
     doc.cursor.step { implicit tx =>
-      impl.DocumentViewHandlerImpl.mkView(doc)
+      impl.DocumentViewHandlerImpl.mkWindow(doc)
     }
 
   protected def menuFactory: Menu.Root = MenuFactory.root
