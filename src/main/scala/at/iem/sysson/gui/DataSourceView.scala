@@ -31,13 +31,14 @@ import swing.Component
 import ucar.nc2
 import de.sciss.lucre.event.Sys
 import impl.{DataSourceViewImpl => Impl}
+import de.sciss.lucre.stm.Disposable
 
 object DataSourceView {
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView =
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] =
     Impl(source)
 }
-trait DataSourceView {
-  def document: DataSourceLike
+trait DataSourceView[S <: Sys[S]] extends Disposable[S#Tx] {
+  def source(implicit tx: S#Tx): DataSource[S]
   def component: Component
   var selectedVariable: Option[nc2.Variable]
 }

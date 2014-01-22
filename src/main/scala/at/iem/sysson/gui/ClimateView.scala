@@ -33,16 +33,16 @@ import impl.{ClimateViewImpl => Impl}
 import de.sciss.lucre.event.Sys
 
 object ClimateView {
-  def apply[S <: Sys[S]](document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
-           (implicit workspace: Workspace[S], tx: S#Tx): ClimateView =
+  def apply[S <: Sys[S]](document: DataSource[S], section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
+           (implicit workspace: Workspace[S], tx: S#Tx): ClimateView[S] =
     Impl(document, section, xDim, yDim)
 
   def currentSection: Option[VariableSection] = Impl.currentSection
 }
-trait ClimateView {
+trait ClimateView[S <: Sys[S]] {
   def component: Component
 
-  def document: DataSourceLike
+  def document(implicit tx: S#Tx): DataSource[S]
   def section : VariableSection
 
   var patch: Option[PatchOLD]

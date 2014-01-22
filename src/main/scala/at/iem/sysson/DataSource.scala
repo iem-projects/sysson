@@ -40,21 +40,15 @@ object DataSource {
     Impl.serializer[S]
 
   def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): DataSource[S] = Impl.read(in, access)
-}
 
-trait DataSourceLike extends Writable {
+  case class Variable[S <: Sys[S]](source: DataSource[S], name: String) // extends
+}
+/** A document represents one open data file. */
+trait DataSource[S <: Sys[S]] extends Writable {
   /** Path to the document's underlying file (NetCDF). */
   def path: String
 
   def file: File
 
-//  def data: nc2.NetcdfFile
-//  def variableMap: Map[String, nc2.Variable]
-
-  def data[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): nc2.NetcdfFile
-
-  // def close(): Unit
+  def data(workspace: Workspace[S])(implicit tx: S#Tx): nc2.NetcdfFile
 }
-
-/** A document represents one open data file. */
-trait DataSource[S <: Sys[S]] extends DataSourceLike  // Mutable[S#ID, S#Tx]

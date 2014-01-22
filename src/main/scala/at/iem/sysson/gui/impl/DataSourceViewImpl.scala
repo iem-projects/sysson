@@ -43,18 +43,18 @@ import de.sciss.desktop.{OptionPane, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.stm
 
 object DataSourceViewImpl {
   import Implicits._
 
-  def apply[S <: Sys[S]](doc: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView with Disposable = {
-    val data  = doc.data(workspace)
-    val res   = new Impl(doc, data)
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] = {
+    val data  = source.data(workspace)
+    val docH  = tx.newHandle(source)
+    val res   = new Impl(docH, source.file, data)
     GUI.fromTx(res.guiInit())
     res
   }
-
-  trait Disposable { def dispose(): Unit }
 
   private final class GroupModel(root: nc2.Group)
     extends ExternalTreeModel[nc2.Group](root :: Nil, _.children) {
@@ -138,9 +138,9 @@ object DataSourceViewImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](val document: DataSourceLike, data: nc2.NetcdfFile)
+  private final class Impl[S <: Sys[S]](docH: stm.Source[S#Tx, DataSource[S]], file: File, data: nc2.NetcdfFile)
                                        (implicit workspace: Workspace[S])
-    extends DataSourceView with Disposable with ComponentHolder[Component] {
+    extends DataSourceView[S] with ComponentHolder[Component] {
 
     impl =>
 
@@ -155,6 +155,8 @@ object DataSourceViewImpl {
     private var tGroupVars : Table = _
 
     private var tGroups    : Tree[nc2.Group]  = _
+
+    def source(implicit tx: S#Tx) = docH()
 
     def guiInit(): Unit = {
       GUI.requireEDT()
@@ -258,7 +260,7 @@ object DataSourceViewImpl {
             // open the actual plot if we got the dimensions
             xyOpt.foreach { case (yDim, xDim) =>
               val view = workspace.cursor.step { implicit tx =>
-                ClimateView(document, v.selectAll, xDim = xDim, yDim = yDim)
+                ClimateView(source, v.selectAll, xDim = xDim, yDim = yDim)
               }
               lazy val w: Window = new WindowImpl {
                 def style       = Window.Regular
@@ -269,7 +271,7 @@ object DataSourceViewImpl {
                 size            = (600, 600)
                 GUI.centerOnScreen(this)
 
-                bindMenu("file.close", Action(null) { dispose() })
+                bindMenu("file.close", Action(null) { disposeGUI() })
 
                 override def dispose(): Unit = {
   //                document.removeListener(docL)
@@ -303,8 +305,8 @@ object DataSourceViewImpl {
         def style   = Window.Regular
         def handler = SwingApplication.windowHandler
 
-        title     = document.file.base
-        file      = Some(document.file)
+        title     = impl.file.base // document.file.base
+        file      = Some(impl.file)
         contents  = impl.component
         closeOperation = Window.CloseIgnore
         reactions += {
@@ -327,7 +329,9 @@ object DataSourceViewImpl {
       }
     }
 
-    def dispose(): Unit = frame.dispose()
+    def dispose()(implicit tx: S#Tx): Unit = GUI.fromTx(disposeGUI())
+
+    private def disposeGUI(): Unit = frame.dispose()
 
     private def groupSelected(g: nc2.Group): Unit = {
       mGroupAttrs       = new AttrsModel(g.attributes)

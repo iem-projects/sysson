@@ -81,7 +81,6 @@ object DataSourceImpl {
       out.writeUTF(path)
     }
 
-    def data[S1 <: Sys[S1]](workspace: Workspace[S1])(implicit tx: S1#Tx): NetcdfFile =
-      resolveFile(workspace, file)
+    def data(workspace: Workspace[S])(implicit tx: S#Tx): NetcdfFile = resolveFile(workspace, file)
   }
 }

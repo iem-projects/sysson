@@ -58,6 +58,7 @@ import scala.util.Success
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
+import de.sciss.lucre.stm
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -83,10 +84,11 @@ object ClimateViewImpl {
 
   def currentSection: Option[VariableSection] = _currentSection
 
-  def apply[S <: Sys[S]](document: DataSourceLike, section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
-           (implicit workspace: Workspace[S], tx: S#Tx): ClimateView = {
+  def apply[S <: Sys[S]](document: DataSource[S], section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
+           (implicit workspace: Workspace[S], tx: S#Tx): ClimateView[S] = {
     val data  = document.data(workspace)
-    val view  = new Impl(document, data, section, xDim, yDim)
+    val docH  = tx.newHandle(document)
+    val view  = new Impl(docH, data, section, xDim, yDim)
     GUI.fromTx(view.guiInit())
     view
   }
@@ -156,9 +158,9 @@ object ClimateViewImpl {
     res
   }
 
-  private final class Impl(val document: DataSourceLike, net: nc2.NetcdfFile, val section: VariableSection,
+  private final class Impl[S <: Sys[S]](docH: stm.Source[S#Tx, DataSource[S]], net: nc2.NetcdfFile, val section: VariableSection,
                            xDim: nc2.Dimension, yDim: nc2.Dimension)
-    extends ClimateView with ComponentHolder[Component] {
+    extends ClimateView[S] with ComponentHolder[Component] {
 
     //    models: Map[String, DualRangeSlider],
     //    chart: JFreeChart, redGroup: Component
@@ -173,6 +175,8 @@ object ClimateViewImpl {
     private var stats   = Option.empty[Stats.Variable]
 
     private val data    = new MyMatrix(width, height)
+
+    def document(implicit tx: S#Tx): DataSource[S] = docH()
 
     private def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
       vm.get(dim.name) match {

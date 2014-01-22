@@ -36,7 +36,7 @@ object InterpreterView {
 
   /** The content of this object is imported into the REPL */
   object Bindings {
-    private def document: DataSourceLike = {
+    private def document: DataSource[_] = {
       //      val docs = DocumentHandler.instance.allDocuments.toIndexedSeq
       //      if (docs.isEmpty) sys.error("No document open")
       //      val doc = docs.last
