@@ -22,16 +22,15 @@ import java.io.OutputStream
 import javax.swing.BorderFactory
 import at.iem.sysson.gui.GUI
 import swing.event.WindowClosing
-import de.sciss.desktop.impl.WindowImpl
-import de.sciss.desktop.Window
+import de.sciss.desktop
 
 // lazy window - opens as soon as something goes to the console
-private[gui] final class LogWindowImpl extends LogWindow with WindowImpl {
+private[gui] final class LogWindowImpl extends LogWindow with desktop.impl.WindowImpl {
   frame =>
 
 //  peer.getRootPane.putClientProperty("Window.style", "small")
 
-  def style   = Window.Auxiliary
+  def style   = desktop.Window.Auxiliary
   def handler = SwingApplication.windowHandler
 
   val log = {
@@ -58,7 +57,7 @@ private[gui] final class LogWindowImpl extends LogWindow with WindowImpl {
   }
 
   observe()
-  closeOperation = Window.CloseIgnore
+  closeOperation = desktop.Window.CloseIgnore
   reactions += {
     case WindowClosing(_) =>
       frame.visible = false

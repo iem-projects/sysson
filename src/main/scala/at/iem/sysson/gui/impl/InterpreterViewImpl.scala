@@ -19,8 +19,7 @@ package impl
 import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
 import java.io.{IOException, FileInputStream, File}
 import swing.Component
-import de.sciss.desktop.Window
-import de.sciss.desktop.impl.WindowImpl
+import de.sciss.desktop
 
 private[gui] object InterpreterViewImpl {
   def apply(): InterpreterView = new Impl
@@ -59,26 +58,20 @@ private[gui] object InterpreterViewImpl {
         "at.iem.sysson.gui.InterpreterView.Bindings._"
       )
 
-//      intpCfg.bindings = Seq( NamedParam( "replSupport", replSupport ))
-//         in.bind( "s", classOf[ Server ].getName, ntp )
-//         in.bind( "in", classOf[ Interpreter ].getName, in )
-
-//      intpCfg.out = Some( LogWindow.instance.log.writer )
-
       InterpreterPane(interpreterConfig = intpCfg, codePaneConfig = codeCfg)
     }
 
     val component = Component.wrap(intp.component)
 
-    val f = new WindowImpl {
+    val f = new desktop.impl.WindowImpl {
       frame =>
 
-      def style   = Window.Auxiliary
+      def style   = desktop.Window.Auxiliary
       def handler = SwingApplication.windowHandler
 
       title     = "Interpreter"
       contents  = impl.component
-      closeOperation = Window.CloseDispose
+      closeOperation = desktop.Window.CloseDispose
       pack()
       GUI.centerOnScreen(this)
       front()

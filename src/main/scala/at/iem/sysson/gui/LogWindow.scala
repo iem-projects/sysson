@@ -17,7 +17,7 @@ package gui
 
 import de.sciss.scalainterpreter.LogPane
 import impl.{LogWindowImpl => Impl}
-import de.sciss.desktop.Window
+import de.sciss.desktop
 
 object LogWindow {
   val horizontalPlacement   = 1.0f
@@ -26,6 +26,6 @@ object LogWindow {
 
   lazy val instance: LogWindow  = new Impl
 }
-abstract class LogWindow extends Window {
+abstract class LogWindow extends desktop.Window {
   def log: LogPane
 }

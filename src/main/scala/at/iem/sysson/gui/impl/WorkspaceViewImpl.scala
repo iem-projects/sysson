@@ -40,8 +40,6 @@ import java.awt.datatransfer.Transferable
 object WorkspaceViewImpl {
   import Implicits._
 
-  // private final class DataSourceHandler[S <: Sys[S]] extends ListView.Handler
-
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
     import workspace.cursor
     val undoMgr = new UndoManagerImpl {
@@ -181,8 +179,7 @@ object WorkspaceViewImpl {
     def openSourceDialog(): Unit = {
       val dlg = FileDialog.open(title = txtAddDataSource)
       dlg.setFilter(util.NetCdfFileFilter)
-      val frameOpt: Option[desktop.Window] = ??? // Some(frame)
-      dlg.show(frameOpt).foreach { f =>
+      dlg.show(GUI.windowOption(component)).foreach { f =>
         val edit = cursor.step { implicit tx =>
           val idx     = workspace.dataSources.size
           val ds      = DataSource[S](f.path)

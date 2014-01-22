@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.{Keys, Sonification}
 import de.sciss.lucre.stm
-import scala.swing.{TextField, Alignment, Swing, Orientation, BoxPanel, Label, FlowPanel, Component}
+import scala.swing.{Alignment, Swing, Orientation, BoxPanel, Label, FlowPanel, Component}
 import de.sciss.synth.proc.Attribute
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager

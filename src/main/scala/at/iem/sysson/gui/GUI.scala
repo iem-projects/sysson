@@ -16,7 +16,7 @@ package at.iem.sysson
 package gui
 
 import java.awt.{GraphicsEnvironment, EventQueue}
-import scala.swing.{Button, Action, Color, Swing}
+import scala.swing.{Component, Button, Action, Color, Swing}
 import Swing._
 import de.sciss.desktop
 import de.sciss.lucre.stm.Txn
@@ -97,4 +97,7 @@ object GUI {
     e.getClass.toString + " :\n" + wordWrap(e.getMessage) + "\n" +
       e.getStackTrace.take(10).map("   at " + _).mkString("\n")
   }
+
+  def windowOption(component: Component): Option[desktop.Window] =
+    Option(component.peer.getClientProperty(impl.WindowImpl.WindowKey).asInstanceOf[desktop.Window])
 }

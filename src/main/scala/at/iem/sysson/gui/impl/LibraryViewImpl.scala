@@ -36,7 +36,7 @@ object LibraryViewImpl {
   private final class Impl[S <: Sys[S]](val undoManager: UndoManager,
                                         libraryH: stm.Source[S#Tx, Library[S]],
                                         treeView: TreeTableView[S, Library[S], Handler[S]])
-                                       (implicit cursor: stm.Cursor[S])
+                                       (implicit val cursor: stm.Cursor[S])
     extends LibraryView[S] with ComponentHolder[Component] {
     impl =>
 
@@ -110,6 +110,8 @@ object LibraryViewImpl {
 
       override def getPresentationName = s"Remove $nodeType"
     }
+
+    def dispose()(implicit tx: S#Tx) = ()
 
     def guiInit(): Unit = {
       val scroll = new ScrollPane(treeView.component)

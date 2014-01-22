@@ -7,14 +7,65 @@ import de.sciss.lucre.event.Sys
 import de.sciss.file._
 import de.sciss.synth.Optional
 
+object WindowImpl {
+  final val WindowKey = "at.iem.sysson.Window"
+
+  private final class Peer[S <: Sys[S]](view: View[S], impl: WindowImpl[S], undoRedoActions: Option[(Action, Action)])
+    extends desktop.impl.WindowImpl {
+
+    def style   = desktop.Window.Regular
+    def handler = SwingApplication.windowHandler
+
+    def setTitle(value: String): Unit = title = value
+
+    def getDirty      : Boolean        = dirty
+    def setDirty(value: Boolean): Unit = dirty = value
+
+    view match {
+      case fv: View.File => file = Some(fv.file)
+      case _ =>
+    }
+    file.map(_.base).foreach(title = _)
+
+    contents  = view.component
+    closeOperation = desktop.Window.CloseIgnore
+    reactions += {
+      case desktop.Window.Closing  (_) => impl.handleClose()
+      case desktop.Window.Activated(_) =>
+        view match {
+          case wv: View.Workspace[S] =>
+            DocumentViewHandler.instance.activeDocument = Some(wv.workspace)
+          case _ =>
+        }
+    }
+
+    bindMenu("file.close", Action(null)(impl.handleClose()))
+
+    undoRedoActions.foreach { case (undo, redo) =>
+      bindMenus(
+        "edit.undo" -> undo,
+        "edit.redo" -> redo
+      )
+    }
+
+    pack()
+  }
+}
 abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
   extends Window[S] with ComponentHolder[desktop.Window] {
 
   impl =>
 
-  def window: desktop.Window = component
+  final def window: desktop.Window = component
+  private var windowImpl: WindowImpl.Peer[S] = _
 
-  def init()(implicit tx: S#Tx): Unit = {
+  final protected def title        : String        = windowImpl.title
+  final protected def title_=(value: String): Unit = windowImpl.setTitle(value)
+
+  final protected def dirty        : Boolean        = windowImpl.getDirty
+  final protected def dirty_=(value: Boolean): Unit = windowImpl.setDirty(value)
+
+  final def init()(implicit tx: S#Tx): Unit = {
     view match {
       case wv: View.Workspace[S] => wv.workspace.addDependent(impl)
       case _ =>
@@ -22,51 +73,37 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
     GUI.fromTx(guiInit())
   }
 
+  // /** Subclasses may override this if they invoke `super.guiInit()` first. */
   private def guiInit(): Unit = {
-    val f: desktop.Window = new desktop.impl.WindowImpl {
-      def style   = desktop.Window.Regular
-      def handler = SwingApplication.windowHandler
-
-      view match {
-        case fv: View.File => file = Some(fv.file)
-        case _ =>
-      }
-      file.map(_.base).orElse(title0).foreach(title = _)
-
-      contents  = view.component
-      closeOperation = desktop.Window.CloseIgnore
-      reactions += {
-        case desktop.Window.Closing  (_) => disposeFromGUI()
-        case desktop.Window.Activated(_) =>
-          view match {
-            case wv: View.Workspace[S] =>
-              DocumentViewHandler.instance.activeDocument = Some(wv.workspace)
-            case _ =>
-          }
-      }
-
-      bindMenu("file.close", Action(null)(disposeFromGUI()))
-
-      view match {
-        case ev: View.Editable[S] =>
-          bindMenus(
-            "edit.undo" -> ev.undoManager.undoAction,
-            "edit.redo" -> ev.undoManager.redoAction
-          )
-
-        case _ =>
-      }
-
-      pack()
-    }
-
-    component = f
+    val f       = new WindowImpl.Peer(view, impl, undoRedoActions)
+    component   = f
+    windowImpl  = f
     val (ph, pv, pp) = placement
     GUI.placeWindow(f, ph, pv, pp)
     f.front()
+
+    // so that the component may find a "window ancestor"
+    view.component.peer.putClientProperty(WindowImpl.WindowKey, f)
   }
 
+  /** Subclasses may override this. The tuple is (horiz, vert, padding) position.
+    * By default it centers the window, i.e. `(0.5f, 0.5f, 20)`.
+    */
   protected def placement: (Float, Float, Int) = (0.5f, 0.5f, 20)
+
+  /** Subclasses may override this. If this method returns `true`, the window may be closed,
+    * otherwise a closure is aborted. By default this always returns `true`.
+    */
+  protected def checkClose(): Boolean = true
+
+  /** Subclasses may override this. */
+  protected def undoRedoActions: Option[(Action, Action)] =
+    view match {
+      case ev: View.Editable[S] =>
+        val mgr = ev.undoManager
+        Some(mgr.undoAction -> mgr.redoAction)
+      case _ => None
+    }
 
   private var didClose = false
   private def disposeFromGUI(): Unit = if (!didClose) {
@@ -80,7 +117,12 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
     didClose = true
   }
 
-  def dispose()(implicit tx: S#Tx): Unit = {
+  final def handleClose(): Unit = {
+    GUI.requireEDT()
+    if (checkClose()) disposeFromGUI()
+  }
+
+  final def dispose()(implicit tx: S#Tx): Unit = {
     view match {
       case wv: View.Workspace[S] => wv.workspace.removeDependent(this)
       case _ =>

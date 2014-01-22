@@ -22,5 +22,8 @@ import de.sciss.desktop.UndoManager
 
 object PatchCodeWindow {
   def apply[S <: Sys[S]](entry: Library.Leaf[S], undoManager: UndoManager)
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): Unit = Impl(entry, undoManager)
+                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): PatchCodeWindow[S] = Impl(entry, undoManager)
+}
+trait PatchCodeWindow[S <: Sys[S]] extends Window[S] {
+  def view: PatchCodeView[S]
 }

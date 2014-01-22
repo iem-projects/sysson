@@ -35,7 +35,7 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
       LogWindow.instance          // initializes it
       System.setErr(Console.err)  // por que?
     }
-    new MainWindow
+    MainWindow()
   }
 
   // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
