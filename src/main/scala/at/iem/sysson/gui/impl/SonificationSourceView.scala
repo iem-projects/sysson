@@ -31,7 +31,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import scala.swing.{Orientation, BoxPanel, ComboBox, Label, Swing, TextField, Component}
-import DragAndDrop.DataSourceDrag
+import at.iem.sysson.gui.DragAndDrop.{DataSourceVarDrag, DataSourceDrag}
 import sound.Sonification
 import edit.EditMutableMap
 import de.sciss.desktop.UndoManager
@@ -86,9 +86,9 @@ object SonificationSourceView {
 
     def updateSource(source: Option[Sonification.Source[S]])(implicit tx: S#Tx): Unit = {
       val tup = source.map { source =>
-        val data      = source.matrix
-        val _dataName = data.file.base
-        val net       = data.data(workspace)
+        val v         = source.variable
+        val _dataName = v.name // file.base
+        val net       = v.data(workspace)
         val _dims     = net.dimensionMap
         val _mapping  = source.dims.iterator.map { case (k, expr) => (k, expr.value) } .toMap
         (_dataName, _dims, _mapping)
@@ -118,16 +118,16 @@ object SonificationSourceView {
       ggDataName.border   = Swing.CompoundBorder(outside = ggDataName.border,
         inside = IconBorder(Icons.Target(DropButton.IconSize)))
       mapHOpt.foreach { mapH =>
-        DropButton.installTransferHandler[DataSourceDrag](ggDataName, DragAndDrop.DataSourceFlavor) { drag0 =>
+        DropButton.installTransferHandler[DataSourceVarDrag](ggDataName, DragAndDrop.DataSourceVarFlavor) { drag0 =>
           if (drag0.workspace == workspace) {
-            val drag  = drag0.asInstanceOf[DataSourceDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
+            val drag  = drag0.asInstanceOf[DataSourceVarDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
             val edit  = cursor.step { implicit tx =>
               // val sources = sonifH().sources
-                val map     = mapH()
-                val data    = drag.source()
-                val source  = Sonification.Source(data)
-                EditMutableMap("Assign Data Source", map, key, Some(source))
-              }
+              val map   = mapH()
+              val v     = drag.variable()
+              val source  = Sonification.Source(v)
+              EditMutableMap("Assign Data Source Variable", map, key, Some(source))
+            }
             undoManager.add(edit)
             true
 

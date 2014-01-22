@@ -79,15 +79,16 @@ object Sonification {
 
     implicit def serializer[S <: Sys[S]]: evt.Serializer[S, Source[S]] = Impl.sourceSerializer
 
-    def apply[S <: Sys[S]](dataSource: DataSource[S])(implicit tx: S#Tx): Source[S] = Impl.applySource(dataSource)
+    def apply[S <: Sys[S]](variable: DataSource.Variable[S])(implicit tx: S#Tx): Source[S] =
+      Impl.applySource(variable)
   }
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
-    def matrix: DataSource[S] // XXX TODO: continue here: this should become Matrix[S]
+    def variable: DataSource.Variable[S]
     def dims: expr.Map[S, String, Expr[S, String], model.Change[String]]
   }
 }
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
-  def patch: Patch[S] // PatchOLD.Source
+  def patch: Patch[S]
 
   def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
   def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]

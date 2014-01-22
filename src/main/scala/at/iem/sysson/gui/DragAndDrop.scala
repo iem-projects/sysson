@@ -56,6 +56,14 @@ object DragAndDrop {
     def source: stm.Source[S1#Tx, DataSource[S1]]
   }
 
+  val DataSourceVarFlavor = internalFlavor[DataSourceVarDrag]
+
+  trait DataSourceVarDrag {
+    type S1 <: Sys[S1]
+    def workspace: Workspace[S1]
+    def variable: stm.Source[S1#Tx, DataSource.Variable[S1]]
+  }
+
   // ----
 
   object Transferable {

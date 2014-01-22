@@ -44,11 +44,11 @@ object SonificationImpl {
 
   def sourceSerializer[S <: Sys[S]]: evt.NodeSerializer[S, Source[S]] = anySourceSer.asInstanceOf[SourceSer[S]]
 
-  def applySource[S <: Sys[S]](dataSource: DataSource[S])(implicit tx: S#Tx): Source[S] = {
+  def applySource[S <: Sys[S]](variable: DataSource.Variable[S])(implicit tx: S#Tx): Source[S] = {
     implicit val str = Strings.serializer[S]
     val targets = evt.Targets[S]
     val dims    = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
-    new SourceImpl(targets, dataSource, dims)
+    new SourceImpl(targets, variable, dims)
   }
 
   private val anySourceSer = new SourceSer[evt.InMemory]
@@ -59,14 +59,14 @@ object SonificationImpl {
       val cookie = in.readInt()
       require(cookie == SER_VERSION,
         s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
-      val data = DataSource.read(in, access)
-      val dims = expr.Map.read[S, String, Expr[S, String], model.Change[String]](in, access)
-      new SourceImpl(targets, data, dims)
+      val variable  = DataSource.Variable.read(in, access)
+      val dims      = expr.Map.read[S, String, Expr[S, String], model.Change[String]](in, access)
+      new SourceImpl(targets, variable, dims)
     }
   }
 
   private final class SourceImpl[S <: Sys[S]](protected val targets: evt.Targets[S],
-                                        val matrix: DataSource[S],
+                                        val variable: DataSource.Variable[S],
                                         val dims: expr.Map[S, String, Expr[S, String], model.Change[String]])
     extends Source[S]
     with evt.impl.StandaloneLike[S, Source.Update[S], Source[S]] {
@@ -79,7 +79,7 @@ object SonificationImpl {
 
     protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
-      matrix.write(out)
+      variable.write(out)
       dims.write(out)
     }
 

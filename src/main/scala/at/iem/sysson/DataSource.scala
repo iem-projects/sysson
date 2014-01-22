@@ -29,9 +29,8 @@ package at.iem.sysson
 import ucar.nc2
 import java.io.File
 import impl.{DataSourceImpl => Impl}
-import de.sciss.serial.{DataInput, Writable, Serializer}
+import de.sciss.serial.{DataOutput, DataInput, Writable, Serializer}
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.stm.Mutable
 
 object DataSource {
   def apply[S <: Sys[S]](path: String)(implicit tx: S#Tx): DataSource[S] = Impl(path)
@@ -41,7 +40,19 @@ object DataSource {
 
   def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): DataSource[S] = Impl.read(in, access)
 
-  case class Variable[S <: Sys[S]](source: DataSource[S], name: String) // extends
+  object Variable {
+    implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Variable[S]] = Impl.varSerializer
+
+    def apply[S <: Sys[S]](source: DataSource[S], name: String)(implicit tx: S#Tx): Variable[S] =
+      Impl.variable(source, name)
+
+    def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Variable[S] = Impl.readVariable(in, access)
+  }
+  trait Variable[S <: Sys[S]] extends Writable {
+    def source: DataSource[S]
+    def name: String
+    def data(workspace: Workspace[S])(implicit tx: S#Tx): nc2.Variable
+  }
 }
 /** A document represents one open data file. */
 trait DataSource[S <: Sys[S]] extends Writable {
