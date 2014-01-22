@@ -59,7 +59,7 @@ object SonificationViewImpl {
                                         nameView: Option[StringExprEditor[S]])(implicit val undoManager: UndoManager)
     extends SonificationView[S] with ComponentHolder[Component] {
 
-    import workspace.cursor
+    // import workspace.cursor
 
     def sonification(implicit tx: S#Tx): Sonification[S] = sonifH()
 

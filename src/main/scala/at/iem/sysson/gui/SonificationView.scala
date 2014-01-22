@@ -26,6 +26,6 @@ object SonificationView {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
                         (implicit tx: S#Tx): SonificationView[S] = Impl(workspace, sonification)
 }
-trait SonificationView[S <: Sys[S]] extends View.Workspace[S] with View.Editable {
+trait SonificationView[S <: Sys[S]] extends View.Workspace[S] with View.Editable[S] {
   def sonification(implicit tx: S#Tx): Sonification[S]
 }

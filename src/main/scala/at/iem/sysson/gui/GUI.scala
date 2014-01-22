@@ -16,9 +16,9 @@ package at.iem.sysson
 package gui
 
 import java.awt.{GraphicsEnvironment, EventQueue}
-import scala.swing.{ProgressBar, Button, Action, Color, Swing}
+import scala.swing.{Button, Action, Color, Swing}
 import Swing._
-import de.sciss.desktop.Window
+import de.sciss.desktop
 import de.sciss.lucre.stm.Txn
 import scala.concurrent.stm.TxnLocal
 import scala.util.control.NonFatal
@@ -27,9 +27,9 @@ import javax.swing.Icon
 import java.awt.geom.Path2D
 
 object GUI {
-  def centerOnScreen(w: Window): Unit = placeWindow(w, 0.5f, 0.5f, 0)
+  def centerOnScreen(w: desktop.Window): Unit = placeWindow(w, 0.5f, 0.5f, 0)
 
-  def placeWindow(w: Window, horizontal: Float, vertical: Float, padding: Int): Unit = {
+  def placeWindow(w: desktop.Window, horizontal: Float, vertical: Float, padding: Int): Unit = {
     val ge  = GraphicsEnvironment.getLocalGraphicsEnvironment
     val bs  = ge.getMaximumWindowBounds
     val b   = w.size

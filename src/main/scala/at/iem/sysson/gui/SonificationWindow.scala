@@ -18,15 +18,12 @@ import de.sciss.lucre.event.Sys
 import impl.{SonificationWindowImpl => Impl}
 import at.iem.sysson.Workspace
 import at.iem.sysson.sound.Sonification
-import de.sciss.lucre.stm.Disposable
-import de.sciss.desktop.Window
 
 object SonificationWindow {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
                         (implicit tx: S#Tx): SonificationWindow[S] =
     Impl(workspace, sonification)
 }
-trait SonificationWindow[S <: Sys[S]] extends Disposable[S#Tx] {
+trait SonificationWindow[S <: Sys[S]] extends Window[S] {
   def view: SonificationView[S]
-  def frame: Window
 }

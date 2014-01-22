@@ -17,8 +17,9 @@ package gui
 package impl
 
 import scala.swing.{Swing, FlowPanel, Component, BoxPanel, Orientation, Action}
-import de.sciss.desktop.impl.{UndoManagerImpl, WindowImpl}
-import de.sciss.desktop.{UndoManager, FileDialog, Window}
+import de.sciss.desktop
+import desktop.impl.UndoManagerImpl
+import desktop.{UndoManager, FileDialog}
 import de.sciss.file._
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.List
@@ -96,9 +97,10 @@ object WorkspaceViewImpl {
     impl =>
 
     var component: Component = _
-    private var frame: WindowImpl = _
 
     import workspace.cursor
+
+    def file: File = workspace.file
 
     // XXX TODO: DRY (LibraryViewImpl)
     // direction: true = insert, false = remove
@@ -176,12 +178,11 @@ object WorkspaceViewImpl {
       override def getPresentationName = txtRemoveSonif
     }
 
-    def front(): Unit = frame.front()
-
     def openSourceDialog(): Unit = {
       val dlg = FileDialog.open(title = txtAddDataSource)
       dlg.setFilter(util.NetCdfFileFilter)
-      dlg.show(Some(frame)).foreach { f =>
+      val frameOpt: Option[desktop.Window] = ??? // Some(frame)
+      dlg.show(frameOpt).foreach { f =>
         val edit = cursor.step { implicit tx =>
           val idx     = workspace.dataSources.size
           val ds      = DataSource[S](f.path)
@@ -374,50 +375,12 @@ object WorkspaceViewImpl {
       }
 
       component = ggTab
-
-      frame = new WindowImpl {
-        def style   = Window.Regular
-        def handler = SwingApplication.windowHandler
-
-        title     = workspace.name
-        file      = Some(workspace.file)
-        contents  = ggTab
-        closeOperation = Window.CloseIgnore
-        reactions += {
-          case Window.Closing(_) => disposeDoc()
-          case Window.Activated(_) =>
-            DocumentViewHandler.instance.activeDocument = Some(workspace)
-        }
-
-        bindMenus(
-          "file.close"  -> Action(null)(disposeDoc()),
-          "edit.undo"   -> undoManager.undoAction,
-          "edit.redo"   -> undoManager.redoAction
-        )
-
-        pack()
-        GUI.placeWindow(this, 0f, 0.5f, 8)
-        front()
-      }
-    }
-
-    private var didClose = false
-    private def disposeDoc(): Unit = if (!didClose) {
-      GUI.requireEDT()
-      cursor.step { implicit tx =>
-        workspace.dispose()   // this will invoke our dispose function, and consequently close the window
-      }
-      didClose = true
     }
 
     def dispose()(implicit tx: S#Tx): Unit = {
       workspace.removeDependent(this)
       dataSources  .dispose()
       sonifications.dispose()
-      GUI.fromTx {
-        frame.dispose()
-        didClose = true
-      }
     }
   }
 }

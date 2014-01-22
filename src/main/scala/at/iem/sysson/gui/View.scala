@@ -18,13 +18,19 @@ import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.event.Sys
 import scala.swing.Component
 import de.sciss.desktop.UndoManager
+import de.sciss.lucre.stm
 
 object View {
-  trait Workspace[S <: Sys[S]] extends View[S] {
-    def workspace: at.iem.sysson.Workspace[S]
+  trait Cursor[S <: Sys[S]] extends View[S] {
+    implicit def cursor: stm.Cursor[S]
   }
 
-  trait Editable {
+  trait Workspace[S <: Sys[S]] extends Cursor[S] {
+    def workspace: at.iem.sysson.Workspace[S]
+    implicit def cursor: stm.Cursor[S] = workspace.cursor
+  }
+
+  trait Editable[S <: Sys[S]] extends Cursor[S] {
     def undoManager: UndoManager
   }
 
