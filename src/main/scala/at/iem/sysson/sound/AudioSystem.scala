@@ -17,9 +17,10 @@ package sound
 
 import impl.{AudioSystemImpl => Impl}
 import de.sciss.synth
-import synth.Server
 import de.sciss.osc.TCP
 import de.sciss.model.Model
+import de.sciss.lucre.synth.Server
+import de.sciss.synth.proc.AuralSystem
 
 object AudioSystem {
   def instance: AudioSystem = Impl.instance
@@ -27,9 +28,9 @@ object AudioSystem {
   def start(config: synth.Server.Config = defaultConfig): AudioSystem = instance.start(config)
 
   sealed trait Update
-  final case class Booting(connection: synth.ServerConnection) extends Update
-  final case class Started(server    : synth.Server          ) extends Update
-  case object      Stopped                                     extends Update
+  // final case class Booting(connection: synth.ServerConnection) extends Update
+  final case class Started(server    : Server          ) extends Update
+  case object      Stopped                               extends Update
 
   type Listener = Model.Listener[Update]
 
@@ -42,11 +43,13 @@ object AudioSystem {
   }
 }
 trait AudioSystem extends Model[AudioSystem.Update] {
-  def server: Option[synth.ServerLike]
+  private[sysson] def aural: AuralSystem    // woopa, bridge to SoundProcesses
+
+  def server: Option[Server]
   def start(config: synth.Server.Config = AudioSystem.defaultConfig): this.type
   def stop(): this.type
 
-  def isBooting: Boolean
+  // def isBooting: Boolean
   def isRunning: Boolean
 
   def whenBooted(fun: Server => Unit): this.type

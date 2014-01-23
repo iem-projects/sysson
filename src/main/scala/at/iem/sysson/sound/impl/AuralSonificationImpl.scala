@@ -22,19 +22,36 @@ import at.iem.sysson.impl.TxnModelImpl
 import scala.concurrent.stm.Ref
 import de.sciss.lucre.stm
 import scala.concurrent.{ExecutionContext, future, blocking}
+import de.sciss.synth.proc.{SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
+import de.sciss.lucre.synth.expr.SpanLikes
+import de.sciss.span.Span
+import de.sciss.lucre
 
 object AuralSonificationImpl {
   def apply[S <: Sys[S]](aw: AuralWorkspace[S], sonification: Sonification[S])
                         (implicit tx: S#Tx): AuralSonification[S] = {
-    // aw.workspace.cursor
-    val sonifH = tx.newHandle(sonification)
-    new Impl(aw, sonifH)
+    val w             = aw.workspace
+    implicit val itx  = w.inMemoryTx(tx)         // why can't I just import w.inMemory !?
+    val sonifH        = tx.newHandle(sonification)
+    val proc          = Proc[w.I]
+    val group         = ProcGroup.Modifiable[w.I]
+    val span          = SpanLikes.newVar[w.I](SpanLikes.newConst(Span.from(0L)))
+    group.add(span, proc)
+    import w.inMemorySys
+    val transport     = Transport[w.I, w.I](group)
+    val auralSys      = AudioSystem.instance.aural
+    val aural         = AuralPresentation.runTx(transport, auralSys)
+    new Impl[S, w.I](aw, aural, w.inMemorySys, w.inMemoryTx, sonifH, proc, transport)
   }
 
   // private sealed trait State
   // private case object Stopped extends State
 
-  private final class Impl[S <: Sys[S]](aw: AuralWorkspace[S], sonifH: stm.Source[S#Tx, Sonification[S]])
+  private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S], ap: AuralPresentation[I],
+                                                          iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx,
+                                                          sonifH: stm.Source[S#Tx, Sonification[S]],
+      proc: Proc[I], // no handle necessary for in-memory!!
+      transport: Transport[I, Proc[I], Transport.Proc.Update[I]])
     extends AuralSonification[S] with TxnModelImpl[S#Tx, Update] {
 
     private val _state = Ref(Stopped: Update)
@@ -48,6 +65,8 @@ object AuralSonificationImpl {
 
     def stop()(implicit tx: S#Tx): Unit = {
       state_=(Stopped)
+      implicit val itx: I#Tx = iTx(tx)
+      transport.stop()
     }
 
     def play()(implicit tx: S#Tx): Unit = {
@@ -58,8 +77,15 @@ object AuralSonificationImpl {
     private def prepare()(implicit tx: S#Tx): Unit = {
       val sonif = sonifH()
       val graph = sonif.patch.graph.value
+      graph.sources.foreach {
+        case _ =>
+      }
       // XXX TODO: expand
       state_=(Preparing)
+
+      implicit val itx: I#Tx = iTx(tx)
+      proc.graph() = SynthGraphs.newConst[I](graph)
+
       tx.afterCommit {
         import ExecutionContext.Implicits.global
         future {
@@ -67,6 +93,9 @@ object AuralSonificationImpl {
             Thread.sleep(2000)
           }
           aw.workspace.cursor.step { implicit tx =>
+            implicit val itx: I#Tx = iTx(tx)
+            transport.seek(0L)
+            transport.play()
             state_=(Playing)
           }
         }

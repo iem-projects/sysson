@@ -34,7 +34,7 @@ object DiskStreamTest extends App {
 //    s.dumpOSC(osc.Dump.Text)
 
     val pad           = if (userInterpolation) 4 else 0 // 4 if using cubic interpolation
-    val halfBufSizeM  = s.sampleRate.toInt
+    val halfBufSizeM  = s.peer.sampleRate.toInt
     val halfBufSize   = halfBufSizeM + pad
     val bufSize       = halfBufSize * 2
 
@@ -93,10 +93,10 @@ object DiskStreamTest extends App {
       (p, frame)
     }
 
-    val buf       = Buffer(s)
-    val synth     = Synth(s)
+    val buf       = Buffer(s.peer)
+    val synth     = Synth(s.peer)
 
-    val newMsg    = synth.newMsg(df.name, target = s, args = Seq("buf" -> buf.id, "rate" -> sampleRate))
+    val newMsg    = synth.newMsg(df.name, target = s.peer, args = Seq("buf" -> buf.id, "rate" -> sampleRate))
     val update2   = updateBuffer(buf, trigVal = 1, completion = Some(newMsg))._1
     val update1   = updateBuffer(buf, trigVal = 0, completion = Some(update2))._1
     val allocMsg  = buf.allocMsg(numFrames = bufSize, numChannels = numChannels, completion = Some(update1))
@@ -108,7 +108,7 @@ object DiskStreamTest extends App {
 //    bb.flip()
 //    val mm1 = cd.decode(bb)
 
-    val trigResp  = message.Responder.add(s) {
+    val trigResp  = message.Responder.add(s.peer) {
       case osc.Message("/tr", synth.id, _, trigValF: Float) =>
         val trigVal = trigValF.toInt + 1
         val (p, frame) = updateBuffer(buf, trigVal = trigVal)

@@ -46,7 +46,7 @@ object WorkspaceImpl {
     val fact  = BerkeleyDB.factory(dir, createIfNecessary = create)
     implicit val system: S = proc.Durable(fact)
 
-    new Impl[S, I](dir, system, /* access, */ system)
+    new Impl[S, I](dir, system, /* access, */ system.inMemory, system)
   }
 
   private final val WORKSPACE_COOKIE  = 0x737973736F6E7700L   // "syssonw\0"
@@ -60,7 +60,8 @@ object WorkspaceImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S], I1 <: synth.Sys[I1]](val file: File, val system: S,
+  private final class Impl[S <: Sys[S], I1 <: synth.Sys[I1] with stm.Cursor[I1]](val file: File, val system: S,
+                                                                                 val inMemorySys: I1,
                                         val cursor: stm.Cursor[S])(implicit inMemFun: S#Tx => I1#Tx)
     extends Workspace[S] {
 
@@ -112,7 +113,7 @@ object WorkspaceImpl {
       } (tx.peer)
 
 
-    def inMemory(tx: S#Tx): I#Tx = inMemFun(tx)
+    def inMemoryTx(tx: S#Tx): I#Tx = inMemFun(tx)
 
     def dispose()(implicit tx: S#Tx): Unit = {
       logInfoTx(s"Dispose workspace $name")

@@ -72,5 +72,5 @@ object SonifTest extends App {
     loop(0)
   }
 
-  as.whenBooted(play)
+  as.whenBooted(s => play(s.peer))
 }

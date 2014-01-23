@@ -99,7 +99,7 @@ object SonificationOLDImpl {
 
     def prepare()(implicit context: ExecutionContext): Future[SonificationOLD.Prepared] = {
       val as  = AudioSystem.instance
-      if (!as.isBooting && !as.isRunning) as.start() // this can start up during our preparations
+      if (/* !as.isBooting && */ !as.isRunning) as.start() // this can start up during our preparations
 
       val prepared: Future[(UGenGraphBuilderOLD.Result, Vec[PreparedBuffer])] = future {
         val res = buildUGens(duration = None)
@@ -173,7 +173,7 @@ object SonificationOLDImpl {
           new SonificationOLD.Prepared {
             def play(): Synth = {
               val sd    = SynthDef(synthDefName, res.graph)
-              val syn   = Synth(s)
+              val syn   = Synth(s.peer)
               val prep  = new SynthPreparation(syn)
 
               // userValueMap.foreach { case (key, value) =>
@@ -187,7 +187,7 @@ object SonificationOLDImpl {
               }
 
               buffers.foreach { b =>
-                val sBuf  = Buffer(s)
+                val sBuf  = Buffer(s.peer)
                 syn.onEnd {
                   if (b.section.isStreaming) sBuf.close() // file was streamed
                   sBuf.free()

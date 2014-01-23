@@ -41,12 +41,13 @@ object Workspace {
   */
 trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] {
   /** In-Memory back end system */
-  type I <: synth.Sys[I]
+  type I <: synth.Sys[I] with stm.Cursor[I]
 
   /** The transactional cursor associated with this workspace. Typically this is `Durable`. */
   implicit def cursor: stm.Cursor[S]
 
-  implicit def inMemory(tx: S#Tx): I#Tx
+  implicit def inMemoryTx(tx: S#Tx): I#Tx
+  implicit def inMemorySys: I
 
   /** The opaque (database) directory associated with the workspace. */
   def file: File
