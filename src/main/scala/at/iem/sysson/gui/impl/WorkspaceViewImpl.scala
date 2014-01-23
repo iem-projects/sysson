@@ -36,10 +36,7 @@ import at.iem.sysson.gui.DragAndDrop.{DataSourceDrag, LibraryNodeDrag, LibraryNo
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
 
-// XXX TODO: factor out frame
 object WorkspaceViewImpl {
-  import Implicits._
-
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
     import workspace.cursor
     val undoMgr = new UndoManagerImpl {
@@ -95,8 +92,6 @@ object WorkspaceViewImpl {
     impl =>
 
     var component: Component = _
-
-    import workspace.cursor
 
     def file: File = workspace.file
 

@@ -19,20 +19,22 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import scala.swing.{Orientation, BoxPanel, ComboBox, Label, Swing, TextField, Component}
-import at.iem.sysson.gui.DragAndDrop.{DataSourceVarDrag, DataSourceDrag}
+import at.iem.sysson.gui.DragAndDrop.DataSourceVarDrag
 import sound.Sonification
-import edit.EditMutableMap
+import at.iem.sysson.gui.edit.{EditExprMap, EditMutableMap}
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.{stm, expr}
-import de.sciss.file._
 import at.iem.sysson.Implicits._
 import javax.swing.GroupLayout
 import scalaswingcontrib.group.GroupPanel
 import de.sciss.swingplus.Implicits._
-import scala.concurrent.stm.{Ref => STMRef}
 import language.reflectiveCalls
+import scala.swing.event.SelectionChanged
 import de.sciss.lucre.expr.Expr
+import scala.concurrent.stm.{Ref => STMRef}
 import de.sciss.model
+import de.sciss.model.Change
+import de.sciss.lucre.synth.expr.Strings
 
 object SonificationSourceView {
   def apply[S <: Sys[S]](workspace: Workspace[S], map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
@@ -40,7 +42,7 @@ object SonificationSourceView {
                         (implicit tx: S#Tx, undoManager: UndoManager): SonificationSourceView[S] = {
     val mapHOpt   = map.modifiableOption.map(tx.newHandle(_))
     val res       = new Impl[S](workspace, mapHOpt, key = key, dimKeys = dimKeys)
-    res.observer  = map.changed.react {
+    res.sourceObserver  = map.changed.react {
       implicit tx => upd => upd.changes.foreach {
         case expr.Map.Added  (`key`, source) => res.updateSource(Some(source)) // .data.file.base))
         case expr.Map.Removed(`key`, source) => res.updateSource(None)
@@ -65,20 +67,78 @@ object SonificationSourceView {
     private var ggDataName: TextField = _
     private var ggMappings = Vec.empty[ComboBox[String]]
 
-    var observer: Disposable[S#Tx] = _
+    var sourceObserver: Disposable[S#Tx] = _
 
-    def dispose()(implicit tx: S#Tx): Unit = observer.dispose()
+    def dispose()(implicit tx: S#Tx): Unit = {
+      sourceObserver.dispose()
+      disposeDimMap()
+    }
 
-    // private val sourceMap = STMRef(Option.empty[stm.Source[S#Tx, expr.Map[S, String, Expr[S, String], model.Change[String]]]])
+    private def disposeDimMap()(implicit tx: S#Tx): Unit = {
+      dimMapObserver.swap(None)(tx.peer).foreach(_.dispose())
+      dimMap.set(None)(tx.peer)
+    }
 
+    private val dimMap = STMRef(
+      Option.empty[stm.Source[S#Tx, expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]]]
+    )
+    private val dimMapObserver = STMRef(Option.empty[Disposable[S#Tx]])
+
+    // propagate GUI action back to model
+    private def updateDimMapFromGUI(dimKey: String, value: String): Unit = {
+      GUI.requireEDT()
+      val editOpt = cursor.step { implicit tx =>
+        dimMap.get(tx.peer).map { mapH =>
+          val map = mapH()
+          import Strings.newConst
+          implicit val s = Strings
+          val exprOpt = if (value != "") Some(newConst[S](value)) else None
+          EditExprMap("Map Dimension", map, key = dimKey, value = exprOpt)
+        }
+      }
+      editOpt.foreach(undoManager.add)
+    }
+
+    // propagate model change to GUI
+    private def updateDimMapToGUI(mapKey: String, value: String)(implicit tx: S#Tx): Unit = {
+      val idx = dimKeys.indexOf(mapKey)
+      // println(s"updateDimMapToGUI($mapKey, $value)")
+      if (idx >= 0) GUI.fromTx {
+        val gg      = ggMappings(idx)
+        // XXX TODO: should have something helpful in swingplus
+        val selIdx  = (0 until gg.peer.getItemCount).find(gg.peer.getItemAt(_) == value).getOrElse(-1)
+        selectIndex(gg, selIdx)
+      }
+    }
+
+    private def selectIndex[A](gg: ComboBox[A], index: Int): Unit = {
+      GUI.requireEDT()
+      gg.deafTo  (gg.selection) // otherwise index_= will dispatch event
+      gg.selection.index = index max 0
+      gg.listenTo(gg.selection)
+    }
 
     def updateSource(source: Option[Sonification.Source[S]])(implicit tx: S#Tx): Unit = {
+      disposeDimMap()
+
       val tup = source.map { source =>
         val v         = source.variable
-        val _dataName = v.name // file.base
+        val _dataName = v.name
         val net       = v.data(workspace)
         val _dims     = net.dimensionMap
-        val _mapping  = source.dims.iterator.map { case (k, expr) => (k, expr.value) } .toMap
+        val sDims     = source.dims
+        val _mapping  = sDims.iterator.map { case (k, expr) => (k, expr.value) } .toMap
+      
+        val mapObs    = sDims.changed.react { implicit tx => upd => upd.changes.foreach {
+          case expr.Map.Added  (k, expr)                    => updateDimMapToGUI(k, expr.value)
+          case expr.Map.Removed(k, expr)                    => updateDimMapToGUI(k, "")
+          case expr.Map.Element(k, expr, Change(_, value))  => updateDimMapToGUI(k, value)
+          case _ =>
+        }}
+        import Strings.serializer
+        dimMap.set(sDims.modifiableOption.map(tx.newHandle(_)))(tx.peer)
+        dimMapObserver.set(Some(mapObs))(tx.peer)
+
         (_dataName, _dims, _mapping)
       }
 
@@ -93,7 +153,7 @@ object SonificationSourceView {
           val items = "" :: dims.keys.toList
           (dimKeys zip ggMappings).foreach { case (dimKey, gg) =>
             gg.peer.setModel(ComboBox.newConstantModel(items))
-            gg.selection.index = items.indexOf(mapping.getOrElse(dimKey, "")) max 0
+            selectIndex(gg, items.indexOf(mapping.getOrElse(dimKey, "")))
           }
         }
       }
@@ -110,9 +170,8 @@ object SonificationSourceView {
           if (drag0.workspace == workspace) {
             val drag  = drag0.asInstanceOf[DataSourceVarDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
             val edit  = cursor.step { implicit tx =>
-              // val sources = sonifH().sources
-              val map   = mapH()
-              val v     = drag.variable()
+              val map     = mapH()
+              val v       = drag.variable()
               val source  = Sonification.Source(v)
               EditMutableMap("Assign Data Source Variable", map, key, Some(source))
             }
@@ -131,6 +190,12 @@ object SonificationSourceView {
         val combo = new ComboBox(Seq("")) {
           this.clientProps += "JComboBox.isSquare" -> true
           prototypeDisplayValue = Some("altitude")
+          listenTo(selection)
+          reactions += {
+            case SelectionChanged(_) =>
+              // println(s"$dimKey: Selected item ${this.selection.item}")
+              updateDimMapFromGUI(dimKey, selection.item)
+          }
         }
         (lb, combo)
       }

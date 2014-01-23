@@ -41,7 +41,7 @@ object DataSourceViewImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] = {
     val data  = source.data(workspace)
     val docH  = tx.newHandle(source)
-    val res   = new Impl(docH, source.file, data)
+    val res   = new Impl[S](docH, source.file, data)
     GUI.fromTx(res.guiInit())
     res
   }
@@ -124,9 +124,7 @@ object DataSourceViewImpl {
     extends DataSourceView[S] with ComponentHolder[Component] {
     impl =>
     
-    import workspace.cursor
-
-    private var _selVar = Option.empty[nc2.Variable]
+    private var _selVar     = Option.empty[nc2.Variable]
 
     private var mGroupAttrs = new AttrsModel(Vec.empty)
     private var mGroupVars  = new VarsModel (Vec.empty)
@@ -143,8 +141,8 @@ object DataSourceViewImpl {
 
       val mGroups = new GroupModel(data.rootGroup)
       tGroups = new Tree(mGroups) {
-        selection.mode = Tree.SelectionMode.Single
-        renderer = Tree.Renderer.wrap(GroupRenderer)
+        selection.mode  = Tree.SelectionMode.Single
+        renderer        = Tree.Renderer.wrap(GroupRenderer)
         listenTo(selection)
         reactions += {
           case TreeNodeSelected(g: nc2.Group) => groupSelected(g)

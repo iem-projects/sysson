@@ -17,7 +17,7 @@ package at.iem
 import ucar.nc2
 import de.sciss.synth
 import de.sciss.file._
-import scala.concurrent.stm.{Txn, InTxn}
+import scala.concurrent.stm.Txn
 import java.util.{Date, Locale}
 import java.text.SimpleDateFormat
 import scala.annotation.elidable
