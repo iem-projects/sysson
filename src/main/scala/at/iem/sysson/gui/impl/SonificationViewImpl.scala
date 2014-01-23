@@ -17,7 +17,7 @@ package gui
 package impl
 
 import de.sciss.lucre.event.Sys
-import at.iem.sysson.sound.{Keys, Sonification}
+import at.iem.sysson.sound.{AuralSonification, AuralWorkspaceHandler, Keys, Sonification}
 import de.sciss.lucre.stm
 import scala.swing.{Alignment, Swing, Orientation, BoxPanel, Label, FlowPanel, Component}
 import de.sciss.synth.proc.Attribute
@@ -29,6 +29,7 @@ import de.sciss.synth.SynthGraph
 import scalaswingcontrib.group.GroupPanel
 import javax.swing.GroupLayout
 import language.reflectiveCalls
+import de.sciss.lucre.stm.Disposable
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
@@ -42,10 +43,16 @@ object SonificationViewImpl {
       StringExprEditor(expr, "Name")
     }
 
-    val res = new Impl(workspace, sonifH, nameView)
-    // workspace.addDependent(res)
+    val sonifView = AuralWorkspaceHandler.instance.view(workspace).view(sonification)
+
+    val res = new Impl(workspace, sonifH, sonifView, nameView) {
+      val auralObserver = sonifView.react { implicit tx => upd =>
+        GUI.fromTx(auralChange(upd))
+      }
+    }
+    val sonifState = sonifView.state
     GUI.fromTx {
-      res.guiInit()
+      res.guiInit(sonifState)
     }
 
     val p       = sonification.patch
@@ -55,20 +62,32 @@ object SonificationViewImpl {
     res
   }
 
-  private final class Impl[S <: Sys[S]](val workspace: Workspace[S], sonifH: stm.Source[S#Tx, Sonification[S]],
+  private abstract class Impl[S <: Sys[S]](val workspace: Workspace[S], sonifH: stm.Source[S#Tx, Sonification[S]],
+                                        sonifView: AuralSonification[S],
                                         nameView: Option[StringExprEditor[S]])(implicit val undoManager: UndoManager)
     extends SonificationView[S] with ComponentHolder[Component] {
 
-    // import workspace.cursor
+    protected def auralObserver: Disposable[S#Tx]
 
     def sonification(implicit tx: S#Tx): Sonification[S] = sonifH()
 
     private var pMapping : FlowPanel = _
     private var pControls: FlowPanel = _
+    private var transportButtons: Component with Transport.ButtonStrip = _
+    private var timerPrepare: javax.swing.Timer = _
 
     // XXX TODO: private val graphDisposables = STMRef[Vec[Disposable[S#Tx]]]
 
-    def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
+    final protected def auralChange(upd: AuralSonification.Update): Unit = {
+      GUI.requireEDT()
+      val ggStop      = transportButtons.button(Transport.Stop).get
+      val ggPlay      = transportButtons.button(Transport.Play).get
+      ggStop.selected = upd == AuralSonification.Stopped
+      ggPlay.selected = upd == AuralSonification.Playing || upd == AuralSonification.Preparing
+      if (upd == AuralSonification.Preparing) timerPrepare.restart() else timerPrepare.stop()
+    }
+
+    final def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
       val sonif = sonifH()
 
       // XXX TODO: graphDisposables.swap(Vec.empty).foreach(_.dispose())
@@ -154,7 +173,7 @@ object SonificationViewImpl {
       }
     }
 
-    def guiInit(): Unit = {
+    final def guiInit(initState: AuralSonification.Update): Unit = {
       // ---- Header ----
       val cHead   = nameView.fold(List.empty[Component])(view => List(new Label("Name:"), view.component))
       val pHeader = new FlowPanel(cHead: _*)
@@ -171,11 +190,17 @@ object SonificationViewImpl {
 
       // ---- Transport ----
 
-      val transpButs = Transport.makeButtonStrip {
+      transportButtons = Transport.makeButtonStrip {
         import Transport._
         Seq(GoToBegin(tGotToBegin()), Stop(tStop()), Play(tPlay()), Loop(tLoop()))
       }
-      val pTransport = new FlowPanel(transpButs)
+      timerPrepare = new javax.swing.Timer(100, Swing.ActionListener { _ =>
+        val ggPlay      = transportButtons.button(Transport.Play).get
+        ggPlay.selected = !ggPlay.selected
+      })
+      timerPrepare.setRepeats(true)
+      auralChange(initState)
+      val pTransport = new FlowPanel(transportButtons)
       pTransport.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Transport")
 
       component = new BoxPanel(Orientation.Vertical) {
@@ -190,24 +215,28 @@ object SonificationViewImpl {
     }
 
     private def tGotToBegin(): Unit = {
-      println("GoToBegin")
+      println("TODO: GoToBegin")
     }
 
-    private def tStop(): Unit = {
-      println("Stop")
+    private def tStop(): Unit = cursor.step { implicit tx =>
+      sonifView.stop()
     }
 
-    private def tPlay(): Unit = {
-      println("Play")
+    private def tPlay(): Unit = cursor.step { implicit tx =>
+      sonifView.play()
     }
 
     private def tLoop(): Unit = {
-      println("Loop")
+      println("TODO: Loop")
     }
 
-    def dispose()(implicit tx: S#Tx): Unit = {
-      // workspace.removeDependent(this)
+    final def dispose()(implicit tx: S#Tx): Unit = {
+      auralObserver.dispose()
+      sonifView.stop()
       nameView.foreach(_.dispose())
+      GUI.fromTx {
+        timerPrepare.stop()
+      }
     }
   }
 }
