@@ -1,5 +1,5 @@
 /*
- *  UGenGraphBuilder.scala
+ *  UGenGraphBuilderOLD.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -18,9 +18,10 @@ package sound
 import de.sciss.synth.{SynthGraph, GE, UGenGraph}
 import at.iem.sysson.graph
 import at.iem.sysson.graph.{VarRef, Var, SelectedLike}
-import impl.{UGenGraphBuilderImpl => Impl}
+import impl.{UGenGraphBuilderImplOLD => Impl}
+import at.iem.sysson.legacy.{SonificationSourceOLD, SonificationOLD}
 
-object UGenGraphBuilder {
+object UGenGraphBuilderOLD {
   /** XXX TODO: need to accommodate reductions such as averaging
     *
     * @param controlName  the control name to use
@@ -39,7 +40,7 @@ object UGenGraphBuilder {
 
   def apply(sonif: SonificationOLD, sg: SynthGraph): Result = Impl(sonif, sg)
 }
-trait UGenGraphBuilder extends UGenGraph.Builder {
+trait UGenGraphBuilderOLD extends UGenGraph.Builder {
   def addMatrixIn(m: MatrixIn): GE
   def getMatrixInSource(m: MatrixIn): SonificationSourceOLD
 

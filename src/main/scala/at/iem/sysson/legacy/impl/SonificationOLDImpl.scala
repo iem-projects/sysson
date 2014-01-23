@@ -12,21 +12,22 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson
-package sound
-package impl
+package at.iem.sysson.legacy.impl
 
 import de.sciss.synth._
 import concurrent.duration.Duration
 import io.{AudioFileSpec, AudioFile}
 import java.io.File
 import Ops._
-import de.sciss.{synth, osc}
+import de.sciss.osc
 import de.sciss.file._
 import scala.concurrent.{ExecutionContext, Promise, Future, future, blocking}
-import Implicits._
 import de.sciss.synth.swing.SynthGraphPanel
 import at.iem.sysson.gui.GUI
+import at.iem.sysson.sound.{AudioSystem, UGenGraphBuilderOLD}
+import at.iem.sysson._
+import at.iem.sysson.sound.impl.UGenGraphBuilderImplOLD
+import at.iem.sysson.legacy.{MatrixSource, SonificationSourceOLD, RowSource, SonificationOLD}
 
 object SonificationOLDImpl {
   var DEBUG_GRAPH     = false
@@ -38,7 +39,7 @@ object SonificationOLDImpl {
 
   private final val codec = osc.PacketCodec().scsynth().build
 
-  private final class PreparedBuffer(val section: UGenGraphBuilder.Section, val file: File, val spec: AudioFileSpec)
+  private final class PreparedBuffer(val section: UGenGraphBuilderOLD.Section, val file: File, val spec: AudioFileSpec)
 
   private final class SynthPreparation(val synth: Synth) {
     var msgs  = Vec.empty[osc.Message]
@@ -77,8 +78,8 @@ object SonificationOLDImpl {
 
     def play(rate: Double): Synth = play(rate = rate, duration = None)
 
-    private def buildUGens(duration: Option[Double]): UGenGraphBuilder.Result =
-      UGenGraphBuilder(this,
+    private def buildUGens(duration: Option[Double]): UGenGraphBuilderOLD.Result =
+      UGenGraphBuilderOLD(this,
         patch.graph
         //        SynthGraph {
         //          import synth._
@@ -100,7 +101,7 @@ object SonificationOLDImpl {
       val as  = AudioSystem.instance
       if (!as.isBooting && !as.isRunning) as.start() // this can start up during our preparations
 
-      val prepared: Future[(UGenGraphBuilder.Result, Vec[PreparedBuffer])] = future {
+      val prepared: Future[(UGenGraphBuilderOLD.Result, Vec[PreparedBuffer])] = future {
         val res = buildUGens(duration = None)
 
         if (DEBUG_GRAPH) {
@@ -143,6 +144,7 @@ object SonificationOLDImpl {
             val fBuf          = af.buffer(fBufSize)
             var framesWritten = 0L
             val t             = if (section.streamDim <= 0) arr else arr.transpose(0, section.streamDim)
+            import at.iem.sysson.Implicits._
             val it            = t.float1Diterator
             while (framesWritten < numFrames) {
               val chunk = math.min(fBufSize, numFrames - framesWritten).toInt
@@ -244,7 +246,7 @@ object SonificationOLDImpl {
       // at least 32 samples, at most one second with respect to maximum assumed playback rate,
       // unless total file length is smaller.
       val bufSizeHM     = math.max(32, math.min((numFrames + 1)/2, math.ceil(rate).toInt).toInt)
-      val bufSizeH      = bufSizeHM + UGenGraphBuilderImpl.diskPad
+      val bufSizeH      = bufSizeHM + UGenGraphBuilderImplOLD.diskPad
       val bufSize       = bufSizeH * 2
 
       // ---- buffer updating function ----
@@ -260,7 +262,7 @@ object SonificationOLDImpl {
       def updateBuffer(trigVal: Int): (osc.Packet, Int) = {
         val trigEven    = trigVal % 2 == 0
         val bufOff      = if (trigEven) 0 else bufSizeH
-        val frame       = trigVal * bufSizeHM /* + startPos = 0 */ + (if (trigEven) 0 else UGenGraphBuilderImpl.diskPad)
+        val frame       = trigVal * bufSizeHM /* + startPos = 0 */ + (if (trigEven) 0 else UGenGraphBuilderImplOLD.diskPad)
         val readSz      = math.max(0, math.min(bufSizeH, numFrames - frame)).toInt
         val fillSz      = bufSizeH - readSz
         var ms          = List.empty[osc.Packet]

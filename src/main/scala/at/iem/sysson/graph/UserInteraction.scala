@@ -17,7 +17,7 @@ package at.iem.sysson.graph
 import de.sciss.synth.{HasSideEffect, UGenInLike, ScalarRated, AudioRated, GE, Lazy}
 import de.sciss.synth
 import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
-import at.iem.sysson.sound.UGenGraphBuilder
+import at.iem.sysson.sound.UGenGraphBuilderOLD
 
 trait UserInteraction extends Lazy.Expander[Unit] with HasSideEffect {
   protected final def makeUGens = ()
@@ -123,7 +123,7 @@ object UserValue {
   case class Value(peer: UserValue) extends impl.LazyImpl with ScalarRated {
     override def productPrefix = "UserValue$Value"
 
-    protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
+    protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike =
       b.addScalarUserValue(peer)
   }
 }

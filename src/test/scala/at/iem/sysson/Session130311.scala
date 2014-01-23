@@ -7,6 +7,7 @@ import synth._
 import ugen._
 import synth.Ops._
 import concurrent.duration._
+import at.iem.sysson.legacy.SonificationOLD
 
 object Session130311 extends SessionLike {
   rec = false
@@ -255,7 +256,7 @@ object Session130311 extends SessionLike {
     val sel3  = sel2 in "plev" select plevRange
     val (min, max) = if (useGivenMinMax) (givenMin, givenMax) else sel3.minmax
 
-    val son = sound.SonificationOLD("Test")
+    val son = SonificationOLD("Test")
     son.patch = PatchOLD.withoutSource("Test", SynthGraph {
       var sum: GE = 0
       for(lon <- 0 until lonRange.size) {

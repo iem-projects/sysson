@@ -41,12 +41,12 @@ import de.sciss.desktop.DialogSource
 import de.sciss.synth.{Ops, Synth}
 import de.sciss.swingplus.OverlayPanel
 import scala.concurrent.{ExecutionContext, Future}
-import at.iem.sysson.sound.SonificationOLD
 import scala.util.Success
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 import de.sciss.lucre.stm
+import at.iem.sysson.legacy.SonificationOLD
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,

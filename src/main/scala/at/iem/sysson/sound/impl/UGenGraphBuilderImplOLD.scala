@@ -1,5 +1,5 @@
 /*
- *  UGenGraphBuilderImpl.scala
+ *  UGenGraphBuilderImplOLD.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -23,9 +23,10 @@ import ugen.ControlProxyLike
 import at.iem.sysson.graph
 import at.iem.sysson.graph.{VarRef, Var, SelectedLike}
 import Implicits._
+import at.iem.sysson.legacy.{ColumnSource, SonificationSourceOLD, SonificationOLD}
 
-object UGenGraphBuilderImpl {
-  def apply(sonif: SonificationOLD, sg: SynthGraph): UGenGraphBuilder.Result = new Impl(sonif).build(sg)
+object UGenGraphBuilderImplOLD {
+  def apply(sonif: SonificationOLD, sg: SynthGraph): UGenGraphBuilderOLD.Result = new Impl(sonif).build(sg)
 
   // OBSOLETE
   def bufCtlName (key: String): String = "$son_" + key
@@ -35,8 +36,8 @@ object UGenGraphBuilderImpl {
   final val diskUsesInterp  = false
   final val diskPad         = if (diskUsesInterp) 4 else 0
 
-  private final class Impl(sonif: SonificationOLD) extends BasicUGenGraphBuilder with UGenGraphBuilder {
-    import UGenGraphBuilder.Section
+  private final class Impl(sonif: SonificationOLD) extends BasicUGenGraphBuilder with UGenGraphBuilderOLD {
+    import UGenGraphBuilderOLD.Section
 
     override def toString     = s"UGenGraphBuilder(${sonif.name})@" + hashCode.toHexString
 
@@ -44,9 +45,9 @@ object UGenGraphBuilderImpl {
     private var usedMappings  = Set.empty[String]
 
     private var sections      = Vec.empty[Section]
-    private var userValues    = Set.empty[UGenGraphBuilder.UserValue]
+    private var userValues    = Set.empty[UGenGraphBuilderOLD.UserValue]
 
-    def build(init: SynthGraph): UGenGraphBuilder.Result = {
+    def build(init: SynthGraph): UGenGraphBuilderOLD.Result = {
       val ug = UGenGraph.use(this) {
         var g = init // sonif.graph
         var controlProxies = Set.empty[ControlProxyLike]
@@ -57,7 +58,7 @@ object UGenGraphBuilderImpl {
         build(controlProxies)
       }
       // (ug, usedMappings)
-      UGenGraphBuilder.Result(ug, sections, userValues)
+      UGenGraphBuilderOLD.Result(ug, sections, userValues)
     }
 
     // OBSOLETE
@@ -79,7 +80,7 @@ object UGenGraphBuilderImpl {
 
     def addScalarUserValue(value: graph.UserValue): GE = {
       val ctl = s"$$user_${value.key}"
-      userValues += UGenGraphBuilder.UserValue(controlName = ctl, peer = value)
+      userValues += UGenGraphBuilderOLD.UserValue(controlName = ctl, peer = value)
       ctl.ir(value.default)
     }
 

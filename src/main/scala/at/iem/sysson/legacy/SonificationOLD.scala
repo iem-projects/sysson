@@ -12,12 +12,12 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson
-package sound
+package at.iem.sysson.legacy
 
 import de.sciss.synth._
-import impl.{SonificationOLDImpl => Impl}
 import scala.concurrent.{ExecutionContext, Future}
+import at.iem.sysson.{VariableSection, PatchOLD}
+import impl.{SonificationOLDImpl => Impl}
 
 object SonificationOLD {
   // val emptyGraph = SynthGraph(Vector.empty, Set.empty)

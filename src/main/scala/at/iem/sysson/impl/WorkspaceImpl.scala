@@ -15,10 +15,9 @@
 package at.iem.sysson
 package impl
 
-import de.sciss.lucre.{event => evt}
+import de.sciss.lucre.{event => evt, synth, stm}
 import evt.Sys
 import de.sciss.serial.{DataOutput, DataInput, Serializer}
-import de.sciss.lucre.stm
 import java.io.{FileNotFoundException, IOException}
 import de.sciss.file._
 import de.sciss.lucre.stm.store.BerkeleyDB
@@ -28,24 +27,26 @@ import at.iem.sysson.sound.Sonification
 import scala.concurrent.stm.{Ref => STMRef, Txn, TMap}
 import de.sciss.lucre.stm.Disposable
 import scala.util.control.NonFatal
+import de.sciss.synth.proc
 
 object WorkspaceImpl {
-  def readDurable(dir: File): Workspace[evt.Durable] = {
+  def readDurable(dir: File): Workspace[proc.Durable] = {
     if (!dir.isDirectory) throw new FileNotFoundException(s"Document ${dir.path} does not exist")
     applyDurable(dir, create = false)
   }
 
-  def emptyDurable(dir: File): Workspace[evt.Durable] = {
+  def emptyDurable(dir: File): Workspace[proc.Durable] = {
     if (dir.exists()) throw new IOException(s"Document ${dir.path} already exists")
     applyDurable(dir, create = true)
   }
 
-  private def applyDurable(dir: File, create: Boolean): Workspace[evt.Durable] = {
-    type S    = evt.Durable
+  private def applyDurable(dir: File, create: Boolean): Workspace[proc.Durable] = {
+    type S    = proc .Durable
+    type I    = synth.InMemory
     val fact  = BerkeleyDB.factory(dir, createIfNecessary = create)
-    implicit val system: S = evt.Durable(fact)
+    implicit val system: S = proc.Durable(fact)
 
-    new Impl[S](dir, system, /* access, */ system)
+    new Impl[S, I](dir, system, /* access, */ system)
   }
 
   private final val WORKSPACE_COOKIE  = 0x737973736F6E7700L   // "syssonw\0"
@@ -59,8 +60,11 @@ object WorkspaceImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](val file: File, val system: S,
-                                        val cursor: stm.Cursor[S]) extends Workspace[S] {
+  private final class Impl[S <: Sys[S], I1 <: synth.Sys[I1]](val file: File, val system: S,
+                                        val cursor: stm.Cursor[S])(implicit inMemFun: S#Tx => I1#Tx)
+    extends Workspace[S] {
+
+    type I = I1
 
     def path: String  = file.path
     def name: String  = file.base
@@ -106,6 +110,9 @@ object WorkspaceImpl {
         require(idx >= 0, s"Dependent $dep was not registered")
         in.patch(idx, Nil, 1)
       } (tx.peer)
+
+
+    def inMemory(tx: S#Tx): I#Tx = inMemFun(tx)
 
     def dispose()(implicit tx: S#Tx): Unit = {
       logInfoTx(s"Dispose workspace $name")

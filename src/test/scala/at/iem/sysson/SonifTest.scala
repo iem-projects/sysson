@@ -1,6 +1,6 @@
 package at.iem.sysson
 
-import sound.{MatrixIn, SonificationOLD, AudioSystem}
+import sound.{MatrixIn, AudioSystem}
 import de.sciss.synth
 import de.sciss.synth.{SynthGraph, Synth, Server}
 import Implicits._
@@ -8,6 +8,7 @@ import concurrent.{ExecutionContext, duration, future}
 import duration._
 import de.sciss.osc
 import ExecutionContext.Implicits.global
+import at.iem.sysson.legacy.SonificationOLD
 
 object SonifTest extends App {
   val mode      = "matrix"    // either of "row", "column", and "matrix"

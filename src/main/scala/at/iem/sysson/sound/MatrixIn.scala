@@ -34,8 +34,8 @@ object MatrixIn {
     def expand: UGenInLike = builder.getMatrixInSource(m).numColumns
   }
 
-  private def builder: UGenGraphBuilder = UGenGraph.builder match {
-    case b: UGenGraphBuilder  => b
+  private def builder: UGenGraphBuilderOLD = UGenGraph.builder match {
+    case b: UGenGraphBuilderOLD  => b
     case _                    => MatrixIn.outsideOfContext()
   }
 }

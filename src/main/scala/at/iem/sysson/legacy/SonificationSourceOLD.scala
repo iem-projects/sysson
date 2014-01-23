@@ -12,7 +12,10 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson
+package at.iem.sysson.legacy
+
+import at.iem.sysson.VariableSection
+import at.iem.sysson.Implicits._
 
 // OBSOLETE
 sealed trait SonificationSourceOLD {
@@ -45,7 +48,6 @@ case class RowSource(section: VariableSection) extends SonificationSourceOLD {
 }
 
 case class MatrixSource(section: VariableSection, rowDim: Int, columnDim: Int) extends SonificationSourceOLD {
-  import Implicits._
 
   require(section.reducedRank == 2, s"Reduced rank must be 2 for a matrix source: $section")
   require(section.dimensions(rowDim).size > 1 && section.dimensions(columnDim).size > 1,

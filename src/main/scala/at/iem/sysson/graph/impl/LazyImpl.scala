@@ -17,14 +17,14 @@ package graph
 package impl
 
 import de.sciss.synth.{UGenGraph, UGenInLike, GE}
-import at.iem.sysson.sound.UGenGraphBuilder
+import at.iem.sysson.sound.UGenGraphBuilderOLD
 
 trait LazyImpl extends GE.Lazy {
   protected final def makeUGens: UGenInLike =
     UGenGraph.builder match {
-      case b: UGenGraphBuilder => makeUGens(b)
+      case b: UGenGraphBuilderOLD => makeUGens(b)
       case _ => sys.error("Expansion out of context")
     }
 
-  protected def makeUGens(builder: UGenGraphBuilder): UGenInLike
+  protected def makeUGens(builder: UGenGraphBuilderOLD): UGenInLike
 }

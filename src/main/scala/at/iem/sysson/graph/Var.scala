@@ -18,7 +18,7 @@ import de.sciss.synth
 import de.sciss.synth.{ScalarRated, UGenInLike, AudioRated}
 import at.iem.sysson._
 import de.sciss.serial.ImmutableSerializer
-import at.iem.sysson.sound.UGenGraphBuilder
+import at.iem.sysson.sound.UGenGraphBuilderOLD
 
 object Var {
   trait GE extends synth.GE {
@@ -37,7 +37,7 @@ object Var {
       Var.Axis(this, dim.name)
     }
 
-    protected def makeUGens(b: UGenGraphBuilder): UGenInLike = b.addAudioVariable(this)
+    protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addAudioVariable(this)
   }
 
   // def apply(): Var = impl.VarImpl.Default
@@ -64,7 +64,7 @@ object Var {
     case class Values(axis: Var.Axis) extends impl.LazyImpl with ScalarRated {
       override def productPrefix = "Var$Axis$Values"
 
-      protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
+      protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike =
         ??? // b.addScalarAxis(axis.playing, axis.ref)
     }
   }

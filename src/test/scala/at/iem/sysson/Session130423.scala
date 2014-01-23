@@ -6,6 +6,7 @@ import ugen._
 import Ops._
 import scala.concurrent._
 import duration._
+import at.iem.sysson.legacy.SonificationOLD
 
 object Session130423 extends SessionLike {
   rec = true
@@ -89,7 +90,7 @@ object Session130423 extends SessionLike {
     //           numLat-1  numLon-1
     //...
 
-    val son = sound.SonificationOLD("Test")
+    val son = SonificationOLD("Test")
     son.patch = PatchOLD.withoutSource("Test", SynthGraph {
       var sum: GE = 0
       val speed = 1.0 / 4000.0

@@ -14,7 +14,7 @@
 
 package at.iem.sysson
 
-import de.sciss.lucre.{event => evt, stm}
+import de.sciss.lucre.{event => evt, synth, stm}
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.List
 import de.sciss.file.File
@@ -23,6 +23,7 @@ import de.sciss.lucre.stm.Disposable
 import ucar.nc2.NetcdfFile
 import at.iem.sysson.sound.Sonification
 import scala.concurrent.stm.TMap
+import de.sciss.synth.proc
 
 object Workspace {
   /** File name extension (excluding leading period) */
@@ -30,8 +31,8 @@ object Workspace {
 
   // def empty[S <: Sys[S]]
   object Durable {
-    def empty(dir: File): Workspace[evt.Durable] = Impl.emptyDurable(dir)
-    def read (dir: File): Workspace[evt.Durable] = Impl.readDurable (dir)
+    def empty(dir: File): Workspace[proc.Durable] = Impl.emptyDurable(dir)
+    def read (dir: File): Workspace[proc.Durable] = Impl.readDurable (dir)
   }
 }
 
@@ -39,8 +40,13 @@ object Workspace {
   * It contains a collection of data sources, plots and sonification instances.
   */
 trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] {
+  /** In-Memory back end system */
+  type I <: synth.Sys[I]
+
   /** The transactional cursor associated with this workspace. Typically this is `Durable`. */
   implicit def cursor: stm.Cursor[S]
+
+  implicit def inMemory(tx: S#Tx): I#Tx
 
   /** The opaque (database) directory associated with the workspace. */
   def file: File

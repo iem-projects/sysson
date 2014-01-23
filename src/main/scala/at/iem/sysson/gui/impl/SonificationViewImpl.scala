@@ -173,7 +173,7 @@ object SonificationViewImpl {
 
       val transpButs = Transport.makeButtonStrip {
         import Transport._
-        Seq(GoToBegin(), Stop(), Play(), Loop())
+        Seq(GoToBegin(tGotToBegin()), Stop(tStop()), Play(tPlay()), Loop(tLoop()))
       }
       val pTransport = new FlowPanel(transpButs)
       pTransport.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Transport")
@@ -187,6 +187,22 @@ object SonificationViewImpl {
         contents += Separator()
         contents += pTransport
       }
+    }
+
+    private def tGotToBegin(): Unit = {
+      println("GoToBegin")
+    }
+
+    private def tStop(): Unit = {
+      println("Stop")
+    }
+
+    private def tPlay(): Unit = {
+      println("Play")
+    }
+
+    private def tLoop(): Unit = {
+      println("Loop")
     }
 
     def dispose()(implicit tx: S#Tx): Unit = {

@@ -17,7 +17,7 @@ package at.iem.sysson.graph
 import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
 import de.sciss.synth.{HasSideEffect, Lazy, GE, UGenInLike, AudioRated, Optional}
 import de.sciss.synth
-import at.iem.sysson.sound.UGenGraphBuilder
+import at.iem.sysson.sound.UGenGraphBuilderOLD
 
 object Dim {
   // private final val DIM_COOKIE = 0x64696D00 // "dim\0"
@@ -46,7 +46,7 @@ object Dim {
 
     override def productPrefix = "Dim$Play"
 
-    protected def makeUGens(b: UGenGraphBuilder): UGenInLike =
+    protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike =
       ??? // b.addAudioSelection(dim, freq)
   }
 }

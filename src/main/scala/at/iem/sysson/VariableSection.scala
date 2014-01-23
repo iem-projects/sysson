@@ -20,6 +20,7 @@ import Implicits._
 import collection.JavaConversions
 import at.iem.sysson.gui.Plot
 import scala.concurrent.Future
+import at.iem.sysson.legacy.{MatrixSource, RowSource, ColumnSource}
 
 object VariableSection {
   /** A transitory class specifying a variable section along with a dimension

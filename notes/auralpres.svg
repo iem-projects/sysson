@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="auralpres.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mend"
+       style="overflow:visible;">
+      <path
+         id="path3811"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.4) rotate(180) translate(10,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="419.28571"
+     inkscape:cy="691.42857"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1555"
+     inkscape:window-height="956"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="94.285713"
+       y="169.50504"
+       id="text2985"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="94.285713"
+         y="169.50504" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="71.428574"
+       y="79.505043"
+       id="text2989"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2991"
+         x="71.428574"
+         y="79.505043">Sonification[S]</tspan></text>
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1,1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 272.14286,35.93361 0,188.73497"
+       id="path2993"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="352.85715"
+       y="113.79076"
+       id="text2995"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2997"
+         x="352.85715"
+         y="113.79076">AuralPresentation[T]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="370.87891"
+       y="75.933609"
+       id="text2999"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3001"
+         x="370.87891"
+         y="75.933609">Transport[T]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="270"
+       y="278.79074"
+       id="text3003"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3005"
+         x="270"
+         y="278.79074">AuralSystem</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;marker-end:url(#Arrow1Mend)"
+       d="m 375,130.21932 c -12.39001,45.85626 -29.93865,90.0826 -47.14286,134.28576"
+       id="path3007"
+       inkscape:connector-curvature="0" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4243"
+       y="51.719322"
+       x="370"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       xml:space="preserve"><tspan
+         y="51.719322"
+         x="370"
+         id="tspan4245"
+         sodipodi:role="line">ProcGroup[T]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="370"
+       y="27.505039"
+       id="text4247"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4249"
+         x="370"
+         y="27.505039">Proc[T]</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path4251"
+       d="M 163.33224,70.19164 C 228.13042,57.993589 294.57683,51.077969 360.75188,43.875678"
+       style="fill:none;stroke:#000000;stroke-width:1;marker-end:url(#Arrow1Mend)" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4253"
+       d="m 361.51034,223.87253 -188.73497,0"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1.00000001, 1.00000001;stroke-dashoffset:0"
+       d="m 468.538,33.076467 c 16.62133,3.613207 12.71265,11.999749 9.57752,17.98703 -7.63978,7.022681 12.9495,11.937876 6.21061,18.387217 -8.14338,8.327154 -0.33492,17.072011 0.68454,25.533368 -1.87568,9.289608 4.38188,18.869228 -3.38696,27.926808 -9.12748,3.632 -20.70638,-2.40651 -30.9099,-0.40647"
+       id="path4265"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="494.28571"
+       y="63.790752"
+       id="text4278"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="494.28571"
+         y="63.790752"
+         id="tspan4282">(a) per Sonif</tspan><tspan
+         sodipodi:role="line"
+         x="494.28571"
+         y="78.790756"
+         id="tspan4286">(b) 1x global</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="455"
+       y="193.79076"
+       id="text4288"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4290"
+         x="455"
+         y="193.79076">pro (a) con (b)</tspan><tspan
+         sodipodi:role="line"
+         x="455"
+         y="208.79076"
+         id="tspan4292">- transport maps easier to GUI transport</tspan><tspan
+         sodipodi:role="line"
+         x="455"
+         y="223.79076"
+         id="tspan4294">- schedulers independent</tspan><tspan
+         sodipodi:role="line"
+         x="455"
+         y="238.79076"
+         id="tspan4302">- easier to loop/seek</tspan><tspan
+         sodipodi:role="line"
+         x="455"
+         y="253.79076"
+         id="tspan4296" /><tspan
+         sodipodi:role="line"
+         x="455"
+         y="268.79077"
+         id="tspan4298">pro (b) con (a)</tspan><tspan
+         sodipodi:role="line"
+         x="455"
+         y="283.79077"
+         id="tspan4304">- multiple procs may be connected</tspan><tspan
+         sodipodi:role="line"
+         x="455"
+         y="298.79077"
+         id="tspan4308">- could eventually record &quot;whole session&quot;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="204.17383"
+       y="383.79077"
+       id="text4329"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4331"
+         x="204.17383"
+         y="383.79077">For the first iteration, the simpler solution is (a); also S != T</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="235.82031"
+       y="416.95203"
+       id="text4333"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4335"
+         x="235.82031"
+         y="416.95203">Another thing is that if SynthDefs get too big,</tspan><tspan
+         sodipodi:role="line"
+         x="235.82031"
+         y="431.95203"
+         id="tspan4337">this naturally extends to multiple Procs per Sonif</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="190.05273"
+       y="465.93359"
+       id="text4339"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4341"
+         x="190.05273"
+         y="465.93359">If we use the grapheme/scans concept, we would probably</tspan><tspan
+         sodipodi:role="line"
+         x="190.05273"
+         y="480.93359"
+         id="tspan4343">have to re-write the SynthGraph from Sonification[S] to Proc[T]</tspan></text>
+  </g>
+</svg>
