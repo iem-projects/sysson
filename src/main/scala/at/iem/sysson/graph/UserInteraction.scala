@@ -98,35 +98,3 @@ case class SelectedValue(variable: VarRef /*, default: */) extends SelectedLike 
 //    */
 //  def size: GE = stopIndex - startIndex
 //}
-
-object UserValue {
-  private final val USER_COOKIE = 0x75737200  // "usr\0"
-
-  implicit object serializer extends ImmutableSerializer[UserValue] {
-    def read(in: DataInput): UserValue = {
-      val cookie = in.readInt()
-      require(cookie == USER_COOKIE,
-        s"Unexpected cookie (expected ${USER_COOKIE.toHexString}, found ${cookie.toHexString})")
-      val key     = in.readUTF()
-      val default = in.readDouble()
-      UserValue(key, default)
-    }
-
-    def write(v: UserValue, out: DataOutput): Unit = {
-      out.writeInt(USER_COOKIE)
-      out.writeUTF(v.key)
-      out.writeDouble(v.default)
-    }
-  }
-
-  // XXX TODO: shouldn't leak impl.LazyImpl
-  case class Value(peer: UserValue) extends impl.LazyImpl with ScalarRated {
-    override def productPrefix = "UserValue$Value"
-
-    protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike =
-      b.addScalarUserValue(peer)
-  }
-}
-case class UserValue(key: String, default: Double) extends UserInteraction {
-  def value: GE = UserValue.Value(this)
-}

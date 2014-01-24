@@ -39,8 +39,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="419.28571"
-     inkscape:cy="691.42857"
+     inkscape:cx="363.16533"
+     inkscape:cy="344.51041"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -262,5 +262,44 @@
          x="190.05273"
          y="480.93359"
          id="tspan4343">have to re-write the SynthGraph from Sonification[S] to Proc[T]</tspan></text>
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:0.99999999, 0.99999999;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 624.79277,503.87252 -568.445969,0"
+       id="path4345"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="135.36044"
+       y="551.8316"
+       id="text4563"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4565"
+         x="135.36044"
+         y="551.8316">AuralWorkspace would be the view for each project.</tspan><tspan
+         sodipodi:role="line"
+         x="135.36044"
+         y="566.8316"
+         id="tspan4567">AuralWorkspaceHandler would be the instance that maps Workspace to AuralWorkspace,</tspan><tspan
+         sodipodi:role="line"
+         x="135.36044"
+         y="581.8316"
+         id="tspan4569">or actually it could be part of the DocumentHandler ?</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Gulim;-inkscape-font-specification:Sans"
+       x="174.28571"
+       y="669.50507"
+       id="text4571"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4573"
+         x="174.28571"
+         y="669.50507">SynthGraph</tspan><tspan
+         sodipodi:role="line"
+         x="174.28571"
+         y="684.50507"
+         id="tspan4575">   SonificationGE</tspan></text>
   </g>
 </svg>

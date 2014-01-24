@@ -22,10 +22,11 @@ import at.iem.sysson.impl.TxnModelImpl
 import scala.concurrent.stm.Ref
 import de.sciss.lucre.stm
 import scala.concurrent.{ExecutionContext, future, blocking}
-import de.sciss.synth.proc.{SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
-import de.sciss.lucre.synth.expr.SpanLikes
+import de.sciss.synth.proc.{Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
+import de.sciss.lucre.synth.expr.{Doubles, SpanLikes}
 import de.sciss.span.Span
 import de.sciss.lucre
+import scala.util.control.NonFatal
 
 object AuralSonificationImpl {
   def apply[S <: Sys[S]](aw: AuralWorkspace[S], sonification: Sonification[S])
@@ -75,16 +76,22 @@ object AuralSonificationImpl {
     }
 
     private def prepare()(implicit tx: S#Tx): Unit = {
+      implicit val itx: I#Tx = iTx(tx)
+
       val sonif = sonifH()
-      val graph = sonif.patch.graph.value
-      graph.sources.foreach {
+      val g     = sonif.patch.graph.value
+      g.sources.foreach {
+        case uv: graph.UserValue =>
+          sonif.controls.get(uv.key).foreach { expr =>
+            proc.attributes.put(uv.attrKey, Attribute.Double(Doubles.newConst(expr.value)))
+          }
+
         case _ =>
       }
       // XXX TODO: expand
       state_=(Preparing)
 
-      implicit val itx: I#Tx = iTx(tx)
-      proc.graph() = SynthGraphs.newConst[I](graph)
+      proc.graph() = SynthGraphs.newConst[I](g)
 
       tx.afterCommit {
         import ExecutionContext.Implicits.global
@@ -95,7 +102,13 @@ object AuralSonificationImpl {
           aw.workspace.cursor.step { implicit tx =>
             implicit val itx: I#Tx = iTx(tx)
             transport.seek(0L)
-            transport.play()
+            try {
+              transport.play()
+            } catch {
+              case NonFatal(foo) =>
+              foo.printStackTrace()
+              throw foo
+            }
             state_=(Playing)
           }
         }

@@ -16,7 +16,7 @@ package at.iem.sysson
 package sound
 package impl
 
-import de.sciss.{lucre, synth}
+import de.sciss.synth
 import de.sciss.model.impl.ModelImpl
 import de.sciss.synth.proc.AuralSystem
 import de.sciss.lucre.synth.Server
