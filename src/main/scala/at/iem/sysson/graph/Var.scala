@@ -28,7 +28,7 @@ object Var {
   }
 
   case class Play(variable: Var, time: Dim.Play)
-    extends impl.LazyImpl with GE with AudioRated {
+    extends /* impl.LazyImpl with */ GE with AudioRated {
 
     override def productPrefix = "Var$Play"
 
@@ -37,7 +37,9 @@ object Var {
       Var.Axis(this, dim.name)
     }
 
-    protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addAudioVariable(this)
+    // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addAudioVariable(this)
+
+    def expand: UGenInLike = ???
   }
 
   // def apply(): Var = impl.VarImpl.Default
@@ -61,11 +63,12 @@ object Var {
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
 
   object Axis {
-    case class Values(axis: Var.Axis) extends impl.LazyImpl with ScalarRated {
+    case class Values(axis: Var.Axis) extends synth.GE /* impl.LazyImpl */ with ScalarRated {
       override def productPrefix = "Var$Axis$Values"
 
-      protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike =
-        ??? // b.addScalarAxis(axis.playing, axis.ref)
+      // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addScalarAxis(axis.playing, axis.ref)
+
+      def expand: UGenInLike = ???
     }
   }
 
