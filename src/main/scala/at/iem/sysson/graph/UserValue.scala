@@ -1,9 +1,8 @@
 package at.iem.sysson.graph
 
-import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
-import de.sciss.synth.{proc, Rate, audio, control, scalar, GE, UGenInLike, ScalarRated}
-import at.iem.sysson.sound.UGenGraphBuilderOLD
+import de.sciss.synth.{proc, Rate, scalar, GE, UGenInLike}
 import de.sciss.synth
+import at.iem.sysson.sound.AuralSonification
 
 object UserValue {
 
@@ -33,8 +32,12 @@ object UserValue {
     // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike =
     //  b.addScalarUserValue(peer)
 
-    protected def makeUGens: UGenInLike =
-      proc.graph.attribute(peer.attrKey).ir(peer.default)
+    protected def makeUGens: UGenInLike = {
+      val key = AuralSonification.current().attributeKey(this)
+      proc.graph.attribute(key).ir
+    }
+
+    // proc.graph.attribute(peer.attrKey).ir(peer.default)
   }
 }
 case class UserValue(key: String, default: Double) extends UserInteraction {
@@ -43,5 +46,5 @@ case class UserValue(key: String, default: Double) extends UserInteraction {
   // def kr: GE = UserValue.GE(control, this)
   // def ar: GE = UserValue.GE(audio  , this)
 
-  private[sysson] def attrKey = s"user_$key"
+  // private[sysson] def attrKey = s"user_$key"
 }

@@ -14,24 +14,21 @@
 
 package at.iem.sysson.graph
 
-import de.sciss.synth.{HasSideEffect, UGenInLike, ScalarRated, AudioRated, GE, Lazy}
-import de.sciss.synth
-import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
-import at.iem.sysson.sound.UGenGraphBuilderOLD
+import de.sciss.synth.{HasSideEffect, Lazy}
 
 trait UserInteraction extends Lazy.Expander[Unit] with HasSideEffect {
   protected final def makeUGens = ()
 }
 
-sealed trait SelectedLike extends UserInteraction {
-  /** Variable proxy to select */
-  def variable: VarRef
-}
-
-case class SelectedValue(variable: VarRef /*, default: */) extends SelectedLike {
-  def value: GE = ???
-  def index: GE = ???
-}
+//sealed trait SelectedLike extends UserInteraction {
+//  /** Variable proxy to select */
+//  def variable: VarRef
+//}
+//
+//case class SelectedValue(variable: VarRef /*, default: */) extends SelectedLike {
+//  def value: GE = ???
+//  def index: GE = ???
+//}
 
 //@deprecated("Replaced by Dim")
 //object SelectedRange {

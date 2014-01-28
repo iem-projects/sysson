@@ -19,16 +19,30 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
-import scala.concurrent.stm.Ref
+import scala.concurrent.stm.{Txn, TxnLocal, Ref}
 import de.sciss.lucre.stm
 import scala.concurrent.{ExecutionContext, future, blocking}
 import de.sciss.synth.proc.{Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
-import de.sciss.lucre.synth.expr.{Doubles, SpanLikes}
+import de.sciss.lucre.synth.expr.{DoubleVec, Doubles, SpanLikes}
 import de.sciss.span.Span
 import de.sciss.lucre
 import scala.util.control.NonFatal
 
 object AuralSonificationImpl {
+  private val _current = TxnLocal(Option.empty[AuralSonification[_]])
+
+  private[sysson] def current(): AuralSonification[_] = {
+    implicit val tx = Txn.findCurrent.getOrElse(sys.error("Called outside of transaction"))
+    _current.get.getOrElse(sys.error("Called outside transport play"))
+  }
+
+  private def using[S <: Sys[S], A](aural: AuralSonification[S])(block: => A)(implicit tx: S#Tx): A = {
+    val old = _current.swap(Some(aural))(tx.peer)
+    val res = block
+    _current.set(old)(tx.peer)
+    res
+  }
+
   def apply[S <: Sys[S]](aw: AuralWorkspace[S], sonification: Sonification[S])
                         (implicit tx: S#Tx): AuralSonification[S] = {
     val w             = aw.workspace
@@ -42,7 +56,7 @@ object AuralSonificationImpl {
     val transport     = Transport[w.I, w.I](group)
     val auralSys      = AudioSystem.instance.aural
     val aural         = AuralPresentation.runTx(transport, auralSys)
-    new Impl[S, w.I](aw, aural, w.inMemorySys, w.inMemoryTx, sonifH, proc, transport)
+    new Impl[S, w.I](aw, aural, w.inMemorySys, w.inMemoryTx, sonifH, itx.newHandle(proc), transport)
   }
 
   // private sealed trait State
@@ -51,11 +65,13 @@ object AuralSonificationImpl {
   private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S], ap: AuralPresentation[I],
                                                           iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx,
                                                           sonifH: stm.Source[S#Tx, Sonification[S]],
-      proc: Proc[I], // no handle necessary for in-memory!!
+      procH: stm.Source[I#Tx, Proc[I]],
       transport: Transport[I, Proc[I], Transport.Proc.Update[I]])
     extends AuralSonification[S] with TxnModelImpl[S#Tx, Update] {
+    impl =>
 
-    private val _state = Ref(Stopped: Update)
+    private val _state    = Ref(Stopped: Update)
+    private val attrMap   = Ref(Map.empty[Any, String])
 
     def state(implicit tx: S#Tx): Update = _state.get(tx.peer)
 
@@ -75,20 +91,52 @@ object AuralSonificationImpl {
       prepare()
     }
 
+    def attributeKey(elem: Any): String = {
+      ???
+    }
+
     private def prepare()(implicit tx: S#Tx): Unit = {
       implicit val itx: I#Tx = iTx(tx)
 
       val sonif = sonifH()
       val g     = sonif.patch.graph.value
+      val proc  = procH()
+
+      var aMap  = Map.empty[Any, String]
+      var aCnt  = 0
+
+      def addAttr(elem: Any): String = {
+        val key = s"sonif_$aCnt"
+        aCnt   += 1
+        aMap   += elem -> key
+        key
+      }
+
+      def putAttrValue(key: String, value: Double): Unit =
+        proc.attributes.put(key, Attribute.Double(Doubles.newConst(value)))
+
+      def putAttrValues(key: String, values: Vec[Double]): Unit =
+        proc.attributes.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
+
       g.sources.foreach {
         case uv: graph.UserValue =>
+          val attrKey = addAttr(uv)
           sonif.controls.get(uv.key).foreach { expr =>
-            proc.attributes.put(uv.attrKey, Attribute.Double(Doubles.newConst(expr.value)))
+            putAttrValue(attrKey, expr.value)
           }
+
+        case dp: graph.Dim.Play =>
+          ??? // val key = addAttr(dp)
+
+        case vav: graph.Var.Axis.Values =>
+          val attrKey = addAttr(vav)
+
+
 
         case _ =>
       }
-      // XXX TODO: expand
+
+      attrMap.set(aMap)(tx.peer)
       state_=(Preparing)
 
       proc.graph() = SynthGraphs.newConst[I](g)
@@ -103,7 +151,7 @@ object AuralSonificationImpl {
             implicit val itx: I#Tx = iTx(tx)
             transport.seek(0L)
             try {
-              transport.play()
+              using(impl)(transport.play())
             } catch {
               case NonFatal(foo) =>
               foo.printStackTrace()

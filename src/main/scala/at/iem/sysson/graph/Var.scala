@@ -15,10 +15,9 @@
 package at.iem.sysson.graph
 
 import de.sciss.synth
-import de.sciss.synth.{ScalarRated, UGenInLike, AudioRated}
-import at.iem.sysson._
+import de.sciss.synth.{proc, ScalarRated, UGenInLike, AudioRated}
 import de.sciss.serial.ImmutableSerializer
-import at.iem.sysson.sound.UGenGraphBuilderOLD
+import at.iem.sysson.sound.AuralSonification
 
 object Var {
   trait GE extends synth.GE {
@@ -28,9 +27,11 @@ object Var {
   }
 
   case class Play(variable: Var, time: Dim.Play)
-    extends /* impl.LazyImpl with */ GE with AudioRated {
+    extends /* impl.LazyImpl with */ GE with synth.GE.Lazy with AudioRated {
 
     override def productPrefix = "Var$Play"
+
+    override def toString = s"$variable.play($time)"
 
     def axis(dim: Dim): Var.Axis = {
       require (dim.variable == variable, s"Dimension ${dim.name} does not belong to variable $variable")
@@ -38,11 +39,10 @@ object Var {
     }
 
     // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addAudioVariable(this)
-
-    def expand: UGenInLike = ???
+    protected def makeUGens: UGenInLike = {
+      ??? // proc.graph.scan.In(scanKey)
+    }
   }
-
-  // def apply(): Var = impl.VarImpl.Default
 
   /** Declares a new sonification variable (data source).
     *
@@ -63,12 +63,17 @@ object Var {
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
 
   object Axis {
-    case class Values(axis: Var.Axis) extends synth.GE /* impl.LazyImpl */ with ScalarRated {
+    case class Values(axis: Var.Axis) extends synth.GE.Lazy /* impl.LazyImpl */ with ScalarRated {
       override def productPrefix = "Var$Axis$Values"
+
+      override def toString = s"$axis.values"
 
       // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addScalarAxis(axis.playing, axis.ref)
 
-      def expand: UGenInLike = ???
+      protected def makeUGens: UGenInLike = {
+        val key = AuralSonification.current().attributeKey(this)
+        proc.graph.attribute(key).ir
+      }
     }
   }
 
@@ -79,8 +84,10 @@ object Var {
     * This allows signal processing which combines each sample value from a
     * variable with the corresponding axes elements.
     */
-  case class Axis(playing: Var.Play, dim: String) {
+  case class Axis(variable: Var.Play, dim: String) {
     override def productPrefix = "Var$Axis"
+
+    override def toString = s"$variable.axis($dim)"
 
     def values    : synth.GE = Axis.Values(this)
 
@@ -91,47 +98,12 @@ object Var {
     def endValue  : synth.GE = ???
   }
 
-  // ---- operations ----
-
-  sealed trait Op
-
-  sealed trait Reduction extends Op {
-    def variable: VarRef
-  }
-
-  final case class Select (selection: SelectedLike) extends Reduction {
-    override def productPrefix = "Var$Select"
-
-    def variable: VarRef = selection.variable
-  }
-  final case class Average(variable: VarRef) extends Reduction
-
   // -------- VarImpl --------
 
   private final case class Impl(name: String, higherRank: Boolean)
     extends Var {
 
     override def productPrefix = "Var"
-
-
-
-    //    private def select1(selection: SelectedLike): Impl = {
-    //      requireUnusedReduction(selection.variable)
-    //      copy(operations = operations :+ Var.Select(selection))
-    //    }
-
-    //    private def requireUnusedReduction(v: VarRef): Unit =
-    //      require(!operations.exists {
-    //        case r: Var.Reduction if r.variable == v => true
-    //        case _ => false
-    //      }, s"Dimension $v has already been selected or reduced")
-
-    //    def select(selections: SelectedLike*): Var = (this /: selections)(_ select1 _)
-    //
-    //    def average(dim: VarRef): Var = {
-    //      requireUnusedReduction(dim)
-    //      copy(operations = operations :+ Var.Average(dim))
-    //    }
 
     def dim(name: String): Dim = Dim(this, name)
 
@@ -145,28 +117,14 @@ trait Var extends UserInteraction {
   /** Logical name by which the source is referred to */
   def name: String
 
-  // /** List of specifications of required dimensions */
-  // def dims: Vec[Dim]
-
   def dim(name: String): Dim
 
   /** Whether a matrix rank higher than `dimensions.size` is permitted */
   def higherRank: Boolean
-
-  //  def select(selections: SelectedLike*): Var
-  //  def average(dim: VarRef): Var
 
   def ir: Var.GE
   def kr: Var.GE
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
   def play(time: Dim.Play): Var.Play
-
-  // /** Creates a dimension reference */
-  // def dim(dim: Dim): Dim
-
-  //  /** The operations performed on the original input variable, such as taking slices,
-  //    * averaging over a dimension, etc.
-  //    */
-  //  def operations: Vec[Var.Op]
 }

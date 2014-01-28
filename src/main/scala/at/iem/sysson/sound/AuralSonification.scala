@@ -16,16 +16,21 @@ package at.iem.sysson
 package sound
 
 import de.sciss.lucre.event.{Observable, Sys}
+import impl.{AuralSonificationImpl => Impl}
 
 object AuralSonification {
   sealed trait Update
   case object Preparing extends Update
   case object Playing   extends Update
   case object Stopped   extends Update
+
+  private[sysson] def current(): AuralSonification[_] = Impl.current()
 }
 trait AuralSonification[S <: Sys[S]] extends Observable[S#Tx, AuralSonification.Update] {
   def play()(implicit tx: S#Tx): Unit
   def stop()(implicit tx: S#Tx): Unit
 
   def state(implicit tx: S#Tx): AuralSonification.Update
+
+  private[sysson] def attributeKey(elem: Any): String
 }

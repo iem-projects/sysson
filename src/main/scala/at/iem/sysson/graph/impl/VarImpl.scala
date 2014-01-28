@@ -16,9 +16,7 @@ package at.iem.sysson
 package graph
 package impl
 
-import de.sciss.synth.{GE, ScalarRated, UGenInLike}
 import at.iem.sysson.graph.Var
-import at.iem.sysson.sound.UGenGraphBuilderOLD
 import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
 
 object VarImpl {

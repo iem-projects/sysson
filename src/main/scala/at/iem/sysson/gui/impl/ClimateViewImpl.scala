@@ -46,7 +46,6 @@ import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 import de.sciss.lucre.stm
-import at.iem.sysson.legacy.SonificationOLD
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -518,45 +517,45 @@ object ClimateViewImpl {
     private var _patch = Option.empty[PatchOLD]
 
     def play(): Unit = {
-      stop()
-      markPlayStop(playing = true)
-      patch.foreach { p =>
-        val son          = SonificationOLD(p.name)
-        son.patch        = p
-        son.variableMap += SonificationOLD.DefaultVariable -> section
-        models.foreach { case (key, model) =>
-          val (start, end) = model.range
-          val section = net.variableMap(key) in key select (start to end)
-          son.variableMap += key -> section
-        }
-        userValues.foreach { case (key, model) =>
-          son.userValueMap += key -> model.getValue.asInstanceOf[Double]
-        }
-        // println(s"sonfication.userValueMap = ${son.userValueMap}")
-
-        import ExecutionContext.Implicits.global
-        val fut          = son.prepare().map(_.play())
-        playing          = Some(fut)
-        ggBusy.visible = true
-
-        def done(): Unit = GUI.defer {
-          // only react if we're still talking about the same synth
-          if (playing == Some(fut)) markPlayStop(playing = false)
-        }
-
-        fut.onComplete {
-          case _ => GUI.defer(ggBusy.visible = false)
-        }
-        fut.onComplete {
-          case Success(synth) => synth.onEnd(done())
-          case _              => done()
-        }
-        fut.onFailure {
-          case ex: Exception =>
-            DialogSource.Exception(ex -> s"Playing ${p.name}").show(None) // XXX TODO find window
-          case f => f.printStackTrace()
-        }
-      }
+//      stop()
+//      markPlayStop(playing = true)
+//      patch.foreach { p =>
+//        val son          = SonificationOLD(p.name)
+//        son.patch        = p
+//        son.variableMap += SonificationOLD.DefaultVariable -> section
+//        models.foreach { case (key, model) =>
+//          val (start, end) = model.range
+//          val section = net.variableMap(key) in key select (start to end)
+//          son.variableMap += key -> section
+//        }
+//        userValues.foreach { case (key, model) =>
+//          son.userValueMap += key -> model.getValue.asInstanceOf[Double]
+//        }
+//        // println(s"sonfication.userValueMap = ${son.userValueMap}")
+//
+//        import ExecutionContext.Implicits.global
+//        val fut          = son.prepare().map(_.play())
+//        playing          = Some(fut)
+//        ggBusy.visible = true
+//
+//        def done(): Unit = GUI.defer {
+//          // only react if we're still talking about the same synth
+//          if (playing == Some(fut)) markPlayStop(playing = false)
+//        }
+//
+//        fut.onComplete {
+//          case _ => GUI.defer(ggBusy.visible = false)
+//        }
+//        fut.onComplete {
+//          case Success(synth) => synth.onEnd(done())
+//          case _              => done()
+//        }
+//        fut.onFailure {
+//          case ex: Exception =>
+//            DialogSource.Exception(ex -> s"Playing ${p.name}").show(None) // XXX TODO find window
+//          case f => f.printStackTrace()
+//        }
+//      }
     }
 
     private def markPlayStop(playing: Boolean) {

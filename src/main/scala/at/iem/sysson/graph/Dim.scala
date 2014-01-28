@@ -14,10 +14,8 @@
 
 package at.iem.sysson.graph
 
-import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
-import de.sciss.synth.{proc, HasSideEffect, Lazy, GE, UGenInLike, AudioRated, Optional}
+import de.sciss.synth.{proc, GE, UGenInLike, AudioRated}
 import de.sciss.synth
-import at.iem.sysson.sound.UGenGraphBuilderOLD
 
 object Dim {
   // private final val DIM_COOKIE = 0x64696D00 // "dim\0"
@@ -46,13 +44,23 @@ object Dim {
 
     override def productPrefix = "Dim$Play"
 
+    override def toString = s"$dim.play($freq)"
+
     // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = ??? // b.addAudioSelection(dim, freq)
 
     protected def makeUGens: UGenInLike = {
-      // XXX TODO: eventually: graph.eme(dim.graphKey).ar(freq)
-      // in order to allow multiple plays for the same dimension at different speeds
-      proc.graph.scan.InFix(dim.scanKey, numChannels = 1)
+      ???
+//      UGenGraph.builder match {
+//        case b: UGenGraphBuilder[_] => makeUGens(b)
+//        case _ => sys.error(s"Expansion out of context: $this")
+//      }
     }
+
+    // XXX TODO: eventually: graph.eme(dim.graphKey).ar(freq)
+    // in order to allow multiple plays for the same dimension at different speeds
+    proc.graph.scan.InFix(scanKey, numChannels = 1)
+
+    private[sysson] def scanKey = s"dim_${dim.variable.name}_${dim.name}"
   }
 }
 /** Specification of a data source dimension
@@ -62,8 +70,6 @@ object Dim {
   */
 case class Dim(variable: Var, name: String)
   extends UserInteraction {
-
-  private[sysson] def scanKey = s"dim_${variable.name}_$name"
 
   /** Produces a graph element which unrolls the selected range in time, using the dimension's domain value.
     *
