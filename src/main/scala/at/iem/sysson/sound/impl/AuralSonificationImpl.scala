@@ -19,14 +19,16 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
-import scala.concurrent.stm.{Txn, TxnLocal, Ref}
+import scala.concurrent.stm.{TxnExecutor, Txn, TxnLocal, Ref}
 import de.sciss.lucre.stm
 import scala.concurrent.{ExecutionContext, future, blocking}
-import de.sciss.synth.proc.{Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
-import de.sciss.lucre.synth.expr.{DoubleVec, Doubles, SpanLikes}
+import de.sciss.synth.proc.{Artifact, Grapheme, Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
+import de.sciss.lucre.synth.expr.{Longs, DoubleVec, Doubles, SpanLikes}
 import de.sciss.span.Span
 import de.sciss.lucre
 import scala.util.control.NonFatal
+import de.sciss.file.File
+import de.sciss.synth.io.AudioFileSpec
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -56,19 +58,23 @@ object AuralSonificationImpl {
     val transport     = Transport[w.I, w.I](group)
     val auralSys      = AudioSystem.instance.aural
     val aural         = AuralPresentation.runTx(transport, auralSys)
-    new Impl[S, w.I](aw, aural, w.inMemorySys, w.inMemoryTx, sonifH, itx.newHandle(proc), transport)
+    new Impl[S, w.I](aw.asInstanceOf[AuralWorkspace[S] { type I = w.I }],
+      aural, w.inMemorySys, w.inMemoryTx, sonifH, itx.newHandle(proc), transport)
   }
 
   // private sealed trait State
   // private case object Stopped extends State
 
-  private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S], ap: AuralPresentation[I],
-                                                          iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx,
-                                                          sonifH: stm.Source[S#Tx, Sonification[S]],
-      procH: stm.Source[I#Tx, Proc[I]],
-      transport: Transport[I, Proc[I], Transport.Proc.Update[I]])
+  private final class Impl[S <: Sys[S], I1 <: lucre.synth.Sys[I1]](aw: AuralWorkspace[S] { type I = I1 },
+                                                                   ap: AuralPresentation[I1],
+                                                                   iCursor: stm.Cursor[I1], iTx: S#Tx => I1#Tx,
+                                                                   sonifH: stm.Source[S#Tx, Sonification[S]],
+      procH: stm.Source[I1#Tx, Proc[I1]],
+      transport: Transport[I1, Proc[I1], Transport.Proc.Update[I1]])
     extends AuralSonification[S] with TxnModelImpl[S#Tx, Update] {
     impl =>
+
+    type I = I1
 
     private val _state    = Ref(Stopped: Update)
     private val attrMap   = Ref(Map.empty[Any, String])
@@ -91,8 +97,8 @@ object AuralSonificationImpl {
       prepare()
     }
 
-    def attributeKey(elem: Any): String = {
-      ???
+    def attributeKey(elem: Any): String = TxnExecutor.defaultAtomic { implicit itx =>
+      attrMap().getOrElse(elem, sys.error(s"No key for attribute $elem"))
     }
 
     private def prepare()(implicit tx: S#Tx): Unit = {
@@ -129,9 +135,25 @@ object AuralSonificationImpl {
           ??? // val key = addAttr(dp)
 
         case vav: graph.Var.Axis.Values =>
-          val attrKey = addAttr(vav)
+          val attrKey     = addAttr(vav)
+          // TODO: review old sections iteration, write audio file (cache!) and place as Attribute.AudioGrapheme
+          val dir: File   = ???
+          val loc         = Artifact.Location.Modifiable[I](dir)
+          val file: File  = ???
+          val artifact    = loc.add(file)
+          val spec: AudioFileSpec = ???
+          val offset      = 0L
+          val gain        = 1.0
+          // val gv          = Grapheme.Value.Audio(file, spec, offset, gain)
+          // val g           = Grapheme.Elem.Audio.newConst[I](gv)
+          val g           = Grapheme.Elem.Audio(artifact, spec, Longs.newConst(offset), Doubles.newConst(gain))
+          proc.attributes.put(attrKey, Attribute.AudioGrapheme(g))
 
-
+        case dv: graph.Dim.Values =>
+          val attrKey = addAttr(dv)
+          val section: VariableSection = ???
+          val (g, fut) = aw.graphemeCache(section)
+          ??? // proc.attributes.put(attrKey, Attribute.AudioGrapheme(g))
 
         case _ =>
       }

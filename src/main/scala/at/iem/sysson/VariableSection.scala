@@ -71,7 +71,7 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
       shape(i)  = math.max(0, math.min(len, range.stopOption.getOrElse(len)) - origin(i))
       stride(i) = range.step
     i += 1}
-    new ma2.Section(origin, shape)
+    new ma2.Section(origin, shape, stride)
   }
 
   def ranges: Vec[ma2.Range] = {

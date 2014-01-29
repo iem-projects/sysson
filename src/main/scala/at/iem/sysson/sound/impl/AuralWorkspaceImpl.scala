@@ -18,6 +18,8 @@ package impl
 
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.{IdentifierMap, Disposable}
+import scala.concurrent.Future
+import de.sciss.synth.proc.Grapheme
 
 object AuralWorkspaceImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): AuralWorkspace[S] = {
@@ -41,6 +43,10 @@ object AuralWorkspaceImpl {
 
     def dispose()(implicit tx: S#Tx): Unit = {
       map.dispose() // XXX TODO: iterate and dispose AuralSonification instances?
+    }
+
+    def graphemeCache(section: VariableSection)(implicit tx: S#Tx): (Grapheme.Elem.Audio[S], Future[Unit]) = {
+      ???
     }
   }
 }

@@ -16,9 +16,19 @@ package at.iem.sysson
 package sound
 
 import de.sciss.lucre.event.Sys
+import de.sciss.synth.proc.Grapheme
+import scala.concurrent.Future
 
 trait AuralWorkspace[S <: Sys[S]] {
-  def workspace: Workspace[S]
+  aw =>
+
+  val workspace: Workspace[S]
+
+  type I = workspace.I
 
   def view(sonification: Sonification[S])(implicit tx: S#Tx): AuralSonification[S]
+
+  // import aw.{workspace => w}
+
+  private[sysson] def graphemeCache(section: VariableSection)(implicit tx: S#Tx): (Grapheme.Elem.Audio[I], Future[Unit])
 }

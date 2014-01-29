@@ -14,8 +14,9 @@
 
 package at.iem.sysson.graph
 
-import de.sciss.synth.{proc, GE, UGenInLike, AudioRated}
+import de.sciss.synth.{ScalarRated, proc, GE, UGenInLike, AudioRated}
 import de.sciss.synth
+import at.iem.sysson.sound.AuralSonification
 
 object Dim {
   // private final val DIM_COOKIE = 0x64696D00 // "dim\0"
@@ -62,6 +63,18 @@ object Dim {
 
     private[sysson] def scanKey = s"dim_${dim.variable.name}_${dim.name}"
   }
+
+  case class Values(dim: Dim) extends GE.Lazy with ScalarRated {
+
+    override def productPrefix = "Dim$Values"
+
+    override def toString = s"$dim.values"
+
+    protected def makeUGens: UGenInLike = {
+      val key = AuralSonification.current().attributeKey(this)
+      proc.graph.attribute(key).ir
+    }
+  }
 }
 /** Specification of a data source dimension
   *
@@ -77,7 +90,7 @@ case class Dim(variable: Var, name: String)
     */
   def play(freq: GE): Dim.Play = Dim.Play(this, freq)
 
-  def values : GE = ??? // Impl.values (this)
+  def values : Dim.Values = Dim.Values(this)
   def indices: GE = ??? // Impl.indices(this)
 
   /** Produces a graph element reflecting the low end of the range within the dimension's domain. */
