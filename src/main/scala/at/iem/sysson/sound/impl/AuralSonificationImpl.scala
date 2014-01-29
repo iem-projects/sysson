@@ -20,7 +20,7 @@ import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
 import scala.concurrent.stm.{TxnExecutor, Txn, TxnLocal, Ref}
-import de.sciss.lucre.stm
+import de.sciss.lucre.{synth, stm}
 import scala.concurrent.{ExecutionContext, future, blocking}
 import de.sciss.synth.proc.{Artifact, Grapheme, Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
 import de.sciss.lucre.synth.expr.{Longs, DoubleVec, Doubles, SpanLikes}
@@ -45,36 +45,32 @@ object AuralSonificationImpl {
     res
   }
 
-  def apply[S <: Sys[S]](aw: AuralWorkspace[S], sonification: Sonification[S])
+  def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Sonification[S])
                         (implicit tx: S#Tx): AuralSonification[S] = {
     val w             = aw.workspace
     implicit val itx  = w.inMemoryTx(tx)         // why can't I just import w.inMemory !?
     val sonifH        = tx.newHandle(sonification)
-    val proc          = Proc[w.I]
-    val group         = ProcGroup.Modifiable[w.I]
-    val span          = SpanLikes.newVar[w.I](SpanLikes.newConst(Span.from(0L)))
+    val proc          = Proc[I]
+    val group         = ProcGroup.Modifiable[I]
+    val span          = SpanLikes.newVar[I](SpanLikes.newConst(Span.from(0L)))
     group.add(span, proc)
-    import w.inMemorySys
-    val transport     = Transport[w.I, w.I](group)
+    import w.{inMemoryCursor, inMemoryTx}
+    val transport     = Transport[I, I](group)
     val auralSys      = AudioSystem.instance.aural
     val aural         = AuralPresentation.runTx(transport, auralSys)
-    new Impl[S, w.I](aw.asInstanceOf[AuralWorkspace[S] { type I = w.I }],
-      aural, w.inMemorySys, w.inMemoryTx, sonifH, itx.newHandle(proc), transport)
+    new Impl[S, I](aw, aural, sonifH, itx.newHandle(proc), transport)
   }
 
   // private sealed trait State
   // private case object Stopped extends State
 
-  private final class Impl[S <: Sys[S], I1 <: lucre.synth.Sys[I1]](aw: AuralWorkspace[S] { type I = I1 },
-                                                                   ap: AuralPresentation[I1],
-                                                                   iCursor: stm.Cursor[I1], iTx: S#Tx => I1#Tx,
-                                                                   sonifH: stm.Source[S#Tx, Sonification[S]],
-      procH: stm.Source[I1#Tx, Proc[I1]],
-      transport: Transport[I1, Proc[I1], Transport.Proc.Update[I1]])
+  private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S, I],
+                                                                 ap: AuralPresentation[I],
+                                                                 sonifH: stm.Source[S#Tx, Sonification[S]],
+      procH: stm.Source[I#Tx, Proc[I]],
+      transport: Transport[I, Proc[I], Transport.Proc.Update[I]])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx)
     extends AuralSonification[S] with TxnModelImpl[S#Tx, Update] {
     impl =>
-
-    type I = I1
 
     private val _state    = Ref(Stopped: Update)
     private val attrMap   = Ref(Map.empty[Any, String])

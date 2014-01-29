@@ -20,18 +20,20 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.{IdentifierMap, Disposable}
 import scala.concurrent.Future
 import de.sciss.synth.proc.Grapheme
+import de.sciss.lucre.synth
 
 object AuralWorkspaceImpl {
-  def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): AuralWorkspace[S] = {
+  def apply[S <: Sys[S], I1 <: synth.Sys[I1]](workspace: Workspace[S] { type I = I1 })
+                                       (implicit tx: S#Tx): AuralWorkspace[S, I1] = {
     val map = tx.newInMemoryIDMap[AuralSonification[S]]
     val res = new Impl(workspace, map)
     workspace.addDependent(res)
     res
   }
 
-  private final class Impl[S <: Sys[S]](val workspace: Workspace[S],
+  private final class Impl[S <: Sys[S], I1 <: synth.Sys[I1]](val workspace: Workspace[S] { type I = I1 },
                                         map: IdentifierMap[S#ID, S#Tx, AuralSonification[S]])
-    extends AuralWorkspace[S] with Disposable[S#Tx] {
+    extends AuralWorkspace[S, I1] with Disposable[S#Tx] {
     impl =>
 
     def view(sonif: Sonification[S])(implicit tx: S#Tx): AuralSonification[S] =
@@ -45,7 +47,7 @@ object AuralWorkspaceImpl {
       map.dispose() // XXX TODO: iterate and dispose AuralSonification instances?
     }
 
-    def graphemeCache(section: VariableSection)(implicit tx: S#Tx): (Grapheme.Elem.Audio[S], Future[Unit]) = {
+    def graphemeCache(section: VariableSection)(implicit tx: S#Tx): (Grapheme.Elem.Audio[I1], Future[Unit]) = {
       ???
     }
   }

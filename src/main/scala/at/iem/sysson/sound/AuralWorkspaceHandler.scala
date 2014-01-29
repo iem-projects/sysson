@@ -17,10 +17,12 @@ package sound
 
 import impl.{AuralWorkspaceHandlerImpl => Impl}
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.synth
 
 object AuralWorkspaceHandler {
   lazy val instance: AuralWorkspaceHandler = Impl()
 }
 trait AuralWorkspaceHandler {
-  def view[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): AuralWorkspace[S]
+  def view[S <: Sys[S], I1 <: synth.Sys[I1]](workspace: Workspace[S] { type I = I1 })
+                                            (implicit tx: S#Tx): AuralWorkspace[S, I1]
 }

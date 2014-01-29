@@ -14,7 +14,7 @@
 
 package at.iem.sysson
 
-import de.sciss.lucre.{event => evt, synth, stm}
+import de.sciss.lucre.{synth, stm}
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.List
 import de.sciss.file.File
@@ -41,13 +41,16 @@ object Workspace {
   */
 trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] {
   /** In-Memory back end system */
-  type I <: synth.Sys[I] with stm.Cursor[I]
+  type I <: synth.Sys[I] // with stm.Cursor[I]
 
   /** The transactional cursor associated with this workspace. Typically this is `Durable`. */
   implicit def cursor: stm.Cursor[S]
 
-  implicit def inMemoryTx(tx: S#Tx): I#Tx
-  implicit def inMemorySys: I
+  // implicit def inMemoryTx(tx: S#Tx): I#Tx
+  implicit def inMemoryTx: S#Tx => I#Tx
+
+  def inMemorySys: I
+  implicit def inMemoryCursor: stm.Cursor[I]
 
   /** The opaque (database) directory associated with the workspace. */
   def file: File

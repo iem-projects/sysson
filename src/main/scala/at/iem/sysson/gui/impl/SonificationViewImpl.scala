@@ -43,7 +43,7 @@ object SonificationViewImpl {
       StringExprEditor(expr, "Name")
     }
 
-    val sonifView = AuralWorkspaceHandler.instance.view(workspace).view(sonification)
+    val sonifView = AuralWorkspaceHandler.instance.view[S, workspace.I](workspace).view(sonification)
 
     val res = new Impl(workspace, sonifH, sonifView, nameView) {
       val auralObserver = sonifView.react { implicit tx => upd =>
