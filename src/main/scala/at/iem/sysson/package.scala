@@ -57,8 +57,8 @@ package object sysson {
   /** Opens a NetCDF file from a given file object . */
   def openFile(file: File): nc2.NetcdfFile = open(file.getPath)
 
-  /** Convenient file object constructor from a given path string. */
-  def file(path: String): File = new File(path)
+  //  /** Convenient file object constructor from a given path string. */
+  //  def file(path: String): File = new File(path)
 
   /** Boots the SuperCollider server. */
   def boot(): Unit =

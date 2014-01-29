@@ -62,9 +62,10 @@ object WorkspaceImpl {
   }
 
   private final class Impl[S <: Sys[S], I1 <: synth.Sys[I1]](val file: File, val system: S,
-                                                                                 val inMemorySys: I1,
-                                        val cursor: stm.Cursor[S])(implicit val inMemoryTx: S#Tx => I1#Tx,
-                                                                   val inMemoryCursor: stm.Cursor[I1])
+                                                             val inMemorySys: I1,
+                                                             val cursor: stm.Cursor[S])
+                                                            (implicit val inMemoryTx: S#Tx => I1#Tx,
+                                                                      val inMemoryCursor: stm.Cursor[I1])
     extends Workspace[S] {
 
     type I = I1

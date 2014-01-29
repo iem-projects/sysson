@@ -48,6 +48,7 @@ object AuralWorkspaceImpl {
     }
 
     def graphemeCache(section: VariableSection)(implicit tx: S#Tx): (Grapheme.Elem.Audio[I1], Future[Unit]) = {
+
       ???
     }
   }
