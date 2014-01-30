@@ -341,7 +341,7 @@ object DataSourceViewImpl {
       val sel = tGroupVars.selection.rows
       opt match {
         case Some(vr) =>
-          vr.group.foreach(selectGroup)
+          selectGroup(vr.group)
           val row = mGroupVars.data.indexOf(vr)
           if (row >= 0 && sel.leadIndex != row) sel += row
 

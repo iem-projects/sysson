@@ -14,7 +14,11 @@
 
 package at.iem.sysson
 
+import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
+
 object OpenRange {
+  private final val COOKIE = 0x4F52
+
   implicit def closed(r: Range): OpenRange =
     new OpenRange(startOption = Some(r.start), endOption = Some(r.end), isInclusive = r.isInclusive, step = r.step)
 
@@ -23,6 +27,29 @@ object OpenRange {
 //  def at(idx: Int) = apply(Some(idx), Some(idx), isInclusive = true)
   object at {
     def apply(idx: Int) = new OpenRange(Some(idx), Some(idx), isInclusive = true)
+  }
+
+  implicit object Serializer extends ImmutableSerializer[OpenRange] {
+    def read(in: DataInput): OpenRange = {
+      val cookie = in readShort()
+      require (cookie == COOKIE, s"Unexpected cookie (expected ${COOKIE.toHexString}, found ${cookie.toInt.toHexString})")
+      val opt = ImmutableSerializer.option[Int]
+      val startOption = opt read in
+      val endOption   = opt read in
+      val isInclusive = in readBoolean()
+      val step        = in readInt()
+      OpenRange(startOption = startOption, endOption = endOption, isInclusive = isInclusive, step = step)
+    }
+
+    def write(r: OpenRange, out: DataOutput): Unit = {
+      import r._
+      val opt = ImmutableSerializer.option[Int]
+      out writeShort   COOKIE
+      opt write       (startOption, out)
+      opt write       (endOption  , out)
+      out writeBoolean isInclusive
+      out writeInt     step
+    }
   }
 }
 final case class OpenRange(startOption: Option[Int], endOption: Option[Int], isInclusive: Boolean, step: Int = 1) {

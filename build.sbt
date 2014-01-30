@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "scalacolliderswing"      % "1.12.+",         // sound widgets, interpreter
   "de.sciss" %% "desktop"                 % "0.3.4+",         // application framework
   "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
-  "de.sciss" %% "filecache"               % "0.2.+",          // caching statistics of data files
+  "de.sciss" %% "filecache"               % "0.2.1+",         // caching statistics of data files
   "de.sciss" %% "fileutil"                % "1.1.+",          // easy file name manipulation
   "de.sciss" %% "swingplus"               % "0.0.3+",         // GUI helpers
   "de.sciss" %% "treetable-scala"         % "1.3.4+",         // GUI component

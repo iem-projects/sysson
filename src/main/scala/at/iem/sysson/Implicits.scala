@@ -102,7 +102,7 @@ object Implicits {
     def rank          = peer.getRank
     def attributes    = peer.getAttributes.toIndexedSeq
     def description   = Option(peer.getDescription)
-    def group         = Option(peer.getParentGroup)
+    def group         = peer.getParentGroup // Option(peer.getParentGroup)
     def dimensions    = peer.getDimensions.toIndexedSeq
     def ranges        = peer.getRanges.toIndexedSeq
 
