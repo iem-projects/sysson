@@ -20,10 +20,11 @@ import de.sciss.filecache
 import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
 import collection.breakOut
 import concurrent._
-import Implicits._
+import at.iem.sysson.Implicits._
 import de.sciss.file._
 import de.sciss.synth.proc.Grapheme
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
+import scala.annotation.tailrec
 
 object AudioFileCache {
   private val KEY_COOKIE  = 0x6166636B  // "afck"
@@ -46,7 +47,7 @@ object AudioFileCache {
         val variable  = in readUTF()
         val section   = ImmutableSerializer.indexedSeq[OpenRange].read(in)
         val streamDim = in readInt()
-        CacheKey(file = file(path), parents = parents, variable = variable, section = section, streamDim = streamDim)
+        ??? // CacheKey(file = file(path), parents = parents, variable = variable, section = section, streamDim = streamDim)
       }
 
       def write(v: CacheKey, out: DataOutput): Unit = {
@@ -55,7 +56,7 @@ object AudioFileCache {
         out writeUTF  file.path
         ImmutableSerializer.list[String]          .write(parents, out)
         out writeUTF  variable
-        ImmutableSerializer.indexedSeq[OpenRange] .write(section, out)
+        ??? // ImmutableSerializer.indexedSeq[OpenRange] .write(section, out)
         out writeInt  streamDim
       }
     }
@@ -68,9 +69,21 @@ object AudioFileCache {
    * @param section   the sectioning of the variable
    * @param streamDim  the dimension index to stream or `-1`
    */
-  private case class CacheKey(
-    file: File, parents: List[String], variable: String, section: Vec[OpenRange], streamDim: Int
-  )
+  private case class CacheKey(file: File, parents: List[String], variable: String, section: Vec[Range],
+                              streamDim: Int) {
+    lazy val spec: AudioFileSpec = keyToSpec(this)
+  }
+
+  private def keyToSpec(key: CacheKey): AudioFileSpec = {
+    import key._
+    val isStreaming   = streamDim >= 0
+    val numFrames     = if (!isStreaming) 1 else section(streamDim).size
+    val size          = (0L /: section)((sum, dim) => sum + dim.size)
+    val numChannelsL  = size / numFrames
+    require(numChannelsL <= 0xFFFF, s"The number of channels ($numChannelsL) is larger than supported")
+    val numChannels   = numChannelsL.toInt
+    AudioFileSpec(numFrames = numFrames, numChannels = numChannels, sampleRate = 44100 /* rate */)
+  }
   
   private object CacheValue {
     implicit object Serializer extends ImmutableSerializer[CacheValue] {
@@ -99,9 +112,17 @@ object AudioFileCache {
 
   private def sectionToKey(section: VariableSection, streamDim: Int): CacheKey = {
     import at.iem.sysson.Implicits._
-    val v     = section.variable
-    val file  = v.group
-    ??? // CacheKey(file, parents, v, section.section, streamDim)
+    val v = section.variable
+    val f = file(v.file.path)
+
+    @tailrec def loop(g: nc2.Group, res: List[String]): List[String] = g.parent match {
+      case Some(p)  => loop(p, g.name :: res)
+      case _        => res
+    }
+
+    val parents = loop(v.group, Nil)
+    val sectClosed: Vec[Range] = ??? // section.section
+    CacheKey(f, parents, v.name, sectClosed, streamDim)
   }
 
   /*
@@ -118,7 +139,7 @@ object AudioFileCache {
     val config        = filecache.Producer.Config[CacheKey, CacheValue]()
     config.capacity   = filecache.Limit(count = 500, space = 10L * 1024 * 1024 * 1024)  // 10 GB
     config.accept     = (key, value) => {
-      val res = key.file.lastModified() == value.lastModified
+      val res = key.file.lastModified() == value.lastModified && key.file.length() == value.size
       debug(s"accept key = ${key.file.name} (lastModified = ${new java.util.Date(key.file.lastModified())}}), value = $value? $res")
       res
     }
@@ -155,24 +176,22 @@ object AudioFileCache {
         // ALWAYS:
         // - when streaming, we use a channel per rank-product (excluding time dimension),
         //   possibly allowing interpolations in BufRd.
-        val numFrames     = /* if (!isStreaming) n else */ arr.getIndexPrivate.getShape(streamDim)
+        val numFrames     = if (!isStreaming) 1 /* n */ else arr.getIndexPrivate.getShape(streamDim)
         val numChannelsL  = n / numFrames
         require(numChannelsL <= 0xFFFF, s"The number of channels ($numChannelsL) is larger than supported")
-
         val numChannels   = numChannelsL.toInt
-        val file          = File.createTemp("sysson", ".aif")
 
-        // WARNING: sound file should be AIFF to allow for floating point sample rates
-        // (note: sample rate not used now)
-        val af            = AudioFile.openWrite(file, AudioFileSpec(numChannels = numChannels, sampleRate = 44100 /* rate */))
-        val fBufSize      = math.min(8192/numChannels, numFrames).toInt // file buffer
+        val spec          = key.spec
+        val afF           = File.createTemp("sysson", ".aif")
+        val af            = AudioFile.openWrite(afF, spec)
+        val fBufSize      = math.max(1, math.min(8192/spec.numChannels, spec.numFrames)).toInt // file buffer
         assert(fBufSize > 0)
         val fBuf          = af.buffer(fBufSize)
         var framesWritten = 0L
         val t             = if (streamDim <= 0) arr else arr.transpose(0, streamDim)
         import at.iem.sysson.Implicits._
         val it            = t.float1Diterator
-        while (framesWritten < numFrames) {
+        while (framesWritten < spec.numFrames) {
           val chunk = math.min(fBufSize, numFrames - framesWritten).toInt
           var i = 0
           while (i < chunk) {
@@ -188,43 +207,11 @@ object AudioFileCache {
         }
         af.close()
 
-
-        ???
-//        val stats: Stats = ??? // Stats(statsMap)
-//        val f     = java.io.File.createTempFile("sysson", ".stats", cache.config.folder)
-//        val out   = DataOutput.open(f)
-//        val fSz   = key.length()
-//        val fMod  = key.lastModified()
-//        var succ  = false
-//        try {
-//          Stats.Serializer.write(stats, out)
-//          out.close()
-//          succ  = true
-//          CacheValue(size = fSz, lastModified = fMod, data = f)
-//        } finally {
-//          out.close()
-//          if (!succ) {
-//            debug(s"Not successful. Deleting $f")
-//            f.delete()
-//          }
-//        }
+        CacheValue(size = key.file.length(), lastModified = key.file.lastModified(), data = afF)
       })
 
       val futM = fut.map { value =>
-//        blocking {
-//          val in = DataInput.open(value.data)
-//          try {
-//            val res: Stats = ??? // Serializer.read(in)
-//            // that way the caller of `get` doesn't need to bother, and all data is in RAM now
-//            // TODO: if this gets too slow, because `get` is called several times, we might instead
-//            // store the result in a weak hash map that calls `release` upon eviction from that weak map.
-//            cache.release(key)
-//            res
-//          } finally {
-//            in.close()
-//          }
-//        }
-        ??? : Result
+        Grapheme.Value.Audio(artifact = value.data, spec = key.spec, offset = 0L, gain = 1.0)
       }
 
       sync.synchronized(busy += key -> futM)

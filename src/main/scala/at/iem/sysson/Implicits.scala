@@ -106,11 +106,13 @@ object Implicits {
     def dimensions    = peer.getDimensions.toIndexedSeq
     def ranges        = peer.getRanges.toIndexedSeq
 
-    def file: nc2.NetcdfFile = {
-      val field = classOf[nc2.Variable].getDeclaredField("ncfile")
-      field.setAccessible(true)
-      field.get(peer).asInstanceOf[nc2.NetcdfFile]
-    }
+    def file: nc2.NetcdfFile = peer.getParentGroup.getNetcdfFile
+
+    //    def file: nc2.NetcdfFile = {
+    //      val field = classOf[nc2.Variable].getDeclaredField("ncfile")
+    //      field.setAccessible(true)
+    //      field.get(peer).asInstanceOf[nc2.NetcdfFile]
+    //    }
 
     def units         = Option(peer.getUnitsString)
     def isFloat       = dataType == ma2.DataType.FLOAT

@@ -24,6 +24,8 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = DocumentHandler.Document  // sysson.DataSourceLike
 
   override def init(): Unit = {
+    // javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel")
+
     val dh = DocumentHandler.instance
     dh.addListener {
       case DocumentHandler.Opened(doc) => mkDocView(doc)
