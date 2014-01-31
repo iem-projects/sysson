@@ -55,6 +55,7 @@ object Implicits {
     def attributes : Vec[nc2.Attribute] = peer.getGlobalAttributes.toIndexedSeq
     def rootGroup  : nc2.Group          = peer.getRootGroup
     def variables  : Vec[nc2.Variable]  = peer.getVariables.toIndexedSeq
+    def file       : File               = new File(path)
 
     def exportAsCSV(file: File, delimiter: Char = ','): Unit = util.Export.netcdfToCSV(file, peer, delimiter)
   }

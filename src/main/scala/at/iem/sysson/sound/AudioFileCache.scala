@@ -24,6 +24,7 @@ import de.sciss.synth.proc.Grapheme
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import de.sciss.lucre.event.Sys
 import scala.concurrent.stm.TMap
+import at.iem.sysson.Implicits._
 
 object AudioFileCache {
   private val KEY_COOKIE  = 0x6166636B  // "afck"
@@ -96,16 +97,16 @@ object AudioFileCache {
     // lazy val spec: AudioFileSpec = keyToSpec(this)
   }
 
-  private def keyToSpec(key: CacheKey): AudioFileSpec = {
-    ???
-//    import key._
-//    val isStreaming   = streamDim >= 0
-//    val numFrames     = if (!isStreaming) 1 else section(streamDim).size
-//    val size          = (0L /: section)((sum, dim) => sum + dim.size)
-//    val numChannelsL  = size / numFrames
-//    require(numChannelsL <= 0xFFFF, s"The number of channels ($numChannelsL) is larger than supported")
-//    val numChannels   = numChannelsL.toInt
-//    AudioFileSpec(numFrames = numFrames, numChannels = numChannels, sampleRate = 44100 /* rate */)
+  private def sectionToSpec(vs: VariableSection, streamDim: Int /* , key: CacheKey */): AudioFileSpec = {
+    // import key._
+    val isStreaming   = streamDim >= 0
+    val shape         = vs.shape
+    val numFrames     = if (!isStreaming) 1 else shape(streamDim)
+    val size          = (0L /: shape)((sum, sz) => sum + sz)
+    val numChannelsL  = size / numFrames
+    require(numChannelsL <= 0xFFFF, s"The number of channels ($numChannelsL) is larger than supported")
+    val numChannels   = numChannelsL.toInt
+    AudioFileSpec(numFrames = numFrames, numChannels = numChannels, sampleRate = 44100 /* rate */)
   }
   
   private object CacheValue {
@@ -136,7 +137,6 @@ object AudioFileCache {
   }
 
   private def sectionToKey(source: DataSource.Variable[_], section: Vec[OpenRange], streamDim: Int): CacheKey = {
-    import at.iem.sysson.Implicits._
     // val v = section.variable
     val f = file(source.source.path) // v.file.path
 
@@ -178,13 +178,14 @@ object AudioFileCache {
 
   // def acquire(section: VariableSection, streamDim: Int): Future[Result]
 
-  private def produceValue[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S], key: CacheKey,
-                                        streamDim: Int): CacheValue = {
+  private def produceValue[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S],
+                                        section: Vec[OpenRange], streamDim: Int): CacheValue = {
     val v             = workspace.cursor.step { implicit tx => source.data(workspace) }
-    val arr: ma2.Array = ??? // = section.readSafe()
+    val vs            = VariableSection(v, section)
+    val arr           = vs.readSafe()
 
     // cf. Arrays.txt for (de-)interleaving scheme
-    val spec          = keyToSpec(key)
+    val spec          = sectionToSpec(vs, streamDim)
     val numChannels   = spec.numChannels
     val numFrames     = spec.numFrames
     val afF           = File.createTemp("sysson", ".aif")
@@ -212,7 +213,8 @@ object AudioFileCache {
     }
     af.close()
 
-    CacheValue(netSize = key.file.length(), netModified = key.file.lastModified(), data = afF, spec = spec)
+    val file = vs.file.file
+    CacheValue(netSize = file.length(), netModified = file.lastModified(), data = afF, spec = spec)
   }
 
   def acquire[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S], section: Vec[OpenRange],
@@ -220,7 +222,7 @@ object AudioFileCache {
                           (implicit tx: S#Tx): Future[Result] = {
     val key = sectionToKey(source, section, streamDim)
     busy.get(key)(tx.peer).getOrElse {
-      val fut = cache.acquire(key, blocking(produceValue(workspace, source, key, streamDim)))
+      val fut = cache.acquire(key, blocking(produceValue(workspace, source, section, streamDim)))
 
       val futM = fut.map { value =>
         Grapheme.Value.Audio(artifact = value.data, spec = value.spec, offset = 0L, gain = 1.0)
