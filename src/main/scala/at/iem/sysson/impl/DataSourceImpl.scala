@@ -16,7 +16,7 @@ package at.iem.sysson
 package impl
 
 import ucar.nc2
-import de.sciss.serial.{Serializer, DataInput, DataOutput}
+import de.sciss.serial.{ImmutableSerializer, Serializer, DataInput, DataOutput}
 import de.sciss.lucre.{event => evt}
 import evt.Sys
 import scala.concurrent.stm.Txn
@@ -30,22 +30,26 @@ object DataSourceImpl {
 
   def apply[S <: Sys[S]](path: String)(implicit tx: S#Tx): DataSource[S] = new Impl(path)
 
-  def variable[S <: Sys[S]](source: DataSource[S], name: String)(implicit tx: S#Tx): Variable[S] =
-    new VariableImpl(source, name)
+  def variable[S <: Sys[S]](source: DataSource[S], parents: List[String], name: String)
+                           (implicit tx: S#Tx): Variable[S] =
+    new VariableImpl(source, parents, name)
 
   def writeVariable[S <: Sys[S]](v: Variable[S], out: DataOutput): Unit = {
+    import v._
     out.writeInt(VAR_COOKIE)
-    v.source.write(out)
-    out.writeUTF(v.name)
+    source.write(out)
+    ImmutableSerializer.list[String].write(parents, out)
+    out.writeUTF(name)
   }
 
   def readVariable[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Variable[S] = {
-    val cookie = in.readInt()
+    val cookie  = in.readInt()
     require(cookie == VAR_COOKIE,
       s"Unexpected cookie (found ${cookie.toHexString}, expected ${VAR_COOKIE.toHexString})")
     val source  = DataSource.read(in, access)
+    val parents = ImmutableSerializer.list[String].read(in)
     val name    = in.readUTF()
-    Variable(source, name)
+    Variable(source, parents, name)
   }
 
   private def resolveFile[S <: Sys[S]](workspace: Workspace[S], file: File)(implicit tx: S#Tx): nc2.NetcdfFile =
@@ -88,7 +92,9 @@ object DataSourceImpl {
     def write(v: Variable[S], out: DataOutput): Unit = DataSourceImpl.writeVariable(v, out)
   }
 
-  private final case class VariableImpl[S <: Sys[S]](source: DataSource[S], name: String) extends Variable[S] {
+  private final case class VariableImpl[S <: Sys[S]](source: DataSource[S], parents: List[String], name: String)
+    extends Variable[S] {
+
     def write(out: DataOutput): Unit = writeVariable(this, out)
 
     def data(workspace: Workspace[S])(implicit tx: S#Tx): nc2.Variable = {

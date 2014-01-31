@@ -20,11 +20,10 @@ import de.sciss.synth
 import synth.ugen
 import java.io.File
 import scala.concurrent.{Await, Future}
+import scala.annotation.tailrec
 
 object Implicits {
   final val all = OpenRange.all
-
-  //  final val at  = OpenRange.at
 
   object end    // used in expressions such as 1 to end
   object start {
@@ -34,108 +33,105 @@ object Implicits {
     def until(e: end.type): OpenRange = OpenRange.all
   }
 
-  //  implicit def sectionAll(v: nc2.Variable): VariableSection = {
-  //    val s = Vec.fill(v.rank)(all) // new ma2.Section(v.getShape)
-  //    new VariableSection(v, s)
-  //  }
-
   // important: use name distinct from `RichInt` which would otherwise shadow enrichments from ScalaCollider
-  implicit class SyRichInt(i: Int) {
-    def to   (e: end.type): OpenRange = OpenRange(startOption = Some(i), endOption = None, isInclusive = true)
-    def until(e: end.type): OpenRange = OpenRange(startOption = Some(i), endOption = None, isInclusive = false)
+  implicit class SyRichInt(val toInt: Int) extends AnyVal {
+    def to   (e: end.type): OpenRange = OpenRange(startOption = Some(toInt), endOption = None, isInclusive = true )
+    def until(e: end.type): OpenRange = OpenRange(startOption = Some(toInt), endOption = None, isInclusive = false)
 
-    def isPowerOfTwo: Boolean = (i & (i-1)) == 0
+    def isPowerOfTwo: Boolean = (toInt & (toInt-1)) == 0
     def nextPowerOfTwo: Int = {
    		var j = 1
-   		while( j < i ) j <<= 1
+      while (j < toInt) j <<= 1
    		j
    	}
   }
 
-  implicit class SyRichNetcdfFile(peer: nc2.NetcdfFile)
-    extends impl.HasDimensions with impl.HasAttributes with impl.HasVariables {
+  implicit class SyRichNetcdfFile(val peer: nc2.NetcdfFile)
+    extends AnyVal with impl.HasDimensions with impl.HasAttributes with impl.HasVariables {
 
     import JavaConversions._
-    def path          = peer.getLocation
-    def dimensions    = peer.getDimensions.toIndexedSeq
-    def attributes    = peer.getGlobalAttributes.toIndexedSeq
-    def rootGroup     = peer.getRootGroup
-    def variables     = peer.getVariables.toIndexedSeq
+    def path       : String             = peer.getLocation
+    def dimensions : Vec[nc2.Dimension] = peer.getDimensions.toIndexedSeq
+    def attributes : Vec[nc2.Attribute] = peer.getGlobalAttributes.toIndexedSeq
+    def rootGroup  : nc2.Group          = peer.getRootGroup
+    def variables  : Vec[nc2.Variable]  = peer.getVariables.toIndexedSeq
 
     def exportAsCSV(file: File, delimiter: Char = ','): Unit = util.Export.netcdfToCSV(file, peer, delimiter)
   }
 
-  implicit class SyRichAttribute(peer: nc2.Attribute) {
-    def name          = peer.getShortName // getName
-    def dataType      = peer.getDataType
-    def size          = peer.getLength
-    def values        = peer.getValues
+  implicit class SyRichAttribute(val peer: nc2.Attribute) extends AnyVal {
+    def name       : String             = peer.getShortName // getName
+    def dataType   : ma2.DataType       = peer.getDataType
+    def size       : Int                = peer.getLength
+    def values     : ma2.Array          = peer.getValues
   }
 
-  implicit class SyRichGroup(peer: nc2.Group) extends impl.HasDimensions with impl.HasAttributes {
+  implicit class SyRichGroup(val peer: nc2.Group) extends AnyVal with impl.HasDimensions with impl.HasAttributes {
     import JavaConversions._
-    def name          = peer.getFullName  // getName
-    def attributes    = peer.getAttributes.toIndexedSeq
-    def dimensions    = peer.getDimensions.toIndexedSeq
-    def variables     = peer.getVariables.toIndexedSeq
-    def children      = peer.getGroups.toIndexedSeq
-    def parent        = Option(peer.getParentGroup)
+    def name       : String             = peer.getFullName  // getName
+    def attributes : Vec[nc2.Attribute] = peer.getAttributes.toIndexedSeq
+    def dimensions : Vec[nc2.Dimension] = peer.getDimensions.toIndexedSeq
+    def variables  : Vec[nc2.Variable]  = peer.getVariables.toIndexedSeq
+    def children   : Vec[nc2.Group]     = peer.getGroups.toIndexedSeq
+    def parentOption: Option[nc2.Group] = Option(peer.getParentGroup)
   }
 
-  implicit class SyRichDimension(peer: nc2.Dimension) {
-    def name          = nameOption.getOrElse("?")
-    def nameOption    = Option(peer.getShortName) // getName
-    def size          = peer.getLength
-    def group         = Option(peer.getGroup)
+  implicit class SyRichDimension(val peer: nc2.Dimension) extends AnyVal {
+    def name       : String             = nameOption.getOrElse("?")
+    def nameOption : Option[String]     = Option(peer.getShortName) // getName
+    def size       : Int                = peer.getLength
+    def groupOption: Option[nc2.Group]  = Option(peer.getGroup)
   }
 
-  implicit class SyRichVariable(peer: nc2.Variable)
-    extends impl.HasDimensions with impl.HasAttributes with impl.VariableLike {
+  @tailrec private def parentsLoop(g: nc2.Group, res: List[String]): List[String] = g.parentOption match {
+    case Some(p)  => parentsLoop(p, g.name :: res)
+    case _        => res
+  }
+
+  implicit class SyRichVariable(val peer: nc2.Variable)
+    extends AnyVal with impl.HasDimensions with impl.HasAttributes with impl.VariableLike {
 
     import JavaConversions._
-    def fullName      = peer.getFullName
-    def name          = peer.getShortName
-    def dataType      = peer.getDataType
-    def shape         = peer.getShape.toIndexedSeq
+    def fullName   : String             = peer.getFullName
+    def name       : String             = peer.getShortName
+    def dataType   : ma2.DataType       = peer.getDataType
+    def shape      : Vec[Int]           = peer.getShape.toIndexedSeq
     /** Reports the total number of elements within the variable's matrix */
-    def size          = peer.getSize
-    def rank          = peer.getRank
-    def attributes    = peer.getAttributes.toIndexedSeq
-    def description   = Option(peer.getDescription)
-    def group         = peer.getParentGroup // Option(peer.getParentGroup)
-    def dimensions    = peer.getDimensions.toIndexedSeq
-    def ranges        = peer.getRanges.toIndexedSeq
+    def size       : Long               = peer.getSize
+    def rank       : Int                = peer.getRank
+    def attributes : Vec[nc2.Attribute] = peer.getAttributes.toIndexedSeq
+    def description: Option[String]     = Option(peer.getDescription)
+    def group      : nc2.Group          = peer.getParentGroup
+    def dimensions : Vec[nc2.Dimension] = peer.getDimensions.toIndexedSeq
+    def ranges     : Vec[ma2.Range]     = peer.getRanges.toIndexedSeq
 
-    def file: nc2.NetcdfFile = peer.getParentGroup.getNetcdfFile
+    def file       : nc2.NetcdfFile     = peer.getParentGroup.getNetcdfFile
 
-    //    def file: nc2.NetcdfFile = {
-    //      val field = classOf[nc2.Variable].getDeclaredField("ncfile")
-    //      field.setAccessible(true)
-    //      field.get(peer).asInstanceOf[nc2.NetcdfFile]
-    //    }
+    /** List of group names which lead from root (excluded) to this variable. */
+    def parents    : List[String]       = parentsLoop(peer.group, Nil)
 
-    def units         = Option(peer.getUnitsString)
-    def isFloat       = dataType == ma2.DataType.FLOAT
-    def isDouble      = dataType == ma2.DataType.DOUBLE
-    def fillValue: Float = {
+    def units      : Option[String]     = Option(peer.getUnitsString)
+    def isFloat    : Boolean            = dataType == ma2.DataType.FLOAT
+    def isDouble   : Boolean            = dataType == ma2.DataType.DOUBLE
+    def fillValue  : Float = {
       require(isFloat, s"fillValue only defined for floating point variables ($dataType)")
       attributeMap.get("_FillValue").map(_.getNumericValue.floatValue()).getOrElse(Float.NaN)
     }
 
     // it would be good to shadow peer.read(), but because it takes precedence over
     // an equally named enriched method, there is no way to enforce this. use `readSafe` instead.
-    def readSafe() = file.synchronized(peer.read())
+    def readSafe() : ma2.Array          = file.synchronized(peer.read())
 
     def in(dim: String): VariableSection.In = selectAll.in(dim)
 
-    protected def scale = Scale.Identity
+    protected def scale: Scale = Scale.Identity
 
     def selectAll: VariableSection = {
       val s = Vec.fill(rank)(all)
       new VariableSection(peer, s)
     }
 
-    def applyScale(scale: Scale) = selectAll.applyScale(scale)
+    def applyScale(scale: Scale): VariableSection = selectAll.applyScale(scale)
   }
 
   private def checkNaNFun(fillValue: Float): Float => Boolean = if (java.lang.Float.isNaN(fillValue))
@@ -143,17 +139,17 @@ object Implicits {
   else
     _ == fillValue
 
-  implicit class SyRichArray(peer: ma2.Array) {
-    def size          = peer.getSize
-    def elementType   = peer.getElementType
-    def rank          = peer.getRank
-    def shape         = peer.getShape.toIndexedSeq
+  implicit class SyRichArray(val peer: ma2.Array) extends AnyVal {
+    def size       : Long               = peer.getSize
+    def elementType: Class[_]           = peer.getElementType
+    def rank       : Int                = peer.getRank
+    def shape      : Vec[Int]           = peer.getShape.toIndexedSeq
 
     //    def f1d_force: IndexedSeq[Float] = float1d(force = true)
     //    def f1d: IndexedSeq[Float] = float1d(force = true)
 
-    def isFloat       = peer.getElementType == classOf[Float]
-    def isDouble      = peer.getElementType == classOf[Double]
+    def isFloat    : Boolean            = peer.getElementType == classOf[Float]
+    def isDouble   : Boolean            = peer.getElementType == classOf[Double]
 
     private def requireFloat(): Unit =
       require(isFloat, s"Wrong element type (${peer.getElementType}); required: Float")
@@ -243,7 +239,7 @@ object Implicits {
     }
   }
 
-  implicit class SyRichFloatSeq(peer: Vec[Float]) {
+  implicit class SyRichFloatSeq(val peer: Vec[Float]) extends AnyVal {
     def replaceNaNs(value: Float, fillValue: Float = Float.NaN): Vec[Float] = {
       val checkNaN = checkNaNFun(fillValue)
       peer.map { f =>
@@ -305,22 +301,10 @@ object Implicits {
     }
   }
 
-  //  implicit class SyRichFile(f: File) {
-  //    def /(child: String): File = new File(f, child)
-  //    def path: String  = f.getPath
-  //    def name: String  = f.getName
-  //    def parent: File  = f.getParentFile
-  //    def nameWithoutExtension: String = {
-  //      val n = f.getName
-  //      val i = n.lastIndexOf('.')
-  //      if (i < 0) n else n.substring(0, i)
-  //    }
-  //  }
-
-  implicit class SyRichFuture[A](fut: Future[A]) {
+  implicit class SyRichFuture[A](val peer: Future[A]) extends AnyVal {
     def !! : A = {
       import concurrent.duration._
-      Await.result(fut, 3.seconds)
+      Await.result(peer, 3.seconds)
     }
   }
 }

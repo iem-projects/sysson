@@ -31,13 +31,15 @@ object DataSource {
   object Variable {
     implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Variable[S]] = Impl.varSerializer
 
-    def apply[S <: Sys[S]](source: DataSource[S], name: String)(implicit tx: S#Tx): Variable[S] =
-      Impl.variable(source, name)
+    def apply[S <: Sys[S]](source: DataSource[S], parents: List[String], name: String)
+                          (implicit tx: S#Tx): Variable[S] =
+      Impl.variable(source, parents, name)
 
     def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Variable[S] = Impl.readVariable(in, access)
   }
   trait Variable[S <: Sys[S]] extends Writable {
     def source: DataSource[S]
+    def parents: List[String]
     def name: String
     def data(workspace: Workspace[S])(implicit tx: S#Tx): nc2.Variable
   }

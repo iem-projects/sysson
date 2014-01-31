@@ -21,14 +21,17 @@ import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparin
 import at.iem.sysson.impl.TxnModelImpl
 import scala.concurrent.stm.{TxnExecutor, Txn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
-import scala.concurrent.{ExecutionContext, future, blocking}
+import scala.concurrent.{Await, Promise, Future, ExecutionContext, future, blocking}
 import de.sciss.synth.proc.{Artifact, Grapheme, Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
 import de.sciss.lucre.synth.expr.{Longs, DoubleVec, Doubles, SpanLikes}
 import de.sciss.span.Span
 import de.sciss.lucre
 import scala.util.control.NonFatal
-import de.sciss.file.File
+import de.sciss.file._
 import de.sciss.synth.io.AudioFileSpec
+import de.sciss.lucre.stm.TxnLike
+import scala.concurrent.duration.Duration
+import java.util.concurrent.TimeUnit
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -43,6 +46,13 @@ object AuralSonificationImpl {
     val res = block
     _current.set(old)(tx.peer)
     res
+  }
+
+  // makes sure a future is only executed when the transaction succeeds
+  private def txFuture[A](block: => Future[A])(implicit tx: TxnLike): Future[A] = {
+    val p = Promise[A]()
+    tx.afterCommit(p.completeWith(block))
+    p.future
   }
 
   def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Sonification[S])
@@ -99,6 +109,7 @@ object AuralSonificationImpl {
 
     private def prepare()(implicit tx: S#Tx): Unit = {
       implicit val itx: I#Tx = iTx(tx)
+      import AudioFileCache.executionContext
 
       val sonif = sonifH()
       val g     = sonif.patch.graph.value
@@ -117,8 +128,11 @@ object AuralSonificationImpl {
       def putAttrValue(key: String, value: Double): Unit =
         proc.attributes.put(key, Attribute.Double(Doubles.newConst(value)))
 
-      def putAttrValues(key: String, values: Vec[Double]): Unit =
-        proc.attributes.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
+      //      def putAttrValues(key: String, values: Vec[Double]): Unit =
+      //        proc.attributes.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
+
+      // var graphemes = Map.empty[String, Future[AudioFileCache.Result]]
+      var graphemes = Vec.empty[Future[(String, AudioFileCache.Result)]]
 
       g.sources.foreach {
         case uv: graph.UserValue =>
@@ -147,9 +161,16 @@ object AuralSonificationImpl {
 
         case dv: graph.Dim.Values =>
           val attrKey = addAttr(dv)
+          val dimElem = dv.dim
+          val mapKey  = dimElem.variable.name
+          val source  = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
+          // source.variable
+
           val section: VariableSection = ???
-          val (g, fut) = aw.graphemeCache(section)
-          ??? // proc.attributes.put(attrKey, Attribute.AudioGrapheme(g))
+          // val (g, fut) = aw.graphemeCache(section)
+          val fut = txFuture(AudioFileCache.acquire(section, streamDim = -1))(tx)
+          // graphemes += attrKey -> fut
+          graphemes :+= fut.map(attrKey -> _)
 
         case _ =>
       }
@@ -159,23 +180,35 @@ object AuralSonificationImpl {
 
       proc.graph() = SynthGraphs.newConst[I](g)
 
-      tx.afterCommit {
+      def transpPlay()(implicit tx: S#Tx): Unit = {
+        implicit val itx: I#Tx = iTx(tx)
+        transport.seek(0L)
+        try {
+          using(impl)(transport.play())
+        } catch {
+          case NonFatal(foo) =>
+            foo.printStackTrace()
+            throw foo
+        }
+        state_=(Playing)
+      }
+
+      if (graphemes.isEmpty) transpPlay() else tx.afterCommit {
         import ExecutionContext.Implicits.global
         future {
           blocking {
-            Thread.sleep(2000)
+            val graphMapF = Future.sequence(graphemes)
+            val graphMap  = Await.result(graphMapF, Duration(10, TimeUnit.MINUTES))
+            graphMap.foreach { case (attrKey, gv) =>
+              // XXX TODO: we should allow Grapheme.Elem.newConst ?
+              val loc   = Artifact.Location.Modifiable[I](gv.artifact.parent)
+              val artif = loc.add(gv.artifact)
+              val elem  = Grapheme.Elem.Audio(artif, gv.spec, Longs.newConst(gv.offset), Doubles.newConst(gv.gain))
+              proc.attributes.put(attrKey, Attribute.AudioGrapheme(elem))
+            }
           }
           aw.workspace.cursor.step { implicit tx =>
-            implicit val itx: I#Tx = iTx(tx)
-            transport.seek(0L)
-            try {
-              using(impl)(transport.play())
-            } catch {
-              case NonFatal(foo) =>
-              foo.printStackTrace()
-              throw foo
-            }
-            state_=(Playing)
+            transpPlay()
           }
         }
       }

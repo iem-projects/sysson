@@ -188,7 +188,7 @@ object DataSourceViewImpl {
           override def createTransferable(c: JComponent): Transferable = {
             selectedVariable.map { vr =>
               val varH = impl.cursor.step { implicit tx =>
-                tx.newHandle(DataSource.Variable(sourceH(), vr.name))
+                tx.newHandle(DataSource.Variable(sourceH(), vr.parents, vr.name))
               }
               DragAndDrop.Transferable(DragAndDrop.DataSourceVarFlavor) {
                 new DataSourceVarDrag {
@@ -314,9 +314,9 @@ object DataSourceViewImpl {
     private def selectGroup(group: nc2.Group): Unit = {
       @tailrec def loop(path: Tree.Path[nc2.Group], g: nc2.Group): Tree.Path[nc2.Group] = {
         val p2 = g +: path
-        g.parent match {
-          case None => p2
-          case Some(p) => loop(p2, p)
+        g.parentOption match {
+          case Some(p)  => loop(p2, p)
+          case _        => p2
         }
       }
       val fullPath = loop(Tree.Path.empty[nc2.Group], group)

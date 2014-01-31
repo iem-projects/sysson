@@ -18,9 +18,7 @@ package sound
 import ucar.nc2
 import de.sciss.filecache
 import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
-import collection.breakOut
 import concurrent._
-import at.iem.sysson.Implicits._
 import de.sciss.file._
 import de.sciss.synth.proc.Grapheme
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
@@ -36,6 +34,29 @@ object AudioFileCache {
 
   type Result = Grapheme.Value.Audio
 
+  implicit val executionContext: ExecutionContext = ExecutionContext.global
+
+  private implicit object RangeSerializer extends ImmutableSerializer[Range] {
+    def read(in: DataInput): Range = {
+      val start       = in readInt()
+      val end         = in readInt()
+      val isInclusive = in readBoolean()
+      val step        = in readInt()
+      if (isInclusive)
+        Range.inclusive(start, end, step)
+      else
+        Range.apply    (start, end, step)
+    }
+
+    def write(r: Range, out: DataOutput): Unit = {
+      import r._
+      out writeInt     start
+      out write        end
+      out writeBoolean isInclusive
+      out writeInt     step
+    }
+  }
+
   private object CacheKey {
     implicit object Serializer extends ImmutableSerializer[CacheKey] {
       def read(in: DataInput): CacheKey = {
@@ -45,18 +66,18 @@ object AudioFileCache {
         val path      = in readUTF()
         val parents   = ImmutableSerializer.list[String].read(in)
         val variable  = in readUTF()
-        val section   = ImmutableSerializer.indexedSeq[OpenRange].read(in)
+        val section   = ImmutableSerializer.indexedSeq[Range].read(in)
         val streamDim = in readInt()
-        ??? // CacheKey(file = file(path), parents = parents, variable = variable, section = section, streamDim = streamDim)
+        CacheKey(file = file(path), parents = parents, variable = variable, section = section, streamDim = streamDim)
       }
 
       def write(v: CacheKey, out: DataOutput): Unit = {
         import v._
         out writeInt  KEY_COOKIE
         out writeUTF  file.path
-        ImmutableSerializer.list[String]          .write(parents, out)
+        ImmutableSerializer.list[String]      .write(parents, out)
         out writeUTF  variable
-        ??? // ImmutableSerializer.indexedSeq[OpenRange] .write(section, out)
+        ImmutableSerializer.indexedSeq[Range] .write(section, out)
         out writeInt  streamDim
       }
     }
@@ -115,14 +136,10 @@ object AudioFileCache {
     val v = section.variable
     val f = file(v.file.path)
 
-    @tailrec def loop(g: nc2.Group, res: List[String]): List[String] = g.parent match {
-      case Some(p)  => loop(p, g.name :: res)
-      case _        => res
+    val sectClosed: Vec[Range] = section.ranges.map { r =>
+      Range.inclusive(r.first(), r.last(), r.stride())
     }
-
-    val parents = loop(v.group, Nil)
-    val sectClosed: Vec[Range] = ??? // section.section
-    CacheKey(f, parents, v.name, sectClosed, streamDim)
+    CacheKey(f, v.parents, v.name, sectClosed, streamDim)
   }
 
   /*
@@ -132,27 +149,26 @@ object AudioFileCache {
      the NetCDF file's identity (size and modification date), along with a pointer `data` to the actually
      generated stats file which is associated with the cache
 
-    This stats file is a straight forward serialisation of the `Stats` trait.
+    This stats file is a straight forward serialization of the `Stats` trait.
 
    */
   private lazy val cache = {
-    val config        = filecache.Producer.Config[CacheKey, CacheValue]()
-    config.capacity   = filecache.Limit(count = 500, space = 10L * 1024 * 1024 * 1024)  // 10 GB
-    config.accept     = (key, value) => {
+    val config              = filecache.Producer.Config[CacheKey, CacheValue]()
+    config.capacity         = filecache.Limit(count = 500, space = 10L * 1024 * 1024 * 1024)  // 10 GB
+    config.accept           = (key, value) => {
       val res = key.file.lastModified() == value.lastModified && key.file.length() == value.size
       debug(s"accept key = ${key.file.name} (lastModified = ${new java.util.Date(key.file.lastModified())}}), value = $value? $res")
       res
     }
-    config.space      = (_  , value) => value.data.length()
-    config.evict      = (_  , value) => {
+    config.space            = (_  , value) => value.data.length()
+    config.evict            = (_  , value) => {
       debug(s"evict $value")
       value.data.delete()
     }
-    config.folder     = dataDir / "cache"
+    config.folder           = dataDir / "cache"
+    config.executionContext = AudioFileCache.executionContext
     filecache.Producer(config)
   }
-
-  implicit def executionContext = cache.executionContext
 
   private val sync  = new AnyRef
   private var busy  = Map.empty[CacheKey, Future[Result]]
@@ -161,37 +177,23 @@ object AudioFileCache {
     val key = sectionToKey(section, streamDim)
     busy.getOrElse(key, {
       val fut = cache.acquire(key, blocking {
-        val arr = section.read()
-        val n   = arr.getSize
-        // if using streaming, we need probably:
-        // arr.transpose()
+        val arr = section.readSafe()
 
         // cf. Arrays.txt for (de-)interleaving scheme
 
-        val isStreaming = streamDim >= 0
-
-        // NOT:
-        // - when not streaming, we use a monophonic linearised buffer (instead of a buffer
-        //   with one frame and arr.size channels).
-        // ALWAYS:
-        // - when streaming, we use a channel per rank-product (excluding time dimension),
-        //   possibly allowing interpolations in BufRd.
-        val numFrames     = if (!isStreaming) 1 /* n */ else arr.getIndexPrivate.getShape(streamDim)
-        val numChannelsL  = n / numFrames
-        require(numChannelsL <= 0xFFFF, s"The number of channels ($numChannelsL) is larger than supported")
-        val numChannels   = numChannelsL.toInt
-
         val spec          = key.spec
+        val numChannels   = spec.numChannels
+        val numFrames     = spec.numFrames
         val afF           = File.createTemp("sysson", ".aif")
         val af            = AudioFile.openWrite(afF, spec)
-        val fBufSize      = math.max(1, math.min(8192/spec.numChannels, spec.numFrames)).toInt // file buffer
+        val fBufSize      = math.max(1, math.min(8192 / numChannels, numFrames)).toInt // file buffer
         assert(fBufSize > 0)
         val fBuf          = af.buffer(fBufSize)
         var framesWritten = 0L
         val t             = if (streamDim <= 0) arr else arr.transpose(0, streamDim)
         import at.iem.sysson.Implicits._
         val it            = t.float1Diterator
-        while (framesWritten < spec.numFrames) {
+        while (framesWritten < numFrames) {
           val chunk = math.min(fBufSize, numFrames - framesWritten).toInt
           var i = 0
           while (i < chunk) {

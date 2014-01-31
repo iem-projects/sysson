@@ -18,26 +18,26 @@ package impl
 import ucar.{nc2, ma2}
 import collection.breakOut
 
-trait HasDimensions {
+trait HasDimensions extends Any {
   import Implicits._
   def dimensions: Vec[nc2.Dimension]
   def dimensionMap: Map[String, nc2.Dimension] = dimensions.map(d => d.nameOption -> d)
     .collect({ case (Some(name), d) => name -> d })(breakOut)
 }
 
-trait HasAttributes {
+trait HasAttributes extends Any {
   import Implicits._
   def attributes: Vec[nc2.Attribute]
   def attributeMap: Map[String, nc2.Attribute] = attributes.map(a => a.name -> a)(breakOut)
 }
 
-trait HasVariables {
+trait HasVariables extends Any {
   import Implicits._
   def variables: Vec[nc2.Variable]
   def variableMap: Map[String, nc2.Variable] = variables.map(a => a.name -> a)(breakOut)
 }
 
-trait VariableLike extends HasDimensions {
+trait VariableLike extends Any with HasDimensions {
   def name: String
   def dataType: ma2.DataType
   def shape: Vec[Int]
