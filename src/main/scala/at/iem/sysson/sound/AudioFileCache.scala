@@ -15,14 +15,15 @@
 package at.iem.sysson
 package sound
 
-import ucar.nc2
+import ucar.ma2
 import de.sciss.filecache
 import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
 import concurrent._
 import de.sciss.file._
 import de.sciss.synth.proc.Grapheme
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
-import scala.annotation.tailrec
+import de.sciss.lucre.event.Sys
+import scala.concurrent.stm.TMap
 
 object AudioFileCache {
   private val KEY_COOKIE  = 0x6166636B  // "afck"
@@ -66,7 +67,7 @@ object AudioFileCache {
         val path      = in readUTF()
         val parents   = ImmutableSerializer.list[String].read(in)
         val variable  = in readUTF()
-        val section   = ImmutableSerializer.indexedSeq[Range].read(in)
+        val section   = ImmutableSerializer.indexedSeq[OpenRange].read(in)
         val streamDim = in readInt()
         CacheKey(file = file(path), parents = parents, variable = variable, section = section, streamDim = streamDim)
       }
@@ -75,9 +76,9 @@ object AudioFileCache {
         import v._
         out writeInt  KEY_COOKIE
         out writeUTF  file.path
-        ImmutableSerializer.list[String]      .write(parents, out)
+        ImmutableSerializer.list[String]          .write(parents, out)
         out writeUTF  variable
-        ImmutableSerializer.indexedSeq[Range] .write(section, out)
+        ImmutableSerializer.indexedSeq[OpenRange] .write(section, out)
         out writeInt  streamDim
       }
     }
@@ -90,20 +91,21 @@ object AudioFileCache {
    * @param section   the sectioning of the variable
    * @param streamDim  the dimension index to stream or `-1`
    */
-  private case class CacheKey(file: File, parents: List[String], variable: String, section: Vec[Range],
+  private case class CacheKey(file: File, parents: List[String], variable: String, section: Vec[OpenRange],
                               streamDim: Int) {
-    lazy val spec: AudioFileSpec = keyToSpec(this)
+    // lazy val spec: AudioFileSpec = keyToSpec(this)
   }
 
   private def keyToSpec(key: CacheKey): AudioFileSpec = {
-    import key._
-    val isStreaming   = streamDim >= 0
-    val numFrames     = if (!isStreaming) 1 else section(streamDim).size
-    val size          = (0L /: section)((sum, dim) => sum + dim.size)
-    val numChannelsL  = size / numFrames
-    require(numChannelsL <= 0xFFFF, s"The number of channels ($numChannelsL) is larger than supported")
-    val numChannels   = numChannelsL.toInt
-    AudioFileSpec(numFrames = numFrames, numChannels = numChannels, sampleRate = 44100 /* rate */)
+    ???
+//    import key._
+//    val isStreaming   = streamDim >= 0
+//    val numFrames     = if (!isStreaming) 1 else section(streamDim).size
+//    val size          = (0L /: section)((sum, dim) => sum + dim.size)
+//    val numChannelsL  = size / numFrames
+//    require(numChannelsL <= 0xFFFF, s"The number of channels ($numChannelsL) is larger than supported")
+//    val numChannels   = numChannelsL.toInt
+//    AudioFileSpec(numFrames = numFrames, numChannels = numChannels, sampleRate = 44100 /* rate */)
   }
   
   private object CacheValue {
@@ -111,35 +113,37 @@ object AudioFileCache {
       def write(v: CacheValue, out: DataOutput): Unit = {
         import v._
         out writeInt  VAL_COOKIE
-        out writeLong size
-        out writeLong lastModified
+        out writeLong netSize
+        out writeLong netModified
         out writeUTF  data.getPath
+        AudioFileSpec.Serializer.write(spec, out)
       }
 
       def read(in: DataInput): CacheValue = {
         val cookie = in.readInt()
         require(cookie == VAL_COOKIE, s"Serialized version $cookie does not match $VAL_COOKIE")
-        val size          = in.readLong()
-        val lastModified  = in.readLong()
+        val netSize       = in.readLong()
+        val netModified   = in.readLong()
         val data          = new File(in.readUTF())
-        CacheValue(size = size, lastModified = lastModified, data = data)
+        val spec          = AudioFileSpec.Serializer.read(in)
+        CacheValue(netSize = netSize, netModified = netModified, data = data, spec = spec)
       }
     }
   }
-  private case class CacheValue(size: Long, lastModified: Long, data: File) {
+  private case class CacheValue(netSize: Long, netModified: Long, data: File, spec: AudioFileSpec) {
     override def toString =
-      s"$productPrefix(size = $size, lastModified = ${new java.util.Date(lastModified)}, data = ${data.getName})"
+      s"$productPrefix(size = $netSize, lastModified = ${new java.util.Date(netModified)}, data = ${data.getName})"
   }
 
-  private def sectionToKey(section: VariableSection, streamDim: Int): CacheKey = {
+  private def sectionToKey(source: DataSource.Variable[_], section: Vec[OpenRange], streamDim: Int): CacheKey = {
     import at.iem.sysson.Implicits._
-    val v = section.variable
-    val f = file(v.file.path)
+    // val v = section.variable
+    val f = file(source.source.path) // v.file.path
 
-    val sectClosed: Vec[Range] = section.ranges.map { r =>
-      Range.inclusive(r.first(), r.last(), r.stride())
-    }
-    CacheKey(f, v.parents, v.name, sectClosed, streamDim)
+    //    val sectClosed: Vec[Range] = section.ranges.map { r =>
+    //      Range.inclusive(r.first(), r.last(), r.stride())
+    //    }
+    CacheKey(f, source.parents, source.name, section /* sectClosed */, streamDim)
   }
 
   /*
@@ -156,7 +160,7 @@ object AudioFileCache {
     val config              = filecache.Producer.Config[CacheKey, CacheValue]()
     config.capacity         = filecache.Limit(count = 500, space = 10L * 1024 * 1024 * 1024)  // 10 GB
     config.accept           = (key, value) => {
-      val res = key.file.lastModified() == value.lastModified && key.file.length() == value.size
+      val res = key.file.lastModified() == value.netModified && key.file.length() == value.netSize
       debug(s"accept key = ${key.file.name} (lastModified = ${new java.util.Date(key.file.lastModified())}}), value = $value? $res")
       res
     }
@@ -170,55 +174,63 @@ object AudioFileCache {
     filecache.Producer(config)
   }
 
-  private val sync  = new AnyRef
-  private var busy  = Map.empty[CacheKey, Future[Result]]
+  private val busy = TMap.empty[CacheKey, Future[Result]]
 
-  def acquire(section: VariableSection, streamDim: Int): Future[Result] = sync.synchronized {
-    val key = sectionToKey(section, streamDim)
-    busy.getOrElse(key, {
-      val fut = cache.acquire(key, blocking {
-        val arr = section.readSafe()
+  // def acquire(section: VariableSection, streamDim: Int): Future[Result]
 
-        // cf. Arrays.txt for (de-)interleaving scheme
+  private def produceValue[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S], key: CacheKey,
+                                        streamDim: Int): CacheValue = {
+    val v             = workspace.cursor.step { implicit tx => source.data(workspace) }
+    val arr: ma2.Array = ??? // = section.readSafe()
 
-        val spec          = key.spec
-        val numChannels   = spec.numChannels
-        val numFrames     = spec.numFrames
-        val afF           = File.createTemp("sysson", ".aif")
-        val af            = AudioFile.openWrite(afF, spec)
-        val fBufSize      = math.max(1, math.min(8192 / numChannels, numFrames)).toInt // file buffer
-        assert(fBufSize > 0)
-        val fBuf          = af.buffer(fBufSize)
-        var framesWritten = 0L
-        val t             = if (streamDim <= 0) arr else arr.transpose(0, streamDim)
-        import at.iem.sysson.Implicits._
-        val it            = t.float1Diterator
-        while (framesWritten < numFrames) {
-          val chunk = math.min(fBufSize, numFrames - framesWritten).toInt
-          var i = 0
-          while (i < chunk) {
-            var ch = 0
-            while (ch < numChannels) {
-              fBuf(ch)(i) = it.next() // XXX TODO: would be better to have inner loop iterate for frames
-              ch += 1
-            }
-            i += 1
-          }
-          af.write(fBuf, 0, chunk)
-          framesWritten += chunk
+    // cf. Arrays.txt for (de-)interleaving scheme
+    val spec          = keyToSpec(key)
+    val numChannels   = spec.numChannels
+    val numFrames     = spec.numFrames
+    val afF           = File.createTemp("sysson", ".aif")
+    val af            = AudioFile.openWrite(afF, spec)
+    val fBufSize      = math.max(1, math.min(8192 / numChannels, numFrames)).toInt // file buffer
+    assert(fBufSize > 0)
+    val fBuf          = af.buffer(fBufSize)
+    var framesWritten = 0L
+    val t             = if (streamDim <= 0) arr else arr.transpose(0, streamDim)
+    import at.iem.sysson.Implicits._
+    val it            = t.float1Diterator
+    while (framesWritten < numFrames) {
+      val chunk = math.min(fBufSize, numFrames - framesWritten).toInt
+      var i = 0
+      while (i < chunk) {
+        var ch = 0
+        while (ch < numChannels) {
+          fBuf(ch)(i) = it.next() // XXX TODO: would be better to have inner loop iterate for frames
+          ch += 1
         }
-        af.close()
+        i += 1
+      }
+      af.write(fBuf, 0, chunk)
+      framesWritten += chunk
+    }
+    af.close()
 
-        CacheValue(size = key.file.length(), lastModified = key.file.lastModified(), data = afF)
-      })
+    CacheValue(netSize = key.file.length(), netModified = key.file.lastModified(), data = afF, spec = spec)
+  }
+
+  def acquire[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S], section: Vec[OpenRange],
+                           streamDim: Int)
+                          (implicit tx: S#Tx): Future[Result] = {
+    val key = sectionToKey(source, section, streamDim)
+    busy.get(key)(tx.peer).getOrElse {
+      val fut = cache.acquire(key, blocking(produceValue(workspace, source, key, streamDim)))
 
       val futM = fut.map { value =>
-        Grapheme.Value.Audio(artifact = value.data, spec = key.spec, offset = 0L, gain = 1.0)
+        Grapheme.Value.Audio(artifact = value.data, spec = value.spec, offset = 0L, gain = 1.0)
       }
 
-      sync.synchronized(busy += key -> futM)
-      futM.onComplete(_ => sync.synchronized(busy -= key))
+      busy.put(key, futM)(tx.peer)
+      futM.onComplete { _ =>
+        busy.single.remove(key)
+      }
       futM
-    })
+    }
   }
 }

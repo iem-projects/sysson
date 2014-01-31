@@ -168,7 +168,7 @@ object AuralSonificationImpl {
 
           val section: VariableSection = ???
           // val (g, fut) = aw.graphemeCache(section)
-          val fut = txFuture(AudioFileCache.acquire(section, streamDim = -1))(tx)
+          val fut = txFuture(AudioFileCache.acquire(aw.workspace, source = source.variable, ???, streamDim = -1))(tx)
           // graphemes += attrKey -> fut
           graphemes :+= fut.map(attrKey -> _)
 
