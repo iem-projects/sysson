@@ -15,7 +15,6 @@
 package at.iem.sysson
 package sound
 
-import ucar.ma2
 import de.sciss.filecache
 import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
 import concurrent._
@@ -24,7 +23,8 @@ import de.sciss.synth.proc.Grapheme
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import de.sciss.lucre.event.Sys
 import scala.concurrent.stm.TMap
-import at.iem.sysson.Implicits._
+// import at.iem.sysson.Implicits._
+import scala.concurrent.stm.atomic
 
 object AudioFileCache {
   private val KEY_COOKIE  = 0x6166636B  // "afck"
@@ -157,7 +157,7 @@ object AudioFileCache {
 
    */
   private lazy val cache = {
-    val config              = filecache.Producer.Config[CacheKey, CacheValue]()
+    val config              = filecache.Config[CacheKey, CacheValue]()
     config.capacity         = filecache.Limit(count = 500, space = 10L * 1024 * 1024 * 1024)  // 10 GB
     config.accept           = (key, value) => {
       val res = key.file.lastModified() == value.netModified && key.file.length() == value.netSize
@@ -171,7 +171,7 @@ object AudioFileCache {
     }
     config.folder           = dataDir / "cache"
     config.executionContext = AudioFileCache.executionContext
-    filecache.Producer(config)
+    atomic { implicit tx => filecache.TxnProducer(config) }
   }
 
   private val busy = TMap.empty[CacheKey, Future[Result]]
@@ -221,14 +221,15 @@ object AudioFileCache {
                            streamDim: Int)
                           (implicit tx: S#Tx): Future[Result] = {
     val key = sectionToKey(source, section, streamDim)
-    busy.get(key)(tx.peer).getOrElse {
+    implicit val itx = tx.peer
+    busy.get(key).getOrElse {
       val fut = cache.acquire(key, blocking(produceValue(workspace, source, section, streamDim)))
 
       val futM = fut.map { value =>
         Grapheme.Value.Audio(artifact = value.data, spec = value.spec, offset = 0L, gain = 1.0)
       }
 
-      busy.put(key, futM)(tx.peer)
+      busy.put(key, futM)
       futM.onComplete { _ =>
         busy.single.remove(key)
       }

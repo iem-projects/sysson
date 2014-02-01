@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
-import scala.concurrent.stm.{TxnExecutor, Txn, TxnLocal, Ref}
+import scala.concurrent.stm.{TMap, TxnExecutor, Txn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
 import scala.concurrent.{Await, Promise, Future, ExecutionContext, future, blocking}
 import de.sciss.synth.proc.{Artifact, Grapheme, Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
@@ -83,7 +83,7 @@ object AuralSonificationImpl {
     impl =>
 
     private val _state    = Ref(Stopped: Update)
-    private val attrMap   = Ref(Map.empty[Any, String])
+    private val attrMap   = TMap.empty[Any, String]
 
     def state(implicit tx: S#Tx): Update = _state.get(tx.peer)
 
@@ -104,7 +104,8 @@ object AuralSonificationImpl {
     }
 
     def attributeKey(elem: Any): String = TxnExecutor.defaultAtomic { implicit itx =>
-      attrMap().getOrElse(elem, sys.error(s"No key for attribute $elem"))
+      // logInfo(s"attributeKey elem '$elem'")
+      attrMap.get(elem).getOrElse(sys.error(s"No key for attribute $elem"))
     }
 
     private def prepare()(implicit tx: S#Tx): Unit = {
@@ -115,13 +116,13 @@ object AuralSonificationImpl {
       val g     = sonif.patch.graph.value
       val proc  = procH()
 
-      var aMap  = Map.empty[Any, String]
       var aCnt  = 0
 
       def addAttr(elem: Any): String = {
         val key = s"sonif_$aCnt"
         aCnt   += 1
-        aMap   += elem -> key
+        // logInfo(s"addAttr elem '${elem.getClass}@$elem' key '$key'")
+        attrMap.put(elem, key)(tx.peer)
         key
       }
 
@@ -175,7 +176,6 @@ object AuralSonificationImpl {
         case _ =>
       }
 
-      attrMap.set(aMap)(tx.peer)
       state_=(Preparing)
 
       proc.graph() = SynthGraphs.newConst[I](g)

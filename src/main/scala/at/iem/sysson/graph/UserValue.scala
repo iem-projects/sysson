@@ -33,8 +33,9 @@ object UserValue {
     //  b.addScalarUserValue(peer)
 
     protected def makeUGens: UGenInLike = {
-      val key = AuralSonification.current().attributeKey(this)
-      proc.graph.attribute(key).ir
+      // re-write as a proc attribute
+      val key = AuralSonification.current().attributeKey(peer)
+      proc.graph.attribute(key).ir(peer.default)
     }
 
     // proc.graph.attribute(peer.attrKey).ir(peer.default)

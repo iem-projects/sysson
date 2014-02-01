@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.2 r9819"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="auralpres2.svg">
   <defs
      id="defs4">
     <marker
@@ -40,7 +40,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
      inkscape:cx="362.85714"
-     inkscape:cy="862.85714"
+     inkscape:cy="720"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -193,5 +193,10 @@
          x="145"
          y="53.790752"
          style="font-size:10px">(Proc[S])</tspan></text>
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 67.142857,235.93361 596.428573,0"
+       id="path4353"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

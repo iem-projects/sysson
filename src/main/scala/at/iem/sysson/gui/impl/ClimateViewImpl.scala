@@ -35,17 +35,15 @@ import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import javax.swing.TransferHandler.TransferSupport
 import de.sciss.audiowidgets.{Transport, DualRangeModel, DualRangeSlider}
-import at.iem.sysson.graph
 import collection.breakOut
-import de.sciss.desktop.DialogSource
 import de.sciss.synth.{Ops, Synth}
 import de.sciss.swingplus.OverlayPanel
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Success
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 import de.sciss.lucre.stm
+import scala.concurrent.stm.atomic
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -183,7 +181,7 @@ object ClimateViewImpl {
     private def spawnStats(): Unit = {
       // get the statistics from the cache manager
       import Stats.executionContext
-      Stats.get(in).onSuccess {
+      atomic { implicit tx => Stats.get(in) } .onSuccess {
         case Stats(map) => GUI.defer {
           // see if stats are available for the plotted variable
           val s = map.get(section.name)

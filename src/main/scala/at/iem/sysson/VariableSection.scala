@@ -21,6 +21,8 @@ import collection.JavaConversions
 import at.iem.sysson.gui.Plot
 import scala.concurrent.Future
 import at.iem.sysson.legacy.{MatrixSource, RowSource, ColumnSource}
+import de.sciss.lucre.stm.TxnLike
+import scala.concurrent.stm.InTxn
 
 object VariableSection {
   /** A transitory class specifying a variable section along with a dimension
@@ -125,7 +127,7 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
   // ---- statistics ----
 
   /** Returns a statistics count for this variable section. */
-  def stats: Future[Stats.Counts] = {
+  def stats(implicit tx: InTxn): Future[Stats.Counts] = {
     import Stats.executionContext
     Stats.get(variable.file).map { s =>
       require(scale == Scale.Identity, "Scaled sections are not yet supported")
