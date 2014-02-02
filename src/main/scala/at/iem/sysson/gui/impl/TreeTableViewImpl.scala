@@ -218,7 +218,7 @@ object TreeTableViewImpl {
         if (DEBUG) println(s"model.elemRemoved($parent, $idx)")
         require(idx >= 0 && idx < parent.children.size)
         val v       = parent.children(idx)
-        // this is frickin insane. the tree UI still accesses the model based on the previous assumption
+        // this is insane. the tree UI still accesses the model based on the previous assumption
         // about the number of children, it seems. therefore, we must not update children before
         // returning from fireNodesRemoved.
         fireNodesRemoved(v)
@@ -407,7 +407,7 @@ object TreeTableViewImpl {
         case upd1 @ TreeLike.BranchUpdate(parent1, _) =>
           val id = handler.branchID(parent1)
           mapViews.get(id) match {
-            case Some(vparent1: VBranch) => folderUpdated(vparent1, upd1)
+            case Some(vParent1: VBranch) => folderUpdated(vParent1, upd1)
             case other                    => warnNoBranchView(parent1, other)
           }
 
@@ -577,10 +577,10 @@ object TreeTableViewImpl {
 
     //    def selection: BranchView.Selection[S] =
     //      t.selection.paths.collect({
-    //        case PathExtrator(path, child) => (path, child)
+    //        case PathExtractor(path, child) => (path, child)
     //      })(breakOut)
     //
-    //    object PathExtrator {
+    //    object PathExtractor {
     //      def unapply(path: Seq[Node]): Option[(Vec[NodeView.BranchLike[S]], NodeView[S])] =
     //        path match {
     //          case init :+ (last: NodeView[S]) =>
