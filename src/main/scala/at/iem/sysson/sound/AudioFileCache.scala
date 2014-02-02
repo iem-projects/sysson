@@ -223,7 +223,9 @@ object AudioFileCache {
     val key = sectionToKey(source, section, streamDim)
     implicit val itx = tx.peer
     busy.get(key).getOrElse {
-      val fut = cache.acquire(key, blocking(produceValue(workspace, source, section, streamDim)))
+      val fut = cache.acquire(key) {
+        blocking(produceValue(workspace, source, section, streamDim))
+      }
 
       val futM = fut.map { value =>
         Grapheme.Value.Audio(artifact = value.data, spec = value.spec, offset = 0L, gain = 1.0)
