@@ -16,12 +16,13 @@ package at.iem.sysson
 package gui
 
 import java.awt.event.KeyEvent
-import de.sciss.desktop.{KeyStrokes, Menu}
+import de.sciss.desktop.{Desktop, KeyStrokes, Menu}
 import scala.swing.Action
 import de.sciss.lucre.event.{Sys, Durable}
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.file._
 import de.sciss.lucre.stm
+import gui.{SwingApplication => App}
 import language.existentials
 
 object MenuFactory {
@@ -52,52 +53,66 @@ object MenuFactory {
         checkCloseAll()
     }
 
-    Root().add(
-      Group("file", "File").add(
-        Group("new", "New").add(
-          Item("new-workspace", ActionNewWorkspace) // ("Workspace..." -> (menu1 + VK_N)) {
-        ).addLine()
+    val itAbout = Item.About(App) {
+      println("TODO: About")
+    }
+    val itPrefs = Item.Preferences(App) {
+      println("TODO: Prefs")
+    }
+    val itQuit = Item.Quit(App)
+
+    val gFile = Group("file", "File")
+      .add(Group("new", "New")
         .add(
-          Item("new-interpreter")("Interpreter..." -> (menu1 + VK_R)) {
+          Item("new-workspace", ActionNewWorkspace) // ("Workspace..." -> (menu1 + VK_N)) {
+        )
+        .addLine()
+        .add(Item("new-interpreter")("Interpreter..." -> (menu1 + VK_R)) {
             openInterpreter()
           }
-        ).add(
+        )
+        .add(
           Item("new-library")("Library..." -> (menu1 + VK_L)) {
             openLibrary()
           }
         )
-      ).add(Item("open", ActionOpenWorkspace))
+      )
+      .add(Item("open", ActionOpenWorkspace))
       .add(ActionOpenWorkspace.recentMenu)
-      .addLine().add(
-        Item("close", proxy("Close" -> (menu1 + VK_W)))
-      ).add(
-        Item("close-all", actionCloseAll)
-      ).add(
-        Item("save", proxy("Save" -> (menu1 + VK_S)))
-      )
-    ).add(
-      Group("edit", "Edit").add(
-        Item("undo", proxy("Undo" -> (menu1 + VK_Z)))
-      ).add(
-        Item("redo", proxy("Redo" -> (menu1 + shift + VK_Z)))
-      )
-    ).add(
-      Group("tools", "Tools")
+      .addLine()
+      .add(Item("close", proxy("Close" -> (menu1 + VK_W))))
+      .add(Item("close-all", actionCloseAll))
+      .add(Item("save", proxy("Save" -> (menu1 + VK_S))))
+
+    if (itQuit.visible) gFile.addLine().add(itQuit)
+
+    val gEdit = Group("edit", "Edit")
+    if (itPrefs.visible && Desktop.isLinux) gEdit.add(itPrefs).addLine()
+
+    gEdit
+      .add(Item("undo", proxy("Undo" -> (menu1 + VK_Z))))
+      .add(Item("redo", proxy("Redo" -> (menu1 + shift + VK_Z))))
+
+    val gTools = Group("tools", "Tools")
+    if (itPrefs.visible && !Desktop.isLinux) gTools.add(itPrefs)
         // .add(
         //   Item("sonif-declaration")("Sonification Declaration TEST..." -> (menu1 + VK_D)) { sonif.DeclarationEditor() }
         // )
       //      .add(
       //        Item("designer")("Sound Designer..." -> (menu1 + VK_D)) { openSoundDesigner() }
       //      )
-    ).add(
-      Group("view", "View").add(
+
+    val gView = Group("view", "View")
+      .add(
         Item("clear-log")("Clear Log Window" -> (menu1 + shift + VK_P)) {
           LogWindow.instance.log.clear()
         }
       )
-    ).add(
-      Group("window", "Window")
-    )
+    val gWindow = Group("window", "Window")
+
+    val r = Root().add(gFile).add(gEdit).add(gTools).add(gView).add(gWindow)
+    if (itAbout.visible) r.add(Group("help", "Help").add(itAbout))
+    r
   }
 
   def closeAll(): Unit = {

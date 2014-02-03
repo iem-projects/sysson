@@ -32,7 +32,6 @@ object MainWindow {
   private final class Impl extends desktop.impl.WindowImpl {
     val view        = MainView()
 
-    def style       = desktop.Window.Regular
     def handler     = SwingApplication.windowHandler
 
     component.peer.getRootPane.putClientProperty("apple.awt.brushMetalLook", true)

@@ -265,7 +265,6 @@ object DataSourceViewImpl {
                 ClimateView(source, v.selectAll, xDim = xDim, yDim = yDim)
               }
               lazy val w: desktop.Window = new desktop.impl.WindowImpl {
-                def style       = desktop.Window.Regular
                 def handler     = SwingApplication.windowHandler
                 closeOperation  = desktop.Window.CloseDispose
                 title           = s"Plot : ${v.name}"

@@ -20,7 +20,7 @@ import de.sciss.desktop.Menu
 import de.sciss.lucre.event.Sys
 import language.existentials
 
-object SwingApplication extends SwingApplicationImpl("SysSon") {
+object  SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = DocumentHandler.Document  // sysson.DataSourceLike
 
   override def init(): Unit = {

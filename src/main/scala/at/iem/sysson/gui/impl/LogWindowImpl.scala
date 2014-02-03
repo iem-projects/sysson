@@ -30,7 +30,7 @@ private[gui] final class LogWindowImpl extends LogWindow with desktop.impl.Windo
 
 //  peer.getRootPane.putClientProperty("Window.style", "small")
 
-  def style   = desktop.Window.Auxiliary
+  override def style = desktop.Window.Auxiliary
   def handler = SwingApplication.windowHandler
 
   val log = {

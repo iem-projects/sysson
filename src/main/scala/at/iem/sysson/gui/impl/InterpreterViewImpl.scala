@@ -66,7 +66,7 @@ private[gui] object InterpreterViewImpl {
     val f = new desktop.impl.WindowImpl {
       frame =>
 
-      def style   = desktop.Window.Auxiliary
+      override def style = desktop.Window.Auxiliary
       def handler = SwingApplication.windowHandler
 
       title     = "Interpreter"

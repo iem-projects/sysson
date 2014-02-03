@@ -27,13 +27,12 @@ object WindowImpl {
   private final class Peer[S <: Sys[S]](view: View[S], impl: WindowImpl[S], undoRedoActions: Option[(Action, Action)])
     extends desktop.impl.WindowImpl {
 
-    def style   = desktop.Window.Regular
     def handler = SwingApplication.windowHandler
 
-    def setTitle(value: String): Unit = title = value
+    // def setTitle(value: String): Unit = title = value
 
-    def getDirty      : Boolean        = dirty
-    def setDirty(value: Boolean): Unit = dirty = value
+    // def getDirty      : Boolean        = dirty
+    // def setDirty(value: Boolean): Unit = dirty = value
 
     view match {
       case fv: View.File => file = Some(fv.file)
@@ -74,10 +73,10 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
   private var windowImpl: WindowImpl.Peer[S] = _
 
   final protected def title        : String        = windowImpl.title
-  final protected def title_=(value: String): Unit = windowImpl.setTitle(value)
+  final protected def title_=(value: String): Unit = windowImpl.title = value
 
-  final protected def dirty        : Boolean        = windowImpl.getDirty
-  final protected def dirty_=(value: Boolean): Unit = windowImpl.setDirty(value)
+  final protected def dirty        : Boolean        = windowImpl.dirty
+  final protected def dirty_=(value: Boolean): Unit = windowImpl.dirty = value
 
   final def init()(implicit tx: S#Tx): Unit = {
     view match {
@@ -90,7 +89,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
   // /** Subclasses may override this if they invoke `super.guiInit()` first. */
   private def guiInit(): Unit = {
     val f       = new WindowImpl.Peer(view, impl, undoRedoActions)
-    title0.foreach(f.setTitle)
+    title0.foreach(f.title_=)
     component   = f
     windowImpl  = f
     val (ph, pv, pp) = placement

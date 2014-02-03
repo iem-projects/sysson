@@ -23,16 +23,12 @@ libraryDependencies ++= Seq(
   "edu.ucar" %  "netcdf"                  % "4.3.20",
   "de.sciss" %% "soundprocesses"          % "2.1.+",
   "de.sciss" %% "scalacolliderswing"      % "1.12.+",         // sound widgets, interpreter
-  "de.sciss" %% "desktop"                 % "0.3.4+",         // application framework
+  "de.sciss" %% "desktop-mac"             % "0.4.0+",         // application framework
   "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
   "de.sciss" %% "filecache-txn"           % "0.3.+",          // caching statistics of data files
-  "de.sciss" %% "fileutil"                % "1.1.+",          // easy file name manipulation
-  "de.sciss" %% "swingplus"               % "0.0.3+",         // GUI helpers
   "de.sciss" %% "treetable-scala"         % "1.3.4+",         // GUI component
   "de.sciss" %% "lucrestm-bdb"            % "2.0.+",          // database used for library
-  "de.sciss" %% "serial"                  % "1.0.1+",         // important bug fix in 1.0.1!
   "org.jfree" % "jfreechart"              % "1.0.15",         // plotting
-  "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // some GUI widgets
   "de.sciss" %% "raphael-icons"           % "1.0.+",          // tool icons
   "de.sciss" %% "guiflitz"                % "0.2.+",
   "org.slf4j" % "slf4j-simple"            % "1.7.5"           // logging (used by netcdf)
