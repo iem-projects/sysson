@@ -20,6 +20,7 @@ import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import scala.concurrent.stm.TMap
+import de.sciss.desktop.Desktop
 
 private[gui] object DocumentViewHandlerImpl {
   import DocumentHandler.Document
@@ -33,8 +34,16 @@ private[gui] object DocumentViewHandlerImpl {
   private final class Impl extends DocumentViewHandler with ModelImpl[DocumentViewHandler.Update] {
     override def toString = "DocumentViewHandler"
 
-    private var map     = TMap.empty[Document, WorkspaceWindow[_]]
+    private val map     = TMap  .empty[Document, WorkspaceWindow[_]]
     private var _active = Option.empty[Document]
+
+    Desktop.addListener {
+      case Desktop.OpenFiles(_, files) =>
+        // println(s"TODO: $open; EDT? ${java.awt.EventQueue.isDispatchThread}")
+        files.foreach { f =>
+          ActionOpenWorkspace.perform(f)
+        }
+    }
 
     def activeDocument = _active
     def activeDocument_=[S <: Sys[S]](value: Option[Workspace[S]]): Unit = {
