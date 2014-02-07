@@ -22,15 +22,16 @@ resolvers    += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/cont
 libraryDependencies ++= Seq(
   "edu.ucar" %  "netcdf"                  % "4.3.20",
   "de.sciss" %% "soundprocesses"          % "2.1.+",
-  "de.sciss" %% "scalacolliderswing"      % "1.12.+",         // sound widgets, interpreter
-  "de.sciss" %% "desktop-mac"             % "0.4.0+",         // application framework
+//  "de.sciss" %% "scalacollider"           % "1.10.1+",
+  "de.sciss" %% "scalacolliderswing"      % "1.13.+",         // sound widgets, interpreter
+  "de.sciss" %% "desktop-mac"             % "0.4.+",          // application framework
   "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
   "de.sciss" %% "filecache-txn"           % "0.3.+",          // caching statistics of data files
   "de.sciss" %% "treetable-scala"         % "1.3.4+",         // GUI component
-  "de.sciss" %% "lucrestm-bdb"            % "2.0.+",          // database used for library
+  "de.sciss" %% "lucrestm-bdb"            % "2.0.1+",         // database used for library
   "org.jfree" % "jfreechart"              % "1.0.15",         // plotting
   "de.sciss" %% "raphael-icons"           % "1.0.+",          // tool icons
-  "de.sciss" %% "guiflitz"                % "0.2.+",
+  "de.sciss" %% "guiflitz"                % "0.3.+",
   "org.slf4j" % "slf4j-simple"            % "1.7.5"           // logging (used by netcdf)
 )
 
