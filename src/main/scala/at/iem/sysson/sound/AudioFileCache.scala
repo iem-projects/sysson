@@ -24,6 +24,7 @@ import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import de.sciss.lucre.event.Sys
 import scala.concurrent.stm.TMap
 import at.iem.sysson.impl.Serializers
+import scala.util.control.NonFatal
 
 // import at.iem.sysson.Implicits._
 import scala.concurrent.stm.atomic
@@ -156,10 +157,17 @@ object AudioFileCache {
     }
     config.folder           = dataDir / "cache"
     config.executionContext = AudioFileCache.executionContext
-    atomic { implicit tx => filecache.TxnProducer(config) }
+    atomic { implicit tx =>
+      filecache.TxnProducer(config)
+    }
   }
 
-  private val busy = TMap.empty[CacheKey, Future[Result]]
+  final private class Entry(val useCount: Int = 1, val future: Future[Result]) {
+    def inc = new Entry(useCount + 1, future)
+    def dec = new Entry(useCount - 1, future)
+  }
+
+  private val map = TMap.empty[CacheKey, Entry]
 
   // def acquire(section: VariableSection, streamDim: Int): Future[Result]
 
@@ -207,20 +215,26 @@ object AudioFileCache {
                           (implicit tx: S#Tx): Future[Result] = {
     val key = sectionToKey(source, section, streamDim)
     implicit val itx = tx.peer
-    busy.get(key).getOrElse {
-      val fut = cache.acquire(key) {
+    map.get(key).fold {
+      val fut0 = cache.acquire(key) {
         blocking(produceValue(workspace, source, section, streamDim))
       }
-
-      val futM = fut.map { value =>
+      val fut = fut0.map { value =>
         Grapheme.Value.Audio(artifact = value.data, spec = value.spec, offset = 0L, gain = 1.0)
       }
-
-      busy.put(key, futM)
-      futM.onComplete { _ =>
-        busy.single.remove(key)
+      val e = new Entry(future = fut)
+      map.put(key, e)
+      fut.recover {
+        case NonFatal(t) =>
+          map.single.remove(key)
+          throw t
       }
-      futM
+      fut
+
+    } { e0 =>
+      val e1 = e0.inc
+      map.put(key, e1)
+      e1.future
     }
   }
 }
