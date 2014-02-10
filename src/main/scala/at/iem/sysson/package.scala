@@ -70,11 +70,15 @@ package object sysson {
 
   var showLog = true
 
-  @elidable(INFO)    private[sysson] def logInfo(what: => String): Unit = log("info", what)
-  @elidable(WARNING) private[sysson] def logWarn(what: => String): Unit = log("warn", what)
+  @elidable(CONFIG)  private[sysson] def logDebug(what: => String): Unit = log("debug", what)
+  @elidable(INFO)    private[sysson] def logInfo (what: => String): Unit = log("info" , what)
+  @elidable(WARNING) private[sysson] def logWarn (what: => String): Unit = log("warn" , what)
 
   private def log(level: String, what: => String): Unit =
     if (showLog) println(s"${logHeader.format(new Date())} - $level - $what")
+
+  @elidable(CONFIG)  private[sysson] def logDebugTx(what: => String)(implicit tx: TxnLike): Unit =
+    Txn.afterCommit(_ => logDebug(what))(tx.peer)
 
   @elidable(INFO)    private[sysson] def logInfoTx(what: => String)(implicit tx: TxnLike): Unit =
     Txn.afterCommit(_ => logInfo(what))(tx.peer)

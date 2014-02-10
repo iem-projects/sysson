@@ -197,46 +197,57 @@ object AuralSonificationImpl {
 
       proc.graph() = SynthGraphs.newConst[I](g)
 
-      def transpPlay()(implicit tx: S#Tx): Unit = {
-        implicit val itx: I#Tx = iTx(tx)
-        transport.seek(0L)
-        try {
-          using(impl)(transport.play())
-        } catch {
-          case NonFatal(foo) =>
-            foo.printStackTrace()
-            throw foo
-        }
-        state_=(Playing)
-      }
-
-      if (graphemes.isEmpty) transpPlay() else tx.afterCommit {
+      if (graphemes.isEmpty) transportPlay() else tx.afterCommit {
         import ExecutionContext.Implicits.global
+        logDebug(s"Producing ${graphemes.size} graphemes...")
         future {
-          blocking {
+          val graphMap = blocking {
             val graphMapF = Future.sequence(graphemes)
-            val graphMap  = Await.result(graphMapF, Duration(10, TimeUnit.MINUTES))
-            graphMap.foreach { case gen =>
-              // XXX TODO: we should allow Grapheme.Elem.newConst ?
-              val gv    = gen.data
-              val loc   = Artifact.Location.Modifiable[I](gv.artifact.parent)
-              val artif = loc.add(gv.artifact)
-              val elem  = Grapheme.Elem.Audio(artif, gv.spec, Longs.newConst(gv.offset), Doubles.newConst(gv.gain))
-              if (gen.scan) {
-                val scan  = proc.scans.add(gen.key)
-                val g     = Grapheme.Modifiable[I]
-                g.add(BiExpr(Longs.newConst(0L), elem))
-                scan.addSource(Scan.Link.Grapheme(g))
-              } else {
-                proc.attributes.put(gen.key, Attribute.AudioGrapheme(elem))
-              }
-            }
+            Await.result(graphMapF, Duration(10, TimeUnit.MINUTES))
           }
-          aw.workspace.cursor.step { implicit tx =>
-            transpPlay()
-          }
+          logDebug("Finished grapheme production")
+          produceGraphemesAndPlay(graphMap)
         }
       }
+    }
+    
+    private def cursor: stm.Cursor[S] = aw.workspace.cursor
+
+    // reset and start transport, after the Proc was fully configured
+    def transportPlay()(implicit tx: S#Tx): Unit = {
+      logDebugTx("Transport play")(tx)
+      implicit val itx: I#Tx = iTx(tx)
+      transport.seek(0L)
+      try {
+        using(impl)(transport.play())
+      } catch {
+        case NonFatal(foo) =>
+          foo.printStackTrace()
+          throw foo
+      }
+      state_=(Playing)
+    }
+
+    private def produceGraphemesAndPlay(graphMap: Vec[GraphemeGen]): Unit = cursor.step { implicit tx =>
+      implicit val itx: I#Tx = iTx(tx)
+      val proc = procH()
+      graphMap.foreach { gen =>
+        logDebug(s"step $gen")
+        // XXX TODO: we should allow Grapheme.Elem.newConst ?
+        val gv = gen.data
+        val loc = Artifact.Location.Modifiable[I](gv.artifact.parent)
+        val artif = loc.add(gv.artifact)
+        val elem = Grapheme.Elem.Audio(artif, gv.spec, Longs.newConst(gv.offset), Doubles.newConst(gv.gain))
+        if (gen.scan) {
+          val scan = proc.scans.add(gen.key)
+          val g = Grapheme.Modifiable[I]
+          g.add(BiExpr(Longs.newConst(0L), elem))
+          scan.addSource(Scan.Link.Grapheme(g))
+        } else {
+          proc.attributes.put(gen.key, Attribute.AudioGrapheme(elem))
+        }
+      }
+      transportPlay()
     }
   }
 }
