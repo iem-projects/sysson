@@ -76,7 +76,10 @@ object AuralSonificationImpl {
   // private sealed trait State
   // private case object Stopped extends State
 
-  private final case class GraphemeGen(key: String, scan: Boolean, data: AudioFileCache.Result)
+  private final case class GraphemeGen(key: String, scan: Boolean, data: AudioFileCache.Result) {
+    override def toString = s"GraphemeGen(key = $key, scan = $scan, " +
+      s"data = ['${data.artifact.name}', numChannels = ${data.numChannels}, numFrames = ${data.spec.numFrames}])"
+  }
 
   private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S, I],
                                                                  ap: AuralPresentation[I],
@@ -155,10 +158,11 @@ object AuralSonificationImpl {
           val dimName = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
           val ds      = source.variable.source
           val dimVar  = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
+          assert(dimVar.rank == 1)
           val ranges  = dimVar.shape.map(_._2)
 
           // val (g, fut) = aw.graphemeCache(section)
-          val fut = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = -1)
+          val fut = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = 0 /* ! */)
           // graphemes += attrKey -> fut
           graphemes :+= fut.map(data => GraphemeGen(key = attrKey, scan = true, data = data))
 

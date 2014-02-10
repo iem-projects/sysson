@@ -132,6 +132,8 @@ object AudioFileCache {
     CacheKey(f, source.parents, source.name, section /* sectClosed */, streamDim)
   }
 
+  private lazy val folder: File = dataDir / "cache"
+
   /*
     The cache is organised as follows:
     - the lookup part of the key is the NetCDF file (`get` takes a `NetcdfFile`, we actually just use its path).
@@ -155,7 +157,7 @@ object AudioFileCache {
       debug(s"evict $value")
       value.data.delete()
     }
-    config.folder           = dataDir / "cache"
+    config.folder           = folder
     config.executionContext = AudioFileCache.executionContext
     atomic { implicit tx =>
       filecache.TxnProducer(config)
@@ -181,10 +183,14 @@ object AudioFileCache {
     val spec          = sectionToSpec(vs, streamDim)
     val numChannels   = spec.numChannels
     val numFrames     = spec.numFrames
-    val afF           = File.createTemp("sysson", ".aif")
+    // val afF           = File.createTemp("sysson", ".aif")
+    val afF           = java.io.File.createTempFile("sysson", ".aif", folder)
     val af            = AudioFile.openWrite(afF, spec)
     val fBufSize      = math.max(1, math.min(8192 / numChannels, numFrames)).toInt // file buffer
     assert(fBufSize > 0)
+
+    logDebug(s"Audio file cache: '${afF.name}', numChannels = $numChannels, numFrames = $numFrames")
+
     val fBuf          = af.buffer(fBufSize)
     var framesWritten = 0L
     val t             = if (streamDim <= 0) arr else arr.transpose(0, streamDim)
