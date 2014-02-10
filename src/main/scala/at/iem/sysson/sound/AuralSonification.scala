@@ -26,7 +26,8 @@ object AuralSonification {
 
   private[sysson] def current(): AuralSonification[_] = Impl.current()
 
-  case class MissingSource(key: String) extends Exception
+  case class MissingSource   (key: String) extends Exception
+  case class MissingDimension(key: String) extends Exception
 }
 trait AuralSonification[S <: Sys[S]] extends Observable[S#Tx, AuralSonification.Update] {
   def play()(implicit tx: S#Tx): Unit

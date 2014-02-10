@@ -188,7 +188,7 @@ object DataSourceViewImpl {
           override def createTransferable(c: JComponent): Transferable = {
             selectedVariable.map { vr =>
               val varH = impl.cursor.step { implicit tx =>
-                tx.newHandle(DataSource.Variable(sourceH(), vr.parents, vr.name))
+                ??? // tx.newHandle(DataSource.Variable(sourceH(), vr.parents, vr.name))
               }
               DragAndDrop.Transferable(DragAndDrop.DataSourceVarFlavor) {
                 new DataSourceVarDrag {

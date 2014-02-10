@@ -50,18 +50,19 @@ object Dim {
     // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = ??? // b.addAudioSelection(dim, freq)
 
     protected def makeUGens: UGenInLike = {
-      ???
-//      UGenGraph.builder match {
-//        case b: UGenGraphBuilder[_] => makeUGens(b)
-//        case _ => sys.error(s"Expansion out of context: $this")
-//      }
+      //      UGenGraph.builder match {
+      //        case b: UGenGraphBuilder[_] => makeUGens(b)
+      //        case _ => sys.error(s"Expansion out of context: $this")
+      //      }
+
+      // XXX TODO: eventually: graph.eme(dim.graphKey).ar(freq)
+      // in order to allow multiple plays for the same dimension at different speeds
+      val key = AuralSonification.current().attributeKey(this)
+      proc.graph.scan.InFix(key /* scanKey */, numChannels = 1)
     }
 
-    // XXX TODO: eventually: graph.eme(dim.graphKey).ar(freq)
-    // in order to allow multiple plays for the same dimension at different speeds
-    proc.graph.scan.InFix(scanKey, numChannels = 1)
 
-    private[sysson] def scanKey = s"dim_${dim.variable.name}_${dim.name}"
+    // private[sysson] def scanKey = s"dim_${dim.variable.name}_${dim.name}"
   }
 
   case class Values(dim: Dim) extends GE.Lazy with ScalarRated {

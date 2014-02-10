@@ -177,7 +177,7 @@ object WorkspaceViewImpl {
       dlg.show(GUI.windowOption(component)).foreach { f =>
         val edit = cursor.step { implicit tx =>
           val idx     = workspace.dataSources.size
-          val ds      = DataSource[S](f.path)
+          val ds      = DataSource[S](f)
           val childH  = tx.newHandle(ds)
           val _edit   = new EditInsertSource(idx, childH)
           _edit.perform()

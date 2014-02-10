@@ -19,37 +19,45 @@ import ucar.nc2
 import de.sciss.serial.{ImmutableSerializer, Serializer, DataInput, DataOutput}
 import de.sciss.lucre.{event => evt}
 import evt.Sys
-import scala.concurrent.stm.Txn
 import de.sciss.file._
 import DataSource.Variable
+import de.sciss.lucre.stm.Mutable
+import at.iem.sysson.Implicits._
+import scala.collection.breakOut
+import scala.concurrent.stm.Txn
 
 object DataSourceImpl {
   private final val SOURCE_COOKIE = 0x737973736F6E6400L   // "syssond\0"
 
   private final val VAR_COOKIE    = 0x76617200            // "var\0"
 
-  def apply[S <: Sys[S]](path: String)(implicit tx: S#Tx): DataSource[S] = new Impl(path)
+  def apply[S <: Sys[S]](file: File)(implicit tx: S#Tx, workspace: Workspace[S]): DataSource[S] = {
+    val netFile = resolveFile(workspace, file)
+    val f0      = file
 
-  def variable[S <: Sys[S]](source: DataSource[S], parents: List[String], name: String)
-                           (implicit tx: S#Tx): Variable[S] =
-    new VariableImpl(source, parents, name)
+    new Impl[S] {
+      ds =>
 
-  def writeVariable[S <: Sys[S]](v: Variable[S], out: DataOutput): Unit = {
-    import v._
-    out.writeInt(VAR_COOKIE)
-    source.write(out)
-    ImmutableSerializer.list[String].write(parents, out)
-    out.writeUTF(name)
+      val id                = tx.newID()
+      val file              = f0
+      protected val varRef  = tx.newVar[List[Variable[S]]](id, netFile.variables.map(variable(ds, _))(breakOut))
+    }
   }
 
+  def variable[S <: Sys[S]](source: DataSource[S], net: nc2.Variable)(implicit tx: S#Tx): Variable[S] =
+    ??? // new VariableImpl(source, parents, name)
+
   def readVariable[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Variable[S] = {
-    val cookie  = in.readInt()
+    val id        = tx.readID(in, access)
+    val cookie    = in.readInt()
     require(cookie == VAR_COOKIE,
       s"Unexpected cookie (found ${cookie.toHexString}, expected ${VAR_COOKIE.toHexString})")
-    val source  = DataSource.read(in, access)
-    val parents = ImmutableSerializer.list[String].read(in)
-    val name    = in.readUTF()
-    Variable(source, parents, name)
+    // val source  = DataSource.read(in, access)
+    val sourceRef = tx.readVar[DataSource[S]](id, in)
+    val parents   = parentsSer.read(in)
+    val name      = in.readUTF()
+    val shape     = shapeSer.read(in)
+    new VariableImpl(sourceRef, parents, name, shape)
   }
 
   private def resolveFile[S <: Sys[S]](workspace: Workspace[S], file: File)(implicit tx: S#Tx): nc2.NetcdfFile =
@@ -69,11 +77,13 @@ object DataSourceImpl {
     anyVarSer.asInstanceOf[VarSer[S]]
 
   def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): DataSource[S] = {
-    val cookie = in.readLong()
+    val id      = tx.readID(in, access)
+    val cookie  = in.readLong()
     require(cookie == SOURCE_COOKIE,
       s"Unexpected cookie (found ${cookie.toHexString}, expected ${SOURCE_COOKIE.toHexString})")
-    val path  = in.readUTF()
-    new Impl(path) // instantiate(id, path)
+    val path    = in.readUTF()
+    val varRef  = tx.readVar[List[Variable[S]]](id, in)
+  ???
   }
 
   private val anySer    = new Ser   [evt.InMemory]
@@ -89,13 +99,34 @@ object DataSourceImpl {
   private class VarSer[S <: Sys[S]] extends Serializer[S#Tx, S#Acc, Variable[S]] {
     def read(in: DataInput, access: S#Acc)(implicit tx: S#Tx): Variable[S] = DataSourceImpl.readVariable(in, access)
 
-    def write(v: Variable[S], out: DataOutput): Unit = DataSourceImpl.writeVariable(v, out)
+    def write(v: Variable[S], out: DataOutput): Unit = v.write(out)
   }
 
-  private final case class VariableImpl[S <: Sys[S]](source: DataSource[S], parents: List[String], name: String)
+  private val parentsSer  = ImmutableSerializer.list[String]
+  import Serializers.RangeSerializer
+  private val shapeSer    = ImmutableSerializer.indexedSeq[(String, Range)]
+
+  private final class VariableImpl[S <: Sys[S]](sourceRef: S#Var[DataSource[S]], val parents: List[String],
+                                                val name: String, val shape: Vec[(String, Range)])
     extends Variable[S] {
 
-    def write(out: DataOutput): Unit = writeVariable(this, out)
+    def source(implicit tx: S#Tx): DataSource[S] = sourceRef()
+
+    def write(out: DataOutput): Unit = {
+      out       .writeInt(VAR_COOKIE)
+      sourceRef .write(out)
+      parentsSer.write(parents, out)
+      shapeSer  .write(shape  , out)
+      out       .writeUTF(name)
+    }
+
+    def rank: Int = shape.size
+
+    lazy val size: Long = {
+      var res = 0L
+      shape.foreach { tup => res += tup._2.size }
+      res
+    }
 
     def data(workspace: Workspace[S])(implicit tx: S#Tx): nc2.Variable = {
       import at.iem.sysson.Implicits._
@@ -104,17 +135,28 @@ object DataSourceImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](val path: String)
-    extends DataSource[S] {
+  private abstract class Impl[S <: Sys[S]]
+    extends DataSource[S] with Mutable.Impl[S] {
+
+    protected def varRef: S#Var[List[Variable[S]]]
 
     override def toString = s"DataSource($path)"
 
-    def file = new File(path)
+    // def file = new File(path)
 
-    def write(out: DataOutput): Unit = {
+    def path: String = file.path
+
+    protected def writeData(out: DataOutput): Unit = {
       out.writeLong(SOURCE_COOKIE)
       out.writeUTF(path)
+      varRef.write(out)
     }
+
+    protected def disposeData()(implicit tx: S#Tx): Unit = {
+      varRef.dispose()
+    }
+
+    def variables(implicit tx: S#Tx): List[Variable[S]] = varRef()
 
     def data(workspace: Workspace[S])(implicit tx: S#Tx): nc2.NetcdfFile = resolveFile(workspace, file)
   }

@@ -31,13 +31,17 @@ import de.sciss.osc
 private[gui] object MainViewImpl {
   def apply(background: Option[Color] = None): MainView = {
     requireEDT()
-    new Impl(background)
+    val res = new Impl(background)
+    if (AUTO_BOOT) res.boot()
+    res
   }
+
+  private val AUTO_BOOT = true  // XXX TODO: make a preferences item for this
 
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 
   private final class Impl(bg: Option[Color]) extends MainView with DynamicComponentImpl {
-    private def boot(): Unit = AudioSystem.instance.start()
+    def boot(): Unit = AudioSystem.instance.start()
 
     private lazy val serverStatus = new ServerStatusPanel {
       bootAction = Some(boot _)

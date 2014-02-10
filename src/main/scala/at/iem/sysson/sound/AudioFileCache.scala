@@ -38,27 +38,6 @@ object AudioFileCache {
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  private implicit object RangeSerializer extends ImmutableSerializer[Range] {
-    def read(in: DataInput): Range = {
-      val start       = in readInt()
-      val end         = in readInt()
-      val isInclusive = in readBoolean()
-      val step        = in readInt()
-      if (isInclusive)
-        Range.inclusive(start, end, step)
-      else
-        Range.apply    (start, end, step)
-    }
-
-    def write(r: Range, out: DataOutput): Unit = {
-      import r._
-      out writeInt     start
-      out write        end
-      out writeBoolean isInclusive
-      out writeInt     step
-    }
-  }
-
   private object CacheKey {
     implicit object Serializer extends ImmutableSerializer[CacheKey] {
       def read(in: DataInput): CacheKey = {
@@ -138,7 +117,7 @@ object AudioFileCache {
 
   private def sectionToKey(source: DataSource.Variable[_], section: Vec[OpenRange], streamDim: Int): CacheKey = {
     // val v = section.variable
-    val f = file(source.source.path) // v.file.path
+    val f: File = ??? // = file(source.source.path) // v.file.path
 
     //    val sectClosed: Vec[Range] = section.ranges.map { r =>
     //      Range.inclusive(r.first(), r.last(), r.stride())

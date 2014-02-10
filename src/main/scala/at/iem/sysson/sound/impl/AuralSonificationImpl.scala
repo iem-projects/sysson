@@ -32,6 +32,7 @@ import de.sciss.synth.io.AudioFileSpec
 import de.sciss.lucre.stm.TxnLike
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
+import at.iem.sysson.Implicits._
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -143,7 +144,24 @@ object AuralSonificationImpl {
           }
 
         case dp: graph.Dim.Play =>
-          ??? // val key = addAttr(dp)
+          val attrKey = addAttr(dp)
+          val dimElem = dp.dim
+          val mapKey  = dimElem.variable.name
+          val source  = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource   (mapKey))
+          val dimKey  = dimElem.name
+          val dimName = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
+          val dsv     = source.variable
+          val net     = source.variable.source.data(aw.workspace)
+          // val netVar  = dsv.data(aw.workspace)
+          // val netDim  = netVar.dimensionMap(dimName)
+          val netVar  = net.variableMap(dimName)
+          val ds      = source.variable.source
+          val dimSource = ???
+
+          // val (g, fut) = aw.graphemeCache(section)
+          val fut = txFuture(AudioFileCache.acquire(aw.workspace, source = source.variable, ???, streamDim = -1))(tx)
+          // graphemes += attrKey -> fut
+          graphemes :+= fut.map(attrKey -> _)
 
         case vav: graph.Var.Axis.Values =>
           val attrKey     = addAttr(vav)
