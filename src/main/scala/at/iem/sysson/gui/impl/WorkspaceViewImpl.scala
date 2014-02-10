@@ -192,12 +192,12 @@ object WorkspaceViewImpl {
       val imp   = ExprImplicits[S]
       import imp._
       val edit = cursor.step { implicit tx =>
-        val idx   = workspace.sonifications.size
-        val sonif = Sonification[S]
+        val idx             = workspace.sonifications.size
+        val sonif           = Sonification[S]
         sonif.patch.graph() = patch.graph
         sonif.attributes.put(Keys.attrName, Attribute.String.apply(Strings.newVar(patch.name)))
-        val childH  = tx.newHandle(sonif)
-        val _edit   = new EditInsertSonif(idx, childH)
+        val childH          = tx.newHandle(sonif)
+        val _edit           = new EditInsertSonif(idx, childH)
         _edit.perform()
         _edit
       }

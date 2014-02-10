@@ -21,6 +21,7 @@ import synth.ugen
 import java.io.File
 import scala.concurrent.{Await, Future}
 import scala.annotation.tailrec
+import scala.collection.breakOut
 
 object Implicits {
   final val all = OpenRange.all
@@ -104,7 +105,9 @@ object Implicits {
     def description: Option[String]     = Option(peer.getDescription)
     def group      : nc2.Group          = peer.getParentGroup
     def dimensions : Vec[nc2.Dimension] = peer.getDimensions.toIndexedSeq
-    def ranges     : Vec[ma2.Range]     = peer.getRanges.toIndexedSeq
+    def ranges     : Vec[Range]         = peer.getRanges.map {
+      ma => Range.inclusive(ma.first(), ma.last(), ma.stride())
+    } (breakOut)
 
     def file       : nc2.NetcdfFile     = peer.getParentGroup.getNetcdfFile
 

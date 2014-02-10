@@ -44,9 +44,9 @@ trait VariableLike extends Any with HasDimensions {
 
   def size: Long
   def rank: Int
-  def ranges: Vec[ma2.Range]
+  def ranges: Vec[Range]
 
-  def read(): ma2.Array = readSafe()
+  def read    (): ma2.Array = readSafe()
   def readSafe(): ma2.Array
 
   // this requires reflection because stupidly there is no public accessor on nc2.Variable
@@ -63,7 +63,7 @@ trait VariableLike extends Any with HasDimensions {
     val dim = dimensions
     effectiveDimIndices.map(dim.apply)
   }
-  def reducedRanges: Vec[ma2.Range] = {
+  def reducedRanges: Vec[Range] = {
     val r = ranges
     effectiveDimIndices.map(r.apply)
   }

@@ -37,10 +37,10 @@ object OSCSupport {
       val data    = peer.readScaled1D()
       val dims    = peer.dimensions
       val ranges  = peer.ranges
-      val infos   = (dims zip ranges).zipWithIndex.flatMap { case ((dim, r), idx) =>
-        Vector(dim.nameOption.getOrElse(idx), dim.size, r.first, r.last, r.stride)
+      val info    = (dims zip ranges).zipWithIndex.flatMap { case ((dim, r), idx) =>
+        Vector(dim.nameOption.getOrElse(idx), dim.size, r.start, r.last, r.step)
       }
-      val args    = peer.name +: dims.size +: (infos ++ (data.size +: data))
+      val args    = peer.name +: dims.size +: (info ++ (data.size +: data))
       val msg     = osc.Message("/sysson_matrix", args: _*)
       trns.send(msg, target)
     }

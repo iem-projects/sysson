@@ -22,7 +22,7 @@ import at.iem.sysson.impl.TxnModelImpl
 import scala.concurrent.stm.{TMap, TxnExecutor, Txn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
 import scala.concurrent.{Await, Promise, Future, ExecutionContext, future, blocking}
-import de.sciss.synth.proc.{Artifact, Grapheme, Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
+import de.sciss.synth.proc.{Scan, Artifact, Grapheme, Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
 import de.sciss.lucre.synth.expr.{Longs, DoubleVec, Doubles, SpanLikes}
 import de.sciss.span.Span
 import de.sciss.lucre
@@ -33,6 +33,7 @@ import de.sciss.lucre.stm.TxnLike
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
 import at.iem.sysson.Implicits._
+import de.sciss.lucre.bitemp.BiExpr
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -74,6 +75,8 @@ object AuralSonificationImpl {
 
   // private sealed trait State
   // private case object Stopped extends State
+
+  private final case class GraphemeGen(key: String, scan: Boolean, data: AudioFileCache.Result)
 
   private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S, I],
                                                                  ap: AuralPresentation[I],
@@ -134,7 +137,7 @@ object AuralSonificationImpl {
       //        proc.attributes.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
 
       // var graphemes = Map.empty[String, Future[AudioFileCache.Result]]
-      var graphemes = Vec.empty[Future[(String, AudioFileCache.Result)]]
+      var graphemes = Vec.empty[Future[GraphemeGen]]
 
       g.sources.foreach {
         case uv: graph.UserValue =>
@@ -150,18 +153,14 @@ object AuralSonificationImpl {
           val source  = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource   (mapKey))
           val dimKey  = dimElem.name
           val dimName = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
-          val dsv     = source.variable
-          val net     = source.variable.source.data(aw.workspace)
-          // val netVar  = dsv.data(aw.workspace)
-          // val netDim  = netVar.dimensionMap(dimName)
-          val netVar  = net.variableMap(dimName)
           val ds      = source.variable.source
-          val dimSource = ???
+          val dimVar  = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
+          val ranges  = dimVar.shape.map(_._2)
 
           // val (g, fut) = aw.graphemeCache(section)
-          val fut = txFuture(AudioFileCache.acquire(aw.workspace, source = source.variable, ???, streamDim = -1))(tx)
+          val fut = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = -1)
           // graphemes += attrKey -> fut
-          graphemes :+= fut.map(attrKey -> _)
+          graphemes :+= fut.map(data => GraphemeGen(key = attrKey, scan = true, data = data))
 
         case vav: graph.Var.Axis.Values =>
           val attrKey     = addAttr(vav)
@@ -189,7 +188,7 @@ object AuralSonificationImpl {
           // val (g, fut) = aw.graphemeCache(section)
           val fut = txFuture(AudioFileCache.acquire(aw.workspace, source = source.variable, ???, streamDim = -1))(tx)
           // graphemes += attrKey -> fut
-          graphemes :+= fut.map(attrKey -> _)
+          ??? // graphemes :+= fut.map(attrKey -> _)
 
         case _ =>
       }
@@ -217,12 +216,20 @@ object AuralSonificationImpl {
           blocking {
             val graphMapF = Future.sequence(graphemes)
             val graphMap  = Await.result(graphMapF, Duration(10, TimeUnit.MINUTES))
-            graphMap.foreach { case (attrKey, gv) =>
+            graphMap.foreach { case gen =>
               // XXX TODO: we should allow Grapheme.Elem.newConst ?
+              val gv    = gen.data
               val loc   = Artifact.Location.Modifiable[I](gv.artifact.parent)
               val artif = loc.add(gv.artifact)
               val elem  = Grapheme.Elem.Audio(artif, gv.spec, Longs.newConst(gv.offset), Doubles.newConst(gv.gain))
-              proc.attributes.put(attrKey, Attribute.AudioGrapheme(elem))
+              if (gen.scan) {
+                val scan  = proc.scans.add(gen.key)
+                val g     = Grapheme.Modifiable[I]
+                g.add(BiExpr(Longs.newConst(0L), elem))
+                scan.addSource(Scan.Link.Grapheme(g))
+              } else {
+                proc.attributes.put(gen.key, Attribute.AudioGrapheme(elem))
+              }
             }
           }
           aw.workspace.cursor.step { implicit tx =>

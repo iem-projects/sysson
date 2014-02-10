@@ -40,24 +40,31 @@ object DataSourceImpl {
 
       val id                = tx.newID()
       val file              = f0
-      protected val varRef  = tx.newVar[List[Variable[S]]](id, netFile.variables.map(variable(ds, _))(breakOut))
+      protected val varRef  = tx.newVar[List[Variable[S]]](id, Nil)
+      varRef() = netFile.variables.map(variable(ds, _))(breakOut)   // tricky decoupling of recursive serialization
     }
   }
 
-  def variable[S <: Sys[S]](source: DataSource[S], net: nc2.Variable)(implicit tx: S#Tx): Variable[S] =
-    ??? // new VariableImpl(source, parents, name)
+  private def variable[S <: Sys[S]](source: DataSource[S], net: nc2.Variable)(implicit tx: S#Tx): Variable[S] = {
+    val id        = tx.newID()
+    // val sourceRef = tx.newVar(id, source)
+    val parents   = net.parents
+    val name      = net.name
+    val shape     = net.dimensions.map(_.name) zip net.ranges
+    new VariableImpl(id, source /* sourceRef */, parents, name, shape)
+  }
 
   def readVariable[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Variable[S] = {
     val id        = tx.readID(in, access)
     val cookie    = in.readInt()
     require(cookie == VAR_COOKIE,
       s"Unexpected cookie (found ${cookie.toHexString}, expected ${VAR_COOKIE.toHexString})")
-    // val source  = DataSource.read(in, access)
-    val sourceRef = tx.readVar[DataSource[S]](id, in)
+    val source    = DataSource.read(in, access)
+    // val sourceRef = tx.readVar[DataSource[S]](id, in)
     val parents   = parentsSer.read(in)
     val name      = in.readUTF()
     val shape     = shapeSer.read(in)
-    new VariableImpl(sourceRef, parents, name, shape)
+    new VariableImpl(id, source /* sourceRef */, parents, name, shape)
   }
 
   private def resolveFile[S <: Sys[S]](workspace: Workspace[S], file: File)(implicit tx: S#Tx): nc2.NetcdfFile =
@@ -76,14 +83,13 @@ object DataSourceImpl {
   implicit def varSerializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Variable[S]] =
     anyVarSer.asInstanceOf[VarSer[S]]
 
-  def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): DataSource[S] = {
+  def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): DataSource[S] = new Impl[S] {
     val id      = tx.readID(in, access)
     val cookie  = in.readLong()
     require(cookie == SOURCE_COOKIE,
       s"Unexpected cookie (found ${cookie.toHexString}, expected ${SOURCE_COOKIE.toHexString})")
-    val path    = in.readUTF()
+    val file    = new File(in.readUTF())
     val varRef  = tx.readVar[List[Variable[S]]](id, in)
-  ???
   }
 
   private val anySer    = new Ser   [evt.InMemory]
@@ -106,18 +112,24 @@ object DataSourceImpl {
   import Serializers.RangeSerializer
   private val shapeSer    = ImmutableSerializer.indexedSeq[(String, Range)]
 
-  private final class VariableImpl[S <: Sys[S]](sourceRef: S#Var[DataSource[S]], val parents: List[String],
+  private final class VariableImpl[S <: Sys[S]](val id: S#ID, val source: DataSource[S] /* sourceRef: S#Var[DataSource[S]] */,
+                                                val parents: List[String],
                                                 val name: String, val shape: Vec[(String, Range)])
-    extends Variable[S] {
+    extends Variable[S] with Mutable.Impl[S] {
 
-    def source(implicit tx: S#Tx): DataSource[S] = sourceRef()
+    // def source(implicit tx: S#Tx): DataSource[S] = _source // sourceRef()
 
-    def write(out: DataOutput): Unit = {
+    protected def writeData(out: DataOutput): Unit = {
       out       .writeInt(VAR_COOKIE)
-      sourceRef .write(out)
+      // sourceRef .write(out)
+      source    .write(out)
       parentsSer.write(parents, out)
-      shapeSer  .write(shape  , out)
       out       .writeUTF(name)
+      shapeSer  .write(shape  , out)
+    }
+
+    protected def disposeData()(implicit tx: S#Tx): Unit = {
+      // sourceRef.dispose()
     }
 
     def rank: Int = shape.size

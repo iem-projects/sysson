@@ -39,7 +39,7 @@ object DataSource {
     def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Variable[S] = Impl.readVariable(in, access)
   }
   trait Variable[S <: Sys[S]] extends Writable {
-    def source(implicit tx: S#Tx): DataSource[S]
+    def source /* (implicit tx: S#Tx) */: DataSource[S]
     def parents: List[String]
     def name: String
 

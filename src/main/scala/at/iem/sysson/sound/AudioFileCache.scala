@@ -23,6 +23,8 @@ import de.sciss.synth.proc.Grapheme
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import de.sciss.lucre.event.Sys
 import scala.concurrent.stm.TMap
+import at.iem.sysson.impl.Serializers
+
 // import at.iem.sysson.Implicits._
 import scala.concurrent.stm.atomic
 
@@ -38,6 +40,10 @@ object AudioFileCache {
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
+  import Serializers.RangeSerializer
+  private val parentsSer  = ImmutableSerializer.list[String]
+  private val sectionSer  = ImmutableSerializer.indexedSeq[Range]
+
   private object CacheKey {
     implicit object Serializer extends ImmutableSerializer[CacheKey] {
       def read(in: DataInput): CacheKey = {
@@ -45,9 +51,9 @@ object AudioFileCache {
         require(cookie == KEY_COOKIE,
           s"Unexpected cookie (expected ${KEY_COOKIE.toHexString}, found ${cookie.toHexString})")
         val path      = in readUTF()
-        val parents   = ImmutableSerializer.list[String].read(in)
+        val parents   = parentsSer.read(in)
         val variable  = in readUTF()
-        val section   = ImmutableSerializer.indexedSeq[OpenRange].read(in)
+        val section   = sectionSer.read(in)
         val streamDim = in readInt()
         CacheKey(file = file(path), parents = parents, variable = variable, section = section, streamDim = streamDim)
       }
@@ -56,9 +62,9 @@ object AudioFileCache {
         import v._
         out writeInt  KEY_COOKIE
         out writeUTF  file.path
-        ImmutableSerializer.list[String]          .write(parents, out)
+        parentsSer.write(parents, out)
         out writeUTF  variable
-        ImmutableSerializer.indexedSeq[OpenRange] .write(section, out)
+        sectionSer.write(section, out)
         out writeInt  streamDim
       }
     }
@@ -71,7 +77,7 @@ object AudioFileCache {
    * @param section   the sectioning of the variable
    * @param streamDim  the dimension index to stream or `-1`
    */
-  private case class CacheKey(file: File, parents: List[String], variable: String, section: Vec[OpenRange],
+  private case class CacheKey(file: File, parents: List[String], variable: String, section: Vec[Range],
                               streamDim: Int) {
     // lazy val spec: AudioFileSpec = keyToSpec(this)
   }
@@ -115,9 +121,9 @@ object AudioFileCache {
       s"$productPrefix(size = $netSize, lastModified = ${new java.util.Date(netModified)}, data = ${data.getName})"
   }
 
-  private def sectionToKey(source: DataSource.Variable[_], section: Vec[OpenRange], streamDim: Int): CacheKey = {
+  private def sectionToKey(source: DataSource.Variable[_], section: Vec[Range], streamDim: Int): CacheKey = {
     // val v = section.variable
-    val f: File = ??? // = file(source.source.path) // v.file.path
+    val f = file(source.source.path) // v.file.path
 
     //    val sectClosed: Vec[Range] = section.ranges.map { r =>
     //      Range.inclusive(r.first(), r.last(), r.stride())
@@ -158,9 +164,9 @@ object AudioFileCache {
   // def acquire(section: VariableSection, streamDim: Int): Future[Result]
 
   private def produceValue[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S],
-                                        section: Vec[OpenRange], streamDim: Int): CacheValue = {
+                                        section: Vec[Range], streamDim: Int): CacheValue = {
     val v             = workspace.cursor.step { implicit tx => source.data(workspace) }
-    val vs            = VariableSection(v, section)
+    val vs            = VariableSection(v, section.map(OpenRange.closed))
     val arr           = vs.readSafe()
 
     // cf. Arrays.txt for (de-)interleaving scheme
@@ -196,7 +202,7 @@ object AudioFileCache {
     CacheValue(netSize = file.length(), netModified = file.lastModified(), data = afF, spec = spec)
   }
 
-  def acquire[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S], section: Vec[OpenRange],
+  def acquire[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S], section: Vec[Range],
                            streamDim: Int)
                           (implicit tx: S#Tx): Future[Result] = {
     val key = sectionToKey(source, section, streamDim)

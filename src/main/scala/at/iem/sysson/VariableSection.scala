@@ -17,12 +17,13 @@ package at.iem.sysson
 import ucar.{nc2, ma2}
 
 import Implicits._
-import collection.JavaConversions
+import scala.collection.{JavaConversions, breakOut}
 import at.iem.sysson.gui.Plot
 import scala.concurrent.Future
-import at.iem.sysson.legacy.{MatrixSource, RowSource, ColumnSource}
-import de.sciss.lucre.stm.TxnLike
 import scala.concurrent.stm.InTxn
+import at.iem.sysson.legacy.ColumnSource
+import at.iem.sysson.legacy.RowSource
+import at.iem.sysson.legacy.MatrixSource
 
 object VariableSection {
   /** A transitory class specifying a variable section along with a dimension
@@ -76,9 +77,11 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
     new ma2.Section(origin, shape, stride)
   }
 
-  def ranges: Vec[ma2.Range] = {
+  def ranges: Vec[Range] = {
     import JavaConversions._
-    toSection.getRanges.toIndexedSeq
+    toSection.getRanges.map { ma =>
+      Range.inclusive(ma.first(), ma.last(), ma.stride())
+    } (breakOut)
   }
 
   /** Reports the total number of elements within the selected sub matrix */

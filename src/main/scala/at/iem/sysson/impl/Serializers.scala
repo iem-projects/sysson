@@ -18,7 +18,7 @@ object Serializers {
     def write(r: Range, out: DataOutput): Unit = {
       import r._
       out writeInt     start
-      out write        end
+      out writeInt     end
       out writeBoolean isInclusive
       out writeInt     step
     }
