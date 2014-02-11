@@ -21,7 +21,7 @@ resolvers    += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/cont
 
 libraryDependencies ++= Seq(
   "edu.ucar" %  "netcdf"                  % "4.3.20",
-  "de.sciss" %% "soundprocesses"          % "2.1.1+",
+  "de.sciss" %% "soundprocesses"          % "2.2.+",
   "de.sciss" %% "scalacolliderswing"      % "1.13.+",         // sound widgets, interpreter
   "de.sciss" %% "desktop-mac"             % "0.4.+",          // application framework
   "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette

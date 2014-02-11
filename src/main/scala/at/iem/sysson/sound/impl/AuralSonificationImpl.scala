@@ -164,7 +164,7 @@ object AuralSonificationImpl {
           // val (g, fut) = aw.graphemeCache(section)
           val fut = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = 0 /* ! */)
           // graphemes += attrKey -> fut
-          graphemes :+= fut.map(data => GraphemeGen(key = attrKey, scan = true, data = data))
+          graphemes :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
 
         case vav: graph.Var.Axis.Values =>
           val attrKey     = addAttr(vav)
@@ -238,13 +238,13 @@ object AuralSonificationImpl {
       graphMap.foreach { gen =>
         logDebug(s"step $gen")
         // XXX TODO: we should allow Grapheme.Elem.newConst ?
-        val gv = gen.data
-        val loc = Artifact.Location.Modifiable[I](gv.artifact.parent)
+        val gv    = gen.data
+        val loc   = Artifact.Location.Modifiable[I](gv.artifact.parent)
         val artif = loc.add(gv.artifact)
-        val elem = Grapheme.Elem.Audio(artif, gv.spec, Longs.newConst(gv.offset), Doubles.newConst(gv.gain))
+        val elem  = Grapheme.Elem.Audio(artif, gv.spec, Longs.newConst(gv.offset), Doubles.newConst(gv.gain))
         if (gen.scan) {
-          val scan = proc.scans.add(gen.key)
-          val g = Grapheme.Modifiable[I]
+          val scan  = proc.scans.add(gen.key)
+          val g     = Grapheme.Modifiable[I]
           g.add(BiExpr(Longs.newConst(0L), elem))
           scan.addSource(Scan.Link.Grapheme(g))
         } else {

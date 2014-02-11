@@ -50,15 +50,13 @@ object Dim {
     // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = ??? // b.addAudioSelection(dim, freq)
 
     protected def makeUGens: UGenInLike = {
-      //      UGenGraph.builder match {
-      //        case b: UGenGraphBuilder[_] => makeUGens(b)
-      //        case _ => sys.error(s"Expansion out of context: $this")
-      //      }
-
-      // XXX TODO: eventually: graph.eme(dim.graphKey).ar(freq)
-      // in order to allow multiple plays for the same dimension at different speeds
       val key = AuralSonification.current().attributeKey(this)
-      proc.graph.scan.InFix(key /* scanKey */, numChannels = 1)
+      import synth.ugen._
+      val buf   = proc.graph.stream(key)
+      // val bufSr = proc.graph.BufSampleRate.ir(buf)
+      val bufSr = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
+      val speed = freq / bufSr
+      proc.graph.VDiskIn.ar(buf, speed = speed)
     }
 
 

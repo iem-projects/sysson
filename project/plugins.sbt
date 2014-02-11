@@ -4,4 +4,4 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.10.2")    // builds standalone
 
 addSbtPlugin("de.sciss" % "sbt-appbundle" % "1.0.1")        // builds standalone application for OS X
 
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.5.2") // for setting up an IntelliJ IDEA project (development)
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0") // for setting up an IntelliJ IDEA project (development)
