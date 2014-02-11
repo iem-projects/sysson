@@ -52,11 +52,11 @@ object Dim {
     protected def makeUGens: UGenInLike = {
       val key = AuralSonification.current().attributeKey(this)
       import synth.ugen._
-      val buf   = proc.graph.stream(key)
+      // val buf   = proc.graph.stream(key)
       // val bufSr = proc.graph.BufSampleRate.ir(buf)
       val bufSr = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
       val speed = freq / bufSr
-      proc.graph.VDiskIn.ar(buf, speed = speed)
+      proc.graph.VDiskIn.ar(key, speed = speed, interp = 1)
     }
 
 

@@ -25,7 +25,6 @@ object UserValue {
   //    }
   //  }
 
-  // XXX TODO: shouldn't leak impl.LazyImpl
   case class GE(rate: Rate, peer: UserValue) extends synth.GE.Lazy {
     override def productPrefix = "UserValue$GE"
 
