@@ -138,7 +138,7 @@ object SonificationImpl {
         val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
 
         val seq0 = patchOpt.fold(Vec.empty[Change]) { u =>
-          u.changes.map(Sonification.PatchChange(_))
+          u.changes.map(Sonification.PatchChange.apply)
         }
         val seq1 = attrOpt.fold(seq0) { u =>
           if (seq0.isEmpty) u.changes else seq0 ++ u.changes

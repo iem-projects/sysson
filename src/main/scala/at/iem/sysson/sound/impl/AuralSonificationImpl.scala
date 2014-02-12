@@ -126,7 +126,7 @@ object AuralSonificationImpl {
       var aCnt  = 0
 
       def addAttr(elem: Any): String = {
-        val key = s"sonif_$aCnt"
+        val key = s"son$aCnt"
         aCnt   += 1
         // logInfo(s"addAttr elem '${elem.getClass}@$elem' key '$key'")
         attrMap.put(elem, key)(tx.peer)
@@ -142,6 +142,22 @@ object AuralSonificationImpl {
       // var graphemes = Map.empty[String, Future[AudioFileCache.Result]]
       var graphemes = Vec.empty[Future[GraphemeGen]]
 
+      def addDimGE(de: graph.Dim.GE, streaming: Boolean): Unit = {
+        val attrKey   = addAttr(de)
+        val dimElem   = de.dim
+        val mapKey    = dimElem.variable.name
+        val source    = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource   (mapKey))
+        val dimKey    = dimElem.name
+        val dimName   = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
+        val ds        = source.variable.source
+        val dimVar    = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
+        assert(dimVar.rank == 1)
+        val ranges    = dimVar.shape.map(_._2)
+        val streamDim = if (streaming) 0 else -1
+        val fut       = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = streamDim)
+        graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
+      }
+
       g.sources.foreach {
         case uv: graph.UserValue =>
           val attrKey = addAttr(uv)
@@ -149,22 +165,8 @@ object AuralSonificationImpl {
             putAttrValue(attrKey, expr.value)
           }
 
-        case dp: graph.Dim.Play =>
-          val attrKey = addAttr(dp)
-          val dimElem = dp.dim
-          val mapKey  = dimElem.variable.name
-          val source  = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource   (mapKey))
-          val dimKey  = dimElem.name
-          val dimName = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
-          val ds      = source.variable.source
-          val dimVar  = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
-          assert(dimVar.rank == 1)
-          val ranges  = dimVar.shape.map(_._2)
-
-          // val (g, fut) = aw.graphemeCache(section)
-          val fut = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = 0 /* ! */)
-          // graphemes += attrKey -> fut
-          graphemes :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
+        case dp: graph.Dim.Play   => addDimGE(dp, streaming = true )
+        case dv: graph.Dim.Values => addDimGE(dv, streaming = false)
 
         case vav: graph.Var.Axis.Values =>
           val attrKey     = addAttr(vav)
@@ -180,19 +182,6 @@ object AuralSonificationImpl {
           // val g           = Grapheme.Elem.Audio.newConst[I](gv)
           val g           = Grapheme.Elem.Audio(artifact, spec, Longs.newConst(offset), Doubles.newConst(gain))
           proc.attributes.put(attrKey, Attribute.AudioGrapheme(g))
-
-        case dv: graph.Dim.Values =>
-          val attrKey = addAttr(dv)
-          val dimElem = dv.dim
-          val mapKey  = dimElem.variable.name
-          val source  = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
-          // source.variable
-
-          val section: VariableSection = ???
-          // val (g, fut) = aw.graphemeCache(section)
-          val fut = txFuture(AudioFileCache.acquire(aw.workspace, source = source.variable, ???, streamDim = -1))(tx)
-          // graphemes += attrKey -> fut
-          ??? // graphemes :+= fut.map(attrKey -> _)
 
         case _ =>
       }

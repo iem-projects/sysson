@@ -40,37 +40,38 @@ object Dim {
   //    }
   //  }
 
-  case class Play(dim: Dim, freq: synth.GE)
-    extends GE.Lazy /* impl.LazyImpl */ with AudioRated {
+  sealed trait GE extends synth.GE.Lazy {
+    def dim: Dim
+  }
+
+  case class Play(dim: Dim, freq: synth.GE, maxFreq: Double)
+    extends GE with AudioRated {
 
     override def productPrefix = "Dim$Play"
 
     override def toString = s"$dim.play($freq)"
 
-    // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = ??? // b.addAudioSelection(dim, freq)
-
     protected def makeUGens: UGenInLike = {
-      val key = AuralSonification.current().attributeKey(this)
+      val aural = AuralSonification.current()
+      val key   = aural.attributeKey(this)
       import synth.ugen._
       // val buf   = proc.graph.stream(key)
       // val bufSr = proc.graph.BufSampleRate.ir(buf)
-      val bufSr = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
-      val speed = freq / bufSr
-      proc.graph.VDiskIn.ar(key, speed = speed, interp = 1)
+      val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
+      val speed     = freq / bufSr
+      // val maxSpeed
+      proc.graph.VDiskIn.ar(key, speed = speed, interp = 1 /*, maxSpeed = maxSpeed */)  // XXX TODO: need server.sampleRate for maxSpeed
     }
-
-
-    // private[sysson] def scanKey = s"dim_${dim.variable.name}_${dim.name}"
   }
 
-  case class Values(dim: Dim) extends GE.Lazy with ScalarRated {
+  case class Values(dim: Dim) extends GE with ScalarRated {
 
-    override def productPrefix = "Dim$Values"
-
-    override def toString = s"$dim.values"
+    override def productPrefix  = "Dim$Values"
+    override def toString       = s"$dim.values"
 
     protected def makeUGens: UGenInLike = {
-      val key = AuralSonification.current().attributeKey(this)
+      val aural = AuralSonification.current()
+      val key   = aural.attributeKey(this)
       proc.graph.attribute(key).ir
     }
   }
@@ -87,7 +88,7 @@ case class Dim(variable: Var, name: String)
     *
     * @param  freq  a graph element specifying the frequency in samples per second with which to unroll.
     */
-  def play(freq: GE): Dim.Play = Dim.Play(this, freq)
+  def play(freq: GE, maxFreq: Double = 0.0): Dim.Play = Dim.Play(this, freq = freq, maxFreq = maxFreq)
 
   def values : Dim.Values = Dim.Values(this)
   def indices: GE = ??? // Impl.indices(this)
