@@ -24,6 +24,8 @@ import de.sciss.file._
 import de.sciss.lucre.stm
 import gui.{SwingApplication => App}
 import language.existentials
+import at.iem.sysson.sound.AudioSystem
+import de.sciss.{osc, synth}
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -94,13 +96,12 @@ object MenuFactory {
       .add(Item("redo", proxy("Redo" -> (menu1 + shift + VK_Z))))
 
     val gTools = Group("tools", "Tools")
-    if (itPrefs.visible && !Desktop.isLinux) gTools.add(itPrefs)
-        // .add(
-        //   Item("sonif-declaration")("Sonification Declaration TEST..." -> (menu1 + VK_D)) { sonif.DeclarationEditor() }
-        // )
-      //      .add(
-      //        Item("designer")("Sound Designer..." -> (menu1 + VK_D)) { openSoundDesigner() }
-      //      )
+    val gDebug = Group("debug", "Debug")
+    gDebug
+      .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + VK_D))(dumpOSC()))
+
+    gTools.add(gDebug)
+    if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
 
     val gView = Group("view", "View")
       .add(
@@ -151,4 +152,31 @@ object MenuFactory {
       val lib = libraryH()
       LibraryWindow(lib)
     }
+
+  private var resp = Option.empty[synth.message.Responder]
+
+  private var dumpMode: osc.Dump = osc.Dump.Off
+
+  def dumpOSC(): Unit = AudioSystem.instance.server.foreach { s =>
+    dumpMode = if (dumpMode == osc.Dump.Off) osc.Dump.Text else osc.Dump.Off
+    s.peer.dumpOSC(dumpMode)
+  }
+
+  private def dumpOSC_OLD(): Unit = {
+    resp.fold {
+      resp = AudioSystem.instance.server.map { s =>
+        logInfo("Dump OSC on")
+        synth.message.Responder.add(s.peer) {
+          case m => if (m.name != "/$meter" && m.name != "/status.reply")
+            System.out.synchronized {
+              osc.Packet.printTextOn(m, osc.PacketCodec.default, System.out)
+            }
+        }
+      }
+    } { r =>
+      logInfo("Dump OSC off")
+      r.remove()
+      resp = None
+    }
+  }
 }
