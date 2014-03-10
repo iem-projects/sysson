@@ -34,7 +34,7 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-simple"            % "1.7.5"           // logging (used by netcdf)
 )
 
-retrieveManaged := true
+// retrieveManaged := true
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions")
 
