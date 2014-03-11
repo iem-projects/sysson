@@ -15,16 +15,25 @@
 package at.iem.sysson
 package gui
 
-import de.sciss.desktop.impl.SwingApplicationImpl
-import de.sciss.desktop.Menu
+import de.sciss.desktop.impl.{WindowHandlerImpl, SwingApplicationImpl}
+import de.sciss.desktop.{WindowHandler, Desktop, Menu}
 import de.sciss.lucre.event.Sys
 import language.existentials
+import javax.swing.UIManager
 
 object  SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = DocumentHandler.Document  // sysson.DataSourceLike
 
+  override lazy val windowHandler: WindowHandler = new WindowHandlerImpl(this, menuFactory) {
+    override lazy val usesInternalFrames = {
+      false // XXX TODO: eventually a preferences entry
+    }
+  }
+
   override def init(): Unit = {
-    // javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel")
+    if (Desktop.isLinux) UIManager.getInstalledLookAndFeels.find(_.getName contains "GTK+").foreach { info =>
+      UIManager.setLookAndFeel(info.getClassName)
+    }
 
     val dh = DocumentHandler.instance // initialize
     DocumentViewHandler.instance      // initialize
