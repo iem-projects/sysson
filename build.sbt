@@ -20,23 +20,24 @@ scalaVersion  := "2.10.3"
 resolvers    += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
 
 libraryDependencies ++= Seq(
-  "edu.ucar" %  "netcdf"                  % "4.3.20",
-  "de.sciss" %% "soundprocesses"          % "2.2.+",
+  "edu.ucar" %  "netcdf"                  % "4.3.20",         // NetCDF library for matrix data file support
+  "de.sciss" %% "soundprocesses"          % "2.2.+",          // Computer music framework
+  "de.sciss" %% "lucrematrix"             % "0.1.+",          // Reactive matrix component and view
   "de.sciss" %% "scalacolliderswing"      % "1.13.+",         // sound widgets, interpreter
-  "de.sciss" %% "desktop-mac"             % "0.4.+",          // application framework
+  "de.sciss" %% "desktop-mac"             % "0.4.2+",         // application framework
   "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
   "de.sciss" %% "filecache-txn"           % "0.3.+",          // caching statistics of data files
   "de.sciss" %% "treetable-scala"         % "1.3.4+",         // GUI component
   "de.sciss" %% "lucrestm-bdb"            % "2.0.1+",         // database used for library
-  "org.jfree" % "jfreechart"              % "1.0.15",         // plotting
+  "org.jfree" % "jfreechart"              % "1.0.17",         // plotting
   "de.sciss" %% "raphael-icons"           % "1.0.+",          // tool icons
   "de.sciss" %% "guiflitz"                % "0.3.+",
-  "org.slf4j" % "slf4j-simple"            % "1.7.5"           // logging (used by netcdf)
+  "org.slf4j" % "slf4j-simple"            % "1.7.6"           // logging (used by netcdf)
 )
 
-// retrieveManaged := true
+retrieveManaged := true
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
 // ---- runtime settings ----
 
@@ -99,9 +100,20 @@ pomExtra := { val n = name.value
 
 seq(assemblySettings: _*)
 
-test   in assembly  := ()
+test      in assembly := ()
 
-target in assembly  := baseDirectory.value    // make .jar file in the main directory
+target    in assembly := baseDirectory.value    // make .jar file in the main directory
+
+jarName   in assembly := s"${name.value}.jar"
+
+mainClass in assembly := Some("at.iem.sysson.gui.SwingApplication")
+
+//mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
+//  {
+//    case "META-INF/MANIFEST.MF" => MergeStrategy.last
+//    case x => old(x)
+//  }
+//}
 
 // mac os x
 

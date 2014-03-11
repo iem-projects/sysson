@@ -18,7 +18,7 @@ package impl
 import de.sciss.lucre.{event => evt, data, expr}
 import de.sciss.lucre.event.{Pull, EventLike, InMemory, Sys}
 import de.sciss.lucre.expr.Expr
-import de.sciss.lucre.synth.expr.Strings
+import de.sciss.lucre.expr.{String => StringEx}
 import de.sciss.serial
 import de.sciss.serial.{DataOutput, DataInput}
 import scala.annotation.switch
@@ -29,7 +29,7 @@ object LibraryImpl {
 
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = {
     val targets = evt.Targets[S]
-    val root    = newBranch[S](Strings.newConst("root"))
+    val root    = newBranch[S](StringEx.newConst("root"))
     new Impl(targets, root)
   }
 
@@ -40,15 +40,15 @@ object LibraryImpl {
 
   def newBranch[S <: Sys[S]](name0: Expr[S, String])(implicit tx: S#Tx): Branch[S] = {
     val targets = evt.Targets[S]
-    val name    = Strings.newVar(name0)
+    val name    = StringEx.newVar(name0)
     val ll      = expr.List.Modifiable[S, NodeLike[S], NU[S]]
     new BranchImpl(targets, name, ll)
   }
 
   def newLeaf[S <: Sys[S]](name0: Expr[S, String], source0: Expr[S, String])(implicit tx: S#Tx): Leaf[S] = {
     val targets = evt.Targets[S]
-    val name    = Strings.newVar(name0  )
-    val source  = Strings.newVar(source0)
+    val name    = StringEx.newVar(name0  )
+    val source  = StringEx.newVar(source0)
     new LeafImpl(targets, name = name, source = source)
   }
 
@@ -141,8 +141,8 @@ object LibraryImpl {
 
     def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
                                    (implicit tx: S#Tx): LeafImpl[S] = {
-      val name    = Strings.readVar(in, access)
-      val source  = Strings.readVar(in, access)
+      val name    = StringEx.readVar(in, access)
+      val source  = StringEx.readVar(in, access)
       new LeafImpl(targets, name = name, source = source)
     }
   }
@@ -214,7 +214,7 @@ object LibraryImpl {
 
     def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
                                    (implicit tx: S#Tx): BranchImpl[S] = {
-      val name    = Strings.readVar(in, access)
+      val name    = StringEx.readVar(in, access)
       val ll      = expr.List.Modifiable.read[S, NodeLike[S], NU[S]](in, access)
       new BranchImpl(targets, name, ll)
     }

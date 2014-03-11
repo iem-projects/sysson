@@ -21,7 +21,6 @@ import de.sciss.lucre.stm.Disposable
 import scala.swing.{Orientation, BoxPanel, ComboBox, Label, Swing, TextField, Component}
 import at.iem.sysson.gui.DragAndDrop.DataSourceVarDrag
 import sound.Sonification
-import at.iem.sysson.gui.edit.{EditExprMap, EditMutableMap}
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.{stm, expr}
 import at.iem.sysson.Implicits._
@@ -34,7 +33,9 @@ import de.sciss.lucre.expr.Expr
 import scala.concurrent.stm.{Ref => STMRef}
 import de.sciss.model
 import de.sciss.model.Change
-import de.sciss.lucre.synth.expr.Strings
+import de.sciss.lucre.expr.{String => StringEx}
+import de.sciss.lucre.swing.edit.{EditMutableMap, EditExprMap}
+import de.sciss.lucre.swing.impl.ComponentHolder
 
 object SonificationSourceView {
   def apply[S <: Sys[S]](workspace: Workspace[S], map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
@@ -90,8 +91,8 @@ object SonificationSourceView {
       val editOpt = cursor.step { implicit tx =>
         dimMap.get(tx.peer).map { mapH =>
           val map = mapH()
-          import Strings.newConst
-          implicit val s = Strings
+          import StringEx.newConst
+          implicit val s = StringEx
           val exprOpt = if (value != "") Some(newConst[S](value)) else None
           EditExprMap("Map Dimension", map, key = dimKey, value = exprOpt)
         }
@@ -135,7 +136,7 @@ object SonificationSourceView {
           case expr.Map.Element(k, expr, Change(_, value))  => updateDimMapToGUI(k, value)
           case _ =>
         }}
-        import Strings.serializer
+        import StringEx.serializer
         dimMap.set(sDims.modifiableOption.map(tx.newHandle(_)))(tx.peer)
         dimMapObserver.set(Some(mapObs))(tx.peer)
 

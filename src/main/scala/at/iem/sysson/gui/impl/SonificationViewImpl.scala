@@ -30,6 +30,8 @@ import scalaswingcontrib.group.GroupPanel
 import javax.swing.GroupLayout
 import language.reflectiveCalls
 import de.sciss.lucre.stm.Disposable
+import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView}
+import de.sciss.lucre.swing.impl.ComponentHolder
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
@@ -40,7 +42,7 @@ object SonificationViewImpl {
     val sonifH    = tx.newHandle(sonification)
     val nameView  = sonification.attributes[Attribute.String](Keys.attrName).map { expr =>
       import workspace.cursor
-      StringExprEditor(expr, "Name")
+      StringFieldView(expr, "Name")
     }
 
     val sonifView = AuralWorkspaceHandler.instance.view[S, workspace.I](workspace).view(sonification)
@@ -64,7 +66,7 @@ object SonificationViewImpl {
 
   private abstract class Impl[S <: Sys[S]](val workspace: Workspace[S], sonifH: stm.Source[S#Tx, Sonification[S]],
                                         sonifView: AuralSonification[S],
-                                        nameView: Option[StringExprEditor[S]])(implicit val undoManager: UndoManager)
+                                        nameView: Option[StringFieldView[S]])(implicit val undoManager: UndoManager)
     extends SonificationView[S] with ComponentHolder[Component] {
 
     protected def auralObserver: Disposable[S#Tx]
@@ -114,7 +116,7 @@ object SonificationViewImpl {
       val controls    = sonif.controls
       val userValues  = g.sources.collect {
         case graph.UserValue(key, default) =>
-          val view = DoubleExprEditor(controls, key, default, key.capitalize)
+          val view = DoubleSpinnerView.fromMap(controls, key, default, key.capitalize)
           (key, view)
       }
 

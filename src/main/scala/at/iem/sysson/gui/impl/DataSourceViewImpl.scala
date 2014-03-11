@@ -34,6 +34,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
 import java.awt.datatransfer.Transferable
 import at.iem.sysson.gui.DragAndDrop.DataSourceVarDrag
+import de.sciss.lucre.swing.impl.ComponentHolder
 
 object DataSourceViewImpl {
   import Implicits._

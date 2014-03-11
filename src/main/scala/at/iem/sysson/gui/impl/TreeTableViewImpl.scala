@@ -17,6 +17,7 @@ import collection.breakOut
 import scala.concurrent.stm.TxnLocal
 import scala.annotation.tailrec
 import de.sciss.treetable.j.DefaultTreeTableCellEditor
+import de.sciss.lucre.swing.impl.ComponentHolder
 
 object TreeTableViewImpl {
   //  import scala.swing.Graphics2D

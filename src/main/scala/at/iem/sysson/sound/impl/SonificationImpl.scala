@@ -23,9 +23,8 @@ import de.sciss.synth.proc.Attribute
 import scala.annotation.switch
 import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.data.SkipList
-import de.sciss.lucre.expr.Expr
+import de.sciss.lucre.expr.{Expr, Double => DoubleEx, String => StringEx}
 import de.sciss.model
-import de.sciss.lucre.synth.expr.{Doubles, Strings}
 
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"
@@ -33,7 +32,7 @@ object SonificationImpl {
   def sourceSerializer[S <: Sys[S]]: evt.NodeSerializer[S, Source[S]] = anySourceSer.asInstanceOf[SourceSer[S]]
 
   def applySource[S <: Sys[S]](variable: DataSource.Variable[S])(implicit tx: S#Tx): Source[S] = {
-    implicit val str = Strings.serializer[S]
+    implicit val str = StringEx.serializer[S]
     val targets = evt.Targets[S]
     val dims    = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
     new SourceImpl(targets, variable, dims)
@@ -43,7 +42,7 @@ object SonificationImpl {
 
   private final class SourceSer[S <: Sys[S]] extends evt.NodeSerializer[S, Source[S]] {
     def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Source[S] = {
-      implicit val str = Strings.serializer[S]
+      implicit val str = StringEx.serializer[S]
       val cookie = in.readInt()
       require(cookie == SER_VERSION,
         s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
@@ -181,7 +180,7 @@ object SonificationImpl {
     val patch                   = Patch[S]
     val sources                 = expr.Map.Modifiable[S, String, Source[S], Source.Update[S]]
     val controls                = {
-      implicit val ser = Doubles.serializer[S]
+      implicit val ser = DoubleEx.serializer[S]
       expr.Map.Modifiable[S, String, Expr[S, Double], model.Change[Double]]
     }
     protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry]
@@ -199,7 +198,7 @@ object SonificationImpl {
     val patch                   = Patch.read(in, access)
     val sources                 = expr.Map.read[S, String, Source[S], Source.Update[S]](in, access)
     val controls                = {
-      implicit val ser = Doubles.serializer[S]
+      implicit val ser = DoubleEx.serializer[S]
       expr.Map.read[S, String, Expr[S, Double], model.Change[Double]](in, access)
     }
     protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry](in, access)

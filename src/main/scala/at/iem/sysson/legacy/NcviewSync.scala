@@ -17,6 +17,7 @@ package at.iem.sysson.legacy
 import de.sciss.osc
 import de.sciss.model.Model
 import impl.{NcviewSyncImpl => Impl}
+import language.implicitConversions
 
 object NcviewSync {
   /** Creates a new Ncview sonification server.

@@ -15,6 +15,7 @@
 package at.iem.sysson
 
 import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
+import language.implicitConversions
 
 object OpenRange {
   private final val COOKIE = 0x4F52

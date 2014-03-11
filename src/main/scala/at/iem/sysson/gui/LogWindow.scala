@@ -15,17 +15,20 @@
 package at.iem.sysson
 package gui
 
-import de.sciss.scalainterpreter.LogPane
-import impl.{LogWindowImpl => Impl}
 import de.sciss.desktop
+import de.sciss.desktop.impl.LogWindowImpl
+import de.sciss.desktop.{LogPane, WindowHandler}
 
 object LogWindow {
   val horizontalPlacement   = 1.0f
   val verticalPlacement     = 1.0f
   val placementPadding      = 20
 
-  lazy val instance: LogWindow  = new Impl
+  lazy val instance: LogWindow = new LogWindowImpl with LogWindow {
+    def handler: WindowHandler = SwingApplication.windowHandler
+    GUI.placeWindow(this, horizontalPlacement, verticalPlacement, placementPadding)
+  }
 }
-abstract class LogWindow extends desktop.Window {
+trait LogWindow extends desktop.Window {
   def log: LogPane
 }

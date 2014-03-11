@@ -12,14 +12,15 @@ import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
 import java.awt.Graphics
 import de.sciss.lucre.stm
-import de.sciss.lucre.synth.expr.{Strings, ExprImplicits}
-import de.sciss.lucre.expr.Expr
+import de.sciss.lucre.synth.expr.ExprImplicits
+import de.sciss.lucre.expr.{Expr, String => StringEx}
 import de.sciss.icons.raphael
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
 import javax.swing.undo.{CannotUndoException, CannotRedoException, AbstractUndoableEdit}
-import at.iem.sysson.gui.edit.EditExprVar
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
+import de.sciss.lucre.swing.edit.EditVar
+import de.sciss.lucre.swing.impl.ComponentHolder
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
@@ -284,9 +285,9 @@ object LibraryViewImpl {
             case Expr.Var(v) =>
               val expr = ExprImplicits[S]
               import expr._
-              import Strings.{serializer, varSerializer}
+              import StringEx.{serializer, varSerializer}
               val s: Expr[S, String] = value.toString
-              val edit = EditExprVar("Rename Node", v, value = s)
+              val edit = EditVar.Expr("Rename Node", v, value = s)
               Some(edit)
 
             case _ => None

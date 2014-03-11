@@ -20,6 +20,7 @@ import scala.swing.Action
 import de.sciss.lucre.event.Sys
 import de.sciss.file._
 import de.sciss.synth.Optional
+import de.sciss.lucre.swing.impl.ComponentHolder
 
 object WindowImpl {
   final val WindowKey = "at.iem.sysson.Window"

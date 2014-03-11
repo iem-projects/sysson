@@ -21,9 +21,10 @@ import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparin
 import at.iem.sysson.impl.TxnModelImpl
 import scala.concurrent.stm.{TMap, TxnExecutor, Txn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
+import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx}
+import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
 import scala.concurrent.{Await, Promise, Future, ExecutionContext, future, blocking}
 import de.sciss.synth.proc.{Scan, Artifact, Grapheme, Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
-import de.sciss.lucre.synth.expr.{Longs, DoubleVec, Doubles, SpanLikes}
 import de.sciss.span.Span
 import de.sciss.lucre
 import scala.util.control.NonFatal
@@ -64,7 +65,7 @@ object AuralSonificationImpl {
     val sonifH        = tx.newHandle(sonification)
     val proc          = Proc[I]
     val group         = ProcGroup.Modifiable[I]
-    val span          = SpanLikes.newVar[I](SpanLikes.newConst(Span.from(0L)))
+    val span          = SpanLikeEx.newVar[I](SpanLikeEx.newConst(Span.from(0L)))
     group.add(span, proc)
     import w.{inMemoryCursor, inMemoryTx}
     val transport     = Transport[I, I](group)
@@ -134,7 +135,7 @@ object AuralSonificationImpl {
       }
 
       def putAttrValue(key: String, value: Double): Unit =
-        proc.attributes.put(key, Attribute.Double(Doubles.newConst(value)))
+        proc.attributes.put(key, Attribute.Double(DoubleEx.newConst(value)))
 
       //      def putAttrValues(key: String, values: Vec[Double]): Unit =
       //        proc.attributes.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
@@ -180,7 +181,7 @@ object AuralSonificationImpl {
           val gain        = 1.0
           // val gv          = Grapheme.Value.Audio(file, spec, offset, gain)
           // val g           = Grapheme.Elem.Audio.newConst[I](gv)
-          val g           = Grapheme.Elem.Audio(artifact, spec, Longs.newConst(offset), Doubles.newConst(gain))
+          val g           = Grapheme.Elem.Audio(artifact, spec, LongEx.newConst(offset), DoubleEx.newConst(gain))
           proc.attributes.put(attrKey, Attribute.AudioGrapheme(g))
 
         case _ =>
@@ -230,11 +231,11 @@ object AuralSonificationImpl {
         val gv    = gen.data
         val loc   = Artifact.Location.Modifiable[I](gv.artifact.parent)
         val artif = loc.add(gv.artifact)
-        val elem  = Grapheme.Elem.Audio(artif, gv.spec, Longs.newConst(gv.offset), Doubles.newConst(gv.gain))
+        val elem  = Grapheme.Elem.Audio(artif, gv.spec, LongEx.newConst(gv.offset), DoubleEx.newConst(gv.gain))
         if (gen.scan) {
           val scan  = proc.scans.add(gen.key)
           val g     = Grapheme.Modifiable[I]
-          g.add(BiExpr(Longs.newConst(0L), elem))
+          g.add(BiExpr(LongEx.newConst(0L), elem))
           scan.addSource(Scan.Link.Grapheme(g))
         } else {
           proc.attributes.put(gen.key, Attribute.AudioGrapheme(elem))

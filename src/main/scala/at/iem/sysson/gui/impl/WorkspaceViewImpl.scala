@@ -29,12 +29,13 @@ import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoa
 import scala.concurrent.ExecutionContext
 import at.iem.sysson.sound.{Keys, Sonification}
 import de.sciss.synth.proc.{Attribute, ExprImplicits}
-import de.sciss.lucre.synth.expr.Strings
+import de.sciss.lucre.expr.{String => StringEx}
 import de.sciss.model.Change
 import de.sciss.swingplus.Separator
 import at.iem.sysson.gui.DragAndDrop.{DataSourceDrag, LibraryNodeDrag, LibraryNodeFlavor}
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
+import de.sciss.lucre.swing.ListView
 
 object WorkspaceViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
@@ -195,7 +196,7 @@ object WorkspaceViewImpl {
         val idx             = workspace.sonifications.size
         val sonif           = Sonification[S]
         sonif.patch.graph() = patch.graph
-        sonif.attributes.put(Keys.attrName, Attribute.String.apply(Strings.newVar(patch.name)))
+        sonif.attributes.put(Keys.attrName, Attribute.String.apply(StringEx.newVar(patch.name)))
         val childH          = tx.newHandle(sonif)
         val _edit           = new EditInsertSonif(idx, childH)
         _edit.perform()

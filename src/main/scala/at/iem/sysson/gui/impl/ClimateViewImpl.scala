@@ -44,6 +44,7 @@ import de.sciss.lucre.event.Sys
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 import de.sciss.lucre.stm
 import scala.concurrent.stm.atomic
+import de.sciss.lucre.swing.impl.ComponentHolder
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,

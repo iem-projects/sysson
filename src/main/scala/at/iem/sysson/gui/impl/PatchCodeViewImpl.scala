@@ -23,21 +23,22 @@ import scala.swing.{ProgressBar, FlowPanel, Component, Action, BorderPanel, Butt
 import Swing._
 import de.sciss.lucre.stm
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.synth.expr.{Strings, ExprImplicits}
+import de.sciss.lucre.synth.expr.ExprImplicits
 import scala.util.Failure
 import scala.util.Success
 import de.sciss.swingplus.Implicits._
 import de.sciss.syntaxpane.SyntaxDocument
-import at.iem.sysson.gui.edit.EditExprVar
 import de.sciss.icons.raphael
 import de.sciss.swingplus.OverlayPanel
 import de.sciss.swingplus.Implicits._
 import java.awt.Color
 import javax.swing.Icon
 import javax.swing.event.{UndoableEditEvent, UndoableEditListener}
-import de.sciss.lucre.expr.Expr
+import de.sciss.lucre.expr.{Expr, String => StringEx}
 import java.beans.{PropertyChangeEvent, PropertyChangeListener}
 import de.sciss.model.impl.ModelImpl
+import de.sciss.lucre.swing.edit.EditVar
+import de.sciss.lucre.swing.impl.ComponentHolder
 
 object PatchCodeViewImpl {
   /** We use one shared interpreter for all patch code frames. */
@@ -51,7 +52,7 @@ object PatchCodeViewImpl {
                         (implicit tx: S#Tx, cursor: stm.Cursor[S]): PatchCodeView[S] = {
     val name0   = entry.name.value
     val source0 = entry.source.value
-    val sourceH = tx.newHandle(entry.source)(Strings.varSerializer)
+    val sourceH = tx.newHandle(entry.source)(StringEx.varSerializer)
 
     val code    = Code.SynthGraph(source0)
 
@@ -103,9 +104,9 @@ object PatchCodeViewImpl {
       val edit    = cursor.step { implicit tx =>
         val expr = ExprImplicits[S]
         import expr._
-        import Strings.{varSerializer, serializer}
+        import StringEx.{varSerializer, serializer}
         val source  = sourceH()
-        EditExprVar("Change Source Code", source, newCode)
+        EditVar.Expr("Change Source Code", source, newCode)
       }
       undoManager.add(edit)
       // this doesn't work properly
