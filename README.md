@@ -70,3 +70,4 @@ The format is slightly different. The following shows how it could look:
     }
 
 (The property list file changes take effect only after rebooting OS X.)
+
