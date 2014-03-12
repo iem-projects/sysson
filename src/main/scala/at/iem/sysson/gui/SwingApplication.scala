@@ -20,6 +20,7 @@ import de.sciss.desktop.{WindowHandler, Desktop, Menu}
 import de.sciss.lucre.event.Sys
 import language.existentials
 import javax.swing.UIManager
+import scala.util.control.NonFatal
 
 object  SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = DocumentHandler.Document  // sysson.DataSourceLike
@@ -31,8 +32,12 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
   }
 
   override def init(): Unit = {
-    if (Desktop.isLinux) UIManager.getInstalledLookAndFeels.find(_.getName contains "GTK+").foreach { info =>
-      UIManager.setLookAndFeel(info.getClassName)
+    try {
+      // WebLookAndFeel.install()
+      // UIManager.installLookAndFeel("Web Look And Feel", classOf[WebLookAndFeel].getName)
+      UIManager.setLookAndFeel(Prefs.lookAndFeel.getOrElse(Prefs.defaultLookAndFeel).getClassName)
+    } catch {
+      case NonFatal(_) =>
     }
 
     val dh = DocumentHandler.instance // initialize

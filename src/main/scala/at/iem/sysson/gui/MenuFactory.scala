@@ -16,8 +16,8 @@ package at.iem.sysson
 package gui
 
 import java.awt.event.KeyEvent
-import de.sciss.desktop.{Desktop, KeyStrokes, Menu}
-import scala.swing.Action
+import de.sciss.desktop.{OptionPane, Desktop, KeyStrokes, Menu}
+import scala.swing.{Label, Action}
 import de.sciss.lucre.event.{Sys, Durable}
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.file._
@@ -26,6 +26,9 @@ import gui.{SwingApplication => App}
 import language.existentials
 import at.iem.sysson.sound.AudioSystem
 import de.sciss.{osc, synth}
+import scala.swing.event.MouseClicked
+import java.net.URL
+import scala.util.control.NonFatal
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -48,7 +51,7 @@ object MenuFactory {
 
     dh.addListener {
       case DocumentHandler.Opened(doc) =>
-        // recent.add(doc.dir)
+        // recent.add(doc.dir)Main
         checkCloseAll()
 
       case DocumentHandler.Closed(doc) =>
@@ -56,12 +59,37 @@ object MenuFactory {
     }
 
     val itAbout = Item.About(App) {
-      println("TODO: About")
+      val addr    = "sysson.kug.ac.at"
+      val url     = s"http://$addr/"
+      val version = Main.version
+      val html =
+        s"""<html><center>
+           |<font size=+1><b>About ${App.name}</b></font><p>
+           |Version $version<p>
+           |<p>
+           |Copyright (c) 2013&ndash;2014 Institute of Electronic Music and Acoustics, Graz.<p>
+           |Written by Hanns Holger Rutz.<p>
+           |This software is published under the GNU General Public License v2+<p>
+           |<p>
+           |SysSon is a research project of IEM / Kunst Uni Graz<p>
+           |in collaboration with Wegener Center for Climate and Global Change<p>
+           |and funded by the Austrian Science Fund (FWF).<p>
+           |<p>
+           |<a href="$url">$addr</a>
+           |""".stripMargin
+      val lb = new Label(html) {
+        cursor = java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR)
+        listenTo(mouse.clicks)
+        reactions += {
+          case MouseClicked(_, _, _, 1, false) => Desktop.browseURI(new URL(url).toURI)
+        }
+      }
+
+      OptionPane.message(message = lb.peer).show(None /* Some(frame) */)
     }
-    val itPrefs = Item.Preferences(App) {
-      println("TODO: Prefs")
-    }
-    val itQuit = Item.Quit(App)
+
+    val itPrefs = Item.Preferences(App)(ActionPreferences())
+    val itQuit  = Item.Quit(App)
 
     val gFile = Group("file", "File")
       .add(Group("new", "New")
