@@ -39,6 +39,7 @@ import java.beans.{PropertyChangeEvent, PropertyChangeListener}
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing._
 
 object PatchCodeViewImpl {
   /** We use one shared interpreter for all patch code frames. */
@@ -52,12 +53,12 @@ object PatchCodeViewImpl {
                         (implicit tx: S#Tx, cursor: stm.Cursor[S]): PatchCodeView[S] = {
     val name0   = entry.name.value
     val source0 = entry.source.value
-    val sourceH = tx.newHandle(entry.source)(StringEx.varSerializer)
+    val sourceH = tx.newHandle(entry.source)(StringEx.varSerializer[S])
 
     val code    = Code.SynthGraph(source0)
 
     val res = new Impl[S](undoManager, code, sourceH)
-    GUI.fromTx(res.guiInit(name0))
+    deferTx(res.guiInit(name0))
     res
   }
 
@@ -87,7 +88,7 @@ object PatchCodeViewImpl {
     private var actionApply: Action = _
 
     def isCompiling: Boolean = {
-      GUI.requireEDT()
+      requireEDT()
       futCompile.isDefined
     }
 
@@ -99,7 +100,7 @@ object PatchCodeViewImpl {
     def redoAction: Action = Action.wrap(codePane.editor.getActionMap.get("redo"))
 
     def save(): Unit = {
-      GUI.requireEDT()
+      requireEDT()
       val newCode = currentText
       val edit    = cursor.step { implicit tx =>
         val expr = ExprImplicits[S]
@@ -169,7 +170,7 @@ object PatchCodeViewImpl {
         futCompile  = Some(fut)
         import ExecutionContext.Implicits.global
         fut.onComplete { res =>
-          GUI.defer {
+          defer {
             futCompile = None
             ggProgressInvis .visible = true
             ggProgress      .visible = false

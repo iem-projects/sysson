@@ -35,6 +35,7 @@ import de.sciss.lucre.stm
 import java.awt.datatransfer.Transferable
 import at.iem.sysson.gui.DragAndDrop.DataSourceVarDrag
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing._
 
 object DataSourceViewImpl {
   import Implicits._
@@ -43,7 +44,7 @@ object DataSourceViewImpl {
     val data  = source.data(workspace)
     val docH  = tx.newHandle(source)
     val res   = new Impl[S](docH, source.file, data)
-    GUI.fromTx(res.guiInit())
+    deferTx(res.guiInit())
     res
   }
 
@@ -138,7 +139,7 @@ object DataSourceViewImpl {
     def source(implicit tx: S#Tx) = sourceH()
 
     def guiInit(): Unit = {
-      GUI.requireEDT()
+      requireEDT()
 
       val mGroups = new GroupModel(data.rootGroup)
       tGroups = new Tree(mGroups) {
@@ -335,12 +336,12 @@ object DataSourceViewImpl {
     }
 
     def selectedVariable: Option[nc2.Variable] = {
-      GUI.requireEDT()
+      requireEDT()
       _selVar
     }
 
     def selectedVariable_=(opt: Option[nc2.Variable]): Unit = {
-      GUI.requireEDT()
+      requireEDT()
       _selVar = opt
       val sel = tGroupVars.selection.rows
       opt match {

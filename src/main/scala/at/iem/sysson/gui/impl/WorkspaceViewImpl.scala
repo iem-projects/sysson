@@ -35,7 +35,7 @@ import de.sciss.swingplus.Separator
 import at.iem.sysson.gui.DragAndDrop.{DataSourceDrag, LibraryNodeDrag, LibraryNodeFlavor}
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
-import de.sciss.lucre.swing.ListView
+import de.sciss.lucre.swing._
 
 object WorkspaceViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
@@ -70,7 +70,7 @@ object WorkspaceViewImpl {
     val sonifications = ListView[S, Sonification[S], Sonification.Update[S], String](workspace.sonifications, sonificationsHndl)
     val res = new Impl[S](undoMgr, dataSources, sonifications)(workspace)
     workspace.addDependent(res)
-    GUI.fromTx(res.guiInit())
+    deferTx(res.guiInit())
     res
   }
 
@@ -206,7 +206,7 @@ object WorkspaceViewImpl {
     }
 
     def guiInit(): Unit = {
-      GUI.requireEDT()
+      requireEDT()
 
       val actionAddSource = new Action(null) {
         def apply(): Unit = openSourceDialog()

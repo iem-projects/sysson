@@ -32,6 +32,7 @@ import language.reflectiveCalls
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView}
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing._
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
@@ -49,11 +50,11 @@ object SonificationViewImpl {
 
     val res = new Impl(workspace, sonifH, sonifView, nameView) {
       val auralObserver = sonifView.react { implicit tx => upd =>
-        GUI.fromTx(auralChange(upd))
+        deferTx(auralChange(upd))
       }
     }
     val sonifState = sonifView.state
-    GUI.fromTx {
+    deferTx {
       res.guiInit(sonifState)
     }
 
@@ -81,7 +82,7 @@ object SonificationViewImpl {
     // XXX TODO: private val graphDisposables = STMRef[Vec[Disposable[S#Tx]]]
 
     final protected def auralChange(upd: AuralSonification.Update): Unit = {
-      GUI.requireEDT()
+      requireEDT()
       val ggStop      = transportButtons.button(Transport.Stop).get
       val ggPlay      = transportButtons.button(Transport.Play).get
       ggStop.selected = upd == AuralSonification.Stopped
@@ -122,7 +123,7 @@ object SonificationViewImpl {
 
       // XXX TODO: graphDisposables.transform(_ ++ userValues.map(_._2))
 
-      GUI.fromTx {
+      deferTx {
         // ---- sources/mapping gui ----
 
         val ggMap = sources.map { case (key, view) =>
@@ -236,7 +237,7 @@ object SonificationViewImpl {
       auralObserver.dispose()
       sonifView.stop()
       nameView.foreach(_.dispose())
-      GUI.fromTx {
+      deferTx {
         timerPrepare.stop()
       }
     }

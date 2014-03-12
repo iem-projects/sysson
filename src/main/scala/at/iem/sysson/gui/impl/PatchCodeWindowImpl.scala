@@ -17,14 +17,11 @@ package gui
 package impl
 
 import de.sciss.desktop.{UndoManager, OptionPane}
-import scala.swing.{Component, Action, Swing}
-import Swing._
 import de.sciss.lucre.stm
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import de.sciss.swingplus.Implicits._
-import java.beans.{PropertyChangeEvent, PropertyChangeListener}
-import de.sciss.syntaxpane.SyntaxDocument
+import de.sciss.lucre.swing._
 
 object PatchCodeWindowImpl {
   def apply[S <: Sys[S]](entry: Library.Leaf[S], undoManager: UndoManager)
@@ -33,7 +30,7 @@ object PatchCodeWindowImpl {
     val name0   = entry.name.value
     val res     = new Impl[S](view, name0 = name0, contextName = Code.SynthGraph.name) {
       val observer = entry.name.changed.react { implicit tx => ch =>
-        GUI.fromTx {
+        deferTx {
           name = ch.now
         }
       }

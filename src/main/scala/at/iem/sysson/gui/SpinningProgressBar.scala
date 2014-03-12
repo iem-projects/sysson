@@ -17,6 +17,7 @@ package at.iem.sysson.gui
 import de.sciss.swingplus.OverlayPanel
 import scala.swing.{Swing, ProgressBar}
 import Swing._
+import de.sciss.lucre.swing._
 
 class SpinningProgressBar extends OverlayPanel {
   @volatile private var _spin = false
@@ -25,7 +26,7 @@ class SpinningProgressBar extends OverlayPanel {
   def spinning: Boolean = _spin
   def spinning_=(value: Boolean): Unit = {
     _spin = value
-    GUI.defer {
+    defer {
       ggBusy.visible = _spin
     }
   }

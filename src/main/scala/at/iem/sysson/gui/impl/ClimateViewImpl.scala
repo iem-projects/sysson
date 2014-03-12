@@ -45,6 +45,7 @@ import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 import de.sciss.lucre.stm
 import scala.concurrent.stm.atomic
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing._
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -75,7 +76,7 @@ object ClimateViewImpl {
     val data  = document.data(workspace)
     val docH  = tx.newHandle(document)
     val view  = new Impl(docH, data, section, xDim, yDim)
-    GUI.fromTx(view.guiInit())
+    deferTx(view.guiInit())
     view
   }
 
@@ -183,7 +184,7 @@ object ClimateViewImpl {
       // get the statistics from the cache manager
       import Stats.executionContext
       atomic { implicit tx => Stats.get(in) } .onSuccess {
-        case Stats(map) => GUI.defer {
+        case Stats(map) => defer {
           // see if stats are available for the plotted variable
           val s = map.get(section.name)
           if (s.isDefined) {
@@ -354,7 +355,7 @@ object ClimateViewImpl {
     private var pSonif2: BoxPanel = _
 
     def guiInit(): Unit = {
-      GUI.requireEDT()
+      requireEDT()
       spawnStats()
 
       // this is all pretty ugly XXX TODO
@@ -487,7 +488,7 @@ object ClimateViewImpl {
             import ExecutionContext.Implicits.global
             val fut         = Library.compile(source)
             ggBusy.visible  = true
-            fut.onComplete(_ => GUI.defer { ggBusy.visible = false })
+            fut.onComplete(_ => defer { ggBusy.visible = false })
             fut.foreach { p => patch = Some(p) }
             true
           }

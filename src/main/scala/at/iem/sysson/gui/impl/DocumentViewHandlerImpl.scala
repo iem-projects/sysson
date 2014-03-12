@@ -21,6 +21,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import scala.concurrent.stm.TMap
 import de.sciss.desktop.Desktop
+import de.sciss.lucre.swing._
 
 private[gui] object DocumentViewHandlerImpl {
   import DocumentHandler.Document
@@ -47,7 +48,7 @@ private[gui] object DocumentViewHandlerImpl {
 
     def activeDocument = _active
     def activeDocument_=[S <: Sys[S]](value: Option[Workspace[S]]): Unit = {
-      GUI.requireEDT()
+      requireEDT()
       if (_active != value) {
         _active = value
         value.foreach { doc =>
@@ -57,7 +58,7 @@ private[gui] object DocumentViewHandlerImpl {
     }
 
     def getWindow[S <: Sys[S]](doc: Workspace[S]): Option[WorkspaceWindow[S]] = {
-      GUI.requireEDT()
+      requireEDT()
       map.single.get(doc).asInstanceOf[Option[WorkspaceWindow[S]]]
     }
 
@@ -66,7 +67,7 @@ private[gui] object DocumentViewHandlerImpl {
         val w = WorkspaceWindow(doc)
         map.put(doc, w)(tx.peer)
         doc.addDependent(new Disposable[S#Tx] {
-          def dispose()(implicit tx: S#Tx): Unit = GUI.fromTx {
+          def dispose()(implicit tx: S#Tx): Unit = deferTx {
             logInfo(s"Remove view map entry for ${doc.name}")
             map.single.remove(doc)
             if (_active == Some(doc)) activeDocument = None

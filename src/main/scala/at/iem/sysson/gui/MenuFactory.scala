@@ -78,6 +78,10 @@ object MenuFactory {
            |<a href="$url">$addr</a>
            |""".stripMargin
       val lb = new Label(html) {
+        // cf. http://stackoverflow.com/questions/527719/how-to-add-hyperlink-in-jlabel
+        // There is no way to directly register a HyperlinkListener, despite hyper links
+        // being rendered... A simple solution is to accept any mouse click on the label
+        // to open the corresponding website.
         cursor = java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR)
         listenTo(mouse.clicks)
         reactions += {

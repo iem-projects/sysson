@@ -23,10 +23,10 @@ import de.sciss.audiowidgets.PeakMeter
 import java.awt.Color
 import Swing._
 import sound.AudioSystem
-import GUI.{defer, requireEDT}
 import de.sciss.desktop.impl.DynamicComponentImpl
 import de.sciss.lucre.synth.Server
 import de.sciss.osc
+import de.sciss.lucre.swing._
 
 private[gui] object MainViewImpl {
   def apply(background: Option[Color] = None): MainView = {

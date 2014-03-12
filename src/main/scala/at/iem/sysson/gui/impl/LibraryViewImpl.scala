@@ -21,6 +21,7 @@ import javax.swing.undo.{CannotUndoException, CannotRedoException, AbstractUndoa
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing._
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
@@ -30,7 +31,7 @@ object LibraryViewImpl {
     val handler   = new Handler[S](undoMgr)
     val libH      = tx.newHandle(library)
     val res       = new Impl[S](undoMgr, libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
-    GUI.fromTx(res.guiInit())
+    deferTx(res.guiInit())
     res
   }
 

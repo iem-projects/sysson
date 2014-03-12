@@ -21,6 +21,7 @@ import de.sciss.lucre.stm.Disposable
 import scala.concurrent.stm.{Ref => STMRef, TMap}
 import at.iem.sysson.gui.GUI
 import de.sciss.file.File
+import de.sciss.lucre.swing._
 
 private[sysson] object DocumentHandlerImpl {
   import DocumentHandler.Document
@@ -46,7 +47,7 @@ private[sysson] object DocumentHandlerImpl {
         def dispose()(implicit tx: S#Tx): Unit = removeDoc(doc)
       })
 
-      GUI.fromTx(dispatch(DocumentHandler.Opened(doc)))
+      deferTx(dispatch(DocumentHandler.Opened(doc)))
     }
 
     private def removeDoc[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): Unit = {
@@ -57,7 +58,7 @@ private[sysson] object DocumentHandlerImpl {
       } (tx.peer)
       map.-=(doc.file)(tx.peer)
 
-      GUI.fromTx(dispatch(DocumentHandler.Closed(doc)))
+      deferTx(dispatch(DocumentHandler.Closed(doc)))
     }
 
     def allDocuments: Iterator[Document] = all.single().iterator

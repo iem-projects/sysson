@@ -36,6 +36,7 @@ import de.sciss.model.Change
 import de.sciss.lucre.expr.{String => StringEx}
 import de.sciss.lucre.swing.edit.{EditMutableMap, EditExprMap}
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing._
 
 object SonificationSourceView {
   def apply[S <: Sys[S]](workspace: Workspace[S], map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
@@ -52,7 +53,7 @@ object SonificationSourceView {
       }
     }
 
-    GUI.fromTx(res.guiInit())
+    deferTx(res.guiInit())
     res.updateSource(map.get(key))
     res
   }
@@ -87,7 +88,7 @@ object SonificationSourceView {
 
     // propagate GUI action back to model
     private def updateDimMapFromGUI(dimKey: String, value: String): Unit = {
-      GUI.requireEDT()
+      requireEDT()
       val editOpt = cursor.step { implicit tx =>
         dimMap.get(tx.peer).map { mapH =>
           val map = mapH()
@@ -104,7 +105,7 @@ object SonificationSourceView {
     private def updateDimMapToGUI(mapKey: String, value: String)(implicit tx: S#Tx): Unit = {
       val idx = dimKeys.indexOf(mapKey)
       // println(s"updateDimMapToGUI($mapKey, $value)")
-      if (idx >= 0) GUI.fromTx {
+      if (idx >= 0) deferTx {
         val gg      = ggMappings(idx)
         // XXX TODO: should have something helpful in swingplus
         val selIdx  = (0 until gg.peer.getItemCount).find(gg.peer.getItemAt(_) == value).getOrElse(-1)
@@ -113,7 +114,7 @@ object SonificationSourceView {
     }
 
     private def selectIndex[A](gg: ComboBox[A], index: Int): Unit = {
-      GUI.requireEDT()
+      requireEDT()
       gg.deafTo  (gg.selection) // otherwise index_= will dispatch event
       gg.selection.index = index max 0
       gg.listenTo(gg.selection)
@@ -143,7 +144,7 @@ object SonificationSourceView {
         (_dataName, _dims, _mapping)
       }
 
-      GUI.fromTx {
+      deferTx {
         tup.fold {
           ggDataName.text = ""
           ggMappings.foreach { gg =>

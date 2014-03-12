@@ -7,7 +7,6 @@ import de.sciss.lucre.stm.{Disposable, IdentifierMap}
 import de.sciss.model.impl.ModelImpl
 import javax.swing.DropMode
 import de.sciss.treetable.{j, TreeTableSelectionChanged, TreeTableCellRenderer, TreeColumnModel, AbstractTreeModel, TreeTable}
-import GUI.{fromTx => guiFromTx, requireEDT}
 import de.sciss.lucre.event.Sys
 import TreeLike.{IsBranch, IsLeaf}
 import at.iem.sysson.gui.TreeTableView.Handler
@@ -18,6 +17,7 @@ import scala.concurrent.stm.TxnLocal
 import scala.annotation.tailrec
 import de.sciss.treetable.j.DefaultTreeTableCellEditor
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing._
 
 object TreeTableViewImpl {
   //  import scala.swing.Graphics2D
@@ -145,7 +145,7 @@ object TreeTableViewImpl {
         folderUpdated(rootView, upd.branch)
       }
 
-      guiFromTx {
+      deferTx {
         guiInit()
       }
     }
@@ -246,7 +246,7 @@ object TreeTableViewImpl {
       def addView(id: S#ID, v: VNode): Unit = {
         mapViews.put(id, v)
 
-        if (refresh) guiFromTx {
+        if (refresh) deferTx {
           _model.elemAdded(parent, idx, v)
           if (edit) {
             //            val sel = t.selection.paths
@@ -320,7 +320,7 @@ object TreeTableViewImpl {
 
       def removeView(id: S#ID): Unit = {
         mapViews.remove(id)
-        guiFromTx {
+        deferTx {
           _model.elemRemoved(parent, idx)
         }
       }
@@ -351,7 +351,7 @@ object TreeTableViewImpl {
         case Some(v: VBranch) =>
           val oldData = v.renderData
           val newData = handler.branchUpdate(b, upd, oldData)
-          if (newData != oldData) guiFromTx {
+          if (newData != oldData) deferTx {
             v.renderData = newData
             _model.elemUpdated(v)
           }
@@ -365,7 +365,7 @@ object TreeTableViewImpl {
         case Some(v: VLeaf) =>
           val oldData = v.renderData
           val newData = handler.leafUpdate(l, upd, oldData)
-          if (newData != oldData) guiFromTx {
+          if (newData != oldData) deferTx {
             v.renderData = newData
             _model.elemUpdated(v)
           }

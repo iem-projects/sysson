@@ -10,11 +10,13 @@ The `userValueMap` contains arbitrary scalar parameters. These would probably pr
 
 ## Library
 
-There is a preliminary idea to manage the sonfication patches in the form of a `Library`. Currently, a `TestLibrary` is directly included in the source code and brought up in the GUI via `File -> New -> Library` (Cmd-L). A library is a tree of patches. A next version could include an online editor for the patches.
+There is a preliminary idea to manage the sonification patches in the form of a `Library`. Currently, a `TestLibrary` is directly included in the source code and brought up in the GUI via `File -> New -> Library` (Cmd-L). A library is a tree of patches. A next version could include an online editor for the patches.
 
 ## Graph Elements
 
-The initial hook to get hold of a variable is the `Var` element. Currently, there is only a no-arg constructor which uses the logical name `Sonficiation.DefaultVariable`:
+__Note__: This is partially obsolete.
+
+The initial hook to get hold of a variable is the `Var` element. Currently, there is only a no-arg constructor which uses the logical name `Sonification.DefaultVariable`:
 
     val v = Var()  // get a handle on the default sonification variable
 

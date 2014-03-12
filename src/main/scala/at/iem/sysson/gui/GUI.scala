@@ -38,26 +38,6 @@ object GUI {
     w.location = (x, y)
   }
 
-  def requireEDT(): Unit = require(EventQueue.isDispatchThread)
-
-  def defer(thunk: => Unit): Unit =
-    if (EventQueue.isDispatchThread) thunk else Swing.onEDT(thunk)
-
-  private val guiCode = TxnLocal(init = Vec.empty[() => Unit], afterCommit = handleGUI)
-
-  private def handleGUI(seq: Vec[() => Unit]): Unit = {
-    def exec(): Unit =
-      seq.foreach { fun =>
-        try {
-          fun()
-        } catch {
-          case NonFatal(e) => e.printStackTrace()
-        }
-      }
-
-    defer(exec())
-  }
-
   private def iconNormal(fun: Path2D => Unit): Icon =
     raphael.Icon(extent = 20, fill = raphael.TexturePaint(24), shadow = raphael.WhiteShadow)(fun)
 
@@ -72,9 +52,6 @@ object GUI {
     if (!tooltip.isEmpty) res.tooltip = tooltip
     res
   }
-
-  def fromTx(body: => Unit)(implicit tx: Txn[_]): Unit =
-    guiCode.transform(_ :+ (() => body))(tx.peer)
 
   private def wordWrap(s: String, margin: Int = 80): String = {
     if (s == null) return "" // fuck java

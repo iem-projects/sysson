@@ -21,6 +21,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.file._
 import de.sciss.synth.Optional
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing.{Window => _, View => _, _}
 
 object WindowImpl {
   final val WindowKey = "at.iem.sysson.Window"
@@ -84,7 +85,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
       case wv: View.Workspace[S] => wv.workspace.addDependent(impl)
       case _ =>
     }
-    GUI.fromTx(guiInit())
+    deferTx(guiInit())
   }
 
   // /** Subclasses may override this if they invoke `super.guiInit()` first. */
@@ -122,7 +123,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
 
   private var didClose = false
   private def disposeFromGUI(): Unit = if (!didClose) {
-    GUI.requireEDT()
+    requireEDT()
     view match {
       case cv: View.Cursor[S] => cv.cursor.step { implicit tx =>
           dispose()
@@ -133,7 +134,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
   }
 
   final def handleClose(): Unit = {
-    GUI.requireEDT()
+    requireEDT()
     if (checkClose()) disposeFromGUI()
   }
 
@@ -144,7 +145,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
     }
 
     view.dispose()
-    GUI.fromTx {
+    deferTx {
       window.dispose()
       didClose = true
     }
