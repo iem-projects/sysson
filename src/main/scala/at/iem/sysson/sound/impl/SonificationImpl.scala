@@ -25,18 +25,18 @@ import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.data.SkipList
 import de.sciss.lucre.expr.{Expr, Double => DoubleEx, String => StringEx}
 import de.sciss.model
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{Matrix, DataSource}
 
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"
 
   def sourceSerializer[S <: Sys[S]]: evt.NodeSerializer[S, Source[S]] = anySourceSer.asInstanceOf[SourceSer[S]]
 
-  def applySource[S <: Sys[S]](variable: DataSource.Variable[S])(implicit tx: S#Tx): Source[S] = {
+  def applySource[S <: Sys[S]](matrix: Matrix[S])(implicit tx: S#Tx): Source[S] = {
     implicit val str = StringEx.serializer[S]
     val targets = evt.Targets[S]
     val dims    = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
-    new SourceImpl(targets, variable, dims)
+    new SourceImpl(targets, matrix, dims)
   }
 
   private val anySourceSer = new SourceSer[evt.InMemory]
@@ -47,14 +47,15 @@ object SonificationImpl {
       val cookie = in.readInt()
       require(cookie == SER_VERSION,
         s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
-      val variable  = DataSource.Variable.read(in, access)
+      val matrix    = Matrix.read(in, access)
       val dims      = expr.Map.read[S, String, Expr[S, String], model.Change[String]](in, access)
-      new SourceImpl(targets, variable, dims)
+      new SourceImpl(targets, matrix, dims)
     }
   }
 
+  // XXX TODO: listen to matrix
   private final class SourceImpl[S <: Sys[S]](protected val targets: evt.Targets[S],
-                                        val variable: DataSource.Variable[S],
+                                        val matrix: Matrix[S],
                                         val dims: expr.Map[S, String, Expr[S, String], model.Change[String]])
     extends Source[S]
     with evt.impl.StandaloneLike[S, Source.Update[S], Source[S]] {
@@ -67,7 +68,7 @@ object SonificationImpl {
 
     protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
-      variable.write(out)
+      matrix.write(out)
       dims.write(out)
     }
 

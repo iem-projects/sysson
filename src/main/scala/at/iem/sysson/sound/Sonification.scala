@@ -23,7 +23,7 @@ import de.sciss.lucre.expr
 import de.sciss.synth.proc.{Attribute, Attributes}
 import impl.{SonificationImpl => Impl}
 import de.sciss.serial.DataInput
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{Matrix, DataSource}
 
 object Sonification {
   // ---- implementation forwards ----
@@ -68,11 +68,11 @@ object Sonification {
 
     implicit def serializer[S <: Sys[S]]: evt.Serializer[S, Source[S]] = Impl.sourceSerializer
 
-    def apply[S <: Sys[S]](variable: DataSource.Variable[S])(implicit tx: S#Tx): Source[S] =
-      Impl.applySource(variable)
+    def apply[S <: Sys[S]](matrix: Matrix[S])(implicit tx: S#Tx): Source[S] =
+      Impl.applySource(matrix)
   }
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
-    def variable: DataSource.Variable[S]
+    def matrix: Matrix[S]
     def dims: expr.Map[S, String, Expr[S, String], model.Change[String]]
   }
 }

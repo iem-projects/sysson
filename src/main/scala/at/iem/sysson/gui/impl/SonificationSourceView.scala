@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import scala.swing.{Orientation, BoxPanel, ComboBox, Label, Swing, TextField, Component}
-import at.iem.sysson.gui.DragAndDrop.DataSourceVarDrag
+import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.{stm, expr}
@@ -124,10 +124,10 @@ object SonificationSourceView {
       disposeDimMap()
 
       val tup = source.map { source =>
-        val v         = source.variable
+        val v         = source.matrix
         val _dataName = v.name
-        val net       = v.data()(tx, workspace)
-        val _dims     = net.dimensionMap
+        // val net       = v.data()(tx, workspace)
+        // val _dims     = net.dimensionMap
         val sDims     = source.dims
         val _mapping  = sDims.iterator.map { case (k, expr) => (k, expr.value) } .toMap
       
@@ -141,7 +141,7 @@ object SonificationSourceView {
         dimMap.set(sDims.modifiableOption.map(tx.newHandle(_)))(tx.peer)
         dimMapObserver.set(Some(mapObs))(tx.peer)
 
-        (_dataName, _dims, _mapping)
+        (_dataName, /* _dims, */ _mapping)
       }
 
       deferTx {
@@ -150,9 +150,9 @@ object SonificationSourceView {
           ggMappings.foreach { gg =>
             gg.peer.setModel(ComboBox.newConstantModel(Seq("")))    // XXX TODO: put some stuff in swingplus
           }
-        } { case (dataName, dims, mapping) =>
+        } { case (dataName, /* dims, */ mapping) =>
           ggDataName.text = dataName
-          val items = "" :: dims.keys.toList
+          val items = "" :: Nil // XXX TODO: dims.keys.toList
           (dimKeys zip ggMappings).foreach { case (dimKey, gg) =>
             gg.peer.setModel(ComboBox.newConstantModel(items))
             selectIndex(gg, items.indexOf(mapping.getOrElse(dimKey, "")))
@@ -168,12 +168,12 @@ object SonificationSourceView {
       ggDataName.border   = Swing.CompoundBorder(outside = ggDataName.border,
         inside = IconBorder(Icons.Target(DropButton.IconSize)))
       mapHOpt.foreach { mapH =>
-        DropButton.installTransferHandler[DataSourceVarDrag](ggDataName, DragAndDrop.DataSourceVarFlavor) { drag0 =>
+        DropButton.installTransferHandler[MatrixDrag](ggDataName, DragAndDrop.MatrixFlavor) { drag0 =>
           if (drag0.workspace == workspace) {
-            val drag  = drag0.asInstanceOf[DataSourceVarDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
+            val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
             val edit  = cursor.step { implicit tx =>
               val map     = mapH()
-              val v       = drag.variable()
+              val v       = drag.matrix()
               val source  = Sonification.Source(v)
               EditMutableMap("Assign Data Source Variable", map, key, Some(source))
             }

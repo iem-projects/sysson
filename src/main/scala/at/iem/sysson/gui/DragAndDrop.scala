@@ -19,7 +19,7 @@ import java.awt.datatransfer.{UnsupportedFlavorException, Transferable, DataFlav
 import collection.breakOut
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{Matrix, DataSource}
 
 object DragAndDrop {
   sealed trait Flavor[+A] extends DataFlavor
@@ -45,12 +45,12 @@ object DragAndDrop {
     def source: stm.Source[S1#Tx, DataSource[S1]]
   }
 
-  val DataSourceVarFlavor = internalFlavor[DataSourceVarDrag]
+  val MatrixFlavor = internalFlavor[MatrixDrag]
 
-  trait DataSourceVarDrag {
+  trait MatrixDrag {
     type S1 <: Sys[S1]
     def workspace: Workspace[S1]
-    def variable: stm.Source[S1#Tx, DataSource.Variable[S1]]
+    def matrix: stm.Source[S1#Tx, Matrix[S1]]
   }
 
   // ----

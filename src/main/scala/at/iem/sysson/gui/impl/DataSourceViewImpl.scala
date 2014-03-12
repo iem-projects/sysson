@@ -33,10 +33,10 @@ import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
 import java.awt.datatransfer.Transferable
-import at.iem.sysson.gui.DragAndDrop.DataSourceVarDrag
+import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{Matrix, DataSource}
 
 object DataSourceViewImpl {
   import Implicits._
@@ -195,13 +195,13 @@ object DataSourceViewImpl {
                 val p       = vr.parents
                 val n       = vr.name
                 val dsvOpt  = ds.variables.find(dsv => dsv.name == n && dsv.parents == p)
-                dsvOpt.map(tx.newHandle[DataSource.Variable[S]])
+                dsvOpt.map(tx.newHandle[Matrix[S]])
               }
-              varHOpt.map(varH => DragAndDrop.Transferable(DragAndDrop.DataSourceVarFlavor) {
-                new DataSourceVarDrag {
+              varHOpt.map(varH => DragAndDrop.Transferable(DragAndDrop.MatrixFlavor) {
+                new MatrixDrag {
                   type S1 = S
                   val workspace = impl.workspace
-                  val variable  = varH
+                  val matrix  = varH
                 }
               })
             } .orNull

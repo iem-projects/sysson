@@ -35,6 +35,7 @@ import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
 import at.iem.sysson.Implicits._
 import de.sciss.lucre.bitemp.BiExpr
+import de.sciss.lucre.matrix.DataSource
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -150,7 +151,8 @@ object AuralSonificationImpl {
         val source    = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource   (mapKey))
         val dimKey    = dimElem.name
         val dimName   = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
-        val ds        = source.variable.source
+        val dsv       = ??? : DataSource.Variable[S] // source.matrix
+        val ds        = dsv.source
         val dimVar    = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
         assert(dimVar.rank == 1)
         val ranges    = dimVar.ranges // shape.map(_._2)
