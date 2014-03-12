@@ -28,6 +28,7 @@ import scala.concurrent.stm.{Ref => STMRef, Txn, TMap}
 import de.sciss.lucre.stm.Disposable
 import scala.util.control.NonFatal
 import de.sciss.synth.proc
+import de.sciss.lucre.matrix.DataSource
 
 object WorkspaceImpl {
   def readDurable(dir: File): Workspace[proc.Durable] = {
@@ -77,8 +78,8 @@ object WorkspaceImpl {
 
     override def toString = s"Workspace($name)"
 
-    val fileCache = TMap.empty[File, nc2.NetcdfFile]
-    private val dependents = STMRef(Vec.empty[Disposable[S#Tx]])
+    private val fileCache   = TMap.empty[File, nc2.NetcdfFile]
+    private val dependents  = STMRef(Vec.empty[Disposable[S#Tx]])
 
     private implicit object DataSer extends Serializer[S#Tx, S#Acc, Data[S]] {
       def write(data: Data[S], out: DataOutput): Unit = data.write(out)
@@ -105,6 +106,16 @@ object WorkspaceImpl {
     def sonifications(implicit tx: S#Tx): List.Modifiable[S, Sonification[S], Sonification.Update[S]] =
       data().sonifications
 
+    def resolve(file: File)(implicit tx: S#Tx): nc2.NetcdfFile =
+      fileCache.get(file)(tx.peer).getOrElse {
+        val net = nc2.NetcdfFile.open(file.path).setImmutable()
+        fileCache.put(file, net)(tx.peer)
+        Txn.afterRollback { _ =>
+          net.close() // a bit tricky doing I/O inside a transaction...
+        } (tx.peer)
+        net
+      }
+
     def addDependent   (dep: Disposable[S#Tx])(implicit tx: S#Tx): Unit =
       dependents.transform(_ :+ dep)(tx.peer)
 
@@ -114,7 +125,6 @@ object WorkspaceImpl {
         require(idx >= 0, s"Dependent $dep was not registered")
         in.patch(idx, Nil, 1)
       } (tx.peer)
-
 
     def dispose()(implicit tx: S#Tx): Unit = {
       logInfoTx(s"Dispose workspace $name")

@@ -46,6 +46,7 @@ import de.sciss.lucre.stm
 import scala.concurrent.stm.atomic
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
+import de.sciss.lucre.matrix.DataSource
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -73,7 +74,7 @@ object ClimateViewImpl {
 
   def apply[S <: Sys[S]](document: DataSource[S], section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
            (implicit workspace: Workspace[S], tx: S#Tx): ClimateView[S] = {
-    val data  = document.data(workspace)
+    val data  = document.data()
     val docH  = tx.newHandle(document)
     val view  = new Impl(docH, data, section, xDim, yDim)
     deferTx(view.guiInit())

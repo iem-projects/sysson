@@ -23,11 +23,9 @@ import de.sciss.synth.proc.Grapheme
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import de.sciss.lucre.event.Sys
 import scala.concurrent.stm.TMap
-import at.iem.sysson.impl.Serializers
 import scala.util.control.NonFatal
-
-// import at.iem.sysson.Implicits._
 import scala.concurrent.stm.atomic
+import de.sciss.lucre.matrix.DataSource
 
 object AudioFileCache {
   private val KEY_COOKIE  = 0x6166636B  // "afck"
@@ -41,7 +39,7 @@ object AudioFileCache {
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  import Serializers.RangeSerializer
+  import de.sciss.lucre.matrix.Serializers.RangeSerializer
   private val parentsSer  = ImmutableSerializer.list[String]
   private val sectionSer  = ImmutableSerializer.indexedSeq[Range]
 
@@ -122,7 +120,10 @@ object AudioFileCache {
       s"$productPrefix(size = $netSize, lastModified = ${new java.util.Date(netModified)}, data = ${data.getName})"
   }
 
-  private def sectionToKey(source: DataSource.Variable[_], section: Vec[Range], streamDim: Int): CacheKey = {
+  // note: `S#Tx` is only needed for the `name` method. This is a constant in DataSource.Variable,
+  // so if necessary, we could remove `S#Tx` and add a `nameConst` method.
+  private def sectionToKey[S <: Sys[S]](source: DataSource.Variable[S], section: Vec[Range],
+                                        streamDim: Int)(implicit tx: S#Tx): CacheKey = {
     // val v = section.variable
     val f = file(source.source.path) // v.file.path
 
@@ -175,7 +176,7 @@ object AudioFileCache {
 
   private def produceValue[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S],
                                         section: Vec[Range], streamDim: Int): CacheValue = {
-    val v             = workspace.cursor.step { implicit tx => source.data(workspace) }
+    val v             = workspace.cursor.step { implicit tx => source.data()(tx, workspace) }
     val vs            = VariableSection(v, section.map(OpenRange.closed))
     val arr           = vs.readSafe()
 

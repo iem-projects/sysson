@@ -18,26 +18,27 @@ package gui
 import swing.Component
 import impl.{InterpreterViewImpl => Impl}
 import ucar.nc2
+import de.sciss.lucre.matrix.DataSource
 
 object InterpreterView {
   def apply(): InterpreterView = Impl()
 
   /** The content of this object is imported into the REPL */
   object Bindings {
-    private def document: DataSource[_] = {
-      //      val docs = DocumentHandler.instance.allDocuments.toIndexedSeq
-      //      if (docs.isEmpty) sys.error("No document open")
-      //      val doc = docs.last
-      //      if (docs.size > 1) println(s"WARNING: multiple documents open. Assuming '${doc.file.name}")
-      //      doc
-
-      // DocumentViewHandler.instance.activeDocument.getOrElse(sys.error("No document open"))
-      ???
-    }
+    //    private def document: DataSource[_] = {
+    //      //      val docs = DocumentHandler.instance.allDocuments.toIndexedSeq
+    //      //      if (docs.isEmpty) sys.error("No document open")
+    //      //      val doc = docs.last
+    //      //      if (docs.size > 1) println(s"WARNING: multiple documents open. Assuming '${doc.file.name}")
+    //      //      doc
+    //
+    //      // DocumentViewHandler.instance.activeDocument.getOrElse(sys.error("No document open"))
+    //
+    //    }
 
     // def doc: nc2.NetcdfFile = document.data
 
-    def selectedVariable: nc2.Variable = ???
+    // def selectedVariable: nc2.Variable = ...
 //      DocumentViewHandler.instance.getView(document).getOrElse(sys.error("No document view")).selectedVariable
 //        .getOrElse(sys.error("No variable selected"))
 

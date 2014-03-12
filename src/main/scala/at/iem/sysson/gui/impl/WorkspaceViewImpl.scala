@@ -36,6 +36,7 @@ import at.iem.sysson.gui.DragAndDrop.{DataSourceDrag, LibraryNodeDrag, LibraryNo
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
 import de.sciss.lucre.swing._
+import de.sciss.lucre.matrix.DataSource
 
 object WorkspaceViewImpl {
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {

@@ -153,7 +153,7 @@ object AuralSonificationImpl {
         val ds        = source.variable.source
         val dimVar    = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
         assert(dimVar.rank == 1)
-        val ranges    = dimVar.shape.map(_._2)
+        val ranges    = dimVar.ranges // shape.map(_._2)
         val streamDim = if (streaming) 0 else -1
         val fut       = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = streamDim)
         graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))

@@ -25,6 +25,7 @@ import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.data.SkipList
 import de.sciss.lucre.expr.{Expr, Double => DoubleEx, String => StringEx}
 import de.sciss.model
+import de.sciss.lucre.matrix.DataSource
 
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"

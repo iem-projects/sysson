@@ -19,6 +19,7 @@ import swing.Component
 import ucar.nc2
 import impl.{ClimateViewImpl => Impl}
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.matrix.DataSource
 
 object ClimateView {
   def apply[S <: Sys[S]](document: DataSource[S], section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)

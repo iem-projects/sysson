@@ -18,6 +18,7 @@ package gui
 import ucar.nc2
 import de.sciss.lucre.event.Sys
 import impl.{DataSourceViewImpl => Impl}
+import de.sciss.lucre.matrix.DataSource
 
 object DataSourceView {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] =

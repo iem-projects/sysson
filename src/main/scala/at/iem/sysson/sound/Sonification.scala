@@ -23,6 +23,7 @@ import de.sciss.lucre.expr
 import de.sciss.synth.proc.{Attribute, Attributes}
 import impl.{SonificationImpl => Impl}
 import de.sciss.serial.DataInput
+import de.sciss.lucre.matrix.DataSource
 
 object Sonification {
   // ---- implementation forwards ----

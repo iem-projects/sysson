@@ -94,7 +94,7 @@ object SonificationSourceView {
           val map = mapH()
           import StringEx.newConst
           implicit val s = StringEx
-          val exprOpt = if (value != "") Some(newConst[S](value)) else None
+          val exprOpt: Option[Expr[S, String]] = if (value != "") Some(newConst(value)) else None
           EditExprMap("Map Dimension", map, key = dimKey, value = exprOpt)
         }
       }
@@ -126,7 +126,7 @@ object SonificationSourceView {
       val tup = source.map { source =>
         val v         = source.variable
         val _dataName = v.name
-        val net       = v.data(workspace)
+        val net       = v.data()(tx, workspace)
         val _dims     = net.dimensionMap
         val sDims     = source.dims
         val _mapping  = sDims.iterator.map { case (k, expr) => (k, expr.value) } .toMap

@@ -36,12 +36,13 @@ import java.awt.datatransfer.Transferable
 import at.iem.sysson.gui.DragAndDrop.DataSourceVarDrag
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
+import de.sciss.lucre.matrix.DataSource
 
 object DataSourceViewImpl {
   import Implicits._
 
   def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] = {
-    val data  = source.data(workspace)
+    val data  = source.data()
     val docH  = tx.newHandle(source)
     val res   = new Impl[S](docH, source.file, data)
     deferTx(res.guiInit())

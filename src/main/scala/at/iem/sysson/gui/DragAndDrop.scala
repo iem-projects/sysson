@@ -19,6 +19,7 @@ import java.awt.datatransfer.{UnsupportedFlavorException, Transferable, DataFlav
 import collection.breakOut
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
+import de.sciss.lucre.matrix.DataSource
 
 object DragAndDrop {
   sealed trait Flavor[+A] extends DataFlavor

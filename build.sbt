@@ -17,10 +17,9 @@ licenses      := Seq("GPL v2+" -> url("http://www.gnu.org/licenses/gpl-2.0.txt")
 scalaVersion  := "2.10.3"
 
 // maven repository for NetCDF library
-resolvers    += "Unidata Repository" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
+resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
 
 libraryDependencies ++= Seq(
-  "edu.ucar" %  "netcdf"                  % "4.3.20",         // NetCDF library for matrix data file support
   "de.sciss" %% "soundprocesses"          % "2.2.+",          // Computer music framework
   "de.sciss" %% "lucrematrix"             % "0.1.+",          // Reactive matrix component and view
   "de.sciss" %% "scalacolliderswing"      % "1.13.+",         // sound widgets, interpreter
