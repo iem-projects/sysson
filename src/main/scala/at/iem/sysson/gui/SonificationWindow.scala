@@ -18,6 +18,7 @@ import de.sciss.lucre.event.Sys
 import impl.{SonificationWindowImpl => Impl}
 import at.iem.sysson.Workspace
 import at.iem.sysson.sound.Sonification
+import de.sciss.lucre.swing.Window
 
 object SonificationWindow {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])

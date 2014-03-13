@@ -17,6 +17,7 @@ package gui
 
 import de.sciss.lucre.event.Sys
 import impl.{WorkspaceWindowImpl => Impl}
+import de.sciss.lucre.swing.Window
 
 object WorkspaceWindow {
   /** Opens a workspace window for a given workspace. When the window is closed, the workspace is disposed. */

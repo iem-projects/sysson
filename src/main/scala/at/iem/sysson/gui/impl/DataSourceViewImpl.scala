@@ -166,8 +166,8 @@ object DataSourceViewImpl {
         listenTo(selection)
         reactions += {
           case TableRowsSelected(_, range, adjusting) if !adjusting =>
-            val vro   = if (range.isEmpty) None else {
-              val data  = mGroupVars.data
+            val vro: Option[nc2.Variable] = if (range.isEmpty) None else {
+              val data = mGroupVars.data
               // val row   = range.end // weird scala-swing convention! screw the range, let's use the leadIndex instead
               val row = selection.rows.leadIndex
               if (row >= 0 && data.size > row) Some(data(row)) else None
@@ -240,7 +240,7 @@ object DataSourceViewImpl {
             val timeOpt = red.find { d => d.name == "time" }
 
             // first see if there are useful dimensions such as lon/lat
-            val xyOpt0 = (latOpt, lonOpt, timeOpt) match {
+            val xyOpt0: Option[(nc2.Dimension, nc2.Dimension)] = (latOpt, lonOpt, timeOpt) match {
               case (Some(lat), Some(lon), _)  => Some(lat -> lon)
               // case (Some(lat), _, Some(tim))  => Some(lat -> tim)
               // case (_, Some(lon), Some(tim))  => Some(lon -> tim) // does this make sense?
@@ -250,8 +250,9 @@ object DataSourceViewImpl {
             // if not, ask the user which dims she wants to plot
             val xyOpt = xyOpt0.orElse {
               val infos = dim.map { d => s"${d.name} [${d.size}]" } .mkString(", ")
-              val pairs = dim.flatMap { dx =>
-                dim.collect { case dy if dy != dx => (dx, dy)
+              val pairs: Vec[(nc2.Dimension, nc2.Dimension)] = dim.flatMap { dx =>
+                dim.collect {
+                  case dy if dy != dx => (dx, dy)
                 }
               }
 
@@ -263,7 +264,7 @@ object DataSourceViewImpl {
               val res = opt.show(GUI.windowOption(component)).id
               if (res >= 0) {
                 Some(pairs(res))
-              } else None
+              } else None: Option[(nc2.Dimension, nc2.Dimension)]
             }
 
             // open the actual plot if we got the dimensions

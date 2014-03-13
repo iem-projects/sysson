@@ -19,6 +19,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
 import impl.{PatchCodeWindowImpl => Impl}
 import de.sciss.desktop.UndoManager
+import de.sciss.lucre.swing.Window
 
 object PatchCodeWindow {
   def apply[S <: Sys[S]](entry: Library.Leaf[S], undoManager: UndoManager)

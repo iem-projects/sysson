@@ -121,11 +121,10 @@ object MenuFactory {
     if (itQuit.visible) gFile.addLine().add(itQuit)
 
     val gEdit = Group("edit", "Edit")
-    if (itPrefs.visible && Desktop.isLinux) gEdit.add(itPrefs).addLine()
-
     gEdit
       .add(Item("undo", proxy("Undo" -> (menu1 + VK_Z))))
       .add(Item("redo", proxy("Redo" -> (menu1 + shift + VK_Z))))
+    if (itPrefs.visible && Desktop.isLinux) gEdit.addLine().add(itPrefs)
 
     val gTools = Group("tools", "Tools")
     val gDebug = Group("debug", "Debug")

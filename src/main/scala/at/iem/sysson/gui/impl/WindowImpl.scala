@@ -21,7 +21,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.file._
 import de.sciss.synth.Optional
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{Window => _, View => _, _}
+import de.sciss.lucre.swing._
 
 object WindowImpl {
   final val WindowKey = "at.iem.sysson.Window"
@@ -48,7 +48,7 @@ object WindowImpl {
       case desktop.Window.Closing  (_) => impl.handleClose()
       case desktop.Window.Activated(_) =>
         view match {
-          case wv: View.Workspace[S] =>
+          case wv: ViewHasWorkspace[S] =>
             DocumentViewHandler.instance.activeDocument = Some(wv.workspace)
           case _ =>
         }
@@ -82,7 +82,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
 
   final def init()(implicit tx: S#Tx): Unit = {
     view match {
-      case wv: View.Workspace[S] => wv.workspace.addDependent(impl)
+      case wv: ViewHasWorkspace[S] => wv.workspace.addDependent(impl)
       case _ =>
     }
     deferTx(guiInit())
@@ -140,7 +140,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
 
   def dispose()(implicit tx: S#Tx): Unit = {
     view match {
-      case wv: View.Workspace[S] => wv.workspace.removeDependent(this)
+      case wv: ViewHasWorkspace[S] => wv.workspace.removeDependent(this)
       case _ =>
     }
 

@@ -18,6 +18,7 @@ package gui
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.gui.impl.{LibraryViewImpl => Impl}
 import de.sciss.lucre.stm
+import de.sciss.lucre.swing.View
 
 object LibraryView {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = Impl(library)

@@ -21,6 +21,7 @@ import de.sciss.lucre.stm
 import impl.{PatchCodeViewImpl => Impl}
 import de.sciss.model.Model
 import scala.swing.Action
+import de.sciss.lucre.swing.View
 
 object PatchCodeView {
   def apply[S <: Sys[S]](entry: Library.Leaf[S], undoManager: UndoManager)

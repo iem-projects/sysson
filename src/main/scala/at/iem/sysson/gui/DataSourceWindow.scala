@@ -18,6 +18,7 @@ package gui
 import de.sciss.lucre.event.Sys
 import impl.{DataSourceWindowImpl => Impl}
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.swing.Window
 
 object DataSourceWindow {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceWindow[S] =

@@ -340,7 +340,7 @@ object WorkspaceViewImpl {
         val sourceOpt = drag.cursor.step { implicit tx =>
           drag.node() match {
             case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
-            case _ => None
+            case _                  => None : Option[PatchOLD.Source]
           }
         }
 

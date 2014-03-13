@@ -19,12 +19,13 @@ import ucar.nc2
 import de.sciss.lucre.event.Sys
 import impl.{DataSourceViewImpl => Impl}
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.swing.View
 
 object DataSourceView {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] =
     Impl(source)
 }
-trait DataSourceView[S <: Sys[S]] extends View.Workspace[S] with View.File {
+trait DataSourceView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.File {
   def source(implicit tx: S#Tx): DataSource[S]
   var selectedVariable: Option[nc2.Variable]
 }

@@ -18,11 +18,12 @@ package gui
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.Sonification
 import impl.{SonificationViewImpl => Impl}
+import de.sciss.lucre.swing.View
 
 object SonificationView {
   def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
                         (implicit tx: S#Tx): SonificationView[S] = Impl(workspace, sonification)
 }
-trait SonificationView[S <: Sys[S]] extends View.Workspace[S] with View.Editable[S] {
+trait SonificationView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.Editable[S] {
   def sonification(implicit tx: S#Tx): Sonification[S]
 }

@@ -34,16 +34,20 @@ import scala.concurrent.stm.{Ref => STMRef}
 import de.sciss.model
 import de.sciss.model.Change
 import de.sciss.lucre.expr.{String => StringEx}
-import de.sciss.lucre.swing.edit.{EditMutableMap, EditExprMap}
+import de.sciss.lucre.swing.edit.{EditVar, EditMutableMap, EditExprMap}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
+import de.sciss.lucre.matrix.gui.MatrixView
+import de.sciss.lucre.matrix.Matrix
 
 object SonificationSourceView {
   def apply[S <: Sys[S]](workspace: Workspace[S], map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
                          key: String, dimKeys: Vec[String])
                         (implicit tx: S#Tx, undoManager: UndoManager): SonificationSourceView[S] = {
+    import workspace.cursor
     val mapHOpt   = map.modifiableOption.map(tx.newHandle(_))
-    val res       = new Impl[S](workspace, mapHOpt, key = key, dimKeys = dimKeys)
+    val matView   = MatrixView[S]
+    val res       = new Impl[S](workspace, matView, mapHOpt, key = key, dimKeys = dimKeys)
     res.sourceObserver  = map.changed.react {
       implicit tx => upd => upd.changes.foreach {
         case expr.Map.Added  (`key`, source) => res.updateSource(Some(source)) // .data.file.base))
@@ -58,7 +62,7 @@ object SonificationSourceView {
     res
   }
 
-  private final class Impl[S <: Sys[S]](workspace: Workspace[S],
+  private final class Impl[S <: Sys[S]](workspace: Workspace[S], matrixView: MatrixView[S],
       mapHOpt: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]]],
       key: String, dimKeys: Vec[String])
      (implicit undoManager: UndoManager)
@@ -73,6 +77,7 @@ object SonificationSourceView {
 
     def dispose()(implicit tx: S#Tx): Unit = {
       sourceObserver.dispose()
+      matrixView    .dispose()
       disposeDimMap()
     }
 
@@ -120,17 +125,19 @@ object SonificationSourceView {
       gg.listenTo(gg.selection)
     }
 
-    def updateSource(source: Option[Sonification.Source[S]])(implicit tx: S#Tx): Unit = {
+    def updateSource(sourceOpt: Option[Sonification.Source[S]])(implicit tx: S#Tx): Unit = {
       disposeDimMap()
 
-      val tup = source.map { source =>
-        val v         = source.matrix
-        val _dataName = v.name
+      matrixView.matrix = sourceOpt.map(_.matrix)
+
+      val tup = sourceOpt.map { source =>
+        val v             = source.matrix
+        val _dataName     = v.name
         // val net       = v.data()(tx, workspace)
         // val _dims     = net.dimensionMap
         val sDims     = source.dims
         val _mapping  = sDims.iterator.map { case (k, expr) => (k, expr.value) } .toMap
-      
+
         val mapObs    = sDims.changed.react { implicit tx => upd => upd.changes.foreach {
           case expr.Map.Added  (k, expr)                    => updateDimMapToGUI(k, expr.value)
           case expr.Map.Removed(k, expr)                    => updateDimMapToGUI(k, "")
@@ -174,8 +181,14 @@ object SonificationSourceView {
             val edit  = cursor.step { implicit tx =>
               val map     = mapH()
               val v       = drag.matrix()
-              val source  = Sonification.Source(v)
-              EditMutableMap("Assign Data Source Variable", map, key, Some(source))
+              val name    = "Assign Data Source Variable"
+              map.get(key).flatMap(src => Matrix.Var.unapply(src.matrix)).fold {
+                val vr      = Matrix.Var(v) // so that the matrix becomes editable in its view
+                val source  = Sonification.Source(vr)
+                EditMutableMap(name, map, key, Some(source))
+              } { vr =>
+                EditVar(name, vr, v)
+              }
             }
             undoManager.add(edit)
             true
@@ -216,6 +229,8 @@ object SonificationSourceView {
         )
       }
 
+      matrixView.nameVisible = false
+
       component = new BoxPanel(Orientation.Vertical) {
         override lazy val peer = {
           val p = new javax.swing.JPanel with SuperMixin {
@@ -231,6 +246,7 @@ object SonificationSourceView {
         }
 
         contents += ggDataName
+        contents += matrixView.component
         contents += pMap
       }
     }

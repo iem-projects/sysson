@@ -34,7 +34,7 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
   override def init(): Unit = {
     try {
       // WebLookAndFeel.install()
-      // UIManager.installLookAndFeel("Web Look And Feel", classOf[WebLookAndFeel].getName)
+      UIManager.installLookAndFeel("Web Look And Feel", "com.alee.laf.WebLookAndFeel" ) // classOf[WebLookAndFeel].getName
       UIManager.setLookAndFeel(Prefs.lookAndFeel.getOrElse(Prefs.defaultLookAndFeel).getClassName)
     } catch {
       case NonFatal(_) =>
