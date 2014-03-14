@@ -41,9 +41,15 @@ import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.matrix.Matrix
 
 object SonificationSourceView {
+  private val DEBUG = true
+
   def apply[S <: Sys[S]](workspace: Workspace[S], map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
                          key: String, dimKeys: Vec[String])
                         (implicit tx: S#Tx, undoManager: UndoManager): SonificationSourceView[S] = {
+    // XXX TODO: debug
+    de.sciss.lucre.event.showLog = true
+    de.sciss.lucre.matrix.gui.impl.MatrixViewImpl.DEBUG = true
+
     import workspace.cursor
     val mapHOpt   = map.modifiableOption.map(tx.newHandle(_))
     val matView   = MatrixView[S]
@@ -56,6 +62,7 @@ object SonificationSourceView {
         case _ =>
       }
     }
+    if (DEBUG) println(s"SonificationSourceView(map = $map; ${map.changed}); sourceObserver = ${res.sourceObserver}")
 
     deferTx(res.guiInit())
     res.updateSource(map.get(key))
@@ -82,7 +89,10 @@ object SonificationSourceView {
     }
 
     private def disposeDimMap()(implicit tx: S#Tx): Unit = {
-      dimMapObserver.swap(None)(tx.peer).foreach(_.dispose())
+      dimMapObserver.swap(None)(tx.peer).foreach { obs =>
+        if (DEBUG) println(s"disposeDimMap. observer = $obs")
+        obs.dispose()
+      }
       dimMap.set(None)(tx.peer)
     }
 
@@ -144,6 +154,8 @@ object SonificationSourceView {
           case expr.Map.Element(k, expr, Change(_, value))  => updateDimMapToGUI(k, value)
           case _ =>
         }}
+        if (DEBUG) println(s"updateSource(sDims = $sDims; ${sDims.changed}). New mapObs = $mapObs")
+
         import StringEx.serializer
         dimMap.set(sDims.modifiableOption.map(tx.newHandle(_)))(tx.peer)
         dimMapObserver.set(Some(mapObs))(tx.peer)

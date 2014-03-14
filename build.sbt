@@ -22,7 +22,8 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 libraryDependencies ++= Seq(
   "de.sciss" %% "soundprocesses"          % "2.2.+",          // Computer music framework
   "de.sciss" %% "lucrematrix"             % "0.1.+",          // Reactive matrix component and view
-  "de.sciss" %% "scalacolliderswing"      % "1.13.+",         // sound widgets, interpreter
+  "de.sciss" %% "scalacolliderswing-core" % "1.14.+",         // audio (server) widgets
+  "de.sciss" %% "scalainterpreterpane"    % "1.6.+",          // scala interpreter
   "de.sciss" %% "desktop-mac"             % "0.4.2+",         // application framework
   "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
   "de.sciss" %% "filecache-txn"           % "0.3.+",          // caching statistics of data files
