@@ -39,6 +39,8 @@ import de.sciss.lucre.swing._
 import de.sciss.lucre.matrix.DataSource
 
 object WorkspaceViewImpl {
+  var DEBUG = false
+
   def apply[S <: Sys[S]](workspace: Workspace[S])(implicit tx: S#Tx): WorkspaceView[S] = {
     import workspace.cursor
     val undoMgr = new UndoManagerImpl {
@@ -66,6 +68,11 @@ object WorkspaceViewImpl {
           case (x, _) => x
         }
       }
+    }
+
+    if (DEBUG) {
+      de.sciss.lucre.swing.showLog = true
+      println("WorkspaceView : creating list views")
     }
     val dataSources   = ListView[S, DataSource  [S], Unit                  , String](workspace.dataSources  , dataSourcesHndl  )
     val sonifications = ListView[S, Sonification[S], Sonification.Update[S], String](workspace.sonifications, sonificationsHndl)
@@ -182,6 +189,7 @@ object WorkspaceViewImpl {
           val ds      = DataSource[S](f)
           val childH  = tx.newHandle(ds)
           val _edit   = new EditInsertSource(idx, childH)
+          logDebug("EditInsertSource")
           _edit.perform()
           _edit
         }
