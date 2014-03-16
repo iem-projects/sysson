@@ -53,7 +53,7 @@ object Sonification {
   final case class AttributeAdded  [S <: Sys[S]](key: String) extends AssociativeChange[S]
   final case class AttributeRemoved[S <: Sys[S]](key: String) extends AssociativeChange[S]
 
-  final case class AttributeChange[S <: Sys[S]](key: String, attribute: Attribute[S], change: Any)
+  final case class AttributeChange [S <: Sys[S]](key: String, attribute: Attribute[S], change: Any)
     extends Change[S] {
     override def toString = s"AttributeChange($key, $attribute, $change)"
   }

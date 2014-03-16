@@ -40,7 +40,7 @@ object Dim {
   //    }
   //  }
 
-  sealed trait GE extends synth.GE.Lazy {
+  sealed trait GE extends synth.GE.Lazy with SonificationElement {
     def dim: Dim
   }
 

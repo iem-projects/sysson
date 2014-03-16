@@ -20,7 +20,7 @@ import de.sciss.serial.ImmutableSerializer
 import at.iem.sysson.sound.AuralSonification
 
 object Var {
-  trait GE extends synth.GE {
+  trait GE extends synth.GE with SonificationElement {
     def variable: Var
 
     def axis(dim: Dim): Axis
@@ -56,14 +56,16 @@ object Var {
     vr.name, vr.higherRank
   )
 
-  implicit def serializer: ImmutableSerializer[Var] = impl.VarImpl.serializer
+  // implicit def serializer: ImmutableSerializer[Var] = impl.VarImpl.serializer
 
   // ---- axis -----
 
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
 
   object Axis {
-    case class Values(axis: Var.Axis) extends synth.GE.Lazy /* impl.LazyImpl */ with ScalarRated {
+    case class Values(axis: Var.Axis)
+      extends synth.GE.Lazy /* impl.LazyImpl */ with SonificationElement with ScalarRated {
+
       override def productPrefix = "Var$Axis$Values"
 
       override def toString = s"$axis.values"

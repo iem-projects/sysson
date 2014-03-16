@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit
 import at.iem.sysson.Implicits._
 import de.sciss.lucre.bitemp.BiExpr
 import de.sciss.lucre.matrix.DataSource
+import at.iem.sysson.graph.SonificationElement
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -150,6 +151,8 @@ object AuralSonificationImpl {
         val mapKey    = dimElem.variable.name
         val source    = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource   (mapKey))
         val dimKey    = dimElem.name
+        // `dimName` is the name of the dimension in the source matrix
+        // which is mapped to the logical `mapKey`
         val dimName   = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
         val dsv       = ??? : DataSource.Variable[S] // source.matrix
         val ds        = dsv.source
@@ -185,6 +188,9 @@ object AuralSonificationImpl {
           // val g           = Grapheme.Elem.Audio.newConst[I](gv)
           val g           = Grapheme.Elem.Audio(artifact, spec, LongEx.newConst(offset), DoubleEx.newConst(gain))
           proc.attributes.put(attrKey, Attribute.AudioGrapheme(g))
+
+        case nyi: SonificationElement =>
+          throw new NotImplementedError(nyi.toString)
 
         case _ =>
       }

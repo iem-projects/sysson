@@ -16,7 +16,7 @@ package at.iem.sysson.gui
 package impl
 
 import de.sciss.lucre.event.Sys
-import scala.swing.Label
+import scala.swing.{Alignment, Label}
 import de.sciss.icons.raphael
 import javax.swing.TransferHandler
 import javax.swing.TransferHandler.TransferSupport
@@ -100,10 +100,12 @@ object SonificationAssocViewImpl {
       //      })
       val flavor  = DragAndDrop.MappingFlavor
       type A      = DragAndDrop.MappingDrag
-      val lb      = new Label("      ")
+      val lb      = new Label("nnnnn")
       // icon = Icons.Target(extent = 16)
       lb.icon = raphael.Icon(extent = 24)(raphael.Shapes.Clip) // .Disconnect)
       GUI.fixSize(lb)
+      lb.text = null
+      lb.horizontalAlignment = Alignment.Leading
       lb.peer.setTransferHandler(new TransferHandler(null) {
         // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
         override def canImport(support: TransferSupport): Boolean = component.enabled && {
