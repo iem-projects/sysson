@@ -20,9 +20,9 @@ import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.Sonification
 
 object SonificationWindowImpl {
-  def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
-                        (implicit tx: S#Tx): SonificationWindow[S] = {
-    val view  = SonificationView(workspace, sonification)
+  def apply[S <: Sys[S]](sonification: Sonification[S])
+                        (implicit tx: S#Tx, workspace: Workspace[S]): SonificationWindow[S] = {
+    val view  = SonificationView(sonification)
     val res   = new Impl(view)
     res.init()
     res

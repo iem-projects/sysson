@@ -35,8 +35,8 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
 
 object SonificationViewImpl {
-  def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
-                        (implicit tx: S#Tx): SonificationView[S] = {
+  def apply[S <: Sys[S]](sonification: Sonification[S])
+                        (implicit tx: S#Tx, workspace: Workspace[S]): SonificationView[S] = {
     implicit val undoMgr = new UndoManagerImpl {
       protected var dirty: Boolean = false
     }
@@ -48,7 +48,7 @@ object SonificationViewImpl {
 
     val sonifView = AuralWorkspaceHandler.instance.view[S, workspace.I](workspace).view(sonification)
 
-    val res = new Impl(workspace, sonifH, sonifView, nameView) {
+    val res = new Impl(sonifH, sonifView, nameView) {
       val auralObserver = sonifView.react { implicit tx => upd =>
         deferTx(auralChange(upd))
       }
@@ -65,9 +65,10 @@ object SonificationViewImpl {
     res
   }
 
-  private abstract class Impl[S <: Sys[S]](val workspace: Workspace[S], sonifH: stm.Source[S#Tx, Sonification[S]],
+  private abstract class Impl[S <: Sys[S]](sonifH: stm.Source[S#Tx, Sonification[S]],
                                         sonifView: AuralSonification[S],
-                                        nameView: Option[StringFieldView[S]])(implicit val undoManager: UndoManager)
+                                        nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S],
+                                                                              val undoManager: UndoManager)
     extends SonificationView[S] with ComponentHolder[Component] {
 
     protected def auralObserver: Disposable[S#Tx]
@@ -107,7 +108,7 @@ object SonificationViewImpl {
             case graph.Dim(`vr`, dimKey) => dimKey
           }
 
-          val view = SonificationSourceView(workspace, mapping, key, dimKeys)
+          val view = SonificationSourceView(mapping, key, dimKeys)
 
           (key, view)
       }

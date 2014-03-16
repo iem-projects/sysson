@@ -73,6 +73,7 @@ object Sonification {
   }
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
     def matrix: Matrix[S]
+    /** Maps sonification model/patch dimensions (keys) to source matrix dimensions (values). */
     def dims: expr.Map[S, String, Expr[S, String], model.Change[String]]
   }
 }

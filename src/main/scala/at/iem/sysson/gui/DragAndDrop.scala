@@ -20,6 +20,10 @@ import collection.breakOut
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
 import de.sciss.lucre.matrix.{Matrix, DataSource}
+import at.iem.sysson.sound.Sonification
+import javax.swing.{JComponent, TransferHandler}
+import java.awt.event.{MouseEvent, MouseAdapter}
+import scala.swing.Swing
 
 object DragAndDrop {
   sealed trait Flavor[+A] extends DataFlavor
@@ -53,6 +57,15 @@ object DragAndDrop {
     def matrix: stm.Source[S1#Tx, Matrix[S1]]
   }
 
+  val MappingFlavor = internalFlavor[MappingDrag]
+
+  trait MappingDrag {
+    type S1 <: Sys[S1]
+    def workspace: Workspace[S1]
+    def source: stm.Source[S1#Tx, Sonification.Source[S1]]
+    def key: String
+  }
+
   // ----
 
   object Transferable {
@@ -83,5 +96,50 @@ object DragAndDrop {
         peer.getTransferData(_flavor)
       }
     }
+  }
+
+  abstract class Button extends swing.Button() {
+
+    protected def sourceActions: Int
+
+    protected def sourceAction(modifiers: Int): Int
+
+    protected def export(): Option[Transferable]
+
+    private object Transfer extends TransferHandler {
+      override def getSourceActions(c: JComponent): Int = sourceActions
+
+      override def createTransferable(c: JComponent): Transferable = export().orNull
+    }
+
+    peer.setTransferHandler(Transfer)
+    focusable = false
+
+    private var dndInitX    = 0
+    private var dndInitY    = 0
+    private var dndPressed  = false
+    private var dndStarted  = false
+    private object Mouse extends MouseAdapter {
+      override def mousePressed(e: MouseEvent): Unit = {
+        dndInitX	  = e.getX
+        dndInitY    = e.getY
+        dndPressed  = true
+        dndStarted	= false
+      }
+
+      override def mouseReleased(e: MouseEvent): Unit = {
+        dndPressed  = false
+        dndStarted	= false
+      }
+
+      override def mouseDragged(e: MouseEvent): Unit =
+        if (dndPressed && !dndStarted && ((math.abs(e.getX - dndInitX) > 5) || (math.abs(e.getY - dndInitY) > 5))) {
+          Transfer.exportAsDrag(peer, e, sourceAction(e.getModifiers))
+          dndStarted = true
+        }
+    }
+
+    peer.addMouseListener      (Mouse)
+    peer.addMouseMotionListener(Mouse)
   }
 }

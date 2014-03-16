@@ -21,8 +21,8 @@ import impl.{SonificationViewImpl => Impl}
 import de.sciss.lucre.swing.View
 
 object SonificationView {
-  def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
-                        (implicit tx: S#Tx): SonificationView[S] = Impl(workspace, sonification)
+  def apply[S <: Sys[S]](sonification: Sonification[S])
+                        (implicit tx: S#Tx, workspace: Workspace[S]): SonificationView[S] = Impl(sonification)
 }
 trait SonificationView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.Editable[S] {
   def sonification(implicit tx: S#Tx): Sonification[S]

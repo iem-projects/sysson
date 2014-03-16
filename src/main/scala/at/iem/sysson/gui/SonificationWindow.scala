@@ -21,9 +21,9 @@ import at.iem.sysson.sound.Sonification
 import de.sciss.lucre.swing.Window
 
 object SonificationWindow {
-  def apply[S <: Sys[S]](workspace: Workspace[S], sonification: Sonification[S])
-                        (implicit tx: S#Tx): SonificationWindow[S] =
-    Impl(workspace, sonification)
+  def apply[S <: Sys[S]](sonification: Sonification[S])
+                        (implicit tx: S#Tx, workspace: Workspace[S]): SonificationWindow[S] =
+    Impl(sonification)
 }
 trait SonificationWindow[S <: Sys[S]] extends Window[S] {
   def view: SonificationView[S]

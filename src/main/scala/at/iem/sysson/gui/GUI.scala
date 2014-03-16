@@ -38,6 +38,13 @@ object GUI {
     w.location = (x, y)
   }
 
+  def fixSize(c: Component): Unit = {
+    val d = c.preferredSize
+    c.preferredSize = d
+    c.minimumSize   = d
+    c.maximumSize   = d
+  }
+
   private def iconNormal(fun: Path2D => Unit): Icon =
     raphael.Icon(extent = 20, fill = raphael.TexturePaint(24), shadow = raphael.WhiteShadow)(fun)
 
