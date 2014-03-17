@@ -146,9 +146,41 @@ object AuralSonificationImpl {
       // var graphemes = Map.empty[String, Future[AudioFileCache.Result]]
       var graphemes = Vec.empty[Future[GraphemeGen]]
 
-      def addDimGE(de: graph.Dim.GE, streaming: Boolean): Unit = {
-        val attrKey   = addAttr(de)
-        val dimElem   = de.dim
+      def reduceMatrix(m: Matrix[S]): (DataSource.Variable[S], Vec[Range]) = {
+        val md = m.dimensions
+
+        /* @tailrec */ def loopMatrix(m0: Matrix[S], r0: Vec[Range]): (DataSource.Variable[S], Vec[Range]) = m0 match {
+          case dv : DataSource.Variable[S] => (dv, r0)
+          case mv : Matrix.Var[S] => loopMatrix(mv(), r0)
+          case red: Reduce[S] =>
+            val (m1, r1) = loopMatrix(red.in, r0)
+            @tailrec def loopDimension(d0: Dimension.Selection[S]): Int = d0 match {
+              case dv: Dimension.Selection.Var  [S] => loopDimension(dv())
+              case dn: Dimension.Selection.Name [S] => val n = dn.expr.value; md.indexWhere(_.name == n)
+              case di: Dimension.Selection.Index[S] => di.expr.value
+            }
+            val redIdx = loopDimension(red.dim)
+
+            @tailrec def loopOp(o0: Reduce.Op[S]): Range = o0 match {
+              case ov: Reduce.Op.Var  [S] => loopOp(ov())
+              case oa: Reduce.Op.Apply[S] => val i = oa.index.value; i to i
+              case os: Reduce.Op.Slice[S] => os.from.value until os.until.value
+            }
+            val redRange  = loopOp(red.op)
+            val r1i       = r1(redIdx)
+            val newStart  = r1i.start + redRange.start
+            val newLast   = math.min(r1i.last, r1i.start + redRange.last)
+            val r2i       = newStart to newLast
+            val r2        = r1.updated(redIdx, r2i)
+            (m1, r2)
+        }
+
+        loopMatrix(m, md.map(dv => 0 until dv.size))
+      }
+
+      def addDimGE(elem: graph.Dim.GE, streaming: Boolean): Unit = {
+        val attrKey   = addAttr(elem)
+        val dimElem   = elem.dim
         val mapKey    = dimElem.variable.name
         val source    = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource   (mapKey))
         val dimKey    = dimElem.name
@@ -161,38 +193,36 @@ object AuralSonificationImpl {
         val mdi       = md.indexWhere(_.name == dimName)
         if (mdi < 0) throw AuralSonification.MissingDimension(dimKey)
 
-        /* @tailrec */ def loopMatrix(m0: Matrix[S], r0: Range): (DataSource.Variable[S], Range) = m0 match {
-          case dv : DataSource.Variable[S] => (dv, r0)
-          case mv : Matrix.Var[S] => loopMatrix(mv(), r0)
-          case red: Reduce[S] =>
-            val (m1, r1) = loopMatrix(red.in, r0)
-            @tailrec def loopDimension(d0: Dimension.Selection[S]): Int = d0 match {
-              case dv: Dimension.Selection.Var  [S] => loopDimension(dv())
-              case dn: Dimension.Selection.Name [S] => val n = dn.expr.value; md.indexWhere(_.name == n)
-              case di: Dimension.Selection.Index[S] => di.expr.value
-            }
-            val redIdx = loopDimension(red.dim)
-            val r2 = if (redIdx != mdi) r1 else {
-              @tailrec def loopOp(o0: Reduce.Op[S]): Range = o0 match {
-                case ov: Reduce.Op.Var  [S] => loopOp(ov())
-                case oa: Reduce.Op.Apply[S] => val i = oa.index.value; i to i
-                case os: Reduce.Op.Slice[S] => os.from.value until os.until.value
-              }
-              val redRange  = loopOp(red.op)
-              val newStart  = r1.start + redRange.start
-              val newLast   = math.min(r1.last, r1.start + redRange.last)
-              newStart to newLast
-            }
-            (m1, r2)
-        }
-
-        val (dsv, range) = loopMatrix(m, 0 until md(mdi).size)
+        val (dsv, rangesM) = reduceMatrix(m)
         val ds        = dsv.source
         val dimVar    = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
         assert(dimVar.rank == 1)
-        val ranges    = Vec(range) // dimVar.ranges // shape.map(_._2)
+        // val ranges    = Vec(range) // dimVar.ranges // shape.map(_._2)
+        val ranges    = Vec(rangesM(mdi)) // now use only the range corresponding with the dimension at index `mdi`
         val streamDim = if (streaming) 0 else -1
         val fut       = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = streamDim)
+        graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
+      }
+
+      // TODO: perhaps factor out a bit of DRY with respect to addDimGE
+      // TODO: probably we'll run `reduceMatrix` multiple times with the same input.
+      // therefore, should maybe cache the results?
+      def addVarGE(elem: graph.Var.GE, streaming: Option[String]): Unit = {
+        val attrKey   = addAttr(elem)
+        val varElem   = elem.variable
+        val mapKey    = varElem.name
+        val source    = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
+        val m         = source.matrix
+        val (dsv, rangesM)  = reduceMatrix(m)
+        val streamDim = streaming.fold(-1) { dimKey =>
+          val dimName   = source.dims.get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
+          val md        = m.dimensions
+          val mdi       = md.indexWhere(_.name == dimName)
+          if (mdi < 0) throw AuralSonification.MissingDimension(dimKey)
+          mdi
+        }
+        logDebugTx(s"addVarGE: section = ${rangesM.map(r => s"${r.start} to ${r.end}")}, streamDim = $streamDim")(tx)
+        val fut       = AudioFileCache.acquire(aw.workspace, source = dsv, section = rangesM, streamDim = streamDim)
         graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
       }
 
@@ -202,6 +232,9 @@ object AuralSonificationImpl {
           sonif.controls.get(uv.key).foreach { expr =>
             putAttrValue(attrKey, expr.value)
           }
+
+        case vp: graph.Var.Play   => addVarGE(vp, streaming = Some(vp.time.dim.name))
+        case vp: graph.Var.Values => addVarGE(vp, streaming = None)
 
         case dp: graph.Dim.Play   => addDimGE(dp, streaming = true )
         case dv: graph.Dim.Values => addDimGE(dv, streaming = false)

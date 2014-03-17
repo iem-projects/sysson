@@ -19,27 +19,6 @@ import de.sciss.synth
 import at.iem.sysson.sound.AuralSonification
 
 object Dim {
-  // private final val DIM_COOKIE = 0x64696D00 // "dim\0"
-
-  //  implicit object serializer extends ImmutableSerializer[Dim] {
-  //    def read(in: DataInput): Dim = {
-  //      val cookie = in.readInt()
-  //      require(cookie == DIM_COOKIE,
-  //        s"Unexpected cookie (expected ${DIM_COOKIE.toHexString}, found ${cookie.toHexString})")
-  //      val name    = in.readUTF()
-  //      val minSize = ImmutableSerializer.option[Int].read(in)
-  //      val maxSize = ImmutableSerializer.option[Int].read(in)
-  //      Dim(name, minSize = minSize, maxSize = maxSize)
-  //    }
-  //
-  //    def write(dim: Dim, out: DataOutput): Unit = {
-  //      out.writeInt(DIM_COOKIE)
-  //      out.writeUTF(dim.name)
-  //      ImmutableSerializer.option[Int].write(dim.minSize, out)
-  //      ImmutableSerializer.option[Int].write(dim.maxSize, out)
-  //    }
-  //  }
-
   sealed trait GE extends synth.GE.Lazy with SonificationElement {
     def dim: Dim
   }
@@ -47,16 +26,13 @@ object Dim {
   case class Play(dim: Dim, freq: synth.GE, maxFreq: Double)
     extends GE with AudioRated {
 
-    override def productPrefix = "Dim$Play"
-
-    override def toString = s"$dim.play($freq)"
+    override def productPrefix  = "Dim$Play"
+    override def toString       = s"$dim.play($freq)"
 
     protected def makeUGens: UGenInLike = {
       val aural = AuralSonification.current()
       val key   = aural.attributeKey(this)
       import synth.ugen._
-      // val buf   = proc.graph.stream(key)
-      // val bufSr = proc.graph.BufSampleRate.ir(buf)
       val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
       val speed     = freq / bufSr
       // val maxSpeed

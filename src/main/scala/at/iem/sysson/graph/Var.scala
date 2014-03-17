@@ -20,27 +20,43 @@ import de.sciss.serial.ImmutableSerializer
 import at.iem.sysson.sound.AuralSonification
 
 object Var {
-  trait GE extends synth.GE with SonificationElement {
+  sealed trait GE extends synth.GE.Lazy with SonificationElement {
     def variable: Var
 
-    def axis(dim: Dim): Axis
+    // def axis(dim: Dim): Axis
   }
 
   case class Play(variable: Var, time: Dim.Play)
-    extends /* impl.LazyImpl with */ GE with synth.GE.Lazy with AudioRated {
+    extends /* impl.LazyImpl with */ GE with AudioRated {
 
-    override def productPrefix = "Var$Play"
+    override def productPrefix  = "Var$Play"
+    override def toString       = s"$variable.play($time)"
 
-    override def toString = s"$variable.play($time)"
+    protected def makeUGens: UGenInLike = {
+      val aural = AuralSonification.current()
+      val key   = aural.attributeKey(this)
+      import synth.ugen._
+      val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
+      val speed     = time.freq / bufSr
+      // val maxSpeed
+      proc.graph.VDiskIn.ar(key, speed = speed, interp = 1 /*, maxSpeed = maxSpeed */)  // XXX TODO: need server.sampleRate for maxSpeed
+    }
 
     def axis(dim: Dim): Var.Axis = {
       require (dim.variable == variable, s"Dimension ${dim.name} does not belong to variable $variable")
       Var.Axis(this, dim.name)
     }
+  }
 
-    // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addAudioVariable(this)
+  case class Values(variable: Var) extends GE with ScalarRated {
+
+    override def productPrefix  = "Var$Values"
+    override def toString       = s"$variable.values"
+
     protected def makeUGens: UGenInLike = {
-      ??? // proc.graph.scan.In(scanKey)
+      val aural = AuralSonification.current()
+      val key   = aural.attributeKey(this)
+      proc.graph.attribute(key).ir
     }
   }
 
@@ -109,8 +125,10 @@ object Var {
 
     def dim(name: String): Dim = Dim(this, name)
 
-    def ir: Var.GE = ???
-    def kr: Var.GE = ???
+    // def ir: Var.GE = ...
+    // def kr: Var.GE = ...
+
+    def values: Var.Values = Var.Values(this)
 
     def play(time: Dim.Play): Var.Play = Var.Play(this, time)
   }
@@ -124,8 +142,10 @@ trait Var extends UserInteraction {
   /** Whether a matrix rank higher than `dimensions.size` is permitted */
   def higherRank: Boolean
 
-  def ir: Var.GE
-  def kr: Var.GE
+  // def ir: Var.GE
+  // def kr: Var.GE
+
+  def values: Var.Values
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
   def play(time: Dim.Play): Var.Play
