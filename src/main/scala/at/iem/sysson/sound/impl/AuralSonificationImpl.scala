@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit
 import at.iem.sysson.Implicits._
 import de.sciss.lucre.bitemp.BiExpr
 import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
-import at.iem.sysson.graph.SonificationElement
+import at.iem.sysson.graph.{UserValue, SonificationElement}
 import scala.annotation.tailrec
 
 object AuralSonificationImpl {
@@ -217,9 +217,11 @@ object AuralSonificationImpl {
           val offset      = 0L
           val gain        = 1.0
           // val gv          = Grapheme.Value.Audio(file, spec, offset, gain)
-          // val g           = Grapheme.Elem.Audio.newConst[I](gv)
+          // val g           = Grapheme.Elem.Audio.newConst[I]controls(gv)
           val g           = Grapheme.Elem.Audio(artifact, spec, LongEx.newConst(offset), DoubleEx.newConst(gain))
           proc.attributes.put(attrKey, Attribute.AudioGrapheme(g))
+
+        case uv: UserValue.GE =>  // already wired up
 
         case nyi: SonificationElement =>
           throw new NotImplementedError(nyi.toString)
