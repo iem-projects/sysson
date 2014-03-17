@@ -38,6 +38,7 @@ import de.sciss.lucre.matrix.Matrix
 import de.sciss.icons.raphael
 import javax.swing.TransferHandler
 import java.awt.datatransfer.Transferable
+import java.awt.Color
 
 object SonificationSourceViewImpl {
   private val DEBUG = true
@@ -205,7 +206,7 @@ object SonificationSourceViewImpl {
 
       val ggMap = new BoxPanel(Orientation.Horizontal) {
         contents += new Label(null) {
-          icon = raphael.Icon(extent = 24)(raphael.Shapes.Hand) // Clip
+          icon = raphael.Icon(extent = 24, fill = Color.gray)(raphael.Shapes.Hand) // Clip
         }
         contents ++= keyDimButs
         contents += Swing.HGlue

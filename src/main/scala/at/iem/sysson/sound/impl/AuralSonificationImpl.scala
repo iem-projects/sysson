@@ -35,8 +35,9 @@ import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
 import at.iem.sysson.Implicits._
 import de.sciss.lucre.bitemp.BiExpr
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import at.iem.sysson.graph.SonificationElement
+import scala.annotation.tailrec
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -154,11 +155,42 @@ object AuralSonificationImpl {
         // `dimName` is the name of the dimension in the source matrix
         // which is mapped to the logical `mapKey`
         val dimName   = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
-        val dsv       = ??? : DataSource.Variable[S] // source.matrix
+
+        val m         = source.matrix
+        val md        = m.dimensions
+        val mdi       = md.indexWhere(_.name == dimName)
+        if (mdi < 0) throw AuralSonification.MissingDimension(dimKey)
+
+        /* @tailrec */ def loopMatrix(m0: Matrix[S], r0: Range): (DataSource.Variable[S], Range) = m0 match {
+          case dv : DataSource.Variable[S] => (dv, r0)
+          case mv : Matrix.Var[S] => loopMatrix(mv(), r0)
+          case red: Reduce[S] =>
+            val (m1, r1) = loopMatrix(red.in, r0)
+            @tailrec def loopDimension(d0: Dimension.Selection[S]): Int = d0 match {
+              case dv: Dimension.Selection.Var  [S] => loopDimension(dv())
+              case dn: Dimension.Selection.Name [S] => val n = dn.expr.value; md.indexWhere(_.name == n)
+              case di: Dimension.Selection.Index[S] => di.expr.value
+            }
+            val redIdx = loopDimension(red.dim)
+            val r2 = if (redIdx != mdi) r1 else {
+              @tailrec def loopOp(o0: Reduce.Op[S]): Range = o0 match {
+                case ov: Reduce.Op.Var  [S] => loopOp(ov())
+                case oa: Reduce.Op.Apply[S] => val i = oa.index.value; i to i
+                case os: Reduce.Op.Slice[S] => os.from.value until os.until.value
+              }
+              val redRange  = loopOp(red.op)
+              val newStart  = r1.start + redRange.start
+              val newLast   = math.min(r1.last, r1.start + redRange.last)
+              newStart to newLast
+            }
+            (m1, r2)
+        }
+
+        val (dsv, range) = loopMatrix(m, 0 until md(mdi).size)
         val ds        = dsv.source
         val dimVar    = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
         assert(dimVar.rank == 1)
-        val ranges    = dimVar.ranges // shape.map(_._2)
+        val ranges    = Vec(range) // dimVar.ranges // shape.map(_._2)
         val streamDim = if (streaming) 0 else -1
         val fut       = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = streamDim)
         graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
