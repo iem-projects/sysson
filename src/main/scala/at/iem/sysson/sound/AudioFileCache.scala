@@ -86,10 +86,11 @@ object AudioFileCache {
     val isStreaming   = streamDim >= 0
     val shape         = vs.shape
     val numFrames     = if (!isStreaming) 1 else shape(streamDim)
-    val size          = (0L /: shape)((sum, sz) => sum + sz)
+    val size          = (1L /: shape)((sum, sz) => sum * sz)
     val numChannelsL  = size / numFrames
     require(numChannelsL <= 0xFFFF, s"The number of channels ($numChannelsL) is larger than supported")
     val numChannels   = numChannelsL.toInt
+    logDebug(s"sectionToSpec($vs): shape = $shape, numFrames = $numFrames, size = $size, numChannels = $numChannels")
     AudioFileSpec(numFrames = numFrames, numChannels = numChannels, sampleRate = 44100 /* rate */)
   }
   
