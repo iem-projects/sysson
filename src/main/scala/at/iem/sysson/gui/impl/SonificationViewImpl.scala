@@ -34,6 +34,7 @@ import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
 import de.sciss.icons.raphael
+import scala.concurrent.stm.Ref
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Sonification[S])
@@ -48,10 +49,15 @@ object SonificationViewImpl {
     }
 
     val sonifView = AuralWorkspaceHandler.instance.view[S, workspace.I](workspace).view(sonification)
+    val p         = sonification.patch
 
     val res = new Impl[S](sonifH, sonifView, nameView) {
       val auralObserver = sonifView.react { implicit tx => upd =>
         deferTx(auralChange(upd))
+      }
+
+      val graphObserver = p.graph.changed.react { implicit tx => upd =>
+        updateGraph(upd.now)
       }
     }
     val sonifState = sonifView.state
@@ -59,7 +65,6 @@ object SonificationViewImpl {
       res.guiInit(sonifState)
     }
 
-    val p       = sonification.patch
     val graph0  = p.graph.value
     res.updateGraph(graph0)
 
@@ -73,6 +78,7 @@ object SonificationViewImpl {
     extends SonificationView[S] with ComponentHolder[Component] {
 
     protected def auralObserver: Disposable[S#Tx]
+    protected def graphObserver: Disposable[S#Tx]
 
     def sonification(implicit tx: S#Tx): Sonification[S] = sonifH()
 
@@ -81,7 +87,7 @@ object SonificationViewImpl {
     private var transportButtons: Component with Transport.ButtonStrip = _
     private var timerPrepare: javax.swing.Timer = _
 
-    // XXX TODO: private val graphDisposables = STMRef[Vec[Disposable[S#Tx]]]
+    private val graphDisposables = Ref(Vec.empty[Disposable[S#Tx]])
 
     final protected def auralChange(upd: AuralSonification.Update): Unit = {
       requireEDT()
@@ -94,8 +100,6 @@ object SonificationViewImpl {
 
     final def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
       val sonif = sonifH()
-
-      // XXX TODO: graphDisposables.swap(Vec.empty).foreach(_.dispose())
 
       // ---- sources/mapping tx ----
 
@@ -123,7 +127,8 @@ object SonificationViewImpl {
           (key, view)
       }
 
-      // XXX TODO: graphDisposables.transform(_ ++ userValues.map(_._2))
+      val newObs = sources.map(_._2) ++ userValues.map(_._2)
+      graphDisposables.swap(newObs)(tx.peer).foreach(_.dispose())
 
       deferTx {
         // ---- sources/mapping gui ----
@@ -243,8 +248,10 @@ object SonificationViewImpl {
     }
 
     final def dispose()(implicit tx: S#Tx): Unit = {
-      auralObserver.dispose()
       sonifView.stop()
+      auralObserver.dispose()
+      graphObserver.dispose()
+      graphDisposables.swap(Vec.empty)(tx.peer).foreach(_.dispose())
       nameView.foreach(_.dispose())
       deferTx {
         timerPrepare.stop()

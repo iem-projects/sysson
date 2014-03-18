@@ -41,6 +41,8 @@ import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
 import de.sciss.synth.SynthGraph
+import javax.swing.undo.{CompoundEdit, UndoableEdit}
+import de.sciss.synth.proc.SynthGraphs
 
 object PatchCodeViewImpl {
   /** We use one shared interpreter for all patch code frames. */
@@ -54,7 +56,8 @@ object PatchCodeViewImpl {
                         (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeView[S] = {
     val source0 = sourceCode.value
     val sourceH = tx.newHandle(sourceCode)(StringEx.varSerializer[S])
-    val graphH  = graph.map(tx.newHandle(_)(de.sciss.synth.proc.SynthGraphs.varSerializer[S]))
+    import SynthGraphs.varSerializer
+    val graphH  = graph.map(tx.newHandle(_))
 
     val code    = Code.SynthGraph(source0)
 
@@ -65,9 +68,11 @@ object PatchCodeViewImpl {
 
   private final class Impl[S <: Sys[S]](val undoManager: UndoManager, code: Code.SynthGraph,
                                         sourceH: stm.Source[S#Tx, Expr.Var[S, String]],
-                                        graphH : Option[stm.Source[S#Tx, Expr.Var[S, SynthGraph]]])
+                                        graphHOpt : Option[stm.Source[S#Tx, Expr.Var[S, SynthGraph]]])
                                        (implicit val cursor: stm.Cursor[S])
     extends ComponentHolder[Component] with PatchCodeView[S] with ModelImpl[PatchCodeView.Update] {
+
+    import ExecutionContext.Implicits.global
 
     private var _dirty = false
     def dirty = _dirty
@@ -86,7 +91,7 @@ object PatchCodeViewImpl {
     import code.{id => codeID}
 
     private var codePane: CodePane = _
-    private var futCompile = Option.empty[Future[Unit]]
+    private var futCompile = Option.empty[Future[Any]]
     private var actionApply: Action = _
 
     def isCompiling: Boolean = {
@@ -101,49 +106,135 @@ object PatchCodeViewImpl {
     def undoAction: Action = Action.wrap(codePane.editor.getActionMap.get("undo"))
     def redoAction: Action = Action.wrap(codePane.editor.getActionMap.get("redo"))
 
-    def save(): Future[Unit] = {
+    private def saveSource(newCode: String)(implicit tx: S#Tx): UndoableEdit = {
+      val expr  = ExprImplicits[S]
+      import expr._
+      import StringEx.{varSerializer, serializer}
+      val source  = sourceH()
+      EditVar.Expr("Change Source Code", source, newCode)
+    }
+
+    private def addEditAndClear(edit: UndoableEdit): Unit = {
       requireEDT()
-      val newCode = currentText
-      val edit    = cursor.step { implicit tx =>
-        val expr = ExprImplicits[S]
-        import expr._
-        import StringEx.{varSerializer, serializer}
-        val source  = sourceH()
-        EditVar.Expr("Change Source Code", source, newCode)
-      }
       undoManager.add(edit)
       // this doesn't work properly
       // component.setDirty(value = false) // do not erase undo history
 
       // so let's clear the undo history now...
       codePane.editor.getDocument.asInstanceOf[SyntaxDocument].clearUndos()
-      Future.successful[Unit]()
     }
+
+    def save(): Future[Unit] = {
+      requireEDT()
+      val newCode = currentText
+      graphHOpt.fold {
+        val edit = cursor.step { implicit tx => saveSource(newCode) }
+        addEditAndClear(edit)
+        Future.successful[Unit]()
+      } { graphH =>
+        compileSource(newCode, apply = true)
+      }
+    }
+
+    private def saveSourceAndGraph(newCode: String, graph: SynthGraph)(implicit tx: S#Tx): UndoableEdit = {
+      val edit1 = saveSource(newCode)
+      graphHOpt.fold(edit1) { graphH =>
+        val vr    = graphH()
+        import SynthGraphs.{serializer, varSerializer}
+        val edit2 = EditVar.Expr("Change Synth Graph", vr, SynthGraphs.newConst[S](graph))
+        val ce    = new CompoundEdit
+        ce.addEdit(edit1)
+        ce.addEdit(edit2)
+        ce.end()
+        ce
+      }
+    }
+
+    private def compile(): Unit = compileSource(currentText, apply = false)
+
+      private def compileSource(newCode: String, apply: Boolean): Future[Unit] = {
+      val saveGraph = graphHOpt.isDefined && apply
+      if (futCompile.isDefined && !saveGraph) return Future.successful[Unit]()
+
+      ggProgress          .visible = true
+      ggProgressInvisible .visible = false
+      actionCompile       .enabled = false
+      if (saveGraph) actionApply.enabled = false
+
+      val fut     = if (saveGraph) {
+        val _fut = Library.compile(newCode)
+        _fut.onSuccess { case graph =>
+          defer {
+            val edit = cursor.step { implicit tx =>
+              saveSourceAndGraph(newCode, graph)
+            }
+            addEditAndClear(edit)
+          }
+        }
+        _fut
+      } else {
+        Code(codeID, newCode).compileBody()
+      }
+      futCompile = Some(fut)
+      fut.onComplete { res =>
+        defer {
+          futCompile                    = None
+          ggProgressInvisible .visible  = true
+          ggProgress          .visible  = false
+          actionCompile       .enabled  = true
+          if (saveGraph) actionApply.enabled = true
+
+          val iconColr = res match {
+            case Success(_) =>
+              clearGreen = true
+              new Color(0x00, 0xC0, 0x00)                           // "\u2713"
+            case Failure(Code.CompilationFailed()) => Color.red     // "error!"
+            case Failure(Code.CodeIncomplete   ()) => Color.orange  // "incomplete!"
+            case Failure(e) =>
+              e.printStackTrace()
+              Color.red
+          }
+          ggCompile.icon = compileIcon(Some(iconColr))
+        }
+      }
+      fut.map(_ => ())
+    }
+
+    private lazy val ggProgress: ProgressBar = new ProgressBar() {
+      preferredSize = {
+        val d = preferredSize
+        d.width = math.min(32, d.width)
+        d
+      }
+
+      maximumSize = {
+        val d = maximumSize
+        d.width = math.min(32, d.width)
+        d
+      }
+
+      this.clientProps += "JProgressBar.style" -> "circular"
+      indeterminate = true
+
+      visible = false
+    }
+
+    private lazy val ggProgressInvisible = Swing.RigidBox(ggProgress.preferredSize)
+
+    private lazy val actionCompile = Action("Compile")(compile())
+
+    private lazy val ggCompile: Button = GUI.toolButton(actionCompile, raphael.Shapes.Hammer,
+      tooltip = "Verify that current buffer compiles")
+
+    private def compileIcon(colr: Option[Color]): Icon =
+      raphael.Icon(extent = 20, fill = colr.getOrElse(raphael.TexturePaint(24)),
+        shadow = raphael.WhiteShadow)(raphael.Shapes.Hammer)
+
+    private var clearGreen = false
 
     def guiInit(): Unit = {
       codePane        = CodePane(codeCfg)
       val iPane       = InterpreterPane.wrapAsync(interpreter, codePane)
-
-      val ggProgress = new ProgressBar() {
-        preferredSize = {
-          val d = preferredSize
-          d.width = math.min(32, d.width)
-          d
-        }
-
-        maximumSize = {
-          val d = maximumSize
-          d.width = math.min(32, d.width)
-          d
-        }
-
-        this.clientProps += "JProgressBar.style" -> "circular"
-        indeterminate = true
-
-        visible = false
-      }
-
-      val ggProgressInvisible = Swing.RigidBox(ggProgress.preferredSize)
 
       val progressPane = new OverlayPanel {
         contents += ggProgress
@@ -152,47 +243,6 @@ object PatchCodeViewImpl {
 
       actionApply = Action("Apply")(save())
       actionApply.enabled = false
-
-      var clearGreen = false
-
-      def compileIcon(colr: Option[Color]): Icon =
-        raphael.Icon(extent = 20, fill = colr.getOrElse(raphael.TexturePaint(24)),
-          shadow = raphael.WhiteShadow)(raphael.Shapes.Hammer)
-
-      lazy val actionCompile = Action("Compile") {
-        if (futCompile.isDefined) {
-          // ggStatus.text = "busy!"
-          return
-        }
-
-        ggProgress      .visible = true
-        ggProgressInvisible .visible = false
-
-        val newCode = Code(codeID, currentText)
-        val fut     = newCode.compileBody()
-        futCompile  = Some(fut)
-        import ExecutionContext.Implicits.global
-        fut.onComplete { res =>
-          defer {
-            futCompile = None
-            ggProgressInvisible .visible = true
-            ggProgress      .visible = false
-            val iconColr = res match {
-              case Success(_) =>
-                clearGreen = true
-                new Color(0x00, 0xC0, 0x00) // "\u2713"
-              case Failure(Code.CompilationFailed()) => Color.red
-              // "error!"
-              case Failure(Code.CodeIncomplete()) => Color.orange
-              // "incomplete!"
-              case Failure(e) =>
-                e.printStackTrace()
-                Color.red
-            }
-            ggCompile.icon = compileIcon(Some(iconColr))
-          }
-        }
-      }
 
       lazy val doc = codePane.editor.getDocument.asInstanceOf[SyntaxDocument]
       doc.addUndoableEditListener(
@@ -210,7 +260,6 @@ object PatchCodeViewImpl {
       })
 
       lazy val ggApply  : Button = GUI.toolButton(actionApply  , raphael.Shapes.Check , tooltip = "Save text changes")
-      lazy val ggCompile: Button = GUI.toolButton(actionCompile, raphael.Shapes.Hammer, tooltip = "Verify that current buffer compiles")
 
       val panelBottom = new FlowPanel(FlowPanel.Alignment.Trailing)(
         HGlue, ggApply, ggCompile, progressPane) // HStrut(16))

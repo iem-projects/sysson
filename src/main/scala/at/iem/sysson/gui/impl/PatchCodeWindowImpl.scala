@@ -26,6 +26,7 @@ import at.iem.sysson.sound.{Keys, Patch}
 import de.sciss.lucre.expr.{Expr, String => StringEx}
 import de.sciss.synth.proc.Attribute
 import at.iem.sysson.sound.Patch.AttributeKey
+import scala.concurrent.ExecutionContext
 
 object PatchCodeWindowImpl {
   def apply[S <: Sys[S]](entry: Library.Leaf[S])
@@ -87,22 +88,25 @@ object PatchCodeWindowImpl {
 
     override def checkClose(): Boolean = {
       if (view.isCompiling) return false
+      if (!view.dirty     ) return true
 
-      if (view.dirty) {
-        val message = "The code has been edited.\nDo you want to save the changes?"
-        val opt = OptionPane.confirmation(message = message, optionType = OptionPane.Options.YesNoCancel,
-          messageType = OptionPane.Message.Warning)
-        opt.title = "Close Code Editor" // s"Close Code Editor - $name"
-        opt.show(Some(component)) match {
-          case OptionPane.Result.No  =>
-          case OptionPane.Result.Yes =>
-            view.save()
+      val message = "The code has been edited.\nDo you want to save the changes?"
+      val opt = OptionPane.confirmation(message = message, optionType = OptionPane.Options.YesNoCancel,
+        messageType = OptionPane.Message.Warning)
+      opt.title = "Close Code Editor" // s"Close Code Editor - $name"
+      opt.show(Some(component)) match {
+        case OptionPane.Result.No  => true
+        case OptionPane.Result.Yes =>
+          val fut = view.save()
+          fut.value.fold {
+            import ExecutionContext.Implicits.global
+            fut.onSuccess { case _ => defer(disposeFromGUI()) }
+            false
 
-          case OptionPane.Result.Cancel | OptionPane.Result.Closed =>
-            return false
-        }
+          } (_.isSuccess)
+
+        case OptionPane.Result.Cancel | OptionPane.Result.Closed => false
       }
-      true // disposeFromGUI()
     }
 
     private def disposeFromGUI(): Unit = {
