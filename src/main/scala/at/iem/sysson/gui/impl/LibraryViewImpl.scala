@@ -17,7 +17,7 @@ import de.sciss.lucre.expr.{Expr, String => StringEx}
 import de.sciss.icons.raphael
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
-import javax.swing.undo.{CannotUndoException, CannotRedoException, AbstractUndoableEdit}
+import javax.swing.undo.{UndoableEdit, CannotUndoException, CannotRedoException, AbstractUndoableEdit}
 import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
@@ -291,7 +291,7 @@ object LibraryViewImpl {
               val edit = EditVar.Expr("Rename Node", v, value = s)
               Some(edit)
 
-            case _ => None
+            case _ => None: Option[UndoableEdit]
           }
         }
         editOpt.foreach(undo.add)

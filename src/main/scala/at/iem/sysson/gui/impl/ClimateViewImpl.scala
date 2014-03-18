@@ -36,7 +36,7 @@ import javax.swing.event.{ChangeEvent, ChangeListener}
 import javax.swing.TransferHandler.TransferSupport
 import de.sciss.audiowidgets.{Transport, DualRangeModel, DualRangeSlider}
 import collection.breakOut
-import de.sciss.synth.{Ops, Synth}
+import de.sciss.synth.{SynthGraph, Ops, Synth}
 import de.sciss.swingplus.OverlayPanel
 import scala.concurrent.{ExecutionContext, Future}
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
@@ -341,7 +341,7 @@ object ClimateViewImpl {
 
     private var redGUI: Vec[Reduction] = _
 
-    private var userValues  = Map.empty[String, SpinnerNumberModel]
+    // private var userValues  = Map.empty[String, SpinnerNumberModel]
 
     private var ggSonifName: TextField = _
 
@@ -481,11 +481,11 @@ object ClimateViewImpl {
           val drag      = t.getTransferData(DragAndDrop.LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
           val sourceOpt = drag.cursor.step { implicit tx =>
             drag.node() match {
-              case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
-              case _ => None
+              case TreeLike.IsLeaf(l) => Some(l.name.value -> l.source.value)
+              case _ => None: Option[(String, String)]
             }
           }
-          sourceOpt.exists { case source =>
+          sourceOpt.exists { case (name, source) =>
             import ExecutionContext.Implicits.global
             val fut         = Library.compile(source)
             ggBusy.visible  = true
@@ -515,7 +515,7 @@ object ClimateViewImpl {
       peer.putClientProperty("JProgressBar.style", "circular")
     }
 
-    private var _patch = Option.empty[PatchOLD]
+    private var _patch = Option.empty[SynthGraph]
 
     def play(): Unit = {
 //      stop()
@@ -581,8 +581,8 @@ object ClimateViewImpl {
       println("NOT YET IMPLEMENTED: Return-to-zero")
     }
 
-    def patch: Option[PatchOLD] = _patch
-    def patch_=(value: Option[PatchOLD]): Unit = {
+    def patch: Option[SynthGraph] = _patch
+    def patch_=(value: Option[SynthGraph]): Unit = {
 //      value match {
 //        case Some(p) =>
 //          ggSonifName.text    = p.name

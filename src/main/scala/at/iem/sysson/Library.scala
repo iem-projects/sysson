@@ -15,7 +15,7 @@
 package at.iem.sysson
 
 import de.sciss.lucre.{event => evt}
-import de.sciss.lucre.event.{Publisher, EventLike, Sys}
+import de.sciss.lucre.event.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
 import at.iem.sysson.impl.{LibraryImpl => Impl}
 import de.sciss.lucre.stm
@@ -24,6 +24,7 @@ import de.sciss.serial
 import scala.collection.mutable
 import de.sciss.model.Change
 import scala.concurrent.{blocking, Future}
+import de.sciss.synth.SynthGraph
 
 object Library {
   def apply[S <: Sys[S]](implicit tx: S#Tx): Library[S] = Impl[S]
@@ -67,6 +68,8 @@ object Library {
 
     def apply[S <: Sys[S]](name: Expr[S, String], source: Expr[S, String])(implicit tx: S#Tx): Leaf[S] =
       Impl.newLeaf(name, source)
+
+    // case class Value(name: String, source: String)
   }
   trait Leaf[S <: Sys[S]] extends NodeLike[S] {
     def name  : Expr.Var[S, String]
@@ -77,14 +80,13 @@ object Library {
 
   // ---- compilation ----
   private val sync    = new AnyRef
-  private val codeMap = new mutable.WeakHashMap[PatchOLD.Source, PatchOLD]
+  private val codeMap = new mutable.WeakHashMap[String, SynthGraph]
 
-  def compile(source: PatchOLD.Source): Future[PatchOLD] = sync.synchronized(codeMap.get(source)).fold {
+  def compile(source: String): Future[SynthGraph] = sync.synchronized(codeMap.get(source)).fold {
     Code.future {
-      val graph = blocking { Code.SynthGraph(source.code).execute() }
-      val res   = PatchOLD(source, graph)
-      sync.synchronized(codeMap.put(source, res))
-      res
+      val graph = blocking { Code.SynthGraph(source).execute() }
+      sync.synchronized(codeMap.put(source, graph))
+      graph
     }
 
   } (Future.successful)

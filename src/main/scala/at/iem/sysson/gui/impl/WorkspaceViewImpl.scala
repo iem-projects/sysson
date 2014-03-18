@@ -37,6 +37,7 @@ import javax.swing.{JComponent, TransferHandler}
 import java.awt.datatransfer.Transferable
 import de.sciss.lucre.swing._
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.synth.SynthGraph
 
 object WorkspaceViewImpl {
   var DEBUG = false
@@ -198,14 +199,17 @@ object WorkspaceViewImpl {
     }
 
     // creates and adds a Sonification instance
-    def addSonification(patch: PatchOLD): Unit = {
+    def addSonification(name: String, sourceOpt: Option[String], graph: SynthGraph): Unit = {
       val imp   = ExprImplicits[S]
       import imp._
       val edit = cursor.step { implicit tx =>
         val idx             = workspace.sonifications.size
         val sonif           = Sonification[S]
-        sonif.patch.graph() = patch.graph
-        sonif.attributes.put(Keys.attrName, Attribute.String.apply(StringEx.newVar(patch.name)))
+        sonif.patch.graph() = graph
+        sonif.attributes.put(Keys.attrName, Attribute.String.apply(StringEx.newVar(name)))
+        sourceOpt.foreach { code =>
+          sonif.attributes.put(Keys.attrGraphSource, Attribute.String.apply(StringEx.newVar(code)))
+        }
         val childH          = tx.newHandle(sonif)
         val _edit           = new EditInsertSonif(idx, childH)
         _edit.perform()
@@ -347,17 +351,17 @@ object WorkspaceViewImpl {
       val butSonif  = DropButton[LibraryNodeDrag](LibraryNodeFlavor, "Sonification Patch From the Library") { drag =>
         val sourceOpt = drag.cursor.step { implicit tx =>
           drag.node() match {
-            case TreeLike.IsLeaf(l) => Some(PatchOLD.Source(l.name.value, l.source.value))
-            case _                  => None : Option[PatchOLD.Source]
+            case TreeLike.IsLeaf(l) => Some(l.name.value -> l.source.value)
+            case _                  => None : Option[(String, String)]
           }
         }
 
-        sourceOpt.exists { case source =>
+        sourceOpt.exists { case (name, source) =>
           import ExecutionContext.Implicits.global
           val fut         = Library.compile(source)
           ggBusy.spinning = true
           fut.onComplete(_ => ggBusy.spinning = false)
-          fut.foreach(addSonification)
+          fut.foreach(graph => addSonification(name, Some(source), graph))
           true
         }
       }

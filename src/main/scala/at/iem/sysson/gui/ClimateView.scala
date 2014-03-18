@@ -20,6 +20,7 @@ import ucar.nc2
 import impl.{ClimateViewImpl => Impl}
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.synth.SynthGraph
 
 object ClimateView {
   def apply[S <: Sys[S]](document: DataSource[S], section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
@@ -34,5 +35,5 @@ trait ClimateView[S <: Sys[S]] {
   def document(implicit tx: S#Tx): DataSource[S]
   def section : VariableSection
 
-  var patch: Option[PatchOLD]
+  var patch: Option[SynthGraph]
 }
