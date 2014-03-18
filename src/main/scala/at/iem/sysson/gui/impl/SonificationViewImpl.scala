@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.{AuralSonification, AuralWorkspaceHandler, Keys, Sonification}
 import de.sciss.lucre.stm
-import scala.swing.{Alignment, Swing, Orientation, BoxPanel, Label, FlowPanel, Component}
+import scala.swing._
 import de.sciss.synth.proc.Attribute
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
@@ -33,6 +33,7 @@ import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
+import de.sciss.icons.raphael
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Sonification[S])
@@ -48,7 +49,7 @@ object SonificationViewImpl {
 
     val sonifView = AuralWorkspaceHandler.instance.view[S, workspace.I](workspace).view(sonification)
 
-    val res = new Impl(sonifH, sonifView, nameView) {
+    val res = new Impl[S](sonifH, sonifView, nameView) {
       val auralObserver = sonifView.react { implicit tx => upd =>
         deferTx(auralChange(upd))
       }
@@ -179,8 +180,15 @@ object SonificationViewImpl {
 
     final def guiInit(initState: AuralSonification.Update): Unit = {
       // ---- Header ----
-      val cHead   = nameView.fold(List.empty[Component])(view => List(new Label("Name:"), view.component))
-      val pHeader = new FlowPanel(cHead: _*)
+      val actionEditPatch = new Action(null) {
+        def apply(): Unit = cursor.step { implicit tx =>
+          val sonif = sonifH()
+          PatchCodeWindow(sonif.patch)
+        }
+      }
+      val ggEditPatch = GUI.toolButton(actionEditPatch, raphael.Shapes.Edit, tooltip = "Edit Patch")
+      val cHead       = nameView.fold(Vec.empty[Component])(view => Vec(new Label("Name:"), view.component))
+      val pHeader     = new FlowPanel(cHead :+ ggEditPatch: _*)
 
       // ---- Mapping ----
 

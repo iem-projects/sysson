@@ -22,10 +22,19 @@ import impl.{PatchCodeViewImpl => Impl}
 import de.sciss.model.Model
 import scala.swing.Action
 import de.sciss.lucre.swing.View
+import de.sciss.lucre.expr.Expr
+import de.sciss.synth.SynthGraph
+import scala.concurrent.Future
 
 object PatchCodeView {
-  def apply[S <: Sys[S]](entry: Library.Leaf[S], undoManager: UndoManager)
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): PatchCodeView[S] = Impl(entry, undoManager)
+  def apply[S <: Sys[S]](entry: Library.Leaf[S])
+                        (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeView[S] =
+    Impl(entry.source, graph = None)
+
+  /** If `graph` is given, the `apply` action is tied to updating the graph variable. */
+  def apply[S <: Sys[S]](sourceCode: Expr.Var[S, String], graph: Option[Expr.Var[S, SynthGraph]])
+                        (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeView[S] =
+    Impl(sourceCode, graph)
 
   sealed trait Update
   case class DirtyChange(value: Boolean) extends Update
@@ -35,7 +44,7 @@ trait PatchCodeView[S <: Sys[S]] extends View.Cursor[S] with Model[PatchCodeView
 
   def dirty: Boolean
 
-  def save(): Unit
+  def save(): Future[Unit]
 
   def undoAction: Action
   def redoAction: Action

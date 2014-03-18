@@ -40,6 +40,7 @@ import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
+import de.sciss.synth.SynthGraph
 
 object PatchCodeViewImpl {
   /** We use one shared interpreter for all patch code frames. */
@@ -49,21 +50,22 @@ object PatchCodeViewImpl {
     Interpreter.async(cfg)
   }
 
-  def apply[S <: Sys[S]](entry: Library.Leaf[S], undoManager: UndoManager)
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): PatchCodeView[S] = {
-    val name0   = entry.name.value
-    val source0 = entry.source.value
-    val sourceH = tx.newHandle(entry.source)(StringEx.varSerializer[S])
+  def apply[S <: Sys[S]](sourceCode: Expr.Var[S, String], graph: Option[Expr.Var[S, SynthGraph]])
+                        (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeView[S] = {
+    val source0 = sourceCode.value
+    val sourceH = tx.newHandle(sourceCode)(StringEx.varSerializer[S])
+    val graphH  = graph.map(tx.newHandle(_)(de.sciss.synth.proc.SynthGraphs.varSerializer[S]))
 
     val code    = Code.SynthGraph(source0)
 
-    val res = new Impl[S](undoManager, code, sourceH)
-    deferTx(res.guiInit(name0))
+    val res = new Impl[S](undoManager, code, sourceH, graphH)
+    deferTx(res.guiInit())
     res
   }
 
   private final class Impl[S <: Sys[S]](val undoManager: UndoManager, code: Code.SynthGraph,
-                                        sourceH: stm.Source[S#Tx, Expr.Var[S, String]])
+                                        sourceH: stm.Source[S#Tx, Expr.Var[S, String]],
+                                        graphH : Option[stm.Source[S#Tx, Expr.Var[S, SynthGraph]]])
                                        (implicit val cursor: stm.Cursor[S])
     extends ComponentHolder[Component] with PatchCodeView[S] with ModelImpl[PatchCodeView.Update] {
 
@@ -99,7 +101,7 @@ object PatchCodeViewImpl {
     def undoAction: Action = Action.wrap(codePane.editor.getActionMap.get("undo"))
     def redoAction: Action = Action.wrap(codePane.editor.getActionMap.get("redo"))
 
-    def save(): Unit = {
+    def save(): Future[Unit] = {
       requireEDT()
       val newCode = currentText
       val edit    = cursor.step { implicit tx =>
@@ -115,9 +117,10 @@ object PatchCodeViewImpl {
 
       // so let's clear the undo history now...
       codePane.editor.getDocument.asInstanceOf[SyntaxDocument].clearUndos()
+      Future.successful[Unit]()
     }
 
-    def guiInit(name0: String): Unit = {
+    def guiInit(): Unit = {
       codePane        = CodePane(codeCfg)
       val iPane       = InterpreterPane.wrapAsync(interpreter, codePane)
 
@@ -140,11 +143,11 @@ object PatchCodeViewImpl {
         visible = false
       }
 
-      val ggProgressInvis = Swing.RigidBox(ggProgress.preferredSize)
+      val ggProgressInvisible = Swing.RigidBox(ggProgress.preferredSize)
 
       val progressPane = new OverlayPanel {
         contents += ggProgress
-        contents += ggProgressInvis
+        contents += ggProgressInvisible
       }
 
       actionApply = Action("Apply")(save())
@@ -163,7 +166,7 @@ object PatchCodeViewImpl {
         }
 
         ggProgress      .visible = true
-        ggProgressInvis .visible = false
+        ggProgressInvisible .visible = false
 
         val newCode = Code(codeID, currentText)
         val fut     = newCode.compileBody()
@@ -172,7 +175,7 @@ object PatchCodeViewImpl {
         fut.onComplete { res =>
           defer {
             futCompile = None
-            ggProgressInvis .visible = true
+            ggProgressInvisible .visible = true
             ggProgress      .visible = false
             val iconColr = res match {
               case Success(_) =>

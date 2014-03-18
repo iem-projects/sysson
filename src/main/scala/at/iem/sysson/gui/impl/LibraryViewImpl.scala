@@ -25,20 +25,19 @@ import de.sciss.lucre.swing._
 
 object LibraryViewImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryView[S] = {
-    val undoMgr   = new UndoManagerImpl {
+    implicit val undoMgr: UndoManager = new UndoManagerImpl {
       protected var dirty: Boolean = false
     }
     val handler   = new Handler[S](undoMgr)
     val libH      = tx.newHandle(library)
-    val res       = new Impl[S](undoMgr, libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
+    val res       = new Impl[S](libH, TreeTableView[S, Library[S], Handler[S]](library, handler))
     deferTx(res.guiInit())
     res
   }
 
-  private final class Impl[S <: Sys[S]](val undoManager: UndoManager,
-                                        libraryH: stm.Source[S#Tx, Library[S]],
+  private final class Impl[S <: Sys[S]](libraryH: stm.Source[S#Tx, Library[S]],
                                         treeView: TreeTableView[S, Library[S], Handler[S]])
-                                       (implicit val cursor: stm.Cursor[S])
+                                       (implicit val cursor: stm.Cursor[S], val undoManager: UndoManager)
     extends LibraryView[S] with ComponentHolder[Component] {
     impl =>
 
@@ -188,7 +187,7 @@ object LibraryViewImpl {
           case single :: Nil if single.isLeaf =>
             impl.cursor.step { implicit tx =>
               single.modelData() match {
-                case TreeLike.IsLeaf(l) => PatchCodeWindow(l, undoManager)
+                case TreeLike.IsLeaf(l) => PatchCodeWindow(l)
                 case _                  =>
               }
             }
