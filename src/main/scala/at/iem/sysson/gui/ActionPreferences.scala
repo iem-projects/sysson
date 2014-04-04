@@ -1,20 +1,18 @@
 package at.iem.sysson
 package gui
 
-import java.awt.event.KeyEvent
 import de.sciss.desktop.{FileDialog, Preferences, OptionPane, KeyStrokes}
-import scalaswingcontrib.group.GroupPanel
-import de.sciss.swingplus.{Separator, Spinner}
+import de.sciss.swingplus.{GroupPanel, Separator, Spinner}
 import javax.swing.{JPanel, SpinnerNumberModel, UIManager}
 import de.sciss.file._
 import scala.swing.{Action, Label, Alignment, Component, Swing, TextField, Button, FlowPanel, ComboBox}
-import scala.swing.event.{EditDone, SelectionChanged, ValueChanged}
+import scala.swing.event.{Key, EditDone, SelectionChanged, ValueChanged}
 import Swing.EmptyIcon
 
 object ActionPreferences extends Action("Preferences...") {
   import KeyStrokes._
 
-  accelerator = Some(menu1 + KeyEvent.VK_COMMA)
+  accelerator = Some(menu1 + Key.Comma)
 
   def apply(): Unit = {
     import language.reflectiveCalls
@@ -112,17 +110,17 @@ object ActionPreferences extends Action("Preferences...") {
       val sep1 = Separator()
 
       // val lbValue = new Label("Value:", EmptyIcon, Alignment.Right)
-      theHorizontalLayout is Parallel(sep1, Sequential(
-        Parallel(lbLookAndFeel, lbSuperCollider, lbAudioDevice, lbNumOutputs, lbHeadphones),
-        Parallel(ggLookAndFeel, ggSuperCollider, ggAudioDevice, ggNumOutputs, ggHeadphones)
+      horizontal = Par(sep1, Seq(
+        Par(lbLookAndFeel, lbSuperCollider, lbAudioDevice, lbNumOutputs, lbHeadphones),
+        Par(ggLookAndFeel, ggSuperCollider, ggAudioDevice, ggNumOutputs, ggHeadphones)
       ))
-      theVerticalLayout is Sequential(
-        Parallel(Baseline)(lbLookAndFeel  , ggLookAndFeel  ),
+      vertical = Seq(
+        Par(Baseline)(lbLookAndFeel  , ggLookAndFeel  ),
         sep1,
-        Parallel(Baseline)(lbSuperCollider, ggSuperCollider),
-        Parallel(Baseline)(lbAudioDevice  , ggAudioDevice  ),
-        Parallel(Baseline)(lbNumOutputs   , ggNumOutputs   ),
-        Parallel(Baseline)(lbHeadphones   , ggHeadphones   )
+        Par(Baseline)(lbSuperCollider, ggSuperCollider),
+        Par(Baseline)(lbAudioDevice  , ggAudioDevice  ),
+        Par(Baseline)(lbNumOutputs   , ggNumOutputs   ),
+        Par(Baseline)(lbHeadphones   , ggHeadphones   )
       )
     }
 

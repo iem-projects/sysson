@@ -23,10 +23,9 @@ import scala.swing._
 import de.sciss.synth.proc.Attribute
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
-import de.sciss.swingplus.Separator
+import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.audiowidgets.Transport
 import de.sciss.synth.SynthGraph
-import scalaswingcontrib.group.GroupPanel
 import javax.swing.GroupLayout
 import language.reflectiveCalls
 import de.sciss.lucre.stm.Disposable
@@ -140,14 +139,15 @@ object SonificationViewImpl {
         }
 
         val pMap = new GroupPanel {
-          theHorizontalLayout is Sequential(
-            Parallel(ggMap.map(tup => add[GroupLayout#ParallelGroup](tup._1)): _*),
-            Parallel(ggMap.map(tup => add[GroupLayout#ParallelGroup](tup._2)): _*)
+          import GroupPanel.Element
+          horizontal = Seq(
+            Par(ggMap.map(tup => Element(tup._1)): _*),
+            Par(ggMap.map(tup => Element(tup._2)): _*)
           )
 
-          theVerticalLayout is Sequential(
+          vertical = Seq(
             ggMap.map { tup =>
-              Parallel(Baseline)(tup._1, tup._2): InGroup[GroupLayout#SequentialGroup]
+              Par(Baseline)(tup._1, tup._2)
             }: _*
           )
         }
@@ -163,14 +163,15 @@ object SonificationViewImpl {
         }
 
         val pCtl = new GroupPanel {
-          theHorizontalLayout is Sequential(
-            Parallel(ggCtl.map(tup => add[GroupLayout#ParallelGroup](tup._1)): _*),
-            Parallel(ggCtl.map(tup => add[GroupLayout#ParallelGroup](tup._2)): _*)
+          import GroupPanel.Element
+          horizontal = Seq(
+            Par(ggCtl.map(tup => Element(tup._1)): _*),
+            Par(ggCtl.map(tup => Element(tup._2)): _*)
           )
 
-          theVerticalLayout is Sequential(
+          vertical = Seq(
             ggCtl.map { tup =>
-              Parallel(Baseline)(tup._1, tup._2): InGroup[GroupLayout#SequentialGroup]
+              Par(Baseline)(tup._1, tup._2)
             }: _*
           )
         }
@@ -197,7 +198,7 @@ object SonificationViewImpl {
 
       // ---- Mapping ----
 
-      pMapping    = new FlowPanel()
+      pMapping = new FlowPanel()
       pMapping.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Mapping")
 
       // ---- Controls ----

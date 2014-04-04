@@ -16,15 +16,15 @@ package at.iem.sysson
 package gui
 
 import swing.{Dialog, Action}
-import java.awt.event.KeyEvent
 import de.sciss.desktop.{Desktop, FileDialog, KeyStrokes}
 import scala.util.control.NonFatal
 import de.sciss.file._
 import GUI.formatException
+import scala.swing.event.Key
 
 object ActionNewWorkspace extends Action("Workspace...") {
   import KeyStrokes._
-  accelerator = Some(menu1 + KeyEvent.VK_N)
+  accelerator = Some(menu1 + Key.N)
 
   private def deleteRecursive(f: File): Boolean = {
     if (f.isDirectory) {

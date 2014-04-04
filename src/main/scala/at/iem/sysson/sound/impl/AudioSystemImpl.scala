@@ -20,12 +20,17 @@ import de.sciss.synth
 import de.sciss.model.impl.ModelImpl
 import de.sciss.synth.proc.AuralSystem
 import de.sciss.lucre.synth.Server
+import scala.concurrent.stm.{Ref, atomic}
+import de.sciss.lucre.synth.{Txn => SynthTxn}
 
 object AudioSystemImpl {
   lazy val instance: AudioSystem = {
     val aural = AuralSystem()
     val i = new Impl(aural)
-    aural.addClient(i)
+    atomic { implicit tx =>
+      implicit val ptx = SynthTxn.wrap(tx)
+      aural.addClient(i)
+    }
     // sys.addShutdownHook(i.stop())
     i
   }
@@ -35,47 +40,50 @@ object AudioSystemImpl {
 
     override def toString = "AudioSystem"
 
-    private val sync      = new AnyRef
-    private var _server   = Option.empty[Server]
+    private val _server   = Ref(Option.empty[Server])
 
-    def server: Option[Server] = sync.synchronized(_server)
+    def server: Option[Server] = _server.single()
 
-    def stopped(): Unit = sync.synchronized {
+    def stopped()(implicit tx: SynthTxn): Unit = {
       logInfo("SuperCollider Server stopped")
-      _server = None
-      dispatch(AudioSystem.Stopped)
+      _server.set(None)(tx.peer)
+      tx.afterCommit(dispatch(AudioSystem.Stopped))
     }
 
-    def started(server: Server): Unit = sync.synchronized {
+    def started(server: Server)(implicit tx: SynthTxn): Unit = {
       logInfo("SuperCollider Server started")
-      _server = Some(server)
-      dispatch(AudioSystem.Started(server))
-      //      server.addListener {
-      //        case synth.Server.Offline => stopped()
-      //      }
+      _server.set(Some(server))(tx.peer)
+      tx.afterCommit(dispatch(AudioSystem.Started(server)))
     }
 
     def start(config: synth.Server.Config): this.type = {
-      aural.start(config)
+      atomic { implicit tx =>
+        implicit val ptx = SynthTxn.wrap(tx)
+        aural.start(config)
+      }
       this
     }
 
     def stop(): this.type = {
-      aural.stop()
+      atomic { implicit tx =>
+        implicit val ptx = SynthTxn.wrap(tx)
+        aural.stop()
+      }
       this
     }
 
     // def isBooting: Boolean = sync.synchronized(_server match { case Some(_: synth.ServerConnection) => true; case _ => false })
     // def isRunning: Boolean = sync.synchronized(_server match { case Some(_: synth.Server) => true; case _ => false })
 
-    def isRunning: Boolean = sync.synchronized(_server.isDefined)
+    def isRunning: Boolean = _server.single().isDefined
 
   //    def whenBooted(fun: Server => Unit): this.type = {
   //      aural.whenStarted(fun)
   //      this
   //    }
 
-    def whenBooted(fun: Server => Unit): this.type = sync.synchronized {
+    // XXX TODO: not 100% safe - should just forward to AuralSystem
+    def whenBooted(fun: Server => Unit): this.type = {
       server match {
         case Some(s: Server) => fun(s)
         case _ =>

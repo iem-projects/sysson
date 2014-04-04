@@ -15,7 +15,6 @@
 package at.iem.sysson
 package gui
 
-import java.awt.event.KeyEvent
 import de.sciss.desktop.{OptionPane, Desktop, KeyStrokes, Menu}
 import scala.swing.{Label, Action}
 import de.sciss.lucre.event.{Sys, Durable}
@@ -26,22 +25,20 @@ import gui.{SwingApplication => App}
 import language.existentials
 import at.iem.sysson.sound.AudioSystem
 import de.sciss.{osc, synth}
-import scala.swing.event.MouseClicked
+import scala.swing.event.{Key, MouseClicked}
 import java.net.URL
-import scala.util.control.NonFatal
 
 object MenuFactory {
   def root: Menu.Root = _root
 
   private lazy val _root = {
     import Menu._
-    import KeyEvent._
     import KeyStrokes._
 
     val dh = DocumentHandler.instance
 
     val actionCloseAll = new Action("Close All") {
-      accelerator = Some(menu1 + shift + VK_W)
+      accelerator = Some(menu1 + shift + Key.W)
       def apply(): Unit = closeAll()
     }
 
@@ -101,12 +98,12 @@ object MenuFactory {
           Item("new-workspace", ActionNewWorkspace) // ("Workspace..." -> (menu1 + VK_N)) {
         )
         .addLine()
-        .add(Item("new-interpreter")("Interpreter..." -> (menu1 + VK_R)) {
+        .add(Item("new-interpreter")("Interpreter..." -> (menu1 + Key.R)) {
             openInterpreter()
           }
         )
         .add(
-          Item("new-library")("Library..." -> (menu1 + VK_L)) {
+          Item("new-library")("Library..." -> (menu1 + Key.L)) {
             openLibrary()
           }
         )
@@ -114,29 +111,30 @@ object MenuFactory {
       .add(Item("open", ActionOpenWorkspace))
       .add(ActionOpenWorkspace.recentMenu)
       .addLine()
-      .add(Item("close", proxy("Close" -> (menu1 + VK_W))))
+      .add(Item("close", proxy("Close" -> (menu1 + Key.W))))
       .add(Item("close-all", actionCloseAll))
-      .add(Item("save", proxy("Save" -> (menu1 + VK_S))))
+      .add(Item("save", proxy("Save" -> (menu1 + Key.S))))
 
     if (itQuit.visible) gFile.addLine().add(itQuit)
 
     val gEdit = Group("edit", "Edit")
+    val keyRedo = if (Desktop.isWindows) menu1 + Key.Y else menu1 + shift + Key.Z
     gEdit
-      .add(Item("undo", proxy("Undo" -> (menu1 + VK_Z))))
-      .add(Item("redo", proxy("Redo" -> (menu1 + shift + VK_Z))))
+      .add(Item("undo", proxy("Undo" -> (menu1 + Key.Z))))
+      .add(Item("redo", proxy("Redo" -> keyRedo)))
     if (itPrefs.visible && Desktop.isLinux) gEdit.addLine().add(itPrefs)
 
     val gTools = Group("tools", "Tools")
     val gDebug = Group("debug", "Debug")
     gDebug
-      .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + VK_D))(dumpOSC()))
+      .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + Key.D))(dumpOSC()))
 
     gTools.add(gDebug)
     if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
 
     val gView = Group("view", "View")
       .add(
-        Item("clear-log")("Clear Log Window" -> (menu1 + shift + VK_P)) {
+        Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P)) {
           LogWindow.instance.log.clear()
         }
       )

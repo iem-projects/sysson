@@ -16,13 +16,13 @@ package at.iem.sysson
 package gui
 
 import swing.{Dialog, Action}
-import java.awt.event.KeyEvent
 import de.sciss.desktop.{Menu, RecentFiles, FileDialog, KeyStrokes}
 import scala.util.control.NonFatal
 import GUI.formatException
 import de.sciss.lucre.event.Sys
 import de.sciss.file._
 import language.existentials
+import scala.swing.event.Key
 
 object ActionOpenWorkspace extends Action("Open...") {
   import KeyStrokes._
@@ -32,7 +32,7 @@ object ActionOpenWorkspace extends Action("Open...") {
     perform(folder)
   }
 
-  accelerator = Some(menu1 + KeyEvent.VK_O)
+  accelerator = Some(menu1 + Key.O)
 
   private def fullTitle = "Open Document"
 

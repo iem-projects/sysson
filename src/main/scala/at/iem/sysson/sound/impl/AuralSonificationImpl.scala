@@ -73,7 +73,7 @@ object AuralSonificationImpl {
     import w.{inMemoryCursor, inMemoryTx}
     val transport     = Transport[I, I](group)
     val auralSys      = AudioSystem.instance.aural
-    val aural         = AuralPresentation.runTx(transport, auralSys)
+    val aural         = AuralPresentation.run(transport, auralSys)
     new Impl[S, I](aw, aural, sonifH, itx.newHandle(proc), transport)
   }
 
@@ -269,7 +269,7 @@ object AuralSonificationImpl {
       if (graphemes.isEmpty) transportPlay() else tx.afterCommit {
         import ExecutionContext.Implicits.global
         logDebug(s"Producing ${graphemes.size} graphemes...")
-        future {
+        Future {
           val graphMap = blocking {
             val graphMapF = Future.sequence(graphemes)
             Await.result(graphMapF, Duration(10, TimeUnit.MINUTES))

@@ -27,7 +27,6 @@ import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
 import java.awt.{BasicStroke, Color}
 import scala.swing.{ProgressBar, TextField, Button, BoxPanel, Orientation, CheckBox, BorderPanel, Component, Alignment, Label, Swing}
 import Swing._
-import scalaswingcontrib.group.GroupPanel
 import javax.swing.{TransferHandler, SpinnerNumberModel, JSpinner, GroupLayout}
 import scala.swing.event.{ButtonClicked, ValueChanged}
 import language.reflectiveCalls
@@ -37,7 +36,7 @@ import javax.swing.TransferHandler.TransferSupport
 import de.sciss.audiowidgets.{Transport, DualRangeModel, DualRangeSlider}
 import collection.breakOut
 import de.sciss.synth.{SynthGraph, Ops, Synth}
-import de.sciss.swingplus.OverlayPanel
+import de.sciss.swingplus.{GroupPanel, OverlayPanel}
 import scala.concurrent.{ExecutionContext, Future}
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 import de.sciss.lucre.event.Sys
@@ -370,17 +369,18 @@ object ClimateViewImpl {
       lazy val redGUIAll = xDimRed +: yDimRed +: redGUI
 
       val redGroup  = new GroupPanel {
-        theHorizontalLayout is Sequential(
-          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.norm      )): _*),
-          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.nameLabel )): _*),
-          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.slider    )): _*),
-          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.index     )): _*),
-          Parallel(redGUIAll.map(r => add[GroupLayout#ParallelGroup](r.valueLabel)): _*)
+        import GroupPanel.Element
+        horizontal = Seq(
+          Par(redGUIAll.map(_.norm      : Element): _*),
+          Par(redGUIAll.map(_.nameLabel : Element): _*),
+          Par(redGUIAll.map(_.slider    : Element): _*),
+          Par(redGUIAll.map(_.index     : Element): _*),
+          Par(redGUIAll.map(_.valueLabel: Element): _*)
         )
 
-        theVerticalLayout is Sequential(
+        vertical = Seq(
           redGUIAll.map { r =>
-            Parallel(Center)(r.norm, r.nameLabel, r.slider, r.index, r.valueLabel): InGroup[GroupLayout#SequentialGroup]
+            Par(Center)(r.norm, r.nameLabel, r.slider, r.index, r.valueLabel)
           }: _*
         )
       }

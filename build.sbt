@@ -10,11 +10,11 @@ description   := "Sonification Server of the IEM SysSon project"
 
 homepage      := Some(url("https://github.com/iem-projects/sysson"))
 
-licenses      := Seq("GPL v2+" -> url("http://www.gnu.org/licenses/gpl-2.0.txt"))
+licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt"))
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.10.3"
+scalaVersion  := "2.10.4"
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
@@ -31,7 +31,9 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "lucrestm-bdb"            % "2.0.1+",         // database used for library
   "org.jfree" % "jfreechart"              % "1.0.17",         // plotting
   "de.sciss" %% "raphael-icons"           % "1.0.+",          // tool icons
+  "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // tree component (to be replaced eventually...)
   "de.sciss" %% "guiflitz"                % "0.3.+",
+  "de.sciss" %  "weblaf"                  % "1.27",           // cross-platform look-and-feel
   "org.slf4j" % "slf4j-simple"            % "1.7.6"           // logging (used by netcdf)
 )
 
