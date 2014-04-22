@@ -84,12 +84,12 @@ object Library {
 
   def compile(source: String): Future[SynthGraph] = sync.synchronized(codeMap.get(source)).fold {
     Code.future {
-      val graph = blocking { Code.SynthGraph(source).execute() }
+      val graph = blocking { Code.SynthGraph(source).execute(()) }
       sync.synchronized(codeMap.put(source, graph))
       graph
     }
 
-  } (Future.successful)
+  } (Future.successful(_))
 }
 trait Library[S <: Sys[S]]
   extends TreeLike[S, Library[S]] with stm.Mutable[S#ID, S#Tx]

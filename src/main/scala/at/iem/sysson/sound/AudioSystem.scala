@@ -38,7 +38,7 @@ object AudioSystem {
   lazy val defaultConfig = {
     val config          = synth.Server.Config()
     val programPath     = Prefs.superCollider.getOrElse(Prefs.defaultSuperCollider)
-    if (programPath != Prefs.defaultSuperCollider) config.programPath = programPath.path
+    if (programPath != Prefs.defaultSuperCollider) config.program = programPath.path
     val audioDevice     = Prefs.audioDevice.getOrElse(Prefs.defaultAudioDevice)
     if (audioDevice != Prefs.defaultAudioDevice) config.deviceName = Some(audioDevice)
     config.outputBusChannels = Prefs.audioNumOutputs.getOrElse(Prefs.defaultAudioNumOutputs)

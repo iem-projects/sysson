@@ -23,8 +23,8 @@ import scala.concurrent.stm.{TMap, TxnExecutor, Txn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
 import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx}
 import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
-import scala.concurrent.{Await, Promise, Future, ExecutionContext, future, blocking}
-import de.sciss.synth.proc.{Scan, Artifact, Grapheme, Attribute, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
+import scala.concurrent.{Await, Promise, Future, ExecutionContext, blocking}
+import de.sciss.synth.proc.{Scan, Artifact, Grapheme, Attr, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
 import de.sciss.span.Span
 import de.sciss.lucre
 import scala.util.control.NonFatal
@@ -138,7 +138,7 @@ object AuralSonificationImpl {
       }
 
       def putAttrValue(key: String, value: Double): Unit =
-        proc.attributes.put(key, Attribute.Double(DoubleEx.newConst(value)))
+        proc.attributes.put(key, Attr.Double(DoubleEx.newConst(value)))
 
       //      def putAttrValues(key: String, values: Vec[Double]): Unit =
       //        proc.attributes.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
@@ -252,7 +252,7 @@ object AuralSonificationImpl {
           // val gv          = Grapheme.Value.Audio(file, spec, offset, gain)
           // val g           = Grapheme.Elem.Audio.newConst[I]controls(gv)
           val g           = Grapheme.Elem.Audio(artifact, spec, LongEx.newConst(offset), DoubleEx.newConst(gain))
-          proc.attributes.put(attrKey, Attribute.AudioGrapheme(g))
+          proc.attributes.put(attrKey, Attr.AudioGrapheme(g))
 
         case uv: UserValue.GE =>  // already wired up
 
@@ -313,7 +313,7 @@ object AuralSonificationImpl {
           g.add(BiExpr(LongEx.newConst(0L), elem))
           scan.addSource(Scan.Link.Grapheme(g))
         } else {
-          proc.attributes.put(gen.key, Attribute.AudioGrapheme(elem))
+          proc.attributes.put(gen.key, Attr.AudioGrapheme(elem))
         }
       }
       transportPlay()

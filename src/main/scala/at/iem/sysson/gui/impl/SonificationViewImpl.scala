@@ -20,7 +20,7 @@ import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.{AuralSonification, AuralWorkspaceHandler, Keys, Sonification}
 import de.sciss.lucre.stm
 import scala.swing._
-import de.sciss.synth.proc.Attribute
+import de.sciss.synth.proc.Attr
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
 import de.sciss.swingplus.{GroupPanel, Separator}
@@ -42,7 +42,7 @@ object SonificationViewImpl {
       protected var dirty: Boolean = false
     }
     val sonifH    = tx.newHandle(sonification)
-    val nameView  = sonification.attributes[Attribute.String](Keys.attrName).map { expr =>
+    val nameView  = sonification.attributes[Attr.String](Keys.attrName).map { expr =>
       import workspace.cursor
       StringFieldView(expr, "Name")
     }

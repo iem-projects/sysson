@@ -20,7 +20,7 @@ import de.sciss.lucre.data.SkipList
 import de.sciss.lucre.{event => evt}
 import evt.{InMemory, Sys, Event}
 import de.sciss.serial.{DataOutput, DataInput}
-import de.sciss.synth.proc.{SynthGraphs, Attribute}
+import de.sciss.synth.proc.{SynthGraphs, Attr}
 import scala.annotation.switch
 import at.iem.sysson.sound.Patch.AttributeKey
 import language.higherKinds
@@ -54,7 +54,7 @@ object PatchImpl {
 
     final protected def AssociationAdded  (key: String) = Patch.AssociationAdded  [S](AttributeKey(key))
     final protected def AssociationRemoved(key: String) = Patch.AssociationRemoved[S](AttributeKey(key))
-    final protected def AttributeChange   (key: String, u: Attribute.Update[S]) = Patch.AttributeChange(key, u.element, u.change)
+    final protected def AttributeChange   (key: String, u: Attr.Update[S]) = Patch.AttributeChange(key, u.element, u.change)
 
     final protected def Update(changes: Vec[Change]) = Patch.Update(patch, changes)
 

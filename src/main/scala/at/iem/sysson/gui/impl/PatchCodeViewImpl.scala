@@ -130,7 +130,7 @@ object PatchCodeViewImpl {
       graphHOpt.fold {
         val edit = cursor.step { implicit tx => saveSource(newCode) }
         addEditAndClear(edit)
-        Future.successful[Unit]()
+        Future.successful[Unit](())
       } { graphH =>
         compileSource(newCode, apply = true)
       }
@@ -154,7 +154,7 @@ object PatchCodeViewImpl {
 
       private def compileSource(newCode: String, apply: Boolean): Future[Unit] = {
       val saveGraph = graphHOpt.isDefined && apply
-      if (futCompile.isDefined && !saveGraph) return Future.successful[Unit]()
+      if (futCompile.isDefined && !saveGraph) return Future.successful[Unit](())
 
       ggProgress          .visible = true
       ggProgressInvisible .visible = false

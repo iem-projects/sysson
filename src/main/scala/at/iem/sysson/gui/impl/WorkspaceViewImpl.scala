@@ -28,7 +28,7 @@ import de.sciss.lucre.stm
 import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoableEdit}
 import scala.concurrent.ExecutionContext
 import at.iem.sysson.sound.{Keys, Sonification}
-import de.sciss.synth.proc.{Attribute, ExprImplicits}
+import de.sciss.synth.proc.{Attr, ExprImplicits}
 import de.sciss.lucre.expr.{String => StringEx}
 import de.sciss.model.Change
 import de.sciss.swingplus.Separator
@@ -56,7 +56,7 @@ object WorkspaceViewImpl {
     val untitled = "<untitled>"
 
     def sonifName(son: Sonification[S])(implicit tx: S#Tx): Option[String] =
-      son.attributes[Attribute.String](Keys.attrName).map(_.value)
+      son.attributes[Attr.String](Keys.attrName).map(_.value)
 
     val sonificationsHndl   = ListView.Handler[S, Sonification[S], Sonification.Update[S]] {
       implicit tx => sonifName(_).getOrElse(untitled)
@@ -206,9 +206,9 @@ object WorkspaceViewImpl {
         val idx             = workspace.sonifications.size
         val sonif           = Sonification[S]
         sonif.patch.graph() = graph
-        sonif.attributes.put(Keys.attrName, Attribute.String.apply(StringEx.newVar(name)))
+        sonif.attributes.put(Keys.attrName, Attr.String.apply(StringEx.newVar(name)))
         sourceOpt.foreach { code =>
-          sonif.attributes.put(Keys.attrGraphSource, Attribute.String.apply(StringEx.newVar(code)))
+          sonif.attributes.put(Keys.attrGraphSource, Attr.String.apply(StringEx.newVar(code)))
         }
         val childH          = tx.newHandle(sonif)
         val _edit           = new EditInsertSonif(idx, childH)

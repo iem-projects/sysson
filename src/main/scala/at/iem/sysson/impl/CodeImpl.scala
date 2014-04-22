@@ -142,7 +142,7 @@ object CodeImpl {
       def out: File = process.out
       def checkAborted(): Unit = process.checkAborted()
       def progress(f: Double): Unit = {
-        process.progress(f.toFloat)
+        process.progress = f
         process.checkAborted()
       }
     }
@@ -155,7 +155,7 @@ object CodeImpl {
           FileTransformContext.contextVar.set(Bindings)
           try {
             fun()
-            prom.complete(Success())
+            prom.complete(Success(()))
           } catch {
             case e: Exception =>
               e.printStackTrace()

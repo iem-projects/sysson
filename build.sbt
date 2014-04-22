@@ -10,36 +10,35 @@ description   := "Sonification Server of the IEM SysSon project"
 
 homepage      := Some(url("https://github.com/iem-projects/sysson"))
 
-licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt"))
+licenses      := Seq("AGPL v3+" -> url("http://www.gnu.org/licenses/agpl-3.0.txt"))
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.10.4"
+scalaVersion  := "2.11.0"
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "soundprocesses"          % "2.2.+",          // Computer music framework
-  "de.sciss" %% "lucrematrix"             % "0.1.+",          // Reactive matrix component and view
-  "de.sciss" %% "scalacolliderswing-core" % "1.14.+",         // audio (server) widgets
-  "de.sciss" %% "scalainterpreterpane"    % "1.6.+",          // scala interpreter
-  "de.sciss" %% "desktop-mac"             % "0.4.2+",         // application framework
-  "de.sciss" %  "intensitypalette"        % "1.0.0",          // colour palette
-  "de.sciss" %% "filecache-txn"           % "0.3.+",          // caching statistics of data files
-  "de.sciss" %% "treetable-scala"         % "1.3.4+",         // GUI component
-  "de.sciss" %% "lucrestm-bdb"            % "2.0.1+",         // database used for library
-  "org.jfree" % "jfreechart"              % "1.0.17",         // plotting
-  "de.sciss" %% "raphael-icons"           % "1.0.+",          // tool icons
-  "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // tree component (to be replaced eventually...)
-  "de.sciss" %% "guiflitz"                % "0.3.+",
-  "de.sciss" %  "weblaf"                  % "1.27",           // cross-platform look-and-feel
-  "org.slf4j" % "slf4j-simple"            % "1.7.6"           // logging (used by netcdf)
+  "de.sciss" %% "soundprocesses"                 % "2.2.0",          // Computer music framework
+  "de.sciss" %% "lucrematrix"                    % "0.1.0",          // Reactive matrix component and view
+  "de.sciss" %% "scalacolliderswing-interpreter" % "1.16.0",         // audio (server) widgets
+  "de.sciss" %% "desktop-mac"                    % "0.5.1",          // application framework
+  "de.sciss" %  "intensitypalette"               % "1.0.0",          // colour palette
+  "de.sciss" %% "filecache-txn"                  % "0.3.1",          // caching statistics of data files
+  "de.sciss" %% "treetable-scala"                % "1.3.5",          // GUI component
+  "de.sciss" %% "lucrestm-bdb"                   % "2.0.4",          // database used for library
+  "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
+  "de.sciss" %% "raphael-icons"                  % "1.0.1",          // tool icons
+  // "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // tree component (to be replaced eventually...)
+  "de.sciss" %% "guiflitz"                       % "0.3.1",
+  "de.sciss" %  "weblaf"                         % "1.27",           // cross-platform look-and-feel
+  "org.slf4j" % "slf4j-simple"                   % "1.7.6"           // logging (used by netcdf)
 )
 
 retrieveManaged := true
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-Xfuture")
 
 // ---- runtime settings ----
 

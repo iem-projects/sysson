@@ -559,7 +559,7 @@ object ClimateViewImpl {
 //      }
     }
 
-    private def markPlayStop(playing: Boolean) {
+    private def markPlayStop(playing: Boolean): Unit = {
       transport.button(Transport.Stop).get.selected = !playing
       transport.button(Transport.Play).get.selected = playing
     }

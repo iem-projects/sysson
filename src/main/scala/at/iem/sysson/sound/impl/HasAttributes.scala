@@ -18,7 +18,7 @@ import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.event.{InMemory, Sys}
 import de.sciss.lucre.data.SkipList
 import de.sciss.synth.proc.impl.KeyMapImpl
-import de.sciss.synth.proc.{Attributes, Attribute}
+import de.sciss.synth.proc.{Attr, AttrMap}
 import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.collection.breakOut
 import de.sciss.synth.proc
@@ -26,16 +26,16 @@ import language.higherKinds
 import de.sciss.serial.ImmutableSerializer
 
 object HasAttributes {
-  implicit def attributeEntryInfo[S <: Sys[S]]: KeyMapImpl.ValueInfo[S, String, Attribute[S], Attribute.Update[S]] =
-    anyAttributeEntryInfo.asInstanceOf[KeyMapImpl.ValueInfo[S, String, Attribute[S], Attribute.Update[S]]]
+  implicit def attributeEntryInfo[S <: Sys[S]]: KeyMapImpl.ValueInfo[S, String, Attr[S], Attr.Update[S]] =
+    anyAttributeEntryInfo.asInstanceOf[KeyMapImpl.ValueInfo[S, String, Attr[S], Attr.Update[S]]]
 
   private type I = InMemory
 
-  private val anyAttributeEntryInfo = new KeyMapImpl.ValueInfo[I, String, Attribute[I], Attribute.Update[I]] {
-    def valueEvent(value: Attribute[I]) = value.changed
+  private val anyAttributeEntryInfo = new KeyMapImpl.ValueInfo[I, String, Attr[I], Attr.Update[I]] {
+    def valueEvent(value: Attr[I]) = value.changed
 
     val keySerializer   = ImmutableSerializer.String
-    val valueSerializer = Attribute.serializer[I]
+    val valueSerializer = Attr.serializer[I]
   }
 }
 trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
@@ -49,7 +49,7 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
   protected def Update(changes: Vec[Change]): Update
   protected def AssociationAdded  (key: String): Change
   protected def AssociationRemoved(key: String): Change
-  protected def AttributeChange   (key: String, u: Attribute.Update[S]): Change
+  protected def AttributeChange   (key: String, u: Attr.Update[S]): Change
 
   protected def reader: evt.Reader[S, Repr]
 
@@ -58,7 +58,7 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
   // ---- impl ----
   import HasAttributes.attributeEntryInfo
 
-  protected type AttributeEntry = KeyMapImpl.Entry[S, String, Attribute[S], Attribute.Update[S]]
+  protected type AttributeEntry = KeyMapImpl.Entry[S, String, Attr[S], Attr.Update[S]]
 
   /* sealed */ protected trait SelfEvent {
     final protected def reader: evt.Reader[S, Repr] = self.reader
@@ -86,10 +86,10 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
     final protected def isConnected(implicit tx: S#Tx): Boolean = self.targets.nonEmpty
   }
 
-  object attributes extends Attributes.Modifiable[S] with KeyMap[Attribute[S], Attribute.Update[S], Update] {
+  object attributes extends AttrMap.Modifiable[S] with KeyMap[Attr[S], Attr.Update[S], Update] {
     final val slot = 0
 
-    def put(key: String, value: Attribute[S])(implicit tx: S#Tx): Unit = add(key, value)
+    def put(key: String, value: Attr[S])(implicit tx: S#Tx): Unit = add(key, value)
 
     def contains(key: String)(implicit tx: S#Tx): Boolean = map.contains(key)
 
@@ -106,8 +106,8 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
 
     protected def valueInfo = attributeEntryInfo[S]
 
-    def apply[Attr[~ <: Sys[~]] <: Attribute[_]](key: String)(implicit tx: S#Tx,
-                                                              tag: reflect.ClassTag[Attr[S]]): Option[Attr[S]#Peer] =
+    def apply[At[~ <: Sys[~]] <: Attr[_]](key: String)(implicit tx: S#Tx,
+                                                              tag: reflect.ClassTag[At[S]]): Option[At[S]#Peer] =
       get(key) match {
         // cf. stackoverflow #16377741
         case Some(attr) => tag.unapply(attr).map(_.peer) // Some(attr.peer)

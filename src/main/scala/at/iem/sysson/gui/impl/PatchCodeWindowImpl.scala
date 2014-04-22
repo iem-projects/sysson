@@ -24,8 +24,7 @@ import de.sciss.swingplus.Implicits._
 import de.sciss.lucre.swing._
 import at.iem.sysson.sound.{Keys, Patch}
 import de.sciss.lucre.expr.{Expr, String => StringEx}
-import de.sciss.synth.proc.Attribute
-import at.iem.sysson.sound.Patch.AttributeKey
+import de.sciss.synth.proc.Attr
 import scala.concurrent.ExecutionContext
 
 object PatchCodeWindowImpl {
@@ -37,19 +36,19 @@ object PatchCodeWindowImpl {
 
   def apply[S <: Sys[S]](patch: Patch[S])
                         (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeWindow[S] = {
-    val source  = patch.attributes[Attribute.String](Keys.attrGraphSource).fold {
+    val source  = patch.attributes[Attr.String](Keys.attrGraphSource).fold {
       val res = StringEx.newVar[S](StringEx.newConst("// No source code found for patch!\n"))
-      patch.attributes.put(Keys.attrGraphSource, Attribute.String(res))
+      patch.attributes.put(Keys.attrGraphSource, Attr.String(res))
       res
     } {
       case Expr.Var(vr) => vr
       case ex           =>
         val res = StringEx.newVar(ex)
-        patch.attributes.put(Keys.attrGraphSource, Attribute.String(res))
+        patch.attributes.put(Keys.attrGraphSource, Attr.String(res))
         res
     }
     val view = PatchCodeView[S](source, graph = Some(patch.graph))
-    val name = patch.attributes[Attribute.String](Keys.attrName).getOrElse(StringEx.newConst("<Untitled>"))
+    val name = patch.attributes[Attr.String](Keys.attrName).getOrElse(StringEx.newConst("<Untitled>"))
     mkWindow(view, name)
   }
 
