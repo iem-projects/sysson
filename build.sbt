@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.6.0-SNAPSHOT"
+version       := "0.6.0"
 
 organization  := "at.iem.sysson"
 
@@ -16,6 +16,8 @@ licenses      := Seq("AGPL v3+" -> url("http://www.gnu.org/licenses/agpl-3.0.txt
 
 scalaVersion  := "2.11.0"
 
+crossScalaVersions := Seq("2.11.0", "2.10.4")
+
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
 
@@ -28,11 +30,11 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "filecache-txn"                  % "0.3.1",          // caching statistics of data files
   "de.sciss" %% "treetable-scala"                % "1.3.5",          // GUI component
   "de.sciss" %% "lucrestm-bdb"                   % "2.0.4",          // database used for library
-  "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
   "de.sciss" %% "raphael-icons"                  % "1.0.1",          // tool icons
-  // "com.github.benhutchison" % "scalaswingcontrib" % "1.5",    // tree component (to be replaced eventually...)
+  "de.sciss" %% "scala-swing-tree"               % "0.1.0",          // tree component
   "de.sciss" %% "guiflitz"                       % "0.3.1",
   "de.sciss" %  "weblaf"                         % "1.27",           // cross-platform look-and-feel
+  "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
   "org.slf4j" % "slf4j-simple"                   % "1.7.6"           // logging (used by netcdf)
 )
 

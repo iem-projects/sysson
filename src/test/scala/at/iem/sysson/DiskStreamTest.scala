@@ -7,7 +7,7 @@ import synth._
 import ugen._
 import io.{AudioFile, AudioFileSpec}
 import Ops._
-import concurrent.{ExecutionContext, future}
+import scala.concurrent.{Future, ExecutionContext}
 import ExecutionContext.Implicits.global
 
 object DiskStreamTest extends App {
@@ -67,7 +67,7 @@ object DiskStreamTest extends App {
       var ms          = List.empty[osc.Packet]
 
       if (fillSz > 0) {
-        val m = buf.fillMsg((bufOff + readSz) * numChannels, fillSz * numChannels, 0f)
+        val m = buf.fillMsg(FillRange(index = (bufOff + readSz) * numChannels, num = fillSz * numChannels, value = 0f))
         ms = m :: ms
       }
 
@@ -116,7 +116,7 @@ object DiskStreamTest extends App {
           s ! p
         } else {
           synth.free()
-          future {
+          Future {
             Thread.sleep(1000)
             println("Quitting...")
             as.stop()

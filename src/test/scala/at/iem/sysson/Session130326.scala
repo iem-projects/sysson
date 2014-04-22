@@ -9,7 +9,7 @@ import concurrent.duration._
 import concurrent.{Await, Future}
 
 object Session130326 extends SessionLike {
-  def run() { test6() }
+  def run(): Unit = test6()
 
   rec = true
 
@@ -20,7 +20,7 @@ object Session130326 extends SessionLike {
   var INTERP = true
   var MOD    = true
 
-  def test1() {
+  def test1(): Unit = {
     val numTime = f.dimensionMap("time").size
     val numPlev = f.dimensionMap("plev").size
 
@@ -32,7 +32,7 @@ object Session130326 extends SessionLike {
     scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdx :: Nil, rates = rate :: Nil, scan = scan)
   }
 
-  def test2() {
+  def test2(): Unit = {
     val numTime = f.dimensionMap("time").size
     val numPlev = f.dimensionMap("plev").size
 
@@ -44,7 +44,7 @@ object Session130326 extends SessionLike {
     scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdxs, rates = rate :: Nil, scan = scan)
   }
 
-  def test3() {
+  def test3(): Unit = {
     val numTime = f.dimensionMap("time").size
     val numPlev = f.dimensionMap("plev").size
 
@@ -56,7 +56,7 @@ object Session130326 extends SessionLike {
     scanIter(timeIdxs = timeIdxs, plevIdxs = plevIdxs, rates = rates, scan = scan)
   }
 
-  def test4() {
+  def test4(): Unit = {
     val numTime = f.dimensionMap("time").size
     val numPlev = f.dimensionMap("plev").size
 
@@ -69,7 +69,7 @@ object Session130326 extends SessionLike {
   }
 
   // session mit kathi
-  def test5() {
+  def test5(): Unit = {
     val numTime = f.dimensionMap("time").size
 
     FM      = false
@@ -87,7 +87,7 @@ object Session130326 extends SessionLike {
   }
 
   // fm (delay modulation) versuche. noch nicht gut.
-  def test6() {
+  def test6(): Unit = {
     val numTime = f.dimensionMap("time").size
 
     FM      = false
@@ -109,7 +109,8 @@ object Session130326 extends SessionLike {
     else t.take(3).mkString("_") + "_()_" + t.takeRight(3).mkString("_")
   }
 
-  def scanIter(timeIdxs: Seq[Int], plevIdxs: Seq[Int], rates: Seq[Double], scan: Symbol, iter: Option[Int] = None) {
+  def scanIter(timeIdxs: Seq[Int], plevIdxs: Seq[Int], rates: Seq[Double], scan: Symbol,
+               iter: Option[Int] = None): Unit = {
     val dummy   = play { DC.ar(0) }
     record(f"Scan_time_${mkString(timeIdxs)}_plev_${mkString(plevIdxs)}_rate_${mkString(rates.map(r => f"$r%1.2f"))}_scan_${scan.name}${if (FM) "FM" else ""}")(dummy)
     Thread.sleep(100)
@@ -261,7 +262,7 @@ object Session130326 extends SessionLike {
       )
     )
 
-    val prom = concurrent.promise[Unit]()
+    val prom = concurrent.Promise[Unit]()
 
     x.onEnd {
       buf.close(); buf.free()

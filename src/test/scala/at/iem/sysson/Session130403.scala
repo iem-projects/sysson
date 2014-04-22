@@ -16,7 +16,7 @@ object Session130403 extends SessionLike {
   lazy val time = 0
   lazy val plev = 5
 
-  def run() {
+  def run(): Unit = {
     // Met office hus 25, variable "hus"
     val v    = f.variableMap("hus")
     val sect = (v in "time" select time) in "plev" select plev
@@ -73,7 +73,5 @@ object Session130403 extends SessionLike {
     }
   }
 
-  def synth() {
-    ???
-  }
+  def synth(): Unit = ???
 }

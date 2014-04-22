@@ -33,7 +33,7 @@ trait SessionLike extends App {
   if (useAudio) {
     println("Starting AudioSystem...")
     new Thread {
-      override def run() {
+      override def run(): Unit = {
         println("Ich lebe")
         Thread.sleep(2000)
       }
@@ -55,7 +55,7 @@ trait SessionLike extends App {
 
   def s = Server.default
 
-  def quit() {
+  def quit(): Unit = {
     AudioSystem.instance.stop()
     sys.exit()
   }
@@ -66,7 +66,7 @@ trait SessionLike extends App {
     * @param  name  a suffix that will be used in the output sound file name
     * @param  fun   a block of code that creates and launches the synth which is to be recorded
     */
-  def record(name: String)(fun: => Synth) {
+  def record(name: String)(fun: => Synth): Unit = {
     if (!rec) {
       fun
       return

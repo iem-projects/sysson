@@ -24,8 +24,8 @@ import annotation.{tailrec, switch}
 import swing.event.TableRowsSelected
 import scala.swing.{Component, ScrollPane, BoxPanel, Orientation, Action, Table, Swing}
 import Swing._
-import scalaswingcontrib.tree.{Tree, ExternalTreeModel}
-import scalaswingcontrib.event.TreeNodeSelected
+import de.sciss.swingtree.{Tree, ExternalTreeModel}
+import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.desktop
 import desktop.OptionPane
 import de.sciss.file._

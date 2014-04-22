@@ -94,7 +94,7 @@ object CodeImpl {
     }
   }
 
-  def future[A](fun: => A): Future[A] = concurrent.future(fun)
+  def future[A](fun: => A): Future[A] = concurrent.Future(fun)
 
   def compileBody[I, O, Repr <: Code { type In = I; type Out = O }](code: Repr)
                       (implicit w: Wrapper[I, O, Repr]): Future[Unit] = {
