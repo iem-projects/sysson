@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.6.0"
+version       := "0.7.0-SNAPSHOT"
 
 organization  := "at.iem.sysson"
 
@@ -25,17 +25,17 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "soundprocesses"                 % "2.2.0",          // Computer music framework
   "de.sciss" %% "lucrematrix"                    % "0.1.0",          // Reactive matrix component and view
   "de.sciss" %% "scalacolliderswing-interpreter" % "1.16.0",         // audio (server) widgets
-  "de.sciss" %% "desktop-mac"                    % "0.5.1",          // application framework
+  "de.sciss" %% "desktop-mac"                    % "0.5.2",          // application framework
   "de.sciss" %  "intensitypalette"               % "1.0.0",          // colour palette
-  "de.sciss" %% "filecache-txn"                  % "0.3.1",          // caching statistics of data files
+  "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
   "de.sciss" %% "treetable-scala"                % "1.3.5",          // GUI component
   "de.sciss" %% "lucrestm-bdb"                   % "2.0.4",          // database used for library
   "de.sciss" %% "raphael-icons"                  % "1.0.1",          // tool icons
-  "de.sciss" %% "scala-swing-tree"               % "0.1.0",          // tree component
-  "de.sciss" %% "guiflitz"                       % "0.3.1",
+  "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component
+  "de.sciss" %% "guiflitz"                       % "0.3.2",
   "de.sciss" %  "weblaf"                         % "1.27",           // cross-platform look-and-feel
   "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
-  "org.slf4j" % "slf4j-simple"                   % "1.7.6"           // logging (used by netcdf)
+  "org.slf4j" % "slf4j-simple"                   % "1.7.7"           // logging (used by netcdf)
 )
 
 retrieveManaged := true
