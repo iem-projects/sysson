@@ -527,7 +527,7 @@ object TreeTableViewImpl {
       // t.renderer = r
 
       //      val r1 = new DefaultTableCellRenderer with TreeTableCellRenderer {
-      //        def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int, state: State) = ??? : Component
+      //        def getRendererComponent(treeTable: TreeTable[_, _], value: Any, row: Int, column: Int, state: State) = ... : Component
       //
       //        override def getTableCellRendererComponent(table: JTable, value: Any, isSelected: Boolean, hasFocus: Boolean,
       //                                                   row: Int, column: Int): java.awt.Component = {

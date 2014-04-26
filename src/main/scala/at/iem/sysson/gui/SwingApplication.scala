@@ -29,6 +29,8 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
     override lazy val usesInternalFrames = {
       false // XXX TODO: eventually a preferences entry
     }
+
+    override def usesNativeDecoration: Boolean = Prefs.nativeWindowDecoration.getOrElse(true)
   }
 
   override def init(): Unit = {

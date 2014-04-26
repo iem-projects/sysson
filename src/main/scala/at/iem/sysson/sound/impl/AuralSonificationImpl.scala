@@ -24,7 +24,7 @@ import de.sciss.lucre.{synth, stm}
 import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx}
 import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
 import scala.concurrent.{Await, Promise, Future, ExecutionContext, blocking}
-import de.sciss.synth.proc.{Scan, Artifact, Grapheme, Attr, SynthGraphs, AuralPresentation, Transport, ProcGroup, Proc}
+import de.sciss.synth.proc._
 import de.sciss.span.Span
 import de.sciss.lucre
 import scala.util.control.NonFatal
@@ -38,6 +38,10 @@ import de.sciss.lucre.bitemp.BiExpr
 import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import at.iem.sysson.graph.{UserValue, SonificationElement}
 import scala.annotation.tailrec
+import at.iem.sysson.graph
+import scala.Some
+import at.iem.sysson.sound.impl
+import at.iem.sysson.impl
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -138,10 +142,10 @@ object AuralSonificationImpl {
       }
 
       def putAttrValue(key: String, value: Double): Unit =
-        proc.attributes.put(key, Attr.Double(DoubleEx.newConst(value)))
+        proc.attr.put(key, DoubleElem(DoubleEx.newConst(value)))
 
       //      def putAttrValues(key: String, values: Vec[Double]): Unit =
-      //        proc.attributes.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
+      //        proc.attr.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
 
       // var graphemes = Map.empty[String, Future[AudioFileCache.Result]]
       var graphemes = Vec.empty[Future[GraphemeGen]]
@@ -252,7 +256,7 @@ object AuralSonificationImpl {
           // val gv          = Grapheme.Value.Audio(file, spec, offset, gain)
           // val g           = Grapheme.Elem.Audio.newConst[I]controls(gv)
           val g           = Grapheme.Elem.Audio(artifact, spec, LongEx.newConst(offset), DoubleEx.newConst(gain))
-          proc.attributes.put(attrKey, Attr.AudioGrapheme(g))
+          proc.attr.put(attrKey, AudioGraphemeElem(g))
 
         case uv: UserValue.GE =>  // already wired up
 
@@ -313,7 +317,7 @@ object AuralSonificationImpl {
           g.add(BiExpr(LongEx.newConst(0L), elem))
           scan.addSource(Scan.Link.Grapheme(g))
         } else {
-          proc.attributes.put(gen.key, Attr.AudioGrapheme(elem))
+          proc.attr.put(gen.key, AudioGraphemeElem(elem))
         }
       }
       transportPlay()

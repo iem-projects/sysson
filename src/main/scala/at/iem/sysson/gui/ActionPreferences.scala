@@ -5,9 +5,14 @@ import de.sciss.desktop.{FileDialog, Preferences, OptionPane, KeyStrokes}
 import de.sciss.swingplus.{GroupPanel, Separator, Spinner}
 import javax.swing.{JPanel, SpinnerNumberModel, UIManager}
 import de.sciss.file._
-import scala.swing.{Action, Label, Alignment, Component, Swing, TextField, Button, FlowPanel, ComboBox}
-import scala.swing.event.{Key, EditDone, SelectionChanged, ValueChanged}
+import scala.swing._
+import scala.swing.event._
 import Swing.EmptyIcon
+import scala.Some
+import scala.swing.Swing.EmptyIcon
+import scala.Some
+import scala.swing.event.EditDone
+import scala.swing.event.SelectionChanged
 
 object ActionPreferences extends Action("Preferences...") {
   import KeyStrokes._
@@ -90,10 +95,26 @@ object ActionPreferences extends Action("Preferences...") {
       gg
     }
 
+    def checkBox(prefs: Preferences.Entry[Boolean], default: => Boolean): Component = {
+      val gg = new CheckBox
+      val sel0 = prefs.getOrElse(default)
+      gg.selected = sel0
+      gg.listenTo(gg)
+      gg.reactions += {
+        case ButtonClicked(_) =>
+          val sel1 = gg.selected
+          prefs.put(sel1)
+      }
+      gg
+    }
+
     val box = new GroupPanel {
       val lbLookAndFeel   = label("Look-and-Feel")
       val ggLookAndFeel   = combo(Prefs.lookAndFeel, Prefs.defaultLookAndFeel,
         UIManager.getInstalledLookAndFeels)(_.getName)
+
+      val lbNativeDecoration = label("Native Window Decoration")
+      val ggNativeDecoration = checkBox(Prefs.nativeWindowDecoration, default = true)
 
       val lbSuperCollider = label("SuperCollider (scsynth)")
       val ggSuperCollider = pathField(Prefs.superCollider, Prefs.defaultSuperCollider,
@@ -111,16 +132,17 @@ object ActionPreferences extends Action("Preferences...") {
 
       // val lbValue = new Label("Value:", EmptyIcon, Alignment.Right)
       horizontal = Par(sep1, Seq(
-        Par(lbLookAndFeel, lbSuperCollider, lbAudioDevice, lbNumOutputs, lbHeadphones),
-        Par(ggLookAndFeel, ggSuperCollider, ggAudioDevice, ggNumOutputs, ggHeadphones)
+        Par(lbLookAndFeel, lbNativeDecoration, lbSuperCollider, lbAudioDevice, lbNumOutputs, lbHeadphones),
+        Par(ggLookAndFeel, ggNativeDecoration, ggSuperCollider, ggAudioDevice, ggNumOutputs, ggHeadphones)
       ))
       vertical = Seq(
-        Par(Baseline)(lbLookAndFeel  , ggLookAndFeel  ),
+        Par(Baseline)(lbLookAndFeel     , ggLookAndFeel     ),
+        Par(Baseline)(lbNativeDecoration, ggNativeDecoration),
         sep1,
-        Par(Baseline)(lbSuperCollider, ggSuperCollider),
-        Par(Baseline)(lbAudioDevice  , ggAudioDevice  ),
-        Par(Baseline)(lbNumOutputs   , ggNumOutputs   ),
-        Par(Baseline)(lbHeadphones   , ggHeadphones   )
+        Par(Baseline)(lbSuperCollider   , ggSuperCollider   ),
+        Par(Baseline)(lbAudioDevice     , ggAudioDevice     ),
+        Par(Baseline)(lbNumOutputs      , ggNumOutputs      ),
+        Par(Baseline)(lbHeadphones      , ggHeadphones      )
       )
     }
 

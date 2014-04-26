@@ -20,7 +20,7 @@ import de.sciss.lucre.data.SkipList
 import de.sciss.lucre.{event => evt}
 import evt.{InMemory, Sys, Event}
 import de.sciss.serial.{DataOutput, DataInput}
-import de.sciss.synth.proc.{SynthGraphs, Attr}
+import de.sciss.synth.proc.{SynthGraphs, Elem}
 import scala.annotation.switch
 import at.iem.sysson.sound.Patch.AttributeKey
 import language.higherKinds
@@ -54,7 +54,7 @@ object PatchImpl {
 
     final protected def AssociationAdded  (key: String) = Patch.AssociationAdded  [S](AttributeKey(key))
     final protected def AssociationRemoved(key: String) = Patch.AssociationRemoved[S](AttributeKey(key))
-    final protected def AttributeChange   (key: String, u: Attr.Update[S]) = Patch.AttributeChange(key, u.element, u.change)
+    final protected def AttributeChange   (key: String, u: Elem.Update[S]) = Patch.AttributeChange(key, u.element, u.change)
 
     final protected def Update(changes: Vec[Change]) = Patch.Update(patch, changes)
 
@@ -67,12 +67,12 @@ object PatchImpl {
 
       def connect   ()(implicit tx: S#Tx): Unit = {
         graph.changed ---> this
-        attributes    ---> this
+        attr    ---> this
         StateEvent    ---> this
       }
       def disconnect()(implicit tx: S#Tx): Unit = {
         graph.changed -/-> this
-        attributes    -/-> this
+        attr    -/-> this
         StateEvent    -/-> this
       }
 
@@ -80,7 +80,7 @@ object PatchImpl {
         // val graphOpt = if (graphemes .isSource(pull)) graphemes .pullUpdate(pull) else None
         val graphCh  = graph.changed
         val graphOpt = if (pull.contains(graphCh   )) pull(graphCh   ) else None
-        val attrOpt  = if (pull.contains(attributes)) pull(attributes) else None
+        val attrOpt  = if (pull.contains(attr)) pull(attr) else None
         val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
 
         val seq0 = graphOpt.fold(Vec.empty[Change]) { u =>
@@ -98,7 +98,7 @@ object PatchImpl {
 
     final def select(slot: Int): Event[S, Any, Any] = (slot: @switch) match {
       case changed    .slot => changed
-      case attributes .slot => attributes
+      case attr .slot => attr
       case StateEvent .slot => StateEvent
     }
 

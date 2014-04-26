@@ -24,6 +24,8 @@ object Prefs {
 
   def lookAndFeel: Entry[LookAndFeelInfo] = userPrefs("look-and-feel")
 
+  def nativeWindowDecoration: Entry[Boolean] = userPrefs("native-window-decoration")
+
   // ---- audio ----
 
   final val defaultSuperCollider    = file("<SC_HOME>")

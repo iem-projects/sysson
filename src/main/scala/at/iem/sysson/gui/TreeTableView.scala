@@ -73,7 +73,7 @@ object TreeTableView {
   }
 
   //  def editable[S <: Sys[S], T <: TreeLike[S, T]](tree: T, config: Config[S, T])
-  //                                               (implicit tx: S#Tx, cursor: stm.Cursor[S]): TreeTableView[S, T] = ???
+  //                                               (implicit tx: S#Tx, cursor: stm.Cursor[S]): TreeTableView[S, T] = ...
 
   def apply[S <: Sys[S], T <: TreeLike[S, T], H <: Handler[S, T, H]](tree: T, handler: H)
                                              (implicit tx: S#Tx): TreeTableView[S, T, H] = Impl(tree, handler)

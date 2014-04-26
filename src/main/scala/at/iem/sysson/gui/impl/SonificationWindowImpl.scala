@@ -18,6 +18,7 @@ package impl
 
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.Sonification
+import de.sciss.desktop
 
 object SonificationWindowImpl {
   def apply[S <: Sys[S]](sonification: Sonification[S])
@@ -31,5 +32,7 @@ object SonificationWindowImpl {
   private final class Impl[S <: Sys[S]](val view: SonificationView[S])
     extends WindowImpl[S](title0 = "Sonification Editor")
     with SonificationWindow[S] {
+
+    override protected def style = desktop.Window.Auxiliary
   }
 }

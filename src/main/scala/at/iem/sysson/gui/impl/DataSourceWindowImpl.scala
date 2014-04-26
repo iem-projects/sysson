@@ -18,6 +18,7 @@ package impl
 
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.desktop
 
 object DataSourceWindowImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceWindow[S] = {
@@ -30,5 +31,6 @@ object DataSourceWindowImpl {
   private final class Impl[S <: Sys[S]](val view: DataSourceView[S])
     extends WindowImpl[S] with DataSourceWindow[S] {
 
+    override protected def style = desktop.Window.Auxiliary
   }
 }

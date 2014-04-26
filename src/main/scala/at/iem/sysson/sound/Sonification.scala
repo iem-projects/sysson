@@ -20,7 +20,7 @@ import evt.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
 import de.sciss.model
 import de.sciss.lucre.expr
-import de.sciss.synth.proc.{Attr, AttrMap}
+import de.sciss.synth.proc.{Elem, AttrMap}
 import impl.{SonificationImpl => Impl}
 import de.sciss.serial.DataInput
 import de.sciss.lucre.matrix.Matrix
@@ -53,7 +53,7 @@ object Sonification {
   final case class AttributeAdded  [S <: Sys[S]](key: String) extends AssociativeChange[S]
   final case class AttributeRemoved[S <: Sys[S]](key: String) extends AssociativeChange[S]
 
-  final case class AttributeChange [S <: Sys[S]](key: String, attribute: Attr[S], change: Any)
+  final case class AttributeChange [S <: Sys[S]](key: String, attribute: Elem[S], change: Any)
     extends Change[S] {
     override def toString = s"AttributeChange($key, $attribute, $change)"
   }
@@ -84,5 +84,5 @@ trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonificati
   def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
 
   /** A scalar attribute map */
-  def attributes: AttrMap.Modifiable[S]
+  def attr: AttrMap.Modifiable[S]
 }

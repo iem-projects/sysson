@@ -15,26 +15,31 @@
 package at.iem.sysson.gui
 package impl
 
-import de.sciss.desktop
-import scala.swing.Action
+import de.sciss.{pdflitz, desktop}
+import scala.swing.{Component, Action}
 import de.sciss.lucre.event.Sys
 import de.sciss.file._
 import de.sciss.synth.Optional
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
+import javax.swing.JComponent
+import java.awt.{Graphics2D, Dimension}
+import de.sciss.desktop.KeyStrokes
+import scala.swing.event.Key
 
 object WindowImpl {
   final val WindowKey = "at.iem.sysson.Window"
 
-  private final class Peer[S <: Sys[S]](view: View[S], impl: WindowImpl[S], undoRedoActions: Option[(Action, Action)])
+  private final class Peer[S <: Sys[S]](view: View[S], impl: WindowImpl[S],
+                                        undoRedoActions: Option[(Action, Action)],
+                                        override val style: desktop.Window.Style)
     extends desktop.impl.WindowImpl {
 
     def handler = SwingApplication.windowHandler
 
-    // def setTitle(value: String): Unit = title = value
+    // bindMenu("window.windowShot", Action(null)(windowShot()))
 
-    // def getDirty      : Boolean        = dirty
-    // def setDirty(value: Boolean): Unit = dirty = value
+    addAction("window-shot", new ActionWindowShot(this))
 
     view match {
       case fv: View.File => file = Some(fv.file)
@@ -71,6 +76,8 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
 
   impl =>
 
+  protected def style: desktop.Window.Style = desktop.Window.Regular
+
   final def window: desktop.Window = component
   private var windowImpl: WindowImpl.Peer[S] = _
 
@@ -90,7 +97,7 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
 
   // /** Subclasses may override this if they invoke `super.guiInit()` first. */
   private def guiInit(): Unit = {
-    val f       = new WindowImpl.Peer(view, impl, undoRedoActions)
+    val f       = new WindowImpl.Peer(view, impl, undoRedoActions, style)
     title0.foreach(f.title_=)
     component   = f
     windowImpl  = f

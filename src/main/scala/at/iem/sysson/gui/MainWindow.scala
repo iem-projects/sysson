@@ -16,6 +16,7 @@ package at.iem.sysson
 package gui
 
 import de.sciss.desktop
+import at.iem.sysson.gui.impl.ActionWindowShot
 
 object MainWindow {
   val horizontalPlacement   = 1.0f
@@ -34,6 +35,7 @@ object MainWindow {
 
     def handler     = SwingApplication.windowHandler
 
+    addAction("window-shot", new ActionWindowShot(this))
     component.peer.getRootPane.putClientProperty("apple.awt.brushMetalLook", true)
 
     title           = s"${Main.name} v${Main.version}"

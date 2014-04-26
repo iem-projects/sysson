@@ -18,24 +18,25 @@ import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.event.{InMemory, Sys}
 import de.sciss.lucre.data.SkipList
 import de.sciss.synth.proc.impl.KeyMapImpl
-import de.sciss.synth.proc.{Attr, AttrMap}
+import de.sciss.synth.proc.{Elem, AttrMap}
 import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.collection.breakOut
 import de.sciss.synth.proc
 import language.higherKinds
 import de.sciss.serial.ImmutableSerializer
+import scala.reflect.ClassTag
 
 object HasAttributes {
-  implicit def attributeEntryInfo[S <: Sys[S]]: KeyMapImpl.ValueInfo[S, String, Attr[S], Attr.Update[S]] =
-    anyAttributeEntryInfo.asInstanceOf[KeyMapImpl.ValueInfo[S, String, Attr[S], Attr.Update[S]]]
+  implicit def attributeEntryInfo[S <: Sys[S]]: KeyMapImpl.ValueInfo[S, String, Elem[S], Elem.Update[S]] =
+    anyAttributeEntryInfo.asInstanceOf[KeyMapImpl.ValueInfo[S, String, Elem[S], Elem.Update[S]]]
 
   private type I = InMemory
 
-  private val anyAttributeEntryInfo = new KeyMapImpl.ValueInfo[I, String, Attr[I], Attr.Update[I]] {
-    def valueEvent(value: Attr[I]) = value.changed
+  private val anyAttributeEntryInfo = new KeyMapImpl.ValueInfo[I, String, Elem[I], Elem.Update[I]] {
+    def valueEvent(value: Elem[I]) = value.changed
 
     val keySerializer   = ImmutableSerializer.String
-    val valueSerializer = Attr.serializer[I]
+    val valueSerializer = Elem.serializer[I]
   }
 }
 trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
@@ -49,7 +50,7 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
   protected def Update(changes: Vec[Change]): Update
   protected def AssociationAdded  (key: String): Change
   protected def AssociationRemoved(key: String): Change
-  protected def AttributeChange   (key: String, u: Attr.Update[S]): Change
+  protected def AttributeChange   (key: String, u: Elem.Update[S]): Change
 
   protected def reader: evt.Reader[S, Repr]
 
@@ -58,7 +59,7 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
   // ---- impl ----
   import HasAttributes.attributeEntryInfo
 
-  protected type AttributeEntry = KeyMapImpl.Entry[S, String, Attr[S], Attr.Update[S]]
+  protected type AttributeEntry = KeyMapImpl.Entry[S, String, Elem[S], Elem.Update[S]]
 
   /* sealed */ protected trait SelfEvent {
     final protected def reader: evt.Reader[S, Repr] = self.reader
@@ -73,23 +74,37 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
 
     // ---- keymapimpl details ----
 
-    final protected def fire(added: Set[String], removed: Set[String])(implicit tx: S#Tx): Unit = {
-      val seqAdd: Vec[Change] = added  .map(key => AssociationAdded  (key))(breakOut)
-      val seqRem: Vec[Change] = removed.map(key => AssociationRemoved(key))(breakOut)
+    // XXX  TODO: DRY - this is duplicate with ObjImpl
+    protected def fire(added: Option[(String, Value)], removed: Option[(String, Value)])(implicit tx: S#Tx): Unit = {
+      val b = Vector.newBuilder[Change]
       // convention: first the removals, then the additions. thus, overwriting a key yields
       // successive removal and addition of the same key.
-      val seq = if (seqAdd.isEmpty) seqRem else if (seqRem.isEmpty) seqAdd else seqRem ++ seqAdd
-
-      StateEvent(Update(seq))
+      removed.foreach { tup =>
+        b += AssociationRemoved(tup._1)
+      }
+      added.foreach { tup =>
+        b += AssociationAdded  (tup._1)
+      }
+      StateEvent(Update(b.result()))
     }
+
+    //    final protected def fire(added: Set[String], removed: Set[String])(implicit tx: S#Tx): Unit = {
+    //      val seqAdd: Vec[Change] = added  .map(key => AssociationAdded  (key))(breakOut)
+    //      val seqRem: Vec[Change] = removed.map(key => AssociationRemoved(key))(breakOut)
+    //      // convention: first the removals, then the additions. thus, overwriting a key yields
+    //      // successive removal and addition of the same key.
+    //      val seq = if (seqAdd.isEmpty) seqRem else if (seqRem.isEmpty) seqAdd else seqRem ++ seqAdd
+    //
+    //      StateEvent(Update(seq))
+    //    }
 
     final protected def isConnected(implicit tx: S#Tx): Boolean = self.targets.nonEmpty
   }
 
-  object attributes extends AttrMap.Modifiable[S] with KeyMap[Attr[S], Attr.Update[S], Update] {
+  object attr extends AttrMap.Modifiable[S] with KeyMap[Elem[S], Elem.Update[S], Update] {
     final val slot = 0
 
-    def put(key: String, value: Attr[S])(implicit tx: S#Tx): Unit = add(key, value)
+    def put(key: String, value: Elem[S])(implicit tx: S#Tx): Unit = add(key, value)
 
     def contains(key: String)(implicit tx: S#Tx): Boolean = map.contains(key)
 
@@ -106,11 +121,15 @@ trait HasAttributes[S <: Sys[S], Repr <: evt.Node[S]] {
 
     protected def valueInfo = attributeEntryInfo[S]
 
-    def apply[At[~ <: Sys[~]] <: Attr[_]](key: String)(implicit tx: S#Tx,
-                                                              tag: reflect.ClassTag[At[S]]): Option[At[S]#Peer] =
+
+
+    //    def apply[At[~ <: Sys[~]] <: Elem[_]](key: String)(implicit tx: S#Tx,
+    //                                                              tag: reflect.ClassTag[At[S]]): Option[At[S]#Peer] =
+
+    def apply[A[~ <: Sys[~]]](key: String)(implicit tx: S#Tx, tag: ClassTag[A[S]]): Option[A[S]] =
       get(key) match {
         // cf. stackoverflow #16377741
-        case Some(attr) => tag.unapply(attr).map(_.peer) // Some(attr.peer)
+        case Some(attr) => tag.unapply(attr) // .map(_.peer) // Some(attr.peer)
         case _          => None
       }
   }

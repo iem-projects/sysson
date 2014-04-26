@@ -22,7 +22,7 @@ import javax.swing.{JComponent, TransferHandler, JTree}
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
 import swing.event.TableRowsSelected
-import scala.swing.{Component, ScrollPane, BoxPanel, Orientation, Action, Table, Swing}
+import scala.swing._
 import Swing._
 import de.sciss.swingtree.{Tree, ExternalTreeModel}
 import de.sciss.swingtree.event.TreeNodeSelected
@@ -37,6 +37,8 @@ import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
 import de.sciss.lucre.matrix.{Matrix, DataSource}
+import scala.Some
+import scala.swing.event.TableRowsSelected
 
 object DataSourceViewImpl {
   import Implicits._
@@ -282,6 +284,9 @@ object DataSourceViewImpl {
 
                 bindMenu("file.close", Action(null) { dispose() /* disposeGUI() */ })
 
+                override protected def style = desktop.Window.Auxiliary
+                addAction("window-shot", new ActionWindowShot(this))
+
                 override def dispose(): Unit = {
   //                document.removeListener(docL)
                   super.dispose()
@@ -297,15 +302,22 @@ object DataSourceViewImpl {
 
       tGroups.selectInterval(0, 0)
 
-      component = new BoxPanel(Orientation.Vertical) {
-        contents ++= Seq(
-          new ScrollPane(tGroups),
-          new ScrollPane(tGroupAttrs),
-          new ScrollPane(tGroupVars),
-          new BoxPanel(Orientation.Horizontal) {
-            contents += GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
-          }
-        )
+      val ggPlot  = GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
+      val ggSplit = new SplitPane(Orientation.Horizontal, new ScrollPane(tGroupAttrs), new ScrollPane(tGroupVars))
+
+      component = new BorderPanel {
+        add(new ScrollPane(tGroups), BorderPanel.Position.North)
+        add(ggSplit, BorderPanel.Position.Center)
+        // new ScrollPane(tGroupAttrs),
+        // new ScrollPane(tGroupVars),
+        // new BoxPanel(Orientation.Horizontal) {
+        //  contents += ggPlot
+        // }
+        add(new BoxPanel(Orientation.Horizontal) {
+          contents += HGlue
+          contents += ggPlot
+          contents += HGlue
+        }, BorderPanel.Position.South)
       }
     }
 

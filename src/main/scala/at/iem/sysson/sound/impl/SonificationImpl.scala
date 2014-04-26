@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.{event => evt, expr}
 import de.sciss.lucre.event.{Pull, EventLike, InMemory, Event, Sys}
 import at.iem.sysson.sound.Sonification.Source
-import de.sciss.synth.proc.Attr
+import de.sciss.synth.proc.Elem
 import scala.annotation.switch
 import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.data.SkipList
@@ -107,7 +107,7 @@ object SonificationImpl {
 
     final protected def AssociationAdded  (key: String) = Sonification.AttributeAdded  [S](key)
     final protected def AssociationRemoved(key: String) = Sonification.AttributeRemoved[S](key)
-    final protected def AttributeChange   (key: String, u: Attr.Update[S]) =
+    final protected def AttributeChange   (key: String, u: Elem.Update[S]) =
       Sonification.AttributeChange(key, u.element, u.change)
 
     final protected def Update(changes: Vec[Change]) = Sonification.Update(sonif, changes)
@@ -121,12 +121,12 @@ object SonificationImpl {
 
       def connect   ()(implicit tx: S#Tx): Unit = {
         patch.changed ---> this
-        attributes    ---> this
+        attr    ---> this
         StateEvent    ---> this
       }
       def disconnect()(implicit tx: S#Tx): Unit = {
         patch.changed -/-> this
-        attributes    -/-> this
+        attr    -/-> this
         StateEvent    -/-> this
       }
 
@@ -135,7 +135,7 @@ object SonificationImpl {
         // val patchOpt = if (graphemes .isSource(pull)) graphemes .pullUpdate(pull) else None
         val patchCh  = patch.changed
         val patchOpt = if (pull.contains(patchCh   )) pull(patchCh   ) else None
-        val attrOpt  = if (pull.contains(attributes)) pull(attributes) else None
+        val attrOpt  = if (pull.contains(attr)) pull(attr) else None
         val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
 
         val seq0 = patchOpt.fold(Vec.empty[Change]) { u =>
@@ -153,7 +153,7 @@ object SonificationImpl {
 
     final def select(slot: Int): Event[S, Any, Any] = (slot: @switch) match {
       case changed    .slot => changed
-      case attributes .slot => attributes
+      case attr .slot => attr
       case StateEvent .slot => StateEvent
     }
 

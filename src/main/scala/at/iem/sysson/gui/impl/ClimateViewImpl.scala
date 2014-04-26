@@ -415,7 +415,7 @@ object ClimateViewImpl {
 
       models = redGUIAll.map(r => r.name -> r.slider)(breakOut)
 
-      val main        = new ChartPanel(chart)
+      val main        = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
 
       val pSonif      = new BoxPanel(Orientation.Horizontal)
       ggSonifName     = new TextField(16)
@@ -500,7 +500,7 @@ object ClimateViewImpl {
         add(Component.wrap(main), BorderPanel.Position.Center)
         add(new BorderPanel {
           add(redGroup, BorderPanel.Position.Center)
-          add(pSonif  , BorderPanel.Position.South )
+          // add(pSonif  , BorderPanel.Position.South )
         }, BorderPanel.Position.South)
       }
 

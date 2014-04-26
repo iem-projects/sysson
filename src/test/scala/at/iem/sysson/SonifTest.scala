@@ -50,7 +50,7 @@
 //      }
 //    }
 //    son.mapping += "vec" -> source
-//    ??? : Synth // son playOver eachDur.seconds
+//    ... : Synth // son playOver eachDur.seconds
 //  }
 //
 //  def play(s: Server) {

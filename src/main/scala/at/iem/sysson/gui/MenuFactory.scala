@@ -139,6 +139,7 @@ object MenuFactory {
         }
       )
     val gWindow = Group("window", "Window")
+    //  .add(Item("windowShot",         proxy("Export Window as PDF...")))
 
     val r = Root().add(gFile).add(gEdit).add(gTools).add(gView).add(gWindow)
     if (itAbout.visible) r.add(Group("help", "Help").add(itAbout))

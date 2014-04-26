@@ -18,6 +18,7 @@ package impl
 
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
+import de.sciss.desktop
 
 object LibraryWindowImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryWindow[S] = {
@@ -31,5 +32,7 @@ object LibraryWindowImpl {
     extends WindowImpl[S](title0 = "Library") with LibraryWindow[S] {
 
     override def placement = (1f, 0.5f, 20)
+
+    override protected def style = desktop.Window.Auxiliary
   }
 }
