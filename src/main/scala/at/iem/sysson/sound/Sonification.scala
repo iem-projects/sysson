@@ -20,10 +20,11 @@ import evt.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
 import de.sciss.model
 import de.sciss.lucre.expr
-import de.sciss.synth.proc.{Elem, AttrMap}
+import de.sciss.synth.proc.{Obj, Elem, AttrMap}
 import impl.{SonificationImpl => Impl}
-import de.sciss.serial.DataInput
+import de.sciss.serial.{Serializer, DataInput}
 import de.sciss.lucre.matrix.Matrix
+import de.sciss.synth.proc
 
 object Sonification {
   // ---- implementation forwards ----
@@ -76,6 +77,28 @@ object Sonification {
     /** Maps sonification model/patch dimensions (keys) to source matrix dimensions (values). */
     def dims: expr.Map[S, String, Expr[S, String], model.Change[String]]
   }
+
+  // ---- element ----
+
+  object Elem {
+    def apply[S <: Sys[S]](peer: Sonification[S])(implicit tx: S#Tx): Sonification.Elem[S] =
+      ??? // Impl.SonificationElemImpl(peer)
+
+    implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Sonification.Elem[S]] =
+      ??? // Impl.SonificationElemImpl.serializer
+
+    object Obj {
+      def unapply[S <: Sys[S]](obj: Obj[S]): Option[proc.Obj.T[S, Sonification.Elem]] =
+        if (obj.elem.isInstanceOf[Sonification.Elem[S]]) Some(obj.asInstanceOf[proc.Obj.T[S, Sonification.Elem]])
+        else None
+    }
+  }
+  trait Elem[S <: Sys[S]] extends proc.Elem[S] {
+    type Peer       = Sonification[S]
+    type PeerUpdate = Sonification.Update[S]
+
+    def mkCopy()(implicit tx: S#Tx): Elem[S]
+  }
 }
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
   def patch: Patch[S]
@@ -83,6 +106,6 @@ trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonificati
   def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
   def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
 
-  /** A scalar attribute map */
-  def attr: AttrMap.Modifiable[S]
+  //  /** A scalar attribute map */
+  //  def attr: AttrMap.Modifiable[S]
 }

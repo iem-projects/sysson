@@ -28,7 +28,7 @@ import de.sciss.lucre.stm
 import javax.swing.undo.{CannotRedoException, CannotUndoException, AbstractUndoableEdit}
 import scala.concurrent.ExecutionContext
 import at.iem.sysson.sound.{Keys, Sonification}
-import de.sciss.synth.proc.{StringElem, Elem, ExprImplicits}
+import de.sciss.synth.proc.{Obj, StringElem, Elem, ExprImplicits}
 import de.sciss.lucre.expr.{String => StringEx}
 import de.sciss.model.Change
 import de.sciss.swingplus.Separator
@@ -58,10 +58,10 @@ object WorkspaceViewImpl {
 
     val untitled = "<untitled>"
 
-    def sonifName(son: Sonification[S])(implicit tx: S#Tx): Option[String] =
+    def sonifName(son: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): Option[String] =
       son.attr.expr[String](Keys.attrName).map(_.value)
 
-    val sonificationsHndl   = ListView.Handler[S, Sonification[S], Sonification.Update[S]] {
+    val sonificationsHndl = ListView.Handler[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification[S]]] {
       implicit tx => sonifName(_).getOrElse(untitled)
     } {
       implicit tx => { (son, upd) =>
@@ -78,8 +78,9 @@ object WorkspaceViewImpl {
       de.sciss.lucre.swing.showLog = true
       println("WorkspaceView : creating list views")
     }
-    val dataSources   = ListView[S, DataSource  [S], Unit                  , String](workspace.dataSources  , dataSourcesHndl  )
-    val sonifications = ListView[S, Sonification[S], Sonification.Update[S], String](workspace.sonifications, sonificationsHndl)
+    val dataSources   = ListView[S, DataSource[S], Unit, String](workspace.dataSources, dataSourcesHndl)
+    val sonifications = ListView[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification[S]], String](
+      workspace.sonifications, sonificationsHndl)
     val res = new Impl[S](undoMgr, dataSources, sonifications)(workspace)
     workspace.addDependent(res)
     deferTx(res.guiInit())
@@ -98,7 +99,7 @@ object WorkspaceViewImpl {
 
   private final class Impl[S <: Sys[S]](val undoManager: UndoManager, 
                                         dataSources  : ListView[S, DataSource  [S], Unit],
-                                        sonifications: ListView[S, Sonification[S], Sonification.Update[S]])
+                                        sonifications: ListView[S, Obj.T[S, Sonification.Elem], Sonification.Update[S]])
                                        (implicit val workspace: Workspace[S])
     extends WorkspaceView[S] {
 
@@ -208,10 +209,11 @@ object WorkspaceViewImpl {
       val edit = cursor.step { implicit tx =>
         val idx             = workspace.sonifications.size
         val sonif           = Sonification[S]
+        val obj             = Obj(Sonification.Elem(sonif))
         sonif.patch.graph() = graph
-        sonif.attr.put(Keys.attrName, StringElem.apply(StringEx.newVar(name)))
+        obj.attr.put(Keys.attrName, StringElem.apply(StringEx.newVar(name)))
         sourceOpt.foreach { code =>
-          sonif.attr.put(Keys.attrGraphSource, StringElem.apply(StringEx.newVar(code)))
+          obj.attr.put(Keys.attrGraphSource, StringElem.apply(StringEx.newVar(code)))
         }
         val childH          = tx.newHandle(sonif)
         val _edit           = new EditInsertSonif(idx, childH)

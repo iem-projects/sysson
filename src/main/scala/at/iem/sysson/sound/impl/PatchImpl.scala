@@ -43,7 +43,7 @@ object PatchImpl {
       new Read[S](in, access, targets)
   }
 
-  private sealed trait Impl[S <: Sys[S]] extends Patch[S] with HasAttributes[S, Patch[S]] {
+  private sealed trait Impl[S <: Sys[S]] extends Patch[S] {
     patch =>
 
     type Update       = Patch.Update[S]
@@ -52,11 +52,12 @@ object PatchImpl {
 
     final protected def reader: evt.Reader[S, Patch[S]] = PatchImpl.serializer
 
-    final protected def AssociationAdded  (key: String) = Patch.AssociationAdded  [S](AttributeKey(key))
-    final protected def AssociationRemoved(key: String) = Patch.AssociationRemoved[S](AttributeKey(key))
-    final protected def AttributeChange   (key: String, u: Elem.Update[S]) = Patch.AttributeChange(key, u.element, u.change)
-
     final protected def Update(changes: Vec[Change]) = Patch.Update(patch, changes)
+
+    /* sealed */ protected trait SelfEvent {
+      final protected def reader: evt.Reader[S, Patch[S]] = patch.reader
+      final def node: Patch[S] = patch
+    }
 
     object changed
       extends evt.impl.EventImpl[S, Update, Patch[S]]
@@ -67,61 +68,54 @@ object PatchImpl {
 
       def connect   ()(implicit tx: S#Tx): Unit = {
         graph.changed ---> this
-        attr    ---> this
-        StateEvent    ---> this
+        // StateEvent    ---> this
       }
       def disconnect()(implicit tx: S#Tx): Unit = {
         graph.changed -/-> this
-        attr    -/-> this
-        StateEvent    -/-> this
+        // StateEvent    -/-> this
       }
 
       def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Update] = {
         // val graphOpt = if (graphemes .isSource(pull)) graphemes .pullUpdate(pull) else None
         val graphCh  = graph.changed
         val graphOpt = if (pull.contains(graphCh   )) pull(graphCh   ) else None
-        val attrOpt  = if (pull.contains(attr)) pull(attr) else None
-        val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
+        // val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
 
         val seq0 = graphOpt.fold(Vec.empty[Change]) { u =>
           Vec(Patch.GraphChange(u))
         }
-        val seq1 = attrOpt.fold(seq0) { u =>
-          if (seq0.isEmpty) u.changes else seq0 ++ u.changes
-        }
-        val seq3 = stateOpt.fold(seq1) { u =>
-          if (seq1.isEmpty) u.changes else seq1 ++ u.changes
-        }
-        if (seq3.isEmpty) None else Some(Update(seq3))
+        //        val seq1 = attrOpt.fold(seq0) { u =>
+        //          if (seq0.isEmpty) u.changes else seq0 ++ u.changes
+        //        }
+        //        val seq3 = stateOpt.fold(seq1) { u =>
+        //          if (seq1.isEmpty) u.changes else seq1 ++ u.changes
+        //        }
+        if (seq0.isEmpty) None else Some(Update(seq0))
       }
     }
 
     final def select(slot: Int): Event[S, Any, Any] = (slot: @switch) match {
       case changed    .slot => changed
-      case attr .slot => attr
-      case StateEvent .slot => StateEvent
+      // case StateEvent .slot => StateEvent
     }
 
     final protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
-      graph       .write(out)
-      attributeMap.write(out)
+      graph.write(out)
     }
 
     final protected def disposeData()(implicit tx: S#Tx): Unit = {
       graph       .dispose()
-      attributeMap.dispose()
     }
 
-    override def toString() = "Patch" + id
+    override def toString() = s"Patch$id"
   }
 
-  import HasAttributes.attributeEntryInfo
+  // import HasAttributes.attributeEntryInfo
 
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
     protected val targets       = evt.Targets[S](tx0)
     val graph                   = SynthGraphs.newVar(SynthGraphs.empty)
-    protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry]
   }
 
   private final class Read[S <: Sys[S]](in: DataInput, access: S#Acc, protected val targets: evt.Targets[S])
@@ -130,10 +124,9 @@ object PatchImpl {
 
     {
       val serVer = in.readInt()
-      require(serVer == SER_VERSION, s"Incompatible serialized (found $serVer, required $SER_VERSION)")
+      if (serVer != SER_VERSION) sys.error(s"Incompatible serialized (found $serVer, required $SER_VERSION)")
     }
 
-    val graph                   = SynthGraphs.readVar(in, access)
-    protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry](in, access)
+    val graph = SynthGraphs.readVar(in, access)
   }
 }

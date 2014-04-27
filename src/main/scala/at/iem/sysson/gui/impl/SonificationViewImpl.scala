@@ -20,7 +20,7 @@ import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.{AuralSonification, AuralWorkspaceHandler, Keys, Sonification}
 import de.sciss.lucre.stm
 import scala.swing._
-import de.sciss.synth.proc.{StringElem, Elem}
+import de.sciss.synth.proc.{Obj, StringElem, Elem}
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.UndoManager
 import de.sciss.swingplus.{GroupPanel, Separator}
@@ -36,7 +36,7 @@ import de.sciss.icons.raphael
 import scala.concurrent.stm.Ref
 
 object SonificationViewImpl {
-  def apply[S <: Sys[S]](sonification: Sonification[S])
+  def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
                         (implicit tx: S#Tx, workspace: Workspace[S]): SonificationView[S] = {
     implicit val undoMgr = new UndoManagerImpl {
       protected var dirty: Boolean = false
@@ -48,7 +48,7 @@ object SonificationViewImpl {
     }
 
     val sonifView = AuralWorkspaceHandler.instance.view[S, workspace.I](workspace).view(sonification)
-    val p         = sonification.patch
+    val p         = sonification.elem.peer.patch
 
     val res = new Impl[S](sonifH, sonifView, nameView) {
       val auralObserver = sonifView.react { implicit tx => upd =>
@@ -70,7 +70,7 @@ object SonificationViewImpl {
     res
   }
 
-  private abstract class Impl[S <: Sys[S]](sonifH: stm.Source[S#Tx, Sonification[S]],
+  private abstract class Impl[S <: Sys[S]](sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
                                         sonifView: AuralSonification[S],
                                         nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S],
                                                                               val undoManager: UndoManager)
@@ -79,7 +79,7 @@ object SonificationViewImpl {
     protected def auralObserver: Disposable[S#Tx]
     protected def graphObserver: Disposable[S#Tx]
 
-    def sonification(implicit tx: S#Tx): Sonification[S] = sonifH()
+    def sonification(implicit tx: S#Tx): Obj.T[S, Sonification.Elem] = sonifH()
 
     private var pMapping : FlowPanel = _
     private var pControls: FlowPanel = _
@@ -102,7 +102,7 @@ object SonificationViewImpl {
 
       // ---- sources/mapping tx ----
 
-      val mapping = sonif.sources
+      val mapping = sonif.elem.peer.sources
       val sources = g.sources.collect {
         case vr: graph.Var =>
           val key   = vr.name
@@ -119,7 +119,7 @@ object SonificationViewImpl {
       
       // ---- controls tx ----
 
-      val controls    = sonif.controls
+      val controls    = sonif.elem.peer.controls
       val userValues  = g.sources.collect {
         case graph.UserValue(key, default) =>
           val view = DoubleSpinnerView.fromMap(controls, key, default, key.capitalize)
@@ -189,7 +189,7 @@ object SonificationViewImpl {
       val actionEditPatch = new Action(null) {
         def apply(): Unit = cursor.step { implicit tx =>
           val sonif = sonifH()
-          PatchCodeWindow(sonif.patch)
+          PatchCodeWindow(sonif.elem.peer.patch)
         }
       }
       val ggEditPatch = GUI.toolButton(actionEditPatch, raphael.Shapes.Edit, tooltip = "Edit Patch")

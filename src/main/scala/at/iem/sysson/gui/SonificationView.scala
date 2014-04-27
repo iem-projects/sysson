@@ -19,11 +19,12 @@ import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.Sonification
 import impl.{SonificationViewImpl => Impl}
 import de.sciss.lucre.swing.View
+import de.sciss.synth.proc.Obj
 
 object SonificationView {
-  def apply[S <: Sys[S]](sonification: Sonification[S])
+  def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
                         (implicit tx: S#Tx, workspace: Workspace[S]): SonificationView[S] = Impl(sonification)
 }
 trait SonificationView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.Editable[S] {
-  def sonification(implicit tx: S#Tx): Sonification[S]
+  def sonification(implicit tx: S#Tx): Obj.T[S, Sonification.Elem]
 }

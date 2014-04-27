@@ -65,20 +65,21 @@ object AuralSonificationImpl {
     p.future
   }
 
-  def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Sonification[S])
+  def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Obj.T[S, Sonification.Elem])
                         (implicit tx: S#Tx): AuralSonification[S] = {
     val w             = aw.workspace
     implicit val itx  = w.inMemoryTx(tx)         // why can't I just import w.inMemory !?
     val sonifH        = tx.newHandle(sonification)
     val proc          = Proc[I]
+    val obj           = Obj(ProcElem(proc))
     val group         = ProcGroup.Modifiable[I]
     val span          = SpanLikeEx.newVar[I](SpanLikeEx.newConst(Span.from(0L)))
-    group.add(span, proc)
+    group.add(span, obj)
     import w.{inMemoryCursor, inMemoryTx}
     val transport     = Transport[I, I](group)
     val auralSys      = AudioSystem.instance.aural
     val aural         = AuralPresentation.run(transport, auralSys)
-    new Impl[S, I](aw, aural, sonifH, itx.newHandle(proc), transport)
+    new Impl[S, I](aw, aural, sonifH, itx.newHandle(obj), transport)
   }
 
   // private sealed trait State
@@ -91,9 +92,9 @@ object AuralSonificationImpl {
 
   private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S, I],
                                                                  ap: AuralPresentation[I],
-                                                                 sonifH: stm.Source[S#Tx, Sonification[S]],
-      procH: stm.Source[I#Tx, Proc[I]],
-      transport: Transport[I, Proc[I], Transport.Proc.Update[I]])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx)
+                                                                 sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
+      procH: stm.Source[I#Tx, Obj.T[I, ProcElem]],
+      transport: ProcTransport[I])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx)
     extends AuralSonification[S] with TxnModelImpl[S#Tx, Update] {
     impl =>
 
@@ -127,9 +128,11 @@ object AuralSonificationImpl {
       implicit val itx: I#Tx = iTx(tx)
       import AudioFileCache.executionContext
 
-      val sonif = sonifH()
-      val g     = sonif.patch.graph.value
-      val proc  = procH()
+      val sonif   = sonifH()
+      val sonifE  = sonif.elem.peer
+      val patch   = sonifE.patch
+      val g       = patch.graph.value
+      val proc    = procH()
 
       var aCnt  = 0
 
@@ -186,7 +189,7 @@ object AuralSonificationImpl {
         val attrKey   = addAttr(elem)
         val dimElem   = elem.dim
         val mapKey    = dimElem.variable.name
-        val source    = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource   (mapKey))
+        val source    = sonifE.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
         val dimKey    = dimElem.name
         // `dimName` is the name of the dimension in the source matrix
         // which is mapped to the logical `mapKey`
@@ -215,7 +218,7 @@ object AuralSonificationImpl {
         val attrKey   = addAttr(elem)
         val varElem   = elem.variable
         val mapKey    = varElem.name
-        val source    = sonif.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
+        val source    = sonifE.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
         val m         = source.matrix
         val (dsv, rangesM)  = reduceMatrix(m)
         val streamDim = streaming.fold(-1) { dimKey =>
@@ -233,7 +236,7 @@ object AuralSonificationImpl {
       g.sources.foreach {
         case uv: graph.UserValue =>
           val attrKey = addAttr(uv)
-          sonif.controls.get(uv.key).foreach { expr =>
+          sonifE.controls.get(uv.key).foreach { expr =>
             putAttrValue(attrKey, expr.value)
           }
 
@@ -268,7 +271,7 @@ object AuralSonificationImpl {
 
       state_=(Preparing)
 
-      proc.graph() = SynthGraphs.newConst[I](g)
+      proc.elem.peer.graph() = SynthGraphs.newConst[I](g)
 
       if (graphemes.isEmpty) transportPlay() else tx.afterCommit {
         import ExecutionContext.Implicits.global
@@ -283,7 +286,7 @@ object AuralSonificationImpl {
         }
       }
     }
-    
+
     private def cursor: stm.Cursor[S] = aw.workspace.cursor
 
     // reset and start transport, after the Proc was fully configured
@@ -312,7 +315,7 @@ object AuralSonificationImpl {
         val artif = loc.add(gv.artifact)
         val elem  = Grapheme.Elem.Audio(artif, gv.spec, LongEx.newConst(gv.offset), DoubleEx.newConst(gv.gain))
         if (gen.scan) {
-          val scan  = proc.scans.add(gen.key)
+          val scan  = proc.elem.peer.scans.add(gen.key)
           val g     = Grapheme.Modifiable[I]
           g.add(BiExpr(LongEx.newConst(0L), elem))
           scan.addSource(Scan.Link.Grapheme(g))

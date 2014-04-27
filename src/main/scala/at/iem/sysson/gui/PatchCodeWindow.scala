@@ -29,7 +29,7 @@ object PatchCodeWindow {
 
   def apply[S <: Sys[S]](patch: Patch[S])
                         (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeWindow[S] =
-    Impl(patch)
+    ??? // Impl(patch)
 }
 trait PatchCodeWindow[S <: Sys[S]] extends Window[S] {
   def view: PatchCodeView[S]

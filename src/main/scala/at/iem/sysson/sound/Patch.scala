@@ -18,10 +18,10 @@ package sound
 import de.sciss.lucre.{event => evt}
 import evt.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
-import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{Elem, AttrMap}
+import de.sciss.synth.{proc, SynthGraph}
+import de.sciss.synth.proc.{Obj, Elem, AttrMap}
 import impl.{PatchImpl => Impl}
-import de.sciss.serial.DataInput
+import de.sciss.serial.{Serializer, DataInput}
 import de.sciss.model
 
 object Patch {
@@ -64,12 +64,34 @@ object Patch {
 
   final case class AttributeChange[S <: Sys[S]](key: String, attribute: Elem[S], change: Any)
     extends Change[S] {
+
     override def toString = s"AttributeChange($key, $attribute, $change)"
+  }
+
+  // ---- elem ----
+
+  object Elem {
+    def apply[S <: Sys[S]](peer: Patch[S])(implicit tx: S#Tx): Patch.Elem[S] = ???
+
+    implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Patch.Elem[S]] =
+      ??? // Impl.PatchElemImpl.serializer
+
+    object Obj {
+      def unapply[S <: Sys[S]](obj: Obj[S]): Option[proc.Obj.T[S, Patch.Elem]] =
+        if (obj.elem.isInstanceOf[Patch.Elem[S]]) Some(obj.asInstanceOf[proc.Obj.T[S, Patch.Elem]])
+        else None
+    }
+  }
+  trait Elem[S <: Sys[S]] extends proc.Elem[S] {
+    type Peer       = Patch[S]
+    type PeerUpdate = Patch.Update[S]
+
+    def mkCopy()(implicit tx: S#Tx): Elem[S]
   }
 }
 trait Patch[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Patch.Update[S]] {
   def graph: Expr.Var[S, SynthGraph]
 
-  /** A scalar attribute map */
-  def attr: AttrMap.Modifiable[S]
+  //  /** A scalar attribute map */
+  //  def attr: AttrMap.Modifiable[S]
 }

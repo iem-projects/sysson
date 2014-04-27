@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.{IdentifierMap, Disposable}
 import scala.concurrent.Future
-import de.sciss.synth.proc.Grapheme
+import de.sciss.synth.proc.{Obj, Grapheme}
 import de.sciss.lucre.synth
 
 object AuralWorkspaceImpl {
@@ -36,7 +36,7 @@ object AuralWorkspaceImpl {
     extends AuralWorkspace[S, I1] with Disposable[S#Tx] {
     impl =>
 
-    def view(sonif: Sonification[S])(implicit tx: S#Tx): AuralSonification[S] =
+    def view(sonif: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonification[S] =
       map.get(sonif.id).getOrElse {
         val view = AuralSonificationImpl(impl, sonif)
         map.put(sonif.id, view)

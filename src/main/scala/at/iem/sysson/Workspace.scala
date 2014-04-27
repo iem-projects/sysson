@@ -25,6 +25,7 @@ import at.iem.sysson.sound.Sonification
 import scala.concurrent.stm.TMap
 import de.sciss.synth.proc
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.synth.proc.Obj
 
 object Workspace {
   /** File name extension (excluding leading period) */
@@ -63,7 +64,7 @@ trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] with DataSource.Resolver[S
   def path: String
 
   def dataSources  (implicit tx: S#Tx): List.Modifiable[S, DataSource  [S], Unit]
-  def sonifications(implicit tx: S#Tx): List.Modifiable[S, Sonification[S], Sonification.Update[S]]
+  def sonifications(implicit tx: S#Tx): List.Modifiable[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification[S]]]
 
   /** Adds a dependent which is disposed just before the workspace is disposed.
     *

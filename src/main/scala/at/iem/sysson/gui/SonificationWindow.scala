@@ -19,9 +19,10 @@ import impl.{SonificationWindowImpl => Impl}
 import at.iem.sysson.Workspace
 import at.iem.sysson.sound.Sonification
 import de.sciss.lucre.swing.Window
+import de.sciss.synth.proc.Obj
 
 object SonificationWindow {
-  def apply[S <: Sys[S]](sonification: Sonification[S])
+  def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
                         (implicit tx: S#Tx, workspace: Workspace[S]): SonificationWindow[S] =
     Impl(sonification)
 }

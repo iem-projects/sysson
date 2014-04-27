@@ -19,9 +19,10 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop
+import de.sciss.synth.proc.Obj
 
 object SonificationWindowImpl {
-  def apply[S <: Sys[S]](sonification: Sonification[S])
+  def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
                         (implicit tx: S#Tx, workspace: Workspace[S]): SonificationWindow[S] = {
     val view  = SonificationView(sonification)
     val res   = new Impl(view)

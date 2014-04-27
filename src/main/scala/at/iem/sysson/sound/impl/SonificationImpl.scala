@@ -97,7 +97,7 @@ object SonificationImpl {
       new Read[S](in, access, targets)
   }
 
-  private sealed trait Impl[S <: Sys[S]] extends Sonification[S] with HasAttributes[S, Sonification[S]] {
+  private sealed trait Impl[S <: Sys[S]] extends Sonification[S] /* with HasAttributes[S, Sonification[S]] */ {
     sonif =>
 
     type Update       = Sonification.Update[S]
@@ -105,12 +105,17 @@ object SonificationImpl {
 
     final protected def reader: evt.Reader[S, Sonification[S]] = SonificationImpl.serializer
 
-    final protected def AssociationAdded  (key: String) = Sonification.AttributeAdded  [S](key)
-    final protected def AssociationRemoved(key: String) = Sonification.AttributeRemoved[S](key)
-    final protected def AttributeChange   (key: String, u: Elem.Update[S]) =
-      Sonification.AttributeChange(key, u.element, u.change)
+    //    final protected def AssociationAdded  (key: String) = Sonification.AttributeAdded  [S](key)
+    //    final protected def AssociationRemoved(key: String) = Sonification.AttributeRemoved[S](key)
+    //    final protected def AttributeChange   (key: String, u: Elem.Update[S]) =
+    //      Sonification.AttributeChange(key, u.element, u.change)
 
     final protected def Update(changes: Vec[Change]) = Sonification.Update(sonif, changes)
+
+    /* sealed */ protected trait SelfEvent {
+      final protected def reader: evt.Reader[S, Sonification[S]] = sonif.reader
+      final def node: Sonification[S] = sonif
+    }
 
     object changed
       extends evt.impl.EventImpl[S, Update, Sonification[S]]
@@ -121,40 +126,39 @@ object SonificationImpl {
 
       def connect   ()(implicit tx: S#Tx): Unit = {
         patch.changed ---> this
-        attr    ---> this
-        StateEvent    ---> this
+        // attr    ---> this
+        // StateEvent    ---> this
       }
       def disconnect()(implicit tx: S#Tx): Unit = {
         patch.changed -/-> this
-        attr    -/-> this
-        StateEvent    -/-> this
+        // attr    -/-> this
+        // StateEvent    -/-> this
       }
 
       // XXX TODO: for completeness, should forward changes to sources and controls!
       def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Update] = {
-        // val patchOpt = if (graphemes .isSource(pull)) graphemes .pullUpdate(pull) else None
         val patchCh  = patch.changed
         val patchOpt = if (pull.contains(patchCh   )) pull(patchCh   ) else None
-        val attrOpt  = if (pull.contains(attr)) pull(attr) else None
-        val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
+        // val attrOpt  = if (pull.contains(attr)) pull(attr) else None
+        // val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
 
         val seq0 = patchOpt.fold(Vec.empty[Change]) { u =>
           u.changes.map(Sonification.PatchChange.apply)
         }
-        val seq1 = attrOpt.fold(seq0) { u =>
-          if (seq0.isEmpty) u.changes else seq0 ++ u.changes
-        }
-        val seq3 = stateOpt.fold(seq1) { u =>
-          if (seq1.isEmpty) u.changes else seq1 ++ u.changes
-        }
-        if (seq3.isEmpty) None else Some(Update(seq3))
+        //        val seq1 = attrOpt.fold(seq0) { u =>
+        //          if (seq0.isEmpty) u.changes else seq0 ++ u.changes
+        //        }
+        //        val seq3 = stateOpt.fold(seq0) { u =>
+        //          if (seq0.isEmpty) u.changes else seq0 ++ u.changes
+        //        }
+        if (seq0.isEmpty) None else Some(Update(seq0))
       }
     }
 
     final def select(slot: Int): Event[S, Any, Any] = (slot: @switch) match {
       case changed    .slot => changed
-      case attr .slot => attr
-      case StateEvent .slot => StateEvent
+      //      case attr .slot => attr
+      // case StateEvent .slot => StateEvent
     }
 
     final protected def writeData(out: DataOutput): Unit = {
@@ -162,20 +166,20 @@ object SonificationImpl {
       patch       .write(out)
       sources     .write(out)
       controls    .write(out)
-      attributeMap.write(out)
+      //      attributeMap.write(out)
     }
 
     final protected def disposeData()(implicit tx: S#Tx): Unit = {
       patch       .dispose()
       sources     .dispose()
       controls    .dispose()
-      attributeMap.dispose()
+      //      attributeMap.dispose()
     }
 
     override def toString() = "Sonification" + id
   }
 
-  import HasAttributes.attributeEntryInfo
+  // import HasAttributes.attributeEntryInfo
 
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
     protected val targets       = evt.Targets[S](tx0)
@@ -185,7 +189,7 @@ object SonificationImpl {
       implicit val ser = DoubleEx.serializer[S]
       expr.Map.Modifiable[S, String, Expr[S, Double], model.Change[Double]]
     }
-    protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry]
+    //    protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry]
   }
 
   private final class Read[S <: Sys[S]](in: DataInput, access: S#Acc, protected val targets: evt.Targets[S])
@@ -203,6 +207,7 @@ object SonificationImpl {
       implicit val ser = DoubleEx.serializer[S]
       expr.Map.read[S, String, Expr[S, Double], model.Change[Double]](in, access)
     }
-    protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry](in, access)
+
+    //    protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry](in, access)
   }
 }
