@@ -19,13 +19,13 @@ package impl
 import de.sciss.lucre.{event => evt, expr}
 import de.sciss.lucre.event.{Pull, EventLike, InMemory, Event, Sys}
 import at.iem.sysson.sound.Sonification.Source
-import de.sciss.synth.proc.Elem
+import de.sciss.synth.proc.{Obj, Elem}
 import scala.annotation.switch
 import de.sciss.serial.{DataInput, DataOutput}
-import de.sciss.lucre.data.SkipList
 import de.sciss.lucre.expr.{Expr, Double => DoubleEx, String => StringEx}
 import de.sciss.model
-import de.sciss.lucre.matrix.{Matrix, DataSource}
+import de.sciss.lucre.matrix.Matrix
+import de.sciss.synth.proc.impl.ElemImpl
 
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"
@@ -38,6 +38,53 @@ object SonificationImpl {
     val dims    = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
     new SourceImpl(targets, matrix, dims)
   }
+
+
+  // ---- elem ----
+
+  object SonificationElemImpl extends ElemImpl.Companion[Sonification.Elem] {
+    final val typeID = Sonification.typeID
+
+    Elem.registerExtension(this)
+
+    def apply[S <: Sys[S]](peer: Sonification[S])(implicit tx: S#Tx): Sonification.Elem[S] = {
+      val targets = evt.Targets[S]
+      new Impl[S](targets, peer)
+    }
+
+    def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Sonification.Elem[S] =
+      serializer[S].read(in, access)
+
+    // ---- Elem.Extension ----
+
+    /** Read identified active element */
+    def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
+                                   (implicit tx: S#Tx): Sonification.Elem[S] with evt.Node[S] = {
+      val peer = Sonification.read(in, access)
+      new Impl[S](targets, peer)
+    }
+
+    /** Read identified constant element */
+    def readIdentifiedConstant[S <: Sys[S]](in: DataInput)(implicit tx: S#Tx): Sonification.Elem[S] =
+      sys.error("Constant Sonification not supported")
+
+    // ---- implementation ----
+
+    private final class Impl[S <: Sys[S]](protected val targets: evt.Targets[S],
+                                          val peer: Sonification[S])
+      extends Sonification.Elem[S]
+      with ElemImpl.Active[S] {
+
+      def typeID = SonificationElemImpl.typeID
+      def prefix = "Sonification"
+
+      override def toString() = s"$prefix$id"
+
+      def mkCopy()(implicit tx: S#Tx): Sonification.Elem[S] = Sonification.Elem(peer) // XXX TODO
+    }
+  }
+
+  // ---- internals ----
 
   private val anySourceSer = new SourceSer[evt.InMemory]
 
@@ -137,7 +184,7 @@ object SonificationImpl {
 
       // XXX TODO: for completeness, should forward changes to sources and controls!
       def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Update] = {
-        val patchCh  = patch.changed
+        val patchCh  = patch.elem.peer.changed
         val patchOpt = if (pull.contains(patchCh   )) pull(patchCh   ) else None
         // val attrOpt  = if (pull.contains(attr)) pull(attr) else None
         // val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
@@ -183,7 +230,7 @@ object SonificationImpl {
 
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
     protected val targets       = evt.Targets[S](tx0)
-    val patch                   = Patch[S]
+    val patch                   = Obj(Patch.Elem(Patch[S]))
     val sources                 = expr.Map.Modifiable[S, String, Source[S], Source.Update[S]]
     val controls                = {
       implicit val ser = DoubleEx.serializer[S]
@@ -201,7 +248,7 @@ object SonificationImpl {
       require(serVer == SER_VERSION, s"Incompatible serialized (found $serVer, required $SER_VERSION)")
     }
 
-    val patch                   = Patch.read(in, access)
+    val patch                   = Obj.readT[S, Patch.Elem](in, access)
     val sources                 = expr.Map.read[S, String, Source[S], Source.Update[S]](in, access)
     val controls                = {
       implicit val ser = DoubleEx.serializer[S]

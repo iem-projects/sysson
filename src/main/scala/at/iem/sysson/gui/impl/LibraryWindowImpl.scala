@@ -33,6 +33,6 @@ object LibraryWindowImpl {
 
     override def placement = (1f, 0.5f, 20)
 
-    override protected def style = desktop.Window.Auxiliary
+    // override protected def style = desktop.Window.Auxiliary
   }
 }

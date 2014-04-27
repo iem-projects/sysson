@@ -55,7 +55,7 @@ object SonificationViewImpl {
         deferTx(auralChange(upd))
       }
 
-      val graphObserver = p.graph.changed.react { implicit tx => upd =>
+      val graphObserver = p.elem.peer.graph.changed.react { implicit tx => upd =>
         updateGraph(upd.now)
       }
     }
@@ -64,7 +64,7 @@ object SonificationViewImpl {
       res.guiInit(sonifState)
     }
 
-    val graph0  = p.graph.value
+    val graph0  = p.elem.peer.graph.value
     res.updateGraph(graph0)
 
     res

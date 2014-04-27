@@ -18,7 +18,6 @@ import ucar.{nc2, ma2}
 
 import Implicits._
 import scala.collection.{JavaConversions, breakOut}
-import at.iem.sysson.gui.Plot
 import scala.concurrent.Future
 import scala.concurrent.stm.InTxn
 import at.iem.sysson.legacy.ColumnSource
@@ -119,7 +118,7 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
 
   // ---- plotting ----
 
-  def plot(): Plot = Plot(this)
+  // def plot(): Plot = Plot(this)
 
   private def dimIdxByName(n: String): Int = {
     val idx = variable.findDimensionIndex(n)

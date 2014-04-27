@@ -64,7 +64,7 @@ trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] with DataSource.Resolver[S
   def path: String
 
   def dataSources  (implicit tx: S#Tx): List.Modifiable[S, DataSource  [S], Unit]
-  def sonifications(implicit tx: S#Tx): List.Modifiable[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification[S]]]
+  def sonifications(implicit tx: S#Tx): List.Modifiable[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]]
 
   /** Adds a dependent which is disposed just before the workspace is disposed.
     *

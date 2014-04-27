@@ -76,7 +76,7 @@ object PatchCodeWindowImpl {
 
     // import code.{contextName, id => codeID}
 
-    override protected def style = desktop.Window.Auxiliary
+    // override protected def style = desktop.Window.Auxiliary
 
     protected def observer: Disposable[S#Tx]
 

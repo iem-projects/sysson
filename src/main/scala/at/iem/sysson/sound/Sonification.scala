@@ -20,13 +20,15 @@ import evt.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
 import de.sciss.model
 import de.sciss.lucre.expr
-import de.sciss.synth.proc.{Obj, Elem, AttrMap}
+import de.sciss.synth.proc.Obj
 import impl.{SonificationImpl => Impl}
 import de.sciss.serial.{Serializer, DataInput}
 import de.sciss.lucre.matrix.Matrix
 import de.sciss.synth.proc
 
 object Sonification {
+  final val typeID = 0x30004
+
   // ---- implementation forwards ----
 
   def apply[S <: Sys[S]](implicit tx: S#Tx): Sonification[S] = Impl[S]
@@ -43,21 +45,10 @@ object Sonification {
   /** A change is either a state change, or a scan or a grapheme change */
   sealed trait Change[S <: Sys[S]]
 
-  /** A state change is either a renaming, a change of graph, or a change of association (map) */
-  sealed trait StateChange[S <: Sys[S]] extends Change[S]
-  final case class PatchChange[S <: Sys[S]](change: Patch.Change[S]) extends StateChange[S]
+  //  /** A state change is either a renaming, a change of graph, or a change of association (map) */
+  //  sealed trait StateChange[S <: Sys[S]] extends Change[S]
 
-  /** An associative change is either adding or removing an association */
-  sealed trait AssociativeChange[S <: Sys[S]] extends StateChange[S] {
-    def key: String
-  }
-  final case class AttributeAdded  [S <: Sys[S]](key: String) extends AssociativeChange[S]
-  final case class AttributeRemoved[S <: Sys[S]](key: String) extends AssociativeChange[S]
-
-  final case class AttributeChange [S <: Sys[S]](key: String, attribute: Elem[S], change: Any)
-    extends Change[S] {
-    override def toString = s"AttributeChange($key, $attribute, $change)"
-  }
+  final case class PatchChange[S <: Sys[S]](change: Patch.Change[S]) extends Change[S]
 
   // -------------------------------------------------------
 
@@ -82,10 +73,10 @@ object Sonification {
 
   object Elem {
     def apply[S <: Sys[S]](peer: Sonification[S])(implicit tx: S#Tx): Sonification.Elem[S] =
-      ??? // Impl.SonificationElemImpl(peer)
+      Impl.SonificationElemImpl(peer)
 
     implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Sonification.Elem[S]] =
-      ??? // Impl.SonificationElemImpl.serializer
+      Impl.SonificationElemImpl.serializer
 
     object Obj {
       def unapply[S <: Sys[S]](obj: Obj[S]): Option[proc.Obj.T[S, Sonification.Elem]] =
@@ -101,7 +92,7 @@ object Sonification {
   }
 }
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
-  def patch: Patch[S]
+  def patch: Obj.T[S, Patch.Elem]
 
   def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
   def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]

@@ -31,6 +31,6 @@ object DataSourceWindowImpl {
   private final class Impl[S <: Sys[S]](val view: DataSourceView[S])
     extends WindowImpl[S] with DataSourceWindow[S] {
 
-    override protected def style = desktop.Window.Auxiliary
+    // override protected def style = desktop.Window.Auxiliary
   }
 }

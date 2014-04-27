@@ -29,6 +29,7 @@ import de.sciss.lucre.stm.Disposable
 import scala.util.control.NonFatal
 import de.sciss.synth.proc
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.synth.proc.Obj
 
 object WorkspaceImpl {
   def readDurable(dir: File): Workspace[proc.Durable] = {
@@ -54,7 +55,7 @@ object WorkspaceImpl {
   private final val WORKSPACE_COOKIE  = 0x737973736F6E7700L   // "syssonw\0"
 
   private final class Data[S <: Sys[S]](val dataSources  : List.Modifiable[S, DataSource  [S], Unit],
-                                        val sonifications: List.Modifiable[S, Sonification[S], Sonification.Update[S]]) {
+                                        val sonifications: List.Modifiable[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]]) {
     def write(out: DataOutput): Unit = {
       out.writeLong(WORKSPACE_COOKIE)
       dataSources  .write(out)
@@ -89,21 +90,25 @@ object WorkspaceImpl {
         require(cookie == WORKSPACE_COOKIE,
           s"Unexpected cookie (found ${cookie.toHexString}, expected ${WORKSPACE_COOKIE.toHexString})")
         val dataSources   = List.Modifiable.read[S, DataSource  [S]](in, access)
-        val sonifications = List.Modifiable.read[S, Sonification[S], Sonification.Update[S]](in, access)
+        // XXX TODO: this is why the Obj.T approach fails :-(
+        val sonifications = List.Modifiable.read[S, Obj[S], Obj.Update[S]](in, access)
+          .asInstanceOf[List.Modifiable[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]]]
         new Data(dataSources, sonifications)
       }
     }
 
     private val data: stm.Source[S#Tx, Data[S]] = system.root { implicit tx =>
       val dataSources   = List.Modifiable[S, DataSource  [S]]
-      val sonifications = List.Modifiable[S, Sonification[S], Sonification.Update[S]]
+      // XXX TODO: this is why the Obj.T approach fails :-(
+      val sonifications = List.Modifiable[S, Obj[S], Obj.Update[S]]
+        .asInstanceOf[List.Modifiable[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]]]
       new Data[S](dataSources, sonifications)
     }
 
     def dataSources  (implicit tx: S#Tx): List.Modifiable[S, DataSource  [S], Unit] =
       data().dataSources
 
-    def sonifications(implicit tx: S#Tx): List.Modifiable[S, Sonification[S], Sonification.Update[S]] =
+    def sonifications(implicit tx: S#Tx): List.Modifiable[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]] =
       data().sonifications
 
     def resolve(file: File)(implicit tx: S#Tx): nc2.NetcdfFile =

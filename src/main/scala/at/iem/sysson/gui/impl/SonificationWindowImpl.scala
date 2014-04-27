@@ -34,6 +34,6 @@ object SonificationWindowImpl {
     extends WindowImpl[S](title0 = "Sonification Editor")
     with SonificationWindow[S] {
 
-    override protected def style = desktop.Window.Auxiliary
+    // override protected def style = desktop.Window.Auxiliary
   }
 }

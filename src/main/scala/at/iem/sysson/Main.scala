@@ -17,6 +17,7 @@ package at.iem.sysson
 import gui.SwingApplication
 import scala.util.control.NonFatal
 import at.iem.sysson.legacy.NcviewSync
+import at.iem.sysson
 
 object Main extends App with Runnable {
   final val useNcView = false
@@ -32,11 +33,18 @@ object Main extends App with Runnable {
     val m     = clazz.getMethod(key)
     m.invoke(null).toString
   } catch {
-    case NonFatal(e) => "???"
+    case NonFatal(e) => "?"
   }
 
   def run(): Unit = {
     logInfo(s"Welcome to $name v$version")
+
+    // ---- type extensions ----
+
+    // mellite.initTypes()
+    de.sciss.lucre.synth.expr.initTypes()
+    sysson.initTypes()
+
     if (useNcView) {
       val ncView = NcviewSync()
       ncView.dump(on = true)

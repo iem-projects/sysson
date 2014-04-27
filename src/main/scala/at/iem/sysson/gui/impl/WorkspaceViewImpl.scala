@@ -41,6 +41,7 @@ import de.sciss.synth.SynthGraph
 import scala.Some
 import de.sciss.lucre.swing.ListView
 import de.sciss.model.Change
+import de.sciss.serial.Serializer
 
 object WorkspaceViewImpl {
   var DEBUG = false
@@ -61,14 +62,14 @@ object WorkspaceViewImpl {
     def sonifName(son: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): Option[String] =
       son.attr.expr[String](Keys.attrName).map(_.value)
 
-    val sonificationsHndl = ListView.Handler[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification[S]]] {
+    val sonificationsHndl = ListView.Handler[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]] {
       implicit tx => sonifName(_).getOrElse(untitled)
     } {
       implicit tx => { (son, upd) =>
         (Option.empty[String] /: upd.changes) {
-          case (_, Sonification.AttributeAdded  (Keys.attrName)) => sonifName(son)
-          case (_, Sonification.AttributeRemoved(Keys.attrName)) => Some(untitled)
-          case (_, Sonification.AttributeChange (Keys.attrName, _, Change(_, name: String))) => Some(name)
+          case (_, Obj.AttrAdded  (Keys.attrName, _)) => sonifName(son)
+          case (_, Obj.AttrRemoved(Keys.attrName, _)) => Some(untitled)
+          case (_, Obj.AttrChange (Keys.attrName, _, Change(_, name: String))) => Some(name)
           case (x, _) => x
         }
       }
@@ -79,8 +80,12 @@ object WorkspaceViewImpl {
       println("WorkspaceView : creating list views")
     }
     val dataSources   = ListView[S, DataSource[S], Unit, String](workspace.dataSources, dataSourcesHndl)
-    val sonifications = ListView[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification[S]], String](
-      workspace.sonifications, sonificationsHndl)
+    // XXX TODO: this is why the Obj.T approach fails :-(
+    implicit val SER_XXX = List.serializer[S, Obj[S], Obj.Update[S]]
+      .asInstanceOf[Serializer[S#Tx, S#Acc, List[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]]]]
+
+    val sonifications = ListView[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]], String](
+      workspace.sonifications, sonificationsHndl)(tx, cursor, SER_XXX)
     val res = new Impl[S](undoMgr, dataSources, sonifications)(workspace)
     workspace.addDependent(res)
     deferTx(res.guiInit())
@@ -97,10 +102,10 @@ object WorkspaceViewImpl {
   private final val txtRemoveSonif      = "Remove Sonification"
   private final val txtViewSonif        = "View Sonification"
 
-  private final class Impl[S <: Sys[S]](val undoManager: UndoManager, 
-                                        dataSources  : ListView[S, DataSource  [S], Unit],
-                                        sonifications: ListView[S, Obj.T[S, Sonification.Elem], Sonification.Update[S]])
-                                       (implicit val workspace: Workspace[S])
+  private final class Impl[S <: Sys[S]](
+      val undoManager: UndoManager, dataSources  : ListView[S, DataSource  [S], Unit],
+      sonifications: ListView[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]])
+     (implicit val workspace: Workspace[S])
     extends WorkspaceView[S] {
 
     impl =>
@@ -173,13 +178,13 @@ object WorkspaceViewImpl {
       override def getPresentationName = txtRemoveDataSource
     }
 
-    private class EditInsertSonif(index: Int, childH: stm.Source[S#Tx, Sonification[S]])
+    private class EditInsertSonif(index: Int, childH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]])
       extends EditNode(true, workspace.sonifications(_), index, childH) {
 
       override def getPresentationName = txtAddSonif
     }
 
-    private class EditRemoveSonif(index: Int, childH: stm.Source[S#Tx, Sonification[S]])
+    private class EditRemoveSonif(index: Int, childH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]])
       extends EditNode(false, workspace.sonifications(_), index, childH) {
 
       override def getPresentationName = txtRemoveSonif
@@ -210,12 +215,12 @@ object WorkspaceViewImpl {
         val idx             = workspace.sonifications.size
         val sonif           = Sonification[S]
         val obj             = Obj(Sonification.Elem(sonif))
-        sonif.patch.graph() = graph
+        sonif.patch.elem.peer.graph() = graph
         obj.attr.put(Keys.attrName, StringElem.apply(StringEx.newVar(name)))
         sourceOpt.foreach { code =>
           obj.attr.put(Keys.attrGraphSource, StringElem.apply(StringEx.newVar(code)))
         }
-        val childH          = tx.newHandle(sonif)
+        val childH          = tx.newHandle(obj)
         val _edit           = new EditInsertSonif(idx, childH)
         _edit.perform()
         _edit

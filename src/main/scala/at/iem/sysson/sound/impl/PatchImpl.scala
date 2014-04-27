@@ -22,8 +22,8 @@ import evt.{InMemory, Sys, Event}
 import de.sciss.serial.{DataOutput, DataInput}
 import de.sciss.synth.proc.{SynthGraphs, Elem}
 import scala.annotation.switch
-import at.iem.sysson.sound.Patch.AttributeKey
 import language.higherKinds
+import de.sciss.synth.proc.impl.ElemImpl
 
 object PatchImpl {
   private final val SER_VERSION = 0x50617400  // "Pat\0"
@@ -35,6 +35,52 @@ object PatchImpl {
 
   def serializer[S <: Sys[S]]: evt.NodeSerializer[S, Patch[S]] =
     anySer.asInstanceOf[evt.NodeSerializer[S, Patch[S]]]
+
+  // ---- elem ----
+
+  object PatchElemImpl extends ElemImpl.Companion[Patch.Elem] {
+    final val typeID = Patch.typeID
+
+    Elem.registerExtension(this)
+
+    def apply[S <: Sys[S]](peer: Patch[S])(implicit tx: S#Tx): Patch.Elem[S] = {
+      val targets = evt.Targets[S]
+      new Impl[S](targets, peer)
+    }
+
+    def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Patch.Elem[S] =
+      serializer[S].read(in, access)
+
+    // ---- Elem.Extension ----
+
+    /** Read identified active element */
+    def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
+                                   (implicit tx: S#Tx): Patch.Elem[S] with evt.Node[S] = {
+      val peer = Patch.read(in, access)
+      new Impl[S](targets, peer)
+    }
+
+    /** Read identified constant element */
+    def readIdentifiedConstant[S <: Sys[S]](in: DataInput)(implicit tx: S#Tx): Patch.Elem[S] =
+      sys.error("Constant Patch not supported")
+
+    // ---- implementation ----
+
+    private final class Impl[S <: Sys[S]](protected val targets: evt.Targets[S],
+                                          val peer: Patch[S])
+      extends Patch.Elem[S]
+      with ElemImpl.Active[S] {
+
+      def typeID = PatchElemImpl.typeID
+      def prefix = "Patch"
+
+      override def toString() = s"$prefix$id"
+
+      def mkCopy()(implicit tx: S#Tx): Patch.Elem[S] = Patch.Elem(peer) // XXX TODO
+    }
+  }
+
+  // ---- internals ----
 
   private val anySer = new Serializer[InMemory]
 
@@ -48,7 +94,7 @@ object PatchImpl {
 
     type Update       = Patch.Update[S]
     type Change       = Patch.Change[S]
-    type StateChange  = Patch.StateChange[S]
+    // type StateChange  = Patch.StateChange[S]
 
     final protected def reader: evt.Reader[S, Patch[S]] = PatchImpl.serializer
 

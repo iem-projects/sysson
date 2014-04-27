@@ -24,6 +24,8 @@ import scala.annotation.elidable
 import scala.annotation.elidable._
 import scala.Some
 import de.sciss.lucre.stm.TxnLike
+import at.iem.sysson.sound.impl.PatchImpl.PatchElemImpl
+import at.iem.sysson.sound.impl.SonificationImpl.SonificationElemImpl
 
 package object sysson {
   val  Vec     = collection.immutable.IndexedSeq
@@ -84,4 +86,11 @@ package object sysson {
     Txn.afterCommit(_ => logInfo(what))(tx.peer)
 
   type Scale = Double => Double
+
+  // ---- types ----
+
+  def initTypes(): Unit = {
+    PatchElemImpl
+    SonificationElemImpl
+  }
 }

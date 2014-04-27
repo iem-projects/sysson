@@ -131,7 +131,7 @@ object AuralSonificationImpl {
       val sonif   = sonifH()
       val sonifE  = sonif.elem.peer
       val patch   = sonifE.patch
-      val g       = patch.graph.value
+      val g       = patch.elem.peer.graph.value
       val proc    = procH()
 
       var aCnt  = 0

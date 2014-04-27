@@ -284,7 +284,7 @@ object DataSourceViewImpl {
 
                 bindMenu("file.close", Action(null) { dispose() /* disposeGUI() */ })
 
-                override protected def style = desktop.Window.Auxiliary
+                // override protected def style = desktop.Window.Auxiliary
                 addAction("window-shot", new ActionWindowShot(this))
 
                 override def dispose(): Unit = {

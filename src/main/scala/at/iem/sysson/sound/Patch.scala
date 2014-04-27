@@ -25,6 +25,8 @@ import de.sciss.serial.{Serializer, DataInput}
 import de.sciss.model
 
 object Patch {
+  final val typeID = 0x30000
+
   // ---- implementation forwards ----
 
   def apply[S <: Sys[S]](implicit tx: S#Tx): Patch[S] = Impl[S]
@@ -41,40 +43,18 @@ object Patch {
   /** A change is either a state change, or a scan or a grapheme change */
   sealed trait Change[S <: Sys[S]]
 
-  /** A state change is either a renaming, a change of graph, or a change of association (map) */
-  sealed trait StateChange[S <: Sys[S]] extends Change[S]
-  final case class GraphChange[S <: Sys[S]](change: model.Change[SynthGraph]) extends StateChange[S]
+  //  /** A state change is either a renaming, a change of graph, or a change of association (map) */
+  //  sealed trait StateChange[S <: Sys[S]] extends Change[S]
 
-  /** An associative change is either adding or removing an association */
-  sealed trait AssociativeChange[S <: Sys[S]] extends StateChange[S] {
-    def key: AssociativeKey
-  }
-  final case class AssociationAdded  [S <: Sys[S]](key: AssociativeKey) extends AssociativeChange[S]
-  final case class AssociationRemoved[S <: Sys[S]](key: AssociativeKey) extends AssociativeChange[S]
-
-  /** An associative key is either a grapheme or a scan key */
-  sealed trait AssociativeKey { def name: String }
-  final case class ScanKey(name: String) extends AssociativeKey {
-    override def toString = s"[scan: $name]"
-  }
-
-  final case class AttributeKey(name: String) extends AssociativeKey {
-    override def toString = s"[attribute: $name]"
-  }
-
-  final case class AttributeChange[S <: Sys[S]](key: String, attribute: Elem[S], change: Any)
-    extends Change[S] {
-
-    override def toString = s"AttributeChange($key, $attribute, $change)"
-  }
+  final case class GraphChange[S <: Sys[S]](change: model.Change[SynthGraph]) extends Change[S]
 
   // ---- elem ----
 
   object Elem {
-    def apply[S <: Sys[S]](peer: Patch[S])(implicit tx: S#Tx): Patch.Elem[S] = ???
+    def apply[S <: Sys[S]](peer: Patch[S])(implicit tx: S#Tx): Patch.Elem[S] = Impl.PatchElemImpl(peer)
 
     implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Patch.Elem[S]] =
-      ??? // Impl.PatchElemImpl.serializer
+      Impl.PatchElemImpl.serializer
 
     object Obj {
       def unapply[S <: Sys[S]](obj: Obj[S]): Option[proc.Obj.T[S, Patch.Elem]] =
@@ -91,7 +71,4 @@ object Patch {
 }
 trait Patch[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Patch.Update[S]] {
   def graph: Expr.Var[S, SynthGraph]
-
-  //  /** A scalar attribute map */
-  //  def attr: AttrMap.Modifiable[S]
 }
