@@ -110,7 +110,7 @@ target    in assembly := baseDirectory.value    // make .jar file in the main di
 
 jarName   in assembly := s"${name.value}.jar"
 
-mainClass in assembly := Some("at.iem.sysson.gui.SwingApplication")
+mainClass in assembly := Some("at.iem.sysson.Main")
 
 //mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
 //  {
@@ -131,7 +131,7 @@ appbundle.icon := {
   Some(icn)
 }
 
-appbundle.mainClass   := Some("at.iem.sysson.gui.SwingApplication")
+appbundle.mainClass   := Some("at.iem.sysson.Main")
 
 appbundle.javaOptions += "-Xmx2048m"
 

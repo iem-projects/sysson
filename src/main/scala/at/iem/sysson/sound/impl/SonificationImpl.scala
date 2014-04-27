@@ -45,6 +45,7 @@ object SonificationImpl {
   object SonificationElemImpl extends ElemImpl.Companion[Sonification.Elem] {
     final val typeID = Sonification.typeID
 
+    // println("register sonification")
     Elem.registerExtension(this)
 
     def apply[S <: Sys[S]](peer: Sonification[S])(implicit tx: S#Tx): Sonification.Elem[S] = {
