@@ -18,7 +18,6 @@ package impl
 
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.Sonification
-import de.sciss.desktop
 import de.sciss.synth.proc.Obj
 
 object SonificationWindowImpl {
