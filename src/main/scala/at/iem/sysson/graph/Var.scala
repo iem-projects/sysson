@@ -89,8 +89,14 @@ object Var {
       // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addScalarAxis(axis.playing, axis.ref)
 
       protected def makeUGens: UGenInLike = {
-        val key = AuralSonification.current().attributeKey(this)
-        proc.graph.attribute(key).ir
+        val keyComp   = AuralSonification.current().attributeKey(this)
+        val keySp     = keyComp.split(";")
+        val key       = keySp(0)
+        val axisSize  = keySp(1).toInt
+        val div       = keySp(2).toInt
+        val axisSignal= proc.graph.attribute(key).ir
+        println(s"axisSize = $axisSize, div = $div")
+        Vector.tabulate(axisSize * div)(i => axisSignal \ (i/div)): synth.GE
       }
     }
   }
@@ -114,6 +120,8 @@ object Var {
     def startValue: synth.GE = ???
 
     def endValue  : synth.GE = ???
+
+    def asDim: Dim = Dim(variable.variable, dim)
   }
 
   // -------- VarImpl --------

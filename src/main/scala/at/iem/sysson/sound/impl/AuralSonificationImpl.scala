@@ -136,9 +136,14 @@ object AuralSonificationImpl {
 
       var aCnt  = 0
 
-      def addAttr(elem: Any): String = {
+      def mkAttrKey(): String = {
         val key = s"son$aCnt"
         aCnt   += 1
+        key
+      }
+
+      def addAttr(elem: Any): String = {
+        val key = mkAttrKey()
         // logInfo(s"addAttr elem '${elem.getClass}@$elem' key '$key'")
         attrMap.put(elem, key)(tx.peer)
         key
@@ -158,7 +163,7 @@ object AuralSonificationImpl {
 
         /* @tailrec */ def loopMatrix(m0: Matrix[S], r0: Vec[Range]): (DataSource.Variable[S], Vec[Range]) = m0 match {
           case dv : DataSource.Variable[S] => (dv, r0)
-          case mv : Matrix.Var[S] => loopMatrix(mv(), r0)
+          case mv : Matrix.Var[S]          => loopMatrix(mv(), r0)
           case red: Reduce[S] =>
             val (m1, r1) = loopMatrix(red.in, r0)
             @tailrec def loopDimension(d0: Dimension.Selection[S]): Int = d0 match {
@@ -185,21 +190,18 @@ object AuralSonificationImpl {
         loopMatrix(m, md.map(dv => 0 until dv.size))
       }
 
-      def addDimGE(elem: graph.Dim.GE, streaming: Boolean): Unit = {
-        val attrKey   = addAttr(elem)
-        val dimElem   = elem.dim
+      // prepares dimensional values by launching their production and adding
+      // the grapheme to the map at the given `attrKey`. the method returns
+      // the matrix, the reduced matrix shape and the index of the particular dimension.
+      def prepareDimGE(dimElem: graph.Dim, attrKey: String,
+                       streaming: Boolean): (Sonification.Source[S], Vec[Range], Int) = {
         val mapKey    = dimElem.variable.name
-        val source    = sonifE.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
+        val source    = getSource(mapKey)
         val dimKey    = dimElem.name
         // `dimName` is the name of the dimension in the source matrix
-        // which is mapped to the logical `mapKey`
-        val dimName   = source.dims  .get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
-
+        // which is mapped to the logical `dimKey`
+        val (dimName, mdi) = dimIndex(source, dimKey)
         val m         = source.matrix
-        val md        = m.dimensions
-        val mdi       = md.indexWhere(_.name == dimName)
-        if (mdi < 0) throw AuralSonification.MissingDimension(dimKey)
-
         val (dsv, rangesM) = reduceMatrix(m)
         val ds        = dsv.source
         val dimVar    = ds.variables.find(_.name == dimName).getOrElse(
@@ -211,8 +213,29 @@ object AuralSonificationImpl {
         val streamDim = if (streaming) 0 else -1
         val fut       = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = streamDim)
         graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
+        (source, rangesM, mdi)
       }
 
+      // produces a graph element for dimension values
+      def addDimGE(elem: graph.Dim.GE, streaming: Boolean): Unit = {
+        val attrKey = addAttr(elem)
+        prepareDimGE(dimElem = elem.dim, attrKey = attrKey, streaming = streaming)
+      }
+
+      // returns the name of a logical dimension and its index within a source
+      def dimIndex(source: Sonification.Source[S], key: String): (String, Int) = {
+        val dimName   = source.dims.get(key).getOrElse(throw AuralSonification.MissingDimension(key)).value
+        val m         = source.matrix
+        val md        = m.dimensions
+        val mdi       = md.indexWhere(_.name == dimName)
+        if (mdi < 0) throw AuralSonification.MissingDimension(key)
+        (dimName, mdi)
+      }
+
+      def getSource(mapKey: String): Sonification.Source[S] =
+        sonifE.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
+
+      // produces a graph element for variable values
       // TODO: perhaps factor out a bit of DRY with respect to addDimGE
       // TODO: probably we'll run `reduceMatrix` multiple times with the same input.
       // therefore, should maybe cache the results?
@@ -220,16 +243,10 @@ object AuralSonificationImpl {
         val attrKey   = addAttr(elem)
         val varElem   = elem.variable
         val mapKey    = varElem.name
-        val source    = sonifE.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
+        val source    = getSource(mapKey)
         val m         = source.matrix
-        val (dsv, rangesM)  = reduceMatrix(m)
-        val streamDim = streaming.fold(-1) { dimKey =>
-          val dimName   = source.dims.get(dimKey).getOrElse(throw AuralSonification.MissingDimension(dimKey)).value
-          val md        = m.dimensions
-          val mdi       = md.indexWhere(_.name == dimName)
-          if (mdi < 0) throw AuralSonification.MissingDimension(dimKey)
-          mdi
-        }
+        val (dsv, rangesM) = reduceMatrix(m)
+        val streamDim = streaming.fold(-1)(dimIndex(source, _)._2)
         logDebugTx(s"addVarGE: section = ${rangesM.map(r => s"${r.start} to ${r.end}")}, streamDim = $streamDim")(tx)
         val fut       = AudioFileCache.acquire(aw.workspace, source = dsv, section = rangesM, streamDim = streamDim)
         graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
@@ -249,19 +266,26 @@ object AuralSonificationImpl {
         case dv: graph.Dim.Values => addDimGE(dv, streaming = false)
 
         case vav: graph.Var.Axis.Values =>
-          val attrKey     = addAttr(vav)
-          // TODO: review old sections iteration, write audio file (cache!) and place as Attribute.AudioGrapheme
-          val dir: File   = ???
-          val loc         = Artifact.Location.Modifiable[I](dir)
-          val file: File  = ???
-          val artifact    = loc.add(file)
-          val spec: AudioFileSpec = ???
-          val offset      = 0L
-          val gain        = 1.0
-          // val gv          = Grapheme.Value.Audio(file, spec, offset, gain)
-          // val g           = Grapheme.Elem.Audio.newConst[I]controls(gv)
-          val g           = Grapheme.Elem.Audio(artifact, spec, LongEx.newConst(offset), DoubleEx.newConst(gain))
-          proc.attr.put(attrKey, AudioGraphemeElem(g))
+          // tricky business. we use the existing approach mapping between `elem` and
+          // an `attrKey` string. however, we store in `attrMap` an "extended" key which
+          // is a tuple of three components separated by semicolons: the first component
+          // is the actual key into the proc's attribute map (to find the grapheme) - this
+          // is `attrKey0` here. the second component is the size of the dimension value
+          // vector (int), the thrid component is the product of the reduced matrix shape
+          // after dropping the dimensions up to and including the selected dimension.
+          // that is, with respect to `VariableAxesAssociations.txt`, we store
+          // "<key>;<axis_size>;<div>"
+          val attrKey0 = mkAttrKey()
+          // scalac freaks out - wants a return type although it is _not_ a recursive call
+          val tup: (Sonification.Source[S], Vec[Range], Int) =
+            prepareDimGE(dimElem = vav.axis.asDim, attrKey = attrKey0, streaming = false)
+          val (source, rangesM, mdi) = tup
+          val (_, timeIdx) = dimIndex(source, vav.axis.variable.time.dim.name)
+          val axisSize  = rangesM(mdi).size
+          val div0      = rangesM.drop(mdi + 1).map(_.size.toLong).product
+          val div       = if (timeIdx < mdi) div0 else div0 / rangesM(timeIdx).size
+          val attrKey   = s"$attrKey0;$axisSize;$div"
+          attrMap.put(vav, attrKey)(tx.peer)
 
         case uv: UserValue.GE =>  // already wired up
 
