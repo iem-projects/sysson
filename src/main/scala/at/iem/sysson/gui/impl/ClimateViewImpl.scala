@@ -25,9 +25,9 @@ import org.jfree.chart.axis.{SymbolAxis, NumberAxis}
 import org.jfree.chart.plot.{ValueMarker, IntervalMarker, XYPlot}
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
 import java.awt.{BasicStroke, Color}
-import scala.swing.{ProgressBar, TextField, Button, BoxPanel, Orientation, CheckBox, BorderPanel, Component, Alignment, Label, Swing}
+import scala.swing._
 import Swing._
-import javax.swing.{TransferHandler, SpinnerNumberModel, JSpinner, GroupLayout}
+import javax.swing._
 import scala.swing.event.{ButtonClicked, ValueChanged}
 import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
@@ -46,6 +46,19 @@ import scala.concurrent.stm.atomic
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
 import de.sciss.lucre.matrix.DataSource
+import scala.Some
+import scala.swing.event.ButtonClicked
+import de.sciss.icons.raphael
+import de.sciss.desktop.OptionPane
+import javax.swing.table.DefaultTableCellRenderer
+import org.jfree.ui.NumberCellRenderer
+import scala.text
+import scala.Some
+import scala.swing.Action
+import scala.swing.event.ButtonClicked
+import java.awt
+import java.text.NumberFormat
+import java.util.Locale
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -199,6 +212,7 @@ object ClimateViewImpl {
                 case ButtonClicked(_) => updateData()
               }
             }
+            actionStats.enabled = s.isDefined
           }
         }
       }
@@ -342,17 +356,63 @@ object ClimateViewImpl {
 
     // private var userValues  = Map.empty[String, SpinnerNumberModel]
 
-    private var ggSonifName: TextField = _
+    //    private var ggSonifName: TextField = _
 
-    private var playing     = Option.empty[Future[Synth]]
+    // private var playing     = Option.empty[Future[Synth]]
 
-    private var ggBusy: ProgressBar = _
+    // private var ggBusy: ProgressBar = _
 
-    private var transport: Component with Transport.ButtonStrip = _
+    // private var transport: Component with Transport.ButtonStrip = _
 
-    private var pUserValues: BoxPanel = _
+    //    private var pUserValues: BoxPanel = _
+    //
+    //    private var pSonif2: BoxPanel = _
 
-    private var pSonif2: BoxPanel = _
+    private var actionStats: Action = _
+
+    private def showStats(): Unit =
+      stats.foreach { sv =>
+        val tot = sv.total
+        // println(tot)
+        // val fmt = NumberFormat.getNumberInstance(Locale.US)
+        // fmt.setMaximumFractionDigits(6)
+        val tab = new Table(
+          // use `.toString` for now, because default renderer applies some bad truncation
+          Array[Array[Any]](
+            Array("size"   , tot.num   ),
+            Array("min"    , tot.min   ), // format tot.min   ),
+            Array("max"    , tot.max   ), // format tot.max   ),
+            Array("mean"   , tot.mean  ), // format tot.mean  ),
+            Array("std-dev", tot.stddev)  // format tot.stddev)
+          ),
+          List("Key", "Value"))
+        val colKey = tab.peer.getColumnModel.getColumn(0)
+        colKey.setPreferredWidth(80)
+        val colVal = tab.peer.getColumnModel.getColumn(1)
+        tab.peer.setDefaultRenderer(classOf[java.lang.Double], new DefaultTableCellRenderer {
+          setHorizontalAlignment(SwingConstants.RIGHT)
+
+          private def formatValue(in: Any): Any = {
+            // println("Aqui")
+            if (in == null) return null
+            // fmt.format(in)
+            // better support for exponentials actually
+            in match {
+              case d: Double => d.toFloat.toString
+              case _ => in
+            }
+          }
+
+          override def getTableCellRendererComponent(table: JTable, value: Any, isSelected: Boolean,
+                                                     hasFocus: Boolean, row: Int,
+                                                     column: Int): awt.Component =
+            super.getTableCellRendererComponent(table, formatValue(value), isSelected, hasFocus, row, column)
+        })
+        colVal.setPreferredWidth(140)
+        val opt   = OptionPane.message(message = tab, messageType = OptionPane.Message.Plain)
+        opt.title = s"Statistics: ${sv.name}"
+        opt.show(GUI.windowOption(component))
+      }
 
     def guiInit(): Unit = {
       requireEDT()
@@ -417,95 +477,100 @@ object ClimateViewImpl {
 
       val main        = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
 
-      val pSonif      = new BoxPanel(Orientation.Horizontal)
-      ggSonifName     = new TextField(16)
-      ggSonifName.maximumSize = ggSonifName.preferredSize
-      ggSonifName.editable    = false
-      ggSonifName.peer.putClientProperty("JComponent.sizeVariant", "small")
-      pUserValues = new BoxPanel(Orientation.Horizontal)  // cannot nest!: new FlowPanel()
+      val pButtons    = new BoxPanel(Orientation.Horizontal)
+      //      ggSonifName     = new TextField(16)
+      //      ggSonifName.maximumSize = ggSonifName.preferredSize
+      //      ggSonifName.editable    = false
+      //      ggSonifName.peer.putClientProperty("JComponent.sizeVariant", "small")
+      //      pUserValues = new BoxPanel(Orientation.Horizontal)  // cannot nest!: new FlowPanel()
+      actionStats = Action(null)(showStats())
+      actionStats.enabled = stats.isDefined
+      val ggStats = GUI.toolButton(actionStats, raphael.Shapes.InformationCircle, tooltip = "Show Statistics")
+      pButtons.contents += ggStats
+      pButtons.contents += HGlue
 
-      transport   = Transport.makeButtonStrip {
-        import Transport._
-        Seq(
-          GoToBegin {
-            rtz()
-          },
-          Stop {
-            stop()
-          },
-          Play {
-            play()
-          }
-        )
-      }
+      //      transport   = Transport.makeButtonStrip {
+      //        import Transport._
+      //        Seq(
+      //          GoToBegin {
+      //            rtz()
+      //          },
+      //          Stop {
+      //            stop()
+      //          },
+      //          Play {
+      //            play()
+      //          }
+      //        )
+      //      }
 
-      ggBusy = mkIndetProgress()
+      // ggBusy = mkIndetProgress()
 
-      pSonif2     = new BoxPanel(Orientation.Horizontal) {
-        contents += ggSonifName
-        contents += transport
-        contents += pUserValues
-      }
-      pSonif2.visible         = false
+      //      pSonif2     = new BoxPanel(Orientation.Horizontal) {
+      //        contents += ggSonifName
+      //        contents += transport
+      //        contents += pUserValues
+      //      }
+      //      pSonif2.visible         = false
 
-      val butSonif    = new Button(null: String)
-      butSonif.icon           = Icons.Target(24)
-      butSonif.focusable      = false
-      butSonif.tooltip        = "Drop Sonification Patch From the Library Here"
+      //      val butSonif    = new Button(null: String)
+      //      butSonif.icon           = Icons.Target(24)
+      //      butSonif.focusable      = false
+      //      butSonif.tooltip        = "Drop Sonification Patch From the Library Here"
 
-      pSonif.contents += butSonif
-      pSonif.contents += new OverlayPanel {
-        contents += RigidBox(ggBusy.preferredSize)
-        contents += ggBusy
-      }
-      pSonif.contents += pSonif2
+      //      pSonif.contents += butSonif
+      //      pSonif.contents += new OverlayPanel {
+      //        contents += RigidBox(ggBusy.preferredSize)
+      //        contents += ggBusy
+      //      }
+      //      pSonif.contents += pSonif2
 
-      butSonif.peer.setTransferHandler(new TransferHandler(null) {
-        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
-        override def canImport(support: TransferSupport): Boolean = {
-          val res =
-            if (support.isDataFlavorSupported(DragAndDrop.LibraryNodeFlavor) &&
-              ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
-              support.setDropAction(TransferHandler.LINK)
-              true
-            } else
-              false
-
-          // println(s"canImport? $res")
-          res
-        }
-
-        override def importData(support: TransferSupport): Boolean = {
-          val t           = support.getTransferable
-          // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
-          val drag      = t.getTransferData(DragAndDrop.LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
-          val sourceOpt = drag.cursor.step { implicit tx =>
-            drag.node() match {
-              case TreeLike.IsLeaf(l) => Some(l.name.value -> l.source.value)
-              case _ => None: Option[(String, String)]
-            }
-          }
-          sourceOpt.exists { case (name, source) =>
-            import ExecutionContext.Implicits.global
-            val fut         = Library.compile(source)
-            ggBusy.visible  = true
-            fut.onComplete(_ => defer { ggBusy.visible = false })
-            fut.foreach { p => patch = Some(p) }
-            true
-          }
-        }
-      })
+      //      butSonif.peer.setTransferHandler(new TransferHandler(null) {
+      //        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
+      //        override def canImport(support: TransferSupport): Boolean = {
+      //          val res =
+      //            if (support.isDataFlavorSupported(DragAndDrop.LibraryNodeFlavor) &&
+      //              ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
+      //              support.setDropAction(TransferHandler.LINK)
+      //              true
+      //            } else
+      //              false
+      //
+      //          // println(s"canImport? $res")
+      //          res
+      //        }
+      //
+      //        override def importData(support: TransferSupport): Boolean = {
+      //          val t           = support.getTransferable
+      //          // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
+      //          val drag      = t.getTransferData(DragAndDrop.LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
+      //          val sourceOpt = drag.cursor.step { implicit tx =>
+      //            drag.node() match {
+      //              case TreeLike.IsLeaf(l) => Some(l.name.value -> l.source.value)
+      //              case _ => None: Option[(String, String)]
+      //            }
+      //          }
+      //          sourceOpt.exists { case (name, source) =>
+      //            import ExecutionContext.Implicits.global
+      //            val fut         = Library.compile(source)
+      //            ggBusy.visible  = true
+      //            fut.onComplete(_ => defer { ggBusy.visible = false })
+      //            fut.foreach { p => patch = Some(p) }
+      //            true
+      //          }
+      //        }
+      //      })
 
       component = new BorderPanel {
         add(Component.wrap(main), BorderPanel.Position.Center)
         add(new BorderPanel {
           add(redGroup, BorderPanel.Position.Center)
-          // add(pSonif  , BorderPanel.Position.South )
+          add(pButtons  , BorderPanel.Position.South )
         }, BorderPanel.Position.South)
       }
 
       // ---- constructor ----
-      markPlayStop(playing = false)
+      // markPlayStop(playing = false)
     }
 
     private def mkIndetProgress() = new ProgressBar {
@@ -559,27 +624,27 @@ object ClimateViewImpl {
 //      }
     }
 
-    private def markPlayStop(playing: Boolean): Unit = {
-      transport.button(Transport.Stop).get.selected = !playing
-      transport.button(Transport.Play).get.selected = playing
-    }
+    //    private def markPlayStop(playing: Boolean): Unit = {
+    //      transport.button(Transport.Stop).get.selected = !playing
+    //      transport.button(Transport.Play).get.selected = playing
+    //    }
 
-    def stop(): Unit = {
-      markPlayStop(playing = false)
-      playing.foreach { fut =>
-        import ExecutionContext.Implicits.global
-        fut.onSuccess {
-          case synth =>
-            import Ops._
-            synth.free()
-        }
-        playing = None
-      }
-    }
-
-    def rtz(): Unit = {
-      println("NOT YET IMPLEMENTED: Return-to-zero")
-    }
+    //    def stop(): Unit = {
+    //      markPlayStop(playing = false)
+    //      playing.foreach { fut =>
+    //        import ExecutionContext.Implicits.global
+    //        fut.onSuccess {
+    //          case synth =>
+    //            import Ops._
+    //            synth.free()
+    //        }
+    //        playing = None
+    //      }
+    //    }
+    //
+    //    def rtz(): Unit = {
+    //      println("NOT YET IMPLEMENTED: Return-to-zero")
+    //    }
 
     def patch: Option[SynthGraph] = _patch
     def patch_=(value: Option[SynthGraph]): Unit = {
