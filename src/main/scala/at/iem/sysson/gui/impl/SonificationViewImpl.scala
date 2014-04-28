@@ -5,7 +5,7 @@
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
- *	This software is published under the GNU General Public License v2+
+ *	This software is published under the GNU General Public License v3+
  *
  *
  *	For further information, please contact Hanns Holger Rutz at
@@ -22,7 +22,7 @@ import de.sciss.lucre.stm
 import scala.swing._
 import de.sciss.synth.proc.{Obj, StringElem, Elem}
 import de.sciss.desktop.impl.UndoManagerImpl
-import de.sciss.desktop.UndoManager
+import de.sciss.desktop.{OptionPane, UndoManager}
 import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.audiowidgets.Transport
 import de.sciss.synth.SynthGraph
@@ -34,6 +34,7 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
 import de.sciss.icons.raphael
 import scala.concurrent.stm.Ref
+import scala.util.control.NonFatal
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
@@ -241,7 +242,15 @@ object SonificationViewImpl {
     }
 
     private def tPlay(): Unit = cursor.step { implicit tx =>
-      sonifView.play()
+      try {
+        sonifView.play()
+      } catch {
+        case NonFatal(e) =>
+          val opt = OptionPane.message(
+            message = s"<html><b>Sonification failed due to the following problem:</b><p>${e.getMessage}",
+            messageType = OptionPane.Message.Error)
+          opt.show(GUI.windowOption(component))
+      }
     }
 
     private def tLoop(): Unit = {

@@ -5,7 +5,7 @@
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
- *	This software is published under the GNU General Public License v2+
+ *	This software is published under the GNU General Public License v3+
  *
  *
  *	For further information, please contact Hanns Holger Rutz at
@@ -214,13 +214,17 @@ object WorkspaceViewImpl {
       val edit = cursor.step { implicit tx =>
         val idx             = workspace.sonifications.size
         val sonif           = Sonification[S]
-        val obj             = Obj(Sonification.Elem(sonif))
-        sonif.patch.elem.peer.graph() = graph
-        obj.attr.put(Keys.attrName, StringElem.apply(StringEx.newVar(name)))
+        val sonifO          = Obj(Sonification.Elem(sonif))
+        val patchO          = sonif.patch
+        patchO.elem.peer.graph() = graph
+        val nameEx          = StringEx.newVar(name)
+        sonifO.attr.put(Keys.attrName, StringElem(nameEx))
+        patchO.attr.put(Keys.attrName, StringElem(nameEx))
         sourceOpt.foreach { code =>
-          obj.attr.put(Keys.attrGraphSource, StringElem.apply(StringEx.newVar(code)))
+          // sonifO
+          patchO.attr.put(Keys.attrGraphSource, StringElem.apply(StringEx.newVar(code)))
         }
-        val childH          = tx.newHandle(obj)
+        val childH          = tx.newHandle(sonifO)
         val _edit           = new EditInsertSonif(idx, childH)
         _edit.perform()
         _edit

@@ -5,7 +5,7 @@
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
- *	This software is published under the GNU General Public License v2+
+ *	This software is published under the GNU General Public License v3+
  *
  *
  *	For further information, please contact Hanns Holger Rutz at
@@ -70,7 +70,7 @@ package object sysson {
 
   private lazy val logHeader = new SimpleDateFormat("[d MMM yyyy, HH:mm''ss.SSS] 'SysSon'", Locale.US)
 
-  var showLog = true
+  var showLog = false
 
   @elidable(CONFIG)  private[sysson] def logDebug(what: => String): Unit = log("debug", what)
   @elidable(INFO)    private[sysson] def logInfo (what: => String): Unit = log("info" , what)

@@ -10,7 +10,7 @@ description   := "Sonification Server of the IEM SysSon project"
 
 homepage      := Some(url("https://github.com/iem-projects/sysson"))
 
-licenses      := Seq("AGPL v3+" -> url("http://www.gnu.org/licenses/agpl-3.0.txt"))
+licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt"))
 
 // ---- scala compiler settings and libraries ----
 

@@ -5,7 +5,7 @@
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
- *	This software is published under the GNU General Public License v2+
+ *	This software is published under the GNU General Public License v3+
  *
  *
  *	For further information, please contact Hanns Holger Rutz at
@@ -66,7 +66,7 @@ object MenuFactory {
            |<p>
            |Copyright (c) 2013&ndash;2014 Institute of Electronic Music and Acoustics, Graz.<p>
            |Written by Hanns Holger Rutz.<p>
-           |This software is published under the GNU General Public License v2+<p>
+           |This software is published under the GNU General Public License v3+<p>
            |<p>
            |SysSon is a research project of IEM / Kunst Uni Graz<p>
            |in collaboration with Wegener Center for Climate and Global Change<p>

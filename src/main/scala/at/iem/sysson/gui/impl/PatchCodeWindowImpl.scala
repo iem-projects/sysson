@@ -5,7 +5,7 @@
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
- *	This software is published under the GNU General Public License v2+
+ *	This software is published under the GNU General Public License v3+
  *
  *
  *	For further information, please contact Hanns Holger Rutz at
@@ -37,6 +37,10 @@ object PatchCodeWindowImpl {
 
   def apply[S <: Sys[S]](patch: Obj.T[S, Patch.Elem])
                         (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeWindow[S] = {
+    //    println("----Patch Attributes----")
+    //    patch.attr.iterator.foreach { case (key, value) =>
+    //      println(s"'$key' -> $value")
+    //    }
     val source  = patch.attr.expr[String](Keys.attrGraphSource).fold {
       val res = StringEx.newVar[S](StringEx.newConst("// No source code found for patch!\n"))
       patch.attr.put(Keys.attrGraphSource, StringElem(res))

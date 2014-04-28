@@ -5,7 +5,7 @@
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
- *	This software is published under the GNU General Public License v2+
+ *	This software is published under the GNU General Public License v3+
  *
  *
  *	For further information, please contact Hanns Holger Rutz at
@@ -202,7 +202,9 @@ object AuralSonificationImpl {
 
         val (dsv, rangesM) = reduceMatrix(m)
         val ds        = dsv.source
-        val dimVar    = ds.variables.find(_.name == dimName).getOrElse(throw AuralSonification.MissingSourceDimension(dimName))
+        val dimVar    = ds.variables.find(_.name == dimName).getOrElse(
+          throw AuralSonification.MissingSourceDimension(mapKey, dimName)
+        )
         assert(dimVar.rank == 1)
         // val ranges    = Vec(range) // dimVar.ranges // shape.map(_._2)
         val ranges    = Vec(rangesM(mdi)) // now use only the range corresponding with the dimension at index `mdi`
