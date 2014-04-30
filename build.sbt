@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.7.1"
+version       := "0.7.2"
 
 organization  := "at.iem.sysson"
 
@@ -22,7 +22,7 @@ crossScalaVersions := Seq("2.11.0", "2.10.4")
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "soundprocesses"                 % "2.3.0",          // Computer music framework
+  "de.sciss" %% "soundprocesses"                 % "2.3.1",          // Computer music framework
   "de.sciss" %% "lucrematrix"                    % "0.1.0",          // Reactive matrix component and view
   "de.sciss" %% "scalacolliderswing-interpreter" % "1.16.0",         // audio (server) widgets
   "de.sciss" %% "desktop-mac"                    % "0.5.2",          // application framework
@@ -38,6 +38,8 @@ libraryDependencies ++= Seq(
   "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
   "org.slf4j" % "slf4j-simple"                   % "1.7.7"           // logging (used by netcdf)
 )
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test"
 
 retrieveManaged := true
 
