@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.7.0"
+version       := "0.7.1"
 
 organization  := "at.iem.sysson"
 
@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
   "de.sciss" %% "treetable-scala"                % "1.3.6",          // GUI component
   "de.sciss" %% "lucrestm-bdb"                   % "2.0.4",          // database used for library
-  "de.sciss" %% "raphael-icons"                  % "1.0.1",          // tool icons
+  "de.sciss" %% "raphael-icons"                  % "1.0.2",          // tool icons
   "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component
   "de.sciss" %% "guiflitz"                       % "0.3.2",
   "de.sciss" %  "weblaf"                         % "1.27",           // cross-platform look-and-feel
