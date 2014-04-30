@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.7.0-SNAPSHOT"
+version       := "0.7.0"
 
 organization  := "at.iem.sysson"
 
@@ -22,13 +22,13 @@ crossScalaVersions := Seq("2.11.0", "2.10.4")
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "soundprocesses"                 % "2.3.0-SNAPSHOT", // Computer music framework
+  "de.sciss" %% "soundprocesses"                 % "2.3.0",          // Computer music framework
   "de.sciss" %% "lucrematrix"                    % "0.1.0",          // Reactive matrix component and view
   "de.sciss" %% "scalacolliderswing-interpreter" % "1.16.0",         // audio (server) widgets
   "de.sciss" %% "desktop-mac"                    % "0.5.2",          // application framework
   "de.sciss" %  "intensitypalette"               % "1.0.0",          // colour palette
   "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
-  "de.sciss" %% "treetable-scala"                % "1.3.5",          // GUI component
+  "de.sciss" %% "treetable-scala"                % "1.3.6",          // GUI component
   "de.sciss" %% "lucrestm-bdb"                   % "2.0.4",          // database used for library
   "de.sciss" %% "raphael-icons"                  % "1.0.1",          // tool icons
   "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component

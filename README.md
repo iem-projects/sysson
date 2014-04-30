@@ -1,10 +1,10 @@
 # SysSon
 
-Repository for the software developed during the [SysSon Project](http://sysson.kug.ac.at/) at IEM Graz &ndash; SysSon is a systematic procedure to develop sonifications. Published under the GNU General Public License v2+. Please see the `licenses` folder for details.
+Repository for the software developed during the [SysSon Project](http://sysson.kug.ac.at/) at IEM Graz &ndash; SysSon is a systematic procedure to develop sonifications. Published under the GNU General Public License v3+. Please see the `licenses` folder for details.
 
 ## Installation
 
-The project is written in [Scala](http://www.scala-lang.org/) 2.10 and builds with the [Simple Build Bool](http://www.scala-sbt.org/) (sbt) 0.13. The included shell script `sbt` is sufficient to build the project as it will automatically download and locally install Scala and sbt.
+The project is written in [Scala](http://www.scala-lang.org/) 2.11, 2.10 and builds with the [Simple Build Bool](http://www.scala-sbt.org/) (sbt) 0.13. The included shell script `sbt` is sufficient to build the project as it will automatically download and locally install Scala and sbt.
 
 Furthermore, the project requires Java and SuperCollider.
 
