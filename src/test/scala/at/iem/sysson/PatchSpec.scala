@@ -22,7 +22,7 @@ class PatchSpec extends DurableSpec {
       for (i <- 0 until n) {
         val freq = LFDNoise3.ar(LFDNoise3.ar(v).linexp(-1, 1, 1e-4, 0.01)).linexp(-1, 1, 64, 16000)
         val sin  = SinOsc.ar(freq)
-        val mul  = LFDNoise3.ar(LFDNoise3.ar(v).linexp(-1, 1, 1e-4, 1)).linexp(-1, 1, 0.001, 1)
+        val mul  = LFDNoise3.ar(LFDNoise3.ar(v).linexp(-1, 1, 1e-4, 1.00)).linexp(-1, 1, 0.001, 1)
         mix += sin * mul
       }
       val sig = OnePole.ar(mix / n * 2, 0.95)

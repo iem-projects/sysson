@@ -21,6 +21,9 @@ crossScalaVersions := Seq("2.11.0", "2.10.4")
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
 
+// maven repository for Oracle BDB JE
+resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
+
 libraryDependencies ++= Seq(
   "de.sciss" %% "soundprocesses"                 % "2.3.1",          // Computer music framework
   "de.sciss" %% "lucrematrix"                    % "0.1.0",          // Reactive matrix component and view
