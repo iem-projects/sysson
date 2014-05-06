@@ -41,7 +41,7 @@ import java.awt.datatransfer.Transferable
 import java.awt.Color
 
 object SonificationSourceViewImpl {
-  private val DEBUG = true
+  private val DEBUG = false
 
   def apply[S <: Sys[S]](map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
                          key: String, keyDimNames: Vec[String])
