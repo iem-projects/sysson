@@ -16,12 +16,17 @@ package at.iem.sysson
 package gui
 
 import de.sciss.desktop.impl.{WindowHandlerImpl, SwingApplicationImpl}
-import de.sciss.desktop.{WindowHandler, Desktop, Menu}
+import de.sciss.desktop.{WindowHandler, Menu}
 import de.sciss.lucre.event.Sys
 import language.existentials
 import javax.swing.UIManager
 import scala.util.control.NonFatal
 
+/** The main entry point for the desktop Swing application.
+  * Please note that this should _not_ be the main class of the project,
+  * but you should always invoke `at.iem.sysson.Main`, because it first
+  * initializes some type extensions that would be missing otherwise.
+  */
 object  SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = DocumentHandler.Document  // sysson.DataSourceLike
 
@@ -41,6 +46,9 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
     } catch {
       case NonFatal(_) =>
     }
+
+    // work-around for WebLookAndFeel bug #118
+    new javax.swing.JSpinner
 
     val dh = DocumentHandler.instance // initialize
     DocumentViewHandler.instance      // initialize
