@@ -18,6 +18,9 @@ package gui
 import de.sciss.desktop
 import de.sciss.desktop.impl.LogWindowImpl
 import de.sciss.desktop.{LogPane, WindowHandler}
+import scala.swing.Font
+import java.awt.Font
+import scala.swing.Font
 
 object LogWindow {
   val horizontalPlacement   = 1.0f
@@ -26,6 +29,7 @@ object LogWindow {
 
   lazy val instance: LogWindow = new LogWindowImpl with LogWindow {
     def handler: WindowHandler = SwingApplication.windowHandler
+    log.font = new Font(Font.MONOSPACED, Font.PLAIN, 10)
     GUI.placeWindow(this, horizontalPlacement, verticalPlacement, placementPadding)
   }
 }

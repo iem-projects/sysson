@@ -145,6 +145,8 @@ abstract class WindowImpl[S <: Sys[S]](title0: Optional[String] = None)
     if (checkClose()) disposeFromGUI()
   }
 
+  def pack(): Unit = windowImpl.pack()
+
   def dispose()(implicit tx: S#Tx): Unit = {
     view match {
       case wv: ViewHasWorkspace[S] => wv.workspace.removeDependent(this)

@@ -70,7 +70,7 @@ object SonificationSourceViewImpl {
     res
   }
 
-  private final class Impl[S <: Sys[S]](matrixView: MatrixView[S],
+  private final class Impl[S <: Sys[S]](val matrixView: MatrixView[S],
       mapHOpt: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]]],
       key: String, keyDimNames: Vec[String])
      (implicit workspace: Workspace[S], undoManager: UndoManager)

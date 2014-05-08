@@ -19,6 +19,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.Sonification
 import de.sciss.synth.proc.Obj
+import de.sciss.lucre.swing.deferTx
 
 object SonificationWindowImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
@@ -26,6 +27,11 @@ object SonificationWindowImpl {
     val view  = SonificationView(sonification)
     val res   = new Impl(view)
     res.init()
+    deferTx {
+      view.addListener {
+        case SonificationView.Resized => res.pack()
+      }
+    }
     res
   }
 

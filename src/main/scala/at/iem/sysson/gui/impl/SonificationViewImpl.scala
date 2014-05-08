@@ -35,6 +35,8 @@ import de.sciss.lucre.swing._
 import de.sciss.icons.raphael
 import scala.concurrent.stm.Ref
 import scala.util.control.NonFatal
+import de.sciss.model.impl.ModelImpl
+import de.sciss.lucre.matrix.gui.MatrixView
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
@@ -75,7 +77,7 @@ object SonificationViewImpl {
                                         sonifView: AuralSonification[S],
                                         nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S],
                                                                               val undoManager: UndoManager)
-    extends SonificationView[S] with ComponentHolder[Component] {
+    extends SonificationView[S] with ComponentHolder[Component] with ModelImpl[SonificationView.Update] {
 
     protected def auralObserver: Disposable[S#Tx]
     protected def graphObserver: Disposable[S#Tx]
@@ -136,6 +138,9 @@ object SonificationViewImpl {
         val ggMap = sources.map { case (key, view) =>
           val lb    = new Label(s"$key:")
           val drop  = view.component
+          view.matrixView.addListener {
+            case MatrixView.Resized => dispatch(SonificationView.Resized)
+          }
           (lb, drop)
         }
 

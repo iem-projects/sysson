@@ -176,7 +176,7 @@ object AuralSonificationImpl {
             @tailrec def loopOp(o0: Reduce.Op[S]): Range = o0 match {
               case ov: Reduce.Op.Var  [S] => loopOp(ov())
               case oa: Reduce.Op.Apply[S] => val i = oa.index.value; i to i
-              case os: Reduce.Op.Slice[S] => os.from.value until os.until.value
+              case os: Reduce.Op.Slice[S] => os.from.value to os.to.value
             }
             val redRange  = loopOp(red.op)
             val r1i       = r1(redIdx)

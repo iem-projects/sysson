@@ -22,6 +22,7 @@ import at.iem.sysson._
 import de.sciss.lucre.expr
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
+import de.sciss.lucre.matrix.gui.MatrixView
 
 object SonificationSourceView {
   /** Creates a new view for editing the mapping between a sonification data source matrix and model dimensions.
@@ -40,4 +41,6 @@ object SonificationSourceView {
 }
 trait SonificationSourceView[S <: Sys[S]] extends Disposable[S#Tx] {
   def component: Component
+
+  def matrixView: MatrixView[S]
 }

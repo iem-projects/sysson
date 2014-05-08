@@ -59,10 +59,12 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
     dh.allDocuments.foreach(mkDocView)
 
     // keep using IntelliJ console when debugging
-    if (!sys.props.getOrElse("sun.java.command", "?").contains("intellij")) {
-      LogWindow.instance          // initializes it
-      System.setErr(Console.err)  // por que?
-    }
+    // if (!sys.props.getOrElse("sun.java.command", "?").contains("intellij")) ...
+
+    LogWindow.instance          // initializes it
+    Console.setOut(System.out)  // stupidly deprecated, but needed, because Console is broken
+    Console.setErr(System.err)  // stupidly deprecated, but needed, because Console is broken
+
     MainWindow()
   }
 

@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.7.3-SNAPSHOT"
+version       := "0.8.0-SNAPSHOT"
 
 organization  := "at.iem.sysson"
 
@@ -26,9 +26,9 @@ resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 libraryDependencies ++= Seq(
   "de.sciss" %% "soundprocesses"                 % "2.3.1",          // Computer music framework
-  "de.sciss" %% "lucrematrix"                    % "0.1.0",          // Reactive matrix component and view
+  "de.sciss" %% "lucrematrix"                    % "0.2.0",          // Reactive matrix component and view
   "de.sciss" %% "scalacolliderswing-interpreter" % "1.16.0",         // audio (server) widgets
-  "de.sciss" %% "desktop-mac"                    % "0.5.2",          // application framework
+  "de.sciss" %% "desktop-mac"                    % "0.5.3",          // application framework
   "de.sciss" %  "intensitypalette"               % "1.0.0",          // colour palette
   "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
   "de.sciss" %% "treetable-scala"                % "1.3.6",          // GUI component
