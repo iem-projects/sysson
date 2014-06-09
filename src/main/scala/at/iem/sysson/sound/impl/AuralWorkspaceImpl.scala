@@ -27,6 +27,7 @@ object AuralWorkspaceImpl {
                                        (implicit tx: S#Tx): AuralWorkspace[S, I1] = {
     val map = tx.newInMemoryIDMap[AuralSonification[S]]
     val res = new Impl(workspace, map)
+    // de.sciss.lucre.synth.showLog = true
     workspace.addDependent(res)
     res
   }
@@ -47,7 +48,7 @@ object AuralWorkspaceImpl {
       map.dispose() // XXX TODO: iterate and dispose AuralSonification instances?
     }
 
-    def graphemeCache(section: VariableSection)(implicit tx: S#Tx): (Grapheme.Elem.Audio[I1], Future[Unit]) = {
+    def graphemeCache(section: VariableSection)(implicit tx: S#Tx): (Grapheme.Expr.Audio[I1], Future[Unit]) = {
 
       ???
     }

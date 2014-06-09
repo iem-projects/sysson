@@ -44,13 +44,13 @@ object AudioSystemImpl {
 
     def server: Option[Server] = _server.single()
 
-    def stopped()(implicit tx: SynthTxn): Unit = {
+    def auralStopped()(implicit tx: SynthTxn): Unit = {
       logInfo("SuperCollider Server stopped")
       _server.set(None)(tx.peer)
       tx.afterCommit(dispatch(AudioSystem.Stopped))
     }
 
-    def started(server: Server)(implicit tx: SynthTxn): Unit = {
+    def auralStarted(server: Server)(implicit tx: SynthTxn): Unit = {
       logInfo("SuperCollider Server started")
       _server.set(Some(server))(tx.peer)
       tx.afterCommit(dispatch(AudioSystem.Started(server)))

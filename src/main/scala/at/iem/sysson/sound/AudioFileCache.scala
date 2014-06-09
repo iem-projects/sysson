@@ -177,7 +177,8 @@ object AudioFileCache {
 
   private def produceValue[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S],
                                         section: Vec[Range], streamDim: Int): CacheValue = {
-    val v             = workspace.cursor.step { implicit tx => source.data()(tx, workspace) }
+    implicit val resolver = WorkspaceResolver(workspace)
+    val v             = workspace.cursor.step { implicit tx => source.data() }
     val vs            = VariableSection(v, section.map(OpenRange.closed))
     val arr           = vs.readSafe()
 

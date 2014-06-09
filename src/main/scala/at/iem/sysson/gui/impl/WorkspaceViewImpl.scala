@@ -69,7 +69,11 @@ object WorkspaceViewImpl {
         (Option.empty[String] /: upd.changes) {
           case (_, Obj.AttrAdded  (Keys.attrName, _)) => sonifName(son)
           case (_, Obj.AttrRemoved(Keys.attrName, _)) => Some(untitled)
-          case (_, Obj.AttrChange (Keys.attrName, _, Change(_, name: String))) => Some(name)
+          case (x, Obj.AttrChange (Keys.attrName, _, valueCh)) =>
+            (x /: valueCh) {
+              case (_, Obj.ElemChange(Change(_, name: String))) => Some(name)
+              case (x, _) => x
+            }
           case (x, _) => x
         }
       }
@@ -196,6 +200,7 @@ object WorkspaceViewImpl {
       dlg.show(GUI.windowOption(component)).foreach { f =>
         val edit = cursor.step { implicit tx =>
           val idx     = workspace.dataSources.size
+          implicit val resolver = WorkspaceResolver[S]
           val ds      = DataSource[S](f)
           val childH  = tx.newHandle(ds)
           val _edit   = new EditInsertSource(idx, childH)
@@ -218,11 +223,11 @@ object WorkspaceViewImpl {
         val patchO          = sonif.patch
         patchO.elem.peer.graph() = graph
         val nameEx          = StringEx.newVar(name)
-        sonifO.attr.put(Keys.attrName, StringElem(nameEx))
-        patchO.attr.put(Keys.attrName, StringElem(nameEx))
+        sonifO.attr.put(Keys.attrName, Obj(StringElem(nameEx)))
+        patchO.attr.put(Keys.attrName, Obj(StringElem(nameEx)))
         sourceOpt.foreach { code =>
           // sonifO
-          patchO.attr.put(Keys.attrGraphSource, StringElem.apply(StringEx.newVar(code)))
+          patchO.attr.put(Keys.attrGraphSource, Obj(StringElem(StringEx.newVar(code))))
         }
         val childH          = tx.newHandle(sonifO)
         val _edit           = new EditInsertSonif(idx, childH)

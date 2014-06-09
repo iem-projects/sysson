@@ -71,7 +71,7 @@ object AuralSonificationImpl {
     implicit val itx  = w.inMemoryTx(tx)         // why can't I just import w.inMemory !?
     val sonifH        = tx.newHandle(sonification)
     val proc          = Proc[I]
-    val obj           = Obj(ProcElem(proc))
+    val obj           = Obj(Proc.Elem(proc))
     val group         = ProcGroup.Modifiable[I]
     val span          = SpanLikeEx.newVar[I](SpanLikeEx.newConst(Span.from(0L)))
     group.add(span, obj)
@@ -93,7 +93,7 @@ object AuralSonificationImpl {
   private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S, I],
                                                                  ap: AuralPresentation[I],
                                                                  sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
-      procH: stm.Source[I#Tx, Obj.T[I, ProcElem]],
+      procH: stm.Source[I#Tx, Obj.T[I, Proc.Elem]],
       transport: ProcTransport[I])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx)
     extends AuralSonification[S] with TxnModelImpl[S#Tx, Update] {
     impl =>
@@ -150,7 +150,7 @@ object AuralSonificationImpl {
       }
 
       def putAttrValue(key: String, value: Double): Unit =
-        proc.attr.put(key, DoubleElem(DoubleEx.newConst(value)))
+        proc.attr.put(key, Obj(DoubleElem(DoubleEx.newConst(value))))
 
       //      def putAttrValues(key: String, values: Vec[Double]): Unit =
       //        proc.attr.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
@@ -337,16 +337,16 @@ object AuralSonificationImpl {
         logDebug(s"step $gen")
         // XXX TODO: we should allow Grapheme.Elem.newConst ?
         val gv    = gen.data
-        val loc   = Artifact.Location.Modifiable[I](gv.artifact.parent)
+        val loc   = ArtifactLocation.Modifiable[I](gv.artifact.parent)
         val artif = loc.add(gv.artifact)
-        val elem  = Grapheme.Elem.Audio(artif, gv.spec, LongEx.newConst(gv.offset), DoubleEx.newConst(gv.gain))
+        val elem  = Grapheme.Expr.Audio(artif, gv.spec, LongEx.newConst(gv.offset), DoubleEx.newConst(gv.gain))
         if (gen.scan) {
           val scan  = proc.elem.peer.scans.add(gen.key)
           val g     = Grapheme.Modifiable[I]
           g.add(BiExpr(LongEx.newConst(0L), elem))
           scan.addSource(Scan.Link.Grapheme(g))
         } else {
-          proc.attr.put(gen.key, AudioGraphemeElem(elem))
+          proc.attr.put(gen.key, Obj(AudioGraphemeElem(elem)))
         }
       }
       transportPlay()

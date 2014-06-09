@@ -79,7 +79,7 @@ object WorkspaceImpl {
 
     override def toString = s"Workspace($name)"
 
-    private val fileCache   = TMap.empty[File, nc2.NetcdfFile]
+    // private val fileCache   = TMap.empty[File, nc2.NetcdfFile]
     private val dependents  = STMRef(Vec.empty[Disposable[S#Tx]])
 
     private implicit object DataSer extends Serializer[S#Tx, S#Acc, Data[S]] {
@@ -111,15 +111,15 @@ object WorkspaceImpl {
     def sonifications(implicit tx: S#Tx): List.Modifiable[S, Obj.T[S, Sonification.Elem], Obj.UpdateT[S, Sonification.Elem[S]]] =
       data().sonifications
 
-    def resolve(file: File)(implicit tx: S#Tx): nc2.NetcdfFile =
-      fileCache.get(file)(tx.peer).getOrElse {
-        val net = nc2.NetcdfFile.open(file.path).setImmutable()
-        fileCache.put(file, net)(tx.peer)
-        Txn.afterRollback { _ =>
-          net.close() // a bit tricky doing I/O inside a transaction...
-        } (tx.peer)
-        net
-      }
+    //    def resolve(file: File)(implicit tx: S#Tx): nc2.NetcdfFile =
+    //      fileCache.get(file)(tx.peer).getOrElse {
+    //        val net = nc2.NetcdfFile.open(file.path).setImmutable()
+    //        fileCache.put(file, net)(tx.peer)
+    //        Txn.afterRollback { _ =>
+    //          net.close() // a bit tricky doing I/O inside a transaction...
+    //        } (tx.peer)
+    //        net
+    //      }
 
     def addDependent   (dep: Disposable[S#Tx])(implicit tx: S#Tx): Unit =
       dependents.transform(_ :+ dep)(tx.peer)
@@ -137,20 +137,21 @@ object WorkspaceImpl {
       val deps = dependents.get(tx.peer)
       deps.foreach(_.dispose())
       dependents.update(Vec.empty)(tx.peer)
-      // grap the file cache entries
-      val nets = fileCache.snapshot /* (tx.peer) */.valuesIterator
-      // clear the file cache map
-      fileCache.retain((_, _) => false)(tx.peer)  // direct method instead of `clear()`
+      //      // grap the file cache entries
+      //      val nets = fileCache.snapshot /* (tx.peer) */.valuesIterator
+      //      // clear the file cache map
+      //      fileCache.retain((_, _) => false)(tx.peer)  // direct method instead of `clear()`
+
       // if the transaction is successful...
       Txn.afterCommit { _ =>
-        // ...actually close the files
-        nets.foreach { net =>
-          try {
-            net.close()
-          } catch {
-            case NonFatal(e) => e.printStackTrace()
-          }
-        }
+        //        // ...actually close the files
+        //        nets.foreach { net =>
+        //          try {
+        //            net.close()
+        //          } catch {
+        //            case NonFatal(e) => e.printStackTrace()
+        //          }
+        //        }
 
         // ...and close the database
         system.close()

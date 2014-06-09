@@ -86,6 +86,8 @@ object ClimateViewImpl {
 
   def apply[S <: Sys[S]](document: DataSource[S], section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
            (implicit workspace: Workspace[S], tx: S#Tx): ClimateView[S] = {
+    // import WorkspaceResolver._
+    implicit val resolver = WorkspaceResolver[S]
     val data  = document.data()
     val docH  = tx.newHandle(document)
     val view  = new Impl(docH, data, section, xDim, yDim)

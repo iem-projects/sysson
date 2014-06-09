@@ -51,8 +51,11 @@ object ActionOpenWorkspace extends Action("Open...") {
 
   def apply(): Unit = {
     val dlg = FileDialog.open(title = fullTitle)
-    dlg.setFilter { f => f.isDirectory && f.ext.toLowerCase == Workspace.ext }
-    dlg.show(None).foreach(perform)
+    // dlg.setFilter { f => f.isDirectory && f.ext.toLowerCase == Workspace.ext }
+    dlg.show(None).foreach { f0 =>
+      val f = if (f0.isDirectory) f0 else f0.parent
+      perform(f)
+    }
   }
 
   def perform(folder: File): Unit =

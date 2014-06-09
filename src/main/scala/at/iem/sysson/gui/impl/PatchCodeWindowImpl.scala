@@ -43,13 +43,13 @@ object PatchCodeWindowImpl {
     //    }
     val source  = patch.attr.expr[String](Keys.attrGraphSource).fold {
       val res = StringEx.newVar[S](StringEx.newConst("// No source code found for patch!\n"))
-      patch.attr.put(Keys.attrGraphSource, StringElem(res))
+      patch.attr.put(Keys.attrGraphSource, Obj(StringElem(res)))
       res
     } {
       case Expr.Var(vr) => vr
       case ex           =>
         val res = StringEx.newVar(ex)
-        patch.attr.put(Keys.attrGraphSource, StringElem(res))
+        patch.attr.put(Keys.attrGraphSource, Obj(StringElem(res)))
         res
     }
     val view = PatchCodeView[S](source, graph = Some(patch.elem.peer.graph))

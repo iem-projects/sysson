@@ -41,7 +41,7 @@ object Workspace {
 /** The workspace type for SysSon. A workspace is usually persisted on hard-disk.
   * It contains a collection of data sources, plots and sonification instances.
   */
-trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] with DataSource.Resolver[S] {
+trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] /* with DataSource.Resolver[S] */ {
   /** In-Memory back end system */
   type I <: synth.Sys[I] // with stm.Cursor[I]
 
@@ -72,6 +72,4 @@ trait Workspace[S <: Sys[S]] extends Disposable[S#Tx] with DataSource.Resolver[S
     */
   private[sysson] def addDependent   (dep: Disposable[S#Tx])(implicit tx: S#Tx): Unit
   private[sysson] def removeDependent(dep: Disposable[S#Tx])(implicit tx: S#Tx): Unit
-
-  // private[sysson] def fileCache: TMap[File, NetcdfFile]
 }

@@ -44,6 +44,7 @@ object DataSourceViewImpl {
   import Implicits._
 
   def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] = {
+    implicit val resolver = WorkspaceResolver[S]
     val data  = source.data()
     val docH  = tx.newHandle(source)
     val res   = new Impl[S](docH, source.file, data)
