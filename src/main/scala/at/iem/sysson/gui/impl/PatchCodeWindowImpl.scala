@@ -27,6 +27,7 @@ import de.sciss.lucre.expr.{Expr, String => StringEx}
 import de.sciss.synth.proc.{Obj, StringElem, Elem}
 import scala.concurrent.ExecutionContext
 import de.sciss.desktop
+import de.sciss.mellite.gui.impl.WindowImpl
 
 object PatchCodeWindowImpl {
   def apply[S <: Sys[S]](entry: Library.Leaf[S])
@@ -100,7 +101,7 @@ object PatchCodeWindowImpl {
       val opt = OptionPane.confirmation(message = message, optionType = OptionPane.Options.YesNoCancel,
         messageType = OptionPane.Message.Warning)
       opt.title = "Close Code Editor" // s"Close Code Editor - $name"
-      opt.show(Some(component)) match {
+      opt.show(Some(window)) match {
         case OptionPane.Result.No  => true
         case OptionPane.Result.Yes =>
           val fut = view.save()
@@ -119,7 +120,7 @@ object PatchCodeWindowImpl {
       cursor.step { implicit tx =>
         disposeData()
       }
-      component.dispose()
+      window.dispose()
     }
 
     private def disposeData()(implicit tx: S#Tx): Unit = {

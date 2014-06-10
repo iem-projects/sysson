@@ -21,8 +21,7 @@ import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.{JComponent, TransferHandler, JTree}
 import javax.swing.table.AbstractTableModel
 import annotation.{tailrec, switch}
-import swing.event.TableRowsSelected
-import scala.swing._
+import scala.swing.{SplitPane, ScrollPane, BorderPanel, BoxPanel, Orientation, Action, Table, Component, Swing}
 import Swing._
 import de.sciss.swingtree.{Tree, ExternalTreeModel}
 import de.sciss.swingtree.event.TreeNodeSelected
@@ -37,9 +36,9 @@ import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
 import de.sciss.lucre.matrix.{Matrix, DataSource}
-import scala.Some
 import scala.swing.event.TableRowsSelected
 import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.GUI
 
 object DataSourceViewImpl {
   import Implicits._
@@ -225,14 +224,14 @@ object DataSourceViewImpl {
             val opt = OptionPane.message(
               message = s"Variable '${v.name}' is not in floating point format.",
               messageType = OptionPane.Message.Info)
-            opt.show(GUI.windowOption(component))
+            opt.show(GUI.findWindow(component))
 
           } else if (dim.size < 2) {
             // abort if there is less than two dimensions
             val opt = OptionPane.message(
               message = s"Variable '${v.name}' has ${if (dim.size == 0) "no dimensions" else "only one dimension"}.\nNeed at least two for a plot.",
               messageType = OptionPane.Message.Info)
-            opt.show(GUI.windowOption(component))
+            opt.show(GUI.findWindow(component))
           } else {
             // identify latitude and longitude by their unit names, and time by its dimension name
             // (that seems to be working with the files we have)
@@ -266,7 +265,7 @@ object DataSourceViewImpl {
               val opt = OptionPane(message = s"Select the dimensions of '${v.name}' to plot.\n$infos",
                 messageType = OptionPane.Message.Question,
                 optionType  = OptionPane.Options.OkCancel, entries = names)
-              val res = opt.show(GUI.windowOption(component)).id
+              val res = opt.show(GUI.findWindow(component)).id
               if (res >= 0) {
                 Some(pairs(res))
               } else None: Option[(nc2.Dimension, nc2.Dimension)]

@@ -60,6 +60,7 @@ import java.awt
 import java.text.NumberFormat
 import java.util.Locale
 import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.GUI
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -414,7 +415,7 @@ object ClimateViewImpl {
         colVal.setPreferredWidth(140)
         val opt   = OptionPane.message(message = tab, messageType = OptionPane.Message.Plain)
         opt.title = s"Statistics: ${sv.name}"
-        opt.show(GUI.windowOption(component))
+        opt.show(GUI.findWindow(component))
       }
 
     def guiInit(): Unit = {

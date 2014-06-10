@@ -49,7 +49,7 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
     // ---- type extensions ----
 
     sysson.initTypes()
-    GUI.registerViews()
+    sysson.gui.registerViews()
 
     // ---- look and feel
 
@@ -70,7 +70,7 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
     WebProgressBarStyle.highlightWhite      = new Color(255, 255, 255, 0)
     WebProgressBarStyle.highlightDarkWhite  = new Color(255, 255, 255, 0)
 
-    val dh = DocumentHandler.instance // initialize
+    /* val dh = */ DocumentHandler.instance // initialize
     DocumentViewHandler.instance      // initialize
 
     // MMM

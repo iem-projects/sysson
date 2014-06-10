@@ -22,6 +22,7 @@ import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.swing.View
 import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
+import de.sciss.mellite.gui.ViewHasWorkspace
 
 object DataSourceView {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],

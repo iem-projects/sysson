@@ -31,6 +31,7 @@ import de.sciss.lucre.expr.{Expr, String => StringEx}
 import de.sciss.lucre.swing.edit.EditExprMap
 import de.sciss.model.Change
 import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.GUI
 
 object SonificationAssocViewImpl {
   def apply[S <: Sys[S]](source: Sonification.Source[S], valueDimName: String)

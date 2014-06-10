@@ -18,7 +18,7 @@ package impl
 
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
-import de.sciss.desktop
+import de.sciss.mellite.gui.impl.WindowImpl
 
 object LibraryWindowImpl {
   def apply[S <: Sys[S]](library: Library[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): LibraryWindow[S] = {

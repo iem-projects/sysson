@@ -18,9 +18,8 @@ package gui
 import de.sciss.desktop
 import de.sciss.desktop.impl.LogWindowImpl
 import de.sciss.desktop.{LogPane, WindowHandler}
-import scala.swing.Font
 import java.awt.Font
-import scala.swing.Font
+import de.sciss.mellite.gui.GUI
 
 object LogWindow {
   val horizontalPlacement   = 1.0f

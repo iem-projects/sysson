@@ -23,6 +23,7 @@ import de.sciss.synth.proc.Obj
 import de.sciss.model.Model
 import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
+import de.sciss.mellite.gui.ViewHasWorkspace
 
 object SonificationView {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])

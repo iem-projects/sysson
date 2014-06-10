@@ -22,6 +22,7 @@ import de.sciss.synth.proc.Obj
 import de.sciss.lucre.swing.deferTx
 import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
+import de.sciss.mellite.gui.impl.WindowImpl
 
 object SonificationWindowImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])

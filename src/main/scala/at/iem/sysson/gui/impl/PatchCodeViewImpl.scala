@@ -43,6 +43,7 @@ import de.sciss.lucre.swing._
 import de.sciss.synth.SynthGraph
 import javax.swing.undo.{CompoundEdit, UndoableEdit}
 import de.sciss.synth.proc.SynthGraphs
+import de.sciss.mellite.gui.GUI
 
 object PatchCodeViewImpl {
   /** We use one shared interpreter for all patch code frames. */

@@ -20,6 +20,7 @@ import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
 import java.io.{IOException, FileInputStream, File}
 import swing.Component
 import de.sciss.desktop
+import de.sciss.mellite.gui.GUI
 
 private[gui] object InterpreterViewImpl {
   def apply(): InterpreterView = new Impl

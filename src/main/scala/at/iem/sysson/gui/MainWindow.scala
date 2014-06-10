@@ -17,6 +17,7 @@ package gui
 
 import de.sciss.desktop
 import at.iem.sysson.gui.impl.ActionWindowShot
+import de.sciss.mellite.gui.GUI
 
 object MainWindow {
   val horizontalPlacement   = 1.0f

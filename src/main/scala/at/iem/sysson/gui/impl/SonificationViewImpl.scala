@@ -38,6 +38,7 @@ import scala.util.control.NonFatal
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.GUI
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
@@ -256,7 +257,7 @@ object SonificationViewImpl {
           val opt = OptionPane.message(
             message = s"<html><b>Sonification failed due to the following problem:</b><p>${e.getMessage}",
             messageType = OptionPane.Message.Error)
-          opt.show(GUI.windowOption(component))
+          opt.show(GUI.findWindow(component))
       }
     }
 

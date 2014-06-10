@@ -21,6 +21,7 @@ import de.sciss.lucre.matrix.DataSource
 import de.sciss.desktop
 import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
+import de.sciss.mellite.gui.impl.WindowImpl
 
 object DataSourceWindowImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
