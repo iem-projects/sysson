@@ -21,6 +21,7 @@ import scala.concurrent.stm.{Txn, InTxn, TMap}
 import de.sciss.file._
 import de.sciss.lucre.stm.Disposable
 import scala.util.control.NonFatal
+import de.sciss.mellite.Workspace
 
 /** Associates a workspace with a file cache for NetCDF resources. */
 object WorkspaceResolver {

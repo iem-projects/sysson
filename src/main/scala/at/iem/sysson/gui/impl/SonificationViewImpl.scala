@@ -37,16 +37,17 @@ import scala.concurrent.stm.Ref
 import scala.util.control.NonFatal
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.matrix.gui.MatrixView
+import de.sciss.mellite.Workspace
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx, workspace: Workspace[S]): SonificationView[S] = {
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] = {
     implicit val undoMgr = new UndoManagerImpl {
       protected var dirty: Boolean = false
     }
     val sonifH    = tx.newHandle(sonification)
     val nameView  = sonification.attr.expr[String](Keys.attrName).map { expr =>
-      import workspace.cursor
+      // import workspace.cursor
       StringFieldView(expr, "Name")
     }
 
@@ -76,7 +77,8 @@ object SonificationViewImpl {
   private abstract class Impl[S <: Sys[S]](sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
                                         sonifView: AuralSonification[S],
                                         nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S],
-                                                                              val undoManager: UndoManager)
+                                                                              val undoManager: UndoManager,
+                                                                              val cursor: stm.Cursor[S])
     extends SonificationView[S] with ComponentHolder[Component] with ModelImpl[SonificationView.Update] {
 
     protected def auralObserver: Disposable[S#Tx]

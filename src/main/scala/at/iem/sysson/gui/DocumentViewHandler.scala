@@ -19,8 +19,12 @@ import impl.{DocumentViewHandlerImpl => Impl}
 import de.sciss.model.Model
 import DocumentHandler.Document
 import de.sciss.lucre.event.Sys
+import de.sciss.mellite.Workspace
+import de.sciss.lucre.swing.Window
 
 object DocumentViewHandler {
+  type WorkspaceWindow[S <: Sys[S]] = Window[S] // MMM
+
   type View[S <: Sys[S]] = WorkspaceWindow[S]
 
   lazy val instance: DocumentViewHandler = Impl.instance

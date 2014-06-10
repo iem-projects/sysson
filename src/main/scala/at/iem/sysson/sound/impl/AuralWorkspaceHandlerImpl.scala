@@ -19,7 +19,8 @@ package impl
 import de.sciss.lucre.event.Sys
 import scala.concurrent.stm.TMap
 import de.sciss.lucre.stm.Disposable
-import de.sciss.lucre.synth
+import de.sciss.lucre.{stm, synth}
+import de.sciss.mellite.Workspace
 
 object AuralWorkspaceHandlerImpl {
   def apply(): AuralWorkspaceHandler = new Impl
@@ -31,7 +32,7 @@ object AuralWorkspaceHandlerImpl {
       map.remove(workspace)(tx.peer) // .foreach
 
     def view[S <: Sys[S], I1 <: synth.Sys[I1]](workspace: Workspace[S] { type I = I1 })
-                                              (implicit tx: S#Tx): AuralWorkspace[S, I1] =
+                                              (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralWorkspace[S, I1] =
       map.get(workspace)(tx.peer).asInstanceOf[Option[AuralWorkspace[S, I1]]].getOrElse {
         val view = AuralWorkspaceImpl(workspace)
         workspace.addDependent(new Disposable[S#Tx] {

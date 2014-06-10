@@ -19,6 +19,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.synth.proc.{Obj, Grapheme}
 import scala.concurrent.Future
 import de.sciss.lucre.synth
+import de.sciss.mellite.Workspace
 
 trait AuralWorkspace[S <: Sys[S], I1 <: synth.Sys[I1]] {
 

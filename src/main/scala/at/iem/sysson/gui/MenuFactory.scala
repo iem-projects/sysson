@@ -27,6 +27,8 @@ import at.iem.sysson.sound.AudioSystem
 import de.sciss.{osc, synth}
 import scala.swing.event.{Key, MouseClicked}
 import java.net.URL
+import de.sciss.mellite.gui.{ActionNewWorkspace, ActionOpenWorkspace}
+import de.sciss.mellite.Workspace
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -150,7 +152,10 @@ object MenuFactory {
     val docs = DocumentHandler.instance.allDocuments
 
     // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
-    def screwYou[S <: Sys[S]](doc: Workspace[S]): Unit = doc.cursor.step { implicit tx => doc.dispose() }
+    def screwYou[S <: Sys[S]](doc: Workspace[S]): Unit = {
+      // doc.cursor.step { implicit tx => doc.dispose() }
+      println("TODO: close workspace")  // MMM
+    }
 
     docs.foreach(doc => screwYou(doc.asInstanceOf[Workspace[~] forSome { type ~ <: Sys[~] }]))
   }

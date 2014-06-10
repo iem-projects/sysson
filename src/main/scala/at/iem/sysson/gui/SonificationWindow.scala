@@ -16,14 +16,15 @@ package at.iem.sysson.gui
 
 import de.sciss.lucre.event.Sys
 import impl.{SonificationWindowImpl => Impl}
-import at.iem.sysson.Workspace
 import at.iem.sysson.sound.Sonification
 import de.sciss.lucre.swing.Window
 import de.sciss.synth.proc.Obj
+import de.sciss.mellite.Workspace
+import de.sciss.lucre.stm
 
 object SonificationWindow {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx, workspace: Workspace[S]): SonificationWindow[S] =
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationWindow[S] =
     Impl(sonification)
 }
 trait SonificationWindow[S <: Sys[S]] extends Window[S] {

@@ -20,9 +20,12 @@ import de.sciss.lucre.event.Sys
 import impl.{DataSourceViewImpl => Impl}
 import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.swing.View
+import de.sciss.mellite.Workspace
+import de.sciss.lucre.stm
 
 object DataSourceView {
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] =
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
+                                                cursor: stm.Cursor[S]): DataSourceView[S] =
     Impl(source)
 }
 trait DataSourceView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.File {

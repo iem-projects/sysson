@@ -17,10 +17,15 @@ package gui
 
 import de.sciss.desktop.impl.{WindowHandlerImpl, SwingApplicationImpl}
 import de.sciss.desktop.{WindowHandler, Menu}
-import de.sciss.lucre.event.Sys
 import language.existentials
 import javax.swing.UIManager
 import scala.util.control.NonFatal
+import de.sciss.mellite.Application
+import at.iem.sysson.Prefs
+import com.alee.laf.checkbox.WebCheckBoxStyle
+import com.alee.laf.progressbar.WebProgressBarStyle
+import java.awt.Color
+import at.iem.sysson
 
 /** The main entry point for the desktop Swing application.
   * Please note that this should _not_ be the main class of the project,
@@ -39,24 +44,40 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
   }
 
   override def init(): Unit = {
+    Application.init(this)
+
+    // ---- type extensions ----
+
+    sysson.initTypes()
+    GUI.registerViews()
+
+    // ---- look and feel
+
     try {
-      // WebLookAndFeel.install()
-      UIManager.installLookAndFeel("Web Look And Feel", "com.alee.laf.WebLookAndFeel" ) // classOf[WebLookAndFeel].getName
+      val web = "com.alee.laf.WebLookAndFeel"
+      UIManager.installLookAndFeel("Web Look And Feel", web)
       UIManager.setLookAndFeel(Prefs.lookAndFeel.getOrElse(Prefs.defaultLookAndFeel).getClassName)
     } catch {
       case NonFatal(_) =>
     }
-
-    // work-around for WebLookAndFeel bug #118
+    // work-around for web-laf bug #118
     new javax.swing.JSpinner
+    // some custom web-laf settings
+    WebCheckBoxStyle   .animated            = false
+    WebProgressBarStyle.progressTopColor    = Color.lightGray
+    WebProgressBarStyle.progressBottomColor = Color.gray
+    // XXX TODO: how to really turn of animation?
+    WebProgressBarStyle.highlightWhite      = new Color(255, 255, 255, 0)
+    WebProgressBarStyle.highlightDarkWhite  = new Color(255, 255, 255, 0)
 
     val dh = DocumentHandler.instance // initialize
     DocumentViewHandler.instance      // initialize
 
-    dh.addListener {
-      case DocumentHandler.Opened(doc) => mkDocView(doc)
-    }
-    dh.allDocuments.foreach(mkDocView)
+    // MMM
+    //    dh.addListener {
+    //      case DocumentHandler.Opened(doc) => mkDocView(doc)
+    //    }
+    //    dh.allDocuments.foreach(mkDocView)
 
     // keep using IntelliJ console when debugging
     if (!sys.props.getOrElse("sun.java.command", "?").contains("intellij")) {
@@ -68,14 +89,15 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
     MainWindow()
   }
 
-  // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
-  private def mkDocView(doc: Workspace[_]): Unit =
-    mkDocView1(doc.asInstanceOf[Workspace[S] forSome { type S <: Sys[S] }])
-
-  private def mkDocView1[S <: Sys[S]](doc: Workspace[S]): Unit =
-    doc.cursor.step { implicit tx =>
-      impl.DocumentViewHandlerImpl.mkWindow(doc)
-    }
+  // MMM
+  //  // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
+  //  private def mkDocView(doc: Workspace[_]): Unit =
+  //    mkDocView1(doc.asInstanceOf[Workspace[S] forSome { type S <: Sys[S] }])
+  //
+  //  private def mkDocView1[S <: Sys[S]](doc: Workspace[S]): Unit =
+  //    doc.cursor.step { implicit tx =>
+  //      impl.DocumentViewHandlerImpl.mkWindow(doc)
+  //    }
 
   protected def menuFactory: Menu.Root = MenuFactory.root
 }

@@ -20,10 +20,12 @@ import de.sciss.lucre.event.Sys
 import at.iem.sysson.sound.Sonification
 import de.sciss.synth.proc.Obj
 import de.sciss.lucre.swing.deferTx
+import de.sciss.mellite.Workspace
+import de.sciss.lucre.stm
 
 object SonificationWindowImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx, workspace: Workspace[S]): SonificationWindow[S] = {
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationWindow[S] = {
     val view  = SonificationView(sonification)
     val res   = new Impl(view)
     res.init()

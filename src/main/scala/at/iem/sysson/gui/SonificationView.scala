@@ -21,10 +21,13 @@ import impl.{SonificationViewImpl => Impl}
 import de.sciss.lucre.swing.View
 import de.sciss.synth.proc.Obj
 import de.sciss.model.Model
+import de.sciss.mellite.Workspace
+import de.sciss.lucre.stm
 
 object SonificationView {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx, workspace: Workspace[S]): SonificationView[S] = Impl(sonification)
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] =
+    Impl(sonification)
 
   sealed trait Update
   case object Resized extends Update

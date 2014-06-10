@@ -24,6 +24,7 @@ import at.iem.sysson.sound.Sonification
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.event.{MouseEvent, MouseAdapter}
 import scala.swing.Swing
+import de.sciss.mellite.Workspace
 
 object DragAndDrop {
   sealed trait Flavor[+A] extends DataFlavor

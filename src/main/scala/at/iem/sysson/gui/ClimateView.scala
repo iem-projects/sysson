@@ -21,6 +21,7 @@ import impl.{ClimateViewImpl => Impl}
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.DataSource
 import de.sciss.synth.SynthGraph
+import de.sciss.mellite.Workspace
 
 object ClimateView {
   def apply[S <: Sys[S]](document: DataSource[S], section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)

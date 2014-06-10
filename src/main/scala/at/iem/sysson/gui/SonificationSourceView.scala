@@ -19,10 +19,11 @@ import de.sciss.lucre.stm.Disposable
 import scala.swing.Component
 import at.iem.sysson.gui.impl.{SonificationSourceViewImpl => Impl}
 import at.iem.sysson._
-import de.sciss.lucre.expr
+import de.sciss.lucre.{stm, expr}
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.matrix.gui.MatrixView
+import de.sciss.mellite.Workspace
 
 object SonificationSourceView {
   /** Creates a new view for editing the mapping between a sonification data source matrix and model dimensions.
@@ -36,7 +37,7 @@ object SonificationSourceView {
   def apply[S <: Sys[S]](map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
                          key: String, dimKeys: Vec[String])
                         (implicit tx: S#Tx, workspace: Workspace[S],
-                         undoManager: UndoManager): SonificationSourceView[S] =
+                         undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] =
     Impl(map, key, dimKeys)
 }
 trait SonificationSourceView[S <: Sys[S]] extends Disposable[S#Tx] {

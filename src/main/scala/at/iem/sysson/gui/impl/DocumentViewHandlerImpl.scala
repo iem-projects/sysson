@@ -22,15 +22,21 @@ import de.sciss.lucre.stm.Disposable
 import scala.concurrent.stm.TMap
 import de.sciss.desktop.Desktop
 import de.sciss.lucre.swing._
+import de.sciss.mellite.gui.ActionOpenWorkspace
+import de.sciss.mellite.Workspace
+import de.sciss.file._
 
 private[gui] object DocumentViewHandlerImpl {
   import DocumentHandler.Document
+
+  import DocumentViewHandler.WorkspaceWindow  // MMM
 
   def instance: DocumentViewHandler = impl
 
   private lazy val impl = new Impl
 
-  def mkWindow[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceWindow[S] = impl.mkWindow(doc)
+  // MMM
+  // def mkWindow[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceWindow[S] = impl.mkWindow(doc)
 
   private final class Impl extends DocumentViewHandler with ModelImpl[DocumentViewHandler.Update] {
     override def toString = "DocumentViewHandler"
@@ -62,18 +68,19 @@ private[gui] object DocumentViewHandlerImpl {
       map.single.get(doc).asInstanceOf[Option[WorkspaceWindow[S]]]
     }
 
-    def mkWindow[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceWindow[S] =
-      map.get(doc)(tx.peer).asInstanceOf[Option[WorkspaceWindow[S]]].getOrElse {
-        val w = WorkspaceWindow(doc)
-        map.put(doc, w)(tx.peer)
-        doc.addDependent(new Disposable[S#Tx] {
-          def dispose()(implicit tx: S#Tx): Unit = deferTx {
-            logInfo(s"Remove view map entry for ${doc.name}")
-            map.single.remove(doc)
-            if (_active == Some(doc)) activeDocument = None
-          }
-        })
-        w
-      }
+    // MMM
+    //    def mkWindow[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): WorkspaceWindow[S] =
+    //      map.get(doc)(tx.peer).asInstanceOf[Option[WorkspaceWindow[S]]].getOrElse {
+    //        val w = WorkspaceWindow(doc)
+    //        map.put(doc, w)(tx.peer)
+    //        doc.addDependent(new Disposable[S#Tx] {
+    //          def dispose()(implicit tx: S#Tx): Unit = deferTx {
+    //            logInfo(s"Remove view map entry for ${doc.folder.name}")
+    //            map.single.remove(doc)
+    //            if (_active == Some(doc)) activeDocument = None
+    //          }
+    //        })
+    //        w
+    //      }
   }
 }

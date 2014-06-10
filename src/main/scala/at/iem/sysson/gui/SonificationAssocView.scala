@@ -18,13 +18,15 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.swing.View
 import impl.{SonificationAssocViewImpl => Impl}
 import at.iem.sysson.sound.Sonification
-import at.iem.sysson.Workspace
 import de.sciss.desktop.UndoManager
+import de.sciss.mellite.Workspace
+import de.sciss.lucre.stm
 
 object SonificationAssocView {
   def apply[S <: Sys[S]](source: Sonification.Source[S], dimName: String)
-                        (implicit tx: S#Tx, workspace: Workspace[S],
-                         undoManager: UndoManager): SonificationAssocView[S] = Impl(source, dimName)
+                        (implicit tx: S#Tx, workspace: Workspace[S], undoManager: UndoManager,
+                         cursor: stm.Cursor[S]): SonificationAssocView[S] =
+    Impl(source, dimName)
 }
 trait SonificationAssocView [S <: Sys[S]] extends View[S] {
   // override def component: ...

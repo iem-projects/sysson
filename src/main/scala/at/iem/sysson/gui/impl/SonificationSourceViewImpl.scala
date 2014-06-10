@@ -39,6 +39,7 @@ import de.sciss.icons.raphael
 import javax.swing.TransferHandler
 import java.awt.datatransfer.Transferable
 import java.awt.Color
+import de.sciss.mellite.Workspace
 
 object SonificationSourceViewImpl {
   private val DEBUG = false
@@ -46,11 +47,11 @@ object SonificationSourceViewImpl {
   def apply[S <: Sys[S]](map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
                          key: String, keyDimNames: Vec[String])
                         (implicit tx: S#Tx, workspace: Workspace[S],
-                         undoManager: UndoManager): SonificationSourceView[S] = {
+                         undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] = {
     // de.sciss.lucre.event.showLog = true
     // de.sciss.lucre.matrix.gui.impl.MatrixViewImpl.DEBUG = true
 
-    import workspace.cursor
+    // import workspace.cursor
     val mapHOpt     = map.modifiableOption.map(tx.newHandle(_))
     val matView     = MatrixView[S]
     matView.nameVisible = false
@@ -73,11 +74,11 @@ object SonificationSourceViewImpl {
   private final class Impl[S <: Sys[S]](val matrixView: MatrixView[S],
       mapHOpt: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]]],
       key: String, keyDimNames: Vec[String])
-     (implicit workspace: Workspace[S], undoManager: UndoManager)
+     (implicit workspace: Workspace[S], undoManager: UndoManager, cursor: stm.Cursor[S])
     extends SonificationSourceView[S] with ComponentHolder[Component] {
     impl =>
 
-    import workspace.cursor
+    // import workspace.cursor
 
     private var ggDataName: TextField = _
     // private var ggMappings = Vec.empty[ComboBox[String]]

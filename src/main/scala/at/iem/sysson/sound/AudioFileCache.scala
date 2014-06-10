@@ -17,7 +17,6 @@ package sound
 
 import de.sciss.filecache
 import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
-import concurrent._
 import de.sciss.file._
 import de.sciss.synth.proc.Grapheme
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
@@ -26,6 +25,9 @@ import scala.concurrent.stm.TMap
 import scala.util.control.NonFatal
 import scala.concurrent.stm.atomic
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.mellite.Workspace
+import scala.concurrent.{Future, ExecutionContext, blocking}
+import de.sciss.lucre.stm
 
 object AudioFileCache {
   private val KEY_COOKIE  = 0x6166636B  // "afck"
@@ -176,9 +178,9 @@ object AudioFileCache {
   // def acquire(section: VariableSection, streamDim: Int): Future[Result]
 
   private def produceValue[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S],
-                                        section: Vec[Range], streamDim: Int): CacheValue = {
+                                        section: Vec[Range], streamDim: Int)(implicit cursor: stm.Cursor[S]): CacheValue = {
     implicit val resolver = WorkspaceResolver(workspace)
-    val v             = workspace.cursor.step { implicit tx => source.data() }
+    val v             = /* workspace. */ cursor.step { implicit tx => source.data() }
     val vs            = VariableSection(v, section.map(OpenRange.closed))
     val arr           = vs.readSafe()
 
@@ -221,7 +223,7 @@ object AudioFileCache {
 
   def acquire[S <: Sys[S]](workspace: Workspace[S], source: DataSource.Variable[S], section: Vec[Range],
                            streamDim: Int)
-                          (implicit tx: S#Tx): Future[Result] = {
+                          (implicit tx: S#Tx, cursor: stm.Cursor[S]): Future[Result] = {
     val key = sectionToKey(source, section, streamDim)
     implicit val itx = tx.peer
     map.get(key).fold {

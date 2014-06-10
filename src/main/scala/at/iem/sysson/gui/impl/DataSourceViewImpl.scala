@@ -39,11 +39,13 @@ import de.sciss.lucre.swing._
 import de.sciss.lucre.matrix.{Matrix, DataSource}
 import scala.Some
 import scala.swing.event.TableRowsSelected
+import de.sciss.mellite.Workspace
 
 object DataSourceViewImpl {
   import Implicits._
 
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx): DataSourceView[S] = {
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx,
+                                                cursor: stm.Cursor[S]): DataSourceView[S] = {
     implicit val resolver = WorkspaceResolver[S]
     val data  = source.data()
     val docH  = tx.newHandle(source)
@@ -126,7 +128,7 @@ object DataSourceViewImpl {
   }
 
   private final class Impl[S <: Sys[S]](sourceH: stm.Source[S#Tx, DataSource[S]], val file: File, data: nc2.NetcdfFile)
-                                       (implicit val workspace: Workspace[S])
+                                       (implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
     extends DataSourceView[S] with ComponentHolder[Component] {
     impl =>
     

@@ -19,9 +19,9 @@ import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import scala.concurrent.stm.{Ref => STMRef, TMap}
-import at.iem.sysson.gui.GUI
-import de.sciss.file.File
+import de.sciss.file._
 import de.sciss.lucre.swing._
+import de.sciss.mellite.Workspace
 
 private[sysson] object DocumentHandlerImpl {
   import DocumentHandler.Document
@@ -38,7 +38,7 @@ private[sysson] object DocumentHandlerImpl {
 
     def addDocument[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): Unit = {
       // doc.addListener(docListener)
-      val p = doc.file
+      val p = doc.folder
       require(!map.contains(p)(tx.peer), s"Workspace for path '$p' is already registered")
       all.transform(_ :+ doc)(tx.peer)
       map.+=(p -> doc)(tx.peer)
@@ -53,10 +53,10 @@ private[sysson] object DocumentHandlerImpl {
     private def removeDoc[S <: Sys[S]](doc: Workspace[S])(implicit tx: S#Tx): Unit = {
       all.transform { in =>
         val idx = in.indexOf(doc)
-        require(idx >= 0, s"Workspace for path '${doc.path}' was not registered")
+        require(idx >= 0, s"Workspace for path '${doc.folder.path}' was not registered")
         in.patch(idx, Nil, 1)
       } (tx.peer)
-      map.-=(doc.file)(tx.peer)
+      map.-=(doc.folder)(tx.peer)
 
       deferTx(dispatch(DocumentHandler.Closed(doc)))
     }

@@ -66,16 +66,16 @@ object AuralSonificationImpl {
   }
 
   def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx): AuralSonification[S] = {
+                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralSonification[S] = {
     val w             = aw.workspace
-    implicit val itx  = w.inMemoryTx(tx)         // why can't I just import w.inMemory !?
+    implicit val itx  = w.inMemoryBridge(tx)         // why can't I just import w.inMemory !?
     val sonifH        = tx.newHandle(sonification)
     val proc          = Proc[I]
     val obj           = Obj(Proc.Elem(proc))
     val group         = ProcGroup.Modifiable[I]
     val span          = SpanLikeEx.newVar[I](SpanLikeEx.newConst(Span.from(0L)))
     group.add(span, obj)
-    import w.{inMemoryCursor, inMemoryTx}
+    import w.{inMemoryCursor, inMemoryBridge}
     val transport     = Transport[I, I](group)
     val auralSys      = AudioSystem.instance.aural
     val aural         = AuralPresentation.run(transport, auralSys)
@@ -94,7 +94,7 @@ object AuralSonificationImpl {
                                                                  ap: AuralPresentation[I],
                                                                  sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
       procH: stm.Source[I#Tx, Obj.T[I, Proc.Elem]],
-      transport: ProcTransport[I])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx)
+      transport: ProcTransport[I])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx, cursor: stm.Cursor[S])
     extends AuralSonification[S] with TxnModelImpl[S#Tx, Update] {
     impl =>
 
@@ -313,7 +313,7 @@ object AuralSonificationImpl {
       }
     }
 
-    private def cursor: stm.Cursor[S] = aw.workspace.cursor
+    // private def cursor: stm.Cursor[S] = aw.workspace.cursor
 
     // reset and start transport, after the Proc was fully configured
     def transportPlay()(implicit tx: S#Tx): Unit = {

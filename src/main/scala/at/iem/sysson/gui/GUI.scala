@@ -25,6 +25,8 @@ import scala.util.control.NonFatal
 import de.sciss.icons.raphael
 import javax.swing.Icon
 import java.awt.geom.Path2D
+import de.sciss.mellite.gui.ObjView
+import at.iem.sysson.gui.impl.DataSourceObjView
 
 object GUI {
   def centerOnScreen(w: desktop.Window): Unit = placeWindow(w, 0.5f, 0.5f, 0)
@@ -84,4 +86,8 @@ object GUI {
 
   def windowOption(component: Component): Option[desktop.Window] =
     Option(component.peer.getClientProperty(impl.WindowImpl.WindowKey).asInstanceOf[desktop.Window])
+
+  def registerViews(): Unit = {
+    DataSourceObjView
+  }
 }

@@ -59,6 +59,7 @@ import scala.swing.event.ButtonClicked
 import java.awt
 import java.text.NumberFormat
 import java.util.Locale
+import de.sciss.mellite.Workspace
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,

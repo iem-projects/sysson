@@ -20,6 +20,7 @@ import de.sciss.lucre.{event => evt}
 import language.existentials
 import evt.Sys
 import de.sciss.file.File
+import de.sciss.mellite.Workspace
 
 object DocumentHandler {
   type Document = Workspace[_ <: Sys[_]]

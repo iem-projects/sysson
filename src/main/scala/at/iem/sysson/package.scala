@@ -15,7 +15,7 @@
 package at.iem
 
 import ucar.nc2
-import de.sciss.synth
+import de.sciss.{mellite, synth}
 import de.sciss.file._
 import scala.concurrent.stm.Txn
 import java.util.{Date, Locale}
@@ -37,7 +37,7 @@ package object sysson {
   val syssonDir   = sys.env.get("SYSSON_HOME") match {
     case Some(path) => file(path)
     case _ =>
-      Console.err.println("WARNING: Environment variable SYSSON_HOME not set. Cannot access default data files.")
+      // Console.err.println("WARNING: Environment variable SYSSON_HOME not set. Cannot access default data files.")
       val res = file(sys.props("user.home")) / "sysson"
       if (!res.isDirectory) res.mkdir()
       res
@@ -90,6 +90,7 @@ package object sysson {
   // ---- types ----
 
   def initTypes(): Unit = {
+    mellite.initTypes()
     PatchElemImpl
     SonificationElemImpl
   }

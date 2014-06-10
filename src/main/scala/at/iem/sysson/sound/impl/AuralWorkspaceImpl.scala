@@ -20,11 +20,12 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.{IdentifierMap, Disposable}
 import scala.concurrent.Future
 import de.sciss.synth.proc.{Obj, Grapheme}
-import de.sciss.lucre.synth
+import de.sciss.lucre.{stm, synth}
+import de.sciss.mellite.Workspace
 
 object AuralWorkspaceImpl {
   def apply[S <: Sys[S], I1 <: synth.Sys[I1]](workspace: Workspace[S] { type I = I1 })
-                                       (implicit tx: S#Tx): AuralWorkspace[S, I1] = {
+                                       (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralWorkspace[S, I1] = {
     val map = tx.newInMemoryIDMap[AuralSonification[S]]
     val res = new Impl(workspace, map)
     // de.sciss.lucre.synth.showLog = true
@@ -34,6 +35,7 @@ object AuralWorkspaceImpl {
 
   private final class Impl[S <: Sys[S], I1 <: synth.Sys[I1]](val workspace: Workspace[S] { type I = I1 },
                                         map: IdentifierMap[S#ID, S#Tx, AuralSonification[S]])
+                                                            (implicit cursor: stm.Cursor[S])
     extends AuralWorkspace[S, I1] with Disposable[S#Tx] {
     impl =>
 
