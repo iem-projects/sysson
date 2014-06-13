@@ -14,6 +14,7 @@
 
 package at.iem
 
+import at.iem.sysson.gui.impl.DataSourceElem
 import ucar.nc2
 import de.sciss.{mellite, synth}
 import de.sciss.file._
@@ -22,7 +23,6 @@ import java.util.{Date, Locale}
 import java.text.SimpleDateFormat
 import scala.annotation.elidable
 import scala.annotation.elidable._
-import scala.Some
 import de.sciss.lucre.stm.TxnLike
 import at.iem.sysson.sound.impl.PatchImpl.PatchElemImpl
 import at.iem.sysson.sound.impl.SonificationImpl.SonificationElemImpl
@@ -93,5 +93,6 @@ package object sysson {
     mellite.initTypes()
     PatchElemImpl
     SonificationElemImpl
+    DataSourceElem
   }
 }

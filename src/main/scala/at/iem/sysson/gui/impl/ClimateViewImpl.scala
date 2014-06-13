@@ -87,7 +87,7 @@ object ClimateViewImpl {
   def currentSection: Option[VariableSection] = _currentSection
 
   def apply[S <: Sys[S]](document: DataSource[S], section: VariableSection, xDim: nc2.Dimension, yDim: nc2.Dimension)
-           (implicit workspace: Workspace[S], tx: S#Tx): ClimateView[S] = {
+           (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): ClimateView[S] = {
     // import WorkspaceResolver._
     implicit val resolver = WorkspaceResolver[S]
     val data  = document.data()
@@ -163,7 +163,7 @@ object ClimateViewImpl {
   }
 
   private final class Impl[S <: Sys[S]](docH: stm.Source[S#Tx, DataSource[S]], net: nc2.NetcdfFile, val section: VariableSection,
-                           xDim: nc2.Dimension, yDim: nc2.Dimension)
+                           xDim: nc2.Dimension, yDim: nc2.Dimension)(implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
     extends ClimateView[S] with ComponentHolder[Component] {
 
     //    models: Map[String, DualRangeSlider],
@@ -180,7 +180,9 @@ object ClimateViewImpl {
 
     private val data    = new MyMatrix(width, height)
 
-    def document(implicit tx: S#Tx): DataSource[S] = docH()
+    def dataSource(implicit tx: S#Tx): DataSource[S] = docH()
+
+    def dispose()(implicit tx: S#Tx) = ()
 
     private def valueFun(dim: nc2.Dimension, units: Boolean): Int => String =
       vm.get(dim.name) match {

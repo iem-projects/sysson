@@ -116,6 +116,7 @@ object MenuFactory {
       .add(Item("close", proxy("Close" -> (menu1 + Key.W))))
       .add(Item("close-all", actionCloseAll))
       .add(Item("save", proxy("Save" -> (menu1 + Key.S))))
+      .add(Item("bounce", proxy("Bounce...", menu1 + Key.B)))
 
     if (itQuit.visible) gFile.addLine().add(itQuit)
 
@@ -124,15 +125,27 @@ object MenuFactory {
     gEdit
       .add(Item("undo", proxy("Undo" -> (menu1 + Key.Z))))
       .add(Item("redo", proxy("Redo" -> keyRedo)))
-    if (itPrefs.visible && Desktop.isLinux) gEdit.addLine().add(itPrefs)
+      .addLine()
+      .add(Item("cut",                proxy("Cut",                      menu1 + Key.X)))
+      .add(Item("copy",               proxy("Copy",                     menu1 + Key.C)))
+      .add(Item("paste",              proxy("Paste",                    menu1 + Key.V)))
+      .add(Item("delete",             proxy("Delete",                   plain + Key.BackSpace)))
+      .addLine()
+      .add(Item("select-all",         proxy("Select All",               menu1 + Key.A)))
 
-    val gTools = Group("tools", "Tools")
-    val gDebug = Group("debug", "Debug")
-    gDebug
+    if (itPrefs.visible /* && Desktop.isLinux */) gEdit.addLine().add(itPrefs)
+
+    val gActions = Group("actions", "Actions")
+//    val gDebug = Group("debug", "Debug")
+//    gDebug
+//      .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + Key.D))(dumpOSC()))
+
+    gActions
+      .add(Item("stop-all-sound",     proxy("Stop All Sound",           menu1 + Key.Period)))
+      .add(Item("debug-print",        proxy("Debug Print",              menu2 + Key.P)))
       .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + Key.D))(dumpOSC()))
 
-    gTools.add(gDebug)
-    if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
+    // if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
 
     val gView = Group("view", "View")
       .add(
@@ -143,7 +156,7 @@ object MenuFactory {
     val gWindow = Group("window", "Window")
     //  .add(Item("windowShot",         proxy("Export Window as PDF...")))
 
-    val r = Root().add(gFile).add(gEdit).add(gTools).add(gView).add(gWindow)
+    val r = Root().add(gFile).add(gEdit).add(gActions).add(gView).add(gWindow)
     if (itAbout.visible) r.add(Group("help", "Help").add(itAbout))
     r
   }

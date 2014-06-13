@@ -17,6 +17,7 @@ package gui
 package impl
 
 import de.sciss.desktop.UndoManager
+import de.sciss.mellite.Workspace
 import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.swing.{ProgressBar, FlowPanel, Component, Action, BorderPanel, Button, Swing}
@@ -54,7 +55,8 @@ object PatchCodeViewImpl {
   }
 
   def apply[S <: Sys[S]](sourceCode: Expr.Var[S, String], graph: Option[Expr.Var[S, SynthGraph]])
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeView[S] = {
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
+                         undoManager: UndoManager): PatchCodeView[S] = {
     val source0 = sourceCode.value
     val sourceH = tx.newHandle(sourceCode)(StringEx.varSerializer[S])
     import SynthGraphs.varSerializer
@@ -70,7 +72,7 @@ object PatchCodeViewImpl {
   private final class Impl[S <: Sys[S]](val undoManager: UndoManager, code: Code.SynthGraph,
                                         sourceH: stm.Source[S#Tx, Expr.Var[S, String]],
                                         graphHOpt : Option[stm.Source[S#Tx, Expr.Var[S, SynthGraph]]])
-                                       (implicit val cursor: stm.Cursor[S])
+                                       (implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
     extends ComponentHolder[Component] with PatchCodeView[S] with ModelImpl[PatchCodeView.Update] {
 
     import ExecutionContext.Implicits.global

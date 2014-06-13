@@ -16,6 +16,7 @@ package at.iem.sysson
 package gui
 package impl
 
+import de.sciss.mellite.gui.impl.WindowImpl
 import ucar.nc2
 import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.{JComponent, TransferHandler, JTree}
@@ -273,30 +274,13 @@ object DataSourceViewImpl {
 
             // open the actual plot if we got the dimensions
             xyOpt.foreach { case (yDim, xDim) =>
-              val view = cursor.step { implicit tx =>
-                ClimateView(source, v.selectAll, xDim = xDim, yDim = yDim)
-              }
-              lazy val w: desktop.Window = new desktop.impl.WindowImpl {
-                def handler     = SwingApplication.windowHandler
-                closeOperation  = desktop.Window.CloseDispose
-                title           = s"Plot : ${v.name}"
-                contents        = view.component
-                size            = (600, 600)
-                GUI.centerOnScreen(this)
-
-                bindMenu("file.close", Action(null) { dispose() /* disposeGUI() */ })
-
-                // override protected def style = desktop.Window.Auxiliary
-                addAction("window-shot", new ActionWindowShot(this))
-
-                override def dispose(): Unit = {
-  //                document.removeListener(docL)
-                  super.dispose()
+              cursor.step { implicit tx =>
+                val frame = new WindowImpl[S](s"Plot : ${v.name}") {
+                  val view: View[S] = ClimateView(source, v.selectAll, xDim = xDim, yDim = yDim)
+                  // size = (600, 600)
                 }
-
-                front()
+                frame.init()
               }
-              w
             }
           }
         }

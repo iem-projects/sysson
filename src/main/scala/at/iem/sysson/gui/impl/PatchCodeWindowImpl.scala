@@ -20,24 +20,26 @@ import de.sciss.desktop.{UndoManager, OptionPane}
 import de.sciss.lucre.stm
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
+import de.sciss.mellite.Workspace
 import de.sciss.swingplus.Implicits._
-import de.sciss.lucre.swing._
+import de.sciss.lucre.swing.{defer, deferTx}
 import at.iem.sysson.sound.{Keys, Patch}
 import de.sciss.lucre.expr.{Expr, String => StringEx}
-import de.sciss.synth.proc.{Obj, StringElem, Elem}
+import de.sciss.synth.proc.{Obj, StringElem}
 import scala.concurrent.ExecutionContext
-import de.sciss.desktop
 import de.sciss.mellite.gui.impl.WindowImpl
 
 object PatchCodeWindowImpl {
   def apply[S <: Sys[S]](entry: Library.Leaf[S])
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeWindow[S] = {
-    val view    = PatchCodeView(entry)
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
+                         undoManager: UndoManager): PatchCodeWindow[S] = {
+    val view = PatchCodeView(entry)
     mkWindow(view, entry.name)
   }
 
   def apply[S <: Sys[S]](patch: Obj.T[S, Patch.Elem])
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager): PatchCodeWindow[S] = {
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
+                         undoManager: UndoManager): PatchCodeWindow[S] = {
     //    println("----Patch Attributes----")
     //    patch.attr.iterator.foreach { case (key, value) =>
     //      println(s"'$key' -> $value")

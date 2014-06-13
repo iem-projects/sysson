@@ -219,7 +219,7 @@ object SonificationViewImpl {
 
       transportButtons = Transport.makeButtonStrip {
         import Transport._
-        Seq(GoToBegin(tGotToBegin()), Stop(tStop()), Play(tPlay()), Loop(tLoop()))
+        Seq(/* GoToBegin(tGotToBegin()), */ Stop(tStop()), Play(tPlay()) /*, Loop(tLoop()) */)
       }
       timerPrepare = new javax.swing.Timer(100, Swing.ActionListener { _ =>
         val ggPlay      = transportButtons.button(Transport.Play).get
@@ -227,7 +227,19 @@ object SonificationViewImpl {
       })
       timerPrepare.setRepeats(true)
       auralChange(initState)
-      val pTransport = new FlowPanel(transportButtons)
+
+      val ggMute: ToggleButton = new ToggleButton(null) {
+        listenTo(this)
+        reactions += {
+          case event.ButtonClicked(_) => println("TODO: Mute")
+        }
+        focusable = false
+        icon          = raphael.Icon(extent = 20, fill = raphael.TexturePaint(24), shadow = raphael.WhiteShadow)(raphael.Shapes.Mute)
+        disabledIcon  = raphael.Icon(extent = 20, fill = new Color(0, 0, 0, 0x7F), shadow = raphael.WhiteShadow)(raphael.Shapes.Mute)
+        tooltip       = "Mute"
+      }
+
+      val pTransport = new FlowPanel(transportButtons, ggMute)
       pTransport.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Transport")
 
       component = new BoxPanel(Orientation.Vertical) {
