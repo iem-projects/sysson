@@ -25,38 +25,38 @@ import de.sciss.swingplus.Implicits._
 import de.sciss.lucre.swing.{defer, deferTx}
 import at.iem.sysson.sound.{Keys, Patch}
 import de.sciss.lucre.expr.{Expr, String => StringEx}
-import de.sciss.synth.proc.{Obj, StringElem}
+import de.sciss.synth.proc.{Proc, Obj, StringElem}
 import scala.concurrent.ExecutionContext
 import de.sciss.mellite.gui.impl.WindowImpl
 
 object PatchCodeWindowImpl {
-  def apply[S <: Sys[S]](entry: Library.Leaf[S])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
-                         undoManager: UndoManager): PatchCodeWindow[S] = {
-    val view = PatchCodeView(entry)
-    mkWindow(view, entry.name)
-  }
+  //  def apply[S <: Sys[S]](entry: Library.Leaf[S])
+  //                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
+  //                         undoManager: UndoManager): PatchCodeWindow[S] = {
+  //    val view = PatchCodeView(entry)
+  //    mkWindow(view, entry.name)
+  //  }
 
-  def apply[S <: Sys[S]](patch: Obj.T[S, Patch.Elem])
+  def apply[S <: Sys[S]](proc: Obj.T[S, Proc.Elem])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
                          undoManager: UndoManager): PatchCodeWindow[S] = {
     //    println("----Patch Attributes----")
     //    patch.attr.iterator.foreach { case (key, value) =>
     //      println(s"'$key' -> $value")
     //    }
-    val source  = patch.attr.expr[String](Keys.attrGraphSource).fold {
+    val source  = proc.attr.expr[String](Keys.attrGraphSource).fold {
       val res = StringEx.newVar[S](StringEx.newConst("// No source code found for patch!\n"))
-      patch.attr.put(Keys.attrGraphSource, Obj(StringElem(res)))
+      proc.attr.put(Keys.attrGraphSource, Obj(StringElem(res)))
       res
     } {
       case Expr.Var(vr) => vr
       case ex           =>
         val res = StringEx.newVar(ex)
-        patch.attr.put(Keys.attrGraphSource, Obj(StringElem(res)))
+        proc.attr.put(Keys.attrGraphSource, Obj(StringElem(res)))
         res
     }
-    val view = PatchCodeView[S](source, graph = Some(patch.elem.peer.graph))
-    val name = patch.attr.expr[String](Keys.attrName).getOrElse(StringEx.newConst("<Untitled>"))
+    val view = PatchCodeView[S](source, graph = Some(proc.elem.peer.graph))
+    val name = proc.attr.expr[String](Keys.attrName).getOrElse(StringEx.newConst("<Untitled>"))
     mkWindow(view, name)
   }
 

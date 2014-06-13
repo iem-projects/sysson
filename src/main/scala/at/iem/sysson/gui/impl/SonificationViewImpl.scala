@@ -53,7 +53,7 @@ object SonificationViewImpl {
     }
 
     val sonifView = AuralWorkspaceHandler.instance.view[S, workspace.I](workspace).view(sonification)
-    val p         = sonification.elem.peer.patch
+    val p         = sonification.elem.peer.proc
 
     val res = new Impl[S](sonifH, sonifView, nameView) {
       val auralObserver = sonifView.react { implicit tx => upd =>
@@ -198,7 +198,7 @@ object SonificationViewImpl {
       val actionEditPatch = new Action(null) {
         def apply(): Unit = cursor.step { implicit tx =>
           val sonif = sonifH()
-          PatchCodeWindow(sonif.elem.peer.patch)
+          PatchCodeWindow(sonif.elem.peer.proc)
         }
       }
       val ggEditPatch = GUI.toolButton(actionEditPatch, raphael.Shapes.Edit, tooltip = "Edit Patch")

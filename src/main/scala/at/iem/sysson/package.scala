@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat
 import scala.annotation.elidable
 import scala.annotation.elidable._
 import de.sciss.lucre.stm.TxnLike
-import at.iem.sysson.sound.impl.PatchImpl.PatchElemImpl
+//import at.iem.sysson.sound.impl.PatchImpl.PatchElemImpl
 import at.iem.sysson.sound.impl.SonificationImpl.SonificationElemImpl
 
 package object sysson {
@@ -91,7 +91,7 @@ package object sysson {
 
   def initTypes(): Unit = {
     mellite.initTypes()
-    PatchElemImpl
+    // PatchElemImpl
     SonificationElemImpl
     DataSourceElem
   }

@@ -184,22 +184,22 @@ object MenuFactory {
     Durable(store)
   }
 
-  private lazy val libraryH: stm.Source[S#Tx, Library[S]] =
-    system.root { implicit tx =>
-      val _lib  = Library[S]
-      //      val imp   = ExprImplicits[S]
-      //      import imp._
-      //      _lib.root.insertLeaf  (0, "Test-Leaf", "Test-Source")
-      //      val sub = _lib.root.insertBranch(0, "Test-Branch")
-      //      sub.insertLeaf       (0, "Test-Child", "Test-Source")
-      _lib
-    }
+  //  private lazy val libraryH: stm.Source[S#Tx, Library[S]] =
+  //    system.root { implicit tx =>
+  //      val _lib  = Library[S]
+  //      //      val imp   = ExprImplicits[S]
+  //      //      import imp._
+  //      //      _lib.root.insertLeaf  (0, "Test-Leaf", "Test-Source")
+  //      //      val sub = _lib.root.insertBranch(0, "Test-Branch")
+  //      //      sub.insertLeaf       (0, "Test-Child", "Test-Source")
+  //      _lib
+  //    }
 
-  def openLibrary(): Unit =
-    system.step { implicit tx =>
-      val lib = libraryH()
-      LibraryWindow(lib)
-    }
+  def openLibrary(): Unit = println("TODO: open library")
+//    system.step { implicit tx =>
+//      val lib = libraryH()
+//      LibraryWindow(lib)
+//    }
 
   private var resp = Option.empty[synth.message.Responder]
 

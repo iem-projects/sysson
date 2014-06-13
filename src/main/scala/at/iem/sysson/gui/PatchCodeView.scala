@@ -28,10 +28,10 @@ import de.sciss.synth.SynthGraph
 import scala.concurrent.Future
 
 object PatchCodeView {
-  def apply[S <: Sys[S]](entry: Library.Leaf[S])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
-                         undoManager: UndoManager): PatchCodeView[S] =
-    Impl(entry.source, graph = None)
+  //  def apply[S <: Sys[S]](entry: Library.Leaf[S])
+  //                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
+  //                         undoManager: UndoManager): PatchCodeView[S] =
+  //    Impl(entry.source, graph = None)
 
   /** If `graph` is given, the `apply` action is tied to updating the graph variable. */
   def apply[S <: Sys[S]](sourceCode: Expr.Var[S, String], graph: Option[Expr.Var[S, SynthGraph]])

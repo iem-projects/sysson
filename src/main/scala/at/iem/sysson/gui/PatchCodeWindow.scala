@@ -22,18 +22,18 @@ import impl.{PatchCodeWindowImpl => Impl}
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.swing.Window
 import at.iem.sysson.sound.Patch
-import de.sciss.synth.proc.Obj
+import de.sciss.synth.proc.{Proc, Obj}
 
 object PatchCodeWindow {
-  def apply[S <: Sys[S]](entry: Library.Leaf[S])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
-                         undoManager: UndoManager): PatchCodeWindow[S] =
-    Impl(entry)
+  //  def apply[S <: Sys[S]](entry: Library.Leaf[S])
+  //                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
+  //                         undoManager: UndoManager): PatchCodeWindow[S] =
+  //    Impl(entry)
 
-  def apply[S <: Sys[S]](patch: Obj.T[S, Patch.Elem])
+  def apply[S <: Sys[S]](proc: Obj.T[S, Proc.Elem])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S],
                          undoManager: UndoManager): PatchCodeWindow[S] =
-    Impl(patch)
+    Impl(proc)
 }
 trait PatchCodeWindow[S <: Sys[S]] extends Window[S] {
   def view: PatchCodeView[S]

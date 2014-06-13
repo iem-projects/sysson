@@ -28,37 +28,27 @@ import java.awt.{BasicStroke, Color}
 import scala.swing._
 import Swing._
 import javax.swing._
-import scala.swing.event.{ButtonClicked, ValueChanged}
+import scala.swing.event.ValueChanged
 import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
-import javax.swing.TransferHandler.TransferSupport
-import de.sciss.audiowidgets.{Transport, DualRangeModel, DualRangeSlider}
+import de.sciss.audiowidgets.{DualRangeModel, DualRangeSlider}
 import collection.breakOut
-import de.sciss.synth.{SynthGraph, Ops, Synth}
-import de.sciss.swingplus.{GroupPanel, OverlayPanel}
-import scala.concurrent.{ExecutionContext, Future}
+import de.sciss.synth.SynthGraph
+import de.sciss.swingplus.GroupPanel
 import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 import de.sciss.lucre.event.Sys
-import at.iem.sysson.gui.DragAndDrop.LibraryNodeDrag
 import de.sciss.lucre.stm
 import scala.concurrent.stm.atomic
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing._
 import de.sciss.lucre.matrix.DataSource
-import scala.Some
-import scala.swing.event.ButtonClicked
 import de.sciss.icons.raphael
 import de.sciss.desktop.OptionPane
 import javax.swing.table.DefaultTableCellRenderer
-import org.jfree.ui.NumberCellRenderer
-import scala.text
-import scala.Some
 import scala.swing.Action
 import scala.swing.event.ButtonClicked
 import java.awt
-import java.text.NumberFormat
-import java.util.Locale
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 

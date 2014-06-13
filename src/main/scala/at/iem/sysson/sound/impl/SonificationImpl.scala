@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.{event => evt, expr}
 import de.sciss.lucre.event.{Pull, EventLike, InMemory, Event, Sys}
 import at.iem.sysson.sound.Sonification.Source
-import de.sciss.synth.proc.{Obj, Elem}
+import de.sciss.synth.proc.{Proc, Obj, Elem}
 import scala.annotation.switch
 import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.expr.{Expr, Double => DoubleEx, String => StringEx}
@@ -173,25 +173,25 @@ object SonificationImpl {
       final val slot = 3
 
       def connect   ()(implicit tx: S#Tx): Unit = {
-        patch.changed ---> this
+        proc.changed ---> this
         // attr    ---> this
         // StateEvent    ---> this
       }
       def disconnect()(implicit tx: S#Tx): Unit = {
-        patch.changed -/-> this
+        proc.changed -/-> this
         // attr    -/-> this
         // StateEvent    -/-> this
       }
 
       // XXX TODO: for completeness, should forward changes to sources and controls!
       def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Update] = {
-        val patchCh  = patch.elem.peer.changed
-        val patchOpt = if (pull.contains(patchCh   )) pull(patchCh   ) else None
+        val procCh    = proc.elem.peer.changed
+        val procOpt   = if (pull.contains(procCh   )) pull(procCh   ) else None
         // val attrOpt  = if (pull.contains(attr)) pull(attr) else None
         // val stateOpt = if (pull.contains(StateEvent)) pull(StateEvent) else None
 
-        val seq0 = patchOpt.fold(Vec.empty[Change]) { u =>
-          u.changes.map(Sonification.PatchChange.apply)
+        val seq0 = procOpt.fold(Vec.empty[Change]) { u =>
+          u.changes.map(Sonification.ProcChange.apply)
         }
         //        val seq1 = attrOpt.fold(seq0) { u =>
         //          if (seq0.isEmpty) u.changes else seq0 ++ u.changes
@@ -211,14 +211,14 @@ object SonificationImpl {
 
     final protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
-      patch       .write(out)
+      proc        .write(out)
       sources     .write(out)
       controls    .write(out)
       //      attributeMap.write(out)
     }
 
     final protected def disposeData()(implicit tx: S#Tx): Unit = {
-      patch       .dispose()
+      proc        .dispose()
       sources     .dispose()
       controls    .dispose()
       //      attributeMap.dispose()
@@ -231,7 +231,8 @@ object SonificationImpl {
 
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
     protected val targets       = evt.Targets[S](tx0)
-    val patch                   = Obj(Patch.Elem(Patch[S]))
+    // val patch                   = Obj(Patch.Elem(Patch[S]))
+    val proc                    = Obj(Proc.Elem(Proc[S]))
     val sources                 = expr.Map.Modifiable[S, String, Source[S], Source.Update[S]]
     val controls                = {
       implicit val ser = DoubleEx.serializer[S]
@@ -249,9 +250,10 @@ object SonificationImpl {
       require(serVer == SER_VERSION, s"Incompatible serialized (found $serVer, required $SER_VERSION)")
     }
 
-    val patch                   = Obj.readT[S, Patch.Elem](in, access)
-    val sources                 = expr.Map.read[S, String, Source[S], Source.Update[S]](in, access)
-    val controls                = {
+    // val patch                   = Obj.readT[S, Patch.Elem](in, access)
+    val proc        = Obj.readT[S, Proc.Elem](in, access)
+    val sources     = expr.Map.read[S, String, Source[S], Source.Update[S]](in, access)
+    val controls    = {
       implicit val ser = DoubleEx.serializer[S]
       expr.Map.read[S, String, Expr[S, Double], model.Change[Double]](in, access)
     }

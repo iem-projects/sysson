@@ -29,7 +29,6 @@ import de.sciss.span.Span
 import de.sciss.lucre
 import scala.util.control.NonFatal
 import de.sciss.file._
-import de.sciss.synth.io.AudioFileSpec
 import de.sciss.lucre.stm.TxnLike
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
@@ -39,9 +38,6 @@ import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import at.iem.sysson.graph.{UserValue, SonificationElement}
 import scala.annotation.tailrec
 import at.iem.sysson.graph
-import scala.Some
-import at.iem.sysson.sound.impl
-import at.iem.sysson.impl
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_]])
@@ -130,8 +126,8 @@ object AuralSonificationImpl {
 
       val sonif   = sonifH()
       val sonifE  = sonif.elem.peer
-      val patch   = sonifE.patch
-      val g       = patch.elem.peer.graph.value
+      val procIn  = sonifE.proc
+      val g       = procIn.elem.peer.graph.value
       val proc    = procH()
 
       var aCnt  = 0

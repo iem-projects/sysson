@@ -20,7 +20,7 @@ import evt.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
 import de.sciss.model
 import de.sciss.lucre.expr
-import de.sciss.synth.proc.Obj
+import de.sciss.synth.proc.{Proc, Obj}
 import impl.{SonificationImpl => Impl}
 import de.sciss.serial.{Serializer, DataInput}
 import de.sciss.lucre.matrix.Matrix
@@ -48,7 +48,7 @@ object Sonification {
   //  /** A state change is either a renaming, a change of graph, or a change of association (map) */
   //  sealed trait StateChange[S <: Sys[S]] extends Change[S]
 
-  final case class PatchChange[S <: Sys[S]](change: Patch.Change[S]) extends Change[S]
+  final case class ProcChange[S <: Sys[S]](change: Proc.Change[S]) extends Change[S]
 
   // -------------------------------------------------------
 
@@ -92,7 +92,8 @@ object Sonification {
   }
 }
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
-  def patch: Obj.T[S, Patch.Elem]
+  // def patch: Obj.T[S, Patch.Elem]
+  def proc: Obj.T[S, Proc.Elem]
 
   def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
   def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]

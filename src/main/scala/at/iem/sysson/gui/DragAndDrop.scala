@@ -23,7 +23,6 @@ import de.sciss.lucre.matrix.{Matrix, DataSource}
 import at.iem.sysson.sound.Sonification
 import javax.swing.{JComponent, TransferHandler}
 import java.awt.event.{MouseEvent, MouseAdapter}
-import scala.swing.Swing
 import de.sciss.mellite.Workspace
 
 object DragAndDrop {
@@ -34,13 +33,13 @@ object DragAndDrop {
 
   // ---- specific flavors ----
 
-  val LibraryNodeFlavor = internalFlavor[LibraryNodeDrag]
-
-  trait LibraryNodeDrag {
-    type S1 <: Sys[S1]
-    def cursor: stm.Cursor[S1]
-    def node: stm.Source[S1#Tx, Either[Library.Branch[S1], Library.Leaf[S1]]]
-  }
+  //  val LibraryNodeFlavor = internalFlavor[LibraryNodeDrag]
+  //
+  //  trait LibraryNodeDrag {
+  //    type S1 <: Sys[S1]
+  //    def cursor: stm.Cursor[S1]
+  //    def node: stm.Source[S1#Tx, Either[Library.Branch[S1], Library.Leaf[S1]]]
+  //  }
 
   val DataSourceFlavor = internalFlavor[DataSourceDrag]
 

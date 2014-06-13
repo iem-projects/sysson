@@ -32,7 +32,7 @@ object SonificationObjView extends ObjView.Factory {
   def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
     val name      = obj.attr.name
     val son       = obj.elem.peer
-    val patchName = son.patch.attr.name
+    val patchName = son.proc.attr.name
     new SonificationObjView.Impl(tx.newHandle(obj), name = name, value = new Value(patchName))
   }
 
