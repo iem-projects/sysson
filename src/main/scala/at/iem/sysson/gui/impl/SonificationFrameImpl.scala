@@ -1,5 +1,5 @@
 /*
- *  SonificationWindowImpl.scala
+ *  SonificationFrameImpl.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -24,9 +24,9 @@ import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
 import de.sciss.mellite.gui.impl.WindowImpl
 
-object SonificationWindowImpl {
+object SonificationFrameImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationWindow[S] = {
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationFrame[S] = {
     val view  = SonificationView(sonification)
     val res   = new Impl(view)
     res.init()
@@ -40,7 +40,7 @@ object SonificationWindowImpl {
 
   private final class Impl[S <: Sys[S]](val view: SonificationView[S])
     extends WindowImpl[S](title0 = "Sonification Editor")
-    with SonificationWindow[S] {
+    with SonificationFrame[S] {
 
     // override protected def style = desktop.Window.Auxiliary
   }

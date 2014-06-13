@@ -6,12 +6,13 @@ import javax.swing.undo.UndoableEdit
 
 import at.iem.sysson.sound.Sonification
 import at.iem.sysson.sound.impl.SonificationImpl.SonificationElemImpl
-import de.sciss.desktop.{OptionPane, Window}
+import de.sciss.desktop
+import desktop.OptionPane
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Cursor, Source}
-import de.sciss.lucre.swing.View
+import de.sciss.lucre.swing.{Window, View}
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ObjView
@@ -32,11 +33,12 @@ object SonificationObjView extends ObjView.Factory {
   def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
     val name      = obj.attr.name
     val son       = obj.elem.peer
-    val patchName = son.proc.attr.name
-    new SonificationObjView.Impl(tx.newHandle(obj), name = name, value = new Value(patchName))
+    val procName  = son.proc.attr.name
+    new SonificationObjView.Impl(tx.newHandle(obj), name = name, value = new Value(procName))
   }
 
-  def initDialog[S <: SSys[S]](workspace: Workspace[S], folderH: Source[S#Tx, Folder[S]], window: Option[Window])
+  def initDialog[S <: SSys[S]](workspace: Workspace[S], folderH: Source[S#Tx, Folder[S]],
+                               window: Option[desktop.Window])
                               (implicit cursor: Cursor[S]): Option[UndoableEdit] = {
     val opt = OptionPane.textInput(message = "Enter Sonification Name:",
       messageType = OptionPane.Message.Question, initial = "Sonification")
@@ -54,8 +56,8 @@ object SonificationObjView extends ObjView.Factory {
     }
   }
 
-  private final class Value(patchName: String) {
-    override def toString = if (patchName == "<unnamed>") "" else s"patch: $patchName"
+  private final class Value(procName: String) {
+    override def toString = if (procName == "<unnamed>") "" else s"proc: $procName"
   }
 
   private final class Impl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
@@ -64,6 +66,7 @@ object SonificationObjView extends ObjView.Factory {
 
     def prefix  = SonificationObjView.prefix
     def icon    = SonificationObjView.icon
+    def typeID  = SonificationObjView.typeID
 
     def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = update match {
       case Sonification.Update(_, ch) => false
@@ -75,10 +78,9 @@ object SonificationObjView extends ObjView.Factory {
 
     def isViewable = true
 
-    def openView(workspace: Workspace[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): Option[View[S]] = {
-      implicit val ws = workspace
-      val frame = SonificationWindow(obj())
-      Some(frame.view)
+    def openView()(implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
+      val frame = SonificationFrame(obj())
+      Some(frame)
     }
 
     def configureRenderer(label: Label): Component = {

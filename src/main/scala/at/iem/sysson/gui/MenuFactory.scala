@@ -27,7 +27,7 @@ import at.iem.sysson.sound.AudioSystem
 import de.sciss.{osc, synth}
 import scala.swing.event.{Key, MouseClicked}
 import java.net.URL
-import de.sciss.mellite.gui.{ActionNewWorkspace, ActionOpenWorkspace}
+import de.sciss.mellite.gui.{LogFrame, ActionNewWorkspace, ActionOpenWorkspace}
 import de.sciss.mellite.Workspace
 
 object MenuFactory {
@@ -150,7 +150,7 @@ object MenuFactory {
     val gView = Group("view", "View")
       .add(
         Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P)) {
-          LogWindow.instance.log.clear()
+          LogFrame.instance.log.clear()
         }
       )
     val gWindow = Group("window", "Window")

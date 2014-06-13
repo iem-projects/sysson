@@ -1,5 +1,5 @@
 /*
- *  DataSourceWindowImpl.scala
+ *  DataSourceFrameImpl.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -23,9 +23,9 @@ import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
 import de.sciss.mellite.gui.impl.WindowImpl
 
-object DataSourceWindowImpl {
+object DataSourceFrameImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
-                                                cursor: stm.Cursor[S]): DataSourceWindow[S] = {
+                                                cursor: stm.Cursor[S]): DataSourceFrame[S] = {
     val view  = DataSourceView(source)
     val res   = new Impl(view)
     res.init()
@@ -33,7 +33,7 @@ object DataSourceWindowImpl {
   }
 
   private final class Impl[S <: Sys[S]](val view: DataSourceView[S])
-    extends WindowImpl[S] with DataSourceWindow[S] {
+    extends WindowImpl[S] with DataSourceFrame[S] {
 
     // override protected def style = desktop.Window.Auxiliary
   }

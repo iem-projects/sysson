@@ -1,5 +1,5 @@
 /*
- *  SonificationWindow.scala
+ *  SonificationFrame.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -15,18 +15,18 @@
 package at.iem.sysson.gui
 
 import de.sciss.lucre.event.Sys
-import impl.{SonificationWindowImpl => Impl}
+import impl.{SonificationFrameImpl => Impl}
 import at.iem.sysson.sound.Sonification
 import de.sciss.lucre.swing.Window
 import de.sciss.synth.proc.Obj
 import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
 
-object SonificationWindow {
+object SonificationFrame {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationWindow[S] =
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationFrame[S] =
     Impl(sonification)
 }
-trait SonificationWindow[S <: Sys[S]] extends Window[S] {
+trait SonificationFrame[S <: Sys[S]] extends Window[S] {
   def view: SonificationView[S]
 }

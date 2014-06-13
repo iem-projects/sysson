@@ -3,12 +3,13 @@ package gui
 package impl
 
 import de.sciss.file._
-import de.sciss.lucre.swing.View
+import de.sciss.lucre.swing.Window
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ObjView
 import de.sciss.lucre.stm.{Cursor, Source}
 import de.sciss.synth.proc.{Elem, Obj, Folder}
-import de.sciss.desktop.{FileDialog, Window}
+import de.sciss.desktop
+import desktop.FileDialog
 import javax.swing.undo.UndoableEdit
 import de.sciss.mellite.gui.impl.ObjViewImpl
 import de.sciss.icons.raphael
@@ -43,7 +44,8 @@ object DataSourceObjView extends ObjView.Factory {
     new DataSourceObjView.Impl(tx.newHandle(obj), name = name, value = new Value(file = f, multiDim = multiDim))
   }
 
-  def initDialog[S <: SSys[S]](workspace: Workspace[S], folderH: Source[S#Tx, Folder[S]], window: Option[Window])
+  def initDialog[S <: SSys[S]](workspace: Workspace[S], folderH: Source[S#Tx, Folder[S]],
+                               window: Option[desktop.Window])
                              (implicit cursor: Cursor[S]): Option[UndoableEdit] = {
     val dlg = FileDialog.open(title = "Add Data Source")
     dlg.setFilter(util.NetCdfFileFilter)
@@ -74,15 +76,15 @@ object DataSourceObjView extends ObjView.Factory {
 
     def prefix  = DataSourceObjView.prefix
     def icon    = DataSourceObjView.icon
+    def typeID  = DataSourceObjView.typeID
 
     def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = false
 
     def isViewable = true
 
-    def openView(workspace: Workspace[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): Option[View[S]] = {
-      implicit val ws = workspace
-      val frame = DataSourceWindow(obj())
-      Some(frame.view)
+    def openView()(implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
+      val frame = DataSourceFrame(obj())
+      Some(frame)
     }
 
     def configureRenderer(label: Label): Component = {

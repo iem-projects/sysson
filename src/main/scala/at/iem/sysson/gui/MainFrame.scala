@@ -1,5 +1,5 @@
 /*
- *  MainWindow.scala
+ *  MainFrame.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -19,7 +19,7 @@ import de.sciss.desktop
 import at.iem.sysson.gui.impl.ActionWindowShot
 import de.sciss.mellite.gui.GUI
 
-object MainWindow {
+object MainFrame {
   val horizontalPlacement   = 1.0f
   val verticalPlacement     = 0.0f
   val placementPadding      = 20

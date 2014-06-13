@@ -1,5 +1,5 @@
 /*
- *  DataSourceWindow.scala
+ *  DataSourceFrame.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -17,17 +17,17 @@ package gui
 
 import de.sciss.lucre.event.Sys
 import de.sciss.synth.proc.Obj
-import at.iem.sysson.gui.impl.{DataSourceWindowImpl => Impl, DataSourceElem}
+import at.iem.sysson.gui.impl.{DataSourceFrameImpl => Impl, DataSourceElem}
 import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.swing.Window
 import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
 
-object DataSourceWindow {
+object DataSourceFrame {
   def apply[S <: Sys[S]](source: Obj.T[S, DataSourceElem])(implicit tx: S#Tx, workspace: Workspace[S],
-                                                cursor: stm.Cursor[S]): DataSourceWindow[S] =
+                                                cursor: stm.Cursor[S]): DataSourceFrame[S] =
     Impl(source.elem.peer)  // XXX TODO - retain object with attributes
 }
-trait DataSourceWindow[S <: Sys[S]] extends Window[S] {
+trait DataSourceFrame[S <: Sys[S]] extends Window[S] {
   def view: DataSourceView[S]
 }

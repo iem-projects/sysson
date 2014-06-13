@@ -38,7 +38,7 @@ import scala.util.control.NonFatal
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.mellite.Workspace
-import de.sciss.mellite.gui.GUI
+import de.sciss.mellite.gui.{CodeFrame, GUI}
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
@@ -122,7 +122,7 @@ object SonificationViewImpl {
 
           (key, view)
       }
-      
+
       // ---- controls tx ----
 
       val controls    = sonif.elem.peer.controls
@@ -198,7 +198,8 @@ object SonificationViewImpl {
       val actionEditPatch = new Action(null) {
         def apply(): Unit = cursor.step { implicit tx =>
           val sonif = sonifH()
-          PatchCodeWindow(sonif.elem.peer.proc)
+          // PatchCodeWindow(sonif.elem.peer.proc)
+          CodeFrame.proc(sonif.elem.peer.proc)
         }
       }
       val ggEditPatch = GUI.toolButton(actionEditPatch, raphael.Shapes.Edit, tooltip = "Edit Patch")

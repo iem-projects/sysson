@@ -17,11 +17,11 @@ package gui
 
 import de.sciss.desktop.impl.{WindowHandlerImpl, SwingApplicationImpl}
 import de.sciss.desktop.{WindowHandler, Menu}
+import de.sciss.mellite.gui.LogFrame
 import language.existentials
 import javax.swing.UIManager
 import scala.util.control.NonFatal
 import de.sciss.mellite.Application
-import at.iem.sysson.Prefs
 import com.alee.laf.checkbox.WebCheckBoxStyle
 import com.alee.laf.progressbar.WebProgressBarStyle
 import java.awt.Color
@@ -32,7 +32,7 @@ import at.iem.sysson
   * but you should always invoke `at.iem.sysson.Main`, because it first
   * initializes some type extensions that would be missing otherwise.
   */
-object  SwingApplication extends SwingApplicationImpl("SysSon") {
+object SwingApplication extends SwingApplicationImpl("SysSon") {
   type Document = DocumentHandler.Document  // sysson.DataSourceLike
 
   override lazy val windowHandler: WindowHandler = new WindowHandlerImpl(this, menuFactory) {
@@ -70,8 +70,9 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
     WebProgressBarStyle.highlightWhite      = new Color(255, 255, 255, 0)
     WebProgressBarStyle.highlightDarkWhite  = new Color(255, 255, 255, 0)
 
-    /* val dh = */ DocumentHandler.instance // initialize
-    DocumentViewHandler.instance      // initialize
+    LogFrame           .instance    // init
+    DocumentHandler    .instance    // init
+    DocumentViewHandler.instance    // init
 
     // MMM
     //    dh.addListener {
@@ -79,14 +80,13 @@ object  SwingApplication extends SwingApplicationImpl("SysSon") {
     //    }
     //    dh.allDocuments.foreach(mkDocView)
 
-    // keep using IntelliJ console when debugging
-    if (!sys.props.getOrElse("sun.java.command", "?").contains("intellij")) {
-      LogWindow.instance // initializes it
-      Console.setOut(System.out) // stupidly deprecated, but needed, because Console is broken
-      Console.setErr(System.err) // stupidly deprecated, but needed, because Console is broken
-    }
+    //    // keep using IntelliJ console when debugging
+    //    if (!sys.props.getOrElse("sun.java.command", "?").contains("intellij")) {
+    //      Console.setOut(System.out) // stupidly deprecated, but needed, because Console is broken
+    //      Console.setErr(System.err) // stupidly deprecated, but needed, because Console is broken
+    //    }
 
-    MainWindow()
+    MainFrame()
   }
 
   // MMM

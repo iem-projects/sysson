@@ -15,6 +15,7 @@
 package at.iem
 
 import at.iem.sysson.gui.impl.DataSourceElem
+import de.sciss.mellite.Code
 import ucar.nc2
 import de.sciss.{mellite, synth}
 import de.sciss.file._
@@ -89,10 +90,14 @@ package object sysson {
 
   // ---- types ----
 
+  private lazy val importExtensions: Unit =
+    Code.registerImports(Code.SynthGraph.id, Seq("at.iem.sysson.graph._"))
+
   def initTypes(): Unit = {
     mellite.initTypes()
     // PatchElemImpl
     SonificationElemImpl
     DataSourceElem
+    importExtensions
   }
 }
