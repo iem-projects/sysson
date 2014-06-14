@@ -14,7 +14,7 @@
 
 package at.iem.sysson.gui
 
-import de.sciss.lucre.event.Sys
+import de.sciss.lucre.synth.Sys
 import impl.{SonificationFrameImpl => Impl}
 import at.iem.sysson.sound.Sonification
 import de.sciss.lucre.swing.Window

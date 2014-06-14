@@ -16,7 +16,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import de.sciss.lucre.event.Sys
+import de.sciss.lucre.synth.Sys
 import at.iem.sysson.sound.Sonification
 import de.sciss.synth.proc.Obj
 import de.sciss.lucre.swing.deferTx

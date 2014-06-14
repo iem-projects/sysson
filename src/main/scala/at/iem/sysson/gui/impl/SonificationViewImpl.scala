@@ -16,29 +16,30 @@ package at.iem.sysson
 package gui
 package impl
 
-import de.sciss.lucre.event.Sys
+import java.awt.Color
+
+import de.sciss.lucre.synth.Sys
 import at.iem.sysson.sound.{AuralSonification, AuralWorkspaceHandler, Keys, Sonification}
 import de.sciss.lucre.stm
-import scala.swing._
-import de.sciss.synth.proc.{Obj, StringElem, Elem}
+import de.sciss.synth.proc.Obj
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{OptionPane, UndoManager}
 import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.audiowidgets.Transport
 import de.sciss.synth.SynthGraph
-import javax.swing.GroupLayout
 import language.reflectiveCalls
 import de.sciss.lucre.stm.Disposable
-import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView}
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing._
+import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView, deferTx, requireEDT}
 import de.sciss.icons.raphael
 import scala.concurrent.stm.Ref
+import scala.swing.event.ButtonClicked
+import scala.swing.{Action, Orientation, BoxPanel, ToggleButton, Swing, Alignment, Label, FlowPanel, Component}
 import scala.util.control.NonFatal
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.mellite.Workspace
-import de.sciss.mellite.gui.{CodeFrame, GUI}
+import de.sciss.mellite.gui.{AttrMapFrame, CodeFrame, GUI}
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
@@ -195,16 +196,26 @@ object SonificationViewImpl {
 
     final def guiInit(initState: AuralSonification.Update): Unit = {
       // ---- Header ----
-      val actionEditPatch = new Action(null) {
+      val actionEditProcAttr = new Action(null) {
+        def apply(): Unit = cursor.step { implicit tx =>
+          val sonif = sonifH()
+          AttrMapFrame(sonif.elem.peer.proc)
+        }
+      }
+      val actionEditProcGraph = new Action(null) {
         def apply(): Unit = cursor.step { implicit tx =>
           val sonif = sonifH()
           // PatchCodeWindow(sonif.elem.peer.proc)
           CodeFrame.proc(sonif.elem.peer.proc)
         }
       }
-      val ggEditPatch = GUI.toolButton(actionEditPatch, raphael.Shapes.Edit, tooltip = "Edit Patch")
-      val cHead       = nameView.fold(Vec.empty[Component])(view => Vec(new Label("Name:"), view.component))
-      val pHeader     = new FlowPanel(cHead :+ ggEditPatch: _*)
+
+      val ggEditProcAttr  = GUI.toolButton(actionEditProcAttr , raphael.Shapes.Wrench, tooltip = "Edit Proc Attributes")
+      val ggEditProcGraph = GUI.toolButton(actionEditProcGraph, raphael.Shapes.Edit  , tooltip = "Edit Synth Graph"    )
+      ggEditProcAttr .focusable = false
+      ggEditProcGraph.focusable = false
+      val cHead           = nameView.fold(Vec.empty[Component])(view => Vec(new Label("Name:"), view.component))
+      val pHeader         = new FlowPanel(cHead :+ ggEditProcAttr :+ ggEditProcGraph: _*)
 
       // ---- Mapping ----
 
@@ -232,7 +243,7 @@ object SonificationViewImpl {
       val ggMute: ToggleButton = new ToggleButton(null) {
         listenTo(this)
         reactions += {
-          case event.ButtonClicked(_) => println("TODO: Mute")
+          case ButtonClicked(_) => println("TODO: Mute")
         }
         focusable = false
         icon          = raphael.Icon(extent = 20, fill = raphael.TexturePaint(24), shadow = raphael.WhiteShadow)(raphael.Shapes.Mute)
