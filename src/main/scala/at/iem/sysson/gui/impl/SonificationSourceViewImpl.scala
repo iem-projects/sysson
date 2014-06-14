@@ -23,9 +23,6 @@ import at.iem.sysson.gui.DragAndDrop.{MappingDrag, MatrixDrag}
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.{stm, expr}
-import at.iem.sysson.Implicits._
-import de.sciss.swingplus.Implicits._
-import language.reflectiveCalls
 import de.sciss.lucre.expr.Expr
 import scala.concurrent.stm.Ref
 import de.sciss.model

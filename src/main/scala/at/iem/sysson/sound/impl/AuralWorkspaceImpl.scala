@@ -26,7 +26,7 @@ import de.sciss.mellite.Workspace
 object AuralWorkspaceImpl {
   def apply[S <: Sys[S], I1 <: synth.Sys[I1]](workspace: Workspace[S] { type I = I1 })
                                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralWorkspace[S, I1] = {
-    val map = tx.newInMemoryIDMap[AuralSonification[S]]
+    val map = tx.newInMemoryIDMap[AuralSonification[S, I1]]
     val res = new Impl(workspace, map)
     // de.sciss.lucre.synth.showLog = true
     workspace.addDependent(res)
@@ -34,12 +34,12 @@ object AuralWorkspaceImpl {
   }
 
   private final class Impl[S <: Sys[S], I1 <: synth.Sys[I1]](val workspace: Workspace[S] { type I = I1 },
-                                        map: IdentifierMap[S#ID, S#Tx, AuralSonification[S]])
+                                        map: IdentifierMap[S#ID, S#Tx, AuralSonification[S, I1]])
                                                             (implicit cursor: stm.Cursor[S])
     extends AuralWorkspace[S, I1] with Disposable[S#Tx] {
     impl =>
 
-    def view(sonif: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonification[S] =
+    def view(sonif: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonification[S, I1] =
       map.get(sonif.id).getOrElse {
         val view = AuralSonificationImpl(impl, sonif)
         map.put(sonif.id, view)

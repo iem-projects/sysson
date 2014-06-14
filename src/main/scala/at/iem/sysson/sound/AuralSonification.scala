@@ -16,6 +16,8 @@ package at.iem.sysson
 package sound
 
 import de.sciss.lucre.event.{Observable, Sys}
+import de.sciss.lucre.synth.{Sys => SSys}
+import de.sciss.synth.proc.AuralPresentation
 import impl.{AuralSonificationImpl => Impl}
 
 object AuralSonification {
@@ -24,7 +26,7 @@ object AuralSonification {
   case object Playing   extends Update
   case object Stopped   extends Update
 
-  private[sysson] def current(): AuralSonification[_] = Impl.current()
+  private[sysson] def current(): AuralSonification[_, _] = Impl.current()
 
   case class MissingSource         (key : String)
     extends Exception(s"The source for key '$key' is not assigned")
@@ -35,11 +37,13 @@ object AuralSonification {
   case class MissingSourceDimension(sourceKey: String, name: String)
     extends Exception(s"The source for key '$sourceKey' does not have dimension '$name'")
 }
-trait AuralSonification[S <: Sys[S]] extends Observable[S#Tx, AuralSonification.Update] {
+trait AuralSonification[S <: Sys[S], I <: SSys[I]] extends Observable[S#Tx, AuralSonification.Update] {
   def play()(implicit tx: S#Tx): Unit
   def stop()(implicit tx: S#Tx): Unit
 
   def state(implicit tx: S#Tx): AuralSonification.Update
+
+  def auralPresentation: AuralPresentation[I]
 
   private[sysson] def attributeKey(elem: Any): String
 }

@@ -25,7 +25,7 @@ trait AuralWorkspace[S <: Sys[S], I1 <: synth.Sys[I1]] {
 
   val workspace: Workspace[S] { type I = I1 }
 
-  def view(sonification: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonification[S]
+  def view(sonification: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonification[S, I1]
 
   private[sysson] def graphemeCache(section: VariableSection)
                                    (implicit tx: S#Tx): (Grapheme.Expr.Audio[I1], Future[Unit])

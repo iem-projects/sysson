@@ -17,22 +17,21 @@ package sound
 package impl
 
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.synth.{Sys => SSys}
 import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
 import scala.concurrent.stm.{TMap, TxnExecutor, Txn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
 import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx, Boolean => BooleanEx, Int => IntEx}
 import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
-import scala.concurrent.{Await, Promise, Future, ExecutionContext, blocking}
+import scala.concurrent.{Await, Future, ExecutionContext, blocking}
 import de.sciss.synth.proc._
 import de.sciss.span.Span
 import de.sciss.lucre
 import scala.util.control.NonFatal
 import de.sciss.file._
-import de.sciss.lucre.stm.TxnLike
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
-import at.iem.sysson.Implicits._
 import de.sciss.lucre.bitemp.BiExpr
 import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import at.iem.sysson.graph.{UserValue, SonificationElement}
@@ -40,14 +39,14 @@ import scala.annotation.tailrec
 import at.iem.sysson.graph
 
 object AuralSonificationImpl {
-  private val _current = TxnLocal(Option.empty[AuralSonification[_]])
+  private val _current = TxnLocal(Option.empty[AuralSonification[_, _]])
 
-  private[sysson] def current(): AuralSonification[_] = {
+  private[sysson] def current(): AuralSonification[_, _] = {
     implicit val tx = Txn.findCurrent.getOrElse(sys.error("Called outside of transaction"))
     _current.get.getOrElse(sys.error("Called outside transport play"))
   }
 
-  private def using[S <: Sys[S], A](aural: AuralSonification[S])(block: => A)(implicit tx: S#Tx): A = {
+  private def using[S <: Sys[S], I <: SSys[I], A](aural: AuralSonification[S, I])(block: => A)(implicit tx: S#Tx): A = {
     val old = _current.swap(Some(aural))(tx.peer)
     val res = block
     _current.set(old)(tx.peer)
@@ -62,7 +61,7 @@ object AuralSonificationImpl {
   //  }
 
   def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralSonification[S] = {
+                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralSonification[S, I] = {
     val w             = aw.workspace
     implicit val itx  = w.inMemoryBridge(tx)         // why can't I just import w.inMemory !?
     val sonifH        = tx.newHandle(sonification)
@@ -91,13 +90,15 @@ object AuralSonificationImpl {
                                                                  sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
       procH: stm.Source[I#Tx, Obj.T[I, Proc.Elem]],
       transport: ProcTransport[I])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx, cursor: stm.Cursor[S])
-    extends AuralSonification[S] with TxnModelImpl[S#Tx, Update] {
+    extends AuralSonification[S, I] with TxnModelImpl[S#Tx, Update] {
     impl =>
 
     private val _state    = Ref(Stopped: Update)
     private val attrMap   = TMap.empty[Any, String]
 
     def state(implicit tx: S#Tx): Update = _state.get(tx.peer)
+
+    def auralPresentation = ap // .group
 
     private def state_=(value: Update)(implicit tx: S#Tx): Unit = {
       val oldState = _state.swap(value)(tx.peer)

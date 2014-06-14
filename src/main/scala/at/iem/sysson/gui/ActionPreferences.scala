@@ -19,14 +19,9 @@ import de.sciss.desktop.{FileDialog, Preferences, OptionPane, KeyStrokes}
 import de.sciss.swingplus.{GroupPanel, Separator, Spinner}
 import javax.swing.{JPanel, SpinnerNumberModel, UIManager}
 import de.sciss.file._
-import scala.swing._
-import scala.swing.event._
-import Swing.EmptyIcon
-import scala.Some
+import scala.swing.{CheckBox, ComboBox, FlowPanel, Button, TextField, Component, Alignment, Label, Action}
 import scala.swing.Swing.EmptyIcon
-import scala.Some
-import scala.swing.event.EditDone
-import scala.swing.event.SelectionChanged
+import scala.swing.event.{ButtonClicked, ValueChanged, Key, EditDone, SelectionChanged}
 
 object ActionPreferences extends Action("Preferences...") {
   import KeyStrokes._
@@ -34,8 +29,6 @@ object ActionPreferences extends Action("Preferences...") {
   accelerator = Some(menu1 + Key.Comma)
 
   def apply(): Unit = {
-    import language.reflectiveCalls
-
     def label(text: String) = new Label(text + ":", EmptyIcon, Alignment.Right)
 
     def intField(prefs: Preferences.Entry[Int], default: => Int, min: Int = 0, max: Int = 65536,

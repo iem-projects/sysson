@@ -16,6 +16,8 @@ package at.iem.sysson
 package gui
 package impl
 
+import javax.swing.{JTable, SwingConstants, JSpinner, SpinnerNumberModel}
+
 import ucar.nc2
 import org.jfree.chart.{JFreeChart, ChartPanel}
 import Implicits._
@@ -25,11 +27,9 @@ import org.jfree.chart.axis.{SymbolAxis, NumberAxis}
 import org.jfree.chart.plot.{ValueMarker, IntervalMarker, XYPlot}
 import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
 import java.awt.{BasicStroke, Color}
-import scala.swing._
+import scala.swing.{BoxPanel, Orientation, Alignment, BorderPanel, Table, CheckBox, Label, Component, Swing, Action}
 import Swing._
-import javax.swing._
 import scala.swing.event.ValueChanged
-import language.reflectiveCalls
 import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import de.sciss.audiowidgets.{DualRangeModel, DualRangeSlider}
@@ -41,12 +41,11 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
 import scala.concurrent.stm.atomic
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing._
+import de.sciss.lucre.swing.{defer, deferTx, requireEDT}
 import de.sciss.lucre.matrix.DataSource
 import de.sciss.icons.raphael
 import de.sciss.desktop.OptionPane
 import javax.swing.table.DefaultTableCellRenderer
-import scala.swing.Action
 import scala.swing.event.ButtonClicked
 import java.awt
 import de.sciss.mellite.Workspace
@@ -569,12 +568,12 @@ object ClimateViewImpl {
       // markPlayStop(playing = false)
     }
 
-    private def mkIndetProgress() = new ProgressBar {
-      visible       = false
-      indeterminate = true
-      preferredSize = (24, 24)
-      peer.putClientProperty("JProgressBar.style", "circular")
-    }
+    //    private def mkIndetProgress() = new ProgressBar {
+    //      visible       = false
+    //      indeterminate = true
+    //      preferredSize = (24, 24)
+    //      peer.putClientProperty("JProgressBar.style", "circular")
+    //    }
 
     private var _patch = Option.empty[SynthGraph]
 

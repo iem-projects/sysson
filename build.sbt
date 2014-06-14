@@ -25,25 +25,16 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite"                        % "0.8.0-SNAPSHOT", // computer music environment
-//  "de.sciss" %% "soundprocesses"                 % "2.4.0-SNAPSHOT", // computer music framework
+  "de.sciss" %% "mellite"                        % "0.8.0",          // computer music environment
   "de.sciss" %% "lucrematrix"                    % "0.2.0",          // reactive matrix component and view
-//  "de.sciss" %% "scalacolliderswing-interpreter" % "1.16.0",         // audio (server) widgets
-//  "de.sciss" %% "desktop-mac"                    % "0.5.3",          // application framework
-//  "de.sciss" %  "intensitypalette"               % "1.0.0",          // colour palette
   "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
-//  "de.sciss" %% "treetable-scala"                % "1.3.6",          // GUI component
-//  "de.sciss" %% "lucrestm-bdb"                   % "2.0.4",          // database used for library
-//  "de.sciss" %% "raphael-icons"                  % "1.0.2",          // tool icons
   "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component
   "de.sciss" %% "guiflitz"                       % "0.3.2",
-//  "de.sciss" %  "weblaf"                         % "1.27",           // cross-platform look-and-feel
-//  "de.sciss" %% "pdflitz"                        % "1.1.0",
   "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
   "org.slf4j" % "slf4j-simple"                   % "1.7.7"           // logging (used by netcdf)
 )
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test"
 
 retrieveManaged := true
 
