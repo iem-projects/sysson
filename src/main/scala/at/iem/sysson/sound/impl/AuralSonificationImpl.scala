@@ -34,7 +34,7 @@ import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
 import de.sciss.lucre.bitemp.BiExpr
 import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
-import at.iem.sysson.graph.{UserValue, SonificationElement}
+import at.iem.sysson.graph.{Elapsed, UserValue, SonificationElement}
 import scala.annotation.tailrec
 import at.iem.sysson.graph
 
@@ -285,6 +285,10 @@ object AuralSonificationImpl {
           attrMap.put(vav, attrKey)(tx.peer)
 
         case uv: UserValue.GE =>  // already wired up
+
+        case el: Elapsed =>
+          val attrKey = addAttr(el)
+          putAttrValue(attrKey, 1000) // XXX TODO
 
         case nyi: SonificationElement =>
           throw new NotImplementedError(nyi.toString)

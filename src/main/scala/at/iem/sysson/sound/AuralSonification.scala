@@ -45,5 +45,8 @@ trait AuralSonification[S <: Sys[S], I <: SSys[I]] extends Observable[S#Tx, Aura
 
   def auralPresentation: AuralPresentation[I]
 
+  /* Attribute keys are used to link a graph element to an automatically generated attribute
+   * such as a control value.
+   */
   private[sysson] def attributeKey(elem: Any): String
 }

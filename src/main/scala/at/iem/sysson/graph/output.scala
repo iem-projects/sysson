@@ -7,7 +7,7 @@ import de.sciss.synth.ugen._
 object output {
   def :=(in: GE): Lazy = Signal(in)
 
-  final case class Signal(in: GE) extends Lazy.Expander[Unit] {
+  final case class Signal(in: GE) extends Lazy.Expander[Unit] with HasSideEffect with IsIndividual {
     override def productPrefix  = "output$Signal"
     override def toString       = s"output := $in"
 

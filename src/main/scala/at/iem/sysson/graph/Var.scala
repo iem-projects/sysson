@@ -16,7 +16,6 @@ package at.iem.sysson.graph
 
 import de.sciss.synth
 import de.sciss.synth.{proc, ScalarRated, UGenInLike, AudioRated}
-import de.sciss.serial.ImmutableSerializer
 import at.iem.sysson.sound.AuralSonification
 
 object Var {
