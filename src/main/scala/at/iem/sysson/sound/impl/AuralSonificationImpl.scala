@@ -21,7 +21,7 @@ import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparin
 import at.iem.sysson.impl.TxnModelImpl
 import scala.concurrent.stm.{TMap, TxnExecutor, Txn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
-import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx}
+import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx, Boolean => BooleanEx, Int => IntEx}
 import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
 import scala.concurrent.{Await, Promise, Future, ExecutionContext, blocking}
 import de.sciss.synth.proc._
@@ -54,12 +54,12 @@ object AuralSonificationImpl {
     res
   }
 
-  // makes sure a future is only executed when the transaction succeeds
-  private def txFuture[A](block: => Future[A])(implicit tx: TxnLike): Future[A] = {
-    val p = Promise[A]()
-    tx.afterCommit(p.completeWith(block))
-    p.future
-  }
+  //  // makes sure a future is only executed when the transaction succeeds
+  //  private def txFuture[A](block: => Future[A])(implicit tx: TxnLike): Future[A] = {
+  //    val p = Promise[A]()
+  //    tx.afterCommit(p.completeWith(block))
+  //    p.future
+  //  }
 
   def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Obj.T[S, Sonification.Elem])
                         (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralSonification[S] = {
@@ -124,11 +124,11 @@ object AuralSonificationImpl {
       implicit val itx: I#Tx = iTx(tx)
       import AudioFileCache.executionContext
 
-      val sonif   = sonifH()
-      val sonifE  = sonif.elem.peer
-      val procIn  = sonifE.proc
-      val g       = procIn.elem.peer.graph.value
-      val proc    = procH()
+      val sonif     = sonifH()
+      val sonifE    = sonif.elem.peer
+      val procInObj = sonifE.proc
+      val g         = procInObj.elem.peer.graph.value
+      val procOutObj= procH()
 
       var aCnt  = 0
 
@@ -146,7 +146,7 @@ object AuralSonificationImpl {
       }
 
       def putAttrValue(key: String, value: Double): Unit =
-        proc.attr.put(key, Obj(DoubleElem(DoubleEx.newConst(value))))
+        procOutObj.attr.put(key, Obj(DoubleElem(DoubleEx.newConst(value))))
 
       //      def putAttrValues(key: String, values: Vec[Double]): Unit =
       //        proc.attr.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
@@ -293,7 +293,53 @@ object AuralSonificationImpl {
 
       state_=(Preparing)
 
-      proc.elem.peer.graph() = SynthGraphs.newConst[I](g)
+      procOutObj.elem.peer.graph() = SynthGraphs.newConst[I](g)
+      val procOutAttr = procOutObj.attr
+      procInObj.attr.iterator.foreach { case (key, value) =>
+        // proc-in is system S, whereas out is system I...
+        // there is currently no automatic copying or referencing
+        // mechanism in place. For now, what we do is create
+        // "shallow" copies of the following object types:
+        // AudioGrapheme, Double, Int, Boolean, FadeSpec
+
+        value match {
+          case AudioGraphemeElem.Obj(objT) =>
+            val expS   : Grapheme.Expr.Audio[S] = objT.elem.peer
+            val artS   : Artifact[S]            = expS.artifact
+            val dir                             = artS.location.directory
+            val locI                            = ArtifactLocation.Modifiable[I](dir)
+            val shallow: Grapheme.Value.Audio   = expS.value
+            val artI   : Artifact[I]            = locI.add(shallow.artifact)
+            val exp    : Grapheme.Expr.Audio[I] =
+              Grapheme.Expr.Audio(artI, shallow.spec, LongEx.newConst(shallow. offset), DoubleEx.newConst(shallow. gain))
+            val objI    = Obj(AudioGraphemeElem(exp))
+            procOutAttr.put(key, objI)
+
+          case DoubleElem.Obj(objT) =>
+            val shallow = objT.elem.peer.value
+            val objI    = Obj(DoubleElem(DoubleEx.newConst[I](shallow)))
+            procOutAttr.put(key, objI)
+
+          case IntElem.Obj(objT) =>
+            val shallow = objT.elem.peer.value
+            val objI    = Obj(IntElem(IntEx.newConst[I](shallow)))
+            procOutAttr.put(key, objI)
+
+          case BooleanElem.Obj(objT) =>
+            val shallow = objT.elem.peer.value
+            val objI    = Obj(BooleanElem(BooleanEx.newConst[I](shallow)))
+            procOutAttr.put(key, objI)
+
+          case FadeSpec.Elem.Obj(objT) =>
+            val shallow = objT.elem.peer.value
+            val objI    = Obj(FadeSpec.Elem(FadeSpec.Expr.newConst[I](shallow)))
+            procOutAttr.put(key, objI)
+
+          case _ =>
+        }
+      }
+
+      // now either play directly or prepare graphemes first
 
       if (graphemes.isEmpty) transportPlay() else tx.afterCommit {
         import ExecutionContext.Implicits.global
