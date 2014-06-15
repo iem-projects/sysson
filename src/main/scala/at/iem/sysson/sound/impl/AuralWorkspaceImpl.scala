@@ -61,5 +61,9 @@ object AuralWorkspaceImpl {
 
       ???
     }
+
+    def addBuffer(grapheme: Grapheme.Value.Audio)(implicit tx: S#Tx): Unit = {
+      println(s"TODO: addBuffer($grapheme)")
+    }
   }
 }

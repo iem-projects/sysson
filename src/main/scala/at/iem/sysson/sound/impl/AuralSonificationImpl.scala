@@ -38,6 +38,7 @@ import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import at.iem.sysson.graph.SonificationElement
 import scala.annotation.tailrec
 import de.sciss.synth.message
+import scala.collection.breakOut
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_, _]])
@@ -54,13 +55,6 @@ object AuralSonificationImpl {
     res
   }
 
-  //  // makes sure a future is only executed when the transaction succeeds
-  //  private def txFuture[A](block: => Future[A])(implicit tx: TxnLike): Future[A] = {
-  //    val p = Promise[A]()
-  //    tx.afterCommit(p.completeWith(block))
-  //    p.future
-  //  }
-
   def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Obj.T[S, Sonification.Elem])
                         (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralSonification[S, I] = {
     val w             = aw.workspace
@@ -76,13 +70,11 @@ object AuralSonificationImpl {
     val auralSys      = AudioSystem.instance.aural
     val aural         = AuralPresentation.run(transport, auralSys)
     val res           = new Impl[S, I](aw, aural, sonifH, itx.newHandle(obj), transport)
+    res.init()
     auralSys.addClient(res)
     auralSys.serverOption.foreach(s => res.auralStarted(s))
     res
   }
-
-  // private sealed trait State
-  // private case object Stopped extends State
 
   private final case class GraphemeGen(key: String, scan: Boolean, data: AudioFileCache.Result) {
     override def toString = s"GraphemeGen(key = $key, scan = $scan, " +
@@ -139,6 +131,40 @@ object AuralSonificationImpl {
     private val elapsedMap  = TMap.empty[Int, graph.Elapsed]
 
     def auralStarted(s: Server)(implicit tx: Txn): Unit = {
+      // ---- first thing, install the responder to handle elapsed notifications ----
+      installResponder(s)
+      // ---- second thing, look for random access buffers, and start loading them ----
+      loadBuffers(s)
+    }
+
+    def init()(implicit tx: S#Tx): Unit = {
+      scanForBuffers()
+    }
+
+    private def scanForBuffers()(implicit tx: S#Tx): Unit = {
+      val procObj   = sonifH().elem.peer.proc // yes, I know... we ought to simplify this
+      val proc      = procObj.elem.peer
+      val procAttr  = procObj.attr
+      val g         = proc.graph.value
+      val map: Map[String, Grapheme.Value.Audio] = g.sources.flatMap {
+        case elem: graph.LoadBuffer =>
+          val key = elem.key
+          // println(s"LoadBuffer($key)")
+          procAttr.expr[Grapheme.Value.Audio](key).map { expr =>
+            val audio = expr.value
+            // val artif = audio.artifact
+            // println(s"---> $artif")
+            (key, audio)
+          }
+        case _ => None
+      } (breakOut)
+
+      map.valuesIterator.foreach { audio =>
+        aw.addBuffer(audio)
+      }
+    }
+
+    private def installResponder(s: Server)(implicit tx: Txn): Unit = {
       val resp = message.Responder(s.peer) {
         case osc.Message("/$elpsd", _, reportID: Int, ratio: Float, value: Float) =>
           // println(s"elapsed: $reportID, $ratio")
@@ -154,6 +180,9 @@ object AuralSonificationImpl {
       }
       elapsedResp.set(Some(resp))(tx.peer)
       tx.afterCommit(resp.add())
+    }
+
+    private def loadBuffers(s: Server)(implicit tx: Txn): Unit = {
     }
 
     def auralStopped()(implicit tx: Txn): Unit = {
