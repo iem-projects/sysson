@@ -285,8 +285,18 @@ object SonificationViewImpl {
     //      println("TODO: GoToBegin")
     //    }
 
-    private def tStop(): Unit = cursor.step { implicit tx =>
-      sonifView.stop()
+    private def runGroup(state: Boolean)(implicit tx: S#Tx): Unit =
+      sonifView.auralPresentation.group(workspace.inMemoryBridge(tx)).foreach { g =>
+        g.run(audible = true, state = state)
+      }
+
+    private def tStop(): Unit = {
+      val ggPause   = transportButtons.button(Transport.Pause).get
+      val isPausing = ggPause.selected
+      cursor.step { implicit tx =>
+        sonifView.stop()
+        if (isPausing) runGroup(state = true)
+      }
     }
 
     private def tPause(): Unit = {
@@ -294,11 +304,7 @@ object SonificationViewImpl {
       val isPausing = !ggPause.selected
       val isPlaying = cursor.step { implicit tx =>
         val p = sonifView.state == AuralSonification.Playing
-        if (p) {
-          sonifView.auralPresentation.group(workspace.inMemoryBridge(tx)).foreach { g =>
-            g.run(audible = true, state = !isPausing)
-          }
-        }
+        if (p) runGroup(state = !isPausing)
         p
       }
       if (isPlaying) ggPause.selected = isPausing

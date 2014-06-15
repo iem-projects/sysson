@@ -128,6 +128,8 @@ object AuralSonificationImpl {
       implicit val itx: I#Tx = iTx(tx)
       import AudioFileCache.executionContext
 
+      attrMap.retain((_, _) => false)(tx.peer)  // aka .clear()
+
       val sonif     = sonifH()
       val sonifE    = sonif.elem.peer
       val procInObj = sonifE.proc
@@ -148,6 +150,8 @@ object AuralSonificationImpl {
         attrMap.put(elem, key)(tx.peer)
         key
       }
+
+      def isNewAttr(elem: Any): Boolean = !attrMap.contains(elem)(tx.peer)
 
       def putAttrValue(key: String, value: Double): Unit =
         procOutObj.attr.put(key, Obj(DoubleElem(DoubleEx.newConst(value))))
@@ -231,7 +235,7 @@ object AuralSonificationImpl {
       }
 
       // produces a graph element for dimension values
-      def addDimGE(elem: graph.Dim.GE, streaming: Boolean): Unit = {
+      def addDimGE(elem: graph.Dim.GE, streaming: Boolean): Unit = if (isNewAttr(elem)) {
         val attrKey = addAttr(elem)
         prepareDimGE(dimElem = elem.dim, attrKey = attrKey, streaming = streaming)
       }
@@ -253,7 +257,7 @@ object AuralSonificationImpl {
       // TODO: perhaps factor out a bit of DRY with respect to addDimGE
       // TODO: probably we'll run `reduceMatrix` multiple times with the same input.
       // therefore, should maybe cache the results?
-      def addVarGE(elem: graph.Var.GE, streaming: Option[String]): Unit = {
+      def addVarGE(elem: graph.Var.GE, streaming: Option[String]): Unit = if (isNewAttr(elem)) {
         val attrKey   = addAttr(elem)
         val varElem   = elem.variable
         val mapKey    = varElem.name
@@ -267,10 +271,12 @@ object AuralSonificationImpl {
       }
 
       g.sources.foreach {
-        case uv: graph.UserValue =>
-          val attrKey = addAttr(uv)
-          sonifE.controls.get(uv.key).foreach { expr =>
-            putAttrValue(attrKey, expr.value)
+        case elem: graph.UserValue =>
+          if (isNewAttr(elem)) {
+            val attrKey = addAttr(elem)
+            sonifE.controls.get(elem.key).foreach { expr =>
+              putAttrValue(attrKey, expr.value)
+            }
           }
 
         case vp: graph.Var.Play       => addVarGE(vp, streaming = Some(vp.time.dim.name))
@@ -278,14 +284,16 @@ object AuralSonificationImpl {
 
         case dp: graph.Dim.Play       => addDimGE(dp, streaming = true )
         case dv: graph.Dim.Values     => addDimGE(dv, streaming = false)
-        case dr: graph.Dim.IndexRange =>
-          val (_, _, _, rangesM, mdi) = findDim(dr.dim)
-          val range   = rangesM(mdi)
-          val attrKey = addAttr(dr)
-          val values  = Vec[Double](range.head, range.last + range.step /* aka terminalElement */)
-          putAttrValues(attrKey, values)
+        case elem: graph.Dim.IndexRange =>
+          if (isNewAttr(elem)) {
+            val attrKey = addAttr(elem)
+            val (_, _, _, rangesM, mdi) = findDim(elem.dim)
+            val range   = rangesM(mdi)
+            val values  = Vec[Double](range.head, range.last + range.step /* aka terminalElement */)
+            putAttrValues(attrKey, values)
+          }
 
-        case vav: graph.Var.Axis.Values =>
+        case elem: graph.Var.Axis.Values =>
           // tricky business. we use the existing approach mapping between `elem` and
           // an `attrKey` string. however, we store in `attrMap` an "extended" key which
           // is a tuple of three components separated by semicolons: the first component
@@ -295,17 +303,19 @@ object AuralSonificationImpl {
           // after dropping the dimensions up to and including the selected dimension.
           // that is, with respect to `VariableAxesAssociations.txt`, we store
           // "<key>;<axis_size>;<div>"
-          val attrKey0 = mkAttrKey()
-          // scalac freaks out - wants a return type although it is _not_ a recursive call
-          val tup: (Sonification.Source[S], Vec[Range], Int) =
-            prepareDimGE(dimElem = vav.axis.asDim, attrKey = attrKey0, streaming = false)
-          val (source, rangesM, mdi) = tup
-          val (_, timeIdx) = dimIndex(source, vav.axis.variable.time.dim.name)
-          val axisSize  = rangesM(mdi).size
-          val div0      = rangesM.drop(mdi + 1).map(_.size.toLong).product
-          val div       = if (timeIdx < mdi) div0 else div0 / rangesM(timeIdx).size
-          val attrKey   = s"$attrKey0;$axisSize;$div"
-          attrMap.put(vav, attrKey)(tx.peer)
+          if (isNewAttr(elem)) {
+            val attrKey0      = mkAttrKey()
+            // scalac freaks out - wants a return type although it is _not_ a recursive call
+            val tup: (Sonification.Source[S], Vec[Range], Int) =
+              prepareDimGE(dimElem = elem.axis.asDim, attrKey = attrKey0, streaming = false)
+            val (source, rangesM, mdi) = tup
+            val (_, timeIdx)  = dimIndex(source, elem.axis.variable.time.dim.name)
+            val axisSize      = rangesM(mdi).size
+            val div0          = rangesM.drop(mdi + 1).map(_.size.toLong).product
+            val div           = if (timeIdx < mdi) div0 else div0 / rangesM(timeIdx).size
+            val attrKey       = s"$attrKey0;$axisSize;$div"
+            attrMap.put(elem, attrKey)(tx.peer)
+          }
 
         case uv: graph.UserValue.GE =>  // already wired up
 
@@ -313,8 +323,8 @@ object AuralSonificationImpl {
         //          val attrKey = addAttr(el)
         //          putAttrValue(attrKey, ...)
 
-        case nyi: SonificationElement =>
-          throw new NotImplementedError(nyi.toString)
+        case elem: SonificationElement =>
+          throw new NotImplementedError(elem.toString)
 
         case _ =>
       }
