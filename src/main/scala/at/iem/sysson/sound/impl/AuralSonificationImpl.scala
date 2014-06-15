@@ -17,6 +17,7 @@ package sound
 package impl
 
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.synth.expr.DoubleVec
 import de.sciss.lucre.synth.{Sys => SSys}
 import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
@@ -34,7 +35,7 @@ import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
 import de.sciss.lucre.bitemp.BiExpr
 import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
-import at.iem.sysson.graph.{Elapsed, UserValue, SonificationElement}
+import at.iem.sysson.graph.SonificationElement
 import scala.annotation.tailrec
 import at.iem.sysson.graph
 
@@ -116,9 +117,11 @@ object AuralSonificationImpl {
       prepare()
     }
 
-    def attributeKey(elem: Any): String = TxnExecutor.defaultAtomic { implicit itx =>
-      // logInfo(s"attributeKey elem '$elem'")
-      attrMap.get(elem).getOrElse(sys.error(s"No key for attribute $elem"))
+    def attributeKey(elem: Any): String = {
+      logDebug(s"attributeKey elem '$elem'")
+      TxnExecutor.defaultAtomic { implicit itx =>
+        attrMap.get(elem).getOrElse(sys.error(s"No key for attribute $elem"))
+      }
     }
 
     private def prepare()(implicit tx: S#Tx): Unit = {
@@ -141,13 +144,16 @@ object AuralSonificationImpl {
 
       def addAttr(elem: Any): String = {
         val key = mkAttrKey()
-        // logInfo(s"addAttr elem '${elem.getClass}@$elem' key '$key'")
+        logDebug(s"addAttr elem '${elem.getClass}@$elem' key '$key'")
         attrMap.put(elem, key)(tx.peer)
         key
       }
 
       def putAttrValue(key: String, value: Double): Unit =
         procOutObj.attr.put(key, Obj(DoubleElem(DoubleEx.newConst(value))))
+
+      def putAttrValues(key: String, values: Vec[Double]): Unit =
+        procOutObj.attr.put(key, Obj(DoubleVecElem(DoubleVec.newConst(values))))
 
       //      def putAttrValues(key: String, values: Vec[Double]): Unit =
       //        proc.attr.put(key, Attribute.DoubleVec(DoubleVec.newConst(values)))
@@ -192,6 +198,27 @@ object AuralSonificationImpl {
       // the matrix, the reduced matrix shape and the index of the particular dimension.
       def prepareDimGE(dimElem: graph.Dim, attrKey: String,
                        streaming: Boolean): (Sonification.Source[S], Vec[Range], Int) = {
+        val (source, dsv, dimName, rangesM, mdi) = findDim(dimElem)
+        val ds        = dsv.source
+        val mapKey    = dimElem.variable.name
+        val dimVar    = ds.variables.find(_.name == dimName).getOrElse(
+          throw AuralSonification.MissingSourceDimension(mapKey, dimName)
+        )
+        assert(dimVar.rank == 1)
+        val ranges    = Vec(rangesM(mdi)) // now use only the range corresponding with the dimension at index `mdi`
+        val streamDim = if (streaming) 0 else -1
+        val fut       = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = streamDim)
+        graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
+        (source, rangesM, mdi)
+      }
+
+      // finds a mapped dimension. returns a tuple consisting of
+      // (sonification source to which the dim is mapped,
+      //  dimension's data source,
+      //  dimension-name within the data source,
+      //  reduced matrix of the source,
+      //  index of the dimension within the reduced matrix)
+      def findDim(dimElem: graph.Dim): (Sonification.Source[S], DataSource.Variable[S], String, Vec[Range], Int) = {
         val mapKey    = dimElem.variable.name
         val source    = getSource(mapKey)
         val dimKey    = dimElem.name
@@ -200,17 +227,7 @@ object AuralSonificationImpl {
         val (dimName, mdi) = dimIndex(source, dimKey)
         val m         = source.matrix
         val (dsv, rangesM) = reduceMatrix(m)
-        val ds        = dsv.source
-        val dimVar    = ds.variables.find(_.name == dimName).getOrElse(
-          throw AuralSonification.MissingSourceDimension(mapKey, dimName)
-        )
-        assert(dimVar.rank == 1)
-        // val ranges    = Vec(range) // dimVar.ranges // shape.map(_._2)
-        val ranges    = Vec(rangesM(mdi)) // now use only the range corresponding with the dimension at index `mdi`
-        val streamDim = if (streaming) 0 else -1
-        val fut       = AudioFileCache.acquire(aw.workspace, source = dimVar, section = ranges, streamDim = streamDim)
-        graphemes   :+= fut.map(data => GraphemeGen(key = attrKey, scan = false, data = data))
-        (source, rangesM, mdi)
+        (source, dsv, dimName, rangesM, mdi)
       }
 
       // produces a graph element for dimension values
@@ -256,11 +273,17 @@ object AuralSonificationImpl {
             putAttrValue(attrKey, expr.value)
           }
 
-        case vp: graph.Var.Play   => addVarGE(vp, streaming = Some(vp.time.dim.name))
-        case vp: graph.Var.Values => addVarGE(vp, streaming = None)
+        case vp: graph.Var.Play       => addVarGE(vp, streaming = Some(vp.time.dim.name))
+        case vp: graph.Var.Values     => addVarGE(vp, streaming = None)
 
-        case dp: graph.Dim.Play   => addDimGE(dp, streaming = true )
-        case dv: graph.Dim.Values => addDimGE(dv, streaming = false)
+        case dp: graph.Dim.Play       => addDimGE(dp, streaming = true )
+        case dv: graph.Dim.Values     => addDimGE(dv, streaming = false)
+        case dr: graph.Dim.IndexRange =>
+          val (_, _, _, rangesM, mdi) = findDim(dr.dim)
+          val range   = rangesM(mdi)
+          val attrKey = addAttr(dr)
+          val values  = Vec[Double](range.head, range.last + range.step /* aka terminalElement */)
+          putAttrValues(attrKey, values)
 
         case vav: graph.Var.Axis.Values =>
           // tricky business. we use the existing approach mapping between `elem` and
@@ -268,7 +291,7 @@ object AuralSonificationImpl {
           // is a tuple of three components separated by semicolons: the first component
           // is the actual key into the proc's attribute map (to find the grapheme) - this
           // is `attrKey0` here. the second component is the size of the dimension value
-          // vector (int), the thrid component is the product of the reduced matrix shape
+          // vector (int), the third component is the product of the reduced matrix shape
           // after dropping the dimensions up to and including the selected dimension.
           // that is, with respect to `VariableAxesAssociations.txt`, we store
           // "<key>;<axis_size>;<div>"
@@ -284,11 +307,11 @@ object AuralSonificationImpl {
           val attrKey   = s"$attrKey0;$axisSize;$div"
           attrMap.put(vav, attrKey)(tx.peer)
 
-        case uv: UserValue.GE =>  // already wired up
+        case uv: graph.UserValue.GE =>  // already wired up
 
-        case el: Elapsed =>
-          val attrKey = addAttr(el)
-          putAttrValue(attrKey, 1000) // XXX TODO
+        //        case el: graph.Elapsed =>
+        //          val attrKey = addAttr(el)
+        //          putAttrValue(attrKey, ...)
 
         case nyi: SonificationElement =>
           throw new NotImplementedError(nyi.toString)

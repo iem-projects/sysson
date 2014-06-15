@@ -20,7 +20,6 @@ import scala.swing.{Label, Action}
 import de.sciss.lucre.event.{Sys, Durable}
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.file._
-import de.sciss.lucre.stm
 import gui.{SwingApplication => App}
 import language.existentials
 import at.iem.sysson.sound.AudioSystem
@@ -207,24 +206,27 @@ object MenuFactory {
 
   def dumpOSC(): Unit = AudioSystem.instance.server.foreach { s =>
     dumpMode = if (dumpMode == osc.Dump.Off) osc.Dump.Text else osc.Dump.Off
-    s.peer.dumpOSC(dumpMode)
+    s.peer.dumpOSC(dumpMode, filter = {
+      case m: osc.Message if m.name == "/$meter" => false
+      case _ => true
+    })
   }
 
-  private def dumpOSC_OLD(): Unit = {
-    resp.fold {
-      resp = AudioSystem.instance.server.map { s =>
-        logInfo("Dump OSC on")
-        synth.message.Responder.add(s.peer) {
-          case m => if (m.name != "/$meter" && m.name != "/status.reply")
-            System.out.synchronized {
-              osc.Packet.printTextOn(m, osc.PacketCodec.default, System.out)
-            }
-        }
-      }
-    } { r =>
-      logInfo("Dump OSC off")
-      r.remove()
-      resp = None
-    }
-  }
+  //  private def dumpOSC_OLD(): Unit = {
+  //    resp.fold {
+  //      resp = AudioSystem.instance.server.map { s =>
+  //        logInfo("Dump OSC on")
+  //        synth.message.Responder.add(s.peer) {
+  //          case m => if (m.name != "/$meter" && m.name != "/status.reply")
+  //            System.out.synchronized {
+  //              osc.Packet.printTextOn(m, osc.PacketCodec.default, System.out)
+  //            }
+  //        }
+  //      }
+  //    } { r =>
+  //      logInfo("Dump OSC off")
+  //      r.remove()
+  //      resp = None
+  //    }
+  //  }
 }

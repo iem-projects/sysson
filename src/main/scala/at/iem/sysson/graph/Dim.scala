@@ -23,7 +23,7 @@ object Dim {
     def dim: Dim
   }
 
-  case class Play(dim: Dim, freq: synth.GE, maxFreq: Double)
+  final case class Play(dim: Dim, freq: synth.GE, maxFreq: Double)
     extends GE with AudioRated {
 
     override def productPrefix  = "Dim$Play"
@@ -40,10 +40,20 @@ object Dim {
     }
   }
 
-  case class Values(dim: Dim) extends GE with ScalarRated {
-
+  final case class Values(dim: Dim) extends GE with ScalarRated {
     override def productPrefix  = "Dim$Values"
     override def toString       = s"$dim.values"
+
+    protected def makeUGens: UGenInLike = {
+      val aural = AuralSonification.current()
+      val key   = aural.attributeKey(this)
+      proc.graph.attribute(key).ir
+    }
+  }
+
+  final case class IndexRange(dim: Dim) extends GE with ScalarRated {
+    override def productPrefix  = "Dim$IndexRange"
+    override def toString       = s"Dim.IndexRange($dim)"
 
     protected def makeUGens: UGenInLike = {
       val aural = AuralSonification.current()
@@ -57,7 +67,7 @@ object Dim {
   * @param variable Data source to which this dimension refers
   * @param name     Logical name by which the dimension is referred to
   */
-case class Dim(variable: Var, name: String)
+final case class Dim(variable: Var, name: String)
   extends UserInteraction {
 
   /** Produces a graph element which unrolls the selected range in time, using the dimension's domain value.
@@ -67,16 +77,17 @@ case class Dim(variable: Var, name: String)
   def play(freq: GE, maxFreq: Double = 0.0): Dim.Play = Dim.Play(this, freq = freq, maxFreq = maxFreq)
 
   def values : Dim.Values = Dim.Values(this)
-  def indices: GE = ??? // Impl.indices(this)
 
-  /** Produces a graph element reflecting the low end of the range within the dimension's domain. */
-  def startValue: GE = ??? // Impl.startValue(this)
+  // def indices: GE = ...
 
-  /** Produces a graph element reflecting the high end of the range within the dimension's domain. */
-  def endValue: GE = ??? // Impl.endValue(this)
+  //  /** Produces a graph element reflecting the low end of the range within the dimension's domain. */
+  //  def startValue: GE = ...
+  //
+  //  /** Produces a graph element reflecting the high end of the range within the dimension's domain. */
+  //  def endValue: GE = ...
 
   /** Produces a graph element reflecting the low end of the range as index into the dimension vector. */
-  def startIndex: GE = ??? // Impl.startIndex(this)
+  def startIndex: GE = Dim.IndexRange(this) \ 0
 
   /** Produces a graph element reflecting the high end of the range as index into the dimension vector.
     * This index is "inclusive", i.e. denotes the index corresponding to `endValue`.
@@ -87,12 +98,12 @@ case class Dim(variable: Var, name: String)
     * This index is "exclusive", i.e. denotes the index after the last included element. The index
     * corresponding to `endValue` is `endIndex` which equals `stopIndex - 1`
     */
-  def stopIndex: GE = ??? // Impl.stopIndex(this)
+  def stopIndex: GE = Dim.IndexRange(this) \ 1
 
-  /** Produces a graph element reflecting the extent of this selection in the dimension's domain.
-    * That is `endValue - startValue`.
-    */
-  def extent: GE = endValue - startValue
+  //  /** Produces a graph element reflecting the extent of this selection in the dimension's domain.
+  //    * That is `endValue - startValue`.
+  //    */
+  //  def extent: GE = endValue - startValue
 
   /** Produces a graph element reflecting the number of samples (`stopIndex - startIndex`) covered by
     * this selection.

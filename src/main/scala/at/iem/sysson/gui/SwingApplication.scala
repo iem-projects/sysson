@@ -45,6 +45,7 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
 
   override def init(): Unit = {
     Application.init(this)
+    showLog = true
 
     // ---- type extensions ----
 
