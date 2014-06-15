@@ -29,4 +29,6 @@ trait AuralWorkspace[S <: Sys[S], I1 <: synth.Sys[I1]] {
 
   private[sysson] def graphemeCache(section: VariableSection)
                                    (implicit tx: S#Tx): (Grapheme.Expr.Audio[I1], Future[Unit])
+
+  private[sysson] def nextID()(implicit tx: S#Tx): Int
 }

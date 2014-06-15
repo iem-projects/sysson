@@ -22,9 +22,20 @@ import impl.{AuralSonificationImpl => Impl}
 
 object AuralSonification {
   sealed trait Update
+  /** The sonification is being prepared. For example, grapheme production starts. */
   case object Preparing extends Update
+  /** The sonification transport is actually started. */
   case object Playing   extends Update
+  /** The sonification transport is stopped. */
   case object Stopped   extends Update
+
+  /** The sonification reported an elapsed state.
+    *
+    * @param dim      the logical dimension key
+    * @param ratio    the percentage between zero and one
+    * @param value    the dimension's current value
+    */
+  case class Elapsed(dim: String, ratio: Float, value: Float) extends Update
 
   private[sysson] def current(): AuralSonification[_, _] = Impl.current()
 

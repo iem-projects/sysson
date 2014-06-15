@@ -18,17 +18,17 @@ package impl
 
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.synth.expr.DoubleVec
-import de.sciss.lucre.synth.{Sys => SSys}
+import de.sciss.lucre.synth.{Sys => SSys, Server, Txn}
 import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
-import scala.concurrent.stm.{TMap, TxnExecutor, Txn, TxnLocal, Ref}
+import de.sciss.synth.proc.{SynthGraphs, FadeSpec, Scan, BooleanElem, ArtifactLocation, Artifact, Grapheme, AudioGraphemeElem, AuralSystem, ProcTransport, IntElem, DoubleVecElem, DoubleElem, AuralPresentation, Transport, ProcGroup, Obj, Proc}
+import scala.concurrent.stm.{TMap, TxnExecutor, Txn => ScalaTxn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
 import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx, Boolean => BooleanEx, Int => IntEx}
 import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
 import scala.concurrent.{Await, Future, ExecutionContext, blocking}
-import de.sciss.synth.proc._
 import de.sciss.span.Span
-import de.sciss.lucre
+import de.sciss.{osc, lucre}
 import scala.util.control.NonFatal
 import de.sciss.file._
 import scala.concurrent.duration.Duration
@@ -37,13 +37,13 @@ import de.sciss.lucre.bitemp.BiExpr
 import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import at.iem.sysson.graph.SonificationElement
 import scala.annotation.tailrec
-import at.iem.sysson.graph
+import de.sciss.synth.message
 
 object AuralSonificationImpl {
   private val _current = TxnLocal(Option.empty[AuralSonification[_, _]])
 
   private[sysson] def current(): AuralSonification[_, _] = {
-    implicit val tx = Txn.findCurrent.getOrElse(sys.error("Called outside of transaction"))
+    implicit val tx = ScalaTxn.findCurrent.getOrElse(sys.error("Called outside of transaction"))
     _current.get.getOrElse(sys.error("Called outside transport play"))
   }
 
@@ -75,7 +75,10 @@ object AuralSonificationImpl {
     val transport     = Transport[I, I](group)
     val auralSys      = AudioSystem.instance.aural
     val aural         = AuralPresentation.run(transport, auralSys)
-    new Impl[S, I](aw, aural, sonifH, itx.newHandle(obj), transport)
+    val res           = new Impl[S, I](aw, aural, sonifH, itx.newHandle(obj), transport)
+    auralSys.addClient(res)
+    auralSys.serverOption.foreach(s => res.auralStarted(s))
+    res
   }
 
   // private sealed trait State
@@ -91,7 +94,7 @@ object AuralSonificationImpl {
                                                                  sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
       procH: stm.Source[I#Tx, Obj.T[I, Proc.Elem]],
       transport: ProcTransport[I])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx, cursor: stm.Cursor[S])
-    extends AuralSonification[S, I] with TxnModelImpl[S#Tx, Update] {
+    extends AuralSonification[S, I] with TxnModelImpl[S#Tx, Update] with AuralSystem.Client {
     impl =>
 
     private val _state    = Ref(Stopped: Update)
@@ -124,11 +127,48 @@ object AuralSonificationImpl {
       }
     }
 
+    // XXX TODO: one problem with this approach is that
+    // the aural-sonification is kept running for the entire duration of
+    // the session, and never disposed. thus, we may end up having quite
+    // a lot of responders registered, even if they will not match any
+    // messages.
+    //
+    // On the up-side, we can use this approach to manage online-buffers.
+    private val elapsedResp = Ref(Option.empty[message.Responder])
+
+    private val elapsedMap  = TMap.empty[Int, graph.Elapsed]
+
+    def auralStarted(s: Server)(implicit tx: Txn): Unit = {
+      val resp = message.Responder(s.peer) {
+        case osc.Message("/$elpsd", _, reportID: Int, ratio: Float, value: Float) =>
+          // println(s"elapsed: $reportID, $ratio")
+          // use `.single.get` so we stay lightweight if the id is not associated with this sonif.
+          elapsedMap.single.get(reportID).foreach { elem =>
+            cursor.step { implicit tx =>
+              dispatch(AuralSonification.Elapsed(elem.in.dim.name, ratio = ratio, value = value))
+              // val debug = elem.terminate || ratio >= 1
+              // if (debug) println(s"terminate? ${elem.terminate}; ratio? $ratio")
+              if (ratio >= 1 && elem.terminate) stop()
+            }
+          }
+      }
+      elapsedResp.set(Some(resp))(tx.peer)
+      tx.afterCommit(resp.add())
+    }
+
+    def auralStopped()(implicit tx: Txn): Unit = {
+      elapsedResp.swap(None)(tx.peer).foreach(resp => tx.afterCommit(resp.remove()))
+    }
+
+    @inline private def clearTMap[A, B](m: TMap[A, B])(implicit tx: S#Tx): Unit =
+      m.retain((_, _) => false)(tx.peer)  // aka .clear()
+
     private def prepare()(implicit tx: S#Tx): Unit = {
       implicit val itx: I#Tx = iTx(tx)
       import AudioFileCache.executionContext
 
-      attrMap.retain((_, _) => false)(tx.peer)  // aka .clear()
+      clearTMap(attrMap)
+      clearTMap(elapsedMap)
 
       val sonif     = sonifH()
       val sonifE    = sonif.elem.peer
@@ -155,6 +195,9 @@ object AuralSonificationImpl {
 
       def putAttrValue(key: String, value: Double): Unit =
         procOutObj.attr.put(key, Obj(DoubleElem(DoubleEx.newConst(value))))
+
+      def putAttrValueI(key: String, value: Int): Unit =
+        procOutObj.attr.put(key, Obj(IntElem(IntEx.newConst(value))))
 
       def putAttrValues(key: String, values: Vec[Double]): Unit =
         procOutObj.attr.put(key, Obj(DoubleVecElem(DoubleVec.newConst(values))))
@@ -279,11 +322,11 @@ object AuralSonificationImpl {
             }
           }
 
-        case vp: graph.Var.Play       => addVarGE(vp, streaming = Some(vp.time.dim.name))
-        case vp: graph.Var.Values     => addVarGE(vp, streaming = None)
+        case elem: graph.Var.Play       => addVarGE(elem, streaming = Some(elem.time.dim.name))
+        case elem: graph.Var.Values     => addVarGE(elem, streaming = None)
 
-        case dp: graph.Dim.Play       => addDimGE(dp, streaming = true )
-        case dv: graph.Dim.Values     => addDimGE(dv, streaming = false)
+        case elem: graph.Dim.Play       => addDimGE(elem, streaming = true )
+        case elem: graph.Dim.Values     => addDimGE(elem, streaming = false)
         case elem: graph.Dim.IndexRange =>
           if (isNewAttr(elem)) {
             val attrKey = addAttr(elem)
@@ -317,11 +360,23 @@ object AuralSonificationImpl {
             attrMap.put(elem, attrKey)(tx.peer)
           }
 
-        case uv: graph.UserValue.GE =>  // already wired up
+        case elem: graph.UserValue.GE =>  // already wired up
 
-        //        case el: graph.Elapsed =>
-        //          val attrKey = addAttr(el)
-        //          putAttrValue(attrKey, ...)
+        case elem: graph.Elapsed =>
+          if (isNewAttr(elem)) {
+            // how this works: the GE uses a normal attribute/control
+            // to receive the actual report-ID which is used for SendReply.
+            // For simplicity, the aural-workspace provides an incremental
+            // ID generator (similar to node IDs). That way, there will
+            // be no conflicts between multiple aural-sonifs.
+            // The aural-sonif on the other hand, must then be able
+            // to trace that ID back to the dimension. It will then
+            // dispatch an update for the visual views to watch.
+            val attrKey   = addAttr(elem)
+            val reportID  = aw.nextID()
+            putAttrValueI(attrKey, reportID)
+            elapsedMap.put(reportID, elem)(tx.peer)
+          }
 
         case elem: SonificationElement =>
           throw new NotImplementedError(elem.toString)

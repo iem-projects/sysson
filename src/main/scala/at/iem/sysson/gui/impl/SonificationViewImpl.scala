@@ -98,19 +98,26 @@ object SonificationViewImpl {
 
     private var ggMute: ToggleButton = _
 
-    final protected def auralChange(upd: AuralSonification.Update): Unit = {
-      requireEDT()
-      val ggStop      = transportButtons.button(Transport.Stop ).get
-      val ggPlay      = transportButtons.button(Transport.Play ).get
-      val stopped     = upd == AuralSonification.Stopped
-      ggStop.selected = stopped
-      ggPlay.selected = upd == AuralSonification.Playing || upd == AuralSonification.Preparing
-      if (stopped) {
-        ggMute.selected = false
-        val ggPause     = transportButtons.button(Transport.Pause).get
-        ggPause.selected = false
-      }
-      if (upd == AuralSonification.Preparing) timerPrepare.restart() else timerPrepare.stop()
+    private var ggElapsed: ElapsedBar = _
+
+    final protected def auralChange(upd: AuralSonification.Update): Unit = upd match {
+      case AuralSonification.Elapsed(dim, ratio, value) =>
+        // println(f"$dim ${p * 100}%1.0f")
+        ggElapsed.value = ratio
+
+      case _ =>
+        val ggStop      = transportButtons.button(Transport.Stop ).get
+        val ggPlay      = transportButtons.button(Transport.Play ).get
+        val stopped     = upd == AuralSonification.Stopped
+        ggStop.selected = stopped
+        ggPlay.selected = upd == AuralSonification.Playing || upd == AuralSonification.Preparing
+        // ggElapsed.textVisible = !stopped
+          if (stopped) {
+          ggMute.selected = false
+          val ggPause     = transportButtons.button(Transport.Pause).get
+          ggPause.selected = false
+        }
+        if (upd == AuralSonification.Preparing) timerPrepare.restart() else timerPrepare.stop()
     }
 
     final def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
@@ -221,8 +228,8 @@ object SonificationViewImpl {
 
       val ggEditProcAttr  = GUI.toolButton(actionEditProcAttr , raphael.Shapes.Wrench, tooltip = "Edit Proc Attributes")
       val ggEditProcGraph = GUI.toolButton(actionEditProcGraph, raphael.Shapes.Edit  , tooltip = "Edit Synth Graph"    )
-      ggEditProcAttr .focusable = false
-      ggEditProcGraph.focusable = false
+      // ggEditProcAttr .focusable = false
+      // ggEditProcGraph.focusable = false
       val cHead           = nameView.fold(Vec.empty[Component])(view => Vec(new Label("Name:"), view.component))
       val pHeader         = new FlowPanel(cHead :+ ggEditProcAttr :+ ggEditProcGraph: _*)
 
@@ -248,6 +255,8 @@ object SonificationViewImpl {
       })
       timerPrepare.setRepeats(true)
 
+      ggElapsed = new ElapsedBar
+
       ggMute = new ToggleButton(null) { me =>
         listenTo(this)
         reactions += {
@@ -267,7 +276,7 @@ object SonificationViewImpl {
 
       auralChange(initState)
 
-      val pTransport = new FlowPanel(transportButtons, ggMute)
+      val pTransport = new FlowPanel(Swing.HStrut(101), transportButtons, ggMute, ggElapsed)
       pTransport.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Transport")
 
       component = new BoxPanel(Orientation.Vertical) {
