@@ -138,7 +138,26 @@ object AuralSonificationImpl {
     }
 
     def init()(implicit tx: S#Tx): Unit = {
-      scanForBuffers()
+      // the random access buffers feature is
+      // not yet implemented, only the tentative layout
+      // exists:
+      // - trace the appearance of attr map entries connected
+      //   to LoadBuffer elements in the graph sources
+      // - these pairs are communicated to the AuralWorkspace
+      //   which will keep a usage count for the graphemes
+      // - when the server is ready, the workspace will
+      //   sequentially load the registered graphemes,
+      //   producing a Processor or Future.
+      // - the sonif will query these, and add them to the
+      //   stuff to wait for during preparation.
+      // - it must be decided how to handle the case that
+      //   the graph function changes during playback. because
+      //   that is the moment that buffers might be registered
+      //   and unregistered, and that must not interfere with
+      //   ongoing use. the straight forward answer is to stop
+      //   the transport when that happens.
+
+      // scanForBuffers()
     }
 
     private def scanForBuffers()(implicit tx: S#Tx): Unit = {
