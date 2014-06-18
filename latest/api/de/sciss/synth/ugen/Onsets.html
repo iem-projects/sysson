@@ -1,0 +1,828 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Onsets - SysSon 0.8.0 API - de.sciss.synth.ugen.Onsets</title>
+          <meta name="description" content="Onsets - SysSon 0.8.0 API - de.sciss.synth.ugen.Onsets" />
+          <meta name="keywords" content="Onsets SysSon 0.8.0 API de.sciss.synth.ugen.Onsets" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'de.sciss.synth.ugen.Onsets';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="Onsets$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
+        <h1><a href="Onsets$.html" title="Go to companion">Onsets</a></h1> <span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Onsets</span><span class="params">(<span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.5f</a></span></span></span>, <span name="fun">fun: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">3</a></span></span></span>, <span name="decay">decay: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="noiseFloor">noiseFloor: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>, <span name="minGap">minGap: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">10</a></span></span></span>, <span name="medianSpan">medianSpan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">11</a></span></span></span>, <span name="whType">whType: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="raw">raw: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../ControlRated.html" class="extype" name="de.sciss.synth.ControlRated">ControlRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An onset detecting UGen for musical audio signals. It detects the beginning of
+notes/drumbeats/etc. Outputs a control-rate trigger signal which is 1 when an
+onset is detected, and 0 otherwise.</p><p>The onset detection should work well for a general range of monophonic and
+polyphonic audio signals. The onset detection is purely based on signal analysis
+and does not make use of any &quot;top-down&quot; inferences such as tempo.</p><p>There are different functions available for the analysis:</p><p>- 0 &quot;power&quot; -- generally OK, good for percussive input, and also very efficient
+- 1 &quot;magsum&quot; -- generally OK, good for percussive input, and also very efficient
+- 2 &quot;complex&quot; -- performs generally very well, but more CPU-intensive - 3
+&quot;rcomplex&quot; (default) -- performs generally very well, and slightly more
+efficient than &quot;complex&quot; - 4 &quot;phase&quot; -- generally good, especially for tonal
+input, medium efficiency - 5 &quot;wphase&quot; -- generally very good, especially for
+tonal input, medium efficiency - 6 &quot;mkl&quot; -- generally very good, medium
+efficiency, pretty different from the other methods</p><p>The differences aren't large, so it is recommended you stick with the default
+&quot;rcomplex&quot; unless you find specific problems with it. Then maybe try &quot;wphase&quot;.
+The &quot;mkl&quot; type is a bit different from the others so maybe try that too. They
+all have slightly different characteristics, and in tests perform at a similar
+quality level.
+</p></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>the output (buffer) of an FFT UGen which transforms the
+                        audio input to track. For the FFT chain, you should
+                        typically use a frame size of 512 or 1024 (at 44.1 kHz
+                        sampling rate) and 50% hop size (which is the default
+                        setting in SC). For different sampling rates choose an
+                        FFT size to cover a similar time-span (around 10 to 20
+                        ms).</p></dd><dt class="param">thresh</dt><dd class="cmt"><p>the detection threshold, typically between 0 and 1,
+                        although in rare cases you may find values outside this
+                        range useful</p></dd><dt class="param">fun</dt><dd class="cmt"><p>index of a function to be used to analyse the signal.
+                        See main paragraph for possible values (usually can be
+                        left to default).</p></dd><dt class="param">decay</dt><dd class="cmt"><p>(advanced setting) Specifies the time (in seconds) for
+                        the normalisation to &quot;forget&quot; about a recent onset. If
+                        you find too much re-triggering (e.g. as a note dies
+                        away unevenly) then you might wish to increase this
+                        value. Not used with &quot;mkl&quot;.</p></dd><dt class="param">noiseFloor</dt><dd class="cmt"><p>(advanced setting) This is a lower limit, connected to
+                        the idea of how quiet the sound is expected to get
+                        without becoming indistinguishable from noise. For some
+                        cleanly-recorded classical music with wide dynamic
+                        variations, it was found helpful to go down as far as
+                        1e-6. Not used with &quot;mkl&quot;.</p></dd><dt class="param">minGap</dt><dd class="cmt"><p>(advanced setting) Specifies a minimum gap (in FFT
+                        frames) between onset detections, a brute-force way to
+                        prevent too many doubled detections.</p></dd><dt class="param">medianSpan</dt><dd class="cmt"><p>(advanced setting) Specifies the size (in FFT frames)
+                        of the median window used for smoothing the detection
+                        function before triggering.</p></dd><dt class="param">whType</dt><dd class="cmt"><p>(advanced setting) ?</p></dd><dt class="param">raw</dt><dd class="cmt"><p>(advanced setting) ?
+</p></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../ControlRated.html" class="extype" name="de.sciss.synth.ControlRated">ControlRated</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="de.sciss.synth.ugen.Onsets"><span>Onsets</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="de.sciss.synth.IsIndividual"><span>IsIndividual</span></li><li class="in" name="de.sciss.synth.ControlRated"><span>ControlRated</span></li><li class="in" name="de.sciss.synth.UGenSource.SingleOut"><span>SingleOut</span></li><li class="in" name="de.sciss.synth.UGenSource.SomeOut"><span>SomeOut</span></li><li class="in" name="de.sciss.synth.GE.Lazy"><span>Lazy</span></li><li class="in" name="de.sciss.synth.GE"><span>GE</span></li><li class="in" name="de.sciss.synth.UGenSource"><span>UGenSource</span></li><li class="in" name="de.sciss.synth.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.synth.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="de.sciss.synth.ugen.Onsets#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(chain:de.sciss.synth.GE,thresh:de.sciss.synth.GE,fun:de.sciss.synth.GE,decay:de.sciss.synth.GE,noiseFloor:de.sciss.synth.GE,minGap:de.sciss.synth.GE,medianSpan:de.sciss.synth.GE,whType:de.sciss.synth.GE,raw:de.sciss.synth.GE):de.sciss.synth.ugen.Onsets"></a>
+      <a id="&lt;init&gt;:Onsets"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Onsets</span><span class="params">(<span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.5f</a></span></span></span>, <span name="fun">fun: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">3</a></span></span></span>, <span name="decay">decay: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="noiseFloor">noiseFloor: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>, <span name="minGap">minGap: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">10</a></span></span></span>, <span name="medianSpan">medianSpan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">11</a></span></span></span>, <span name="whType">whType: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="raw">raw: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@&lt;init&gt;(chain:de.sciss.synth.GE,thresh:de.sciss.synth.GE,fun:de.sciss.synth.GE,decay:de.sciss.synth.GE,noiseFloor:de.sciss.synth.GE,minGap:de.sciss.synth.GE,medianSpan:de.sciss.synth.GE,whType:de.sciss.synth.GE,raw:de.sciss.synth.GE):de.sciss.synth.ugen.Onsets" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>the output (buffer) of an FFT UGen which transforms the
+                        audio input to track. For the FFT chain, you should
+                        typically use a frame size of 512 or 1024 (at 44.1 kHz
+                        sampling rate) and 50% hop size (which is the default
+                        setting in SC). For different sampling rates choose an
+                        FFT size to cover a similar time-span (around 10 to 20
+                        ms).</p></dd><dt class="param">thresh</dt><dd class="cmt"><p>the detection threshold, typically between 0 and 1,
+                        although in rare cases you may find values outside this
+                        range useful</p></dd><dt class="param">fun</dt><dd class="cmt"><p>index of a function to be used to analyse the signal.
+                        See main paragraph for possible values (usually can be
+                        left to default).</p></dd><dt class="param">decay</dt><dd class="cmt"><p>(advanced setting) Specifies the time (in seconds) for
+                        the normalisation to &quot;forget&quot; about a recent onset. If
+                        you find too much re-triggering (e.g. as a note dies
+                        away unevenly) then you might wish to increase this
+                        value. Not used with &quot;mkl&quot;.</p></dd><dt class="param">noiseFloor</dt><dd class="cmt"><p>(advanced setting) This is a lower limit, connected to
+                        the idea of how quiet the sound is expected to get
+                        without becoming indistinguishable from noise. For some
+                        cleanly-recorded classical music with wide dynamic
+                        variations, it was found helpful to go down as far as
+                        1e-6. Not used with &quot;mkl&quot;.</p></dd><dt class="param">minGap</dt><dd class="cmt"><p>(advanced setting) Specifies a minimum gap (in FFT
+                        frames) between onset detections, a brute-force way to
+                        prevent too many doubled detections.</p></dd><dt class="param">medianSpan</dt><dd class="cmt"><p>(advanced setting) Specifies the size (in FFT frames)
+                        of the median window used for smoothing the detection
+                        function before triggering.</p></dd><dt class="param">whType</dt><dd class="cmt"><p>(advanced setting) ?</p></dd><dt class="param">raw</dt><dd class="cmt"><p>(advanced setting) ?
+</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@##():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#chain" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="chain:de.sciss.synth.GE"></a>
+      <a id="chain:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">chain</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@chain:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the output (buffer) of an FFT UGen which transforms the
+                        audio input to track.</p><div class="fullcomment"><div class="comment cmt"><p>the output (buffer) of an FFT UGen which transforms the
+                        audio input to track. For the FFT chain, you should
+                        typically use a frame size of 512 or 1024 (at 44.1 kHz
+                        sampling rate) and 50% hop size (which is the default
+                        setting in SC). For different sampling rates choose an
+                        FFT size to cover a similar time-span (around 10 to 20
+                        ms).</p></div></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#decay" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="decay:de.sciss.synth.GE"></a>
+      <a id="decay:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">decay</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@decay:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(advanced setting) Specifies the time (in seconds) for
+                        the normalisation to &quot;forget&quot; about a recent onset.</p><div class="fullcomment"><div class="comment cmt"><p>(advanced setting) Specifies the time (in seconds) for
+                        the normalisation to &quot;forget&quot; about a recent onset. If
+                        you find too much re-triggering (e.g. as a note dies
+                        away unevenly) then you might wish to increase this
+                        value. Not used with &quot;mkl&quot;.</p></div></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#fun" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fun:de.sciss.synth.GE"></a>
+      <a id="fun:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fun</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@fun:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">index of a function to be used to analyse the signal.</p><div class="fullcomment"><div class="comment cmt"><p>index of a function to be used to analyse the signal.
+                        See main paragraph for possible values (usually can be
+                        left to default).</p></div></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
+      <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">makeUGen</span><span class="params">(<span name="_args">_args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>)</span><span class="result">: <a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.ugen.Onsets">Onsets</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#makeUGens" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="makeUGens:de.sciss.synth.UGenInLike"></a>
+      <a id="makeUGens:UGenInLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">makeUGens</span><span class="result">: <a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@makeUGens:de.sciss.synth.UGenInLike" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Abstract method which must be implemented by creating the actual <code>UGen</code>s
+during expansion.</p><div class="fullcomment"><div class="comment cmt"><p>Abstract method which must be implemented by creating the actual <code>UGen</code>s
+during expansion. This method is at most called once during graph
+expansion
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the expanded object (depending on the type parameter <code>U</code>)
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.ugen.Onsets">Onsets</a> → <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#medianSpan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="medianSpan:de.sciss.synth.GE"></a>
+      <a id="medianSpan:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">medianSpan</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@medianSpan:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(advanced setting) Specifies the size (in FFT frames)
+                        of the median window used for smoothing the detection
+                        function before triggering.</p>
+    </li><li name="de.sciss.synth.ugen.Onsets#minGap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="minGap:de.sciss.synth.GE"></a>
+      <a id="minGap:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minGap</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@minGap:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(advanced setting) Specifies a minimum gap (in FFT
+                        frames) between onset detections, a brute-force way to
+                        prevent too many doubled detections.</p>
+    </li><li name="de.sciss.synth.UGenSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="name:String"></a>
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">name</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@name:String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#noiseFloor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="noiseFloor:de.sciss.synth.GE"></a>
+      <a id="noiseFloor:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">noiseFloor</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@noiseFloor:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(advanced setting) This is a lower limit, connected to
+                        the idea of how quiet the sound is expected to get
+                        without becoming indistinguishable from noise.</p><div class="fullcomment"><div class="comment cmt"><p>(advanced setting) This is a lower limit, connected to
+                        the idea of how quiet the sound is expected to get
+                        without becoming indistinguishable from noise. For some
+                        cleanly-recorded classical music with wide dynamic
+                        variations, it was found helpful to go down as far as
+                        1e-6. Not used with &quot;mkl&quot;.</p></div></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.ControlRated#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rate:de.sciss.synth.Rate"></a>
+      <a id="rate:Rate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rate</span><span class="result">: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@rate:de.sciss.synth.Rate" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ControlRated.html" class="extype" name="de.sciss.synth.ControlRated">ControlRated</a></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#raw" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="raw:de.sciss.synth.GE"></a>
+      <a id="raw:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">raw</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@raw:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(advanced setting) ?
+</p>
+    </li><li name="de.sciss.synth.UGenSource.SomeOut#rewrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):de.sciss.synth.UGenInLike"></a>
+      <a id="rewrap(IndexedSeq[UGenInLike],Int):UGenInLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rewrap</span><span class="params">(<span name="args">args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</span>, <span name="exp">exp: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):de.sciss.synth.UGenInLike" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#thresh" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="thresh:de.sciss.synth.GE"></a>
+      <a id="thresh:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thresh</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@thresh:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the detection threshold, typically between 0 and 1,
+                        although in rare cases you may find values outside this
+                        range useful</p>
+    </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
+      <a id="unwrap(IndexedSeq[UGenInLike]):UGenInLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unwrap</span><span class="params">(<span name="args">args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</span>)</span><span class="result">: <a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Onsets#whType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="whType:de.sciss.synth.GE"></a>
+      <a id="whType:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whType</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Onsets@whType:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(advanced setting) ?</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="de.sciss.synth.IsIndividual">
+              <h3>Inherited from <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a></h3>
+            </div><div class="parent" name="de.sciss.synth.ControlRated">
+              <h3>Inherited from <a href="../ControlRated.html" class="extype" name="de.sciss.synth.ControlRated">ControlRated</a></h3>
+            </div><div class="parent" name="de.sciss.synth.UGenSource.SingleOut">
+              <h3>Inherited from <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a></h3>
+            </div><div class="parent" name="de.sciss.synth.UGenSource.SomeOut">
+              <h3>Inherited from <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a></h3>
+            </div><div class="parent" name="de.sciss.synth.GE.Lazy">
+              <h3>Inherited from <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a></h3>
+            </div><div class="parent" name="de.sciss.synth.GE">
+              <h3>Inherited from <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></h3>
+            </div><div class="parent" name="de.sciss.synth.UGenSource">
+              <h3>Inherited from <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</h3>
+            </div><div class="parent" name="de.sciss.synth.Lazy.Expander">
+              <h3>Inherited from <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</h3>
+            </div><div class="parent" name="de.sciss.synth.Lazy">
+              <h3>Inherited from <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

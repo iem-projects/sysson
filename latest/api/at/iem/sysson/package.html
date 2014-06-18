@@ -1,0 +1,736 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>sysson - SysSon 0.8.0 API - at.iem.sysson</title>
+          <meta name="description" content="sysson - SysSon 0.8.0 API - at.iem.sysson" />
+          <meta name="keywords" content="sysson SysSon 0.8.0 API at.iem.sysson" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'at.iem.sysson.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="at">at</a>.<a href="../package.html" class="extype" name="at.iem">iem</a></p>
+        <h1>sysson</h1> <span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sysson</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="at.iem.sysson"><span>sysson</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="at.iem.sysson.DocumentHandler" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DocumentHandlerextendsModel[at.iem.sysson.DocumentHandler.Update]"></a>
+      <a id="DocumentHandler:DocumentHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DocumentHandler.html"><span class="name">DocumentHandler</span></a><span class="result"> extends <span class="extype" name="de.sciss.model.Model">Model</span>[<a href="DocumentHandler$$Update.html" class="extype" name="at.iem.sysson.DocumentHandler.Update">Update</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@DocumentHandlerextendsModel[at.iem.sysson.DocumentHandler.Update]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.OpenRange" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OpenRangeextendsProductwithSerializable"></a>
+      <a id="OpenRange:OpenRange"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OpenRange.html"><span class="name">OpenRange</span></a><span class="params">(<span name="startOption">startOption: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="endOption">endOption: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="isInclusive">isInclusive: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="step">step: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@OpenRangeextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.Scale" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Scale=Double=&gt;Double"></a>
+      <a id="Scale:Scale"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Scale</span><span class="result"> = (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@Scale=Double=&gt;Double" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.Stats" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="StatsextendsProductwithSerializable"></a>
+      <a id="Stats:Stats"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Stats.html"><span class="name">Stats</span></a><span class="params">(<span name="map">map: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Stats$$Variable.html" class="extype" name="at.iem.sysson.Stats.Variable">Variable</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@StatsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Statistics for a given file.</p><div class="fullcomment"><div class="comment cmt"><p>Statistics for a given file. It provides a map from variable names to <code>Stats.Variable</code> which captures
+the moments of that particular variable.</p><p>Statistics are obtained via <code>Stats.get(netcdfFile)</code>.</p><p>For example, if the file has a variable <code>&quot;ta&quot;</code> with dimensions <code>&quot;lon&quot;</code>, <code>&quot;lat&quot;</code> and <code>&quot;plev&quot;</code>, the
+overall minimum temperature will be found through <code>stats(&quot;ta&quot;).total.min</code>. That maximum temperature
+at pressure level 0 will be found through <code>stats(&quot;ta&quot;).slices(&quot;plev&quot;)(0).max</code>.
+</p></div></div>
+    </li><li name="at.iem.sysson.TreeLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TreeLike[S&lt;:de.sciss.lucre.event.Sys[S],T&lt;:at.iem.sysson.TreeLike[S,T]]extendsPublisher[S,at.iem.sysson.TreeLike.Update[S,T]]"></a>
+      <a id="TreeLike[S&lt;:Sys[S],T&lt;:TreeLike[S,T]]:TreeLike[S,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TreeLike.html"><span class="name">TreeLike</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="at.iem.sysson.TreeLike.S">S</span>]</span>, <span name="T">T &lt;: <a href="TreeLike.html" class="extype" name="at.iem.sysson.TreeLike">TreeLike</a>[<span class="extype" name="at.iem.sysson.TreeLike.S">S</span>, <span class="extype" name="at.iem.sysson.TreeLike.T">T</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.event.Publisher">Publisher</span>[<span class="extype" name="at.iem.sysson.TreeLike.S">S</span>, <a href="TreeLike$$Update.html" class="extype" name="at.iem.sysson.TreeLike.Update">Update</a>[<span class="extype" name="at.iem.sysson.TreeLike.S">S</span>, <span class="extype" name="at.iem.sysson.TreeLike.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@TreeLike[S&lt;:de.sciss.lucre.event.Sys[S],T&lt;:at.iem.sysson.TreeLike[S,T]]extendsPublisher[S,at.iem.sysson.TreeLike.Update[S,T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.TreeTypes" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TreeTypesextendsAnyRef"></a>
+      <a id="TreeTypes:TreeTypes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TreeTypes.html"><span class="name">TreeTypes</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@TreeTypesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.VariableSection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="VariableSectionextendsVariableLikewithProductwithSerializable"></a>
+      <a id="VariableSection:VariableSection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="VariableSection.html"><span class="name">VariableSection</span></a><span class="params">(<span name="variable">variable: <span class="extype" name="ucar.nc2.Variable">Variable</span></span>, <span name="section">section: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="at.iem.sysson.Vec">Vec</a>[<a href="OpenRange.html" class="extype" name="at.iem.sysson.OpenRange">OpenRange</a>]</span>, <span name="scale">scale: <a href="#Scale=Double=&gt;Double" class="extmbr" name="at.iem.sysson.Scale">Scale</a> = <span class="symbol"><span class="name"><a href="Scale$.html">Scale.Identity</a></span></span></span>)</span><span class="result"> extends <span class="extype" name="at.iem.sysson.impl.VariableLike">VariableLike</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@VariableSectionextendsVariableLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A variable section is a non destructive selection within the dimension of a variable,
+possibly applying scaling to its values.</p><div class="fullcomment"><div class="comment cmt"><p>A variable section is a non destructive selection within the dimension of a variable,
+possibly applying scaling to its values.
+</p></div><dl class="paramcmts block"><dt class="param">variable</dt><dd class="cmt"><p>the original NetCDF variable</p></dd><dt class="param">section</dt><dd class="cmt"><p>the range selection within the dimension
+</p></dd></dl></div>
+    </li><li name="at.iem.sysson.Vec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vec[+A]=scala.collection.immutable.IndexedSeq[A]"></a>
+      <a id="Vec[+A]:Vec[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Vec</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> = <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="at.iem.sysson.Vec.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@Vec[+A]=scala.collection.immutable.IndexedSeq[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="at.iem.sysson.BuildInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BuildInfo"></a>
+      <a id="BuildInfo:BuildInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BuildInfo$.html"><span class="name">BuildInfo</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@BuildInfo" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.DocumentHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DocumentHandler"></a>
+      <a id="DocumentHandler:DocumentHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DocumentHandler$.html"><span class="name">DocumentHandler</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@DocumentHandler" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.Implicits" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Implicits"></a>
+      <a id="Implicits:Implicits"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Implicits$.html"><span class="name">Implicits</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@Implicits" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.Main" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Main"></a>
+      <a id="Main:Main"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Main$.html"><span class="name">Main</span></a><span class="result"> extends <span class="extype" name="scala.App">App</span> with <span class="extype" name="java.lang.Runnable">Runnable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@Main" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.OSCSupport" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OSCSupport"></a>
+      <a id="OSCSupport:OSCSupport"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OSCSupport$.html"><span class="name">OSCSupport</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@OSCSupport" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.OpenRange" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OpenRange"></a>
+      <a id="OpenRange:OpenRange"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OpenRange$.html"><span class="name">OpenRange</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@OpenRange" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.Prefs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Prefs"></a>
+      <a id="Prefs:Prefs"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Prefs$.html"><span class="name">Prefs</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@Prefs" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.Scale" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Scale"></a>
+      <a id="Scale:Scale"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Scale$.html"><span class="name">Scale</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@Scale" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.Stats" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Stats"></a>
+      <a id="Stats:Stats"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Stats$.html"><span class="name">Stats</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@Stats" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.TreeLike" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TreeLike"></a>
+      <a id="TreeLike:TreeLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TreeLike$.html"><span class="name">TreeLike</span></a><span class="result"> extends <a href="TreeTypes.html" class="extype" name="at.iem.sysson.TreeTypes">TreeTypes</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@TreeLike" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.VariableSection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VariableSection"></a>
+      <a id="VariableSection:VariableSection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="VariableSection$.html"><span class="name">VariableSection</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@VariableSection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson#Vec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vec:collection.immutable.IndexedSeq.type"></a>
+      <a id="Vec:IndexedSeq.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Vec</span><span class="result">: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@Vec:collection.immutable.IndexedSeq.type" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.WorkspaceResolver" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WorkspaceResolver"></a>
+      <a id="WorkspaceResolver:WorkspaceResolver"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="WorkspaceResolver$.html"><span class="name">WorkspaceResolver</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@WorkspaceResolver" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Associates a workspace with a file cache for NetCDF resources.</p>
+    </li><li name="at.iem.sysson#boot" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="boot():Unit"></a>
+      <a id="boot():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">boot</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@boot():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Boots the SuperCollider server.</p>
+    </li><li name="at.iem.sysson#dataDir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="dataDir:de.sciss.file.package.File"></a>
+      <a id="dataDir:File"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dataDir</span><span class="result">: <span class="extype" name="de.sciss.file.File">File</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@dataDir:de.sciss.file.package.File" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>data</code> directory inside the SysSon base directory contains common NetCDF files.</p>
+    </li><li name="at.iem.sysson#defaultFile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="defaultFile:de.sciss.file.package.File"></a>
+      <a id="defaultFile:File"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultFile</span><span class="result">: <span class="extype" name="de.sciss.file.File">File</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@defaultFile:de.sciss.file.package.File" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson#defaultFile2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="defaultFile2:de.sciss.file.package.File"></a>
+      <a id="defaultFile2:File"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultFile2</span><span class="result">: <span class="extype" name="de.sciss.file.File">File</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@defaultFile2:de.sciss.file.package.File" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.graph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="graph"></a>
+      <a id="graph:graph"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="graph/package.html"><span class="name">graph</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@graph" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.gui" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="gui"></a>
+      <a id="gui:gui"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="gui/package.html"><span class="name">gui</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@gui" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson#initTypes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="initTypes():Unit"></a>
+      <a id="initTypes():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initTypes</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@initTypes():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson#open" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="open(path:String):ucar.nc2.NetcdfFile"></a>
+      <a id="open(String):NetcdfFile"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">open</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="ucar.nc2.NetcdfFile">NetcdfFile</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@open(path:String):ucar.nc2.NetcdfFile" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Opens a NetCDF file from a given path string.</p>
+    </li><li name="at.iem.sysson#openDefault" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="openDefault():ucar.nc2.NetcdfFile"></a>
+      <a id="openDefault():NetcdfFile"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">openDefault</span><span class="params">()</span><span class="result">: <span class="extype" name="ucar.nc2.NetcdfFile">NetcdfFile</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@openDefault():ucar.nc2.NetcdfFile" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Opens <code>RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc</code></p>
+    </li><li name="at.iem.sysson#openDefault2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="openDefault2():ucar.nc2.NetcdfFile"></a>
+      <a id="openDefault2():NetcdfFile"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">openDefault2</span><span class="params">()</span><span class="result">: <span class="extype" name="ucar.nc2.NetcdfFile">NetcdfFile</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@openDefault2():ucar.nc2.NetcdfFile" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Opens <code>MetOffUK_HadGEM2-ES/25_ta_Amon_HadGEM2-ES_rcp45_r1i1p1_200512-210012.nc</code></p>
+    </li><li name="at.iem.sysson#openFile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="openFile(file:de.sciss.file.File):ucar.nc2.NetcdfFile"></a>
+      <a id="openFile(File):NetcdfFile"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">openFile</span><span class="params">(<span name="file">file: <span class="extype" name="de.sciss.file.File">File</span></span>)</span><span class="result">: <span class="extype" name="ucar.nc2.NetcdfFile">NetcdfFile</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@openFile(file:de.sciss.file.File):ucar.nc2.NetcdfFile" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Opens a NetCDF file from a given file object .</p>
+    </li><li name="at.iem.sysson#showLog" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="showLog:Boolean"></a>
+      <a id="showLog:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">showLog</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@showLog:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.sound" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sound"></a>
+      <a id="sound:sound"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="sound/package.html"><span class="name">sound</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@sound" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson#syssonDir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="syssonDir:de.sciss.file.File"></a>
+      <a id="syssonDir:File"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">syssonDir</span><span class="result">: <span class="extype" name="de.sciss.file.File">File</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#at.iem.sysson.package@syssonDir:de.sciss.file.File" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The SysSon base directory is determined by the environment variable <code>SYSSON_HOME</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The SysSon base directory is determined by the environment variable <code>SYSSON_HOME</code>. See the
+<code>README.md</code> for more information.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,0 +1,1843 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>message - SysSon 0.8.0 API - de.sciss.synth.message</title>
+          <meta name="description" content="message - SysSon 0.8.0 API - de.sciss.synth.message" />
+          <meta name="keywords" content="message SysSon 0.8.0 API de.sciss.synth.message" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'de.sciss.synth.message.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a></p>
+        <h1>message</h1> <span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">message</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.synth.message.AsyncSend" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AsyncSendextendsSend"></a>
+      <a id="AsyncSend:AsyncSend"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AsyncSend.html"><span class="name">AsyncSend</span></a><span class="result"> extends <a href="Send.html" class="extype" name="de.sciss.synth.message.Send">Send</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@AsyncSendextendsSend" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Identifies messages sent to the server which are executed asynchronously and reply with a form of done-message.</p>
+    </li><li name="de.sciss.synth.message.BufferAlloc" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferAllocextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferAlloc:BufferAlloc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferAlloc.html"><span class="name">BufferAlloc</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferAllocextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_alloc</code> message tells the server to allocate memory for a buffer associated
+with its logical identifier.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_alloc</code> message tells the server to allocate memory for a buffer associated
+with its logical identifier.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a>
+</p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocMsg(numFrames:Int,numChannels:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAlloc" class="extmbr" name="de.sciss.synth.Buffer#allocMsg">Buffer#allocMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferAllocRead" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferAllocReadextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferAllocRead:BufferAllocRead"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferAllocRead.html"><span class="name">BufferAllocRead</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferAllocReadextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_allocRead</code> message tells the server to allocate memory for a buffer and read
+in a portion of an audio-file.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_allocRead</code> message tells the server to allocate memory for a buffer and read
+in a portion of an audio-file. The number of channels
+and the sample-rate of the buffer are determined by that audio-file.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier to use for the buffer. It must denote a currently un-allocated buffer
+                    and be greater than or equal to zero and less than the maximum number of buffers.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to read. Since the server is an independent process, this must
+                    resolve with respect to the server's current working directory. If the server is running on
+                    a remote node, the path will be resolved in the server's local file system.</p></dd><dt class="param">startFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
+                    value less than or equal to zero denotes that the number of frames available in the file
+                    from the given offset is used (the entire file will be read).
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a>
+</p></span><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></p></span><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocReadMsg(path:String,startFrame:Int,numFrames:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocRead" class="extmbr" name="de.sciss.synth.Buffer#allocReadMsg">Buffer#allocReadMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferAllocReadChannel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferAllocReadChannelextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferAllocReadChannel:BufferAllocReadChannel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferAllocReadChannel.html"><span class="name">BufferAllocReadChannel</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="channels">channels: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferAllocReadChannelextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_allocReadChannel</code> message tells the server to allocate memory for a buffer and read
+in a portion of an audio-file, selecting a subset of its channels.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_allocReadChannel</code> message tells the server to allocate memory for a buffer and read
+in a portion of an audio-file, selecting a subset of its channels. The number of channels
+is given by the size of the <code>channels</code> argument, and the sample-rate of the buffer is determined
+by the audio-file.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier to use for the buffer. It must denote a currently un-allocated buffer
+                    and be greater than or equal to zero and less than the maximum number of buffers.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to read. Since the server is an independent process, this must
+                    resolve with respect to the server's current working directory. If the server is running on
+                    a remote node, the path will be resolved in the server's local file system.</p></dd><dt class="param">startFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
+                    value of <code>-1</code> denotes that the number of frames available in the file
+                    from the given offset is used (the entire file will be read).</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a>
+</p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocReadChannelMsg(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocReadChannel" class="extmbr" name="de.sciss.synth.Buffer#allocReadChannelMsg">Buffer#allocReadChannelMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferClose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferCloseextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferClose:BufferClose"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferClose.html"><span class="name">BufferClose</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferCloseextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_close</code> message ensures that a buffer closes an associated audio-file.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_close</code> message ensures that a buffer closes an associated audio-file.
+This is a no-op if the buffer is not associated with an audio-file or if that
+file is already closed.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a>
+</p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#closeMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferClose" class="extmbr" name="de.sciss.synth.Buffer#closeMsg">Buffer#closeMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferFill" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferFillextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="BufferFill:BufferFill"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferFill.html"><span class="name">BufferFill</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="ranges">ranges: <a href="../FillRange.html" class="extype" name="de.sciss.synth.FillRange">FillRange</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferFillextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_fill</code> message sets individual ranges of samples of the buffer to given values.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_fill</code> message sets individual ranges of samples of the buffer to given values.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">ranges</dt><dd class="cmt"><p>tuples which specify the offset into the buffer, the number of samples to overwrite and the
+                value with which to overwrite.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a>
+</p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#fillMsg(ranges:de.sciss.synth.FillRange*):de.sciss.synth.message.BufferFill" class="extmbr" name="de.sciss.synth.Buffer#fillMsg">Buffer#fillMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferFree" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferFreeextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferFree:BufferFree"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferFree.html"><span class="name">BufferFree</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferFreeextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_free</code> message frees a buffer on the server side.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_free</code> message frees a buffer on the server side. The client side
+typically maintains a logical list of allocated buffer identifiers as well,
+so one should normally rely on the specific client side API to correctly
+free a buffer.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a>
+</p></span><span class="cmt"><p><a href="BufferClose.html" class="extype" name="de.sciss.synth.message.BufferClose">BufferClose</a></p></span><span class="cmt"><p><a href="../Buffer.html#freeMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet],release:Boolean):de.sciss.synth.message.BufferFree" class="extmbr" name="de.sciss.synth.Buffer#freeMsg">Buffer#freeMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferGen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferGenextendsMessagewithSendwithProductwithSerializable"></a>
+      <a id="BufferGen:BufferGen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferGen.html"><span class="name">BufferGen</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="command">command: <a href="BufferGen$$Command.html" class="extype" name="de.sciss.synth.message.BufferGen.Command">Command</a></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="Send.html" class="extype" name="de.sciss.synth.message.Send">Send</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferGenextendsMessagewithSendwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_gen</code> message uses a dedicated command to generate or manipulate the buffer content.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_gen</code> message uses a dedicated command to generate or manipulate the buffer content.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">command</dt><dd class="cmt"><p>the operation to carry out on the buffer, such as generating a waveform or copying the content
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a>
+</p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#genMsg(command:de.sciss.synth.message.BufferGen.Command):de.sciss.synth.message.BufferGen" class="extmbr" name="de.sciss.synth.Buffer#genMsg">Buffer#genMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferGet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferGetextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="BufferGet:BufferGet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferGet.html"><span class="name">BufferGet</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="index">index: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferGetextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_get</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_get</code> message.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a>
+</p></span><span class="cmt"><p><a href="BufferGetn.html" class="extype" name="de.sciss.synth.message.BufferGetn">BufferGetn</a></p></span><span class="cmt"><p><a href="../Buffer.html#getMsg(indices:Int*):de.sciss.synth.message.BufferGet" class="extmbr" name="de.sciss.synth.Buffer#getMsg">Buffer#getMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferGetn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferGetnextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="BufferGetn:BufferGetn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferGetn.html"><span class="name">BufferGetn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="ranges">ranges: <span class="extype" name="scala.Range">Range</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferGetnextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_getn</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_getn</code> message.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a>
+</p></span><span class="cmt"><p><a href="BufferGet.html" class="extype" name="de.sciss.synth.message.BufferGet">BufferGet</a></p></span><span class="cmt"><p><a href="../Buffer.html#getnMsg(ranges:Range*):de.sciss.synth.message.BufferGetn" class="extmbr" name="de.sciss.synth.Buffer#getnMsg">Buffer#getnMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferInfoextendsMessagewithReceivewithProductwithSerializable"></a>
+      <a id="BufferInfo:BufferInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferInfo.html"><span class="name">BufferInfo</span></a><span class="params">(<span name="data">data: <a href="BufferInfo$$Data.html" class="extype" name="de.sciss.synth.message.BufferInfo.Data">Data</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="Receive.html" class="extype" name="de.sciss.synth.message.Receive">Receive</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferInfoextendsMessagewithReceivewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>/b_info</code> message is received in reply to a <code>/b_query</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>/b_info</code> message is received in reply to a <code>/b_query</code> message.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferQuery.html" class="extype" name="de.sciss.synth.message.BufferQuery">BufferQuery</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferQuery" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferQueryextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="BufferQuery:BufferQuery"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferQuery.html"><span class="name">BufferQuery</span></a><span class="params">(<span name="ids">ids: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferQueryextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_query</code> messages requests a <code>/b_info</code> reply message from the server, providing
+information about the size and sample-rate of the specified buffers.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_query</code> messages requests a <code>/b_info</code> reply message from the server, providing
+information about the size and sample-rate of the specified buffers.
+</p></div><dl class="paramcmts block"><dt class="param">ids</dt><dd class="cmt"><p>a sequence of buffer identifiers to query
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Buffer.html#queryMsg:de.sciss.synth.message.BufferQuery" class="extmbr" name="de.sciss.synth.Buffer#queryMsg">Buffer#queryMsg</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferRead" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferReadextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferRead:BufferRead"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferRead.html"><span class="name">BufferRead</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferReadextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_read</code> message tells the server to read a portion of an audio-file into an existing buffer.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_read</code> message tells the server to read a portion of an audio-file into an existing buffer.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer to read into.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to read.</p></dd><dt class="param">fileStartFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
+                        value of <code>-1</code> denotes that as many frames are read as are available in the file or
+                        fit into the buffer.</p></dd><dt class="param">bufStartFrame</dt><dd class="cmt"><p>the frame offset in the buffer to begin writing to.</p></dd><dt class="param">leaveOpen</dt><dd class="cmt"><p>if <code>true</code>, leaves the file open for streaming with the
+                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a>
+</p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="../Buffer.html#readMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" class="extmbr" name="de.sciss.synth.Buffer#readMsg">Buffer#readMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferReadChannel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferReadChannelextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferReadChannel:BufferReadChannel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferReadChannel.html"><span class="name">BufferReadChannel</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="channels">channels: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferReadChannelextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_readChannel</code> message tells the server to read a portion of an audio-file into an existing buffer,
+selecting a subset of the file's channels.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_readChannel</code> message tells the server to read a portion of an audio-file into an existing buffer,
+selecting a subset of the file's channels.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer to read into.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to read.</p></dd><dt class="param">fileStartFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
+                        value of <code>-1</code> denotes that as many frames are read as are available in the file or
+                        fit into the buffer.</p></dd><dt class="param">bufStartFrame</dt><dd class="cmt"><p>the frame offset in the buffer to begin writing to.</p></dd><dt class="param">leaveOpen</dt><dd class="cmt"><p>if <code>true</code>, leaves the file open for streaming with the
+                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a>
+</p></span><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></p></span><span class="cmt"><p><a href="../Buffer.html#readChannelMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferReadChannel" class="extmbr" name="de.sciss.synth.Buffer#readChannelMsg">Buffer#readChannelMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferSetextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="BufferSet:BufferSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferSet.html"><span class="name">BufferSet</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="pairs">pairs: <a href="../FillValue.html" class="extype" name="de.sciss.synth.FillValue">FillValue</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferSetextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_set</code> message sets individual samples of the buffer to given values.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_set</code> message sets individual samples of the buffer to given values.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">pairs</dt><dd class="cmt"><p>pairs of sample offsets and sample values. The offsets are de-interleaved samples,
+                so for multi-channel buffers, to address a particular frame, the frame index must
+                be multiplied by the number of channels and offset by the channel to write into.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a>
+</p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="../Buffer.html#setMsg(pairs:de.sciss.synth.FillValue*):de.sciss.synth.message.BufferSet" class="extmbr" name="de.sciss.synth.Buffer#setMsg">Buffer#setMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferSetn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferSetnextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="BufferSetn:BufferSetn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferSetn.html"><span class="name">BufferSetn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="indicesAndValues">indicesAndValues: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>])*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferSetnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_setn</code> message sets individual ranges of samples of the buffer to given values.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_setn</code> message sets individual ranges of samples of the buffer to given values.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">indicesAndValues</dt><dd class="cmt"><p>pairs of sample offsets and sequences of sample values.
+                          The offsets are de-interleaved samples,
+                          so for multi-channel buffers, to address a particular frame, the frame index must
+                          be multiplied by the number of channels and offset by the channel to write into.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a>
+</p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#setnMsg(pairs:(Int,IndexedSeq[Float])*):de.sciss.synth.message.BufferSetn" class="extmbr" name="de.sciss.synth.Buffer#setnMsg">Buffer#setnMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferWrite" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferWriteextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferWrite:BufferWrite"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferWrite.html"><span class="name">BufferWrite</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileType">fileType: <a href="../io/AudioFileType.html" class="extype" name="de.sciss.synth.io.AudioFileType">AudioFileType</a></span>, <span name="sampleFormat">sampleFormat: <a href="../io/SampleFormat.html" class="extype" name="de.sciss.synth.io.SampleFormat">SampleFormat</a></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferWriteextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_write</code> message writes a portion of the buffer contents to an audio-file.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_write</code> message writes a portion of the buffer contents to an audio-file.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to write to.</p></dd><dt class="param">fileType</dt><dd class="cmt"><p>the header format of the audio-file</p></dd><dt class="param">sampleFormat</dt><dd class="cmt"><p>the sample resolution of the audio-file</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to write. The special
+                        value of <code>-1</code> denotes that the whole buffer content (or the remainder
+                        after the <code>startFrame</code>) is written out.</p></dd><dt class="param">startFrame</dt><dd class="cmt"><p>the frame offset in the buffer to begin reading from</p></dd><dt class="param">leaveOpen</dt><dd class="cmt"><p>if <code>true</code>, leaves the file open for streaming with
+                        the <a href="../ugen/DiskOut.html" class="extype" name="de.sciss.synth.ugen.DiskOut">DiskOut</a> UGen.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a>
+</p></span><span class="cmt"><p><a href="../Buffer.html#writeMsg(path:String,fileType:de.sciss.synth.io.AudioFileType,sampleFormat:de.sciss.synth.io.SampleFormat,numFrames:Int,startFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferWrite" class="extmbr" name="de.sciss.synth.Buffer#writeMsg">Buffer#writeMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.BufferZero" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferZeroextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="BufferZero:BufferZero"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferZero.html"><span class="name">BufferZero</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferZeroextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/b_zero</code> message clears the contents of a buffer (all samples will be zero).</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_zero</code> message clears the contents of a buffer (all samples will be zero).
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a>
+</p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="../Buffer.html#zeroMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferZero" class="extmbr" name="de.sciss.synth.Buffer#zeroMsg">Buffer#zeroMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.ControlBusFill" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ControlBusFillextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="ControlBusFill:ControlBusFill"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlBusFill.html"><span class="name">ControlBusFill</span></a><span class="params">(<span name="ranges">ranges: <a href="../FillRange.html" class="extype" name="de.sciss.synth.FillRange">FillRange</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusFillextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/c_fill</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_fill</code> message.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a>
+</p></span><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#fillMsg(data:de.sciss.synth.FillRange*):de.sciss.synth.message.ControlBusFill" class="extmbr" name="de.sciss.synth.ControlBus#fillMsg">ControlBus#fillMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.ControlBusGet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ControlBusGetextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="ControlBusGet:ControlBusGet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlBusGet.html"><span class="name">ControlBusGet</span></a><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusGetextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/c_get</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_get</code> message.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a>
+</p></span><span class="cmt"><p><a href="ControlBusGetn.html" class="extype" name="de.sciss.synth.message.ControlBusGetn">ControlBusGetn</a></p></span><span class="cmt"><p><a href="../ControlBus.html#getMsg(offsets:Int*):de.sciss.synth.message.ControlBusGet" class="extmbr" name="de.sciss.synth.ControlBus#getMsg">ControlBus#getMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.ControlBusGetn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ControlBusGetnextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="ControlBusGetn:ControlBusGetn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlBusGetn.html"><span class="name">ControlBusGetn</span></a><span class="params">(<span name="ranges">ranges: <span class="extype" name="scala.Range">Range</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusGetnextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/c_getn</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_getn</code> message.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a>
+</p></span><span class="cmt"><p><a href="ControlBusGet.html" class="extype" name="de.sciss.synth.message.ControlBusGet">ControlBusGet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#getnMsg(ranges:Range*):de.sciss.synth.message.ControlBusGetn" class="extmbr" name="de.sciss.synth.ControlBus#getnMsg">ControlBus#getnMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.ControlBusSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ControlBusSetextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="ControlBusSet:ControlBusSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlBusSet.html"><span class="name">ControlBusSet</span></a><span class="params">(<span name="pairs">pairs: <a href="../FillValue.html" class="extype" name="de.sciss.synth.FillValue">FillValue</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusSetextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/c_set</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_set</code> message.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusFill.html" class="extype" name="de.sciss.synth.message.ControlBusFill">ControlBusFill</a>
+</p></span><span class="cmt"><p><a href="ControlBusGet.html" class="extype" name="de.sciss.synth.message.ControlBusGet">ControlBusGet</a></p></span><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a></p></span><span class="cmt"><p><a href="../ControlBus.html#setMsg(pairs:de.sciss.synth.FillValue*):de.sciss.synth.message.ControlBusSet" class="extmbr" name="de.sciss.synth.ControlBus#setMsg">ControlBus#setMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.ControlBusSetn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ControlBusSetnextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="ControlBusSetn:ControlBusSetn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlBusSetn.html"><span class="name">ControlBusSetn</span></a><span class="params">(<span name="indicesAndValues">indicesAndValues: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>])*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusSetnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/c_setn</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_setn</code> message.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusFill.html" class="extype" name="de.sciss.synth.message.ControlBusFill">ControlBusFill</a>
+</p></span><span class="cmt"><p><a href="ControlBusGetn.html" class="extype" name="de.sciss.synth.message.ControlBusGetn">ControlBusGetn</a></p></span><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#setnMsg(pairs:(Int,IndexedSeq[Float])*):de.sciss.synth.message.ControlBusSetn" class="extmbr" name="de.sciss.synth.ControlBus#setnMsg">ControlBus#setnMsg</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.DumpOSC" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DumpOSCextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="DumpOSC:DumpOSC"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DumpOSC.html"><span class="name">DumpOSC</span></a><span class="params">(<span name="mode">mode: <a href="../../osc/Dump.html" class="extype" name="de.sciss.osc.Dump">Dump</a></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@DumpOSCextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/dumpOSC</code> message that selects how the server reports incoming OSC packets.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/dumpOSC</code> message that selects how the server reports incoming OSC packets.</p><p><u>Note:</u> The OSC dump behavior of scsynth has long time been broken. It is recommended
+to use client-side only reporting, provided by the <code>dumpOSC</code> method of the <code>Server</code> class.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Server.html#dumpOSC(mode:de.sciss.osc.Dump,filter:de.sciss.osc.Packet=&gt;Boolean):Unit" class="extmbr" name="de.sciss.synth.Server#dumpOSC">Server#dumpOSC</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.Error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ErrorextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="Error:Error"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Error.html"><span class="name">Error</span></a><span class="params">(<span name="mode">mode: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ErrorextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Produces an <code>/error</code> message that selects how the server will report errors to the console.</p>
+    </li><li name="de.sciss.synth.message.GroupDeepFree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupDeepFreeextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="GroupDeepFree:GroupDeepFree"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupDeepFree.html"><span class="name">GroupDeepFree</span></a><span class="params">(<span name="ids">ids: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@GroupDeepFreeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/g_deepFree</code> message.</p>
+    </li><li name="de.sciss.synth.message.GroupDumpTree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupDumpTreeextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="GroupDumpTree:GroupDumpTree"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupDumpTree.html"><span class="name">GroupDumpTree</span></a><span class="params">(<span name="groups">groups: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Boolean">Boolean</span>)*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@GroupDumpTreeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/g_dumpTree</code> message.</p>
+    </li><li name="de.sciss.synth.message.GroupFreeAll" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupFreeAllextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="GroupFreeAll:GroupFreeAll"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupFreeAll.html"><span class="name">GroupFreeAll</span></a><span class="params">(<span name="ids">ids: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@GroupFreeAllextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/g_freeAll</code> message.</p>
+    </li><li name="de.sciss.synth.message.GroupHead" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="GroupHeadextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="GroupHead:GroupHead"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupHead.html"><span class="name">GroupHead</span></a><span class="params">(<span name="groups">groups: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@GroupHeadextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/g_head</code> message pair-wise places nodes at the head of groups.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/g_head</code> message pair-wise places nodes at the head of groups.</p><pre>/g_head
+[
+  <span class="std">Int</span> - the ID of the group at which head a node is to be placed (B)
+  int - the ID of the node to place (A)
+] * N</pre><p>So that for each pair, node A is moved to the head of group B.
+</p></div></div>
+    </li><li name="de.sciss.synth.message.GroupNew" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupNewextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="GroupNew:GroupNew"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupNew.html"><span class="name">GroupNew</span></a><span class="params">(<span name="groups">groups: <a href="GroupNew$$Data.html" class="extype" name="de.sciss.synth.message.GroupNew.Data">Data</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@GroupNewextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/g_new</code> message.</p>
+    </li><li name="de.sciss.synth.message.GroupQueryTree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupQueryTreeextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="GroupQueryTree:GroupQueryTree"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupQueryTree.html"><span class="name">GroupQueryTree</span></a><span class="params">(<span name="groups">groups: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Boolean">Boolean</span>)*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@GroupQueryTreeextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/g_queryTree</code> message.</p>
+    </li><li name="de.sciss.synth.message.GroupTail" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="GroupTailextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="GroupTail:GroupTail"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupTail.html"><span class="name">GroupTail</span></a><span class="params">(<span name="groups">groups: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@GroupTailextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/g_tail</code> message pair-wise places nodes at the tail of groups.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/g_tail</code> message pair-wise places nodes at the tail of groups.</p><pre>/g_tail
+[
+  <span class="std">Int</span> - the ID of the group at which tail a node is to be placed (B)
+  int - the ID of the node to place (A)
+] * N</pre><p>So that for each pair, node A is moved to the tail of group B.
+</p></div></div>
+    </li><li name="de.sciss.synth.message.Handler" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HandlerextendsAnyRef"></a>
+      <a id="Handler:Handler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Handler.html"><span class="name">Handler</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@HandlerextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.HasCompletion" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HasCompletionextendsAsyncSend"></a>
+      <a id="HasCompletion:HasCompletion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HasCompletion.html"><span class="name">HasCompletion</span></a><span class="result"> extends <a href="AsyncSend.html" class="extype" name="de.sciss.synth.message.AsyncSend">AsyncSend</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@HasCompletionextendsAsyncSend" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeAfter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NodeAfterextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeAfter:NodeAfter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeAfter.html"><span class="name">NodeAfter</span></a><span class="params">(<span name="groups">groups: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeAfterextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_after</code> message pair-wise places nodes after other nodes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_after</code> message pair-wise places nodes after other nodes.</p><pre>/n_after
+[
+  <span class="std">Int</span> - the ID of the node to place (A)
+  int - the ID of the node after which the above is placed (B)
+] * N</pre><p>So that for each pair, node A in the same group as node B, to execute immediately after node B.
+</p></div></div>
+    </li><li name="de.sciss.synth.message.NodeBefore" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NodeBeforeextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeBefore:NodeBefore"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeBefore.html"><span class="name">NodeBefore</span></a><span class="params">(<span name="groups">groups: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeBeforeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_before</code> message pair-wise places nodes before other nodes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_before</code> message pair-wise places nodes before other nodes.</p><pre>/n_before
+[
+  <span class="std">Int</span> - the ID of the node to place (A)
+  int - the ID of the node before which the above is placed (B)
+] * N</pre><p>So that for each pair, node A in the same group as node B, to execute immediately before node B.
+</p></div></div>
+    </li><li name="de.sciss.synth.message.NodeChange" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NodeChangeextendsReceive"></a>
+      <a id="NodeChange:NodeChange"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeChange.html"><span class="name">NodeChange</span></a><span class="result"> extends <a href="Receive.html" class="extype" name="de.sciss.synth.message.Receive">Receive</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeChangeextendsReceive" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeEnd" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeEndextendsMessagewithNodeChangewithProductwithSerializable"></a>
+      <a id="NodeEnd:NodeEnd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeEnd.html"><span class="name">NodeEnd</span></a><span class="params">(<span name="nodeID">nodeID: <span class="extype" name="scala.Int">Int</span></span>, <span name="info">info: <a href="NodeInfo$$Data.html" class="extype" name="de.sciss.synth.message.NodeInfo.Data">Data</a></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="NodeChange.html" class="extype" name="de.sciss.synth.message.NodeChange">NodeChange</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeEndextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeFill" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeFillextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeFill:NodeFill"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeFill.html"><span class="name">NodeFill</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="data">data: <a href="../ControlFillRange.html" class="extype" name="de.sciss.synth.ControlFillRange">ControlFillRange</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeFillextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_fill</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeFree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeFreeextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeFree:NodeFree"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeFree.html"><span class="name">NodeFree</span></a><span class="params">(<span name="ids">ids: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeFreeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_free</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeGo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeGoextendsMessagewithNodeChangewithProductwithSerializable"></a>
+      <a id="NodeGo:NodeGo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeGo.html"><span class="name">NodeGo</span></a><span class="params">(<span name="nodeID">nodeID: <span class="extype" name="scala.Int">Int</span></span>, <span name="info">info: <a href="NodeInfo$$Data.html" class="extype" name="de.sciss.synth.message.NodeInfo.Data">Data</a></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="NodeChange.html" class="extype" name="de.sciss.synth.message.NodeChange">NodeChange</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeGoextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NodeInfoextendsMessagewithNodeChangewithProductwithSerializable"></a>
+      <a id="NodeInfo:NodeInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeInfo.html"><span class="name">NodeInfo</span></a><span class="params">(<span name="nodeID">nodeID: <span class="extype" name="scala.Int">Int</span></span>, <span name="info">info: <a href="NodeInfo$$Data.html" class="extype" name="de.sciss.synth.message.NodeInfo.Data">Data</a></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="NodeChange.html" class="extype" name="de.sciss.synth.message.NodeChange">NodeChange</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeInfoextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An <code>/n_info</code> message is received as a reply to an <code>/n_query</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>An <code>/n_info</code> message is received as a reply to an <code>/n_query</code> message.
+</p></div><dl class="paramcmts block"><dt class="param">nodeID</dt><dd class="cmt"><p>the identifier of the node for which information has been received</p></dd><dt class="param">info</dt><dd class="cmt"><p>the information object describing the topological position of the node
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeQuery.html" class="extype" name="de.sciss.synth.message.NodeQuery">NodeQuery</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.NodeMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeMapextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeMap:NodeMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeMap.html"><span class="name">NodeMap</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="mappings">mappings: <a href="../ControlKBusMap$$Single.html" class="extype" name="de.sciss.synth.ControlKBusMap.Single">Single</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeMapextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_map</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeMapa" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeMapaextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeMapa:NodeMapa"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeMapa.html"><span class="name">NodeMapa</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="mappings">mappings: <a href="../ControlABusMap$$Single.html" class="extype" name="de.sciss.synth.ControlABusMap.Single">Single</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeMapaextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_mapa</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeMapan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeMapanextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeMapan:NodeMapan"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeMapan.html"><span class="name">NodeMapan</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="mappings">mappings: <a href="../ControlABusMap.html" class="extype" name="de.sciss.synth.ControlABusMap">ControlABusMap</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeMapanextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_mapan</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeMapn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeMapnextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeMapn:NodeMapn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeMapn.html"><span class="name">NodeMapn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="mappings">mappings: <a href="../ControlKBusMap.html" class="extype" name="de.sciss.synth.ControlKBusMap">ControlKBusMap</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeMapnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_mapn</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeMove" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeMoveextendsMessagewithNodeChangewithProductwithSerializable"></a>
+      <a id="NodeMove:NodeMove"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeMove.html"><span class="name">NodeMove</span></a><span class="params">(<span name="nodeID">nodeID: <span class="extype" name="scala.Int">Int</span></span>, <span name="info">info: <a href="NodeInfo$$Data.html" class="extype" name="de.sciss.synth.message.NodeInfo.Data">Data</a></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="NodeChange.html" class="extype" name="de.sciss.synth.message.NodeChange">NodeChange</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeMoveextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeNoID" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeNoIDextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeNoID:NodeNoID"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeNoID.html"><span class="name">NodeNoID</span></a><span class="params">(<span name="ids">ids: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeNoIDextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_noid</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeOff" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeOffextendsMessagewithNodeChangewithProductwithSerializable"></a>
+      <a id="NodeOff:NodeOff"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeOff.html"><span class="name">NodeOff</span></a><span class="params">(<span name="nodeID">nodeID: <span class="extype" name="scala.Int">Int</span></span>, <span name="info">info: <a href="NodeInfo$$Data.html" class="extype" name="de.sciss.synth.message.NodeInfo.Data">Data</a></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="NodeChange.html" class="extype" name="de.sciss.synth.message.NodeChange">NodeChange</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeOffextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeOn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeOnextendsMessagewithNodeChangewithProductwithSerializable"></a>
+      <a id="NodeOn:NodeOn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeOn.html"><span class="name">NodeOn</span></a><span class="params">(<span name="nodeID">nodeID: <span class="extype" name="scala.Int">Int</span></span>, <span name="info">info: <a href="NodeInfo$$Data.html" class="extype" name="de.sciss.synth.message.NodeInfo.Data">Data</a></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="NodeChange.html" class="extype" name="de.sciss.synth.message.NodeChange">NodeChange</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeOnextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeOrder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeOrderextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeOrder:NodeOrder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeOrder.html"><span class="name">NodeOrder</span></a><span class="params">(<span name="addAction">addAction: <span class="extype" name="scala.Int">Int</span></span>, <span name="targetID">targetID: <span class="extype" name="scala.Int">Int</span></span>, <span name="ids">ids: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeOrderextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_order</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeQuery" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeQueryextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="NodeQuery:NodeQuery"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeQuery.html"><span class="name">NodeQuery</span></a><span class="params">(<span name="ids">ids: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeQueryextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_query</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeRun" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeRunextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeRun:NodeRun"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeRun.html"><span class="name">NodeRun</span></a><span class="params">(<span name="nodes">nodes: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Boolean">Boolean</span>)*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeRunextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_run</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeSetextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeSet:NodeSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeSet.html"><span class="name">NodeSet</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="pairs">pairs: <a href="../ControlSet.html" class="extype" name="de.sciss.synth.ControlSet">ControlSet</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeSetextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_set</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeSetn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeSetnextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeSetn:NodeSetn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeSetn.html"><span class="name">NodeSetn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="pairs">pairs: <a href="../ControlSet.html" class="extype" name="de.sciss.synth.ControlSet">ControlSet</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeSetnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_setn</code> message.</p>
+    </li><li name="de.sciss.synth.message.NodeTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeTraceextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="NodeTrace:NodeTrace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeTrace.html"><span class="name">NodeTrace</span></a><span class="params">(<span name="ids">ids: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeTraceextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_trace</code> message.</p>
+    </li><li name="de.sciss.synth.message.ParGroupNew" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ParGroupNewextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="ParGroupNew:ParGroupNew"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ParGroupNew.html"><span class="name">ParGroupNew</span></a><span class="params">(<span name="groups">groups: <a href="GroupNew$$Data.html" class="extype" name="de.sciss.synth.message.GroupNew.Data">Data</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ParGroupNewextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/p_new</code> message.</p>
+    </li><li name="de.sciss.synth.message.Receive" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ReceiveextendsServerMessage"></a>
+      <a id="Receive:Receive"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Receive.html"><span class="name">Receive</span></a><span class="result"> extends <a href="ServerMessage.html" class="extype" name="de.sciss.synth.message.ServerMessage">ServerMessage</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ReceiveextendsServerMessage" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Identifies messages returned by SuperCollider server.</p>
+    </li><li name="de.sciss.synth.message.Responder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ResponderextendsHandler"></a>
+      <a id="Responder:Responder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Responder.html"><span class="name">Responder</span></a><span class="result"> extends <a href="Handler.html" class="extype" name="de.sciss.synth.message.Handler">Handler</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ResponderextendsHandler" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.Send" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SendextendsServerMessage"></a>
+      <a id="Send:Send"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Send.html"><span class="name">Send</span></a><span class="result"> extends <a href="ServerMessage.html" class="extype" name="de.sciss.synth.message.ServerMessage">ServerMessage</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SendextendsServerMessage" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Identifies messages sent to the SuperCollider server.</p>
+    </li><li name="de.sciss.synth.message.ServerMessage" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ServerMessageextendsAnyRef"></a>
+      <a id="ServerMessage:ServerMessage"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ServerMessage.html"><span class="name">ServerMessage</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ServerMessageextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Identifies messages received or sent by the SuperCollider server.</p>
+    </li><li name="de.sciss.synth.message.ServerNotify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ServerNotifyextendsMessagewithAsyncSendwithProductwithSerializable"></a>
+      <a id="ServerNotify:ServerNotify"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ServerNotify.html"><span class="name">ServerNotify</span></a><span class="params">(<span name="on">on: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="AsyncSend.html" class="extype" name="de.sciss.synth.message.AsyncSend">AsyncSend</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ServerNotifyextendsMessagewithAsyncSendwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/notify</code> messages registers or de-registers a client with respect
+to receiving reply messages from the server.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/notify</code> messages registers or de-registers a client with respect
+to receiving reply messages from the server.</p><p>Booting or connecting a server through the regular API automatically handles and does
+not require the explicit use of this message.
+</p></div><dl class="paramcmts block"><dt class="param">on</dt><dd class="cmt"><p>if <code>true</code>, the client is registered, if <code>false</code> it is de-registered.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.message.StatusReply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatusReplyextendsMessagewithReceivewithProductwithSerializable"></a>
+      <a id="StatusReply:StatusReply"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="StatusReply.html"><span class="name">StatusReply</span></a><span class="params">(<span name="numUGens">numUGens: <span class="extype" name="scala.Int">Int</span></span>, <span name="numSynths">numSynths: <span class="extype" name="scala.Int">Int</span></span>, <span name="numGroups">numGroups: <span class="extype" name="scala.Int">Int</span></span>, <span name="numDefs">numDefs: <span class="extype" name="scala.Int">Int</span></span>, <span name="avgCPU">avgCPU: <span class="extype" name="scala.Float">Float</span></span>, <span name="peakCPU">peakCPU: <span class="extype" name="scala.Float">Float</span></span>, <span name="sampleRate">sampleRate: <span class="extype" name="scala.Double">Double</span></span>, <span name="actualSampleRate">actualSampleRate: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="Receive.html" class="extype" name="de.sciss.synth.message.Receive">Receive</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@StatusReplyextendsMessagewithReceivewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.Sync" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SyncextendsMessagewithAsyncSendwithProductwithSerializable"></a>
+      <a id="Sync:Sync"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sync.html"><span class="name">Sync</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="AsyncSend.html" class="extype" name="de.sciss.synth.message.AsyncSend">AsyncSend</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SyncextendsMessagewithAsyncSendwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents a <code>/sync</code> message, which is queued with the asynchronous messages
+on the server, and which, when executed, triggers a corresponding <code>/synced</code> reply
+message (i.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a <code>/sync</code> message, which is queued with the asynchronous messages
+on the server, and which, when executed, triggers a corresponding <code>/synced</code> reply
+message (i.e. with the same id)
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>an arbitrary identifier which can be used to match the corresponding
+               reply message. typically the id is incremented by 1 for each
+               <code>/sync</code> message sent out.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.message.SyncCmd" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SyncCmdextendsSyncSend"></a>
+      <a id="SyncCmd:SyncCmd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SyncCmd.html"><span class="name">SyncCmd</span></a><span class="result"> extends <a href="SyncSend.html" class="extype" name="de.sciss.synth.message.SyncSend">SyncSend</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SyncCmdextendsSyncSend" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Identifies command messages sent to the server which are executed synchronously and do not return a message.</p>
+    </li><li name="de.sciss.synth.message.SyncQuery" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SyncQueryextendsSyncSend"></a>
+      <a id="SyncQuery:SyncQuery"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SyncQuery.html"><span class="name">SyncQuery</span></a><span class="result"> extends <a href="SyncSend.html" class="extype" name="de.sciss.synth.message.SyncSend">SyncSend</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SyncQueryextendsSyncSend" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Identifies query messages sent to the server which are executed synchronously and produce a reply message.</p>
+    </li><li name="de.sciss.synth.message.SyncSend" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SyncSendextendsSend"></a>
+      <a id="SyncSend:SyncSend"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SyncSend.html"><span class="name">SyncSend</span></a><span class="result"> extends <a href="Send.html" class="extype" name="de.sciss.synth.message.Send">Send</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SyncSendextendsSend" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Identifies messages sent to the server which are executed synchronously.</p>
+    </li><li name="de.sciss.synth.message.Synced" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SyncedextendsMessagewithReceivewithProductwithSerializable"></a>
+      <a id="Synced:Synced"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Synced.html"><span class="name">Synced</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="Receive.html" class="extype" name="de.sciss.synth.message.Receive">Receive</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SyncedextendsMessagewithReceivewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents a <code>/synced</code> message, a reply from the server acknowledging that
+all asynchronous operations up to the corresponding <code>/sync</code> message (i.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a <code>/synced</code> message, a reply from the server acknowledging that
+all asynchronous operations up to the corresponding <code>/sync</code> message (i.e. with
+the same id) have been completed
+</p></div></div>
+    </li><li name="de.sciss.synth.message.SynthDefFree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthDefFreeextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="SynthDefFree:SynthDefFree"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthDefFree.html"><span class="name">SynthDefFree</span></a><span class="params">(<span name="names">names: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SynthDefFreeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/d_free</code> message.</p>
+    </li><li name="de.sciss.synth.message.SynthDefLoad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SynthDefLoadextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="SynthDefLoad:SynthDefLoad"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthDefLoad.html"><span class="name">SynthDefLoad</span></a><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SynthDefLoadextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/d_load</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/d_load</code> message.
+</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the path to the file that stores the definition. This can be a pattern
+              like <code>&quot;synthdefs/perc-*&quot;</code>
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SynthDef$.html#loadMsg(path:String,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.SynthDefLoad" class="extmbr" name="de.sciss.synth.SynthDef#loadMsg">SynthDef$.loadMsg</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.SynthDefLoadDir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SynthDefLoadDirextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="SynthDefLoadDir:SynthDefLoadDir"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthDefLoadDir.html"><span class="name">SynthDefLoadDir</span></a><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SynthDefLoadDirextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/d_loadDir</code> message tells the server to load all synth definitions within a directory.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/d_loadDir</code> message tells the server to load all synth definitions within a directory.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SynthDef$.html#loadDirMsg(path:String,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.SynthDefLoadDir" class="extmbr" name="de.sciss.synth.SynthDef#loadDirMsg">SynthDef.loadDirMsg</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.SynthDefRecv" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthDefRecvextendsMessagewithHasCompletionwithProductwithSerializable"></a>
+      <a id="SynthDefRecv:SynthDefRecv"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthDefRecv.html"><span class="name">SynthDefRecv</span></a><span class="params">(<span name="bytes">bytes: <span class="extype" name="java.nio.ByteBuffer">ByteBuffer</span></span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SynthDefRecvextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/d_recv</code> message.</p>
+    </li><li name="de.sciss.synth.message.SynthGet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthGetextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="SynthGet:SynthGet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthGet.html"><span class="name">SynthGet</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="controls">controls: <span class="extype" name="scala.Any">Any</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SynthGetextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/s_get</code> message.</p>
+    </li><li name="de.sciss.synth.message.SynthGetn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthGetnextendsMessagewithSyncQuerywithProductwithSerializable"></a>
+      <a id="SynthGetn:SynthGetn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthGetn.html"><span class="name">SynthGetn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="controls">controls: (<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.Int">Int</span>)*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SynthGetnextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/s_getn</code> message.</p>
+    </li><li name="de.sciss.synth.message.SynthNew" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthNewextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="SynthNew:SynthNew"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthNew.html"><span class="name">SynthNew</span></a><span class="params">(<span name="defName">defName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="addAction">addAction: <span class="extype" name="scala.Int">Int</span></span>, <span name="targetID">targetID: <span class="extype" name="scala.Int">Int</span></span>, <span name="controls">controls: <a href="../ControlSet.html" class="extype" name="de.sciss.synth.ControlSet">ControlSet</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@SynthNewextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/s_new</code> message.</p>
+    </li><li name="de.sciss.synth.message.Timeout" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TimeoutextendsRuntimeExceptionwithProductwithSerializable"></a>
+      <a id="Timeout:Timeout"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Timeout.html"><span class="name">Timeout</span></a><span class="params">()</span><span class="result"> extends <span class="extype" name="scala.RuntimeException">RuntimeException</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@TimeoutextendsRuntimeExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.Trigger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TriggerextendsMessagewithReceivewithProductwithSerializable"></a>
+      <a id="Trigger:Trigger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Trigger.html"><span class="name">Trigger</span></a><span class="params">(<span name="nodeID">nodeID: <span class="extype" name="scala.Int">Int</span></span>, <span name="trig">trig: <span class="extype" name="scala.Int">Int</span></span>, <span name="value">value: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="Receive.html" class="extype" name="de.sciss.synth.message.Receive">Receive</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@TriggerextendsMessagewithReceivewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/tr</code> message send from a <a href="../ugen/SendTrig.html" class="extype" name="de.sciss.synth.ugen.SendTrig">SendTrig</a> UGen.</p>
+    </li><li name="de.sciss.synth.message.UGenCommand" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UGenCommandextendsMessagewithSyncCmdwithProductwithSerializable"></a>
+      <a id="UGenCommand:UGenCommand"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenCommand.html"><span class="name">UGenCommand</span></a><span class="params">(<span name="nodeID">nodeID: <span class="extype" name="scala.Int">Int</span></span>, <span name="ugenIdx">ugenIdx: <span class="extype" name="scala.Int">Int</span></span>, <span name="command">command: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="rest">rest: <span class="extype" name="scala.Any">Any</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@UGenCommandextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/u_cmd</code> message allows one to send UGen specific commands.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="de.sciss.synth.message.BufferGen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufferGen"></a>
+      <a id="BufferGen:BufferGen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferGen$.html"><span class="name">BufferGen</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferGen" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.BufferInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufferInfo"></a>
+      <a id="BufferInfo:BufferInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferInfo$.html"><span class="name">BufferInfo</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@BufferInfo" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.ClearSched" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClearSched"></a>
+      <a id="ClearSched:ClearSched"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ClearSched$.html"><span class="name">ClearSched</span></a><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ClearSched" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.Error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Error"></a>
+      <a id="Error:Error"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Error$.html"><span class="name">Error</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@Error" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.GroupNew" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupNew"></a>
+      <a id="GroupNew:GroupNew"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupNew$.html"><span class="name">GroupNew</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@GroupNew" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeEnd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NodeEnd"></a>
+      <a id="NodeEnd:NodeEnd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeEnd$.html"><span class="name">NodeEnd</span></a><span class="result"> extends <span class="extype" name="de.sciss.synth.message.NodeMessageFactory">NodeMessageFactory</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeEnd" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_end</code> message is received from the server when a node has been freed.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_end</code> message is received from the server when a node has been freed.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeFree.html" class="extype" name="de.sciss.synth.message.NodeFree">NodeFree</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.NodeGo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NodeGo"></a>
+      <a id="NodeGo:NodeGo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeGo$.html"><span class="name">NodeGo</span></a><span class="result"> extends <span class="extype" name="de.sciss.synth.message.NodeMessageFactory">NodeMessageFactory</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeGo" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_go</code> message is received from the server when a node has been newly created.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_go</code> message is received from the server when a node has been newly created.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GroupNew.html" class="extype" name="de.sciss.synth.message.GroupNew">GroupNew</a>
+</p></span><span class="cmt"><p><a href="SynthNew.html" class="extype" name="de.sciss.synth.message.SynthNew">SynthNew</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.NodeInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeInfo"></a>
+      <a id="NodeInfo:NodeInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeInfo$.html"><span class="name">NodeInfo</span></a><span class="result"> extends <span class="extype" name="de.sciss.synth.message.NodeMessageFactory">NodeMessageFactory</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeInfo" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.NodeMove" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NodeMove"></a>
+      <a id="NodeMove:NodeMove"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeMove$.html"><span class="name">NodeMove</span></a><span class="result"> extends <span class="extype" name="de.sciss.synth.message.NodeMessageFactory">NodeMessageFactory</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeMove" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_move</code> message is received from the server when a node has changed its position in the tree.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_move</code> message is received from the server when a node has changed its position in the tree.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GroupTail.html" class="extype" name="de.sciss.synth.message.GroupTail">GroupTail</a>
+</p></span><span class="cmt"><p><a href="GroupHead.html" class="extype" name="de.sciss.synth.message.GroupHead">GroupHead</a></p></span><span class="cmt"><p><a href="NodeAfter.html" class="extype" name="de.sciss.synth.message.NodeAfter">NodeAfter</a></p></span><span class="cmt"><p><a href="NodeBefore.html" class="extype" name="de.sciss.synth.message.NodeBefore">NodeBefore</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.NodeOff" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NodeOff"></a>
+      <a id="NodeOff:NodeOff"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeOff$.html"><span class="name">NodeOff</span></a><span class="result"> extends <span class="extype" name="de.sciss.synth.message.NodeMessageFactory">NodeMessageFactory</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeOff" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_off</code> message is received from the server when a node has been paused.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_off</code> message is received from the server when a node has been paused.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeRun.html" class="extype" name="de.sciss.synth.message.NodeRun">NodeRun</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.NodeOn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NodeOn"></a>
+      <a id="NodeOn:NodeOn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeOn$.html"><span class="name">NodeOn</span></a><span class="result"> extends <span class="extype" name="de.sciss.synth.message.NodeMessageFactory">NodeMessageFactory</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@NodeOn" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/n_on</code> message is received from the server when a node has resumed.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_on</code> message is received from the server when a node has resumed.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeRun.html" class="extype" name="de.sciss.synth.message.NodeRun">NodeRun</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.Responder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Responder"></a>
+      <a id="Responder:Responder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Responder$.html"><span class="name">Responder</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@Responder" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.ServerCodec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ServerCodec"></a>
+      <a id="ServerCodec:ServerCodec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ServerCodec$.html"><span class="name">ServerCodec</span></a><span class="result"> extends <a href="../../osc/PacketCodec.html" class="extype" name="de.sciss.osc.PacketCodec">PacketCodec</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ServerCodec" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message.ServerQuit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ServerQuit"></a>
+      <a id="ServerQuit:ServerQuit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ServerQuit$.html"><span class="name">ServerQuit</span></a><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="AsyncSend.html" class="extype" name="de.sciss.synth.message.AsyncSend">AsyncSend</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@ServerQuit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/quit</code> message tells the server to shut down.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/quit</code> message tells the server to shut down.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Server.html#quit():Unit" class="extmbr" name="de.sciss.synth.Server#quit">Server#quit</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.message.Status" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Status"></a>
+      <a id="Status:Status"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Status$.html"><span class="name">Status</span></a><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.message.package@Status" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>/status</code> message that queries the current statistics from the server.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

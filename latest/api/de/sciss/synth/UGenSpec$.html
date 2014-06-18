@@ -1,0 +1,936 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>UGenSpec - SysSon 0.8.0 API - de.sciss.synth.UGenSpec</title>
+          <meta name="description" content="UGenSpec - SysSon 0.8.0 API - de.sciss.synth.UGenSpec" />
+          <meta name="keywords" content="UGenSpec SysSon 0.8.0 API de.sciss.synth.UGenSpec" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'de.sciss.synth.UGenSpec$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <a href="UGenSpec.html" title="Go to companion"><img src="../../../lib/object_to_class_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
+        <h1><a href="UGenSpec.html" title="Go to companion">UGenSpec</a></h1> <span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">UGenSpec</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="de.sciss.synth.UGenSpec"><span>UGenSpec</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.synth.UGenSpec.Argument" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ArgumentextendsProductwithSerializable"></a>
+      <a id="Argument:Argument"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Argument.html"><span class="name">Argument</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tpe">tpe: <a href="UGenSpec$$ArgumentType.html" class="extype" name="de.sciss.synth.UGenSpec.ArgumentType">ArgumentType</a></span>, <span name="defaults">defaults: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a>, <a href="UGenSpec$$ArgumentValue.html" class="extype" name="de.sciss.synth.UGenSpec.ArgumentValue">ArgumentValue</a>]</span>, <span name="rates">rates: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a>, <a href="UGenSpec$$RateConstraint.html" class="extype" name="de.sciss.synth.UGenSpec.RateConstraint">RateConstraint</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@ArgumentextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen client-side (logical) input argument.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen client-side (logical) input argument.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the argument. On the server-side UGen inputs do not have argument names, so this
+                is purely for the user-interface. It will be the argument name of the constructor arguments
+                of the UGen class.</p></dd><dt class="param">tpe</dt><dd class="cmt"><p>the argument type, such as graph element <code>GE</code> or integer.</p></dd><dt class="param">defaults</dt><dd class="cmt"><p>default values for the argument, as specified depending on the UGen's calculation rate.</p></dd><dt class="param">rates</dt><dd class="cmt"><p>constraints for the argument's own rate, as specified depending on this UGen's calculation rate.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec.ArgumentType" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ArgumentTypeextendsAnyRef"></a>
+      <a id="ArgumentType:ArgumentType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$ArgumentType.html"><span class="name">ArgumentType</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@ArgumentTypeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Currently, two types of arguments are supported for UGen classes: <code>GE</code> and <code>Int</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Currently, two types of arguments are supported for UGen classes: <code>GE</code> and <code>Int</code>.
+However, the actual Scala type for graph elements may differ, depending on the GE's signal shape.
+If that shape is <code>String</code>, the argument may appear to have type <code>String</code> which is then internally
+converted to a UGen input.
+</p></div></div>
+    </li><li name="de.sciss.synth.UGenSpec.ArgumentValue" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ArgumentValueextendsAnyRef"></a>
+      <a id="ArgumentValue:ArgumentValue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$ArgumentValue.html"><span class="name">ArgumentValue</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@ArgumentValueextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Type of default value for a UGen constructor argument.</p><div class="fullcomment"><div class="comment cmt"><p>Type of default value for a UGen constructor argument. This allows for the inclusion
+of special values such as <code>Nyquist</code> or done actions that are more specific than
+for example <code>Constant</code>.
+</p></div></div>
+    </li><li name="de.sciss.synth.UGenSpec.Attribute" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AttributeextendsAnyRef"></a>
+      <a id="Attribute:Attribute"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Attribute.html"><span class="name">Attribute</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@AttributeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An attribute describes an aspect of a UGen related to how it consumes resources, whether it is individual etc.</p>
+    </li><li name="de.sciss.synth.UGenSpec.Doc" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DocextendsProductwithSerializable"></a>
+      <a id="Doc:Doc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Doc.html"><span class="name">Doc</span></a><span class="params">(<span name="body">body: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="args">args: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>, <span name="outputs">outputs: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>, <span name="links">links: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="warnPos">warnPos: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="examples">examples: <span class="extype" name="scala.List">List</span>[<a href="UGenSpec$$Example.html" class="extype" name="de.sciss.synth.UGenSpec.Example">Example</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@DocextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Documentation of a UGen.</p><div class="fullcomment"><div class="comment cmt"><p>Documentation of a UGen.
+</p></div><dl class="paramcmts block"><dt class="param">body</dt><dd class="cmt"><p>the main UGen description text, as a list of paragraphs.</p></dd><dt class="param">args</dt><dd class="cmt"><p>maps argument names to documentation for that argument, given as a list of paragraphs.</p></dd><dt class="param">outputs</dt><dd class="cmt"><p>maps output names to documentation for that output, given as a list of paragraphs.</p></dd><dt class="param">links</dt><dd class="cmt"><p>list of cross-links to related UGens.</p></dd><dt class="param">warnPos</dt><dd class="cmt"><p>if <code>true</code>, indicates that the argument positions are different than in SC-Lang,
+                warranting an explicit warning to the user to raise awareness.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec.Example" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExampleextendsProductwithSerializable"></a>
+      <a id="Example:Example"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Example.html"><span class="name">Example</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="tpe">tpe: <a href="UGenSpec$$Example$$Type.html" class="extype" name="de.sciss.synth.UGenSpec.Example.Type">Type</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@ExampleextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.Input" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="InputextendsProductwithSerializable"></a>
+      <a id="Input:Input"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Input.html"><span class="name">Input</span></a><span class="params">(<span name="arg">arg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="variadic">variadic: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@InputextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen (server-side) input corresponds with a particular argument in the client-side interface.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen (server-side) input corresponds with a particular argument in the client-side interface.
+</p></div><dl class="paramcmts block"><dt class="param">arg</dt><dd class="cmt"><p>the name of the argument (in the spec's <code>args</code> sequence) corresponding to the UGen input.</p></dd><dt class="param">variadic</dt><dd class="cmt"><p>if <code>true</code>, the signal is treated as a multi-channel input with variable number of channels.
+                only the last input of a UGen can be variadic. An example is the second input of
+                the <code>Out</code> UGen.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec.Output" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OutputextendsProductwithSerializable"></a>
+      <a id="Output:Output"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Output.html"><span class="name">Output</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="shape">shape: <a href="UGenSpec$$SignalShape.html" class="extype" name="de.sciss.synth.UGenSpec.SignalShape">SignalShape</a></span>, <span name="variadic">variadic: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@OutputextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Specification of a UGen output.</p><div class="fullcomment"><div class="comment cmt"><p>Specification of a UGen output. Note that this describes one logical output. A UGen with a
+variable number of output channels can be seen has having _one_ logical output. For instance,
+the <code>In</code> UGen has one output signal, even if that signal may have any number of channels.
+In contrast, the <code>Pitch</code> UGen has two discrete logical outputs, one indicating the status
+(&quot;hasFreq&quot;), the other giving the actually seen frequency.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>logical name of the output. The server does not know about output names,
+                this is purely for client side usage (e.g. in a GUI or help system).</p></dd><dt class="param">shape</dt><dd class="cmt"><p>the &quot;shape&quot; or type of output signal, for example (continuous) generic or binary trigger.
+                technically all signals are the same, the shape just indicates the expected shape of that
+                signal.</p></dd><dt class="param">variadic</dt><dd class="cmt"><p>if defined, specifies the name of an argument (in the spec's <code>args</code>) which must be of
+                type <code>Int</code>, determining the number of channels in this output.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec.RateConstraint" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RateConstraintextendsAnyRef"></a>
+      <a id="RateConstraint:RateConstraint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$RateConstraint.html"><span class="name">RateConstraint</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@RateConstraintextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">One of a fixed set of constraints on a UGen argument's calculation rate.</p>
+    </li><li name="de.sciss.synth.UGenSpec.RateMethod" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="RateMethodextendsAnyRef"></a>
+      <a id="RateMethod:RateMethod"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$RateMethod.html"><span class="name">RateMethod</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@RateMethodextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The shape of a UGen's constructor method relating to a particular calculation rate.</p><div class="fullcomment"><div class="comment cmt"><p>The shape of a UGen's constructor method relating to a particular calculation rate.
+For example, it may be one of the standard namings like <code>ar</code> for audio-rate
+(<code>RateMethod.Default</code>), or it may be a custom method.
+</p></div></div>
+    </li><li name="de.sciss.synth.UGenSpec.Rates" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RatesextendsAnyRef"></a>
+      <a id="Rates:Rates"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Rates.html"><span class="name">Rates</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@RatesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The supported calculation rates of a UGen can be either implied or a specified set of rates.</p>
+    </li><li name="de.sciss.synth.UGenSpec.SignalShape" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SignalShapeextendsAnyRef"></a>
+      <a id="SignalShape:SignalShape"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$SignalShape.html"><span class="name">SignalShape</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@SignalShapeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The logical shape or type or &quot;meaning&quot; of a signal.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec.ArgumentType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ArgumentType"></a>
+      <a id="ArgumentType:ArgumentType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$ArgumentType$.html"><span class="name">ArgumentType</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@ArgumentType" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.ArgumentValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ArgumentValue"></a>
+      <a id="ArgumentValue:ArgumentValue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$ArgumentValue$.html"><span class="name">ArgumentValue</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@ArgumentValue" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.Attribute" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Attribute"></a>
+      <a id="Attribute:Attribute"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Attribute$.html"><span class="name">Attribute</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@Attribute" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.Example" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Example"></a>
+      <a id="Example:Example"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Example$.html"><span class="name">Example</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@Example" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.RateConstraint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RateConstraint"></a>
+      <a id="RateConstraint:RateConstraint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$RateConstraint$.html"><span class="name">RateConstraint</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@RateConstraint" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.RateMethod" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RateMethod"></a>
+      <a id="RateMethod:RateMethod"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$RateMethod$.html"><span class="name">RateMethod</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@RateMethod" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.Rates" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Rates"></a>
+      <a id="Rates:Rates"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Rates$.html"><span class="name">Rates</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@Rates" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.SignalShape" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SignalShape"></a>
+      <a id="SignalShape:SignalShape"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$SignalShape$.html"><span class="name">SignalShape</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@SignalShape" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec#parse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parse(node:scala.xml.Node,docs:Boolean):de.sciss.synth.UGenSpec"></a>
+      <a id="parse(scala.xml.Node,Boolean):UGenSpec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parse</span><span class="params">(<span name="node">node: <span class="extype" name="scala.xml.Node">scala.xml.Node</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="UGenSpec.html" class="extype" name="de.sciss.synth.UGenSpec">UGenSpec</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@parse(node:scala.xml.Node,docs:Boolean):de.sciss.synth.UGenSpec" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Parses an individual XML node for one specific UGen specification.</p><div class="fullcomment"><div class="comment cmt"><p>Parses an individual XML node for one specific UGen specification.
+</p></div><dl class="paramcmts block"><dt class="param">node</dt><dd class="cmt"><p>the <code>&lt;ugen&gt;</code> node.</p></dd><dt class="param">docs</dt><dd class="cmt"><p>if <code>true</code>, parses documentation as well. if <code>false</code> skips documentation, thus
+            <code>spec.doc</code> will be <code>None</code>.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec#parseAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parseAll(source:xml.InputSource,docs:Boolean):Map[String,de.sciss.synth.UGenSpec]"></a>
+      <a id="parseAll(InputSource,Boolean):Map[String,UGenSpec]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parseAll</span><span class="params">(<span name="source">source: <span class="extype" name="scala.xml.InputSource">InputSource</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="UGenSpec.html" class="extype" name="de.sciss.synth.UGenSpec">UGenSpec</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@parseAll(source:xml.InputSource,docs:Boolean):Map[String,de.sciss.synth.UGenSpec]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Parses a complete XML file containing a number of UGen specifications.</p><div class="fullcomment"><div class="comment cmt"><p>Parses a complete XML file containing a number of UGen specifications.
+</p></div><dl class="paramcmts block"><dt class="param">source</dt><dd class="cmt"><p>the XML source, such as obtained from a file or input stream.</p></dd><dt class="param">docs</dt><dd class="cmt"><p>if <code>true</code>, parses documentation as well. if <code>false</code> skips documentation, thus
+                <code>spec.doc</code> will be <code>None</code>.</p></dd><dt>returns</dt><dd class="cmt"><p>a map from UGen names to their specifications.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec#standardPlugins" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="standardPlugins:List[String]"></a>
+      <a id="standardPlugins:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">standardPlugins</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="java.lang.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@standardPlugins:List[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">List of standard UGen plugin names.</p>
+    </li><li name="de.sciss.synth.UGenSpec#standardUGens" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="standardUGens:Map[String,de.sciss.synth.UGenSpec]"></a>
+      <a id="standardUGens:Map[String,UGenSpec]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">standardUGens</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="UGenSpec.html" class="extype" name="de.sciss.synth.UGenSpec">UGenSpec</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@standardUGens:Map[String,de.sciss.synth.UGenSpec]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily computes the specs of the UGens bundled with the standard SuperCollider distribution.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily computes the specs of the UGens bundled with the standard SuperCollider distribution.
+This reads and parses the <code>standard-ugens.xml</code> resource. The result maps from UGen names
+to their specifications.
+</p></div></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

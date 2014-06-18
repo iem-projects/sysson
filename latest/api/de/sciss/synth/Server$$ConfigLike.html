@@ -1,0 +1,1184 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>ConfigLike - SysSon 0.8.0 API - de.sciss.synth.Server.ConfigLike</title>
+          <meta name="description" content="ConfigLike - SysSon 0.8.0 API - de.sciss.synth.Server.ConfigLike" />
+          <meta name="keywords" content="ConfigLike SysSon 0.8.0 API de.sciss.synth.Server.ConfigLike" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'de.sciss.synth.Server$$ConfigLike';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="Server$.html" class="extype" name="de.sciss.synth.Server">Server</a></p>
+        <h1>ConfigLike</h1> <span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ConfigLike</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The base trait for <code>Config</code> and <code>ConfigBuilder</code> describes the settings used to boot scsynth in
+realtime or non-realtime mode, as well as its server address and port.</p><p>You obtain a <code>ConfigBuilder</code> by calling <code>Server.Config()</code>. This builder can then be mutated and
+will be implicitly converted to an immutable <code>Config</code> when required.</p><p>See <code>ConfigBuilder</code> for its default values.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Server$$Config.html" class="extype" name="de.sciss.synth.Server.Config">de.sciss.synth.Server.Config</a>
+</p></span><span class="cmt"><p><a href="Server$$ConfigBuilder.html" class="extype" name="de.sciss.synth.Server.ConfigBuilder">de.sciss.synth.Server.ConfigBuilder</a></p></span></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="Server$$Config.html" class="extype" name="de.sciss.synth.Server.Config">Config</a>, <a href="Server$$ConfigBuilder.html" class="extype" name="de.sciss.synth.Server.ConfigBuilder">ConfigBuilder</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="de.sciss.synth.Server.ConfigLike"><span>ConfigLike</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="de.sciss.synth.Server.ConfigLike#audioBuffers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="audioBuffers:Int"></a>
+      <a id="audioBuffers:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">audioBuffers</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@audioBuffers:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The maximum number of audio buffers (for the <code>Buffer</code> class).</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#audioBusChannels" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="audioBusChannels:Int"></a>
+      <a id="audioBusChannels:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">audioBusChannels</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@audioBusChannels:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The maximum number of audio bus channels.</p><div class="fullcomment"><div class="comment cmt"><p>The maximum number of audio bus channels. This includes the channels connected
+to hardware (<code>outputBusChannels</code>) as well as all channels for internal routing.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#blockSize" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="blockSize:Int"></a>
+      <a id="blockSize:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">blockSize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@blockSize:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The calculation block size.</p><div class="fullcomment"><div class="comment cmt"><p>The calculation block size. That is, the number of audio samples calculated en-bloc.
+This corresponds with the control rate, such that
+<code>controlRate := audioRate / blockSize</code>. It should be a power of two.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#controlBusChannels" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="controlBusChannels:Int"></a>
+      <a id="controlBusChannels:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">controlBusChannels</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@controlBusChannels:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The maximum number of control bus channels.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#deviceName" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="deviceName:Option[String]"></a>
+      <a id="deviceName:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deviceName</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@deviceName:Option[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) An option denoting the name of the sound card to use.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) An option denoting the name of the sound card to use. On systems which distinguish
+input and output devices (OS X), this implies that both are the same. Otherwise, you can
+use the <code>deviceNames</code> method instead.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>deviceNames
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#deviceNames" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="deviceNames:Option[(String,String)]"></a>
+      <a id="deviceNames:Option[(String,String)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deviceNames</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@deviceNames:Option[(String,String)]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) An option denoting the name of the input and output sound device to use.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) An option denoting the name of the input and output sound device to use. This is for
+systems which distinguish input and output devices (OS X). If you use a single device both for
+input and output (applies to most professional audio interfaces), you can simply use the
+single string method <code>deviceName</code>.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>deviceName
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#hardwareBlockSize" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="hardwareBlockSize:Int"></a>
+      <a id="hardwareBlockSize:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hardwareBlockSize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@hardwareBlockSize:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) A value to adjust the sound card's hardware block size.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) A value to adjust the sound card's hardware block size. Typically you will leave
+this to <code>0</code> which means that the current block size is used. The block sizes supported depend
+on the particular sound card. Lower values decrease latency but may increase CPU load.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#host" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="host:String"></a>
+      <a id="host:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">host</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@host:String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) Host address of scsynth, when trying to <code>connect</code> to an already running server on the net.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#inputBusChannels" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="inputBusChannels:Int"></a>
+      <a id="inputBusChannels:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inputBusChannels</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@inputBusChannels:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) The number of connected audio hardware input channels.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) The number of connected audio hardware input channels. This does not need to
+correspond to the actual number of channels your sound card provides, but can
+be lower or higher, although a higher value doesn't have any effect as channel
+indices above the number of channels of the sound card will be treated as
+internal channels.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#inputStreamsEnabled" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="inputStreamsEnabled:Option[String]"></a>
+      <a id="inputStreamsEnabled:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inputStreamsEnabled</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@inputStreamsEnabled:Option[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) An option to enable particular input 'streams' or 'bundles' of a sound card.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) An option to enable particular input 'streams' or 'bundles' of a sound card.
+This is a 'binary' String made of <code>'0'</code> and <code>'1'</code> characters.
+If the string is <code>&quot;01100&quot;</code>, for example, then only the second and third input streams on
+the device will be enabled.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#loadSynthDefs" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="loadSynthDefs:Boolean"></a>
+      <a id="loadSynthDefs:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadSynthDefs</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@loadSynthDefs:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Whether scsynth should load synth definitions stored on the hard-disk when booted.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#machPortName" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="machPortName:Option[(String,String)]"></a>
+      <a id="machPortName:Option[(String,String)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">machPortName</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@machPortName:Option[(String,String)]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">?</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#maxLogins" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="maxLogins:Int"></a>
+      <a id="maxLogins:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maxLogins</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@maxLogins:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) The maximum number of client connections when using TCP transport.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#maxNodes" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="maxNodes:Int"></a>
+      <a id="maxNodes:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maxNodes</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@maxNodes:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The maximum number of concurrent nodes (synths and groups).</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#maxSynthDefs" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="maxSynthDefs:Int"></a>
+      <a id="maxSynthDefs:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maxSynthDefs</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@maxSynthDefs:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The maximum number of synth defs.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#memorySize" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="memorySize:Int"></a>
+      <a id="memorySize:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">memorySize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@memorySize:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The maximum number of pre-allocated realtime memory in bytes.</p><div class="fullcomment"><div class="comment cmt"><p>The maximum number of pre-allocated realtime memory in bytes. This memory
+is used for many UGens such as <code>Limiter</code>, <code>DelayN</code> etc. It does not
+affect dynamically allocated memory such as audio buffers.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#nrtCommandPath" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="nrtCommandPath:String"></a>
+      <a id="nrtCommandPath:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nrtCommandPath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@nrtCommandPath:String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Non-Realtime) Path to the binary OSC file.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#nrtHeaderFormat" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="nrtHeaderFormat:de.sciss.synth.io.AudioFileType"></a>
+      <a id="nrtHeaderFormat:AudioFileType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nrtHeaderFormat</span><span class="result">: <a href="io/AudioFileType.html" class="extype" name="de.sciss.synth.io.AudioFileType">AudioFileType</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@nrtHeaderFormat:de.sciss.synth.io.AudioFileType" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Non-Realtime) Audio file format for writing the output.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#nrtInputPath" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="nrtInputPath:Option[String]"></a>
+      <a id="nrtInputPath:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nrtInputPath</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@nrtInputPath:Option[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Non-Realtime) Path to the audio input file used as audio input bus supplement.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#nrtOutputPath" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="nrtOutputPath:String"></a>
+      <a id="nrtOutputPath:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nrtOutputPath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@nrtOutputPath:String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Non-Realtime) Path to the audio output file used as audio output bus supplement.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#nrtSampleFormat" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="nrtSampleFormat:de.sciss.synth.io.SampleFormat"></a>
+      <a id="nrtSampleFormat:SampleFormat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nrtSampleFormat</span><span class="result">: <a href="io/SampleFormat.html" class="extype" name="de.sciss.synth.io.SampleFormat">SampleFormat</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@nrtSampleFormat:de.sciss.synth.io.SampleFormat" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Non-Realtime) Audio sample format for writing the output.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#outputBusChannels" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="outputBusChannels:Int"></a>
+      <a id="outputBusChannels:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">outputBusChannels</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@outputBusChannels:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The number of connected audio hardware output channels.</p><div class="fullcomment"><div class="comment cmt"><p>The number of connected audio hardware output channels. This does not need to
+correspond to the actual number of channels your sound card provides, but can
+be lower or higher, although a higher value doesn't have any effect as channel
+indices above the number of channels of the sound card will be treated as
+internal channels.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#outputStreamsEnabled" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="outputStreamsEnabled:Option[String]"></a>
+      <a id="outputStreamsEnabled:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">outputStreamsEnabled</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@outputStreamsEnabled:Option[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) An option to enable particular output 'streams' or 'bundles' of a sound card.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) An option to enable particular output 'streams' or 'bundles' of a sound card.
+This is a 'binary' String made of <code>'0'</code> and <code>'1'</code> characters.
+If the string is <code>&quot;01100&quot;</code>, for example, then only the second and third output streams on
+the device will be enabled.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#plugInsPaths" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="plugInsPaths:List[String]"></a>
+      <a id="plugInsPaths:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">plugInsPaths</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@plugInsPaths:List[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An explicit list of paths where DSP plugins are found.</p><div class="fullcomment"><div class="comment cmt"><p>An explicit list of paths where DSP plugins are found. Usually this is not
+specified, and scsynth looks for plugins in their default location.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#port" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="port:Int"></a>
+      <a id="port:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">port</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@port:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) UDP or TCP port used by scsynth.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#program" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="program:String"></a>
+      <a id="program:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">program</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@program:String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The path to <code>scsynth</code>, used when booting a server.</p><div class="fullcomment"><div class="comment cmt"><p>The path to <code>scsynth</code>, used when booting a server. This can be either a relative path
+(relating to the JVM's working directory), or an absolute path.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="de.sciss.synth.Server#defaultProgramPath">de.sciss.synth.Server#defaultProgramPath</span>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#randomSeeds" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="randomSeeds:Int"></a>
+      <a id="randomSeeds:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">randomSeeds</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@randomSeeds:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The number of individual random number generators allocated.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#restrictedPath" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="restrictedPath:Option[String]"></a>
+      <a id="restrictedPath:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">restrictedPath</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@restrictedPath:Option[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An option to restrict access to files (e.</p><div class="fullcomment"><div class="comment cmt"><p>An option to restrict access to files (e.g. for loading and saving buffers) to
+a particular directory. This is a security measure, preventing malicious clients from
+accessing parts of the hard-disk which they shouldn't.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#sampleRate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="sampleRate:Int"></a>
+      <a id="sampleRate:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sampleRate</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@sampleRate:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The audio hardware sampling rate to use.</p><div class="fullcomment"><div class="comment cmt"><p>The audio hardware sampling rate to use. A value of <code>0</code> indicates that scsynth
+should use the current sampling rate of the audio hardware. An explicit setting
+will make scsynth try to switch the sound card's sample rate if necessary.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#sessionPassword" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="sessionPassword:Option[String]"></a>
+      <a id="sessionPassword:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sessionPassword</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@sessionPassword:Option[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) A requires session password when using TCP transport.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) A requires session password when using TCP transport. When using TCP and the password option
+is set, each client must send the correct password as the first command to the server, otherwise it is
+rejected.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#transport" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="transport:de.sciss.osc.Transport.Net"></a>
+      <a id="transport:Net"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transport</span><span class="result">: <a href="../osc/Transport$$Net.html" class="extype" name="de.sciss.osc.Transport.Net">Net</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@transport:de.sciss.osc.Transport.Net" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) Open Sound Control transport used by scsynth.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) Open Sound Control transport used by scsynth. (Either of <code>UDP</code> and <code>TCP</code>).</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#verbosity" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="verbosity:Int"></a>
+      <a id="verbosity:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">verbosity</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@verbosity:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The verbosity level of scsynth.</p><div class="fullcomment"><div class="comment cmt"><p>The verbosity level of scsynth. The standard value is <code>0</code>, while
+<code>-1</code> suppresses informational messages, <code>-2</code> also suppresses many error messages.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#wireBuffers" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="wireBuffers:Int"></a>
+      <a id="wireBuffers:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wireBuffers</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@wireBuffers:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The maximum number of concurrent connections between UGens in a single synth.</p><div class="fullcomment"><div class="comment cmt"><p>The maximum number of concurrent connections between UGens in a single synth.
+ScalaCollider performs a depth-first topological sorting of the synth defs,
+so you should not worry too much about this value. It can become important
+in very heavy channel expansions and mix-down.</p><p>This value will be automatically increased if a more complex def is loaded
+at startup, but it cannot be increased thereafter without rebooting.
+</p></div></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#zeroConf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="zeroConf:Boolean"></a>
+      <a id="zeroConf:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zeroConf</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@zeroConf:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">(Realtime) Whether to announce scsynth's OSC service via zero conf.</p><div class="fullcomment"><div class="comment cmt"><p>(Realtime) Whether to announce scsynth's OSC service via zero conf. See
+<a href="http://en.wikipedia.org/wiki/Zero_configuration_networking" target="_blank">Wikipedia</a> for more details.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#internalBusIndex" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="internalBusIndex:Int"></a>
+      <a id="internalBusIndex:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">internalBusIndex</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@internalBusIndex:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A utility method providing the audio bus offset for the start of
+the internal channels.</p><div class="fullcomment"><div class="comment cmt"><p>A utility method providing the audio bus offset for the start of
+the internal channels. (simply the sum of <code>outputBusChannels</code> and <code>inputBusChannels</code>).
+</p></div></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.Server.ConfigLike#toNonRealtimeArgs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toNonRealtimeArgs:List[String]"></a>
+      <a id="toNonRealtimeArgs:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNonRealtimeArgs</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@toNonRealtimeArgs:List[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Produces a command line for booting scsynth in non-realtime mode.</p>
+    </li><li name="de.sciss.synth.Server.ConfigLike#toRealtimeArgs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toRealtimeArgs:List[String]"></a>
+      <a id="toRealtimeArgs:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toRealtimeArgs</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@toRealtimeArgs:List[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Produces a command line for booting scsynth in realtime mode.</p>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.Server$$ConfigLike@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

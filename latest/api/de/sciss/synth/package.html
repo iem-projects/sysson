@@ -1,0 +1,2436 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>synth - SysSon 0.8.0 API - de.sciss.synth</title>
+          <meta name="description" content="synth - SysSon 0.8.0 API - de.sciss.synth" />
+          <meta name="keywords" content="synth SysSon 0.8.0 API de.sciss.synth" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'de.sciss.synth.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a></p>
+        <h1>synth</h1> <span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synth</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The <code>synth</code> package provides some extension methods. In particular converting numbers to
+constant graph elements, operators on graph elements and allowing succinct creation of named controls.
+Furthermore, it contains the <code>play</code> function to quickly test graph functions.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="de.sciss.synth"><span>synth</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.synth.AddAction" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AddActionextendsAnyRef"></a>
+      <a id="AddAction:AddAction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AddAction.html"><span class="name">AddAction</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@AddActionextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Add-actions are used by the server to determine where to place a node with
+respect to other nodes.</p><div class="fullcomment"><div class="comment cmt"><p>Add-actions are used by the server to determine where to place a node with
+respect to other nodes. They form an enumeration of integers which are
+represented by case objects being subclasses of this abstract class.</p><p>The following actions are known:</p><ul><li><code>0</code> - <a href="addToHead$.html" class="extype" name="de.sciss.synth.addToHead">addToHead</a></li><li><code>1</code> - <a href="addToTail$.html" class="extype" name="de.sciss.synth.addToTail">addToTail</a></li><li><code>2</code> - <a href="addBefore$.html" class="extype" name="de.sciss.synth.addBefore">addBefore</a></li><li><code>3</code> - <a href="addAfter$.html" class="extype" name="de.sciss.synth.addAfter">addAfter</a></li><li><code>4</code> - <a href="addReplace$.html" class="extype" name="de.sciss.synth.addReplace">addReplace</a>
+</li></ul></div></div>
+    </li><li name="de.sciss.synth.AllocatorExhausted" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AllocatorExhaustedextendsRuntimeExceptionwithProductwithSerializable"></a>
+      <a id="AllocatorExhausted:AllocatorExhausted"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AllocatorExhausted.html"><span class="name">AllocatorExhausted</span></a><span class="params">(<span name="reason">reason: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.RuntimeException">RuntimeException</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@AllocatorExhaustedextendsRuntimeExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.AudioBus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AudioBusextendsBuswithProductwithSerializable"></a>
+      <a id="AudioBus:AudioBus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioBus.html"><span class="name">AudioBus</span></a><span class="params">(<span name="server">server: <a href="Server.html" class="extype" name="de.sciss.synth.Server">Server</a></span>, <span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="Bus.html" class="extype" name="de.sciss.synth.Bus">Bus</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@AudioBusextendsBuswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.AudioRated" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AudioRatedextendsAnyRef"></a>
+      <a id="AudioRated:AudioRated"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioRated.html"><span class="name">AudioRated</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@AudioRatedextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility trait that defines a <code>rate</code> method returning <code>audio</code>.</p>
+    </li><li name="de.sciss.synth.Buffer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufferextendsModelImpl[de.sciss.synth.BufferManager.BufferInfo]withProductwithSerializable"></a>
+      <a id="Buffer:Buffer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Buffer.html"><span class="name">Buffer</span></a><span class="params">(<span name="server">server: <a href="Server.html" class="extype" name="de.sciss.synth.Server">Server</a></span>, <span name="id">id: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.model.impl.ModelImpl">ModelImpl</span>[<a href="BufferManager$$BufferInfo.html" class="extype" name="de.sciss.synth.BufferManager.BufferInfo">BufferInfo</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@BufferextendsModelImpl[de.sciss.synth.BufferManager.BufferInfo]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.BufferManager" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufferManagerextendsModelImpl[de.sciss.synth.BufferManager.BufferInfo]"></a>
+      <a id="BufferManager:BufferManager"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferManager.html"><span class="name">BufferManager</span></a><span class="result"> extends <span class="extype" name="de.sciss.model.impl.ModelImpl">ModelImpl</span>[<a href="BufferManager$$BufferInfo.html" class="extype" name="de.sciss.synth.BufferManager.BufferInfo">BufferInfo</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@BufferManagerextendsModelImpl[de.sciss.synth.BufferManager.BufferInfo]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Bus" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="BusextendsAnyRef"></a>
+      <a id="Bus:Bus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Bus.html"><span class="name">Bus</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@BusextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Completion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Completion[-T]extendsProductwithSerializable"></a>
+      <a id="Completion[-T]:Completion[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Completion.html"><span class="name">Completion</span></a><span class="tparams">[<span name="T">-T</span>]</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="de.sciss.synth.Completion.T">T</span>) ⇒ <a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>, <span name="action">action: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="de.sciss.synth.Completion.T">T</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Completion[-T]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ControlABusMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ControlABusMapextendsAnyRef"></a>
+      <a id="ControlABusMap:ControlABusMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlABusMap.html"><span class="name">ControlABusMap</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlABusMapextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A mapping from an audio bus to a synth control.</p><div class="fullcomment"><div class="comment cmt"><p>A mapping from an audio bus to a synth control.</p><p>Note that a mapped control acts similar to an <code>InFeedback</code> UGen in that it does not matter
+whether the audio bus was written before the execution of the synth whose control is mapped or not.
+If it was written before, no delay is introduced, otherwise a delay of one control block is introduced.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ugen/InFeedback.html" class="extype" name="de.sciss.synth.ugen.InFeedback">de.sciss.synth.ugen.InFeedback</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.ControlBus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ControlBusextendsBuswithProductwithSerializable"></a>
+      <a id="ControlBus:ControlBus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlBus.html"><span class="name">ControlBus</span></a><span class="params">(<span name="server">server: <a href="Server.html" class="extype" name="de.sciss.synth.Server">Server</a></span>, <span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="Bus.html" class="extype" name="de.sciss.synth.Bus">Bus</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlBusextendsBuswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ControlFillRange" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ControlFillRangeextendsProductwithSerializable"></a>
+      <a id="ControlFillRange:ControlFillRange"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlFillRange.html"><span class="name">ControlFillRange</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlFillRangeextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ControlKBusMap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ControlKBusMapextendsAnyRef"></a>
+      <a id="ControlKBusMap:ControlKBusMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlKBusMap.html"><span class="name">ControlKBusMap</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlKBusMapextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A mapping from a control-rate bus to a synth control.</p>
+    </li><li name="de.sciss.synth.ControlRated" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ControlRatedextendsAnyRef"></a>
+      <a id="ControlRated:ControlRated"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlRated.html"><span class="name">ControlRated</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlRatedextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility trait that defines a <code>rate</code> method returning <code>control</code>.</p>
+    </li><li name="de.sciss.synth.ControlSet" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ControlSetextendsAnyRef"></a>
+      <a id="ControlSet:ControlSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlSet.html"><span class="name">ControlSet</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlSetextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Curve" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CurveextendsAnyRef"></a>
+      <a id="Curve:Curve"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Curve.html"><span class="name">Curve</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@CurveextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.DemandRated" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DemandRatedextendsAnyRef"></a>
+      <a id="DemandRated:DemandRated"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DemandRated.html"><span class="name">DemandRated</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@DemandRatedextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility trait that defines a <code>rate</code> method returning <code>demand</code>.</p>
+    </li><li name="de.sciss.synth.DoneAction" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="DoneActionextendsProduct"></a>
+      <a id="DoneAction:DoneAction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DoneAction.html"><span class="name">DoneAction</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@DoneActionextendsProduct" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An enumeration of special codes used by some UGens to issue a related action when they they are &quot;done&quot;.</p><div class="fullcomment"><div class="comment cmt"><p>An enumeration of special codes used by some UGens to issue a related action when they they are &quot;done&quot;.
+For example, a <code>PlayBuf</code> can be instructed to free its enclosing synth when the buffer has been played
+to the end, using the <a href="freeSelf$.html" class="extype" name="de.sciss.synth.freeSelf">freeSelf</a> done-action.</p><p>The following actions are known:</p><ul><li><code>0</code> - <a href="doNothing$.html" class="extype" name="de.sciss.synth.doNothing">doNothing</a></li><li><code>1</code> - <a href="pauseSelf$.html" class="extype" name="de.sciss.synth.pauseSelf">pauseSelf</a></li><li><code>2</code> - <a href="freeSelf$.html" class="extype" name="de.sciss.synth.freeSelf">freeSelf</a></li><li><code>3</code> - <a href="freeSelfPred$.html" class="extype" name="de.sciss.synth.freeSelfPred">freeSelfPred</a></li><li><code>4</code> - <a href="freeSelfSucc$.html" class="extype" name="de.sciss.synth.freeSelfSucc">freeSelfSucc</a></li><li><code>5</code> - <a href="freeSelfPredAll$.html" class="extype" name="de.sciss.synth.freeSelfPredAll">freeSelfPredAll</a></li><li><code>6</code> - <a href="freeSelfSuccAll$.html" class="extype" name="de.sciss.synth.freeSelfSuccAll">freeSelfSuccAll</a></li><li><code>7</code> - <a href="freeSelfToHead$.html" class="extype" name="de.sciss.synth.freeSelfToHead">freeSelfToHead</a></li><li><code>8</code> - <a href="freeSelfToTail$.html" class="extype" name="de.sciss.synth.freeSelfToTail">freeSelfToTail</a></li><li><code>9</code> - <a href="freeSelfPausePred$.html" class="extype" name="de.sciss.synth.freeSelfPausePred">freeSelfPausePred</a></li><li><code>10</code> - <a href="freeSelfPauseSucc$.html" class="extype" name="de.sciss.synth.freeSelfPauseSucc">freeSelfPauseSucc</a></li><li><code>11</code> - <a href="freeSelfPredDeep$.html" class="extype" name="de.sciss.synth.freeSelfPredDeep">freeSelfPredDeep</a></li><li><code>12</code> - <a href="freeSelfSuccDeep$.html" class="extype" name="de.sciss.synth.freeSelfSuccDeep">freeSelfSuccDeep</a></li><li><code>13</code> - <a href="freeAllInGroup$.html" class="extype" name="de.sciss.synth.freeAllInGroup">freeAllInGroup</a></li><li><code>14</code> - <a href="freeGroup$.html" class="extype" name="de.sciss.synth.freeGroup">freeGroup</a>
+</li></ul></div></div>
+    </li><li name="de.sciss.synth.FillRange" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FillRangeextendsProductwithSerializable"></a>
+      <a id="FillRange:FillRange"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FillRange.html"><span class="name">FillRange</span></a><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="num">num: <span class="extype" name="scala.Int">Int</span></span>, <span name="value">value: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@FillRangeextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A fill range for control buses or buffers.</p><div class="fullcomment"><div class="comment cmt"><p>A fill range for control buses or buffers.
+</p></div><dl class="paramcmts block"><dt class="param">index</dt><dd class="cmt"><p>sample offset into the buffer or channel offset into the bus.
+              for multi channel buffers, multiply the frame offset by the number of channels</p></dd><dt class="param">num</dt><dd class="cmt"><p>the number of samples to fill. for multi channel buffers,
+              multiple the number of frames by the number of channels</p></dd><dt class="param">value</dt><dd class="cmt"><p>the value to write to the bus or buffer in the given range
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.FillValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FillValueextendsProductwithSerializable"></a>
+      <a id="FillValue:FillValue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FillValue.html"><span class="name">FillValue</span></a><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="value">value: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@FillValueextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A tuple consisting of an index and value for that index.</p><div class="fullcomment"><div class="comment cmt"><p>A tuple consisting of an index and value for that index.
+</p></div><dl class="paramcmts block"><dt class="param">index</dt><dd class="cmt"><p>sample offset into the buffer or channel offset into the bus.
+              for multi channel buffers, multiply the frame offset by the number of channels</p></dd><dt class="param">value</dt><dd class="cmt"><p>the value to write to the bus or buffer in the given range
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.GE" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="GEextendsProduct"></a>
+      <a id="GE:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GE.html"><span class="name">GE</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@GEextendsProduct" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The main trait used in synthesis graph, a graph element, abbreviated as <code>GE</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The main trait used in synthesis graph, a graph element, abbreviated as <code>GE</code>.</p><p>Graph elements are characterized by having a calculation rate (possibly unknown),
+and they embody future UGens, which are created by invoking the <code>expand</code> method.
+For each ugen in SuperCollider, there is a corresponding graph element defined
+in the <code>ugen</code> package, and these elements take again graph elements as arguments.
+Multi-channel expansion is thus deferred to the transition from <code>SynthGraph</code> to <code>UGenGraph</code>.</p><p>Currently, also a lot of unary and binary operations are directly defined on the <code>GE</code> trait,
+although they might go into a separate <code>GEOps</code> implicit class in future versions.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SynthGraph.html" class="extype" name="de.sciss.synth.SynthGraph">de.sciss.synth.SynthGraph</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.GEOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GEOpsextendsAnyVal"></a>
+      <a id="GEOps:GEOps"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GEOps.html"><span class="name">GEOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@GEOpsextendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Group" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupextendsNodewithProductwithSerializable"></a>
+      <a id="Group:Group"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Group.html"><span class="name">Group</span></a><span class="params">(<span name="server">server: <a href="Server.html" class="extype" name="de.sciss.synth.Server">Server</a></span>, <span name="id">id: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="Node.html" class="extype" name="de.sciss.synth.Node">Node</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@GroupextendsNodewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.HasDoneFlag" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HasDoneFlagextendsAnyRef"></a>
+      <a id="HasDoneFlag:HasDoneFlag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HasDoneFlag.html"><span class="name">HasDoneFlag</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@HasDoneFlagextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">   Marks a ugen which sets a special done
+   flag that can be read by ugens such
+   as <code>Done</code>.</p>
+    </li><li name="de.sciss.synth.HasSideEffect" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="HasSideEffectextendsAnyRef"></a>
+      <a id="HasSideEffect:HasSideEffect"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HasSideEffect.html"><span class="name">HasSideEffect</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@HasSideEffectextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">   Marks a ugen which has side effects
+   such as writing to a bus or buffer,
+   communicating back to the client, etc.</p><div class="fullcomment"><div class="comment cmt"><p>   Marks a ugen which has side effects
+   such as writing to a bus or buffer,
+   communicating back to the client, etc.
+   Only side-effect ugens are valid roots
+   of the ugen graph, that way other
+   orphaned non-side-effect ugens are
+   automatically removed from the graph.
+</p></div></div>
+    </li><li name="de.sciss.synth.IsIndividual" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="IsIndividualextendsAnyRef"></a>
+      <a id="IsIndividual:IsIndividual"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IsIndividual.html"><span class="name">IsIndividual</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@IsIndividualextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">   Marks a ugen which is individual, that
+   is two instances of that ugen are different
+   even if all inputs are the same.</p><div class="fullcomment"><div class="comment cmt"><p>   Marks a ugen which is individual, that
+   is two instances of that ugen are different
+   even if all inputs are the same. This is
+   the case for example for all ugens that
+   depend on the random seed (as indicated
+   by the sub-type <code>HasRandSeed</code>) or which
+   mix onto buses or buffers (e.g. <code>RecordBuf</code>).</p><p>   Note that for example <code>BufWr</code> could be
+   considered not individual as two identically
+   parametrized BufWr instances produce exactly the same
+   behaviour as one of them. However,
+   they are in certain spots of the UGen
+   graph in which they could be behave differently,
+   for example if the computation order is
+   <code>BufWr</code> -&gt; <code>BufRd</code> -&gt; <code>BufRd</code>. We thus
+   defensively mark every ugen as individual
+   which writes to a Buffer or Bus.
+</p></div></div>
+    </li><li name="de.sciss.synth.Lazy" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LazyextendsProduct"></a>
+      <a id="Lazy:Lazy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Lazy.html"><span class="name">Lazy</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@LazyextendsProduct" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Elements implementing the <code>Lazy</code> trait may participate in the building of a
+<code>SynthGraph</code> body.</p><div class="fullcomment"><div class="comment cmt"><p>Elements implementing the <code>Lazy</code> trait may participate in the building of a
+<code>SynthGraph</code> body. They can be added to the current graph by calling
+<code>SynthGraph.builder.addLazy</code>. Then, when the graph is expanded, the
+<code>force</code> method is called on those registered elements, allowing them
+to either spawn new graph elements or actually expand to <code>UGen</code>s which
+can be added to the ugen graph builder argument.</p><p>In most cases, lazy elements will expanded to ugens, and thus the subtype
+<code>Lazy.Expander</code> is the most convenient way to implement this trait, as it already
+does most of the logic, and provide's for <code>GE</code>s <code>expand</code> method.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">de.sciss.synth.Lazy.Expander</a>
+</p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.MaybeRate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="MaybeRateextendsProduct"></a>
+      <a id="MaybeRate:MaybeRate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MaybeRate.html"><span class="name">MaybeRate</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@MaybeRateextendsProduct" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait denotes an optional server calculation rate.</p><div class="fullcomment"><div class="comment cmt"><p>This trait denotes an optional server calculation rate. Either the rate is explicit, <a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a>,
+or it is undefined, <a href="UndefinedRate$.html" class="extype" name="de.sciss.synth.UndefinedRate">UndefinedRate</a>. In the latter case, a rate is implicitly
+derived from the input arguments of a UGen.
+</p></div></div>
+    </li><li name="de.sciss.synth.Node" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NodeextendsModelImpl[de.sciss.synth.NodeManager.NodeChange]"></a>
+      <a id="Node:Node"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Node.html"><span class="name">Node</span></a><span class="result"> extends <span class="extype" name="de.sciss.model.impl.ModelImpl">ModelImpl</span>[<a href="NodeManager$$NodeChange.html" class="extype" name="de.sciss.synth.NodeManager.NodeChange">NodeChange</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@NodeextendsModelImpl[de.sciss.synth.NodeManager.NodeChange]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.NodeIDAllocator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeIDAllocatorextendsAnyRef"></a>
+      <a id="NodeIDAllocator:NodeIDAllocator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeIDAllocator.html"><span class="name">NodeIDAllocator</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@NodeIDAllocatorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.NodeManager" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeManagerextendsModelImpl[de.sciss.synth.NodeManager.Update]"></a>
+      <a id="NodeManager:NodeManager"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeManager.html"><span class="name">NodeManager</span></a><span class="result"> extends <span class="extype" name="de.sciss.model.impl.ModelImpl">ModelImpl</span>[<a href="NodeManager$$Update.html" class="extype" name="de.sciss.synth.NodeManager.Update">Update</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@NodeManagerextendsModelImpl[de.sciss.synth.NodeManager.Update]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Optional" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Optional[A]extendsProductwithSerializable"></a>
+      <a id="Optional[A]:Optional[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Optional.html"><span class="name">Optional</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="option">option: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="de.sciss.synth.Optional.A">A</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Optional[A]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Rate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="RateextendsMaybeRatewithOrdered[de.sciss.synth.Rate]"></a>
+      <a id="Rate:Rate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Rate.html"><span class="name">Rate</span></a><span class="result"> extends <a href="MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a> with <span class="extype" name="scala.Ordered">Ordered</span>[<a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@RateextendsMaybeRatewithOrdered[de.sciss.synth.Rate]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The server calculation rate of a UGen or a UGen output.</p><div class="fullcomment"><div class="comment cmt"><p>The server calculation rate of a UGen or a UGen output.</p><p>The following rates are known:</p><ul><li><a href="scalar$.html" class="extype" name="de.sciss.synth.scalar">scalar</a> (only calculated once when a <code>Synth</code> is initialized.</li><li><a href="control$.html" class="extype" name="de.sciss.synth.control">control</a> (one value per block)</li><li><a href="audio$.html" class="extype" name="de.sciss.synth.audio">audio</a> (full audio sample rate)</li><li><a href="demand$.html" class="extype" name="de.sciss.synth.demand">demand</a> (calculation specially triggered on demand)
+</li></ul></div></div>
+    </li><li name="de.sciss.synth.RichDouble" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RichDoubleextendsAnyValwithRichNumber.NAryGEOps"></a>
+      <a id="RichDouble:RichDouble"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RichDouble.html"><span class="name">RichDouble</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <a href="RichNumber$$NAryGEOps.html" class="extype" name="de.sciss.synth.RichNumber.NAryGEOps">NAryGEOps</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@RichDoubleextendsAnyValwithRichNumber.NAryGEOps" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.RichFloat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RichFloatextendsAnyValwithRichNumber.NAryGEOps"></a>
+      <a id="RichFloat:RichFloat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RichFloat.html"><span class="name">RichFloat</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <a href="RichNumber$$NAryGEOps.html" class="extype" name="de.sciss.synth.RichNumber.NAryGEOps">NAryGEOps</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@RichFloatextendsAnyValwithRichNumber.NAryGEOps" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.RichInt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RichIntextendsAnyValwithRichNumber.NAryGEOps"></a>
+      <a id="RichInt:RichInt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RichInt.html"><span class="name">RichInt</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <a href="RichNumber$$NAryGEOps.html" class="extype" name="de.sciss.synth.RichNumber.NAryGEOps">NAryGEOps</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@RichIntextendsAnyValwithRichNumber.NAryGEOps" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ScalarRated" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ScalarRatedextendsAnyRef"></a>
+      <a id="ScalarRated:ScalarRated"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ScalarRated.html"><span class="name">ScalarRated</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ScalarRatedextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility trait that defines a <code>rate</code> method returning <code>scalar</code>.</p>
+    </li><li name="de.sciss.synth.Server" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ServerextendsServerLikewithModel[de.sciss.synth.Server.Update]"></a>
+      <a id="Server:Server"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Server.html"><span class="name">Server</span></a><span class="result"> extends <a href="ServerLike.html" class="extype" name="de.sciss.synth.ServerLike">ServerLike</a> with <span class="extype" name="de.sciss.model.Model">Model</span>[<a href="Server$$Update.html" class="extype" name="de.sciss.synth.Server.Update">Update</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ServerextendsServerLikewithModel[de.sciss.synth.Server.Update]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ServerConnection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ServerConnectionextendsServerLikewithModel[de.sciss.synth.ServerConnection.Condition]"></a>
+      <a id="ServerConnection:ServerConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ServerConnection.html"><span class="name">ServerConnection</span></a><span class="result"> extends <a href="ServerLike.html" class="extype" name="de.sciss.synth.ServerLike">ServerLike</a> with <span class="extype" name="de.sciss.model.Model">Model</span>[<a href="ServerConnection$$Condition.html" class="extype" name="de.sciss.synth.ServerConnection.Condition">Condition</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ServerConnectionextendsServerLikewithModel[de.sciss.synth.ServerConnection.Condition]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ServerLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ServerLikeextendsAnyRef"></a>
+      <a id="ServerLike:ServerLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ServerLike.html"><span class="name">ServerLike</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ServerLikeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Synth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthextendsNodewithProductwithSerializable"></a>
+      <a id="Synth:Synth"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Synth.html"><span class="name">Synth</span></a><span class="params">(<span name="server">server: <a href="Server.html" class="extype" name="de.sciss.synth.Server">Server</a></span>, <span name="id">id: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="Node.html" class="extype" name="de.sciss.synth.Node">Node</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@SynthextendsNodewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.SynthDef" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthDefextendsProductwithSerializable"></a>
+      <a id="SynthDef:SynthDef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthDef.html"><span class="name">SynthDef</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="graph">graph: <a href="UGenGraph.html" class="extype" name="de.sciss.synth.UGenGraph">UGenGraph</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@SynthDefextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.SynthGraph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthGraphextendsProductwithSerializable"></a>
+      <a id="SynthGraph:SynthGraph"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthGraph.html"><span class="name">SynthGraph</span></a><span class="params">(<span name="sources">sources: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>]</span>, <span name="controlProxies">controlProxies: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="ugen/ControlProxyLike.html" class="extype" name="de.sciss.synth.ugen.ControlProxyLike">ControlProxyLike</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@SynthGraphextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGen" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UGenextendsProduct"></a>
+      <a id="UGen:UGen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGen.html"><span class="name">UGen</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenextendsProduct" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenGraph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UGenGraphextendsProductwithSerializable"></a>
+      <a id="UGenGraph:UGenGraph"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenGraph.html"><span class="name">UGenGraph</span></a><span class="params">(<span name="constants">constants: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>]</span>, <span name="controlValues">controlValues: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>]</span>, <span name="controlNames">controlNames: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Int">Int</span>)]</span>, <span name="ugens">ugens: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="UGenGraph$$RichUGen.html" class="extype" name="de.sciss.synth.UGenGraph.RichUGen">RichUGen</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenGraphextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenIn" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="UGenInextendsUGenInLike"></a>
+      <a id="UGenIn:UGenIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenIn.html"><span class="name">UGenIn</span></a><span class="result"> extends <a href="UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenInextendsUGenInLike" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An element that can be used as an input to a UGen.</p><div class="fullcomment"><div class="comment cmt"><p>An element that can be used as an input to a UGen.
+This is after multi-channel-expansion, hence implementing
+classes are SingleOutUGen, UGenOutProxy, ControlOutProxy, and Constant.
+</p></div></div>
+    </li><li name="de.sciss.synth.UGenInLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UGenInLikeextendsGE"></a>
+      <a id="UGenInLike:UGenInLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenInLike.html"><span class="name">UGenInLike</span></a><span class="result"> extends <a href="GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenInLikeextendsGE" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSource" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UGenSource[U]extendsLazy.Expander[U]withProduct"></a>
+      <a id="UGenSource[U]:UGenSource[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSource.html"><span class="name">UGenSource</span></a><span class="tparams">[<span name="U">U</span>]</span><span class="result"> extends <a href="Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="de.sciss.synth.UGenSource.U">U</span>] with <span class="extype" name="scala.Product">Product</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenSource[U]extendsLazy.Expander[U]withProduct" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UGenSpecextendsProductwithSerializable"></a>
+      <a id="UGenSpec:UGenSpec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec.html"><span class="name">UGenSpec</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="attr">attr: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="UGenSpec$$Attribute.html" class="extype" name="de.sciss.synth.UGenSpec.Attribute">Attribute</a>]</span>, <span name="rates">rates: <a href="UGenSpec$$Rates.html" class="extype" name="de.sciss.synth.UGenSpec.Rates">Rates</a></span>, <span name="args">args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="UGenSpec$$Argument.html" class="extype" name="de.sciss.synth.UGenSpec.Argument">Argument</a>]</span>, <span name="inputs">inputs: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="UGenSpec$$Input.html" class="extype" name="de.sciss.synth.UGenSpec.Input">Input</a>]</span>, <span name="outputs">outputs: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="UGenSpec$$Output.html" class="extype" name="de.sciss.synth.UGenSpec.Output">Output</a>]</span>, <span name="doc">doc: <span class="extype" name="scala.Option">Option</span>[<a href="UGenSpec$$Doc.html" class="extype" name="de.sciss.synth.UGenSpec.Doc">Doc</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenSpecextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Specification of a Unit Generator.</p><div class="fullcomment"><div class="comment cmt"><p>Specification of a Unit Generator.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the unit generator, as seen by the server</p></dd><dt class="param">attr</dt><dd class="cmt"><p>a set of attributes which characterize the UGen, such as resource usage or uniqueness</p></dd><dt class="param">rates</dt><dd class="cmt"><p>at which calculation rates the UGen runs, and whether the rate is implied</p></dd><dt class="param">args</dt><dd class="cmt"><p>the constructor arguments of the UGen representation. This is the interface for the client-side
+                instantiation and may include types other than <code>GE</code>, for example integers for fixed
+                number of channels, etc., as well as definitions for default values.</p></dd><dt class="param">inputs</dt><dd class="cmt"><p>the inputs as passed to the underlying UGen (server-side object). Inputs are things which
+                expand to <code>UGenInLike</code> elements. Typically they correspond to client-side <code>args</code> arguments.
+                The order of this sequence must be correctly reflecting the UGen plugin interface, whereas
+                the order of the <code>args</code> sequence may diverge for an improved user interface.</p></dd><dt class="param">outputs</dt><dd class="cmt"><p>a list of output specifications</p></dd><dt class="param">doc</dt><dd class="cmt"><p>optional text documentation
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.UsesRandSeed" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UsesRandSeedextendsIsIndividual"></a>
+      <a id="UsesRandSeed:UsesRandSeed"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UsesRandSeed.html"><span class="name">UsesRandSeed</span></a><span class="result"> extends <a href="IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UsesRandSeedextendsIsIndividual" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.WritesBuffer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WritesBufferextendsHasSideEffectwithIsIndividual"></a>
+      <a id="WritesBuffer:WritesBuffer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="WritesBuffer.html"><span class="name">WritesBuffer</span></a><span class="result"> extends <a href="HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <a href="IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@WritesBufferextendsHasSideEffectwithIsIndividual" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.WritesBus" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WritesBusextendsHasSideEffectwithIsIndividual"></a>
+      <a id="WritesBus:WritesBus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="WritesBus.html"><span class="name">WritesBus</span></a><span class="result"> extends <a href="HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <a href="IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@WritesBusextendsHasSideEffectwithIsIndividual" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.WritesFFT" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WritesFFTextendsHasSideEffectwithIsIndividual"></a>
+      <a id="WritesFFT:WritesFFT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="WritesFFT.html"><span class="name">WritesFFT</span></a><span class="result"> extends <a href="HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <a href="IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@WritesFFTextendsHasSideEffectwithIsIndividual" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.rangeOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="rangeOpsextendsAnyVal"></a>
+      <a id="rangeOps:rangeOps"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$rangeOps.html"><span class="name">rangeOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@rangeOpsextendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="de.sciss.synth.Buffer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Buffer"></a>
+      <a id="Buffer:Buffer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Buffer$.html"><span class="name">Buffer</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Buffer" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.BufferManager" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufferManager"></a>
+      <a id="BufferManager:BufferManager"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferManager$.html"><span class="name">BufferManager</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@BufferManager" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.BuildInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BuildInfo"></a>
+      <a id="BuildInfo:BuildInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BuildInfo$.html"><span class="name">BuildInfo</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@BuildInfo" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Bus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Bus"></a>
+      <a id="Bus:Bus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Bus$.html"><span class="name">Bus</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Bus" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Client" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Client"></a>
+      <a id="Client:Client"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Client$.html"><span class="name">Client</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Client" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Completion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Completion"></a>
+      <a id="Completion:Completion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Completion$.html"><span class="name">Completion</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Completion" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ControlABusMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ControlABusMap"></a>
+      <a id="ControlABusMap:ControlABusMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlABusMap$.html"><span class="name">ControlABusMap</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlABusMap" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ControlFillRange" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ControlFillRange"></a>
+      <a id="ControlFillRange:ControlFillRange"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlFillRange$.html"><span class="name">ControlFillRange</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlFillRange" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ControlKBusMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ControlKBusMap"></a>
+      <a id="ControlKBusMap:ControlKBusMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlKBusMap$.html"><span class="name">ControlKBusMap</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlKBusMap" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ControlSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ControlSet"></a>
+      <a id="ControlSet:ControlSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ControlSet$.html"><span class="name">ControlSet</span></a><span class="result"> extends <span class="extype" name="de.sciss.synth.ControlSetValueImplicits">ControlSetValueImplicits</span> with <span class="extype" name="de.sciss.synth.ControlSetVectorImplicits">ControlSetVectorImplicits</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ControlSet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Curve" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Curve"></a>
+      <a id="Curve:Curve"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Curve$.html"><span class="name">Curve</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Curve" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.DoneAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DoneAction"></a>
+      <a id="DoneAction:DoneAction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DoneAction$.html"><span class="name">DoneAction</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@DoneAction" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.FillRange" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FillRange"></a>
+      <a id="FillRange:FillRange"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FillRange$.html"><span class="name">FillRange</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@FillRange" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.FillValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FillValue"></a>
+      <a id="FillValue:FillValue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FillValue$.html"><span class="name">FillValue</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@FillValue" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.GE" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="GE"></a>
+      <a id="GE:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="GE$.html"><span class="name">GE</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@GE" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The UGen graph is constructed from interconnecting graph elements (GE).</p><div class="fullcomment"><div class="comment cmt"><p>The UGen graph is constructed from interconnecting graph elements (GE).
+Graph elements can be decomposed into a sequence of UGenIn objects.
+Graph elements are ordinary UGens, UGen proxies, Control proxies,
+Constants, and collections of UGen inputs which result from
+multichannel expansion (UGenInSeq).
+</p></div></div>
+    </li><li name="de.sciss.synth.GraphFunction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GraphFunction"></a>
+      <a id="GraphFunction:GraphFunction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="GraphFunction$.html"><span class="name">GraphFunction</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@GraphFunction" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Group" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Group"></a>
+      <a id="Group:Group"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Group$.html"><span class="name">Group</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Group" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Lazy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Lazy"></a>
+      <a id="Lazy:Lazy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Lazy$.html"><span class="name">Lazy</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Lazy" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.MaybeRate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MaybeRate"></a>
+      <a id="MaybeRate:MaybeRate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MaybeRate$.html"><span class="name">MaybeRate</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@MaybeRate" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Node" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Node"></a>
+      <a id="Node:Node"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Node$.html"><span class="name">Node</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Node" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A representation for a node on the server's tree.</p><div class="fullcomment"><div class="comment cmt"><p>A representation for a node on the server's tree. A <code>Node</code> is either a <code>Synth</code> or a <code>Group</code>.</p><p><b>Note</b> that if the node is a group, all messages send to the node which are not specific to a
+<code>Synth</code> or <code>Group</code>, i.e. all messages found in this class, will affect all child nodes of the group.
+For example, if <code>release()</code> is called on a <code>Group</code>, the underlying <code>setMsg</code> is propagated to all
+<code>Synth</code>s in the tree whose root is this group.
+</p></div></div>
+    </li><li name="de.sciss.synth.NodeManager" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NodeManager"></a>
+      <a id="NodeManager:NodeManager"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NodeManager$.html"><span class="name">NodeManager</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@NodeManager" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Ops" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Ops"></a>
+      <a id="Ops:Ops"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Ops$.html"><span class="name">Ops</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Ops" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Importing the contents of this object adds imperative (side-effect) functions to resources such as
+synths, buses, buffers.</p><div class="fullcomment"><div class="comment cmt"><p>Importing the contents of this object adds imperative (side-effect) functions to resources such as
+synths, buses, buffers. In general these reflect the OSC messages defined for each object, and send
+them straight to the server. For example, a <code>Synth</code> has function <code>newMsg</code> which returns an OSC message
+to instantiate the synth of the server. After importing <code>Ops</code>, you will be able to directly launch
+a synth using <code>SynthDef.play</code> or <code>Synth.play</code>. You will be able to directly allocate and read buffers,
+and so forth.</p><p>The reason why these functions are separated from the rest of the API is to allow other frameworks
+such as SoundProcesses to avoid side-effects which they handle differently (e.g., using STM).
+</p></div></div>
+    </li><li name="de.sciss.synth.Optional" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Optional"></a>
+      <a id="Optional:Optional"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Optional$.html"><span class="name">Optional</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Optional" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Rate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Rate"></a>
+      <a id="Rate:Rate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Rate$.html"><span class="name">Rate</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Rate" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.RichNumber" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RichNumber"></a>
+      <a id="RichNumber:RichNumber"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RichNumber$.html"><span class="name">RichNumber</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@RichNumber" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Server" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Server"></a>
+      <a id="Server:Server"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Server$.html"><span class="name">Server</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Server" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ServerConnection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ServerConnection"></a>
+      <a id="ServerConnection:ServerConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ServerConnection$.html"><span class="name">ServerConnection</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ServerConnection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.Synth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Synth"></a>
+      <a id="Synth:Synth"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Synth$.html"><span class="name">Synth</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@Synth" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.SynthDef" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthDef"></a>
+      <a id="SynthDef:SynthDef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthDef$.html"><span class="name">SynthDef</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@SynthDef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.SynthGraph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SynthGraph"></a>
+      <a id="SynthGraph:SynthGraph"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SynthGraph$.html"><span class="name">SynthGraph</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@SynthGraph" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UGen"></a>
+      <a id="UGen:UGen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGen$.html"><span class="name">UGen</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGen" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenGraph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UGenGraph"></a>
+      <a id="UGenGraph:UGenGraph"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenGraph$.html"><span class="name">UGenGraph</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenGraph" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenInLike" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UGenInLike"></a>
+      <a id="UGenInLike:UGenInLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenInLike$.html"><span class="name">UGenInLike</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenInLike" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSource" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UGenSource"></a>
+      <a id="UGenSource:UGenSource"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSource$.html"><span class="name">UGenSource</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenSource" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UGenSpec"></a>
+      <a id="UGenSpec:UGenSpec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$.html"><span class="name">UGenSpec</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UGenSpec" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UndefinedRate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UndefinedRate"></a>
+      <a id="UndefinedRate:UndefinedRate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UndefinedRate$.html"><span class="name">UndefinedRate</span></a><span class="result"> extends <a href="MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@UndefinedRate" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An undefined rate signifies that a rate is either unknown or will be implicitly resolved.</p>
+    </li><li name="de.sciss.synth.addAfter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="addAfter"></a>
+      <a id="addAfter:addAfter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="addAfter$.html"><span class="name">addAfter</span></a><span class="result"> extends <a href="AddAction.html" class="extype" name="de.sciss.synth.AddAction">AddAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@addAfter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An <code>AddAction</code> with id <code>3</code>, indicating that a node should be added to the same
+group as the target node, right after it.</p>
+    </li><li name="de.sciss.synth.addBefore" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="addBefore"></a>
+      <a id="addBefore:addBefore"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="addBefore$.html"><span class="name">addBefore</span></a><span class="result"> extends <a href="AddAction.html" class="extype" name="de.sciss.synth.AddAction">AddAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@addBefore" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An <code>AddAction</code> with id <code>2</code>, indicating that a node should be added to the same
+group as the target node, right before it.</p>
+    </li><li name="de.sciss.synth.addReplace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="addReplace"></a>
+      <a id="addReplace:addReplace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="addReplace$.html"><span class="name">addReplace</span></a><span class="result"> extends <a href="AddAction.html" class="extype" name="de.sciss.synth.AddAction">AddAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@addReplace" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An <code>AddAction</code> with id <code>4</code>, indicating that a node should replace an existing
+node, that is take the target node's exact position in the tree.</p>
+    </li><li name="de.sciss.synth.addToHead" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="addToHead"></a>
+      <a id="addToHead:addToHead"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="addToHead$.html"><span class="name">addToHead</span></a><span class="result"> extends <a href="AddAction.html" class="extype" name="de.sciss.synth.AddAction">AddAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@addToHead" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An <code>AddAction</code> with id <code>0</code>, indicating that a node should be add to the head of
+of a target group.</p>
+    </li><li name="de.sciss.synth.addToTail" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="addToTail"></a>
+      <a id="addToTail:addToTail"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="addToTail$.html"><span class="name">addToTail</span></a><span class="result"> extends <a href="AddAction.html" class="extype" name="de.sciss.synth.AddAction">AddAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@addToTail" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An <code>AddAction</code> with id <code>1</code>, indicating that a node should be add to the tail of
+of a target group.</p>
+    </li><li name="de.sciss.synth.audio" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="audio"></a>
+      <a id="audio:audio"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="audio$.html"><span class="name">audio</span></a><span class="result"> extends <a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@audio" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Audio rated calculation (id <code>1</code>) means that values are calculated at the audio sampling rate.</p><div class="fullcomment"><div class="comment cmt"><p>Audio rated calculation (id <code>1</code>) means that values are calculated at the audio sampling rate. For example,
+if the server and sound hardware run at 44.1 kHz, then 44100 samples are calculated per second. On the server,
+audio rate calculation is performed in chunks, depending on the block size setting.</p></div></div>
+    </li><li name="de.sciss.synth.control" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="control"></a>
+      <a id="control:control"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="control$.html"><span class="name">control</span></a><span class="result"> extends <a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@control" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Control rated calculation (id <code>1</code>) means that one value is calculated per block.</p><div class="fullcomment"><div class="comment cmt"><p>Control rated calculation (id <code>1</code>) means that one value is calculated per block. With a default block size
+of <code>64</code>, for every 64 audio samples one control value is calculated. Thus, if the sampling rate is 44.1 kHz,
+the control rate would be 44100/64 = approx. 689 per second.</p></div></div>
+    </li><li name="de.sciss.synth.demand" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="demand"></a>
+      <a id="demand:demand"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="demand$.html"><span class="name">demand</span></a><span class="result"> extends <a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@demand" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Demand rated calculation (id <code>1</code>) means that the UGen is queried by trigger through a special UGen such as
+<code>Demand</code>.</p>
+    </li><li name="de.sciss.synth.doNothing" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="doNothing"></a>
+      <a id="doNothing:doNothing"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="doNothing$.html"><span class="name">doNothing</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@doNothing" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>0</code>, signifying that nothing should be done in particular when the UGen is finished.</p>
+    </li><li name="de.sciss.synth#doubleGEWrapper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="doubleGEWrapper(d:Double):de.sciss.synth.RichDouble"></a>
+      <a id="doubleGEWrapper(Double):RichDouble"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">doubleGEWrapper</span><span class="params">(<span name="d">d: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="RichDouble.html" class="extype" name="de.sciss.synth.RichDouble">RichDouble</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@doubleGEWrapper(d:Double):de.sciss.synth.RichDouble" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth#doubleNumberWrapper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="doubleNumberWrapper(d:Double):de.sciss.numbers.RichDouble"></a>
+      <a id="doubleNumberWrapper(Double):numbers.RichDouble"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">doubleNumberWrapper</span><span class="params">(<span name="d">d: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.numbers.RichDouble">numbers.RichDouble</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@doubleNumberWrapper(d:Double):de.sciss.numbers.RichDouble" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth#floatGEWrapper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="floatGEWrapper(f:Float):de.sciss.synth.RichFloat"></a>
+      <a id="floatGEWrapper(Float):RichFloat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">floatGEWrapper</span><span class="params">(<span name="f">f: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="RichFloat.html" class="extype" name="de.sciss.synth.RichFloat">RichFloat</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@floatGEWrapper(f:Float):de.sciss.synth.RichFloat" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth#floatNumberWrapper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="floatNumberWrapper(f:Float):de.sciss.numbers.RichFloat"></a>
+      <a id="floatNumberWrapper(Float):numbers.RichFloat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">floatNumberWrapper</span><span class="params">(<span name="f">f: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.numbers.RichFloat">numbers.RichFloat</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@floatNumberWrapper(f:Float):de.sciss.numbers.RichFloat" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.freeAllInGroup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="freeAllInGroup"></a>
+      <a id="freeAllInGroup:freeAllInGroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeAllInGroup$.html"><span class="name">freeAllInGroup</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeAllInGroup" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>13</code>, freeing the enclosing synth along with all other nodes
+in the group when the UGen is finished (i.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>DoneAction</code> with id <code>13</code>, freeing the enclosing synth along with all other nodes
+in the group when the UGen is finished (i.e. does
+a freeAll on the group)
+</p></div></div>
+    </li><li name="de.sciss.synth.freeGroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="freeGroup"></a>
+      <a id="freeGroup:freeGroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeGroup$.html"><span class="name">freeGroup</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeGroup" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>14</code>, freeing the enclosing group when the UGen is finished,
+and hence also frees this synth along with all other
+nodes in the group.</p>
+    </li><li name="de.sciss.synth.freeSelf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="freeSelf"></a>
+      <a id="freeSelf:freeSelf"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelf$.html"><span class="name">freeSelf</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelf" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>2</code>, freeing the enclosing synth when the UGen is finished.</p>
+    </li><li name="de.sciss.synth.freeSelfPausePred" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="freeSelfPausePred"></a>
+      <a id="freeSelfPausePred:freeSelfPausePred"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfPausePred$.html"><span class="name">freeSelfPausePred</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfPausePred" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>9</code>, freeing the enclosing synth and pauses the predecessor node
+when the UGen is finished.</p>
+    </li><li name="de.sciss.synth.freeSelfPauseSucc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="freeSelfPauseSucc"></a>
+      <a id="freeSelfPauseSucc:freeSelfPauseSucc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfPauseSucc$.html"><span class="name">freeSelfPauseSucc</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfPauseSucc" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>10</code>, freeing the enclosing synth and pauses the successor node
+when the UGen is finished.</p>
+    </li><li name="de.sciss.synth.freeSelfPred" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="freeSelfPred"></a>
+      <a id="freeSelfPred:freeSelfPred"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfPred$.html"><span class="name">freeSelfPred</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfPred" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>3</code>, freeing the enclosing synth as well as the predecessor node
+when the UGen is finished.</p>
+    </li><li name="de.sciss.synth.freeSelfPredAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="freeSelfPredAll"></a>
+      <a id="freeSelfPredAll:freeSelfPredAll"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfPredAll$.html"><span class="name">freeSelfPredAll</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfPredAll" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>5</code>, freeing the enclosing synth when the UGen is finished.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>DoneAction</code> with id <code>5</code>, freeing the enclosing synth when the UGen is finished.
+ If the predecessor node is a group, calls freeAll on
+that group. If the predecssor node is a synth,
+frees that synth.
+</p></div></div>
+    </li><li name="de.sciss.synth.freeSelfPredDeep" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="freeSelfPredDeep"></a>
+      <a id="freeSelfPredDeep:freeSelfPredDeep"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfPredDeep$.html"><span class="name">freeSelfPredDeep</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfPredDeep" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>11</code>, freeing the enclosing synth when the UGen is finished.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>DoneAction</code> with id <code>11</code>, freeing the enclosing synth when the UGen is finished.
+If the predecessor node is a group, calls deepFree on
+that group. If the predecessor node is a synth,
+frees that synth.
+</p></div></div>
+    </li><li name="de.sciss.synth.freeSelfSucc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="freeSelfSucc"></a>
+      <a id="freeSelfSucc:freeSelfSucc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfSucc$.html"><span class="name">freeSelfSucc</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfSucc" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>4</code>, freeing the enclosing synth as well as the successor node
+when the UGen is finished.</p>
+    </li><li name="de.sciss.synth.freeSelfSuccAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="freeSelfSuccAll"></a>
+      <a id="freeSelfSuccAll:freeSelfSuccAll"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfSuccAll$.html"><span class="name">freeSelfSuccAll</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfSuccAll" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>6</code>, freeing the enclosing synth when the UGen is finished.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>DoneAction</code> with id <code>6</code>, freeing the enclosing synth when the UGen is finished.
+ If the successor node is a group, calls freeAll on
+ that group. If the successor node is a synth,
+frees that synth.
+</p></div></div>
+    </li><li name="de.sciss.synth.freeSelfSuccDeep" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="freeSelfSuccDeep"></a>
+      <a id="freeSelfSuccDeep:freeSelfSuccDeep"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfSuccDeep$.html"><span class="name">freeSelfSuccDeep</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfSuccDeep" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>12</code>, freeing the enclosing synth when the UGen is finished.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>DoneAction</code> with id <code>12</code>, freeing the enclosing synth when the UGen is finished.
+ If the successor node is a group, calls deepFree on
+that group. If the successor node is a synth,
+ frees that synth.
+</p></div></div>
+    </li><li name="de.sciss.synth.freeSelfToHead" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="freeSelfToHead"></a>
+      <a id="freeSelfToHead:freeSelfToHead"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfToHead$.html"><span class="name">freeSelfToHead</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfToHead" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>7</code>, freeing the enclosing synth and all preceding nodes
+in its group when the UGen is finished.</p>
+    </li><li name="de.sciss.synth.freeSelfToTail" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="freeSelfToTail"></a>
+      <a id="freeSelfToTail:freeSelfToTail"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="freeSelfToTail$.html"><span class="name">freeSelfToTail</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@freeSelfToTail" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>8</code>, freeing the enclosing synth and all succeeding nodes
+ in its group when the UGen is finished.</p>
+    </li><li name="de.sciss.synth#geOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="geOps(g:de.sciss.synth.GE):de.sciss.synth.GEOps"></a>
+      <a id="geOps(GE):GEOps"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">geOps</span><span class="params">(<span name="g">g: <a href="GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result">: <a href="GEOps.html" class="extype" name="de.sciss.synth.GEOps">GEOps</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@geOps(g:de.sciss.synth.GE):de.sciss.synth.GEOps" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides operators for graph elements, such as <code>.abs</code>, <code>.linlin</code> or <code>.poll</code>.</p>
+    </li><li name="de.sciss.synth#inf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="inf:Float(Infinity)"></a>
+      <a id="inf:Float(Infinity)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inf</span><span class="result">: Float(Infinity)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@inf:Float(Infinity)" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Positive <code>Float</code> infinity.</p><div class="fullcomment"><div class="comment cmt"><p>Positive <code>Float</code> infinity. Useful for sequence based demand UGens.
+<code>-inf</code> gives you negative infinity.
+</p></div></div>
+    </li><li name="de.sciss.synth#intGEWrapper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="intGEWrapper(i:Int):de.sciss.synth.RichInt"></a>
+      <a id="intGEWrapper(Int):RichInt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">intGEWrapper</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="RichInt.html" class="extype" name="de.sciss.synth.RichInt">RichInt</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@intGEWrapper(i:Int):de.sciss.synth.RichInt" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth#intNumberWrapper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="intNumberWrapper(i:Int):de.sciss.numbers.RichInt"></a>
+      <a id="intNumberWrapper(Int):numbers.RichInt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">intNumberWrapper</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.numbers.RichInt">numbers.RichInt</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@intNumberWrapper(i:Int):de.sciss.numbers.RichInt" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.io" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="io"></a>
+      <a id="io:io"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="io/package.html"><span class="name">io</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@io" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.message" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="message"></a>
+      <a id="message:message"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="message/package.html"><span class="name">message</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@message" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.pauseSelf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pauseSelf"></a>
+      <a id="pauseSelf:pauseSelf"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="pauseSelf$.html"><span class="name">pauseSelf</span></a><span class="result"> extends <a href="DoneAction.html" class="extype" name="de.sciss.synth.DoneAction">DoneAction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@pauseSelf" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DoneAction</code> with id <code>1</code>, pausing the enclosing synth when the UGen is finished.</p>
+    </li><li name="de.sciss.synth#play" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="play[T](target:de.sciss.synth.Node,outBus:Int,fadeTime:de.sciss.synth.Optional[Float],addAction:de.sciss.synth.AddAction)(thunk:=&gt;T)(implicitevidence$2:de.sciss.synth.GraphFunction.Result[T]):de.sciss.synth.Synth"></a>
+      <a id="play[T](Node,Int,Optional[Float],AddAction)(⇒T)(Result[T]):Synth"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">play</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="target">target: <a href="Node.html" class="extype" name="de.sciss.synth.Node">Node</a> = <span class="symbol"><span class="name"><a href="Server$.html">Server.default</a></span></span></span>, <span name="outBus">outBus: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="fadeTime">fadeTime: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<span class="extype" name="scala.Float">Float</span>] = <span class="symbol"><span class="name"><a href="Optional$.html">Some(0.02f)</a></span></span></span>, <span name="addAction">addAction: <a href="AddAction.html" class="extype" name="de.sciss.synth.AddAction">AddAction</a> = <span class="symbol"><span class="name"><a href="addToHead$.html">addToHead</a></span></span></span>)</span><span class="params">(<span name="thunk">thunk: ⇒ <span class="extype" name="de.sciss.synth.play.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="GraphFunction$$Result.html" class="extype" name="de.sciss.synth.GraphFunction.Result">Result</a>[<span class="extype" name="de.sciss.synth.play.T">T</span>]</span>)</span><span class="result">: <a href="Synth.html" class="extype" name="de.sciss.synth.Synth">Synth</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@play[T](target:de.sciss.synth.Node,outBus:Int,fadeTime:de.sciss.synth.Optional[Float],addAction:de.sciss.synth.AddAction)(thunk:=&gt;T)(implicitevidence$2:de.sciss.synth.GraphFunction.Result[T]):de.sciss.synth.Synth" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Wraps the body of the thunk argument in a <code>SynthGraph</code>, adds an output UGen, and plays the graph
+in a synth attached to a given target.</p><div class="fullcomment"><div class="comment cmt"><p>Wraps the body of the thunk argument in a <code>SynthGraph</code>, adds an output UGen, and plays the graph
+in a synth attached to a given target.
+</p></div><dl class="paramcmts block"><dt class="param">target</dt><dd class="cmt"><p>the target with respect to which to place the synth</p></dd><dt class="param">outBus</dt><dd class="cmt"><p>audio bus index which is used for the synthetically generated <code>Out</code> UGen.</p></dd><dt class="param">fadeTime</dt><dd class="cmt"><p>if defined, specifies the fade-in time for a synthetically added amplitude envelope.</p></dd><dt class="param">addAction</dt><dd class="cmt"><p>the relation between the new synth and the target</p></dd><dt class="param">thunk</dt><dd class="cmt"><p>the thunk which produces the UGens to play</p></dd><dt>returns</dt><dd class="cmt"><p>a reference to the spawned Synth
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth#play" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="play[T](thunk:=&gt;T)(implicitevidence$1:de.sciss.synth.GraphFunction.Result[T]):de.sciss.synth.Synth"></a>
+      <a id="play[T](⇒T)(Result[T]):Synth"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">play</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="thunk">thunk: ⇒ <span class="extype" name="de.sciss.synth.play.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="GraphFunction$$Result.html" class="extype" name="de.sciss.synth.GraphFunction.Result">Result</a>[<span class="extype" name="de.sciss.synth.play.T">T</span>]</span>)</span><span class="result">: <a href="Synth.html" class="extype" name="de.sciss.synth.Synth">Synth</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@play[T](thunk:=&gt;T)(implicitevidence$1:de.sciss.synth.GraphFunction.Result[T]):de.sciss.synth.Synth" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Wraps the body of the thunk argument in a <code>SynthGraph</code>, adds an output UGen, and plays the graph
+on the default group of the default server.</p><div class="fullcomment"><div class="comment cmt"><p>Wraps the body of the thunk argument in a <code>SynthGraph</code>, adds an output UGen, and plays the graph
+on the default group of the default server.
+</p></div><dl class="paramcmts block"><dt class="param">thunk</dt><dd class="cmt"><p>the thunk which produces the UGens to play</p></dd><dt>returns</dt><dd class="cmt"><p>a reference to the spawned Synth
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.scalar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="scalar"></a>
+      <a id="scalar:scalar"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="scalar$.html"><span class="name">scalar</span></a><span class="result"> extends <a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@scalar" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Scalar rated calculation (id <code>0</code>) means that a value is only calculated once when a <code>Synth</code> is initialized.</p>
+    </li><li name="de.sciss.synth#stringToControlProxyFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="stringToControlProxyFactory(name:String):de.sciss.synth.ugen.ControlProxyFactory"></a>
+      <a id="stringToControlProxyFactory(String):ControlProxyFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stringToControlProxyFactory</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="ugen/ControlProxyFactory.html" class="extype" name="de.sciss.synth.ugen.ControlProxyFactory">ControlProxyFactory</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@stringToControlProxyFactory(name:String):de.sciss.synth.ugen.ControlProxyFactory" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Allows the construction or named controls, for example via <code>&quot;freq&quot;.kr</code>.</p>
+    </li><li name="de.sciss.synth.ugen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ugen"></a>
+      <a id="ugen:ugen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="ugen/package.html"><span class="name">ugen</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.package@ugen" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
