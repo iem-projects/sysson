@@ -1,8 +1,14 @@
+![logo](https://raw.githubusercontent.com/iem-projects/sysson/master/src/main/resources/at/iem/sysson/SysSon-Logo_web_noshadow.png)
+
 # SysSon
 
-Repository for the software developed during the [SysSon Project](http://sysson.kug.ac.at/) at IEM Graz &ndash; SysSon is a systematic procedure to develop sonifications. Published under the GNU General Public License v3+. Please see the `licenses` folder for details.
+Repository for the software developed during the [SysSon Project](http://sysson.kug.ac.at/) at IEM Graz &ndash; SysSon is a systematic procedure to develop sonifications. Published under the GNU General Public License v3+.
+
+Please see the `licenses` folder for details. It contains the license headers for all dependencies and transitive dependencies. For the binary release of SysSon, source code is not included but available via the respective OSS project pages, as indicated in the license files, or&mdash;in compliance with GPL/LGPL&mdash;on request via E-Mail. All source code with group-ID `de.sciss` is available from [github.com/Sciss](https://github.com/Sciss).
 
 ## Installation
+
+__Please see [the wiki](https://github.com/iem-projects/sysson/wiki) for the most up-to-date information!__
 
 The project is written in [Scala](http://www.scala-lang.org/) 2.11, 2.10 and builds with the [Simple Build Bool](http://www.scala-sbt.org/) (sbt) 0.13. The included shell script `sbt` is sufficient to build the project as it will automatically download and locally install Scala and sbt.
 
@@ -38,7 +44,7 @@ The resulting file is `SysSon.app` which can either be launched through double-c
 
 ### Developing
 
-The recommended environment to develop the source code is [IntelliJ IDEA](http://www.jetbrains.com/idea/download/) Community Edition 12. After installing IDEA for the first time, the Scala plug-in must be installed. In IDEA, open `Preferences` -> `IDE Settings` -> `Plugins` -> `Browse repositories...`. Find `Scala` and select `Download and Install`. It is also recommended to install the `SBT` plugin in the same manner. After the plugin installation, IDEA must be restarted.
+The recommended environment to develop the source code is [IntelliJ IDEA](http://www.jetbrains.com/idea/download/) Community Edition 13. After installing IDEA for the first time, the Scala plug-in must be installed. In IDEA, open `Preferences` -> `IDE Settings` -> `Plugins` -> `Browse repositories...`. Find `Scala` and select `Download and Install`. It is also recommended to install the `SBT` plugin in the same manner. After the plugin installation, IDEA must be restarted.
 
 A fresh IDEA project is setup by running the following command in the terminal: `./sbt gen-idea`. When this command has completed, the project can be opened in IDEA by choosing `File` -> `Open...` and selecting the main project folder.
 
@@ -46,7 +52,7 @@ A fresh IDEA project is setup by running the following command in the terminal: 
 
 See the different files in the `doc` directory. The API documentation for just SysSon can be created by running `./sbt doc` in the main directory. A complete API documentation including the dependencies (ScalaOSC, ScalaCollider etc.) can be created by moving into the `site` directory (`cd site`) and running `../sbt unidoc`. The result will be found in `site/target/scala-2.10/unidoc/index.html`.
 
-### SysSon home directory
+### SysSon home directory (OBSOLETE)
 
 We now expect an environment variable `SYSSON_HOME` to be specified, in order to find common data files. The directory to which `SYSSON_HOME` points, should contain a sub-directory `data` with the same layout as on the IEM server. For example, there should be `$SYSSON_HOME/data/201211/gcm/RCP45/MetOffUK_HadGEM2-ES`.
 
@@ -58,7 +64,7 @@ Adding an entry like the following:
 
     export SYSSON_HOME=/Users/hhrutz/Desktop/IEM/SysSon
 
-Similarily, the property list file can be edited:
+Similarly, the property list file can be edited:
 
     $ mkdir ~/.MacOSX
     $ vi ~/.MacOSX/environment.plist

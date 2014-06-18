@@ -172,7 +172,7 @@ object AuralSonificationImpl {
           procAttr.expr[Grapheme.Value.Audio](key).map { expr =>
             val audio = expr.value
             // val artif = audio.artifact
-            // println(s"---> $artif")
+             // println(s"---> $artif")
             (key, audio)
           }
         case _ => None

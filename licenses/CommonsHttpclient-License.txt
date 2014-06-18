@@ -1,0 +1,5 @@
+(Commons-HttpClient)
+http://hc.apache.org/httpclient-3.x/
+
+The Apache Source License provides maximum flexibility for source and binary reuse.
+

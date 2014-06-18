@@ -127,6 +127,9 @@ object ActionPreferences extends Action("Preferences...") {
       val ggSuperCollider = pathField(Prefs.superCollider, Prefs.defaultSuperCollider,
         title = "SuperCollider Server Location (scsynth)")
 
+      val lbAutoBoot      = label("Automatic Boot")
+      val ggAutoBoot      = checkBox(Prefs.autoBoot, default = false)
+
       val lbAudioDevice   = label("Audio Device")
       val ggAudioDevice   = textField(Prefs.audioDevice   , Prefs.defaultAudioDevice    )
       val lbNumOutputs    = label("Output Channels")
@@ -139,17 +142,18 @@ object ActionPreferences extends Action("Preferences...") {
 
       // val lbValue = new Label("Value:", EmptyIcon, Alignment.Right)
       horizontal = Par(sep1, Seq(
-        Par(lbLookAndFeel, lbNativeDecoration, lbSuperCollider, lbAudioDevice, lbNumOutputs, lbHeadphones),
-        Par(ggLookAndFeel, ggNativeDecoration, ggSuperCollider, ggAudioDevice, ggNumOutputs, ggHeadphones)
+        Par(lbLookAndFeel, lbNativeDecoration, lbSuperCollider, lbAutoBoot, lbAudioDevice, lbNumOutputs /*, lbHeadphones */),
+        Par(ggLookAndFeel, ggNativeDecoration, ggSuperCollider, ggAutoBoot, ggAudioDevice, ggNumOutputs /*, ggHeadphones */)
       ))
       vertical = Seq(
         Par(Baseline)(lbLookAndFeel     , ggLookAndFeel     ),
         Par(Baseline)(lbNativeDecoration, ggNativeDecoration),
         sep1,
         Par(Baseline)(lbSuperCollider   , ggSuperCollider   ),
+        Par(Baseline)(lbAutoBoot        , ggAutoBoot        ),
         Par(Baseline)(lbAudioDevice     , ggAudioDevice     ),
-        Par(Baseline)(lbNumOutputs      , ggNumOutputs      ),
-        Par(Baseline)(lbHeadphones      , ggHeadphones      )
+        Par(Baseline)(lbNumOutputs      , ggNumOutputs      ) /* , */
+        // Par(Baseline)(lbHeadphones      , ggHeadphones      )
       )
     }
 

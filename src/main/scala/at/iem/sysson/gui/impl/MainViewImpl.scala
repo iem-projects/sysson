@@ -36,7 +36,7 @@ private[gui] object MainViewImpl {
     res
   }
 
-  private val AUTO_BOOT = true  // XXX TODO: make a preferences item for this
+  private val AUTO_BOOT = Prefs.autoBoot.getOrElse(false)
 
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 
