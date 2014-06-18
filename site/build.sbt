@@ -1,7 +1,7 @@
 def SYSSON_VERSION = "0.8.0"
 
 val commonSettings = Seq(
-  organization := "at.iem.sysson",
+  organization := "de.sciss"  // ghpages push only works with this, not "at.iem.sysson"...
   version      := SYSSON_VERSION,
   scalaVersion := "2.11.1"
 )
