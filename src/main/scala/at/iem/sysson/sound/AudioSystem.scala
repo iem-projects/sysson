@@ -35,7 +35,7 @@ object AudioSystem {
 
   type Listener = Model.Listener[Update]
 
-  lazy val defaultConfig = {
+  def defaultConfig: synth.Server.Config = {
     val config          = synth.Server.Config()
     val programPath     = Prefs.superCollider.getOrElse(Prefs.defaultSuperCollider)
     if (programPath != Prefs.defaultSuperCollider) config.program = programPath.path
