@@ -17,16 +17,17 @@ package gui
 package impl
 
 import javax.swing.{BorderFactory, ImageIcon}
-import de.sciss.mellite.Prefs
+import de.sciss.mellite.{Mellite, Prefs}
+import de.sciss.synth.proc.AuralSystem
 
+import scala.concurrent.stm.TxnExecutor
 import swing.{Swing, Alignment, Label, Orientation, BoxPanel}
 import de.sciss.synth.swing.ServerStatusPanel
 import de.sciss.audiowidgets.PeakMeter
 import java.awt.Color
 import Swing._
-import sound.AudioSystem
 import de.sciss.desktop.impl.DynamicComponentImpl
-import de.sciss.lucre.synth.Server
+import de.sciss.lucre.synth.{Txn, Server}
 import de.sciss.osc
 import de.sciss.lucre.swing._
 
@@ -43,7 +44,7 @@ private[gui] object MainViewImpl {
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 
   private final class Impl(bg: Option[Color]) extends MainView with DynamicComponentImpl {
-    def boot(): Unit = AudioSystem.instance.start()
+    def boot(): Unit = atomic { implicit tx => Mellite.auralSystem.start() }
 
     private lazy val serverStatus = new ServerStatusPanel {
       bootAction = Some(boot _)
@@ -51,9 +52,8 @@ private[gui] object MainViewImpl {
 
     //      background = Color.black
 
-    private def deferAudioUpdated(): Unit = defer {
-      val s = AudioSystem.instance.server
-      s match {
+    private def deferAudioUpdated(sOpt: Option[Server]): Unit = defer {
+      sOpt match {
         case Some(server /* : synth.Server */) =>
           serverStatus.server   = Some(server.peer)
           startMeters(server)
@@ -96,20 +96,30 @@ private[gui] object MainViewImpl {
       server ! recvMsg
     }
 
-    private lazy val audioListener: AudioSystem.Listener = {
-      // case AudioSystem.Booting(_) => deferAudioUpdated()
-      case AudioSystem.Started(_) => deferAudioUpdated()
-      case AudioSystem.Stopped    => deferAudioUpdated()
+    private lazy val audioListener: AuralSystem.Client = new AuralSystem.Client {
+      def auralStarted(s: Server)(implicit tx: Txn): Unit = tx.afterCommit(deferAudioUpdated(Some(s)))
+      def auralStopped()         (implicit tx: Txn): Unit = tx.afterCommit(deferAudioUpdated(None   ))
+    }
+
+    private def atomic[A](fun: Txn => A): A = TxnExecutor.defaultAtomic { itx =>
+      val tx = Txn.wrap(itx)
+      fun(tx)
     }
 
     protected def componentShown(): Unit = {
-      AudioSystem.instance.addListener(audioListener)
-      deferAudioUpdated()
+      val sOpt = atomic { implicit tx =>
+        val as = Mellite.auralSystem
+        as.addClient(audioListener)
+        as.serverOption
+      }
+      deferAudioUpdated(sOpt)
     }
 
 
     protected def componentHidden(): Unit =
-      AudioSystem.instance.removeListener(audioListener)
+      atomic { implicit tx =>
+        Mellite.auralSystem.removeClient(audioListener)
+      }
 
     private lazy val mainMeters = new PeakMeter {
       numChannels   = 2

@@ -28,7 +28,7 @@ import scala.concurrent.stm.Ref
 object AuralWorkspaceImpl {
   def apply[S <: Sys[S], I1 <: synth.Sys[I1]](workspace: Workspace[S] { type I = I1 })
                                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralWorkspace[S, I1] = {
-    val map = tx.newInMemoryIDMap[AuralSonification[S, I1]]
+    val map = tx.newInMemoryIDMap[AuralSonificationOLD[S, I1]]
     val res = new Impl(workspace, map)
     // de.sciss.lucre.synth.showLog = true
     workspace.addDependent(res)
@@ -39,16 +39,16 @@ object AuralWorkspaceImpl {
   private val idCount = Ref(0)
 
   private final class Impl[S <: Sys[S], I1 <: synth.Sys[I1]](val workspace: Workspace[S] { type I = I1 },
-                                        map: IdentifierMap[S#ID, S#Tx, AuralSonification[S, I1]])
+                                        map: IdentifierMap[S#ID, S#Tx, AuralSonificationOLD[S, I1]])
                                                             (implicit cursor: stm.Cursor[S])
     extends AuralWorkspace[S, I1] with Disposable[S#Tx] {
     impl =>
 
     def nextID()(implicit tx: S#Tx): Int = idCount.getAndTransform(_ + 1)(tx.peer)
 
-    def view(sonif: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonification[S, I1] =
+    def view(sonif: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonificationOLD[S, I1] =
       map.get(sonif.id).getOrElse {
-        val view = AuralSonificationImpl(impl, sonif)
+        val view = AuralSonificationImplOLD(impl, sonif)
         map.put(sonif.id, view)
         view
       }

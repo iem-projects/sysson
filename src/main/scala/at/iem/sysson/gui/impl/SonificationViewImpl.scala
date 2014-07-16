@@ -19,17 +19,17 @@ package impl
 import java.awt.Color
 
 import de.sciss.lucre.synth.Sys
-import at.iem.sysson.sound.{AuralSonification, AuralWorkspaceHandler, Keys, Sonification}
+import at.iem.sysson.sound.{Keys, Sonification}
 import de.sciss.lucre.stm
-import de.sciss.synth.proc.Obj
+import de.sciss.synth.proc.{Transport, Obj}
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{OptionPane, UndoManager}
 import de.sciss.swingplus.{GroupPanel, Separator}
-import de.sciss.audiowidgets.Transport
+import de.sciss.audiowidgets.{Transport => GUITransport}
 import de.sciss.synth.SynthGraph
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView, deferTx, requireEDT}
+import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView, deferTx}
 import de.sciss.icons.raphael
 import scala.concurrent.stm.Ref
 import scala.swing.event.ButtonClicked
@@ -37,7 +37,7 @@ import scala.swing.{Action, Orientation, BoxPanel, ToggleButton, Swing, Alignmen
 import scala.util.control.NonFatal
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.matrix.gui.MatrixView
-import de.sciss.mellite.Workspace
+import de.sciss.mellite.{Mellite, Workspace}
 import de.sciss.mellite.gui.{AttrMapFrame, CodeFrame, GUI}
 
 object SonificationViewImpl {
@@ -52,11 +52,12 @@ object SonificationViewImpl {
       StringFieldView(expr, "Name")
     }
 
-    val sonifView = AuralWorkspaceHandler.instance.view[S, workspace.I](workspace).view(sonification)
+    val transport = Transport[S](Mellite.auralSystem)
+    transport.addObject(sonification)
     val p         = sonification.elem.peer.proc
 
-    val res = new Impl[S, workspace.I](sonifH, sonifView, nameView)(workspace, undoMgr, cursor) {
-      val auralObserver = sonifView.react { implicit tx => upd =>
+    val res = new Impl[S, workspace.I](sonifH, transport, nameView)(workspace, undoMgr, cursor) {
+      val auralObserver = transport.react { implicit tx => upd =>
         deferTx(auralChange(upd))
       }
 
@@ -64,9 +65,9 @@ object SonificationViewImpl {
         updateGraph(upd.now)
       }
     }
-    val sonifState = sonifView.state
+    // val sonifState = sonifView.state
     deferTx {
-      res.guiInit(sonifState)
+      res.guiInit(/* sonifState */)
     }
 
     val graph0  = p.elem.peer.graph.value
@@ -76,7 +77,7 @@ object SonificationViewImpl {
   }
 
   private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
-                                        sonifView: AuralSonification[S, I1],
+                                                          transport: Transport[S],
                                         nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S] { type I = I1 },
                                                                               val undoManager: UndoManager,
                                                                               val cursor: stm.Cursor[S])
@@ -91,7 +92,7 @@ object SonificationViewImpl {
 
     private var pMapping : FlowPanel = _
     private var pControls: FlowPanel = _
-    private var transportButtons: Component with Transport.ButtonStrip = _
+    private var transportButtons: Component with GUITransport.ButtonStrip = _
     private var timerPrepare: javax.swing.Timer = _
 
     private val graphDisposables = Ref(Vec.empty[Disposable[S#Tx]])
@@ -100,24 +101,24 @@ object SonificationViewImpl {
 
     private var ggElapsed: ElapsedBar = _
 
-    final protected def auralChange(upd: AuralSonification.Update): Unit = upd match {
-      case AuralSonification.Elapsed(dim, ratio, value) =>
-        // println(f"$dim ${p * 100}%1.0f")
-        ggElapsed.value = ratio
+    final protected def auralChange(upd: Transport.Update[S] /* AuralSonificationOLD.Update */): Unit = upd match {
+      //      case AuralSonificationOLD.Elapsed(dim, ratio, value) =>
+      //        // println(f"$dim ${p * 100}%1.0f")
+      //        ggElapsed.value = ratio
 
       case _ =>
-        val ggStop      = transportButtons.button(Transport.Stop ).get
-        val ggPlay      = transportButtons.button(Transport.Play ).get
-        val stopped     = upd == AuralSonification.Stopped
+        val ggStop      = transportButtons.button(GUITransport.Stop ).get
+        val ggPlay      = transportButtons.button(GUITransport.Play ).get
+        val stopped     = upd.isInstanceOf[Transport.Stop[S]] // AuralSonificationOLD.Stopped
         ggStop.selected = stopped
-        ggPlay.selected = upd == AuralSonification.Playing || upd == AuralSonification.Preparing
+        ggPlay.selected = upd.isInstanceOf[Transport.Play[S]] // AuralSonificationOLD.Playing || upd == AuralSonificationOLD.Preparing
         // ggElapsed.textVisible = !stopped
           if (stopped) {
           ggMute.selected = false
-          val ggPause     = transportButtons.button(Transport.Pause).get
+          val ggPause     = transportButtons.button(GUITransport.Pause).get
           ggPause.selected = false
         }
-        if (upd == AuralSonification.Preparing) timerPrepare.restart() else timerPrepare.stop()
+        /* if (upd == AuralSonificationOLD.Preparing) timerPrepare.restart() else */ timerPrepare.stop()
     }
 
     final def updateGraph(g: SynthGraph)(implicit tx: S#Tx): Unit = {
@@ -210,7 +211,7 @@ object SonificationViewImpl {
       }
     }
 
-    final def guiInit(initState: AuralSonification.Update): Unit = {
+    final def guiInit(/* initState: AuralSonificationOLD.Update */): Unit = {
       // ---- Header ----
       val actionEditProcAttr = new Action(null) {
         def apply(): Unit = cursor.step { implicit tx =>
@@ -245,12 +246,12 @@ object SonificationViewImpl {
 
       // ---- Transport ----
 
-      transportButtons = Transport.makeButtonStrip {
-        import Transport._
+      transportButtons = GUITransport.makeButtonStrip {
+        import GUITransport._
         Seq(/* GoToBegin(tGotToBegin()), */ Stop(tStop()), Pause(tPause()), Play(tPlay()) /*, Loop(tLoop()) */)
       }
       timerPrepare = new javax.swing.Timer(100, Swing.ActionListener { _ =>
-        val ggPlay      = transportButtons.button(Transport.Play).get
+        val ggPlay      = transportButtons.button(GUITransport.Play).get
         ggPlay.selected = !ggPlay.selected  // flash button at 10 Hz while preparing sonification playback
       })
       timerPrepare.setRepeats(true)
@@ -262,11 +263,12 @@ object SonificationViewImpl {
         reactions += {
           case ButtonClicked(_) =>
             val muted = if (me.selected) 1f else 0
-            workspace.inMemoryCursor.step { implicit tx =>
-              sonifView.auralPresentation.group.foreach { g =>
-                g.set(true, "$son_out" -> muted)
-              }
-            }
+            println("TODO: Mute")
+            //            workspace.inMemoryCursor.step { implicit tx =>
+            //              sonifView.auralPresentation.group.foreach { g =>
+            //                g.set(true, "$son_out" -> muted)
+            //              }
+            //            }
         }
         focusable = false
         icon          = raphael.Icon(extent = 20, fill = raphael.TexturePaint(24), shadow = raphael.WhiteShadow)(raphael.Shapes.Mute)
@@ -274,7 +276,7 @@ object SonificationViewImpl {
         tooltip       = "Mute"
       }
 
-      auralChange(initState)
+      // auralChange(initState)
 
       val pTransport = new FlowPanel(Swing.HStrut(101), transportButtons, ggMute, ggElapsed)
       pTransport.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Transport")
@@ -294,25 +296,29 @@ object SonificationViewImpl {
     //      println("TODO: GoToBegin")
     //    }
 
-    private def runGroup(state: Boolean)(implicit tx: S#Tx): Unit =
-      sonifView.auralPresentation.group(workspace.inMemoryBridge(tx)).foreach { g =>
-        g.run(audible = true, state = state)
-      }
+    private def runGroup(state: Boolean)(implicit tx: S#Tx): Unit = {
+      println("TODO: runGroup")
+      //      sonifView.auralPresentation.group(workspace.inMemoryBridge(tx)).foreach { g =>
+      //        g.run(audible = true, state = state)
+      //      }
+    }
 
     private def tStop(): Unit = {
-      val ggPause   = transportButtons.button(Transport.Pause).get
+      val ggPause   = transportButtons.button(GUITransport.Pause).get
       val isPausing = ggPause.selected
       cursor.step { implicit tx =>
-        sonifView.stop()
+        transport.toString
+        // sonifView.stop()
         if (isPausing) runGroup(state = true)
       }
     }
 
     private def tPause(): Unit = {
-      val ggPause   = transportButtons.button(Transport.Pause).get
+      val ggPause   = transportButtons.button(GUITransport.Pause).get
       val isPausing = !ggPause.selected
       val isPlaying = cursor.step { implicit tx =>
-        val p = sonifView.state == AuralSonification.Playing
+        // val p = sonifView.state == AuralSonificationOLD.Playing
+        val p = transport.isPlaying
         if (p) runGroup(state = !isPausing)
         p
       }
@@ -321,7 +327,8 @@ object SonificationViewImpl {
 
     private def tPlay(): Unit = cursor.step { implicit tx =>
       try {
-        sonifView.play()
+        transport.play()
+        // sonifView.play()
       } catch {
         case NonFatal(e) =>
           val opt = OptionPane.message(
@@ -336,7 +343,8 @@ object SonificationViewImpl {
     //    }
 
     final def dispose()(implicit tx: S#Tx): Unit = {
-      sonifView.stop()
+      transport.dispose()
+      // sonifView.stop()
       auralObserver.dispose()
       graphObserver.dispose()
       graphDisposables.swap(Vec.empty)(tx.peer).foreach(_.dispose())

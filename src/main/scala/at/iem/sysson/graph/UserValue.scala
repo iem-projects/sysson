@@ -16,7 +16,7 @@ package at.iem.sysson.graph
 
 import de.sciss.synth.{proc, Rate, scalar, GE, UGenInLike}
 import de.sciss.synth
-import at.iem.sysson.sound.AuralSonification
+import at.iem.sysson.sound.AuralSonificationOLD
 
 object UserValue {
   case class GE(rate: Rate, peer: UserValue) extends synth.GE.Lazy with SonificationElement {
@@ -24,7 +24,7 @@ object UserValue {
 
     protected def makeUGens: UGenInLike = {
       // re-write as a proc attribute
-      val key = AuralSonification.current().attributeKey(peer)
+      val key = AuralSonificationOLD.current().attributeKey(peer)
       proc.graph.attribute(key).ir(peer.default)
     }
   }

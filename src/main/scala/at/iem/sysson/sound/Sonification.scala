@@ -77,12 +77,6 @@ object Sonification {
 
     implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Sonification.Elem[S]] =
       Impl.SonificationElemImpl.serializer
-
-    object Obj {
-      def unapply[S <: Sys[S]](obj: Obj[S]): Option[proc.Obj.T[S, Sonification.Elem]] =
-        if (obj.elem.isInstanceOf[Sonification.Elem[S]]) Some(obj.asInstanceOf[proc.Obj.T[S, Sonification.Elem]])
-        else None
-    }
   }
   trait Elem[S <: Sys[S]] extends proc.Elem[S] {
     type Peer       = Sonification[S]
@@ -90,10 +84,17 @@ object Sonification {
 
     def mkCopy()(implicit tx: S#Tx): Elem[S]
   }
+
+  object Obj {
+    def unapply[S <: Sys[S]](obj: Obj[S]): Option[Sonification.Obj[S]] =
+      if (obj.elem.isInstanceOf[Sonification.Elem[S]]) Some(obj.asInstanceOf[Sonification.Obj[S]])
+      else None
+  }
+
+  type Obj[S <: Sys[S]] = proc.Obj.T[S, Sonification.Elem]
 }
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
-  // def patch: Obj.T[S, Patch.Elem]
-  def proc: Obj.T[S, Proc.Elem]
+  def proc: Proc.Obj[S]
 
   def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
   def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]

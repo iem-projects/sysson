@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.synth.expr.DoubleVec
 import de.sciss.lucre.synth.{Sys => SSys, Server, Txn}
-import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
+import at.iem.sysson.sound.AuralSonificationOLD.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
 import de.sciss.synth.proc.{SynthGraphs, FadeSpec, Scan, BooleanElem, ArtifactLocation, Artifact, Grapheme, AudioGraphemeElem, AuralSystem, ProcTransport, IntElem, DoubleVecElem, DoubleElem, AuralPresentationOLD => AuralPresentation, TransportOLD => Transport, ProcGroup, Obj, Proc}
 import scala.concurrent.stm.{TMap, TxnExecutor, Txn => ScalaTxn, TxnLocal, Ref}
@@ -40,15 +40,15 @@ import scala.annotation.tailrec
 import de.sciss.synth.message
 import scala.collection.breakOut
 
-object AuralSonificationImpl {
-  private val _current = TxnLocal(Option.empty[AuralSonification[_, _]])
+object AuralSonificationImplOLD {
+  private val _current = TxnLocal(Option.empty[AuralSonificationOLD[_, _]])
 
-  private[sysson] def current(): AuralSonification[_, _] = {
+  private[sysson] def current(): AuralSonificationOLD[_, _] = {
     implicit val tx = ScalaTxn.findCurrent.getOrElse(sys.error("Called outside of transaction"))
     _current.get.getOrElse(sys.error("Called outside transport play"))
   }
 
-  private def using[S <: Sys[S], I <: SSys[I], A](aural: AuralSonification[S, I])(block: => A)(implicit tx: S#Tx): A = {
+  private def using[S <: Sys[S], I <: SSys[I], A](aural: AuralSonificationOLD[S, I])(block: => A)(implicit tx: S#Tx): A = {
     val old = _current.swap(Some(aural))(tx.peer)
     val res = block
     _current.set(old)(tx.peer)
@@ -56,7 +56,7 @@ object AuralSonificationImpl {
   }
 
   def apply[S <: Sys[S], I <: synth.Sys[I]](aw: AuralWorkspace[S, I], sonification: Obj.T[S, Sonification.Elem])
-                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralSonification[S, I] = {
+                        (implicit tx: S#Tx, cursor: stm.Cursor[S]): AuralSonificationOLD[S, I] = {
     val w             = aw.workspace
     implicit val itx  = w.inMemoryBridge(tx)         // why can't I just import w.inMemory !?
     val sonifH        = tx.newHandle(sonification)
@@ -67,12 +67,12 @@ object AuralSonificationImpl {
     group.add(span, obj)
     import w.{inMemoryCursor, inMemoryBridge}
     val transport     = Transport[I, I](group)
-    val auralSys      = AudioSystem.instance.aural
-    val aural         = AuralPresentation.run(transport, auralSys)
+    // val auralSys      = AudioSystem.instance.aural
+    val aural: AuralPresentation[I] = ??? //         = AuralPresentation.run(transport, auralSys)
     val res           = new Impl[S, I](aw, aural, sonifH, itx.newHandle(obj), transport)
     res.init()
-    auralSys.addClient(res)
-    auralSys.serverOption.foreach(s => res.auralStarted(s))
+    // auralSys.addClient(res)
+    // auralSys.serverOption.foreach(s => res.auralStarted(s))
     res
   }
 
@@ -86,7 +86,7 @@ object AuralSonificationImpl {
                                                                  sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
       procH: stm.Source[I#Tx, Obj.T[I, Proc.Elem]],
       transport: ProcTransport[I])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx, cursor: stm.Cursor[S])
-    extends AuralSonification[S, I] with TxnModelImpl[S#Tx, Update] with AuralSystem.Client {
+    extends AuralSonificationOLD[S, I] with TxnModelImpl[S#Tx, Update] with AuralSystem.Client {
     impl =>
 
     private val _state    = Ref(Stopped: Update)
@@ -190,7 +190,7 @@ object AuralSonificationImpl {
           // use `.single.get` so we stay lightweight if the id is not associated with this sonif.
           elapsedMap.single.get(reportID).foreach { elem =>
             cursor.step { implicit tx =>
-              dispatch(AuralSonification.Elapsed(elem.in.dim.name, ratio = ratio, value = value))
+              dispatch(AuralSonificationOLD.Elapsed(elem.in.dim.name, ratio = ratio, value = value))
               // val debug = elem.terminate || ratio >= 1
               // if (debug) println(s"terminate? ${elem.terminate}; ratio? $ratio")
               if (ratio >= 1 && elem.terminate) stop()
@@ -297,7 +297,7 @@ object AuralSonificationImpl {
         val ds        = dsv.source
         val mapKey    = dimElem.variable.name
         val dimVar    = ds.variables.find(_.name == dimName).getOrElse(
-          throw AuralSonification.MissingSourceDimension(mapKey, dimName)
+          throw AuralSonificationOLD.MissingSourceDimension(mapKey, dimName)
         )
         assert(dimVar.rank == 1)
         val ranges    = Vec(rangesM(mdi)) // now use only the range corresponding with the dimension at index `mdi`
@@ -333,16 +333,16 @@ object AuralSonificationImpl {
 
       // returns the name of a logical dimension and its index within a source
       def dimIndex(source: Sonification.Source[S], key: String): (String, Int) = {
-        val dimName   = source.dims.get(key).getOrElse(throw AuralSonification.MissingDimension(key)).value
+        val dimName   = source.dims.get(key).getOrElse(throw AuralSonificationOLD.MissingDimension(key)).value
         val m         = source.matrix
         val md        = m.dimensions
         val mdi       = md.indexWhere(_.name == dimName)
-        if (mdi < 0) throw AuralSonification.MissingDimension(key)
+        if (mdi < 0) throw AuralSonificationOLD.MissingDimension(key)
         (dimName, mdi)
       }
 
       def getSource(mapKey: String): Sonification.Source[S] =
-        sonifE.sources.get(mapKey).getOrElse(throw AuralSonification.MissingSource(mapKey))
+        sonifE.sources.get(mapKey).getOrElse(throw AuralSonificationOLD.MissingSource(mapKey))
 
       // produces a graph element for variable values
       // TODO: perhaps factor out a bit of DRY with respect to addDimGE

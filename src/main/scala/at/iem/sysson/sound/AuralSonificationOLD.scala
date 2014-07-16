@@ -1,5 +1,5 @@
 /*
- *  AuralSonification.scala
+ *  AuralSonificationOLD.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -18,9 +18,9 @@ package sound
 import de.sciss.lucre.event.{Observable, Sys}
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.synth.proc.{AuralPresentationOLD => AuralPresentation}
-import impl.{AuralSonificationImpl => Impl}
+import impl.{AuralSonificationImplOLD => Impl}
 
-object AuralSonification {
+object AuralSonificationOLD {
   sealed trait Update
   /** The sonification is being prepared. For example, grapheme production starts. */
   case object Preparing extends Update
@@ -37,7 +37,7 @@ object AuralSonification {
     */
   case class Elapsed(dim: String, ratio: Float, value: Float) extends Update
 
-  private[sysson] def current(): AuralSonification[_, _] = Impl.current()
+  private[sysson] def current(): AuralSonificationOLD[_, _] = Impl.current()
 
   case class MissingSource         (key : String)
     extends Exception(s"The source for key '$key' is not assigned")
@@ -48,11 +48,11 @@ object AuralSonification {
   case class MissingSourceDimension(sourceKey: String, name: String)
     extends Exception(s"The source for key '$sourceKey' does not have dimension '$name'")
 }
-trait AuralSonification[S <: Sys[S], I <: SSys[I]] extends Observable[S#Tx, AuralSonification.Update] {
+trait AuralSonificationOLD[S <: Sys[S], I <: SSys[I]] extends Observable[S#Tx, AuralSonificationOLD.Update] {
   def play()(implicit tx: S#Tx): Unit
   def stop()(implicit tx: S#Tx): Unit
 
-  def state(implicit tx: S#Tx): AuralSonification.Update
+  def state(implicit tx: S#Tx): AuralSonificationOLD.Update
 
   def auralPresentation: AuralPresentation[I]
 

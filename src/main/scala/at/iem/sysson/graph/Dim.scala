@@ -16,7 +16,7 @@ package at.iem.sysson.graph
 
 import de.sciss.synth.{ScalarRated, proc, GE, UGenInLike, AudioRated}
 import de.sciss.synth
-import at.iem.sysson.sound.AuralSonification
+import at.iem.sysson.sound.AuralSonificationOLD
 
 object Dim {
   sealed trait GE extends synth.GE.Lazy with SonificationElement {
@@ -30,7 +30,7 @@ object Dim {
     override def toString       = s"$dim.play($freq)"
 
     protected def makeUGens: UGenInLike = {
-      val aural = AuralSonification.current()
+      val aural = AuralSonificationOLD.current()
       val key   = aural.attributeKey(this)
       import synth.ugen._
       val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
@@ -45,7 +45,7 @@ object Dim {
     override def toString       = s"$dim.values"
 
     protected def makeUGens: UGenInLike = {
-      val aural = AuralSonification.current()
+      val aural = AuralSonificationOLD.current()
       val key   = aural.attributeKey(this)
       proc.graph.attribute(key).ir
     }
@@ -56,7 +56,7 @@ object Dim {
     override def toString       = s"Dim.IndexRange($dim)"
 
     protected def makeUGens: UGenInLike = {
-      val aural = AuralSonification.current()
+      val aural = AuralSonificationOLD.current()
       val key   = aural.attributeKey(this)
       proc.graph.attribute(key).ir
     }

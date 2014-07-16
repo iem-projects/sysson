@@ -16,18 +16,19 @@ package at.iem.sysson
 package gui
 
 import de.sciss.desktop.{OptionPane, Desktop, KeyStrokes, Menu}
+import de.sciss.lucre.synth.Txn
+import scala.concurrent.stm.TxnExecutor
 import scala.swing.{Label, Action}
 import de.sciss.lucre.event.{Sys, Durable}
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.file._
 import gui.{SwingApplication => App}
 import language.existentials
-import at.iem.sysson.sound.AudioSystem
 import de.sciss.{osc, synth}
 import scala.swing.event.{Key, MouseClicked}
 import java.net.URL
 import de.sciss.mellite.gui.{ActionPreferences, LogFrame, ActionNewWorkspace, ActionOpenWorkspace}
-import de.sciss.mellite.Workspace
+import de.sciss.mellite.{Mellite, Workspace}
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -204,12 +205,18 @@ object MenuFactory {
 
   private var dumpMode: osc.Dump = osc.Dump.Off
 
-  def dumpOSC(): Unit = AudioSystem.instance.server.foreach { s =>
-    dumpMode = if (dumpMode == osc.Dump.Off) osc.Dump.Text else osc.Dump.Off
-    s.peer.dumpOSC(dumpMode, filter = {
-      case m: osc.Message if m.name == "/$meter" => false
-      case _ => true
-    })
+  def dumpOSC(): Unit = {
+    val sOpt = TxnExecutor.defaultAtomic { itx =>
+      implicit val tx = Txn.wrap(itx)
+      Mellite.auralSystem.serverOption
+    }
+    sOpt.foreach { s =>
+      dumpMode = if (dumpMode == osc.Dump.Off) osc.Dump.Text else osc.Dump.Off
+      s.peer.dumpOSC(dumpMode, filter = {
+        case m: osc.Message if m.name == "/$meter" => false
+        case _ => true
+      })
+    }
   }
 
   //  private def dumpOSC_OLD(): Unit = {
