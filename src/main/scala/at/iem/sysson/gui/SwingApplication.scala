@@ -21,7 +21,7 @@ import de.sciss.mellite.gui.LogFrame
 import language.existentials
 import javax.swing.UIManager
 import scala.util.control.NonFatal
-import de.sciss.mellite.Application
+import de.sciss.mellite.{Prefs, Application}
 import com.alee.laf.checkbox.WebCheckBoxStyle
 import com.alee.laf.progressbar.WebProgressBarStyle
 import java.awt.Color
@@ -52,7 +52,7 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     sysson.initTypes()
     sysson.gui.registerViews()
 
-    // ---- look and feel
+    // ---- look and feel ----
 
     try {
       val web = "com.alee.laf.WebLookAndFeel"

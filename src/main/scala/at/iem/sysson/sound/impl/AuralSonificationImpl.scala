@@ -21,7 +21,7 @@ import de.sciss.lucre.synth.expr.DoubleVec
 import de.sciss.lucre.synth.{Sys => SSys, Server, Txn}
 import at.iem.sysson.sound.AuralSonification.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
-import de.sciss.synth.proc.{SynthGraphs, FadeSpec, Scan, BooleanElem, ArtifactLocation, Artifact, Grapheme, AudioGraphemeElem, AuralSystem, ProcTransport, IntElem, DoubleVecElem, DoubleElem, AuralPresentation, Transport, ProcGroup, Obj, Proc}
+import de.sciss.synth.proc.{SynthGraphs, FadeSpec, Scan, BooleanElem, ArtifactLocation, Artifact, Grapheme, AudioGraphemeElem, AuralSystem, ProcTransport, IntElem, DoubleVecElem, DoubleElem, AuralPresentationOLD => AuralPresentation, TransportOLD => Transport, ProcGroup, Obj, Proc}
 import scala.concurrent.stm.{TMap, TxnExecutor, Txn => ScalaTxn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
 import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx, Boolean => BooleanEx, Int => IntEx}
@@ -525,7 +525,7 @@ object AuralSonificationImpl {
         val elem  = Grapheme.Expr.Audio(artif, gv.spec, LongEx.newConst(gv.offset), DoubleEx.newConst(gv.gain))
         if (gen.scan) {
           val scan  = proc.elem.peer.scans.add(gen.key)
-          val g     = Grapheme.Modifiable[I]
+          val g     = Grapheme.Modifiable[I](gv.numChannels)
           g.add(BiExpr(LongEx.newConst(0L), elem))
           scan.addSource(Scan.Link.Grapheme(g))
         } else {

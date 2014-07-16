@@ -17,6 +17,8 @@ package gui
 package impl
 
 import javax.swing.{BorderFactory, ImageIcon}
+import de.sciss.mellite.Prefs
+
 import swing.{Swing, Alignment, Label, Orientation, BoxPanel}
 import de.sciss.synth.swing.ServerStatusPanel
 import de.sciss.audiowidgets.PeakMeter
@@ -36,7 +38,7 @@ private[gui] object MainViewImpl {
     res
   }
 
-  private val AUTO_BOOT = Prefs.autoBoot.getOrElse(false)
+  private def AUTO_BOOT = Prefs.autoBoot.getOrElse(false)
 
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 

@@ -17,7 +17,7 @@ package sound
 
 import de.sciss.lucre.event.{Observable, Sys}
 import de.sciss.lucre.synth.{Sys => SSys}
-import de.sciss.synth.proc.AuralPresentation
+import de.sciss.synth.proc.{AuralPresentationOLD => AuralPresentation}
 import impl.{AuralSonificationImpl => Impl}
 
 object AuralSonification {

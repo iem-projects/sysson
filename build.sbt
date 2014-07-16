@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.8.1-SNAPSHOT"
+version       := "0.9.0-SNAPSHOT"
 
 organization  := "at.iem.sysson"
 
@@ -25,11 +25,11 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite"                        % "0.8.0",          // computer music environment
+  "de.sciss" %% "mellite"                        % "0.9.0-SNAPSHOT", // computer music environment
   "de.sciss" %% "lucrematrix"                    % "0.2.0",          // reactive matrix component and view
   "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
   "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component
-  "de.sciss" %% "guiflitz"                       % "0.3.2",
+//  "de.sciss" %% "guiflitz"                       % "0.3.2",
   "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
   "org.slf4j" % "slf4j-simple"                   % "1.7.7"           // logging (used by netcdf)
 )
@@ -130,7 +130,7 @@ appbundle.icon := {
 
 appbundle.mainClass   := Some("at.iem.sysson.Main")
 
-appbundle.javaOptions += "-Xmx2048m"
+appbundle.javaOptions ++= Seq("-Xmx2048m", "-XX:MaxPermSize=512m")
 
 appbundle.target      := baseDirectory.value      // make .app bundle in the main directory
 

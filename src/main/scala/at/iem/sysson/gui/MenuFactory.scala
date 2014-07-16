@@ -26,7 +26,7 @@ import at.iem.sysson.sound.AudioSystem
 import de.sciss.{osc, synth}
 import scala.swing.event.{Key, MouseClicked}
 import java.net.URL
-import de.sciss.mellite.gui.{LogFrame, ActionNewWorkspace, ActionOpenWorkspace}
+import de.sciss.mellite.gui.{ActionPreferences, LogFrame, ActionNewWorkspace, ActionOpenWorkspace}
 import de.sciss.mellite.Workspace
 
 object MenuFactory {

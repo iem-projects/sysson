@@ -15,6 +15,7 @@
 package at.iem.sysson
 package sound
 
+import de.sciss.mellite.Prefs
 import impl.{AudioSystemImpl => Impl}
 import de.sciss.synth
 import de.sciss.osc.TCP
