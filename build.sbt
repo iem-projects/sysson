@@ -29,7 +29,6 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "lucrematrix"                    % "0.2.0",          // reactive matrix component and view
   "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
   "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component
-//  "de.sciss" %% "guiflitz"                       % "0.3.2",
   "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
   "org.slf4j" % "slf4j-simple"                   % "1.7.7"           // logging (used by netcdf)
 )
