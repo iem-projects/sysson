@@ -365,7 +365,7 @@ object AuralSonificationImplOLD {
         case elem: graph.UserValue =>
           if (isNewAttr(elem)) {
             val attrKey = addAttr(elem)
-            sonifE.controls.get(elem.key).foreach { expr =>
+            sonifE.controls.get(elem.name).foreach { expr =>
               putAttrValue(attrKey, expr.value)
             }
           }

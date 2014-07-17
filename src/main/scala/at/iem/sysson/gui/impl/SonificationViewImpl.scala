@@ -331,10 +331,11 @@ object SonificationViewImpl {
         // sonifView.play()
       } catch {
         case NonFatal(e) =>
-          val opt = OptionPane.message(
-            message = s"<html><b>Sonification failed due to the following problem:</b><p>${e.getMessage}",
-            messageType = OptionPane.Message.Error)
-          opt.show(GUI.findWindow(component))
+          val message = s"<html><b>Sonification failed:</b> <i>(${e.getClass.getSimpleName})</i><p>${e.getMessage}"
+          val options = Seq("Ok", "Show Stack Trace")
+          val opt = OptionPane(message = message, messageType = OptionPane.Message.Error,
+            optionType = OptionPane.Options.YesNo, entries = options, initial = Some(options(0)))
+          if (opt.show(GUI.findWindow(component)).id == 1) e.printStackTrace()
       }
     }
 
