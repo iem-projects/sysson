@@ -1,5 +1,5 @@
 /*
- *  AuralSonificationImpl.scala
+ *  AuralSonificationImplOLD.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
@@ -21,7 +21,7 @@ import de.sciss.lucre.synth.expr.DoubleVec
 import de.sciss.lucre.synth.{Sys => SSys, Server, Txn}
 import at.iem.sysson.sound.AuralSonificationOLD.{Update, Playing, Stopped, Preparing}
 import at.iem.sysson.impl.TxnModelImpl
-import de.sciss.synth.proc.{SynthGraphs, FadeSpec, Scan, BooleanElem, ArtifactLocation, Artifact, Grapheme, AudioGraphemeElem, AuralSystem, ProcTransport, IntElem, DoubleVecElem, DoubleElem, AuralPresentationOLD => AuralPresentation, TransportOLD => Transport, ProcGroup, Obj, Proc}
+import de.sciss.synth.proc.{SynthGraphs, FadeSpec, Scan, BooleanElem, ArtifactLocation, Artifact, Grapheme, AudioGraphemeElem, AuralSystem, ProcTransport, IntElem, DoubleVecElem, DoubleElem, TransportOLD => Transport, ProcGroup, Obj, Proc}
 import scala.concurrent.stm.{TMap, TxnExecutor, Txn => ScalaTxn, TxnLocal, Ref}
 import de.sciss.lucre.{synth, stm}
 import de.sciss.lucre.expr.{Long => LongEx, Double => DoubleEx, Boolean => BooleanEx, Int => IntEx}
@@ -68,8 +68,8 @@ object AuralSonificationImplOLD {
     import w.{inMemoryCursor, inMemoryBridge}
     val transport     = Transport[I, I](group)
     // val auralSys      = AudioSystem.instance.aural
-    val aural: AuralPresentation[I] = ??? //         = AuralPresentation.run(transport, auralSys)
-    val res           = new Impl[S, I](aw, aural, sonifH, itx.newHandle(obj), transport)
+    // val aural: AuralPresentation[I] = ??? //         = AuralPresentation.run(transport, auralSys)
+    val res           = new Impl[S, I](aw, /* aural, */ sonifH, itx.newHandle(obj), transport)
     res.init()
     // auralSys.addClient(res)
     // auralSys.serverOption.foreach(s => res.auralStarted(s))
@@ -82,7 +82,7 @@ object AuralSonificationImplOLD {
   }
 
   private final class Impl[S <: Sys[S], I <: lucre.synth.Sys[I]](aw: AuralWorkspace[S, I],
-                                                                 ap: AuralPresentation[I],
+                                                                 // ap: AuralPresentation[I],
                                                                  sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
       procH: stm.Source[I#Tx, Obj.T[I, Proc.Elem]],
       transport: ProcTransport[I])(implicit iCursor: stm.Cursor[I], iTx: S#Tx => I#Tx, cursor: stm.Cursor[S])
@@ -94,7 +94,7 @@ object AuralSonificationImplOLD {
 
     def state(implicit tx: S#Tx): Update = _state.get(tx.peer)
 
-    def auralPresentation = ap // .group
+    // def auralPresentation = ap // .group
 
     private def state_=(value: Update)(implicit tx: S#Tx): Unit = {
       val oldState = _state.swap(value)(tx.peer)

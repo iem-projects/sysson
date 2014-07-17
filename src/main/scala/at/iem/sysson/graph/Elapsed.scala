@@ -1,7 +1,7 @@
 package at.iem.sysson.graph
 
-import at.iem.sysson.sound.AuralSonificationOLD
 import de.sciss.synth
+import de.sciss.synth.proc.UGenGraphBuilder
 import de.sciss.synth.{proc, HasSideEffect, UGenInLike, GE, Rate, control, audio}
 
 /** A special graph element that measures the progress of a playing dimension.
@@ -41,7 +41,8 @@ final case class Elapsed(rate: Rate, in: Dim.Play, terminate: Boolean)
   private val numFrames = in.dim.size
 
   protected def makeUGens: UGenInLike = {
-    val key       = AuralSonificationOLD.current().attributeKey(this)
+    val b         = UGenGraphBuilder.get
+    val key: String = ??? //       = AuralSonificationOLD.current().attributeKey(this)
     val reportID  = proc.graph.attribute(key).ir
     import synth._
     import synth.ugen._

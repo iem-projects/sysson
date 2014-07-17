@@ -17,8 +17,6 @@ package sound
 
 import de.sciss.lucre.event.{Observable, Sys}
 import de.sciss.lucre.synth.{Sys => SSys}
-import de.sciss.synth.proc.{AuralPresentationOLD => AuralPresentation}
-import impl.{AuralSonificationImplOLD => Impl}
 
 object AuralSonificationOLD {
   sealed trait Update
@@ -37,7 +35,7 @@ object AuralSonificationOLD {
     */
   case class Elapsed(dim: String, ratio: Float, value: Float) extends Update
 
-  private[sysson] def current(): AuralSonificationOLD[_, _] = Impl.current()
+  // private[sysson] def current(): AuralSonificationOLD[_, _] = Impl.current()
 
   case class MissingSource         (key : String)
     extends Exception(s"The source for key '$key' is not assigned")
@@ -54,7 +52,7 @@ trait AuralSonificationOLD[S <: Sys[S], I <: SSys[I]] extends Observable[S#Tx, A
 
   def state(implicit tx: S#Tx): AuralSonificationOLD.Update
 
-  def auralPresentation: AuralPresentation[I]
+  // def auralPresentation: AuralPresentation[I]
 
   /* Attribute keys are used to link a graph element to an automatically generated attribute
    * such as a control value.

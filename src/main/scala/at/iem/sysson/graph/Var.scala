@@ -15,6 +15,7 @@
 package at.iem.sysson.graph
 
 import de.sciss.synth
+import de.sciss.synth.proc.UGenGraphBuilder
 import de.sciss.synth.{proc, ScalarRated, UGenInLike, AudioRated}
 import at.iem.sysson.sound.AuralSonificationOLD
 
@@ -32,8 +33,9 @@ object Var {
     override def toString       = s"$variable.play($time)"
 
     protected def makeUGens: UGenInLike = {
-      val aural = AuralSonificationOLD.current()
-      val key   = aural.attributeKey(this)
+      val b     = UGenGraphBuilder.get
+      // val aural = AuralSonificationOLD.current()
+      val key: String = ??? //   = aural.attributeKey(this)
       import synth.ugen._
       val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
       val speed     = time.freq / bufSr
@@ -53,8 +55,9 @@ object Var {
     override def toString       = s"$variable.values"
 
     protected def makeUGens: UGenInLike = {
-      val aural = AuralSonificationOLD.current()
-      val key   = aural.attributeKey(this)
+      val b     = UGenGraphBuilder.get
+      // val aural = AuralSonificationOLD.current()
+      val key: String = ??? //   = aural.attributeKey(this)
       proc.graph.attribute(key).ir
     }
   }
@@ -88,7 +91,8 @@ object Var {
       // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addScalarAxis(axis.playing, axis.ref)
 
       protected def makeUGens: UGenInLike = {
-        val keyComp   = AuralSonificationOLD.current().attributeKey(this)
+        val b         = UGenGraphBuilder.get
+        val keyComp: String = ??? //   = AuralSonificationOLD.current().attributeKey(this)
         val keySp     = keyComp.split(";")
         val key       = keySp(0)
         val axisSize  = keySp(1).toInt

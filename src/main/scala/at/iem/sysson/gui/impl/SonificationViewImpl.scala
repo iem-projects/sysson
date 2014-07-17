@@ -307,7 +307,7 @@ object SonificationViewImpl {
       val ggPause   = transportButtons.button(GUITransport.Pause).get
       val isPausing = ggPause.selected
       cursor.step { implicit tx =>
-        transport.toString
+        transport.stop()
         // sonifView.stop()
         if (isPausing) runGroup(state = true)
       }
