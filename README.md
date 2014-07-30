@@ -22,8 +22,6 @@ An installation of Java SDK 1.6 or higher is required. On OS X, you will already
 
 The recommended [SuperCollider](http://supercollider.sourceforge.net/) version is 3.6.2 or newer.
 
-__TODO__: Setting up `SC_HOME`.
-
 ### Building
 
 First, open a terminal (bash), and go (`cd`) into the main project directory.
@@ -52,27 +50,4 @@ A fresh IDEA project is setup by running the following command in the terminal: 
 
 See the different files in the `doc` directory. The API documentation for just SysSon can be created by running `./sbt doc` in the main directory. A complete API documentation including the dependencies (ScalaOSC, ScalaCollider etc.) can be created by moving into the `site` directory (`cd site`) and running `../sbt unidoc`. The result will be found in `site/target/scala-2.10/unidoc/index.html`.
 
-### SysSon home directory (OBSOLETE)
-
-We now expect an environment variable `SYSSON_HOME` to be specified, in order to find common data files. The directory to which `SYSSON_HOME` points, should contain a sub-directory `data` with the same layout as on the IEM server. For example, there should be `$SYSSON_HOME/data/201211/gcm/RCP45/MetOffUK_HadGEM2-ES`.
-
-Depending on whether SysSon is launched from the Finder or a terminal, unfortunately there are two locations where that environment variable should be defined: `~/.bash_profile` and `~/.MacOSX/environment.plist`. From a terminal, the bash profile can be edited for example with the `vi` editor:
-
-    $ vi ~/.bash_profile
-
-Adding an entry like the following:
-
-    export SYSSON_HOME=/Users/hhrutz/Desktop/IEM/SysSon
-
-Similarly, the property list file can be edited:
-
-    $ mkdir ~/.MacOSX
-    $ vi ~/.MacOSX/environment.plist
-
-The format is slightly different. The following shows how it could look:
-
-    {
-            "SYSSON_HOME" = "/Users/hhrutz/Desktop/IEM/SysSon";
-    }
-
-(The property list file changes take effect only after rebooting OS X.)
+After first launching the SysSon application, it is recommended to open and verify the preferences.

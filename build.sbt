@@ -14,9 +14,9 @@ licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.11.1"
+scalaVersion  := "2.11.2"
 
-crossScalaVersions := Seq("2.11.1", "2.10.4")
+crossScalaVersions := Seq("2.11.2", "2.10.4")
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
@@ -25,7 +25,7 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite"                        % "0.9.0-SNAPSHOT", // computer music environment
+  "de.sciss" %% "mellite"                        % "0.9.0",          // computer music environment
   "de.sciss" %% "lucrematrix"                    % "0.2.0",          // reactive matrix component and view
   "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
   "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component
