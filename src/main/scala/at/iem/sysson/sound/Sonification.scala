@@ -20,7 +20,7 @@ import evt.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
 import de.sciss.model
 import de.sciss.lucre.expr
-import de.sciss.synth.proc.{Proc, Obj}
+import de.sciss.synth.proc.Proc
 import impl.{SonificationImpl => Impl}
 import de.sciss.serial.{Serializer, DataInput}
 import de.sciss.lucre.matrix.Matrix

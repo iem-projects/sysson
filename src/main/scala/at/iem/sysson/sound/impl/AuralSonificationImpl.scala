@@ -34,7 +34,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
   type E[S <: evt.Sys[S]] = Sonification.Elem[S]
 
   def apply[S <: Sys[S]](obj: Sonification.Obj[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralObj[S] = {
-    println(s"AuralSonification($obj)")
+    logDebugTx(s"AuralSonification($obj)")
     val objH      = tx.newHandle(obj)
     val proc      = obj.elem.peer.proc
     val procData  = context.acquire[AuralObj.ProcData[S]](proc)(new ProcDataImpl[S].init(proc))
@@ -86,6 +86,9 @@ object AuralSonificationImpl extends AuralObj.Factory {
     def init(obj: stm.Source[S#Tx, Sonification.Obj[S]], procView: AuralObj[S])(implicit tx: S#Tx): this.type = {
       _obj      = obj
       _procView = procView
+      procViewL = procView.react { implicit tx => upd =>
+        fire(upd) // just forward
+      }
       this
     }
 
@@ -99,19 +102,13 @@ object AuralSonificationImpl extends AuralObj.Factory {
       }
     }
 
-    def init()(implicit tx: S#Tx): Unit = {
-      procViewL = _procView.react { implicit tx => upd =>
-        fire(upd) // just forward
-      }
-    }
-
     def play(timeRef: TimeRef)(implicit tx: S#Tx): Unit = {
-      println("AuralSonification: play")
+      logDebugTx("AuralSonification: play")
       _procView.play(timeRef)
     }
 
     def stop()(implicit tx: S#Tx): Unit = {
-      println("AuralSonification: stop")
+      logDebugTx("AuralSonification: stop")
       _procView.stop()
     }
 

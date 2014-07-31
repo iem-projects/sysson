@@ -1,7 +1,23 @@
+/*
+ *  output.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
+ *  Written by Hanns Holger Rutz.
+ *
+ *	This software is published under the GNU General Public License v3+
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
+
 package at.iem.sysson
 package graph
 
 import de.sciss.synth._
+import de.sciss.synth.proc.ObjKeys
+import de.sciss.synth.proc.graph.{FadeInOut, attribute}
 import de.sciss.synth.ugen._
 
 object output {
@@ -11,10 +27,15 @@ object output {
     override def productPrefix  = "output$Signal"
     override def toString       = s"output := $in"
 
+    // XXX TODO - this refers to the Proc but not Sonification attrMap.
+    // (which is correct; but the GUI view will currently update the
+    //  sonification's dictionary)
     protected def makeUGens: Unit = {
-      val mute  = "$son_out".kr(0)
-      val amp   = /* Lag.ar( */ 1 - mute /* , 0.05) */   // note: Lag.ar needs ar argument
-      val sig   = in * amp
+      val mute  = attribute(ObjKeys.attrMute).kr(0)
+      val gain  = attribute(ObjKeys.attrGain).kr(1)
+      val amp   = gain * (1 - mute)
+      val env   = FadeInOut(ObjKeys.attrFadeIn, ObjKeys.attrFadeOut).ar
+      val sig   = in * env * amp
       Out.ar(0, sig)
     }
   }
