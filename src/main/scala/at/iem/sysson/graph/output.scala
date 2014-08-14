@@ -17,7 +17,7 @@ package graph
 
 import de.sciss.synth._
 import de.sciss.synth.proc.ObjKeys
-import de.sciss.synth.proc.graph.{FadeInOut, attribute}
+import de.sciss.synth.proc.graph.{FadeIn, FadeInOut, attribute}
 import de.sciss.synth.ugen._
 
 object output {
@@ -34,7 +34,9 @@ object output {
       val mute  = attribute(ObjKeys.attrMute).kr(0)
       val gain  = attribute(ObjKeys.attrGain).kr(1)
       val amp   = gain * (1 - mute)
-      val env   = FadeInOut(ObjKeys.attrFadeIn, ObjKeys.attrFadeOut).ar
+      // XXX TODO - Fade out is broken for indefinite Duration
+      // val env   = FadeInOut(ObjKeys.attrFadeIn, ObjKeys.attrFadeOut).ar
+      val env   = FadeIn(ObjKeys.attrFadeIn).ar
       val sig   = in * env * amp
       Out.ar(0, sig)
     }

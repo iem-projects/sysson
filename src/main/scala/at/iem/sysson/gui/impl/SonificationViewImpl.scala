@@ -21,7 +21,8 @@ import java.awt.Color
 import de.sciss.lucre.synth.Sys
 import at.iem.sysson.sound.{Keys, Sonification}
 import de.sciss.lucre.stm
-import de.sciss.synth.proc.{Transport, Obj}
+import de.sciss.mellite.gui.edit.EditAttrMap
+import de.sciss.synth.proc.{Obj, BooleanElem, ObjKeys, ExprImplicits, Transport}
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{OptionPane, UndoManager}
 import de.sciss.swingplus.{GroupPanel, Separator}
@@ -41,7 +42,7 @@ import de.sciss.mellite.{Mellite, Workspace}
 import de.sciss.mellite.gui.{AttrMapFrame, CodeFrame, GUI}
 
 object SonificationViewImpl {
-  def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
+  def apply[S <: Sys[S]](sonification: Sonification.Obj[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] = {
     implicit val undoMgr = new UndoManagerImpl {
       protected var dirty: Boolean = false
@@ -76,7 +77,7 @@ object SonificationViewImpl {
     res
   }
 
-  private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]],
+  private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Sonification.Obj[S]],
                                                           transport: Transport[S],
                                         nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S] { type I = I1 },
                                                                               val undoManager: UndoManager,
@@ -88,7 +89,7 @@ object SonificationViewImpl {
     protected def auralObserver: Disposable[S#Tx]
     protected def graphObserver: Disposable[S#Tx]
 
-    def sonification(implicit tx: S#Tx): Obj.T[S, Sonification.Elem] = sonifH()
+    def sonification(implicit tx: S#Tx): Sonification.Obj[S] = sonifH()
 
     private var pMapping : FlowPanel = _
     private var pControls: FlowPanel = _
@@ -258,17 +259,25 @@ object SonificationViewImpl {
 
       ggElapsed = new ElapsedBar
 
+      // XXX TODO - should be regular button, and has to listen to model changes
       ggMute = new ToggleButton(null) { me =>
         listenTo(this)
         reactions += {
           case ButtonClicked(_) =>
-            val muted = if (me.selected) 1f else 0
-            println("TODO: Mute")
-            //            workspace.inMemoryCursor.step { implicit tx =>
-            //              sonifView.auralPresentation.group.foreach { g =>
-            //                g.set(true, "$son_out" -> muted)
-            //              }
-            //            }
+            val muted = me.selected
+            implicit val cursor = impl.cursor
+            val edit = cursor /* workspace.inMemoryCursor */ .step { implicit tx =>
+              val imp = ExprImplicits[S]
+              import imp._
+              val value = Obj(BooleanElem[S](muted))
+              val proc  = sonification.elem.peer.proc
+              // Not sure that making an undoable edit is necessary, perhaps just overkill?
+              EditAttrMap(if (muted) "Mute" else "Un-Mute", obj = proc, key = ObjKeys.attrMute, value = Some(value))
+              //              sonifView.auralPresentation.group.foreach { g =>
+              //                g.set(true, "$son_out" -> muted)
+              //              }
+            }
+            undoManager.add(edit)
         }
         focusable = false
         icon          = raphael.Icon(extent = 20, fill = raphael.TexturePaint(24), shadow = raphael.WhiteShadow)(raphael.Shapes.Mute)
