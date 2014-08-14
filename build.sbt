@@ -25,17 +25,17 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite"                        % "0.9.0",          // computer music environment
-  "de.sciss" %% "lucrematrix"                    % "0.2.0",          // reactive matrix component and view
-  "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
-  "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component
-  "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
-  "org.slf4j" % "slf4j-simple"                   % "1.7.7"           // logging (used by netcdf)
+  "de.sciss" %% "mellite"           % "0.9.0",          // computer music environment
+  "de.sciss" %% "lucrematrix"       % "0.3.0-SNAPSHOT", // reactive matrix component and view
+  "de.sciss" %% "filecache-txn"     % "0.3.2",          // caching statistics of data files
+  "de.sciss" %% "scala-swing-tree"  % "0.1.1",          // tree component
+  "org.jfree" % "jfreechart"        % "1.0.19",         // plotting
+  "org.slf4j" % "slf4j-simple"      % "1.7.7"           // logging (used by netcdf)
 )
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test"
 
-retrieveManaged := true
+// retrieveManaged := true
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
 
