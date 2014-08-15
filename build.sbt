@@ -24,16 +24,32 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 // maven repository for Oracle BDB JE
 resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
+// ---- library versions ----
+
+lazy val melliteVersion     = "0.9.0"
+
+lazy val lucreMatrixVersion = "0.3.0-SNAPSHOT"
+
+lazy val fileCacheVersion   = "0.3.2"
+
+lazy val swingTreeVersion   = "0.1.1"
+
+lazy val jfreechartVersion  = "1.0.17"  // "1.0.19" as soon as we have internet connection
+
+lazy val slfVersion         = "1.7.7"
+
+lazy val scalaTestVersion   = "2.2.0"
+
 libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite"           % "0.9.0",          // computer music environment
-  "de.sciss" %% "lucrematrix"       % "0.3.0-SNAPSHOT", // reactive matrix component and view
-  "de.sciss" %% "filecache-txn"     % "0.3.2",          // caching statistics of data files
-  "de.sciss" %% "scala-swing-tree"  % "0.1.1",          // tree component
-  "org.jfree" % "jfreechart"        % "1.0.19",         // plotting
-  "org.slf4j" % "slf4j-simple"      % "1.7.7"           // logging (used by netcdf)
+  "de.sciss" %% "mellite"           % melliteVersion,          // computer music environment
+  "de.sciss" %% "lucrematrix"       % lucreMatrixVersion,      // reactive matrix component and view
+  "de.sciss" %% "filecache-txn"     % fileCacheVersion,        // caching statistics of data files
+  "de.sciss" %% "scala-swing-tree"  % swingTreeVersion,        // tree component
+  "org.jfree" % "jfreechart"        % jfreechartVersion,       // plotting
+  "org.slf4j" % "slf4j-simple"      % slfVersion               // logging (used by netcdf)
 )
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
 
 // retrieveManaged := true
 

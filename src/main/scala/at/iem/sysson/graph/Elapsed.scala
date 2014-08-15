@@ -32,7 +32,7 @@ object Elapsed {
   * @param terminate   if `true`, stops the synth when 100% is reached
   */
 final case class Elapsed(rate: Rate, in: Dim.Play, terminate: Boolean)
-  extends GE.Lazy with SonificationElement with HasSideEffect {
+  extends GE.Lazy /* with SonificationElement */ with HasSideEffect {
 
   /* Important: in order for `Dim.IndexRange` to be found in the aural
    * sonification, the "expansion" should happen immediately, not late.

@@ -20,7 +20,7 @@ import de.sciss.synth.{proc, ScalarRated, UGenInLike, AudioRated}
 import at.iem.sysson.sound.AuralSonificationOLD
 
 object Var {
-  sealed trait GE extends synth.GE.Lazy with SonificationElement {
+  sealed trait GE extends synth.GE.Lazy /* with SonificationElement */ {
     def variable: Var
 
     // def axis(dim: Dim): Axis
@@ -82,7 +82,7 @@ object Var {
 
   object Axis {
     case class Values(axis: Var.Axis)
-      extends synth.GE.Lazy /* impl.LazyImpl */ with SonificationElement with ScalarRated {
+      extends synth.GE.Lazy /* impl.LazyImpl */ /* with SonificationElement */ with ScalarRated {
 
       override def productPrefix = "Var$Axis$Values"
 

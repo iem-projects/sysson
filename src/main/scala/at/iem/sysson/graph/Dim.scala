@@ -14,31 +14,60 @@
 
 package at.iem.sysson.graph
 
-import de.sciss.synth.proc.UGenGraphBuilder
+import de.sciss.synth.proc.impl.StreamBuffer
+import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
+import de.sciss.synth.ugen.Constant
 import de.sciss.synth.{ScalarRated, proc, GE, UGenInLike, AudioRated}
 import de.sciss.synth
-import at.iem.sysson.sound.AuralSonificationOLD
 
 object Dim {
-  sealed trait GE extends synth.GE.Lazy with SonificationElement {
+  sealed trait GE extends synth.GE.Lazy /* with UGB.Input */ {
     def dim: Dim
+
+    // type Key = Dim
+    // def  key = dim
   }
 
-  final case class Play(dim: Dim, freq: synth.GE, maxFreq: Double)
-    extends GE with AudioRated {
+  private[sysson] def controlName(key: String, idx: Int): String = s"$$str${idx}_$key"
+
+  final case class Play(dim: Dim, freq: synth.GE, maxFreq: Double, interp: Int)
+    extends GE with AudioRated with UGB.Input {
+
+    private val maxFreq1 = freq match {
+      case Constant(c)  => c
+      case _            => maxFreq
+    }
 
     override def productPrefix  = "Dim$Play"
     override def toString       = s"$dim.play($freq)"
 
+    type Key    = Dim // UGB.AttributeKey
+    type Value  = UGB.Input.Stream.Value
+    def  key    = dim
+
     protected def makeUGens: UGenInLike = {
-      val b     = UGenGraphBuilder.get
-      // b.requestInput(???)
-      val key: String = ??? // aural.attributeKey(this)
-      import synth.ugen._
+      val b     = UGB.get
+      // val spec  = UGB.Input.Stream.Spec(maxSpeed = maxSpeed1, interp = interp)
+      val info  = b.requestInput(this)
+
+      val key   = s"$$dim_${dim.variable.name}_${dim.name}"
+
+      import synth._
+      import ugen._
       val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
       val speed     = freq / bufSr
-      // val maxSpeed
-      proc.graph.VDiskIn.ar(key, speed = speed, interp = 1 /*, maxSpeed = maxSpeed */)  // XXX TODO: need server.sampleRate for maxSpeed
+
+      // proc.graph.VDiskIn.ar(key, speed = speed, interp = 1 /*, maxSpeed = maxSpeed */)  // need server.sampleRate for maxSpeed
+
+      val idx           = /* if (spec.isEmpty) 0 else */ info.specs.size - 1
+      // val (numCh, idx)  = b.addStreamIn(key, info)
+      val ctlName       = controlName(key, idx)
+      //      val ctl           = ctlName.ir(Seq(0, 0))
+      //      val buf           = ctl \ 0
+      val buf           = ctlName.ir(0)
+
+      StreamBuffer.makeUGen(key = key, idx = idx, buf = buf, numChannels = info.numChannels,
+        speed = speed, interp = interp)
     }
   }
 
@@ -47,7 +76,7 @@ object Dim {
     override def toString       = s"$dim.values"
 
     protected def makeUGens: UGenInLike = {
-      val b     = UGenGraphBuilder.get
+      val b     = UGB.get
       // val aural = AuralSonificationOLD.current()
       val key: String = ??? //  = aural.attributeKey(this)
       proc.graph.attribute(key).ir
@@ -59,7 +88,7 @@ object Dim {
     override def toString       = s"Dim.IndexRange($dim)"
 
     protected def makeUGens: UGenInLike = {
-      val b     = UGenGraphBuilder.get
+      val b     = UGB.get
       // val aural = AuralSonificationOLD.current()
       val key: String = ??? //   = aural.attributeKey(this)
       proc.graph.attribute(key).ir
@@ -72,13 +101,14 @@ object Dim {
   * @param name     Logical name by which the dimension is referred to
   */
 final case class Dim(variable: Var, name: String)
-  extends UserInteraction {
+  extends UserInteraction with UGB.Key {
 
   /** Produces a graph element which unrolls the selected range in time, using the dimension's domain value.
     *
     * @param  freq  a graph element specifying the frequency in samples per second with which to unroll.
     */
-  def play(freq: GE, maxFreq: Double = 0.0): Dim.Play = Dim.Play(this, freq = freq, maxFreq = maxFreq)
+  def play(freq: GE, maxFreq: Double = 0.0, interp: Int = 1): Dim.Play =
+    Dim.Play(this, freq = freq, maxFreq = maxFreq, interp = interp)
 
   def values : Dim.Values = Dim.Values(this)
 

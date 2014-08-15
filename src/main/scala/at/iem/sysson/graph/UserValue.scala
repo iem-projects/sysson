@@ -20,7 +20,7 @@ import de.sciss.synth.{control, audio, Rate, scalar, GE, UGenInLike}
 import de.sciss.synth
 
 object UserValue {
-  case class GE(rate: Rate, peer: UserValue) extends synth.GE.Lazy with SonificationElement {
+  case class GE(rate: Rate, peer: UserValue) extends synth.GE.Lazy /* with SonificationElement */ {
     override def productPrefix = "UserValue$GE"
 
     protected def makeUGens: UGenInLike = {
