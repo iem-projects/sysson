@@ -34,7 +34,7 @@ lazy val fileCacheVersion   = "0.3.2"
 
 lazy val swingTreeVersion   = "0.1.1"
 
-lazy val jfreechartVersion  = "1.0.17"  // "1.0.19" as soon as we have internet connection
+lazy val jfreechartVersion  = "1.0.19"
 
 lazy val slfVersion         = "1.7.7"
 

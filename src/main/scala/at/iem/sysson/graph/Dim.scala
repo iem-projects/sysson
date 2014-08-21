@@ -30,6 +30,10 @@ object Dim {
 
   private[sysson] def controlName(key: String, idx: Int): String = s"$$str${idx}_$key"
 
+  object Play {
+    // private[sysson] case class Key(dim: Dim)
+    private[sysson] def key(dim: Dim): String = s"$$dim_${dim.variable.name}_${dim.name}"
+  }
   final case class Play(dim: Dim, freq: synth.GE, maxFreq: Double, interp: Int)
     extends GE with AudioRated with UGB.Input {
 
@@ -50,7 +54,7 @@ object Dim {
       // val spec  = UGB.Input.Stream.Spec(maxSpeed = maxSpeed1, interp = interp)
       val info  = b.requestInput(this)
 
-      val key   = s"$$dim_${dim.variable.name}_${dim.name}"
+      val key   = Play.key(dim)
 
       import synth._
       import ugen._
@@ -65,9 +69,10 @@ object Dim {
       //      val ctl           = ctlName.ir(Seq(0, 0))
       //      val buf           = ctl \ 0
       val buf           = ctlName.ir(0)
-
-      StreamBuffer.makeUGen(key = key, idx = idx, buf = buf, numChannels = info.numChannels,
-        speed = speed, interp = interp)
+      val numCh         = info.numChannels
+      assert(numCh == 1)
+      // println(s"Dim.Play - numChannels = $numCh")
+      StreamBuffer.makeUGen(key = key, idx = idx, buf = buf, numChannels = numCh, speed = speed, interp = interp)
     }
   }
 
