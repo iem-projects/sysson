@@ -43,7 +43,7 @@ final case class Elapsed(rate: Rate, in: Dim.Play, terminate: Boolean)
   protected def makeUGens: UGenInLike = {
     val b         = UGenGraphBuilder.get
     val key: String = ??? //       = AuralSonificationOLD.current().attributeKey(this)
-    val reportID  = proc.graph.attribute(key).ir
+    val reportID  = proc.graph.Attribute.ir(key)
     import synth._
     import synth.ugen._
     val frame     = Sweep(rate, 0, in.freq) // speed = increment _per second_

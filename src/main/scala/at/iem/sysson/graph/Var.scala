@@ -58,7 +58,7 @@ object Var {
       val b     = UGenGraphBuilder.get
       // val aural = AuralSonificationOLD.current()
       val key: String = ??? //   = aural.attributeKey(this)
-      proc.graph.attribute(key).ir
+      proc.graph.Attribute.ir(key)
     }
   }
 
@@ -97,7 +97,7 @@ object Var {
         val key       = keySp(0)
         val axisSize  = keySp(1).toInt
         val div       = keySp(2).toInt
-        val axisSignal= proc.graph.attribute(key).ir
+        val axisSignal= proc.graph.Attribute.ir(key)
         println(s"axisSize = $axisSize, div = $div")
         Vector.tabulate(axisSize * div)(i => axisSignal \ (i/div)): synth.GE
       }

@@ -26,7 +26,7 @@ resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 // ---- library versions ----
 
-lazy val melliteVersion     = "0.9.0"
+lazy val melliteVersion     = "0.10.0-SNAPSHOT"
 
 lazy val lucreMatrixVersion = "0.3.0-SNAPSHOT"
 
@@ -86,7 +86,7 @@ buildInfoPackage := organization.value
 publishMavenStyle := true
 
 publishTo :=
-  Some(if (version.value endsWith "-SNAPSHOT")
+  Some(if (isSnapshot.value)
     "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
   else
     "Sonatype Releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"

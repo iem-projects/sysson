@@ -17,7 +17,7 @@ package graph
 
 import de.sciss.synth._
 import de.sciss.synth.proc.ObjKeys
-import de.sciss.synth.proc.graph.{FadeIn, FadeInOut, attribute}
+import de.sciss.synth.proc.graph.{FadeIn, FadeInOut, Attribute}
 import de.sciss.synth.ugen._
 
 object output {
@@ -31,12 +31,12 @@ object output {
     // (which is correct; but the GUI view will currently update the
     //  sonification's dictionary)
     protected def makeUGens: Unit = {
-      val mute  = attribute(ObjKeys.attrMute).kr(0)
-      val gain  = attribute(ObjKeys.attrGain).kr(1)
+      val mute  = Attribute.kr(ObjKeys.attrMute)
+      val gain  = Attribute.kr(ObjKeys.attrGain, 1)
       val amp   = gain * (1 - mute)
       // XXX TODO - Fade out is broken for indefinite Duration
       // val env   = FadeInOut(ObjKeys.attrFadeIn, ObjKeys.attrFadeOut).ar
-      val env   = FadeIn(ObjKeys.attrFadeIn).ar
+      val env   = FadeIn.ar
       val sig   = in * env * amp
       Out.ar(0, sig)
     }

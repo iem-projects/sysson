@@ -84,7 +84,7 @@ object Dim {
       val b     = UGB.get
       // val aural = AuralSonificationOLD.current()
       val key: String = ??? //  = aural.attributeKey(this)
-      proc.graph.attribute(key).ir
+      proc.graph.Attribute.ir(key)
     }
   }
 
@@ -96,7 +96,7 @@ object Dim {
       val b     = UGB.get
       // val aural = AuralSonificationOLD.current()
       val key: String = ??? //   = aural.attributeKey(this)
-      proc.graph.attribute(key).ir
+      proc.graph.Attribute.kr(key)
     }
   }
 }

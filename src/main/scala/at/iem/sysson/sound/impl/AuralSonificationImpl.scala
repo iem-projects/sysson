@@ -23,8 +23,7 @@ import de.sciss.numbers
 import de.sciss.synth.ControlSet
 import de.sciss.synth.proc.AuralObj.State
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB, AudioGraphemeElem, TimeRef, AuralContext, AuralObj}
-import de.sciss.synth.proc.impl.AuralProcImpl.SynthBuilder
-import de.sciss.synth.proc.impl.{StreamBuffer, AuralProcImpl, AuralProcDataImpl, ObservableImpl}
+import de.sciss.synth.proc.impl.{SynthBuilder, StreamBuffer, AuralProcImpl, AuralProcDataImpl, ObservableImpl}
 import de.sciss.lucre.{event => evt, stm}
 
 import scala.concurrent.stm.TxnLocal
@@ -66,8 +65,8 @@ object AuralSonificationImpl extends AuralObj.Factory {
   private final class ProcImpl[S <: Sys[S]](sonifData: Impl[S])(implicit context: AuralContext[S])
     extends AuralProcImpl.Impl[S]() {
 
-    override protected def buildInput(b: SynthBuilder[S], keyW: UGB.Key, value: UGB.Value)
-                                     (implicit tx: S#Tx): Unit = keyW match {
+    override protected def buildSyncInput(b: SynthBuilder[S], keyW: UGB.Key, value: UGB.Value)
+                                         (implicit tx: S#Tx): Unit = keyW match {
       case UserValue.Key(key) =>
         val sonif = sonifData.sonifCached().elem.peer
         sonif.controls.get(key).foreach { expr =>
@@ -83,7 +82,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
           case _ => throw new IllegalStateException(s"Unsupported input request value $value")
         }
 
-      case _ => super.buildInput(b, keyW, value)
+      case _ => super.buildSyncInput(b, keyW, value)
     }
 
     // XXX TODO - was package private in previous SoundProcesses version
@@ -166,6 +165,11 @@ object AuralSonificationImpl extends AuralObj.Factory {
         sonifLoc.set(sonif)
         sonif
       }
+    }
+
+    def prepare()(implicit tx: S#Tx): Unit = {
+      logDebugTx("AuralSonification: prepare")
+      _procView.prepare()
     }
 
     def play(timeRef: TimeRef)(implicit tx: S#Tx): Unit = {
