@@ -20,10 +20,10 @@ import at.iem.sysson.graph.UserValue
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.synth.{Buffer, Sys}
 import de.sciss.numbers
-import de.sciss.synth.ControlSet
+import de.sciss.synth.proc
 import de.sciss.synth.proc.AuralObj.State
-import de.sciss.synth.proc.{UGenGraphBuilder => UGB, AudioGraphemeElem, TimeRef, AuralContext, AuralObj}
-import de.sciss.synth.proc.impl.{SynthBuilder, StreamBuffer, AuralProcImpl, AuralProcDataImpl, ObservableImpl}
+import de.sciss.synth.proc.{UGenGraphBuilder => UGB, Proc, AudioGraphemeElem, TimeRef, AuralContext, AuralObj}
+import de.sciss.synth.proc.impl.{AsyncResource, SynthBuilder, AuralProcImpl, AuralProcDataImpl, ObservableImpl}
 import de.sciss.lucre.{event => evt, stm}
 
 import scala.concurrent.stm.TxnLocal
@@ -73,29 +73,29 @@ object AuralSonificationImpl extends AuralObj.Factory {
           val ctlName = UserValue.controlName(key)
           b.setMap += ctlName -> expr.value
         }
+    }
 
+    override protected def buildAsyncInput(obj: Proc.Obj[S], keyW: UGB.Key, value: UGB.Value)
+                                          (implicit tx: S#Tx): AsyncResource[S] = keyW match {
       case dim: graph.Dim =>
         value match {
           case UGB.Input.Stream.Value(numChannels, specs) =>
-            addDimStream(b, key = graph.Dim.Play.key(dim), numChannels = numChannels, specs = specs)
+            addDimStream(obj, key = graph.Dim.Play.key(dim), numChannels = numChannels, specs = specs)
 
           case _ => throw new IllegalStateException(s"Unsupported input request value $value")
         }
 
-      case _ => super.buildSyncInput(b, keyW, value)
+      case _ => super.buildAsyncInput(obj, keyW, value)
     }
 
-    // XXX TODO - was package private in previous SoundProcesses version
-    private def dimPlayControlName(key: String, idx: Int): String = s"$$str${idx}_$key"
-
-    private def addDimStream(b: SynthBuilder[S], key: String, numChannels: Int, specs: List[UGB.Input.Stream.Spec])
-                            (implicit tx: S#Tx): Unit = {
+    private def addDimStream(obj: Proc.Obj[S], key: String, numChannels: Int, specs: List[UGB.Input.Stream.Spec])
+                            (implicit tx: S#Tx): AsyncResource[S] = {
       val infoSeq = if (specs.isEmpty) UGB.Input.Stream.EmptySpec :: Nil else specs
       import context.server
 
       infoSeq.zipWithIndex.foreach { case (info, idx) =>
         // val ctlName     = de.sciss.synth.proc.graph.stream.controlName(key, idx)
-        val ctlName     = dimPlayControlName(key, idx)
+        val ctlName     = proc.graph.impl.Stream.controlName(key, idx)
         val bufSize     = if (info.isEmpty) server.config.blockSize else {
           val maxSpeed  = if (info.maxSpeed <= 0.0) 1.0 else info.maxSpeed
           val bufDur    = 1.5 * maxSpeed
@@ -122,15 +122,13 @@ object AuralSonificationImpl extends AuralObj.Factory {
           )
         } else {
           val __buf = Buffer(server)(numFrames = bufSize, numChannels = spec.numChannels)
-          val trig = new StreamBuffer(key = key, idx = idx, synth = b.synth, buf = __buf, path = path,
-            fileFrames = spec.numFrames, interp = info.interp)
-          trig.install()
           __buf
         }
 
-        b.setMap      += (ctlName -> /* Seq( */ rb.id.toFloat /*, gain.toFloat) */: ControlSet)
-        b.dependencies ::= rb
+        ??? // b.setMap      += (ctlName -> /* Seq( */ rb.id.toFloat /*, gain.toFloat) */: ControlSet)
+        // b.dependencies ::= rb
       }
+      ???
     }
   }
 
