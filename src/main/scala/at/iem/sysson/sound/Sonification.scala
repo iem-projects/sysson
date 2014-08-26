@@ -63,6 +63,11 @@ object Sonification {
     def apply[S <: Sys[S]](matrix: Matrix[S])(implicit tx: S#Tx): Source[S] =
       Impl.applySource(matrix)
   }
+  /** A sonification source is a matrix paired with a dimensional map.
+    *
+    * @see [[at.iem.sysson.graph.Var]]
+    * @see [[at.iem.sysson.graph.Dim]]
+    */
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
     def matrix: Matrix[S]
     /** Maps sonification model/patch dimensions (keys) to source matrix dimensions (values). */
@@ -93,12 +98,22 @@ object Sonification {
 
   type Obj[S <: Sys[S]] = proc.Obj.T[S, Sonification.Elem]
 }
+/** A sonification pairs a sound process with a map to data sources and user controls. */
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
+  /** The sound process that implements the sonification */
   def proc: Proc.Obj[S]
 
+  /** A map from logical keys to sonification sources. A source is
+    * a matrix paired with a dimensional map.
+    *
+    * @see [[at.iem.sysson.graph.Var]]
+    * @see [[at.iem.sysson.graph.Dim]]
+    */
   def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
-  def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
 
-  //  /** A scalar attribute map */
-  //  def attr: AttrMap.Modifiable[S]
+  /** A map from logical keys to control values.
+    *
+    * @see [[at.iem.sysson.graph.UserValue]]
+    */
+  def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
 }

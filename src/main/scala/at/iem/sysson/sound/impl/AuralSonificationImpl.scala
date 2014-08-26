@@ -81,7 +81,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
       case dim: graph.Dim =>
         value match {
           case UGB.Input.Stream.Value(numChannels, specs) =>
-            addDimStream(obj, key = graph.Dim.Play.key(dim), numChannels = numChannels, specs = specs)
+            addDimStream(obj, dimElem = dim /* key = graph.Dim.Play.key(dim) */, numChannels = numChannels, specs = specs)
 
           case _ => throw new IllegalStateException(s"Unsupported input request value $value")
         }
@@ -89,16 +89,24 @@ object AuralSonificationImpl extends AuralObj.Factory {
       case _ => super.buildAsyncInput(obj, keyW, value)
     }
 
-    private def addDimStream(obj: Proc.Obj[S], key: String, numChannels: Int, specs: List[UGB.Input.Stream.Spec])
+    private def addDimStream(obj: Proc.Obj[S], dimElem: graph.Dim, numChannels: Int, specs: List[UGB.Input.Stream.Spec])
                             (implicit tx: S#Tx): AsyncResource[S] = {
       val infoSeq = if (specs.isEmpty) UGB.Input.Stream.EmptySpec :: Nil else specs
       import context.{server, workspaceHandle}
       import context.scheduler.cursor
       implicit val resolver = WorkspaceResolver[S]
 
+      val sonif   = sonifData.sonifCached().elem.peer
+      val varKey  = dimElem.variable.name
+      val dimKey  = dimElem.name
+      val source  = sonif.sources.get(varKey).getOrElse(sys.error(s"Missing source for key $varKey"))
+      val dimName = source.dims.get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key $dimKey")).value
+      val dim     = source.matrix.dimensions.find(_.name == dimName).getOrElse(sys.error(s"Dimension $dimName not in matrix"))
+      ???
+
       infoSeq.zipWithIndex.foreach { case (info, idx) =>
         // val ctlName     = de.sciss.synth.proc.graph.stream.controlName(key, idx)
-        // val ctlName     = proc.graph.impl.Stream.controlName(key, idx)
+        //  val ctlName     = proc.graph.impl.Stream.controlName(key, idx)
         val bufSize     = if (info.isEmpty) server.config.blockSize else {
           val maxSpeed  = if (info.maxSpeed <= 0.0) 1.0 else info.maxSpeed
           val bufDur    = 1.5 * maxSpeed
@@ -111,6 +119,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
         }
 
         val matrix: Matrix.Key = ???
+        val key: String = ???
         val cfg = MatrixPrepare.Config(matrix = matrix, server = server, key = key, index = idx, bufSize = bufSize)
         MatrixPrepare(cfg)
       }
