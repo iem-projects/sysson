@@ -17,12 +17,13 @@ package sound
 package impl
 
 import at.iem.sysson.graph.UserValue
+import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.stm.Disposable
-import de.sciss.lucre.synth.{Buffer, Sys}
+import de.sciss.lucre.synth.Sys
 import de.sciss.numbers
 import de.sciss.synth.proc
 import de.sciss.synth.proc.AuralObj.State
-import de.sciss.synth.proc.{UGenGraphBuilder => UGB, Proc, AudioGraphemeElem, TimeRef, AuralContext, AuralObj}
+import de.sciss.synth.proc.{UGenGraphBuilder => UGB, Proc, TimeRef, AuralContext, AuralObj}
 import de.sciss.synth.proc.impl.{AsyncResource, SynthBuilder, AuralProcImpl, AuralProcDataImpl, ObservableImpl}
 import de.sciss.lucre.{event => evt, stm}
 
@@ -91,11 +92,13 @@ object AuralSonificationImpl extends AuralObj.Factory {
     private def addDimStream(obj: Proc.Obj[S], key: String, numChannels: Int, specs: List[UGB.Input.Stream.Spec])
                             (implicit tx: S#Tx): AsyncResource[S] = {
       val infoSeq = if (specs.isEmpty) UGB.Input.Stream.EmptySpec :: Nil else specs
-      import context.server
+      import context.{server, workspaceHandle}
+      import context.scheduler.cursor
+      implicit val resolver = WorkspaceResolver[S]
 
       infoSeq.zipWithIndex.foreach { case (info, idx) =>
         // val ctlName     = de.sciss.synth.proc.graph.stream.controlName(key, idx)
-        val ctlName     = proc.graph.impl.Stream.controlName(key, idx)
+        // val ctlName     = proc.graph.impl.Stream.controlName(key, idx)
         val bufSize     = if (info.isEmpty) server.config.blockSize else {
           val maxSpeed  = if (info.maxSpeed <= 0.0) 1.0 else info.maxSpeed
           val bufDur    = 1.5 * maxSpeed
@@ -107,26 +110,9 @@ object AuralSonificationImpl extends AuralObj.Factory {
           if (bestSzHi.toDouble/bestSz < bestSz.toDouble/bestSzLo) bestSzHi else bestSzLo
         }
 
-        val a         = ??? : AudioGraphemeElem[S]
-        val audioElem = a.peer
-        val spec      = audioElem.spec
-        val path      = audioElem.artifact.value.getAbsolutePath
-        val offset    = audioElem.offset  .value
-        // val gain      = audioElem.gain    .value
-        val rb        = if (info.isNative) {
-          Buffer.diskIn(server)(
-            path          = path,
-            startFrame    = offset,
-            numFrames     = bufSize,
-            numChannels   = spec.numChannels
-          )
-        } else {
-          val __buf = Buffer(server)(numFrames = bufSize, numChannels = spec.numChannels)
-          __buf
-        }
-
-        ??? // b.setMap      += (ctlName -> /* Seq( */ rb.id.toFloat /*, gain.toFloat) */: ControlSet)
-        // b.dependencies ::= rb
+        val matrix: Matrix.Key = ???
+        val cfg = MatrixPrepare.Config(matrix = matrix, server = server, key = key, index = idx, bufSize = bufSize)
+        MatrixPrepare(cfg)
       }
       ???
     }

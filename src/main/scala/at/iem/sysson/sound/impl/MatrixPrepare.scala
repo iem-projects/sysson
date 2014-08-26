@@ -16,32 +16,25 @@ package at.iem.sysson
 package sound
 package impl
 
-import java.io.File
-
-import at.iem.sysson.sound.AudioFileCache.Value
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
-import de.sciss.lucre.synth.{Server, Sys, Buffer, Txn}
+import de.sciss.lucre.synth.{Server, Sys, Buffer}
 import de.sciss.model.impl.ModelImpl
-import de.sciss.osc
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.{FutureProxy, ProcessorImpl}
-import de.sciss.synth.io.AudioFileSpec
 import de.sciss.synth.proc
 import de.sciss.synth.proc.SoundProcesses
 import de.sciss.synth.proc.impl.{StreamBuffer, SynthBuilder, AsyncResource}
 
-import scala.concurrent.{Future, blocking, Await, duration, TimeoutException}
+import scala.concurrent.{Future, blocking, Await, duration}
 import duration.Duration
-import scala.concurrent.stm.{TxnExecutor, Ref}
-import TxnExecutor.{defaultAtomic => atomic}
 
 object MatrixPrepare {
   /** The configuration of the buffer preparation.
     *
     * @param key      the key of the `graph.Buffer` element, used for setting the synth control eventually
     */
-  case class Config(matrix: Matrix.Key, server: Server, key: String, index: Int)
+  case class Config(matrix: Matrix.Key, server: Server, key: String, index: Int, bufSize: Int)
 
   /** Creates and launches the process. */
   def apply[S <: Sys[S]](config: Config)(implicit tx: S#Tx, resolver: DataSource.Resolver[S],
@@ -66,23 +59,25 @@ object MatrixPrepare {
     protected def cache: Future[AudioFileCache.Value]
 
     final def install(b: SynthBuilder[S])(implicit tx: S#Tx): Unit = {
-      val value        = cache.value.get.get // result()
-      val bufSize      = ??? : Int
-      val numFrames    = ??? : Long
-      import config.{key, index, server}
-      val buf          = Buffer(server)(numFrames = bufSize, numChannels = value.spec.numChannels)
+      val value        = cache.value.get.get
+      val numFrames    = value.spec.numFrames
+      val numChannels  = value.spec.numChannels
+      import config.{key, index, server, bufSize}
+      val buf          = Buffer(server)(numFrames = bufSize, numChannels = numChannels)
       val ctlName      = proc.graph.impl.Stream.controlName(key, index)  // proc.graph.Buffer.controlName(key)
       val trig         = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
           path = value.file.getAbsolutePath, fileFrames = numFrames, interp = 1 /* info.interp */)
       trig.install()
       b.setMap        += ctlName -> buf.id
       b.dependencies ::= buf
+      b.synth.onEndTxn { implicit tx =>
+        AudioFileCache.release(config.matrix)
+      }
     }
 
     def dispose()(implicit tx: S#Tx): Unit = {
       tx.afterCommit(abort())
-      // if (buf.isOnline) buf.dispose()
-      ??? // release cache key
+      AudioFileCache.release(config.matrix)
     }
   }
 
