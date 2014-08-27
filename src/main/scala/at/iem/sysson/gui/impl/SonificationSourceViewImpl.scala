@@ -50,6 +50,8 @@ object SonificationSourceViewImpl {
 
     // import workspace.cursor
     val mapHOpt     = map.modifiableOption.map(tx.newHandle(_))
+    implicit val resolver = WorkspaceResolver[S]
+    import Stats.executionContext
     val matView     = MatrixView[S]
     matView.nameVisible = false
     val res         = new Impl[S](matView, mapHOpt, key = key, keyDimNames = keyDimNames)
