@@ -107,8 +107,12 @@ object AuralSonificationImpl extends AuralObj.Factory {
       val dimKey  = dimElem.name
       val source  = sonif.sources.get(varKey).getOrElse(sys.error(s"Missing source for key $varKey"))
       val dimName = source.dims.get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key $dimKey")).value
-      val dim     = source.matrix.dimensions.find(_.name == dimName).getOrElse(sys.error(s"Dimension $dimName not in matrix"))
-      val matrix  = dim.getKey(streamDim)
+      // val dim     = source.matrix.dimensions.find(_.name == dimName).getOrElse(sys.error(s"Dimension $dimName not in matrix"))
+      // val matrix  = dim.getKey(streamDim)
+      val full    = source.matrix
+      val dimIdx  = full.dimensions.indexWhere(_.name == dimName)
+      if (dimIdx < 0) sys.error(s"Dimension $dimName not in matrix")
+      val matrix  = full.getDimensionKey(dimIdx)
 
       infoSeq.zipWithIndex.foreach { case (info, idx) =>
         // val ctlName     = de.sciss.synth.proc.graph.stream.controlName(key, idx)
