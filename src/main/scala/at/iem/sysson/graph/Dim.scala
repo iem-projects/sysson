@@ -14,6 +14,7 @@
 
 package at.iem.sysson.graph
 
+import at.iem.sysson.sound.impl.MatrixPrepare
 import de.sciss.synth.proc.impl.StreamBuffer
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
 import de.sciss.synth.ugen.Constant
@@ -28,7 +29,7 @@ object Dim {
     // def  key = dim
   }
 
-  private[sysson] def controlName(key: String, idx: Int): String = s"$$str${idx}_$key"
+  // private[sysson] def controlName(key: String, idx: Int): String = s"$$str${idx}_$key"
 
   object Play {
     // private[sysson] case class Key(dim: Dim)
@@ -46,7 +47,7 @@ object Dim {
     override def toString       = s"$dim.play($freq)"
 
     type Key    = Dim // UGB.AttributeKey
-    type Value  = UGB.Input.Stream.Value
+    type Value  = MatrixPrepare.Value
     def  key    = dim
 
     protected def makeUGens: UGenInLike = {
@@ -65,7 +66,7 @@ object Dim {
 
       val idx           = /* if (spec.isEmpty) 0 else */ info.specs.size - 1
       // val (numCh, idx)  = b.addStreamIn(key, info)
-      val ctlName       = controlName(key, idx)
+      val ctlName       = proc.graph.impl.Stream.controlName(key, idx)
       //      val ctl           = ctlName.ir(Seq(0, 0))
       //      val buf           = ctl \ 0
       val buf           = ctlName.ir(0)

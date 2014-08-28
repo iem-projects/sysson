@@ -24,7 +24,7 @@ import de.sciss.numbers
 import de.sciss.synth.proc
 import de.sciss.synth.proc.AuralObj.State
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB, Proc, TimeRef, AuralContext, AuralObj}
-import de.sciss.synth.proc.impl.{AsyncResource, SynthBuilder, AuralProcImpl, AuralProcDataImpl, ObservableImpl}
+import de.sciss.synth.proc.impl.{AsyncProcBuilder, AsyncResource, SynthBuilder, AuralProcImpl, AuralProcDataImpl, ObservableImpl}
 import de.sciss.lucre.{event => evt, stm}
 
 import scala.concurrent.stm.TxnLocal
@@ -52,12 +52,13 @@ object AuralSonificationImpl extends AuralObj.Factory {
                                   (implicit tx: S#Tx): Res = req match {
       case uv: graph.UserValue => UGB.Unit
       case dp: graph.Dim.Play  =>
+        Console.err.println("TODO: Dim.Play -- calculate spec")
         //        val newSpecs = if (i.spec.isEmpty) newSpecs0 else {
         //          i.spec :: newSpecs0
         //        }
         val numCh     = 1 // a streamed dimension is always monophonic
-        val newSpecs  = Nil
-        UGB.Input.Stream.Value(numChannels = numCh, specs = newSpecs)
+        val newSpecs  = MatrixPrepare.Spec(maxSpeed = 1.0, interp = 0) :: Nil  // XXX TODO - analyse GE
+        MatrixPrepare.Value(numChannels = numCh, specs = newSpecs, streamDim = 0)
 
       case _ => super.requestInput(req, st)
     }
@@ -74,24 +75,29 @@ object AuralSonificationImpl extends AuralObj.Factory {
           val ctlName = UserValue.controlName(key)
           b.setMap += ctlName -> expr.value
         }
+
+      case _ => super.buildSyncInput(b, keyW, value)
     }
 
-    override protected def buildAsyncInput(obj: Proc.Obj[S], keyW: UGB.Key, value: UGB.Value)
-                                          (implicit tx: S#Tx): AsyncResource[S] = keyW match {
+    override protected def buildAsyncInput(b: AsyncProcBuilder[S], keyW: UGB.Key, value: UGB.Value)
+                                          (implicit tx: S#Tx): Unit = keyW match {
       case dim: graph.Dim =>
         value match {
-          case UGB.Input.Stream.Value(numChannels, specs) =>
-            addDimStream(obj, dimElem = dim /* key = graph.Dim.Play.key(dim) */, numChannels = numChannels, specs = specs)
+          case MatrixPrepare.Value(numChannels, specs, streamDim) =>
+            addDimStream(b, dimElem = dim /* key = graph.Dim.Play.key(dim) */, numChannels = numChannels,
+              specs = specs, streamDim = streamDim)
 
           case _ => throw new IllegalStateException(s"Unsupported input request value $value")
         }
 
-      case _ => super.buildAsyncInput(obj, keyW, value)
+      case _ => super.buildAsyncInput(b, keyW, value)
     }
 
-    private def addDimStream(obj: Proc.Obj[S], dimElem: graph.Dim, numChannels: Int, specs: List[UGB.Input.Stream.Spec])
-                            (implicit tx: S#Tx): AsyncResource[S] = {
-      val infoSeq = if (specs.isEmpty) UGB.Input.Stream.EmptySpec :: Nil else specs
+    private def addDimStream(b: AsyncProcBuilder[S], dimElem: graph.Dim, numChannels: Int,
+                             specs: List[UGB.Input.Stream.Spec], streamDim: Int)
+                            (implicit tx: S#Tx): Unit = {
+      // note: info-only graph elems not yet supported (or existent)
+      val infoSeq = /* if (specs.isEmpty) UGB.Input.Stream.EmptySpec :: Nil else */ specs
       import context.{server, workspaceHandle}
       import context.scheduler.cursor
       implicit val resolver = WorkspaceResolver[S]
@@ -102,7 +108,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
       val source  = sonif.sources.get(varKey).getOrElse(sys.error(s"Missing source for key $varKey"))
       val dimName = source.dims.get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key $dimKey")).value
       val dim     = source.matrix.dimensions.find(_.name == dimName).getOrElse(sys.error(s"Dimension $dimName not in matrix"))
-      ???
+      val matrix  = dim.getKey(streamDim)
 
       infoSeq.zipWithIndex.foreach { case (info, idx) =>
         // val ctlName     = de.sciss.synth.proc.graph.stream.controlName(key, idx)
@@ -118,12 +124,11 @@ object AuralSonificationImpl extends AuralObj.Factory {
           if (bestSzHi.toDouble/bestSz < bestSz.toDouble/bestSzLo) bestSzHi else bestSzLo
         }
 
-        val matrix: Matrix.Key = ???
-        val key: String = ???
+        val key = graph.Dim.Play.key(dimElem)
         val cfg = MatrixPrepare.Config(matrix = matrix, server = server, key = key, index = idx, bufSize = bufSize)
-        MatrixPrepare(cfg)
+        val res = MatrixPrepare(cfg)
+        b.resources ::= res
       }
-      ???
     }
   }
 

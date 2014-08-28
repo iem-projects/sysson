@@ -23,16 +23,31 @@ import de.sciss.model.impl.ModelImpl
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.{FutureProxy, ProcessorImpl}
 import de.sciss.synth.proc
-import de.sciss.synth.proc.SoundProcesses
+import de.sciss.synth.proc.{UGenGraphBuilder => UGB, SoundProcesses}
 import de.sciss.synth.proc.impl.{StreamBuffer, SynthBuilder, AsyncResource}
 
 import scala.concurrent.{Future, blocking, Await, duration}
 import duration.Duration
 
 object MatrixPrepare {
+  type Spec = UGB.Input.Stream.Spec
+  val  Spec = UGB.Input.Stream.Spec
+
+  // same as Stream.Value, but asynchronous preparation
+  final case class Value(numChannels: Int, specs: List[Spec], streamDim: Int) extends UGB.Value {
+    override def productPrefix = "MatrixPrepare.Value"
+    def async = true
+  }
+
   /** The configuration of the buffer preparation.
     *
-    * @param key      the key of the `graph.Buffer` element, used for setting the synth control eventually
+    * The `key` and `index` arguments will be fed into `Stream.controlName(key, index)`
+    * to generate the control name, and will be passed to `StreamBuffer`.
+    *
+    * @param matrix   the matrix to convert into an audio file
+    * @param key      the key used for setting the synth control eventually
+    * @param index    the index into the alternative versions of the key, used for setting the synth control eventually
+    * @param bufSize  the desired size for the resulting streaming buffer
     */
   case class Config(matrix: Matrix.Key, server: Server, key: String, index: Int, bufSize: Int)
 
@@ -40,6 +55,7 @@ object MatrixPrepare {
   def apply[S <: Sys[S]](config: Config)(implicit tx: S#Tx, resolver: DataSource.Resolver[S],
                                          cursor: stm.Cursor[S]): AsyncResource[S] = {
     import config._
+    logDebugTx(s"MatrixPrepare($config)")
     val cache = AudioFileCache.acquire(matrix)
     if (cache.isCompleted) {
       new SyncImpl[S](config, cache)
