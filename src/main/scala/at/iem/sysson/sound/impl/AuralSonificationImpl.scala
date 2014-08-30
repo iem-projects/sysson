@@ -89,14 +89,23 @@ object AuralSonificationImpl extends AuralObj.Factory {
         //        val newSpecs = if (i.spec.isEmpty) newSpecs0 else {
         //          i.spec :: newSpecs0
         //        }
-        val numCh     = 1 // a streamed dimension is always monophonic
+        val numCh     = 1 // a streaming dimension is always monophonic
         val newSpecs  = MatrixPrepare.Spec(maxFreq = dp.maxFreq, interp = dp.interp) :: Nil
         MatrixPrepare.Value(numChannels = numCh, specs = newSpecs, streamDim = 0, isDim = true)
+
+      case dv: graph.Dim.Values =>
+        val sonif     = sonifCached()
+        val dimElem   = dv.dim
+        val source    = findSource  (sonif , dimElem)
+        val dimIdx    = findDimIndex(source, dimElem)
+        val numCh     = source.matrix.shape.apply(dimIdx)
+        val newSpecs  = MatrixPrepare.Spec(maxFreq = 0f, interp = 0) :: Nil
+        MatrixPrepare.Value(numChannels = numCh, specs = newSpecs, streamDim = -1, isDim = true)
 
       case vp: graph.Var.Play =>
         val sonif     = sonifCached()
         val dimElem   = vp.time.dim
-        val source    = findSource(sonif, dimElem)
+        val source    = findSource  (sonif , dimElem)
         val dimIdx    = findDimIndex(source, dimElem)
         val shape     = source.matrix.shape
         val numCh     = ((1L /: shape)(_ * _) / shape(dimIdx)).toInt
@@ -170,7 +179,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
           if (bestSzHi.toDouble/bestSz < bestSz.toDouble/bestSzLo) bestSzHi else bestSzLo
         }
 
-        val key = graph.Dim.Play.key(dimElem)
+        val key = graph.Dim.key(dimElem)
         val cfg = MatrixPrepare.Config(matrix = matrix, server = server, key = key, index = idx, bufSize = bufSize)
         val res = MatrixPrepare(cfg)
         b.resources ::= res

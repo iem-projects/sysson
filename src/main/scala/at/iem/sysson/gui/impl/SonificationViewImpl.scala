@@ -19,7 +19,7 @@ package impl
 import java.awt.Color
 
 import de.sciss.lucre.synth.Sys
-import at.iem.sysson.sound.{Keys, Sonification}
+import at.iem.sysson.sound.Sonification
 import de.sciss.lucre.stm
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.synth.proc.{Obj, BooleanElem, ObjKeys, ExprImplicits, Transport}
@@ -48,7 +48,7 @@ object SonificationViewImpl {
       protected var dirty: Boolean = false
     }
     val sonifH    = tx.newHandle(sonification)
-    val nameView  = sonification.attr.expr[String](Keys.attrName).map { expr =>
+    val nameView  = sonification.attr.expr[String](ObjKeys.attrName).map { expr =>
       // import workspace.cursor
       StringFieldView(expr, "Name")
     }
