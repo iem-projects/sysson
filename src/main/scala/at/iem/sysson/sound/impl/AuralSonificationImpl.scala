@@ -159,7 +159,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
       val full    = source.matrix
       val matrix  = if (isDim) {
         val dimIdx  = findDimIndex(source, dimElem)
-        full.getDimensionKey(dimIdx)
+        full.getDimensionKey(dimIdx, useChannels = streamDim < 0)
       } else {
         full.getKey(streamDim)
       }
