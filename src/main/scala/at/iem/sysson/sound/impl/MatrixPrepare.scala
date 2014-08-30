@@ -22,7 +22,8 @@ import de.sciss.lucre.synth.{Server, Sys, Buffer}
 import de.sciss.model.impl.ModelImpl
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.{FutureProxy, ProcessorImpl}
-import de.sciss.synth.proc
+import de.sciss.synth
+import de.sciss.synth.{UGenInLike, GE, proc}
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB, SoundProcesses}
 import de.sciss.synth.proc.impl.{StreamBuffer, SynthBuilder, AsyncResource}
 
@@ -30,13 +31,50 @@ import scala.concurrent.{Future, blocking, Await, duration}
 import duration.Duration
 
 object MatrixPrepare {
-  type Spec = UGB.Input.Stream.Spec
-  val  Spec = UGB.Input.Stream.Spec
+  //  type Spec = UGB.Input.Stream.Spec
+  //  val  Spec = UGB.Input.Stream.Spec
+
+  final case class Spec(maxFreq: Double, interp: Int) {
+    /** Empty indicates that the stream is solely used for information
+      * purposes such as `BufChannels`.
+      */
+    def isEmpty: Boolean = interp == 0
+
+    //    /** Native indicates that the stream will be transported by the UGen
+    //      * itself, i.e. via `DiskIn` or `VDiskIn`.
+    //      */
+    //    def isNative: Boolean = interp == -1
+
+    override def productPrefix = "MatrixPrepare.Spec"
+  }
 
   // same as Stream.Value, but asynchronous preparation
-  final case class Value(numChannels: Int, specs: List[Spec], streamDim: Int) extends UGB.Value {
+  /** The value of the `UGenGraphBuilder` request.
+    *
+    * @param numChannels  the number of channels in the audio file
+    * @param specs        the stream performance specifications
+    * @param streamDim    the stream dimension (or `-1` for scalar)
+    * @param isDim        if `true`, produce values for a dimension, if `false` for a matrix
+    */
+  final case class Value(numChannels: Int, specs: List[Spec], streamDim: Int, isDim: Boolean) extends UGB.Value {
     override def productPrefix = "MatrixPrepare.Value"
     def async = true
+  }
+
+  def makeUGen(in: UGB.Input { type Value = MatrixPrepare.Value }, key: String, freq: GE, interp: Int): UGenInLike = {
+    val b     = UGB.get
+    val info  = b.requestInput(in)
+
+    import synth._
+    import ugen._
+    val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
+    val speed     = freq / bufSr
+    val idx       = /* if (spec.isEmpty) 0 else */ info.specs.size - 1
+    val ctlName   = proc.graph.impl.Stream.controlName(key, idx)
+    val buf       = ctlName.ir(0)
+    val numCh     = info.numChannels
+    // only for dimensions: assert(numCh == 1)
+    StreamBuffer.makeUGen(key = key, idx = idx, buf = buf, numChannels = numCh, speed = speed, interp = interp)
   }
 
   /** The configuration of the buffer preparation.

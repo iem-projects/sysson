@@ -14,10 +14,10 @@
 
 package at.iem.sysson.graph
 
+import at.iem.sysson.sound.impl.MatrixPrepare
 import de.sciss.synth
-import de.sciss.synth.proc.UGenGraphBuilder
+import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
 import de.sciss.synth.{proc, ScalarRated, UGenInLike, AudioRated}
-import at.iem.sysson.sound.AuralSonificationOLD
 
 object Var {
   sealed trait GE extends synth.GE.Lazy /* with SonificationElement */ {
@@ -26,22 +26,21 @@ object Var {
     // def axis(dim: Dim): Axis
   }
 
-  case class Play(variable: Var, time: Dim.Play)
-    extends /* impl.LazyImpl with */ GE with AudioRated {
+  object Play {
+    private[sysson] def key(variable: Var, time: Dim): String = s"$$var_${variable.name}_${time.name}"
+  }
+  final case class Play(variable: Var, time: Dim.Play, interp: Int)
+    extends GE with AudioRated with UGB.Input {
 
     override def productPrefix  = "Var$Play"
     override def toString       = s"$variable.play($time)"
 
-    protected def makeUGens: UGenInLike = {
-      val b     = UGenGraphBuilder.get
-      // val aural = AuralSonificationOLD.current()
-      val key: String = ??? //   = aural.attributeKey(this)
-      import synth.ugen._
-      val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
-      val speed     = time.freq / bufSr
-      // val maxSpeed
-      proc.graph.VDiskIn.ar(key, speed = speed, interp = 1 /*, maxSpeed = maxSpeed */)  // XXX TODO: need server.sampleRate for maxSpeed
-    }
+    type Key    = Dim
+    type Value  = MatrixPrepare.Value
+    def  key    = time.dim
+
+    protected def makeUGens: UGenInLike =
+      MatrixPrepare.makeUGen(this, key = Play.key(variable, time.dim), freq = time.freq, interp = interp)
 
     def axis(dim: Dim): Var.Axis = {
       require (dim.variable == variable, s"Dimension ${dim.name} does not belong to variable $variable")
@@ -55,7 +54,7 @@ object Var {
     override def toString       = s"$variable.values"
 
     protected def makeUGens: UGenInLike = {
-      val b     = UGenGraphBuilder.get
+      val b     = UGB.get
       // val aural = AuralSonificationOLD.current()
       val key: String = ??? //   = aural.attributeKey(this)
       proc.graph.Attribute.ir(key)
@@ -91,7 +90,7 @@ object Var {
       // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addScalarAxis(axis.playing, axis.ref)
 
       protected def makeUGens: UGenInLike = {
-        val b         = UGenGraphBuilder.get
+        val b         = UGB.get
         val keyComp: String = ??? //   = AuralSonificationOLD.current().attributeKey(this)
         val keySp     = keyComp.split(";")
         val key       = keySp(0)
@@ -141,7 +140,7 @@ object Var {
 
     def values: Var.Values = Var.Values(this)
 
-    def play(time: Dim.Play): Var.Play = Var.Play(this, time)
+    def play(time: Dim.Play, interp: Int): Var.Play = Var.Play(this, time, interp)
   }
 }
 trait Var extends UserInteraction {
@@ -159,5 +158,5 @@ trait Var extends UserInteraction {
   def values: Var.Values
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
-  def play(time: Dim.Play): Var.Play
+  def play(time: Dim.Play, interp: Int = 1): Var.Play
 }
