@@ -17,30 +17,22 @@ package at.iem.sysson.graph
 import at.iem.sysson.sound.impl.MatrixPrepare
 import de.sciss.synth
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
-import de.sciss.synth.{proc, ScalarRated, UGenInLike, AudioRated}
+import de.sciss.synth.{proc, ScalarRated, UGenInLike}
 
 object Var {
-  sealed trait GE extends synth.GE.Lazy /* with SonificationElement */ {
-    def variable: Var
-
-    // def axis(dim: Dim): Axis
-  }
-
-  //  object Play {
-  //    private[sysson] def key(variable: Var, time: Dim): String = s"$$var_${variable.name}_${time.name}"
-  //  }
   final case class Play(variable: Var, time: Dim.Play, interp: Int)
-    extends GE with AudioRated with UGB.Input {
+    extends MatrixPrepare.VarGE with MatrixPrepare.PlayGE with UGB.Input {
 
     override def productPrefix  = "Var$Play"
     override def toString       = s"$variable.play($time)"
 
     type Key    = Dim
-    type Value  = MatrixPrepare.Value
     def  key    = time.dim
 
+    private[sysson] def dimOption: Option[Dim] = Some(time.dim)
+
     protected def makeUGens: UGenInLike =
-      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(time.dim, isDim = false) /* Play.key(variable, time.dim) */,
+      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(time.dim, isDim = false),
         freq = time.freq, interp = interp)
 
     def axis(dim: Dim): Var.Axis = {
@@ -49,30 +41,33 @@ object Var {
     }
   }
 
-  case class Values(variable: Var) extends GE with ScalarRated {
+  final case class Values(variable: Var)
+    extends MatrixPrepare.VarGE with MatrixPrepare.ValuesGE with UGB.Input {
 
     override def productPrefix  = "Var$Values"
     override def toString       = s"$variable.values"
 
-    protected def makeUGens: UGenInLike = {
-      val b     = UGB.get
-      // val aural = AuralSonificationOLD.current()
-      val key: String = ??? //   = aural.attributeKey(this)
-      proc.graph.Attribute.ir(key)
-    }
+    type Key    = Var
+    def  key    = variable
+
+    private[sysson] def dimOption: Option[Dim] = None
+
+    protected def makeUGens: UGenInLike = ???
+      //      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(dim, isDim = true) /* Dim.key(dim) */,
+      //        freq = 0f, interp = 0)
   }
 
-  /** Declares a new sonification variable (data source).
-    *
-    * @param name         Logical name by which the source is referred to
-    * @param higherRank   Whether a matrix rank higher than `dimensions.size` is permitted
-    */
-  def apply(name: String, /* dims: Vec[Dim], */ higherRank: Boolean = false): Var =
-    Impl(name, higherRank)
-
-  def unapply(vr: Var): Option[(String, /* Vec[Dim], */ Boolean /*, Vec[Var.Op] */)] = Some(
-    vr.name, vr.higherRank
-  )
+  //  /** Declares a new sonification variable (data source).
+  //    *
+  //    * @param name         Logical name by which the source is referred to
+  //    * @param higherRank   Whether a matrix rank higher than `dimensions.size` is permitted
+  //    */
+  //  def apply(name: String, /* dims: Vec[Dim], */ higherRank: Boolean = false): Var =
+  //    Impl(name, higherRank)
+  //
+  //  def unapply(vr: Var): Option[(String, /* Vec[Dim], */ Boolean /*, Vec[Var.Op] */)] = Some(
+  //    vr.name, vr.higherRank
+  //  )
 
   // implicit def serializer: ImmutableSerializer[Var] = impl.VarImpl.serializer
 
@@ -127,37 +122,37 @@ object Var {
     def asDim: Dim = Dim(variable.variable, dim)
   }
 
-  // -------- VarImpl --------
-
-  private final case class Impl(name: String, higherRank: Boolean)
-    extends Var {
-
-    override def productPrefix = "Var"
-
-    def dim(name: String): Dim = Dim(this, name)
-
-    // def ir: Var.GE = ...
-    // def kr: Var.GE = ...
-
-    def values: Var.Values = Var.Values(this)
-
-    def play(time: Dim.Play, interp: Int): Var.Play = Var.Play(this, time, interp)
-  }
+  //  // -------- VarImpl --------
+  //
+  //  private final case class Impl(name: String, higherRank: Boolean)
+  //    extends Var {
+  //
+  //    override def productPrefix = "Var"
+  //
+  //    def dim(name: String): Dim = Dim(this, name)
+  //
+  //    // def ir: Var.GE = ...
+  //    // def kr: Var.GE = ...
+  //
+  //    def values: Var.Values = Var.Values(this)
+  //
+  //    def play(time: Dim.Play, interp: Int): Var.Play = Var.Play(this, time, interp)
+  //  }
 }
-trait Var extends UserInteraction {
-  /** Logical name by which the source is referred to */
-  def name: String
+final case class Var(name: String) extends UserInteraction with UGB.Key {
+  //  /** Logical name by which the source is referred to */
+  //  def name: String
 
-  def dim(name: String): Dim
+  def dim(name: String): Dim = Dim(this, name)
 
-  /** Whether a matrix rank higher than `dimensions.size` is permitted */
-  def higherRank: Boolean
+  //  /** Whether a matrix rank higher than `dimensions.size` is permitted */
+  //  def higherRank: Boolean
 
   // def ir: Var.GE
   // def kr: Var.GE
 
-  def values: Var.Values
+  def values: Var.Values = Var.Values(this)
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
-  def play(time: Dim.Play, interp: Int = 1): Var.Play
+  def play(time: Dim.Play, interp: Int = 1): Var.Play = Var.Play(this, time, interp)
 }

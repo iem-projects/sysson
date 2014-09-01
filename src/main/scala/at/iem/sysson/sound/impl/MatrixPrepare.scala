@@ -23,7 +23,7 @@ import de.sciss.model.impl.ModelImpl
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.{FutureProxy, ProcessorImpl}
 import de.sciss.synth
-import de.sciss.synth.{UGenInLike, GE, proc}
+import de.sciss.synth.{ScalarRated, AudioRated, UGenInLike, proc}
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB, SoundProcesses}
 import de.sciss.synth.proc.impl.{StreamBuffer, SynthBuilder, AsyncResource}
 
@@ -33,6 +33,35 @@ import duration.Duration
 object MatrixPrepare {
   //  type Spec = UGB.Input.Stream.Spec
   //  val  Spec = UGB.Input.Stream.Spec
+
+  sealed trait GE extends synth.GE.Lazy with UGB.Input {
+    def variable: graph.Var
+
+    final type Value = MatrixPrepare.Value
+
+    private[sysson] def isDimension: Boolean
+    private[sysson] def isStreaming: Boolean
+    private[sysson] def dimOption: Option[graph.Dim]
+  }
+
+  trait PlayGE extends GE with AudioRated {
+    private[sysson] final def isStreaming = true
+  }
+
+  trait ValuesGE extends GE with ScalarRated {
+    private[sysson] final def isStreaming = false
+  }
+
+  trait DimGE extends GE {
+    final type Key = graph.Dim
+
+    private[sysson] final def isDimension = true
+    private[sysson] final def dimOption: Option[graph.Dim] = Some(key)
+  }
+
+  trait VarGE extends GE {
+    private[sysson] final def isDimension = false
+  }
 
   /**
    *
@@ -93,7 +122,7 @@ object MatrixPrepare {
     * @param interp the interpolation for the streaming: 1 step, 2 linear, 4 cubic.
     *               For non-streaming, this value is ignored (and should be just set to zero).
     */
-  def makeUGen(in: UGB.Input { type Value = MatrixPrepare.Value }, key: String, freq: GE, interp: Int): UGenInLike = {
+  def makeUGen(in: UGB.Input { type Value = MatrixPrepare.Value }, key: String, freq: synth.GE, interp: Int): UGenInLike = {
     val b         = UGB.get
     val info      = b.requestInput(in)
     val spec      = info.specs.last
