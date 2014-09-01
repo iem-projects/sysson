@@ -143,14 +143,15 @@ object MatrixPrepare {
       val isStreaming   = matrix.isStreaming
       val bufSize1      = if (isStreaming) bufSize else numFrames.toInt
       val buf           = Buffer(server)(numFrames = bufSize1, numChannels = numChannels)
-      val ctlName       = proc.graph.impl.Stream.controlName(key, index)  // proc.graph.Buffer.controlName(key)
       val path          = value.file.getAbsolutePath
-      if (isStreaming) {
-        val trig = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
+      val ctlName       = if (isStreaming) {
+        val trig  = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
           path = path, fileFrames = numFrames, interp = 1 /* info.interp */)
         trig.install()
+        proc.graph.impl.Stream.controlName(key, index)  // proc.graph.Buffer.controlName(key)
       } else {
         buf.read(path)
+        graph.Dim.Values.controlName(key)
       }
       b.setMap         += ctlName -> buf.id
       b.dependencies  ::= buf

@@ -142,16 +142,16 @@ object MenuFactory {
 
     gActions
       .add(Item("stop-all-sound",     proxy("Stop All Sound",           menu1 + Key.Period)))
+      .addLine()
       .add(Item("debug-print",        proxy("Debug Print",              menu2 + Key.P)))
       .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + Key.D))(dumpOSC()))
+      .add(Item("toggle-log")("Debug Logging")(toggleLog()))
 
     // if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
 
     val gView = Group("view", "View")
       .add(
-        Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P)) {
-          LogFrame.instance.log.clear()
-        }
+        Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P))(clearLog())
       )
     val gWindow = Group("window", "Window")
     //  .add(Item("windowShot",         proxy("Export Window as PDF...")))
@@ -217,6 +217,16 @@ object MenuFactory {
         case _ => true
       })
     }
+  }
+
+  def clearLog(): Unit = LogFrame.instance.log.clear()
+
+  def toggleLog(): Unit = {
+    val enabled = !showLog
+    showLog                               = enabled
+    de.sciss.synth.proc.showLog           = enabled
+    de.sciss.synth.proc.showAuralLog      = enabled
+    de.sciss.synth.proc.showTransportLog  = enabled
   }
 
   //  private def dumpOSC_OLD(): Unit = {
