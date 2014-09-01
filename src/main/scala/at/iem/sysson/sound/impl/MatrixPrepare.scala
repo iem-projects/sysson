@@ -83,6 +83,15 @@ object MatrixPrepare {
   //  * @param interp       interpolation type (1 none, 2 linear, 4 cubic)
   //  * @param isDim        if `true`, produce values for a dimension, if `false` for a matrix
 
+  /** A `UGenGraphBuilder.Input.Value` requested by the `Var.Axis` elements.
+    *
+    * @param shape  the shape of the matrix (after removing the streaming dimension)
+    * @param index  the index of the axis dimension (with respect to `shape`)
+    */
+  final case class ShapeAndIndex(shape: Vec[Int], index: Int) extends UGB.Value {
+    def async: Boolean = false
+  }
+
   /**
    *
    * @param numChannels  the number of channels in the audio file

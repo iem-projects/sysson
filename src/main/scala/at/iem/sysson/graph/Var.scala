@@ -15,6 +15,7 @@
 package at.iem.sysson.graph
 
 import at.iem.sysson.sound.impl.MatrixPrepare
+import at.iem.sysson.sound.impl.MatrixPrepare.ShapeAndIndex
 import de.sciss.synth
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
 import de.sciss.synth.{proc, ScalarRated, UGenInLike}
@@ -75,23 +76,28 @@ object Var {
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
 
   object Axis {
+    final case class Key(stream: Dim, axis: String) extends UGB.Key
     final case class Values(axis: Var.Axis)
-      extends synth.GE.Lazy /* impl.LazyImpl */ /* with SonificationElement */ with ScalarRated {
+      extends synth.GE.Lazy /* impl.LazyImpl */ /* with SonificationElement */ with ScalarRated with UGB.Input {
 
       override def productPrefix = "Var$Axis$Values"
 
       override def toString = s"$axis.values"
 
-      // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addScalarAxis(axis.playing, axis.ref)
+      type Key = Axis.Key
+      def key: Key = Axis.Key(stream = axis.variable.time.dim, axis = axis.dim)
+
+      type Value = ShapeAndIndex
 
       protected def makeUGens: UGenInLike = {
         val b         = UGB.get
-        val keyComp: String = ??? //   = AuralSonificationOLD.current().attributeKey(this)
-        val keySp     = keyComp.split(";")
-        val key       = keySp(0)
-        val axisSize  = keySp(1).toInt
-        val div       = keySp(2).toInt
-        val axisSignal= proc.graph.Attribute.ir(key)
+        val ShapeAndIndex(shape, index) = b.requestInput(this)
+        //        val keyComp: String = ??? //   = AuralSonificationOLD.current().attributeKey(this)
+        //        val keySp     = keyComp.split(";")
+        //        val key       = keySp(0)
+        val axisSize  = ??? : Int // keySp(1).toInt
+        val div       = ??? : Int // keySp(2).toInt
+        val axisSignal= ??? : synth.GE // proc.graph.Attribute.ir(key)
         println(s"axisSize = $axisSize, div = $div")
         Vector.tabulate(axisSize * div)(i => axisSignal \ (i/div)): synth.GE
       }
@@ -99,7 +105,7 @@ object Var {
   }
 
   /** A reference to a dimensional axis with respect to a variable section.
-    * The difference between this and for instance `SelectDim` is that the
+    * The difference between this and for instance `Dim` is that the
     * graph element producing methods such as `values` and `indices` produce
     * multi-channel signals which correctly align with the underlying variable section.
     * This allows signal processing which combines each sample value from a
