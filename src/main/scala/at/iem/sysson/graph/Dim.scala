@@ -30,7 +30,7 @@ object Dim {
 
   // private[sysson] def controlName(key: String, idx: Int): String = s"$$str${idx}_$key"
 
-  private[sysson] def key(dim: Dim): String = s"$$dim_${dim.variable.name}_${dim.name}"
+  // private[sysson] def key(dim: Dim): String = s"$$dim_${dim.variable.name}_${dim.name}"
 
   //  object Play {
   //    // private[sysson] case class Key(dim: Dim)
@@ -46,12 +46,13 @@ object Dim {
     def  key    = dim
 
     protected def makeUGens: UGenInLike =
-      MatrixPrepare.makeUGen(this, key = Dim.key(dim), freq = freq, interp = interp)
+      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(dim, isDim = true) /* Dim.key(dim) */,
+        freq = freq, interp = interp)
   }
 
-  object Values {
-    private[sysson] def controlName(key: String): String = s"$$val_$key"
-  }
+  //  object Values {
+  //    private[sysson] def controlName(key: String): String = s"$$val_$key"
+  //  }
   final case class Values(dim: Dim) extends GE with ScalarRated with UGB.Input {
     override def productPrefix  = "Dim$Values"
     override def toString       = s"$dim.values"
@@ -61,7 +62,8 @@ object Dim {
     def  key    = dim
 
     protected def makeUGens: UGenInLike =
-      MatrixPrepare.makeUGen(this, key = Dim.key(dim), freq = 0f, interp = 0) // XXX TODO - Play.key is unintuitive
+      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(dim, isDim = true) /* Dim.key(dim) */,
+        freq = 0f, interp = 0)
   }
 
   //  final case class IndexRange(dim: Dim) extends GE with ScalarRated {

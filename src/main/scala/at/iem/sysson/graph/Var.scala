@@ -26,9 +26,9 @@ object Var {
     // def axis(dim: Dim): Axis
   }
 
-  object Play {
-    private[sysson] def key(variable: Var, time: Dim): String = s"$$var_${variable.name}_${time.name}"
-  }
+  //  object Play {
+  //    private[sysson] def key(variable: Var, time: Dim): String = s"$$var_${variable.name}_${time.name}"
+  //  }
   final case class Play(variable: Var, time: Dim.Play, interp: Int)
     extends GE with AudioRated with UGB.Input {
 
@@ -40,7 +40,8 @@ object Var {
     def  key    = time.dim
 
     protected def makeUGens: UGenInLike =
-      MatrixPrepare.makeUGen(this, key = Play.key(variable, time.dim), freq = time.freq, interp = interp)
+      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(time.dim, isDim = false) /* Play.key(variable, time.dim) */,
+        freq = time.freq, interp = interp)
 
     def axis(dim: Dim): Var.Axis = {
       require (dim.variable == variable, s"Dimension ${dim.name} does not belong to variable $variable")

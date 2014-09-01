@@ -82,13 +82,13 @@ object AuralSonificationImpl extends AuralObj.Factory {
       init(obj.elem.peer.proc)
     }
 
-    private def oldMatrixSpecs(req: UGB.Input, st: UGB.Incomplete[S]): List[MatrixPrepare.Spec] =
+    private def oldMatrixSpecs(req: UGB.Input, st: UGB.Incomplete[S]): Vec[MatrixPrepare.Spec] =
       st.acceptedInputs.get(req.key) match {
         case Some(mv: MatrixPrepare.Value) => mv.specs
         case Some(other) =>
           logDebug(s"For key ${req.key} found something other than MatrixPrepare.Value: $other")
-          Nil
-        case _ => Nil
+          Vector.empty
+        case _ => Vector.empty
       }
 
     override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.Incomplete[S])
@@ -100,8 +100,9 @@ object AuralSonificationImpl extends AuralObj.Factory {
         //          i.spec :: newSpecs0
         //        }
         val numCh     = 1 // a streaming dimension is always monophonic
-        val newSpecs  = MatrixPrepare.Spec(maxFreq = dp.maxFreq, interp = dp.interp) :: oldSpecs
-        MatrixPrepare.Value(numChannels = numCh, specs = newSpecs, streamDim = 0, isDim = true)
+        val newSpec   = MatrixPrepare.Spec(numChannels = numCh, maxFreq = dp.maxFreq, interp = dp.interp,
+          streamDim = 0, isDim = true)
+        MatrixPrepare.Value(oldSpecs :+ newSpec)
 
       case dv: graph.Dim.Values =>
         val oldSpecs = oldMatrixSpecs(req, st)
@@ -111,8 +112,8 @@ object AuralSonificationImpl extends AuralObj.Factory {
         val source    = findSource  (sonif , dimElem)
         val dimIdx    = findDimIndex(source, dimElem)
         val numCh     = source.matrix.shape.apply(dimIdx)
-        val newSpecs  = MatrixPrepare.Spec(maxFreq = 0f, interp = 0) :: oldSpecs
-        MatrixPrepare.Value(numChannels = numCh, specs = newSpecs, streamDim = -1, isDim = true)
+        val newSpec   = MatrixPrepare.Spec(numChannels = numCh, maxFreq = 0f, interp = 0, streamDim = -1, isDim = true)
+        MatrixPrepare.Value(oldSpecs :+ newSpec)
 
       case vp: graph.Var.Play =>
         val oldSpecs = oldMatrixSpecs(req, st)
@@ -124,8 +125,9 @@ object AuralSonificationImpl extends AuralObj.Factory {
         val shape     = source.matrix.shape
         val numCh     = ((1L /: shape)(_ * _) / shape(dimIdx)).toInt
         println(s"graph.Var.Play - numChannels = $numCh")
-        val newSpecs  = MatrixPrepare.Spec(maxFreq = vp.time.maxFreq, interp = vp.interp) :: oldSpecs
-        MatrixPrepare.Value(numChannels = numCh, specs = newSpecs, streamDim = dimIdx, isDim = false)
+        val newSpec   = MatrixPrepare.Spec(numChannels = numCh, maxFreq = vp.time.maxFreq, interp = vp.interp,
+          streamDim = dimIdx, isDim = false)
+        MatrixPrepare.Value(oldSpecs :+ newSpec)
 
       case _ => super.requestInput(req, st)
     }
@@ -150,9 +152,10 @@ object AuralSonificationImpl extends AuralObj.Factory {
                                           (implicit tx: S#Tx): Unit = keyW match {
       case dim: graph.Dim =>
         value match {
-          case MatrixPrepare.Value(numChannels, specs, streamDim, isDim) =>
-            addMatrixStream(b, dimElem = dim, numChannels = numChannels,
-              specs = specs, streamDim = streamDim, isDim = isDim)
+          case MatrixPrepare.Value(specs) =>
+            specs.zipWithIndex.foreach { case (spec, idx) =>
+              addMatrixStream(b, dimElem = dim, spec = spec, idx = idx)
+            }
 
           case _ => throw new IllegalStateException(s"Unsupported input request value $value")
         }
@@ -160,13 +163,12 @@ object AuralSonificationImpl extends AuralObj.Factory {
       case _ => super.buildAsyncInput(b, keyW, value)
     }
 
-    private def addMatrixStream(b: AsyncProcBuilder[S], dimElem: graph.Dim, numChannels: Int,
-                                specs: List[MatrixPrepare.Spec], streamDim: Int, isDim: Boolean)
+    private def addMatrixStream(b: AsyncProcBuilder[S], dimElem: graph.Dim, spec: MatrixPrepare.Spec, idx: Int)
                                (implicit tx: S#Tx): Unit = {
       // note: info-only graph elems not yet supported (or existent)
-      val infoSeq = /* if (specs.isEmpty) UGB.Input.Stream.EmptySpec :: Nil else */ specs
       import context.{server, workspaceHandle}
       import context.scheduler.cursor
+      import spec.{isDim, streamDim}
       implicit val resolver = WorkspaceResolver[S]
 
       val source  = findSource(sonifData.obj(), dimElem)
@@ -178,26 +180,24 @@ object AuralSonificationImpl extends AuralObj.Factory {
         full.getKey(streamDim)
       }
 
-      infoSeq.zipWithIndex.foreach { case (info, idx) =>
-        // val ctlName     = de.sciss.synth.proc.graph.stream.controlName(key, idx)
-        //  val ctlName     = proc.graph.impl.Stream.controlName(key, idx)
-        val bufSize     = if (info.isEmpty) server.config.blockSize else {
-          val maxFreq   = if (info.maxFreq <= 0.0) 1.0 else info.maxFreq
-          val maxSpeed  = maxFreq / server.sampleRate
-          val bufDur    = 1.5 * maxSpeed
-          val minSz     = (2 * server.config.blockSize * math.max(1.0, maxSpeed)).toInt
-          val bestSz    = math.max(minSz, (bufDur * server.sampleRate).toInt)
-          import numbers.Implicits._
-          val bestSzHi  = bestSz.nextPowerOfTwo
-          val bestSzLo  = bestSzHi >> 1
-          if (bestSzHi.toDouble/bestSz < bestSz.toDouble/bestSzLo) bestSzHi else bestSzLo
-        }
-
-        val key = graph.Dim.key(dimElem)
-        val cfg = MatrixPrepare.Config(matrix = matrix, server = server, key = key, index = idx, bufSize = bufSize)
-        val res = MatrixPrepare(cfg)
-        b.resources ::= res
+      // val ctlName     = de.sciss.synth.proc.graph.stream.controlName(key, idx)
+      //  val ctlName     = proc.graph.impl.Stream.controlName(key, idx)
+      val bufSize     = if (spec.isEmpty) server.config.blockSize else {
+        val maxFreq   = if (spec.maxFreq <= 0.0) 1.0 else spec.maxFreq
+        val maxSpeed  = maxFreq / server.sampleRate
+        val bufDur    = 1.5 * maxSpeed
+        val minSz     = (2 * server.config.blockSize * math.max(1.0, maxSpeed)).toInt
+        val bestSz    = math.max(minSz, (bufDur * server.sampleRate).toInt)
+        import numbers.Implicits._
+        val bestSzHi  = bestSz.nextPowerOfTwo
+        val bestSzLo  = bestSzHi >> 1
+        if (bestSzHi.toDouble/bestSz < bestSz.toDouble/bestSzLo) bestSzHi else bestSzLo
       }
+
+      val key = MatrixPrepare.mkKey(dimElem, isDim = isDim) // graph.Dim.key(dimElem)
+      val cfg = MatrixPrepare.Config(matrix = matrix, server = server, key = key, index = idx, bufSize = bufSize)
+      val res = MatrixPrepare(cfg)
+      b.resources ::= res
     }
   }
 

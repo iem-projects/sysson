@@ -34,39 +34,53 @@ object MatrixPrepare {
   //  type Spec = UGB.Input.Stream.Spec
   //  val  Spec = UGB.Input.Stream.Spec
 
-  final case class Spec(maxFreq: Double, interp: Int) {
+  /**
+   *
+   * @param numChannels  the number of channels in the audio file
+   * @param maxFreq      maximum playback sample-rate
+   * @param interp       interpolation type (1 none, 2 linear, 4 cubic)
+   * @param streamDim    the stream dimension (or `-1` for scalar)
+   * @param isDim        if `true`, produce values for a dimension, if `false` for a matrix
+   */
+  final case class Spec(numChannels: Int, maxFreq: Double, interp: Int, streamDim: Int, isDim: Boolean) {
     /** Empty indicates that the stream is solely used for information
       * purposes such as `BufChannels`.
       */
     def isEmpty: Boolean = interp == 0
 
-    //    /** Native indicates that the stream will be transported by the UGen
-    //      * itself, i.e. via `DiskIn` or `VDiskIn`.
-    //      */
-    //    def isNative: Boolean = interp == -1
+    def isStreaming = streamDim >= 0
 
-    override def productPrefix = "MatrixPrepare.Spec"
+    override def toString = f"$productPrefix(numChannels = $numChannels, maxFreq = $maxFreq%1.1f, streamDim = $streamDim, isDim = $isDim)"
 
-    override def toString = s"$productPrefix(maxFreq = $maxFreq, interp = $interp)"
+    // override def productPrefix = "MatrixPrepare.Spec"
   }
 
   /** The value of the `UGenGraphBuilder` request.
     * Similar to `Stream.Value`, but using asynchronous preparation.
     *
-    * @param numChannels  the number of channels in the audio file
     * @param specs        the stream performance specifications
-    * @param streamDim    the stream dimension (or `-1` for scalar)
-    * @param isDim        if `true`, produce values for a dimension, if `false` for a matrix
     */
-  final case class Value(numChannels: Int, specs: List[Spec], streamDim: Int, isDim: Boolean) extends UGB.Value {
+  final case class Value(specs: Vec[Spec]) extends UGB.Value {
     override def productPrefix = "MatrixPrepare.Value"
 
     def async = true
 
-    def isStreaming = streamDim >= 0
+    // def isStreaming = streamDim >= 0
 
-    override def toString = s"$productPrefix(numChannels = $numChannels, specs = $specs, streamDim = $streamDim, isDim = $isDim)"
+    override def toString = s"$productPrefix(${specs.mkString("[", ", ", "]")})"
   }
+
+  def mkKey(dim: graph.Dim, isDim: Boolean): String = {
+    val prefix = if (isDim) "dim" else "var"
+    s"${prefix}_${dim.variable.name}_${dim.name}"
+  }
+
+  def mkCtlName(key: String, idx: Int, isStreaming: Boolean): String =
+    if (isStreaming) {
+      proc.graph.impl.Stream.controlName(key, idx)
+    } else {
+      s"$$val${idx}_$key"
+    }
 
   /** Creates and expands the synth-graph fragment for a matrix. This must be
     * called in the expansion process. It will invoke `UGenGraphBuilder.requestInput`.
@@ -82,22 +96,25 @@ object MatrixPrepare {
   def makeUGen(in: UGB.Input { type Value = MatrixPrepare.Value }, key: String, freq: GE, interp: Int): UGenInLike = {
     val b         = UGB.get
     val info      = b.requestInput(in)
+    val spec      = info.specs.last
 
     import synth._
     import ugen._
 
-    if (info.isStreaming) {
+    val idx     = /* if (spec.isEmpty) 0 else */ info.specs.size - 1
+    val ctlName = mkCtlName(key = key, idx = idx, isStreaming = spec.isStreaming)
+
+    if (spec.isStreaming) {
       val bufSr   = SampleRate.ir // note: VDiskIn uses server sample rate as scale base
       val speed   = freq / bufSr
-      val idx     = /* if (spec.isEmpty) 0 else */ info.specs.size - 1
-      val ctlName = proc.graph.impl.Stream.controlName(key, idx)
+      // val ctlName = proc.graph.impl.Stream.controlName(key, idx)
       val buf     = ctlName.ir(0f)
-      val numCh   = info.numChannels
+      val numCh   = spec.numChannels
       // only for dimensions: assert(numCh == 1)
       StreamBuffer.makeUGen(key = key, idx = idx, buf = buf, numChannels = numCh, speed = speed, interp = interp)
     } else {
-      val numCh   = info.numChannels
-      val ctlName = graph.Dim.Values.controlName(key)
+      val numCh   = spec.numChannels
+      // val ctlName = graph.Dim.Values.controlName(key)
       val buf     = ctlName.ir(0f)
       BufRd.ir(numCh, buf = buf, loop = 0, interp = 1)
     }
@@ -148,14 +165,13 @@ object MatrixPrepare {
       val bufSize1      = if (isStreaming) bufSize else numFrames.toInt
       val buf           = Buffer(server)(numFrames = bufSize1, numChannels = numChannels)
       val path          = value.file.getAbsolutePath
-      val ctlName       = if (isStreaming) {
+      val ctlName       = mkCtlName(key = key, idx = index, isStreaming = isStreaming)
+      if (isStreaming) {
         val trig  = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
           path = path, fileFrames = numFrames, interp = 1 /* info.interp */)
         trig.install()
-        proc.graph.impl.Stream.controlName(key, index)  // proc.graph.Buffer.controlName(key)
       } else {
         buf.read(path)
-        graph.Dim.Values.controlName(key)
       }
       b.setMap         += ctlName -> buf.id
       b.dependencies  ::= buf
