@@ -38,7 +38,7 @@ lazy val jfreechartVersion  = "1.0.19"
 
 lazy val slfVersion         = "1.7.7"
 
-lazy val scalaTestVersion   = "2.2.0"
+lazy val scalaTestVersion   = "2.2.2"
 
 libraryDependencies ++= Seq(
   "de.sciss" %% "mellite"           % melliteVersion,          // computer music environment

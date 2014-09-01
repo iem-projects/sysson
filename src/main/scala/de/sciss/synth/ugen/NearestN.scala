@@ -24,5 +24,5 @@ final case class NearestN(rate: Rate, buf: GE, in: GE, gate: GE, num: Int) exten
   protected def makeUGens: UGenInLike = unwrap(Vec(buf.expand, gate.expand, num: UGenIn).++(in.expand.outputs))
 
   protected def makeUGen(args: Vec[UGenIn]): UGenInLike =
-    new UGen.MultiOut(name, rate, Vec.fill(num * 3)(rate), args)
+    UGen.MultiOut(name, rate, Vec.fill(num * 3)(rate), args)
 }

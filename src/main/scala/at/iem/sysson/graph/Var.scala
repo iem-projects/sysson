@@ -117,7 +117,7 @@ object Var {
 
     def values    : synth.GE = Axis.Values(this)
 
-    def indices   : synth.GE = ???
+    // def indices   : synth.GE = ...
 
     def startValue: synth.GE = ???
 

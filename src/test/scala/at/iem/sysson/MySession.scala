@@ -6,6 +6,7 @@ import ugen._
 
 object MySession extends SessionLike {
   def run(): Unit = {
+    import Ops._
     val x = play {
       FreeSelf.kr(MouseButton.kr)
       WhiteNoise.ar(SinOsc.ar(MouseX.kr.linexp(0, 1, 1, 1000)) * 0.5)
