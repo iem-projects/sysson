@@ -91,41 +91,45 @@ object AuralSonificationImpl extends AuralObj.Factory {
         case _ => Vector.empty
       }
 
+    private def addSpec(req: UGB.Input, st: UGB.Incomplete[S], spec: MatrixPrepare.Spec): MatrixPrepare.Value =
+      MatrixPrepare.Value(oldMatrixSpecs(req, st) :+ spec)
+
     override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.Incomplete[S])
                                   (implicit tx: S#Tx): Res = req match {
       case uv: graph.UserValue => UGB.Unit
       case dp: graph.Dim.Play  =>
-        val oldSpecs = oldMatrixSpecs(req, st)
-        //        val newSpecs = if (i.spec.isEmpty) newSpecs0 else {
-        //          i.spec :: newSpecs0
-        //        }
         val numCh     = 1 // a streaming dimension is always monophonic
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = dp, streamDim = 0)
-        MatrixPrepare.Value(oldSpecs :+ newSpec)
+        addSpec(req, st, newSpec)
 
       case dv: graph.Dim.Values =>
-        val oldSpecs = oldMatrixSpecs(req, st)
-
         val sonif     = sonifCached()
         val dimElem   = dv.dim
         val source    = findSource  (sonif , dv     )
         val dimIdx    = findDimIndex(source, dimElem)
         val numCh     = source.matrix.shape.apply(dimIdx)
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = dv, streamDim = -1)
-        MatrixPrepare.Value(oldSpecs :+ newSpec)
+        addSpec(req, st, newSpec)
 
       case vp: graph.Var.Play =>
-        val oldSpecs = oldMatrixSpecs(req, st)
-
         val sonif     = sonifCached()
         val dimElem   = vp.time.dim
         val source    = findSource  (sonif , vp     )
         val dimIdx    = findDimIndex(source, dimElem)
         val shape     = source.matrix.shape
         val numCh     = ((1L /: shape)(_ * _) / shape(dimIdx)).toInt
-        println(s"graph.Var.Play - numChannels = $numCh")
+        logDebug(s"graph.Var.Play - numChannels = $numCh")
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = vp, streamDim = dimIdx)
-        MatrixPrepare.Value(oldSpecs :+ newSpec)
+        addSpec(req, st, newSpec)
+
+      case vv: graph.Var.Values =>
+        val sonif     = sonifCached()
+        val source    = findSource(sonif, vv)
+        val numChL    = source.matrix.size
+        if (numChL > 0xFFFF) sys.error(s"$vv - matrix too large ($numChL cells)")
+        val numCh     = numChL.toInt
+        val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = vv, streamDim = -1)
+        addSpec(req, st, newSpec)
 
       case _ => super.requestInput(req, st)
     }
@@ -147,15 +151,10 @@ object AuralSonificationImpl extends AuralObj.Factory {
     }
 
     override protected def buildAsyncInput(b: AsyncProcBuilder[S], keyW: UGB.Key, value: UGB.Value)
-                                          (implicit tx: S#Tx): Unit = keyW match {
-      case dim: graph.Dim =>
-        value match {
-          case MatrixPrepare.Value(specs) =>
-            specs.zipWithIndex.foreach { case (spec, idx) =>
-              addMatrixStream(b, spec = spec, idx = idx)
-            }
-
-          case _ => throw new IllegalStateException(s"Unsupported input request value $value")
+                                          (implicit tx: S#Tx): Unit = value match {
+      case MatrixPrepare.Value(specs) =>
+        specs.zipWithIndex.foreach { case (spec, idx) =>
+          addMatrixStream(b, spec = spec, idx = idx)
         }
 
       case _ => super.buildAsyncInput(b, keyW, value)

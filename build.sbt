@@ -112,6 +112,8 @@ pomExtra := { val n = name.value
 
 // ---- packaging (making standalones) ----
 
+lazy val mainClazz = Some("at.iem.sysson.Main")
+
 // windows/linux
 
 seq(assemblySettings: _*)
@@ -122,7 +124,7 @@ target    in assembly := baseDirectory.value    // make .jar file in the main di
 
 jarName   in assembly := s"${name.value}.jar"
 
-mainClass in assembly := Some("at.iem.sysson.Main")
+mainClass in assembly := mainClazz
 
 //mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
 //  {
@@ -143,7 +145,7 @@ appbundle.icon := {
   Some(icn)
 }
 
-appbundle.mainClass   := Some("at.iem.sysson.Main")
+appbundle.mainClass   := mainClazz
 
 // appbundle.javaOptions ++= Seq("-Xmx2048m", "-XX:MaxPermSize=512m")
 

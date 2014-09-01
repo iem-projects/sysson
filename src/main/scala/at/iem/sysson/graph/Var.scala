@@ -141,6 +141,8 @@ final case class Var(name: String, higherRank: Boolean = true) extends UserInter
   //  /** Logical name by which the source is referred to */
   //  def name: String
 
+  override def toString = s"""$productPrefix("$name")"""
+
   def dim(name: String): Dim = Dim(this, name)
 
   //  /** Whether a matrix rank higher than `dimensions.size` is permitted */
