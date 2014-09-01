@@ -21,12 +21,12 @@ import de.sciss.synth.{ScalarRated, GE, UGenInLike, AudioRated}
 import de.sciss.synth
 
 object Dim {
-  sealed trait GE extends synth.GE.Lazy /* with UGB.Input */ {
-    def dim: Dim
-
-    // type Key = Dim
-    // def  key = dim
-  }
+  //  sealed trait GE extends synth.GE.Lazy /* with UGB.Input */ {
+  //    def dim: Dim
+  //
+  //    // type Key = Dim
+  //    // def  key = dim
+  //  }
 
   // private[sysson] def controlName(key: String, idx: Int): String = s"$$str${idx}_$key"
 
@@ -36,34 +36,30 @@ object Dim {
   //    // private[sysson] case class Key(dim: Dim)
   //  }
   final case class Play(dim: Dim, freq: synth.GE, maxFreq: Double, interp: Int)
-    extends GE with AudioRated with UGB.Input {
+    extends MatrixPrepare.DimGE with MatrixPrepare.PlayGE {
 
     override def productPrefix  = "Dim$Play"
     override def toString       = s"$dim.play($freq)"
 
-    type Key    = Dim
-    type Value  = MatrixPrepare.Value
-    def  key    = dim
+    // def key    = dim
 
-    protected def makeUGens: UGenInLike =
-      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(dim, isDim = true) /* Dim.key(dim) */,
-        freq = freq, interp = interp)
+    //    protected def makeUGens: UGenInLike =
+    //      MatrixPrepare.makeUGenOLD(this, key = MatrixPrepare.mkKeyOLD(dim, isDim = true) /* Dim.key(dim) */,
+    //        freq = freq, interp = interp)
   }
 
   //  object Values {
   //    private[sysson] def controlName(key: String): String = s"$$val_$key"
   //  }
-  final case class Values(dim: Dim) extends GE with ScalarRated with UGB.Input {
+  final case class Values(dim: Dim)
+    extends MatrixPrepare.DimGE with MatrixPrepare.ValuesGE {
+
     override def productPrefix  = "Dim$Values"
     override def toString       = s"$dim.values"
 
-    type Key    = Dim
-    type Value  = MatrixPrepare.Value
-    def  key    = dim
-
-    protected def makeUGens: UGenInLike =
-      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(dim, isDim = true) /* Dim.key(dim) */,
-        freq = 0f, interp = 0)
+    //    protected def makeUGens: UGenInLike =
+    //      MatrixPrepare.makeUGenOLD(this, key = MatrixPrepare.mkKeyOLD(dim, isDim = true) /* Dim.key(dim) */,
+    //        freq = 0f, interp = 0)
   }
 
   //  final case class IndexRange(dim: Dim) extends GE with ScalarRated {

@@ -29,11 +29,14 @@ object Var {
     type Key    = Dim
     def  key    = time.dim
 
+    protected def freq = time.freq
+    def maxFreq = time.maxFreq
+
     private[sysson] def dimOption: Option[Dim] = Some(time.dim)
 
-    protected def makeUGens: UGenInLike =
-      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(time.dim, isDim = false),
-        freq = time.freq, interp = interp)
+    //    protected def makeUGens: UGenInLike =
+    //      MatrixPrepare.makeUGenOLD(this, key = MatrixPrepare.mkKeyOLD(time.dim, isDim = false),
+    //        freq = time.freq, interp = interp)
 
     def axis(dim: Dim): Var.Axis = {
       require (dim.variable == variable, s"Dimension ${dim.name} does not belong to variable $variable")
@@ -51,10 +54,6 @@ object Var {
     def  key    = variable
 
     private[sysson] def dimOption: Option[Dim] = None
-
-    protected def makeUGens: UGenInLike = ???
-      //      MatrixPrepare.makeUGen(this, key = MatrixPrepare.mkKey(dim, isDim = true) /* Dim.key(dim) */,
-      //        freq = 0f, interp = 0)
   }
 
   //  /** Declares a new sonification variable (data source).
@@ -76,7 +75,7 @@ object Var {
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
 
   object Axis {
-    case class Values(axis: Var.Axis)
+    final case class Values(axis: Var.Axis)
       extends synth.GE.Lazy /* impl.LazyImpl */ /* with SonificationElement */ with ScalarRated {
 
       override def productPrefix = "Var$Axis$Values"
@@ -106,7 +105,7 @@ object Var {
     * This allows signal processing which combines each sample value from a
     * variable with the corresponding axes elements.
     */
-  case class Axis(variable: Var.Play, dim: String) {
+  final case class Axis(variable: Var.Play, dim: String) {
     override def productPrefix = "Var$Axis"
 
     override def toString = s"$variable.axis($dim)"
@@ -114,10 +113,8 @@ object Var {
     def values    : synth.GE = Axis.Values(this)
 
     // def indices   : synth.GE = ...
-
-    def startValue: synth.GE = ???
-
-    def endValue  : synth.GE = ???
+    // def startValue: synth.GE = ...
+    // def endValue  : synth.GE = ...
 
     def asDim: Dim = Dim(variable.variable, dim)
   }
@@ -139,7 +136,8 @@ object Var {
   //    def play(time: Dim.Play, interp: Int): Var.Play = Var.Play(this, time, interp)
   //  }
 }
-final case class Var(name: String) extends UserInteraction with UGB.Key {
+// XXX TODO - remove obsolete `higherRank` argument, once we don't need session compatibility
+final case class Var(name: String, higherRank: Boolean = true) extends UserInteraction with UGB.Key {
   //  /** Logical name by which the source is referred to */
   //  def name: String
 
