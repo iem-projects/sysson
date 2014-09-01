@@ -145,7 +145,9 @@ appbundle.icon := {
 
 appbundle.mainClass   := Some("at.iem.sysson.Main")
 
-appbundle.javaOptions ++= Seq("-Xmx2048m", "-XX:MaxPermSize=512m")
+// appbundle.javaOptions ++= Seq("-Xmx2048m", "-XX:MaxPermSize=512m")
+
+appbundle.javaOptions ++= Seq("-Xms2048m", "-Xmx2048m", "-XX:PermSize=256m", "-XX:MaxPermSize=512m", "-server")
 
 appbundle.target      := baseDirectory.value      // make .app bundle in the main directory
 
