@@ -53,14 +53,13 @@ object SonificationViewImpl {
       StringFieldView(expr, "Name")
     }
 
-    val transport = Transport[S](Mellite.auralSystem)
-    transport.addObject(sonification)
+    // TTT
+    // val transport = mkTransport(sonification)
     val p         = sonification.elem.peer.proc
 
-    val res = new Impl[S, workspace.I](sonifH, transport, nameView)(workspace, undoMgr, cursor) {
-      val auralObserver = transport.react { implicit tx => upd =>
-        deferTx(auralChange(upd))
-      }
+    val res = new Impl[S, workspace.I](sonifH, /* TTT transport, */ nameView)(workspace, undoMgr, cursor) {
+      // TTT
+      // val auralObserver = mkAuralObserver(transport)
 
       val graphObserver = p.elem.peer.graph.changed.react { implicit tx => upd =>
         updateGraph(upd.now)
@@ -77,8 +76,15 @@ object SonificationViewImpl {
     res
   }
 
+  private def mkTransport[S <: Sys[S]](sonif: Sonification.Obj[S])
+                                      (implicit tx: S#Tx, cursor: stm.Cursor[S]): Transport[S] = {
+    val res = Transport[S](Mellite.auralSystem)
+    res.addObject(sonif)
+    res
+  }
+
   private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Sonification.Obj[S]],
-                                                          transport: Transport[S],
+                                                          /* TTT transport: Transport[S], */
                                         nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S] { type I = I1 },
                                                                               val undoManager: UndoManager,
                                                                               val cursor: stm.Cursor[S])
@@ -86,7 +92,8 @@ object SonificationViewImpl {
 
     impl =>
 
-    protected def auralObserver: Disposable[S#Tx]
+    // TTT
+    // protected def auralObserver: Disposable[S#Tx]
     protected def graphObserver: Disposable[S#Tx]
 
     def sonification(implicit tx: S#Tx): Sonification.Obj[S] = sonifH()
@@ -101,6 +108,11 @@ object SonificationViewImpl {
     private var ggMute: ToggleButton = _
 
     private var ggElapsed: ElapsedBar = _
+
+    final protected def mkAuralObserver(transport: Transport[S])(implicit tx: S#Tx): Disposable[S#Tx] =
+      transport.react { implicit tx => upd =>
+        deferTx(auralChange(upd))
+      }
 
     final protected def auralChange(upd: Transport.Update[S] /* AuralSonificationOLD.Update */): Unit = upd match {
       //      case AuralSonificationOLD.Elapsed(dim, ratio, value) =>
@@ -312,22 +324,32 @@ object SonificationViewImpl {
       //      }
     }
 
+    private val transportRef = Ref(Option.empty[(Transport[S], Disposable[S#Tx])])
+
     private def tStop(): Unit = {
       val ggPause   = transportButtons.button(GUITransport.Pause).get
       val isPausing = ggPause.selected
       cursor.step { implicit tx =>
-        transport.stop()
-        // sonifView.stop()
+        // TTT
+        // transport.stop()
+        stopAndDisposeTransport()
         if (isPausing) runGroup(state = true)
       }
     }
+
+    private def stopAndDisposeTransport()(implicit tx: S#Tx): Unit =
+      transportRef.swap(None)(tx.peer).foreach { case (transport, auralObserver) =>
+        transport.stop()
+        transport.dispose()
+        auralObserver.dispose()
+      }
 
     private def tPause(): Unit = {
       val ggPause   = transportButtons.button(GUITransport.Pause).get
       val isPausing = !ggPause.selected
       val isPlaying = cursor.step { implicit tx =>
         // val p = sonifView.state == AuralSonificationOLD.Playing
-        val p = transport.isPlaying
+        val p = transportRef.get(tx.peer).exists(_._1.isPlaying) // transport.isPlaying
         if (p) runGroup(state = !isPausing)
         p
       }
@@ -336,8 +358,13 @@ object SonificationViewImpl {
 
     private def tPlay(): Unit = cursor.step { implicit tx =>
       try {
+        // TTT
+        stopAndDisposeTransport()   // make sure that old object is disposed
+        val transport     = mkTransport(sonification)
+        val auralObserver = mkAuralObserver(transport)
+        transportRef.set(Some((transport, auralObserver)))(tx.peer)
         transport.play()
-        // sonifView.play()
+
       } catch {
         case NonFatal(e) =>
           val message = s"<html><b>Sonification failed:</b> <i>(${e.getClass.getSimpleName})</i><p>${e.getMessage}"
@@ -353,9 +380,11 @@ object SonificationViewImpl {
     //    }
 
     final def dispose()(implicit tx: S#Tx): Unit = {
-      transport.dispose()
-      // sonifView.stop()
-      auralObserver.dispose()
+      // TTT
+      // transport.dispose()
+      // auralObserver.dispose()
+      stopAndDisposeTransport()
+
       graphObserver.dispose()
       graphDisposables.swap(Vec.empty)(tx.peer).foreach(_.dispose())
       nameView.foreach(_.dispose())
