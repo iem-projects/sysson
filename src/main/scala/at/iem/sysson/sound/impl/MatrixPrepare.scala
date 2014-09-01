@@ -46,6 +46,8 @@ object MatrixPrepare {
     //    def isNative: Boolean = interp == -1
 
     override def productPrefix = "MatrixPrepare.Spec"
+
+    override def toString = s"$productPrefix(maxFreq = $maxFreq, interp = $interp)"
   }
 
   /** The value of the `UGenGraphBuilder` request.
@@ -62,6 +64,8 @@ object MatrixPrepare {
     def async = true
 
     def isStreaming = streamDim >= 0
+
+    override def toString = s"$productPrefix(numChannels = $numChannels, specs = $specs, streamDim = $streamDim, isDim = $isDim)"
   }
 
   /** Creates and expands the synth-graph fragment for a matrix. This must be

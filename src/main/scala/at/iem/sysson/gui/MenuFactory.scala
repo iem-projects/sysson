@@ -216,6 +216,7 @@ object MenuFactory {
         case m: osc.Message if m.name == "/$meter" => false
         case _ => true
       })
+      println(s"DumpOSC is ${if (dumpMode == osc.Dump.Text) "ON" else "OFF"}")
     }
   }
 
@@ -227,6 +228,7 @@ object MenuFactory {
     de.sciss.synth.proc.showLog           = enabled
     de.sciss.synth.proc.showAuralLog      = enabled
     de.sciss.synth.proc.showTransportLog  = enabled
+    println(s"Logging is ${if (enabled) "ON" else "OFF"}")
   }
 
   //  private def dumpOSC_OLD(): Unit = {
