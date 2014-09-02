@@ -44,7 +44,7 @@ private[gui] object MainViewImpl {
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 
   private final class Impl(bg: Option[Color]) extends MainView with DynamicComponentImpl {
-    def boot(): Unit = atomic { implicit tx => Mellite.auralSystem.start() }
+    def boot(): Unit = Mellite.startAuralSystem() // atomic { implicit tx => Mellite.auralSystem.start() }
 
     private lazy val serverStatus = new ServerStatusPanel {
       bootAction = Some(boot _)
