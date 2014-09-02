@@ -18,7 +18,7 @@ import at.iem.sysson.sound.impl.MatrixPrepare
 import at.iem.sysson.sound.impl.MatrixPrepare.ShapeAndIndex
 import de.sciss.synth
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
-import de.sciss.synth.{proc, ScalarRated, UGenInLike}
+import de.sciss.synth.{ScalarRated, UGenInLike}
 
 object Var {
   final case class Play(variable: Var, time: Dim.Play, interp: Int)
@@ -76,9 +76,12 @@ object Var {
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
 
   object Axis {
-    final case class Key(stream: Dim, axis: String) extends UGB.Key
+    final case class Key(stream: Dim, axis: String) extends UGB.Key {
+      override def productPrefix = "Var.Axis.Key"
+      override def toString = s"$productPrefix(stream = $stream, axis = $axis)"
+    }
     final case class Values(axis: Var.Axis)
-      extends synth.GE.Lazy /* impl.LazyImpl */ /* with SonificationElement */ with ScalarRated with UGB.Input {
+      extends MatrixPrepare.GE with ScalarRated {
 
       override def productPrefix = "Var$Axis$Values"
 
@@ -89,17 +92,22 @@ object Var {
 
       type Value = ShapeAndIndex
 
+      def variable: Var = axis.variable.variable
+
       protected def makeUGens: UGenInLike = {
         val b         = UGB.get
-        val ShapeAndIndex(shape, index) = b.requestInput(this)
-        //        val keyComp: String = ??? //   = AuralSonificationOLD.current().attributeKey(this)
-        //        val keySp     = keyComp.split(";")
-        //        val key       = keySp(0)
-        val axisSize  = ??? : Int // keySp(1).toInt
-        val div       = ??? : Int // keySp(2).toInt
-        val axisSignal= ??? : synth.GE // proc.graph.Attribute.ir(key)
-        println(s"axisSize = $axisSize, div = $div")
-        Vector.tabulate(axisSize * div)(i => axisSignal \ (i/div)): synth.GE
+        // cf. VariableAxesAssociations.txt
+        val ShapeAndIndex(shape, streamIdx, axisIdx) = b.requestInput(this)
+        val shapeRed  = shape.updated(streamIdx, 1)               // same as removal when applying `product`!
+        val divL      = (1L /: shapeRed.drop(axisIdx + 1))(_ * _) // note: empty product == 1
+        val axisSize  = shapeRed(axisIdx)
+        val matSizeL  = axisSize * divL
+        if (matSizeL > 0xFFFFFF) sys.error(s"Matrix too large for axis value generation ($matSizeL)")
+        val div       = divL.toInt
+        val matSize   = matSizeL.toInt
+        val dimVals   = axis.asDim.values
+        // println(s"axisSize = $axisSize, div = $div")
+        Vector.tabulate(matSize)(i => dimVals \ (i/div)): synth.GE
       }
     }
   }

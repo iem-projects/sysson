@@ -38,7 +38,7 @@ final case class Elapsed(rate: Rate, in: Dim.Play, terminate: Boolean)
    * sonification, the "expansion" should happen immediately, not late.
    * Thus it must be created now.
    */
-  private val numFrames = in.dim.size
+  private val numFrames = ??? : Int // in.dim.size
 
   protected def makeUGens: UGenInLike = {
     val b         = UGenGraphBuilder.get

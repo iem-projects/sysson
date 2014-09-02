@@ -40,9 +40,11 @@ object MatrixPrepare {
   }
   sealed trait IsStreaming
 
-  sealed trait GE extends synth.GE.Lazy with UGB.Input {
+  trait GE extends synth.GE.Lazy with UGB.Input {
     def variable: graph.Var
+  }
 
+  sealed trait InputGE extends GE  {
     final type Value = MatrixPrepare.Value
 
     private[sysson] def isDimension: Boolean
@@ -52,18 +54,18 @@ object MatrixPrepare {
     final protected def makeUGens: UGenInLike = MatrixPrepare.makeUGen(this)
   }
 
-  trait PlayGE extends GE with AudioRated {
+  trait PlayGE extends InputGE with AudioRated {
     protected def freq: synth.GE
     def maxFreq: Double
     protected def interp: Int
     private[sysson] final def isStreaming = IsStreaming.Yes(freq, interp)
   }
 
-  trait ValuesGE extends GE with ScalarRated {
+  trait ValuesGE extends InputGE with ScalarRated {
     private[sysson] final def isStreaming = IsStreaming.No
   }
 
-  trait DimGE extends GE {
+  trait DimGE extends InputGE {
     final type Key = graph.Dim
 
     protected def dim: graph.Dim
@@ -75,7 +77,7 @@ object MatrixPrepare {
     private[sysson] final def dimOption: Option[graph.Dim] = Some(key)
   }
 
-  trait VarGE extends GE {
+  trait VarGE extends InputGE {
     private[sysson] final def isDimension = false
   }
 
@@ -85,10 +87,11 @@ object MatrixPrepare {
 
   /** A `UGenGraphBuilder.Input.Value` requested by the `Var.Axis` elements.
     *
-    * @param shape  the shape of the matrix (after removing the streaming dimension)
-    * @param index  the index of the axis dimension (with respect to `shape`)
+    * @param shape        the shape of the matrix
+    * @param streamIndex  the index of the streaming dimension
+    * @param axisIndex    the index of the axis dimension
     */
-  final case class ShapeAndIndex(shape: Vec[Int], index: Int) extends UGB.Value {
+  final case class ShapeAndIndex(shape: Vec[Int], streamIndex: Int, axisIndex: Int) extends UGB.Value {
     def async: Boolean = false
   }
 
@@ -97,7 +100,7 @@ object MatrixPrepare {
    * @param numChannels  the number of channels in the audio file
    * @param streamDim    the stream dimension (or `-1` for scalar)
    */
-  final case class Spec(numChannels: Int, elem: GE, streamDim: Int) {
+  final case class Spec(numChannels: Int, elem: InputGE, streamDim: Int) {
     //    /** Empty indicates that the stream is solely used for information
     //      * purposes such as `BufChannels`.
     //      */
@@ -137,12 +140,12 @@ object MatrixPrepare {
       s"$$val${idx}_$key"
     }
   
-  def mkKey(in: GE): String = in.dimOption.fold(s"var_${in.variable.name}") { dim =>
+  def mkKey(in: InputGE): String = in.dimOption.fold(s"var_${in.variable.name}") { dim =>
     val prefix = if (in.isDimension) "dim" else "var"
     s"${prefix}_${in.variable.name}_${dim.name}"
   }
 
-  def makeUGen(in: GE): UGenInLike = {
+  def makeUGen(in: InputGE): UGenInLike = {
     val b         = UGB.get
     val info      = b.requestInput(in)
     val spec      = info.specs.last

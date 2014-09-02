@@ -105,7 +105,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
       case dv: graph.Dim.Values =>
         val sonif     = sonifCached()
         val dimElem   = dv.dim
-        val source    = findSource  (sonif , dv     )
+        val source    = findSource  (sonif , dv)
         val dimIdx    = findDimIndex(source, dimElem)
         val numCh     = source.matrix.shape.apply(dimIdx)
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = dv, streamDim = -1)
@@ -114,7 +114,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
       case vp: graph.Var.Play =>
         val sonif     = sonifCached()
         val dimElem   = vp.time.dim
-        val source    = findSource  (sonif , vp     )
+        val source    = findSource  (sonif , vp)
         val dimIdx    = findDimIndex(source, dimElem)
         val shape     = source.matrix.shape
         val numCh     = ((1L /: shape)(_ * _) / shape(dimIdx)).toInt
@@ -131,6 +131,14 @@ object AuralSonificationImpl extends AuralObj.Factory {
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = vv, streamDim = -1)
         addSpec(req, st, newSpec)
 
+      case av: graph.Var.Axis.Values =>
+        val sonif     = sonifCached()
+        val source    = findSource(sonif, av)
+        val streamIdx = findDimIndex(source, av.axis.variable.time.dim)
+        val axisIdx   = findDimIndex(source, av.axis.asDim)
+        val m         = source.matrix
+        MatrixPrepare.ShapeAndIndex(shape = m.shape, streamIndex = streamIdx, axisIndex = axisIdx)
+
       case _ => super.requestInput(req, st)
     }
   }
@@ -146,6 +154,8 @@ object AuralSonificationImpl extends AuralObj.Factory {
           val ctlName = UserValue.controlName(key)
           b.setMap += ctlName -> expr.value
         }
+
+      case _: graph.Var.Axis.Key =>   // nothing to be done
 
       case _ => super.buildSyncInput(b, keyW, value)
     }

@@ -125,8 +125,8 @@ final case class Dim(variable: Var, name: String)
   //    */
   //  def extent: GE = endValue - startValue
 
-  /** Produces a graph element reflecting the number of samples (`stopIndex - startIndex`) covered by
-    * this selection.
-    */
-  def size: GE = ??? // stopIndex - startIndex
+  //  /** Produces a graph element reflecting the number of samples (`stopIndex - startIndex`) covered by
+  //    * this selection.
+  //    */
+  //  def size: GE = ... // stopIndex - startIndex
 }
