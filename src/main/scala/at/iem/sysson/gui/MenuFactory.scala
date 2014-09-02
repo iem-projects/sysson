@@ -150,9 +150,8 @@ object MenuFactory {
     // if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
 
     val gView = Group("view", "View")
-      .add(
-        Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P))(clearLog())
-      )
+      .add(Item("show-log" )("Show Log Window"  -> (menu1         + Key.P))(logToFront()))
+      .add(Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P))(clearLog  ()))
     val gWindow = Group("window", "Window")
     //  .add(Item("windowShot",         proxy("Export Window as PDF...")))
 
@@ -220,7 +219,8 @@ object MenuFactory {
     }
   }
 
-  def clearLog(): Unit = LogFrame.instance.log.clear()
+  def clearLog  (): Unit = LogFrame.instance.log.clear()
+  def logToFront(): Unit = LogFrame.instance.front()  // XXX TODO - should avoid focus transfer
 
   def toggleLog(): Unit = {
     val enabled = !showLog

@@ -12,7 +12,8 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson.graph
+package at.iem.sysson
+package graph
 
 import at.iem.sysson.sound.impl.MatrixPrepare
 import at.iem.sysson.sound.impl.MatrixPrepare.ShapeAndIndex
@@ -97,16 +98,18 @@ object Var {
       protected def makeUGens: UGenInLike = {
         val b         = UGB.get
         // cf. VariableAxesAssociations.txt
-        val ShapeAndIndex(shape, streamIdx, axisIdx) = b.requestInput(this)
+        val shapeAndIndex @ ShapeAndIndex(shape, streamIdx, axisIdx) = b.requestInput(this)
         val shapeRed  = shape.updated(streamIdx, 1)               // same as removal when applying `product`!
         val divL      = (1L /: shapeRed.drop(axisIdx + 1))(_ * _) // note: empty product == 1
         val axisSize  = shapeRed(axisIdx)
+        // note: matSize is generally smaller than shapeRed.product, because
+        // we can exploit signal repetition in multi-channel matching in SuperCollider
         val matSizeL  = axisSize * divL
         if (matSizeL > 0xFFFFFF) sys.error(s"Matrix too large for axis value generation ($matSizeL)")
         val div       = divL.toInt
         val matSize   = matSizeL.toInt
         val dimVals   = axis.asDim.values
-        // println(s"axisSize = $axisSize, div = $div")
+        logDebug(s"$this: $shapeAndIndex; axisSize = $axisSize, div = $div, matSize = $matSize")
         Vector.tabulate(matSize)(i => dimVals \ (i/div)): synth.GE
       }
     }
@@ -122,7 +125,7 @@ object Var {
   final case class Axis(variable: Var.Play, dim: String) {
     override def productPrefix = "Var$Axis"
 
-    override def toString = s"$variable.axis($dim)"
+    override def toString = s"""$variable.axis($dim)"""
 
     def values    : synth.GE = Axis.Values(this)
 
