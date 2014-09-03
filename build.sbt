@@ -43,6 +43,7 @@ lazy val slfVersion                 = "1.7.7"
 lazy val scalaTestVersion           = "2.2.2"
 
 libraryDependencies ++= Seq(
+  "de.sciss" %% "treetable-scala" % "1.3.7", // !!! a stale 1.3.6 causes crashs on OS X (DropLocation was final)
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
   "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
