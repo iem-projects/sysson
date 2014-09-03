@@ -1,3 +1,17 @@
+/*
+ *  SonificationObjView.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
+ *  Written by Hanns Holger Rutz.
+ *
+ *	This software is published under the GNU General Public License v3+
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
+
 package at.iem.sysson
 package gui
 package impl
@@ -23,12 +37,12 @@ import de.sciss.synth.proc.{ExprImplicits, Folder, Obj}
 import scala.swing.{Component, Label}
 
 object SonificationObjView extends ObjView.Factory {
-  ObjView.addFactory(this)
-
   type E[S <: Sys[S]] = Sonification.Elem[S]
   final val prefix  = "Sonification"
   final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.Feed)
   final val typeID  = SonificationElemImpl.typeID
+
+  ObjView.addFactory(this)
 
   def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
     val name      = obj.attr.name

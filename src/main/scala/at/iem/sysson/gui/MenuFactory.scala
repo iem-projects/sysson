@@ -16,18 +16,19 @@ package at.iem.sysson
 package gui
 
 import de.sciss.desktop.{OptionPane, Desktop, KeyStrokes, Menu}
+import de.sciss.lucre.synth.Txn
+import scala.concurrent.stm.TxnExecutor
 import scala.swing.{Label, Action}
 import de.sciss.lucre.event.{Sys, Durable}
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.file._
 import gui.{SwingApplication => App}
 import language.existentials
-import at.iem.sysson.sound.AudioSystem
 import de.sciss.{osc, synth}
 import scala.swing.event.{Key, MouseClicked}
 import java.net.URL
-import de.sciss.mellite.gui.{LogFrame, ActionNewWorkspace, ActionOpenWorkspace}
-import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.{ActionPreferences, LogFrame, ActionNewWorkspace, ActionOpenWorkspace}
+import de.sciss.mellite.{Mellite, Workspace}
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -141,17 +142,16 @@ object MenuFactory {
 
     gActions
       .add(Item("stop-all-sound",     proxy("Stop All Sound",           menu1 + Key.Period)))
+      .addLine()
       .add(Item("debug-print",        proxy("Debug Print",              menu2 + Key.P)))
       .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + Key.D))(dumpOSC()))
+      .add(Item("toggle-log")("Debug Logging")(toggleLog()))
 
     // if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
 
     val gView = Group("view", "View")
-      .add(
-        Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P)) {
-          LogFrame.instance.log.clear()
-        }
-      )
+      .add(Item("show-log" )("Show Log Window"  -> (menu1         + Key.P))(logToFront()))
+      .add(Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P))(clearLog  ()))
     val gWindow = Group("window", "Window")
     //  .add(Item("windowShot",         proxy("Export Window as PDF...")))
 
@@ -204,12 +204,31 @@ object MenuFactory {
 
   private var dumpMode: osc.Dump = osc.Dump.Off
 
-  def dumpOSC(): Unit = AudioSystem.instance.server.foreach { s =>
-    dumpMode = if (dumpMode == osc.Dump.Off) osc.Dump.Text else osc.Dump.Off
-    s.peer.dumpOSC(dumpMode, filter = {
-      case m: osc.Message if m.name == "/$meter" => false
-      case _ => true
-    })
+  def dumpOSC(): Unit = {
+    val sOpt = TxnExecutor.defaultAtomic { itx =>
+      implicit val tx = Txn.wrap(itx)
+      Mellite.auralSystem.serverOption
+    }
+    sOpt.foreach { s =>
+      dumpMode = if (dumpMode == osc.Dump.Off) osc.Dump.Text else osc.Dump.Off
+      s.peer.dumpOSC(dumpMode, filter = {
+        case m: osc.Message if m.name == "/$meter" => false
+        case _ => true
+      })
+      println(s"DumpOSC is ${if (dumpMode == osc.Dump.Text) "ON" else "OFF"}")
+    }
+  }
+
+  def clearLog  (): Unit = LogFrame.instance.log.clear()
+  def logToFront(): Unit = LogFrame.instance.front()  // XXX TODO - should avoid focus transfer
+
+  def toggleLog(): Unit = {
+    val enabled = !showLog
+    showLog                               = enabled
+    de.sciss.synth.proc.showLog           = enabled
+    de.sciss.synth.proc.showAuralLog      = enabled
+    de.sciss.synth.proc.showTransportLog  = enabled
+    println(s"Logging is ${if (enabled) "ON" else "OFF"}")
   }
 
   //  private def dumpOSC_OLD(): Unit = {

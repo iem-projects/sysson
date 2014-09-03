@@ -38,6 +38,8 @@ import java.awt.datatransfer.Transferable
 import java.awt.Color
 import de.sciss.mellite.Workspace
 
+import scala.swing.event.MouseButtonEvent
+
 object SonificationSourceViewImpl {
   private val DEBUG = false
 
@@ -50,15 +52,24 @@ object SonificationSourceViewImpl {
 
     // import workspace.cursor
     val mapHOpt     = map.modifiableOption.map(tx.newHandle(_))
+    implicit val resolver = WorkspaceResolver[S]
+    import Stats.executionContext
     val matView     = MatrixView[S]
     matView.nameVisible = false
     val res         = new Impl[S](matView, mapHOpt, key = key, keyDimNames = keyDimNames)
-    res.sourceObserver  = map.changed.react {
-      implicit tx => upd => upd.changes.foreach {
+    // println(s"OBSERVE $map")
+    res.sourceObserver  = map.changed.react { implicit tx => upd =>
+      // println(s"OBSERVE CHANGES $upd")
+      upd.changes.foreach {
         case expr.Map.Added  (`key`, source) => res.updateSource(Some(source)) // .data.file.base))
         case expr.Map.Removed(`key`, source) => res.updateSource(None)
-        // case expr.Map.Element(`key`, source, sourceUpdate)  => res.update(now       )
+        case expr.Map.Element(`key`, source, sourceUpdate) =>
+          // XXX TODO -- this is not seen yet somehow
+
+          // println(s"MAP.ELEMENT $sourceUpdate")
+          // res.update(now       )
         case _ =>
+          // println(s"OBSERVED OTHER $other (MY KEY $key")
       }
     }
     if (DEBUG) println(s"SonificationSourceView(map = $map; ${map.changed}); sourceObserver = ${res.sourceObserver}")
@@ -111,6 +122,7 @@ object SonificationSourceViewImpl {
       disposeDimMap()
 
       sourceOptRef.set(sourceOpt.map(tx.newHandle(_)))(tx.peer)
+      // println(s"updateSource($sourceOpt)")
       matrixView.matrix = sourceOpt.map(_.matrix)
 
       val tup = sourceOpt.map { source =>
@@ -129,16 +141,30 @@ object SonificationSourceViewImpl {
       }
 
       deferTx {
-        tup.fold {
-          ggDataName.text = ""
-        } { dataName =>
-          ggDataName.text = dataName
-        }
+        ggDataName.text = tup.getOrElse("")
+        // println(s"ggDataName.text = ${ggDataName.text}")
       }
     }
 
+    private def removeMatrix(): Unit = mapHOpt.foreach { mapH =>
+      val edit = cursor.step { implicit tx =>
+        val map = mapH()
+        EditMutableMap("Remove Matrix", map, key, None)
+      }
+      undoManager.add(edit)
+    }
+
     def guiInit(): Unit = {
-      ggDataName  = new TextField(16)
+      ggDataName = new TextField(16) { txt =>
+        listenTo(mouse.clicks)
+        reactions += {
+          case e: MouseButtonEvent if e.triggersPopup =>
+            new PopupMenu {
+              contents += new MenuItem(Action("Remove Matrix")(removeMatrix()))
+              show(txt, e.point.x, e.point.y)
+            }
+        }
+      }
       // dataName0.foreach(ggDataName.text = _)
       ggDataName.editable = false
       ggDataName.border   = Swing.CompoundBorder(outside = ggDataName.border,
@@ -147,17 +173,28 @@ object SonificationSourceViewImpl {
         DropButton.installTransferHandler[MatrixDrag](ggDataName, DragAndDrop.MatrixFlavor) { drag0 =>
           if (drag0.workspace == workspace) {
             val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
-            val edit  = cursor.step { implicit tx =>
+            val edit = cursor.step { implicit tx =>
               val map     = mapH()
               val v       = drag.matrix()
-              val name    = "Assign Data Source Variable"
-              map.get(key).flatMap(src => Matrix.Var.unapply(src.matrix)).fold {
+              val name    = "Assign Matrix"
+              val sourceOpt = map.get(key)
+              val vrOpt   = sourceOpt.flatMap(src => Matrix.Var.unapply(src.matrix))
+              // println(s"DROP. vrOpt = $vrOpt; map = $map")
+              val res = vrOpt.fold {
                 val vr      = Matrix.Var(v) // so that the matrix becomes editable in its view
                 val source  = Sonification.Source(vr)
+                // println(s"EditMutableMap($name, $map, $key, Some($source))")
                 EditMutableMap(name, map, key, Some(source))
               } { vr =>
-                EditVar(name, vr, v)
+                // println(s"EditVar($name, $vr, $v")
+                val _edit = EditVar(name, vr, v)
+                updateSource(sourceOpt)  // XXX TODO - stupid work-around
+                _edit
               }
+
+              // refreshName.foreach(ggDataName.text = _)
+
+              res
             }
             undoManager.add(edit)
             true

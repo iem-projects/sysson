@@ -15,6 +15,7 @@
 package at.iem
 
 import at.iem.sysson.gui.impl.DataSourceElem
+import at.iem.sysson.sound.impl.AuralSonificationImpl
 import de.sciss.mellite.Code
 import ucar.nc2
 import de.sciss.{mellite, synth}
@@ -98,6 +99,7 @@ package object sysson {
     // PatchElemImpl
     SonificationElemImpl
     DataSourceElem
+    AuralSonificationImpl
     importExtensions
   }
 }

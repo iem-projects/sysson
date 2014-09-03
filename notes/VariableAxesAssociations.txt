@@ -52,3 +52,4 @@ hence:
     val div = shape_red.drop(axis_index + 1).product  // note: List.empty[Int].product == 1
     val axis_size = shape_red(axis_index)
     Vec.tabulate(axis_size * div)(i => axis_signal \ (i/div))
+

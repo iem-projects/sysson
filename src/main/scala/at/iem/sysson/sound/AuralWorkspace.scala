@@ -1,36 +1,36 @@
-/*
- *  AuralWorkspace.scala
- *  (SysSon)
- *
- *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
- *  Written by Hanns Holger Rutz.
- *
- *	This software is published under the GNU General Public License v3+
- *
- *
- *	For further information, please contact Hanns Holger Rutz at
- *	contact@sciss.de
- */
-
-package at.iem.sysson
-package sound
-
-import de.sciss.lucre.event.Sys
-import de.sciss.synth.proc.{Obj, Grapheme}
-import scala.concurrent.Future
-import de.sciss.lucre.synth
-import de.sciss.mellite.Workspace
-
-trait AuralWorkspace[S <: Sys[S], I1 <: synth.Sys[I1]] {
-
-  val workspace: Workspace[S] { type I = I1 }
-
-  def view(sonification: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonification[S, I1]
-
-  private[sysson] def graphemeCache(section: VariableSection)
-                                   (implicit tx: S#Tx): (Grapheme.Expr.Audio[I1], Future[Unit])
-
-  private[sysson] def nextID()(implicit tx: S#Tx): Int
-
-  private[sysson] def addBuffer(grapheme: Grapheme.Value.Audio)(implicit tx: S#Tx): Unit
-}
+///*
+// *  AuralWorkspace.scala
+// *  (SysSon)
+// *
+// *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
+// *  Written by Hanns Holger Rutz.
+// *
+// *	This software is published under the GNU General Public License v3+
+// *
+// *
+// *	For further information, please contact Hanns Holger Rutz at
+// *	contact@sciss.de
+// */
+//
+//package at.iem.sysson
+//package sound
+//
+//import de.sciss.lucre.event.Sys
+//import de.sciss.synth.proc.{Obj, Grapheme}
+//import scala.concurrent.Future
+//import de.sciss.lucre.synth
+//import de.sciss.mellite.Workspace
+//
+//trait AuralWorkspace[S <: Sys[S], I1 <: synth.Sys[I1]] {
+//
+//  val workspace: Workspace[S] { type I = I1 }
+//
+//  // def view(sonification: Obj.T[S, Sonification.Elem])(implicit tx: S#Tx): AuralSonificationOLD[S, I1]
+//
+//  private[sysson] def graphemeCache(section: VariableSection)
+//                                   (implicit tx: S#Tx): (Grapheme.Expr.Audio[I1], Future[Unit])
+//
+//  private[sysson] def nextID()(implicit tx: S#Tx): Int
+//
+//  private[sysson] def addBuffer(grapheme: Grapheme.Value.Audio)(implicit tx: S#Tx): Unit
+//}

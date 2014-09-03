@@ -16,6 +16,7 @@ package at.iem.sysson
 
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.synth.proc.WorkspaceHandle
 import ucar.nc2.NetcdfFile
 import scala.concurrent.stm.{Txn, InTxn, TMap}
 import de.sciss.file._
@@ -25,12 +26,13 @@ import de.sciss.mellite.Workspace
 
 /** Associates a workspace with a file cache for NetCDF resources. */
 object WorkspaceResolver {
-  implicit def apply[S <: Sys[S]](implicit ws: Workspace[S]): DataSource.Resolver[S] = new Wrap(ws)
+  implicit def apply[S <: Sys[S]](implicit workspaceHandle: WorkspaceHandle[S]): DataSource.Resolver[S] =
+    new Wrap(workspaceHandle)
 
   // key = workspace
   private val map = TMap.empty[Any, Resolver]
 
-  private final class Wrap[S <: Sys[S]](val ws: Workspace[S]) extends DataSource.Resolver[S] {
+  private final class Wrap[S <: Sys[S]](val ws: WorkspaceHandle[S]) extends DataSource.Resolver[S] {
     def resolve(file: File)(implicit tx: S#Tx): NetcdfFile = {
       implicit val itx = tx.peer
       val res = map.get(ws).getOrElse {
@@ -48,7 +50,7 @@ object WorkspaceResolver {
     def resolve(file: File)(implicit tx: InTxn): NetcdfFile
   }
 
-  private final class ResolverImpl[S <: Sys[S]](ws: Workspace[S]) extends Resolver with Disposable[S#Tx] {
+  private final class ResolverImpl[S <: Sys[S]](ws: WorkspaceHandle[S]) extends Resolver with Disposable[S#Tx] {
     private val fileCache = TMap.empty[File, NetcdfFile]
 
     def resolve(file: File)(implicit tx: InTxn): NetcdfFile =

@@ -26,7 +26,7 @@ import de.sciss.lucre.stm
 import de.sciss.mellite.gui.ViewHasWorkspace
 
 object SonificationView {
-  def apply[S <: Sys[S]](sonification: Obj.T[S, Sonification.Elem])
+  def apply[S <: Sys[S]](sonification: Sonification.Obj[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] =
     Impl(sonification)
 
@@ -38,5 +38,5 @@ trait SonificationView[S <: Sys[S]]
   with View.Editable[S]
   with Model[SonificationView.Update] {
 
-  def sonification(implicit tx: S#Tx): Obj.T[S, Sonification.Elem]
+  def sonification(implicit tx: S#Tx): Sonification.Obj[S]
 }

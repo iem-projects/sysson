@@ -1,12 +1,15 @@
 package at.iem.sysson
 
-import sound.AudioSystem
 import de.sciss.file._
+import de.sciss.lucre.synth.Txn
+import de.sciss.mellite.Mellite
 import de.sciss.synth
 import synth._
 import io.SampleFormat
 import ugen._
 import synth.Ops._
+
+import scala.concurrent.stm.TxnExecutor
 
 /** A utility trait that can be mixed in to quickly get going with some tests.
   * For example do `object MySession extends SessionLike` and define the `run` method
@@ -39,9 +42,19 @@ trait SessionLike extends App {
       }
     } .start()
 
-    AudioSystem.start().whenBooted { _ => run() }
+    val as = Mellite.auralSystem
+    atomic { implicit tx =>
+      as.whenStarted(_ => run())
+      as.start()
+    }
+
   } else {
     run()
+  }
+
+  private def atomic[A](fun: Txn => A): A = TxnExecutor.defaultAtomic { itx =>
+    val tx = Txn.wrap(itx)
+    fun(tx)
   }
 
   lazy val dataName  = "25_ta_Amon_HadGEM2-ES_rcp45_r1i1p1_200512-210012.nc"
@@ -56,7 +69,7 @@ trait SessionLike extends App {
   def s = Server.default
 
   def quit(): Unit = {
-    AudioSystem.instance.stop()
+    // AudioSystem.instance.stop()
     sys.exit()
   }
 

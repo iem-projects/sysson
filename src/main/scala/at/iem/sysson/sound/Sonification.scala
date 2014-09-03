@@ -20,7 +20,7 @@ import evt.{Publisher, Sys}
 import de.sciss.lucre.expr.Expr
 import de.sciss.model
 import de.sciss.lucre.expr
-import de.sciss.synth.proc.{Proc, Obj}
+import de.sciss.synth.proc.Proc
 import impl.{SonificationImpl => Impl}
 import de.sciss.serial.{Serializer, DataInput}
 import de.sciss.lucre.matrix.Matrix
@@ -63,6 +63,11 @@ object Sonification {
     def apply[S <: Sys[S]](matrix: Matrix[S])(implicit tx: S#Tx): Source[S] =
       Impl.applySource(matrix)
   }
+  /** A sonification source is a matrix paired with a dimensional map.
+    *
+    * @see [[at.iem.sysson.graph.Var]]
+    * @see [[at.iem.sysson.graph.Dim]]
+    */
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
     def matrix: Matrix[S]
     /** Maps sonification model/patch dimensions (keys) to source matrix dimensions (values). */
@@ -77,12 +82,6 @@ object Sonification {
 
     implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Sonification.Elem[S]] =
       Impl.SonificationElemImpl.serializer
-
-    object Obj {
-      def unapply[S <: Sys[S]](obj: Obj[S]): Option[proc.Obj.T[S, Sonification.Elem]] =
-        if (obj.elem.isInstanceOf[Sonification.Elem[S]]) Some(obj.asInstanceOf[proc.Obj.T[S, Sonification.Elem]])
-        else None
-    }
   }
   trait Elem[S <: Sys[S]] extends proc.Elem[S] {
     type Peer       = Sonification[S]
@@ -90,14 +89,31 @@ object Sonification {
 
     def mkCopy()(implicit tx: S#Tx): Elem[S]
   }
+
+  object Obj {
+    def unapply[S <: Sys[S]](obj: Obj[S]): Option[Sonification.Obj[S]] =
+      if (obj.elem.isInstanceOf[Sonification.Elem[S]]) Some(obj.asInstanceOf[Sonification.Obj[S]])
+      else None
+  }
+
+  type Obj[S <: Sys[S]] = proc.Obj.T[S, Sonification.Elem]
 }
+/** A sonification pairs a sound process with a map to data sources and user controls. */
 trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
-  // def patch: Obj.T[S, Patch.Elem]
-  def proc: Obj.T[S, Proc.Elem]
+  /** The sound process that implements the sonification */
+  def proc: Proc.Obj[S]
 
+  /** A map from logical keys to sonification sources. A source is
+    * a matrix paired with a dimensional map.
+    *
+    * @see [[at.iem.sysson.graph.Var]]
+    * @see [[at.iem.sysson.graph.Dim]]
+    */
   def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
-  def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
 
-  //  /** A scalar attribute map */
-  //  def attr: AttrMap.Modifiable[S]
+  /** A map from logical keys to control values.
+    *
+    * @see [[at.iem.sysson.graph.UserValue]]
+    */
+  def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
 }

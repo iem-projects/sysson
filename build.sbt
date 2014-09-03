@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.8.1-SNAPSHOT"
+version       := "0.9.0"
 
 organization  := "at.iem.sysson"
 
@@ -14,9 +14,9 @@ licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.11.1"
+scalaVersion  := "2.11.2"
 
-crossScalaVersions := Seq("2.11.1", "2.10.4")
+crossScalaVersions := Seq("2.11.2", "2.10.4")
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
@@ -24,19 +24,38 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 // maven repository for Oracle BDB JE
 resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
+// ---- library versions ----
+
+lazy val melliteVersion             = "0.10.0"
+
+lazy val lucreMatrixVersion         = "0.3.0"
+
+lazy val scalaColliderSwingVersion  = "1.18.0"
+
+lazy val fileCacheVersion           = "0.3.2"
+
+lazy val swingTreeVersion           = "0.1.1"
+
+//lazy val jfreechartVersion          = "1.0.19"
+
+lazy val slfVersion                 = "1.7.7"
+
+lazy val scalaTestVersion           = "2.2.2"
+
 libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite"                        % "0.8.0",          // computer music environment
-  "de.sciss" %% "lucrematrix"                    % "0.2.0",          // reactive matrix component and view
-  "de.sciss" %% "filecache-txn"                  % "0.3.2",          // caching statistics of data files
-  "de.sciss" %% "scala-swing-tree"               % "0.1.1",          // tree component
-  "de.sciss" %% "guiflitz"                       % "0.3.2",
-  "org.jfree" % "jfreechart"                     % "1.0.17",         // plotting
-  "org.slf4j" % "slf4j-simple"                   % "1.7.7"           // logging (used by netcdf)
+  "de.sciss" %% "treetable-scala" % "1.3.7", // !!! a stale 1.3.6 causes crashs on OS X (DropLocation was final)
+  "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
+  "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
+  "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
+  "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
+  "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
+//  "org.jfree" % "jfreechart"                % jfreechartVersion,          // plotting
+  "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
 )
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
 
-retrieveManaged := true
+// retrieveManaged := true
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
 
@@ -71,7 +90,7 @@ buildInfoPackage := organization.value
 publishMavenStyle := true
 
 publishTo :=
-  Some(if (version.value endsWith "-SNAPSHOT")
+  Some(if (isSnapshot.value)
     "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
   else
     "Sonatype Releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
@@ -97,6 +116,8 @@ pomExtra := { val n = name.value
 
 // ---- packaging (making standalones) ----
 
+lazy val mainClazz = Some("at.iem.sysson.Main")
+
 // windows/linux
 
 seq(assemblySettings: _*)
@@ -107,7 +128,7 @@ target    in assembly := baseDirectory.value    // make .jar file in the main di
 
 jarName   in assembly := s"${name.value}.jar"
 
-mainClass in assembly := Some("at.iem.sysson.Main")
+mainClass in assembly := mainClazz
 
 //mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
 //  {
@@ -128,9 +149,11 @@ appbundle.icon := {
   Some(icn)
 }
 
-appbundle.mainClass   := Some("at.iem.sysson.Main")
+appbundle.mainClass   := mainClazz
 
-appbundle.javaOptions ++= Seq("-Xms2048m", "-Xmx2048m", "-XX:PermSize=256m", "-XX:MaxPermSize=512m")
+// appbundle.javaOptions ++= Seq("-Xmx2048m", "-XX:MaxPermSize=512m")
+
+appbundle.javaOptions ++= Seq("-Xms2048m", "-Xmx2048m", "-XX:PermSize=256m", "-XX:MaxPermSize=512m", "-server")
 
 appbundle.target      := baseDirectory.value      // make .app bundle in the main directory
 

@@ -12,34 +12,33 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson.graph
+package at.iem.sysson
+package graph
 
+import at.iem.sysson.sound.impl.MatrixPrepare
+import at.iem.sysson.sound.impl.MatrixPrepare.ShapeAndIndex
 import de.sciss.synth
-import de.sciss.synth.{proc, ScalarRated, UGenInLike, AudioRated}
-import at.iem.sysson.sound.AuralSonification
+import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
+import de.sciss.synth.{ScalarRated, UGenInLike}
 
 object Var {
-  sealed trait GE extends synth.GE.Lazy with SonificationElement {
-    def variable: Var
-
-    // def axis(dim: Dim): Axis
-  }
-
-  case class Play(variable: Var, time: Dim.Play)
-    extends /* impl.LazyImpl with */ GE with AudioRated {
+  final case class Play(variable: Var, time: Dim.Play, interp: Int)
+    extends MatrixPrepare.VarGE with MatrixPrepare.PlayGE with UGB.Input {
 
     override def productPrefix  = "Var$Play"
     override def toString       = s"$variable.play($time)"
 
-    protected def makeUGens: UGenInLike = {
-      val aural = AuralSonification.current()
-      val key   = aural.attributeKey(this)
-      import synth.ugen._
-      val bufSr     = SampleRate.ir  // note: VDiskIn uses server sample rate as scale base
-      val speed     = time.freq / bufSr
-      // val maxSpeed
-      proc.graph.VDiskIn.ar(key, speed = speed, interp = 1 /*, maxSpeed = maxSpeed */)  // XXX TODO: need server.sampleRate for maxSpeed
-    }
+    type Key    = Dim
+    def  key    = time.dim
+
+    protected def freq = time.freq
+    def maxFreq = time.maxFreq
+
+    private[sysson] def dimOption: Option[Dim] = Some(time.dim)
+
+    //    protected def makeUGens: UGenInLike =
+    //      MatrixPrepare.makeUGenOLD(this, key = MatrixPrepare.mkKeyOLD(time.dim, isDim = false),
+    //        freq = time.freq, interp = interp)
 
     def axis(dim: Dim): Var.Axis = {
       require (dim.variable == variable, s"Dimension ${dim.name} does not belong to variable $variable")
@@ -47,29 +46,29 @@ object Var {
     }
   }
 
-  case class Values(variable: Var) extends GE with ScalarRated {
+  final case class Values(variable: Var)
+    extends MatrixPrepare.VarGE with MatrixPrepare.ValuesGE with UGB.Input {
 
     override def productPrefix  = "Var$Values"
     override def toString       = s"$variable.values"
 
-    protected def makeUGens: UGenInLike = {
-      val aural = AuralSonification.current()
-      val key   = aural.attributeKey(this)
-      proc.graph.attribute(key).ir
-    }
+    type Key    = Var
+    def  key    = variable
+
+    private[sysson] def dimOption: Option[Dim] = None
   }
 
-  /** Declares a new sonification variable (data source).
-    *
-    * @param name         Logical name by which the source is referred to
-    * @param higherRank   Whether a matrix rank higher than `dimensions.size` is permitted
-    */
-  def apply(name: String, /* dims: Vec[Dim], */ higherRank: Boolean = false): Var =
-    Impl(name, higherRank)
-
-  def unapply(vr: Var): Option[(String, /* Vec[Dim], */ Boolean /*, Vec[Var.Op] */)] = Some(
-    vr.name, vr.higherRank
-  )
+  //  /** Declares a new sonification variable (data source).
+  //    *
+  //    * @param name         Logical name by which the source is referred to
+  //    * @param higherRank   Whether a matrix rank higher than `dimensions.size` is permitted
+  //    */
+  //  def apply(name: String, /* dims: Vec[Dim], */ higherRank: Boolean = false): Var =
+  //    Impl(name, higherRank)
+  //
+  //  def unapply(vr: Var): Option[(String, /* Vec[Dim], */ Boolean /*, Vec[Var.Op] */)] = Some(
+  //    vr.name, vr.higherRank
+  //  )
 
   // implicit def serializer: ImmutableSerializer[Var] = impl.VarImpl.serializer
 
@@ -78,82 +77,99 @@ object Var {
   // XXX TODO: should be common trait with SelectedRange (values, indices, extent, size, startValue, ...)
 
   object Axis {
-    case class Values(axis: Var.Axis)
-      extends synth.GE.Lazy /* impl.LazyImpl */ with SonificationElement with ScalarRated {
+    final case class Key(stream: Dim, axis: String) extends UGB.Key {
+      override def productPrefix = "Var.Axis.Key"
+      override def toString = s"$productPrefix(stream = $stream, axis = $axis)"
+    }
+    final case class Values(axis: Var.Axis)
+      extends MatrixPrepare.GE with ScalarRated {
 
       override def productPrefix = "Var$Axis$Values"
 
       override def toString = s"$axis.values"
 
-      // protected def makeUGens(b: UGenGraphBuilderOLD): UGenInLike = b.addScalarAxis(axis.playing, axis.ref)
+      type Key = Axis.Key
+      def key: Key = Axis.Key(stream = axis.variable.time.dim, axis = axis.dim)
+
+      type Value = ShapeAndIndex
+
+      def variable: Var = axis.variable.variable
 
       protected def makeUGens: UGenInLike = {
-        val keyComp   = AuralSonification.current().attributeKey(this)
-        val keySp     = keyComp.split(";")
-        val key       = keySp(0)
-        val axisSize  = keySp(1).toInt
-        val div       = keySp(2).toInt
-        val axisSignal= proc.graph.attribute(key).ir
-        println(s"axisSize = $axisSize, div = $div")
-        Vector.tabulate(axisSize * div)(i => axisSignal \ (i/div)): synth.GE
+        val b         = UGB.get
+        // cf. VariableAxesAssociations.txt
+        val shapeAndIndex @ ShapeAndIndex(shape, streamIdx, axisIdx) = b.requestInput(this)
+        val shapeRed  = shape.updated(streamIdx, 1)               // same as removal when applying `product`!
+        val divL      = (1L /: shapeRed.drop(axisIdx + 1))(_ * _) // note: empty product == 1
+        val axisSize  = shapeRed(axisIdx)
+        // note: matSize is generally smaller than shapeRed.product, because
+        // we can exploit signal repetition in multi-channel matching in SuperCollider
+        val matSizeL  = axisSize * divL
+        if (matSizeL > 0xFFFFFF) sys.error(s"Matrix too large for axis value generation ($matSizeL)")
+        val div       = divL.toInt
+        val matSize   = matSizeL.toInt
+        val dimVals   = axis.asDim.values
+        logDebug(s"$this: $shapeAndIndex; axisSize = $axisSize, div = $div, matSize = $matSize")
+        Vector.tabulate(matSize)(i => dimVals \ (i/div)): synth.GE
       }
     }
   }
 
   /** A reference to a dimensional axis with respect to a variable section.
-    * The difference between this and for instance `SelectDim` is that the
+    * The difference between this and for instance `Dim` is that the
     * graph element producing methods such as `values` and `indices` produce
     * multi-channel signals which correctly align with the underlying variable section.
     * This allows signal processing which combines each sample value from a
     * variable with the corresponding axes elements.
     */
-  case class Axis(variable: Var.Play, dim: String) {
+  final case class Axis(variable: Var.Play, dim: String) {
     override def productPrefix = "Var$Axis"
 
-    override def toString = s"$variable.axis($dim)"
+    override def toString = s"""$variable.axis($dim)"""
 
     def values    : synth.GE = Axis.Values(this)
 
-    def indices   : synth.GE = ???
-
-    def startValue: synth.GE = ???
-
-    def endValue  : synth.GE = ???
+    // def indices   : synth.GE = ...
+    // def startValue: synth.GE = ...
+    // def endValue  : synth.GE = ...
 
     def asDim: Dim = Dim(variable.variable, dim)
   }
 
-  // -------- VarImpl --------
-
-  private final case class Impl(name: String, higherRank: Boolean)
-    extends Var {
-
-    override def productPrefix = "Var"
-
-    def dim(name: String): Dim = Dim(this, name)
-
-    // def ir: Var.GE = ...
-    // def kr: Var.GE = ...
-
-    def values: Var.Values = Var.Values(this)
-
-    def play(time: Dim.Play): Var.Play = Var.Play(this, time)
-  }
+  //  // -------- VarImpl --------
+  //
+  //  private final case class Impl(name: String, higherRank: Boolean)
+  //    extends Var {
+  //
+  //    override def productPrefix = "Var"
+  //
+  //    def dim(name: String): Dim = Dim(this, name)
+  //
+  //    // def ir: Var.GE = ...
+  //    // def kr: Var.GE = ...
+  //
+  //    def values: Var.Values = Var.Values(this)
+  //
+  //    def play(time: Dim.Play, interp: Int): Var.Play = Var.Play(this, time, interp)
+  //  }
 }
-trait Var extends UserInteraction {
-  /** Logical name by which the source is referred to */
-  def name: String
+// XXX TODO - remove obsolete `higherRank` argument, once we don't need session compatibility
+final case class Var(name: String, higherRank: Boolean = true) extends UserInteraction with UGB.Key {
+  //  /** Logical name by which the source is referred to */
+  //  def name: String
 
-  def dim(name: String): Dim
+  override def toString = s"""$productPrefix("$name")"""
 
-  /** Whether a matrix rank higher than `dimensions.size` is permitted */
-  def higherRank: Boolean
+  def dim(name: String): Dim = Dim(this, name)
+
+  //  /** Whether a matrix rank higher than `dimensions.size` is permitted */
+  //  def higherRank: Boolean
 
   // def ir: Var.GE
   // def kr: Var.GE
 
-  def values: Var.Values
+  def values: Var.Values = Var.Values(this)
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
-  def play(time: Dim.Play): Var.Play
+  def play(time: Dim.Play, interp: Int = 1): Var.Play = Var.Play(this, time, interp)
 }

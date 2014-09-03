@@ -51,10 +51,13 @@ private[gui] object InterpreterViewImpl {
       intpCfg.imports = List(
         "at.iem.sysson._",
         "at.iem.sysson.Implicits._",
+        "de.sciss.file._",
+        "de.sciss.osc.Implicits._",
         "de.sciss.synth._",
         "de.sciss.synth.ugen._",
         "de.sciss.synth.Ops._",
-        "de.sciss.osc.Implicits._",
+        "de.sciss.synth.swing.Implicits._",     // ScalaCollider swing extensions
+        "de.sciss.synth.swing.Plotting._",      // ScalaCollider swing app extensions
         // "scala.concurrent.duration._",
         "at.iem.sysson.gui.InterpreterView.Bindings._"
       )

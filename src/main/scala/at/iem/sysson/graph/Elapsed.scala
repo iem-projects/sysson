@@ -1,7 +1,7 @@
 package at.iem.sysson.graph
 
-import at.iem.sysson.sound.AuralSonification
 import de.sciss.synth
+import de.sciss.synth.proc.UGenGraphBuilder
 import de.sciss.synth.{proc, HasSideEffect, UGenInLike, GE, Rate, control, audio}
 
 /** A special graph element that measures the progress of a playing dimension.
@@ -32,17 +32,18 @@ object Elapsed {
   * @param terminate   if `true`, stops the synth when 100% is reached
   */
 final case class Elapsed(rate: Rate, in: Dim.Play, terminate: Boolean)
-  extends GE.Lazy with SonificationElement with HasSideEffect {
+  extends GE.Lazy /* with SonificationElement */ with HasSideEffect {
 
   /* Important: in order for `Dim.IndexRange` to be found in the aural
    * sonification, the "expansion" should happen immediately, not late.
    * Thus it must be created now.
    */
-  private val numFrames = in.dim.size
+  private val numFrames = ??? : Int // in.dim.size
 
   protected def makeUGens: UGenInLike = {
-    val key       = AuralSonification.current().attributeKey(this)
-    val reportID  = proc.graph.attribute(key).ir
+    val b         = UGenGraphBuilder.get
+    val key: String = ??? //       = AuralSonificationOLD.current().attributeKey(this)
+    val reportID  = proc.graph.Attribute.ir(key)
     import synth._
     import synth.ugen._
     val frame     = Sweep(rate, 0, in.freq) // speed = increment _per second_

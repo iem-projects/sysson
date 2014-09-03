@@ -332,7 +332,7 @@ object DataSourceViewImpl {
       // but the caller needs to make selections to tGroupVars for example,
       // so that update must happen synchronously. eventually we could
       // add a filter to `groupSelected` not to do the work twice.
-      groupSelected(group)
+      groupSelected(group)    // XXX TODO - problematic -- resets table column widths
     }
 
     def selectedVariable: Option[nc2.Variable] = {
@@ -346,7 +346,10 @@ object DataSourceViewImpl {
       val sel = tGroupVars.selection.rows
       opt match {
         case Some(vr) =>
-          selectGroup(vr.group)
+          // the following line is not needed, we only have one group in all
+          // the common files; the problem of `selectGroup` is that it
+          // re-adjusts all the table column widths
+          //  selectGroup(vr.group)
           val row = mGroupVars.data.indexOf(vr)
           if (row >= 0 && sel.leadIndex != row) sel += row
 
