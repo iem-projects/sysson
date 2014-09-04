@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.9.0"
+version       := "0.9.1-SNAPSHOT"
 
 organization  := "at.iem.sysson"
 
@@ -28,6 +28,8 @@ resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 lazy val melliteVersion             = "0.10.0"
 
+lazy val soundProcessesVersion      = "2.6.1"  // explicit, until Mellite is at 0.10.1
+
 lazy val lucreMatrixVersion         = "0.3.0"
 
 lazy val scalaColliderSwingVersion  = "1.18.0"
@@ -45,6 +47,7 @@ lazy val scalaTestVersion           = "2.2.2"
 libraryDependencies ++= Seq(
   "de.sciss" %% "treetable-scala" % "1.3.7", // !!! a stale 1.3.6 causes crashs on OS X (DropLocation was final)
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
+  "de.sciss" %% "soundprocesses"              % soundProcessesVersion,      // BUGFIX
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
   "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
   "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
