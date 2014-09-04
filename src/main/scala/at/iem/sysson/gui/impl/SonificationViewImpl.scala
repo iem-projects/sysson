@@ -34,7 +34,7 @@ import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView, deferTx}
 import de.sciss.icons.raphael
 import scala.concurrent.stm.Ref
 import scala.swing.event.ButtonClicked
-import scala.swing.{Action, Orientation, BoxPanel, ToggleButton, Swing, Alignment, Label, FlowPanel, Component}
+import scala.swing.{ScrollPane, Action, Orientation, BoxPanel, ToggleButton, Swing, Alignment, Label, FlowPanel, Component}
 import scala.util.control.NonFatal
 import de.sciss.model.impl.ModelImpl
 import de.sciss.lucre.matrix.gui.MatrixView
@@ -302,12 +302,15 @@ object SonificationViewImpl {
       val pTransport = new FlowPanel(Swing.HStrut(101), transportButtons, ggMute, ggElapsed)
       pTransport.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Transport")
 
-      component = new BoxPanel(Orientation.Vertical) {
-        contents += pHeader
-        contents += Separator()
+      val box = new BoxPanel(Orientation.Vertical) {
         contents += pMapping
         contents += Separator()
         contents += pControls
+      }
+      component = new BoxPanel(Orientation.Vertical) {
+        contents += pHeader
+        contents += Separator()
+        contents += new ScrollPane(box) { border = null }
         contents += Separator()
         contents += pTransport
       }
