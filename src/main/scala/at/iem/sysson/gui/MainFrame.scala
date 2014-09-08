@@ -49,7 +49,7 @@ object MainFrame {
     }
     pack()
 
-    GUI.placeWindow(this, horizontal = horizontalPlacement, vertical = verticalPlacement, padding = placementPadding)
+    desktop.Util.placeWindow(this, horizontal = horizontalPlacement, vertical = verticalPlacement, padding = placementPadding)
 
     // front()
   }

@@ -15,6 +15,7 @@
 package at.iem.sysson.gui
 package impl
 
+import de.sciss.desktop
 import de.sciss.lucre.event.Sys
 import scala.swing.{Alignment, Label}
 import de.sciss.icons.raphael
@@ -104,7 +105,7 @@ object SonificationAssocViewImpl {
       val lb      = new Label("nnnnn")
       // icon = Icons.Target(extent = 16)
       lb.icon = raphael.Icon(extent = 24)(raphael.Shapes.Clip) // .Disconnect)
-      GUI.fixSize(lb)
+      desktop.Util.fixSize(lb)
       lb.text = null
       lb.horizontalAlignment = Alignment.Leading
       lb.peer.setTransferHandler(new TransferHandler(null) {

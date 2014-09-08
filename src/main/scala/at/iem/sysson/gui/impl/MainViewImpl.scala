@@ -43,7 +43,7 @@ private[gui] object MainViewImpl {
 
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 
-  private final class Impl(bg: Option[Color]) extends MainView with DynamicComponentImpl {
+  private final class Impl(bg: Option[Color]) extends MainView {
     def boot(): Unit = Mellite.startAuralSystem() // atomic { implicit tx => Mellite.auralSystem.start() }
 
     private lazy val serverStatus = new ServerStatusPanel {
@@ -106,21 +106,6 @@ private[gui] object MainViewImpl {
       fun(tx)
     }
 
-    protected def componentShown(): Unit = {
-      val sOpt = atomic { implicit tx =>
-        val as = Mellite.auralSystem
-        as.addClient(audioListener)
-        as.serverOption
-      }
-      deferAudioUpdated(sOpt)
-    }
-
-
-    protected def componentHidden(): Unit =
-      atomic { implicit tx =>
-        Mellite.auralSystem.removeClient(audioListener)
-      }
-
     private lazy val mainMeters = new PeakMeter {
       numChannels   = 2
       orientation   = Orientation.Horizontal
@@ -135,12 +120,26 @@ private[gui] object MainViewImpl {
       }
     }
 
-    lazy val component = new BoxPanel(Orientation.Vertical) {
+    lazy val component = new BoxPanel(Orientation.Vertical) with DynamicComponentImpl {
       bg.foreach(background = _)
       contents += box1
       contents += mainMeters
       contents += RigidBox((2, 4))
       contents += serverStatus
+
+      protected def componentShown(): Unit = {
+        val sOpt = atomic { implicit tx =>
+          val as = Mellite.auralSystem
+          as.addClient(audioListener)
+          as.serverOption
+        }
+        deferAudioUpdated(sOpt)
+      }
+
+      protected def componentHidden(): Unit =
+        atomic { implicit tx =>
+          Mellite.auralSystem.removeClient(audioListener)
+        }
     }
   }
 }

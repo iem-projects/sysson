@@ -77,7 +77,7 @@ private[gui] object InterpreterViewImpl {
       contents  = impl.component
       closeOperation = desktop.Window.CloseDispose
       pack()
-      GUI.centerOnScreen(this)
+      desktop.Util.centerOnScreen(this)
       front()
     }
   }

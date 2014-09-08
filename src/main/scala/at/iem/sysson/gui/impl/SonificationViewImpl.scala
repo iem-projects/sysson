@@ -44,9 +44,7 @@ import de.sciss.mellite.gui.{AttrMapFrame, CodeFrame, GUI}
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Sonification.Obj[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] = {
-    implicit val undoMgr = new UndoManagerImpl {
-      protected var dirty: Boolean = false
-    }
+    implicit val undoMgr = new UndoManagerImpl
     val sonifH    = tx.newHandle(sonification)
     val nameView  = sonification.attr.expr[String](ObjKeys.attrName).map { expr =>
       // import workspace.cursor
