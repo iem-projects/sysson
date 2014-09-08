@@ -1,8 +1,8 @@
 package at.iem.sysson
 package turbulence
 
-import java.awt.geom.{Path2D, GeneralPath}
-import java.awt.{Cursor, Color, Toolkit}
+import java.awt.geom.{Ellipse2D, Path2D, GeneralPath}
+import java.awt.{BasicStroke, Cursor, Color}
 import javax.swing.ImageIcon
 
 import scala.swing.event.MouseMoved
@@ -28,8 +28,12 @@ class DymaxionView extends Component {
 
   // private var tri = ((-1, -1), (-1, -1), (-1, -1))
 
-  private val gp          = new GeneralPath(Path2D.WIND_NON_ZERO, 4)
+  private val gpFill      = new GeneralPath(Path2D.WIND_NON_ZERO,  4)
+  private val gpStroke    = new GeneralPath(Path2D.WIND_NON_ZERO, 20)
+  private val circle      = new Ellipse2D.Float()
   private val colrTri     = new Color(0xFF, 0x00, 0x00, 0x7F)
+  private val colrGain    = Color.blue
+  private val strkGain    = new BasicStroke(2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array(2f, 2f), 0f)
 
   override protected def paintComponent(g: Graphics2D): Unit = {
     g.setColor(Color.gray)
@@ -38,7 +42,12 @@ class DymaxionView extends Component {
     image.paintIcon(peer, g, gainRadius, gainRadius)
 
     g.setColor(colrTri)
-    g.fill(gp)
+    g.fill(gpFill)
+    val strkOrig = g.getStroke
+    g.setColor(colrGain)
+    g.setStroke(strkGain)
+    g.draw(gpStroke)
+    g.setStroke(strkOrig)
   }
 
   preferredSize = (w1, h1)
@@ -48,39 +57,77 @@ class DymaxionView extends Component {
   reactions += {
     case MouseMoved(_, pt, _) =>
       // cf. https://stackoverflow.com/questions/8043947/indexing-in-equilateral-triangle-grid-given-simple-2d-cartesian-coordinates
-      val xf  = (pt.x.toFloat - gainRadius) / hSz
+      val xf  = math.max(0f, (pt.x.toFloat - gainRadius) / hSz)
       val x   = xf.toInt
       val u   = xf - x
-      val yf  = (pt.y.toFloat - gainRadius) / vSz
+      val yf  = math.max(0f, (pt.y.toFloat - gainRadius) / vSz)
       val y0  = yf.toInt
       val v   = yf - y0
 
-      // val x   = if (v - u > 0 || ((((x0 % 2) ^ (y % 2)) == 1) || v + u < 1)) x0 - 1 else x0
-      val y   = if (u - v > 0 || ((((y0 % 2) ^ (x % 2)) == 1) || u + v < 1)) y0 - 1 else y0
+      // note, we add two to avoid problems with negative numbers,
+      // but have to take care to subtract that later
+      val y   =
+        if (((y0 % 2) ^ (x % 2)) == 1) {
+          if (u + v < 1) y0 + 1 else y0 + 2
+        } else {
+          if (u - v > 0) y0 + 1 else y0 + 2
+        }
 
-      val vx1 = x + y%2
-      val vy1 = y/2 + y%2
+      val yDiv  = y / 2 - 1 // the minus 1 corrects the offset
+      val yOdd  = y % 2
+      val yEven = 1 - yOdd
+      val xOdd  = x % 2
 
-      val vx2 = x + (y%2^x%2)
-      val vy2 = y/2 + (1-(y%2))
+      val vx1  = x + yOdd
+      val vy1i = yDiv + yOdd
+      val vy1  = vy1i * 2 + (vx1 % 2)
 
-      val vx3 = x + (1-(y%2))
-      val vy3 = y/2 + (y%2)
+      val vx2  = x + (yOdd ^ xOdd)
+      val vy2i = yDiv + yEven
+      val vy2  = vy2i * 2 + (vx2 % 2)
 
-      println(s"x = $x, y = $y")
-      println(s"triangle = [$vx1,$vy1; $vx2,$vy2; $vx3,$vy3]")
+      val vx3  = x + yEven
+      val vy3i = yDiv + yOdd
+      val vy3  = vy3i * 2 + (vx3 % 2)
 
-      def move(x: Int, y: Int, first: Boolean): Unit = {
-        val y1  = 2 * y + x % 2
-        val xp  = x  * hSz + gainRadius
-        val yp  = y1 * vSz + gainRadius
-        if (first) gp.moveTo(xp, yp) else gp.lineTo(xp, yp)
+      //      println(s"x = $x, y = $y")
+      //      println(s"triangle = [$vx1,$vy1; $vx2,$vy2; $vx3,$vy3]")
+
+      // cf. https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+      def dist(x: Float, y: Float)(lx1: Int, ly1: Int, lx2: Int, ly2: Int): Float = {
+        // |Dy x0 - Dx y0 - x1 y2 + x2 y1| / sqrt(Dx.squared + Dy.squared)
+        // - we assume a normalized Dx, Dy, and thus drop the division
+        // - indeed we know the height is two and divide by it
+
+        val dx = lx2 - lx1
+        val dy = ly2 - ly1
+        math.abs(dy * x - dx * y - lx1 * ly2 + lx2 * ly1) / 2
       }
 
-      gp.reset()
-      move(vx1, vy1, first = true )
-      move(vx2, vy2, first = false)
-      move(vx3, vy3, first = false)
+      val df = dist(xf, yf) _
+      val d1 = df(vx2, vy2, vx3, vy3)
+      val d2 = df(vx3, vy3, vx1, vy1)
+      val d3 = df(vx1, vy1, vx2, vy2)
+      // println(f"d1 = $d1%1.2f, d2 = $d2%1.2f, d3 = $d3%1.2f, sum = ${d1 + d2 + d3}%1.2f")
+      val g1 = math.sqrt(d1)
+      val g2 = math.sqrt(d2)
+      val g3 = math.sqrt(d3)
+      // println(f"gain1 = $g1%1.2f, gain2 = $g2%1.2f, gain3 = $g3%1.2f, power-sum = ${math.sqrt(g1*g1 + g2*g2 + g3*g3)}%1.2f")
+
+      def move(x: Int, y: Int, gain: Double, first: Boolean): Unit = {
+        val xp  = x * hSz + gainRadius
+        val yp  = y * vSz + gainRadius
+        if (first) gpFill.moveTo(xp, yp) else gpFill.lineTo(xp, yp)
+        val g = gain * 12
+        circle.setFrameFromCenter(xp, yp, xp + g, yp + g)
+        gpStroke.append(circle, false)
+      }
+
+      gpFill  .reset()
+      gpStroke.reset()
+      move(vx1, vy1, g1, first = true )
+      move(vx2, vy2, g2, first = false)
+      move(vx3, vy3, g3, first = false)
       // repaint(gp.getBounds)
       repaint()
   }

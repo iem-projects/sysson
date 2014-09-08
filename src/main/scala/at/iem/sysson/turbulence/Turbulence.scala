@@ -12,6 +12,7 @@ object Turbulence extends App with Runnable {
     Main.run()
     new Frame {
       contents = new DymaxionView
+      resizable = false
       pack()
       centerOnScreen()
       open()
