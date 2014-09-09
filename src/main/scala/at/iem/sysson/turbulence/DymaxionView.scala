@@ -10,6 +10,9 @@ import scala.swing.{Swing, Graphics2D, Component}
 import Swing._
 
 class DymaxionView extends Component {
+  private val DRAW_SPKR       = true
+  private val DRAW_SPKR_IDX   = true
+
   // private val image = Toolkit.getDefaultToolkit.createImage(getClass.getClassLoader.getResource("dymaxion.png"))
   private val url         = getClass.getResource("dymaxion.png")
   private val image       = new ImageIcon(url)
@@ -18,7 +21,10 @@ class DymaxionView extends Component {
   private val hSz         = 92
   private val vNum        = 9 // 3
   private val vSz         = 53.33333f // 160
-  private val vSz1        = vSz * 2
+  private val vNum1       = vNum / 2
+
+  private val numCols     = hNum  + 1
+  private val numRows     = vNum1 + 1
 
   private val gainRadius  = 16
   private val w           = hNum * hSz  // 1196
@@ -32,14 +38,44 @@ class DymaxionView extends Component {
   private val gpStroke    = new GeneralPath(Path2D.WIND_NON_ZERO, 20)
   private val circle      = new Ellipse2D.Float()
   private val colrTri     = new Color(0xFF, 0x00, 0x00, 0x7F)
+  private val colrSpkr    = new Color(0x00, 0xFF, 0xFF, 0x7F)
+  private val colrEmpty   = new Color(0x00, 0x00, 0x00, 0x4F)
   private val colrGain    = Color.blue
-  private val strkGain    = new BasicStroke(2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array(2f, 2f), 0f)
+  // private val strkGain    = new BasicStroke(2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array(2f, 2f), 0f)
+  private val strkGain    = new BasicStroke(2f)
 
   override protected def paintComponent(g: Graphics2D): Unit = {
     g.setColor(Color.gray)
     g.fillRect(0, 0, w1, h1)
     // g.drawImage(image, 0, 0, peer)
     image.paintIcon(peer, g, gainRadius, gainRadius)
+
+    if (DRAW_SPKR) {
+      var vx = 0; while (vx < numCols) {
+        var vyi = 0; while (vyi < numRows) {
+          val vy  = vyi * 2 + (vx % 2)
+          val xp  = vx * hSz + gainRadius
+          val yp  = vy * vSz + gainRadius
+          circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
+          val chanOpt = Turbulence.ChannelMap.get((vx, vyi))
+          g.setColor(if (chanOpt.isDefined) colrSpkr else colrEmpty)
+          g.fill(circle)
+          if (DRAW_SPKR_IDX) {
+            g.setColor(Color.black)
+            g.drawString(s"$vx,$vyi", xp + 10, yp - 5)
+            g.setColor(Color.white)
+            g.drawString(s"$vx,$vyi", xp +  9, yp - 6)
+            chanOpt.foreach { ch =>
+              g.setColor(Color.blue)
+              val s = ch.toString
+              g.drawString(ch.toString, xp + (if (s.length == 1) -4 else -7), yp + 4)
+            }
+          }
+          vyi += 1
+        }
+        vx += 1
+      }
+    }
 
     g.setColor(colrTri)
     g.fill(gpFill)
@@ -91,7 +127,7 @@ class DymaxionView extends Component {
       val vy3  = vy3i * 2 + (vx3 % 2)
 
       //      println(s"x = $x, y = $y")
-      //      println(s"triangle = [$vx1,$vy1; $vx2,$vy2; $vx3,$vy3]")
+      // println(s"triangle = [$vx1,$vy1i; $vx2,$vy2i; $vx3,$vy3i]")
 
       // cf. https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
       def dist(x: Float, y: Float)(lx1: Int, ly1: Int, lx2: Int, ly2: Int): Float = {
