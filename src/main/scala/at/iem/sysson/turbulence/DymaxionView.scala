@@ -177,7 +177,8 @@ class DymaxionView extends Component {
           val graph = SynthGraph {
             import de.sciss.synth._
             import ugen._
-            val sig = PinkNoise.ar(0.5)
+            // val sig = PinkNoise.ar(0.5)
+            val sig = Dust.ar(400)
             for (i <- 1 to 3) {
               val bus   = s"c$i".ar(0f)
               val gain  = s"g$i".ar(0f)
