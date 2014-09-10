@@ -8,6 +8,7 @@ import javax.swing.ImageIcon
 import de.sciss.lucre.synth.{Escape, Txn, Synth}
 import de.sciss.mellite.Mellite
 import de.sciss.synth.{addToTail, SynthGraph}
+import Dymaxion.Pt2
 
 import scala.concurrent.stm.{TxnExecutor, Ref}
 import scala.swing.event.{MouseDragged, MouseReleased, MousePressed, MouseMoved}
@@ -49,6 +50,14 @@ class DymaxionView extends Component {
   // private val strkGain    = new BasicStroke(2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array(2f, 2f), 0f)
   private val strkGain    = new BasicStroke(2f)
 
+  private var _mark = Option.empty[Pt2]
+
+  def mark: Option[Pt2] = _mark
+  def mark_=(value: Option[Pt2]): Unit = if (_mark != value) {
+    _mark = value
+    repaint()
+  }
+
   override protected def paintComponent(g: Graphics2D): Unit = {
     g.setColor(Color.gray)
     g.fillRect(0, 0, w1, h1)
@@ -89,6 +98,14 @@ class DymaxionView extends Component {
     g.setStroke(strkGain)
     g.draw(gpStroke)
     g.setStroke(strkOrig)
+
+    mark.foreach { case (vx, vy) =>
+      val xp  = vx * hSz + gainRadius
+      val yp  = vy * vSz + gainRadius
+      circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
+      g.setColor(Color.yellow)
+      g.fill(circle)
+    }
   }
 
   preferredSize = (w1, h1)

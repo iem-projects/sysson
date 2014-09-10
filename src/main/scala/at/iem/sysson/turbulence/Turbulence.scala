@@ -8,6 +8,10 @@ import scala.swing.Frame
 object Turbulence extends App with Runnable {
   EventQueue.invokeLater(this)
 
+  /** Maps from (x, y) index with respect to the
+    * equilateral triangle grid to speaker channel
+    * (1-based offset)
+    */
   final val ChannelMap = Map[(Int, Int), Int](
     ( 4, 0) ->  3,
     ( 6, 0) ->  5,
@@ -58,8 +62,20 @@ object Turbulence extends App with Runnable {
 
   def run(): Unit = {
     Main.run()
+
+    val dyn   = new DymaxionView
+    val merc  = new MercatorView(dyn)
+
     new Frame {
-      contents = new DymaxionView
+      contents = dyn
+      resizable = false
+      pack()
+      centerOnScreen()
+      open()
+    }
+
+    new Frame {
+      contents = merc
       resizable = false
       pack()
       centerOnScreen()
