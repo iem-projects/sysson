@@ -39,8 +39,8 @@ class DymaxionView1 extends Component {
     image.paintIcon(peer, g, 0, 0)
 
     mark.foreach { case (vx, vy) =>
-      val xp  = vx    * hSz + hOff
-      val yp  = h -vy * vSz + vOff
+      val xp  = (vx - 0.5) * hSz + hOff
+      val yp  = h - (vy + 1.0/math.sqrt(3)) * vSz + vOff
       circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
       g.setColor(Color.yellow)
       g.fill(circle)

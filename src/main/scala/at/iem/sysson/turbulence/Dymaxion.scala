@@ -4,6 +4,8 @@ import de.sciss.numbers
 import numbers.Implicits._
 import math.{sqrt, sin, cos, asin, acos, atan, atan2, Pi}
 
+// death penality for C programmers who mutate arguments, re-use variables and use 1-based indices
+
 /** Utility functions for Dymaxion(TM) projections. */
 object Dymaxion {
   private final val phi = (1 + sqrt(5)) / 2
@@ -40,6 +42,7 @@ object Dymaxion {
   private val isoR_FOO    = isoR0.map(i => mul(i, normFactor))
 
   private val isoR = Vector(
+    ( -99.0, -99.0, -99.0),
     ( 0.420152426708710003,  0.078145249402782959,  0.904082550615019298),
     ( 0.995009439436241649, -0.091347795276427931,  0.040147175877166645),
     ( 0.518836730327364437,  0.835420380378235850,  0.181331837557262454),
@@ -62,10 +65,11 @@ object Dymaxion {
   )
 
   private val faces = Vector(
-    ( 0, 1, 2), ( 0, 2, 3), ( 0,  3, 4), ( 0,  4, 5), ( 0, 1, 5),
-    ( 1, 2, 7), ( 7, 2, 8), ( 8,  2, 3), ( 9,  8, 3), ( 4, 9, 3),
-    ( 4,10, 9), ( 4, 5,10), (10,  5, 6), ( 6,  5, 1), ( 7, 6, 1),
-    (11, 8, 7), (11, 8, 9), (11, 10, 9), (11, 10, 6), (11, 7, 6)
+    (0,0,0),
+    ( 1, 2, 3), ( 1, 3, 4), ( 1,  4, 5), ( 1,  5, 6), ( 1, 2, 6),
+    ( 2, 3, 8), ( 8, 3, 9), ( 9,  3, 4), (10,  9, 4), ( 5,10, 4),
+    ( 5,11,10), ( 5, 6,11), (11,  6, 7), ( 7,  6, 2), ( 8, 7, 2),
+    (12, 9, 8), (12, 9,10), (12, 11,10), (12, 11, 7), (12, 8, 7)
   )
 
   private def mag(in: Pt3): Double = {
@@ -116,26 +120,39 @@ object Dymaxion {
     mapCartesian(pt)
   }
 
-  private val face1Gray = Vector(1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6, 2, 2, 8, 9, 10, 11, 8)
+  private val face1Gray = Vector(-99, 1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6, 2, 2, 8, 9, 10, 11, 8)
 
-  def mapCartesian(pt: Pt3): Pt2 = {
-    val faceIdx = findFaceIndex(pt)
+  def mapCartesian(h0: Pt3): Pt2 = {
+    val tri = findFaceIndex(h0)
 
     // val vIdx    = faces(faceIdx)._1
-    val vIdx = face1Gray(faceIdx)
+    val v1 = face1Gray(tri)
 
-    val v       = isoR(vIdx)      // cartesian coordinates of one of the face's vertices
-    val c       = center(faceIdx) // cartesian coordinates of        the face's center
+    val h1      = isoR(v1)      // cartesian coordinates of one of the face's vertices
+    val c       = center(tri) // cartesian coordinates of        the face's center
 
-    val (cTheta, cPhi)    = cartesianToPolar(c)
+    val (hlng, hlat)    = c_to_s(c)
     //    val ptNorm            = rotateY(rotateZ(pt, -cPhi), -cTheta)
     //    val vNorm             = rotateY(rotateZ(v , -cPhi), -cTheta)
-    val ptNorm            = rotateY_Gray(rotateZ_Gray(pt, cPhi), cTheta)
-    val vNorm             = rotateY_Gray(rotateZ_Gray(v , cPhi), cTheta)
+    val h0_b = r2(3, hlng, h0)
+    val h1_b = r2(3, hlng, h1)
 
-    val (_, vPhiN)        = cartesianToPolar(vNorm)
-    // val (h0x, h0y, _)     = rotateZ(ptNorm, Pi - vPhiN)
-    val (h0x, h0y, _)     = rotateZ_Gray(ptNorm, vPhiN - Pi)
+    val h0_c = r2(2, hlat, h0_b)
+    val h1_c = r2(2, hlat, h1_b)
+
+    val (hlng_b, hlat_b) = c_to_s(h1_c)
+    val hlng_c = hlng_b - 90.0.toRadians
+
+    val h0_d = r2(3,hlng_c,h0_c);
+
+    //    val ptNorm            = rotateY_Gray(rotateZ_Gray(/* c */ h0, hlng), hlat)
+    //    val vNorm             = rotateY_Gray(rotateZ_Gray(h1 , hlng), hlat)
+
+//    val (_, vPhiN)        = cartesianToPolar(vNorm)
+//    // val (h0x, h0y, _)     = rotateZ(ptNorm, Pi - vPhiN)
+//    val (h0x, h0y, _)     = rotateZ_Gray(ptNorm, vPhiN - Pi)
+
+    val (h0x, h0y, h0z) = h0_d
 
     val gz = sqrt(1 - h0x * h0x - h0y * h0y)
     val gs = sqrt(5 + 2 * sqrt(5)) / (gz * sqrt(15))
@@ -162,7 +179,7 @@ object Dymaxion {
     //    val (vx, vyi) = triPos(faceIdx)
     //    val vy  = vyi * 2 + (vx % 2)
 
-    val ang = triRota_GRAY(faceIdx).toRadians
+    val ang = triRota_GRAY(tri).toRadians
     val xr  = x * cos(ang) - y * sin(ang)
     val yr  = x * sin(ang) + y * cos(ang)
 
@@ -170,7 +187,7 @@ object Dymaxion {
     //
     //    (vx + xr * 2 * korr, vy - yr * 3 / korr)
 
-    val (addX, addY) = triPos_GRAY(faceIdx)
+    val (addX, addY) = triPos_GRAY(tri)
     (xr + addX, yr + addY)
   }
 
@@ -181,7 +198,7 @@ object Dymaxion {
 
   private val triRota_GRAY = Vector(
     //  0    1  2   3     4   5    6  7  8             9  10   11  12  13  14  15          16  17   18  19
-    240, 300, 0, 60, 180, 300, 300, 0, 0 /* 300 */, 60, 60, 120, 60, 0,  0,  0 /* 60 */, 0, 120, 120, 300
+   -99, 240, 300, 0, 60, 180, 300, 300, 0, 0 /* 300 */, 60, 60, 120, 60, 0,  0,  0 /* 60 */, 0, 120, 120, 300
   )
 
   private val triRota = Vector(
@@ -199,6 +216,7 @@ object Dymaxion {
   )
 
   private val triPos_GRAY = Vector(
+    (-99.0, -99.0),
     (2.0, 7.0 / (2.0 * sqrt(3.0))),
     (2.0, 5.0 / (2.0 * sqrt(3.0))),
     (2.5, 2.0 / sqrt(3.0)),
@@ -282,6 +300,31 @@ object Dymaxion {
     (x * cs + y * sn, -x * sn + y * cs, z)
   }
 
+  private def r2(axis: Int, alpha: Double, in: Pt3): Pt3 = {
+    var (x, y, z) = in
+    val a = x
+    val b = y
+    val c = z
+    if (axis == 1)
+    {
+      y = b * cos(alpha) + c * sin(alpha);
+      z = c * cos(alpha) - b * sin(alpha);
+    }
+
+    if (axis == 2)
+    {
+      x = a * cos(alpha) - c * sin(alpha);
+      z = a * sin(alpha) + c * cos(alpha);
+    }
+
+    if (axis == 3)
+    {
+      x = a * cos(alpha) + b * sin(alpha);
+      y = b * cos(alpha) - a * sin(alpha);
+    }
+    (x, y, z)
+  }
+
   private def lonLatToPolar(lon: Double, lat: Double): (Double, Double) = {
     val theta = (90 - lat).toRadians
     val phi   = ((lon + 360) % 360).toRadians
@@ -300,7 +343,7 @@ object Dymaxion {
     (acos(z), atan2(y, x))
   }
 
-  private def cartesianToPolar(pt: Pt3): (Double, Double) = {
+  private def c_to_s(pt: Pt3): (Double, Double) = {
     var a = 0.0
     val (x, y, z) = pt
 
@@ -318,6 +361,6 @@ object Dymaxion {
     if (x<0.0 && y==0.0){ lng = radians(180.0);}
     if (x!=0.0 && y!=0.0){ lng = atan(y/x) + a;}
 
-    (lat, lng) // (lng, lat)
+    (lng, lat)
   }
 }
