@@ -1,33 +1,31 @@
 package at.iem.sysson.turbulence
 
-import de.sciss.numbers
-import numbers.Implicits._
-import math.{sqrt, sin, cos, asin, acos, atan, atan2, Pi}
-
-// death penality for C programmers who mutate arguments, re-use variables and use 1-based indices
+import math.{sqrt, sin, cos, asin, acos, atan, atan2}
 
 /** Utility functions for Dymaxion(TM) projections. */
 object Dymaxion {
   private final val phi = (1 + sqrt(5)) / 2
 
   type Pt2 = (Double, Double)
-  type Pt3 = (Double, Double, Double)
+  // type Pt3 = (Double, Double, Double)
+
+  final case class Pt3(x: Double, y: Double, z: Double)
 
   // cf. https://en.wikipedia.org/wiki/Icosahedron
   // cartesian coordinates of the 12 vertices
-  private val iso0 = Vector[Pt3](
-    (0.0, +1.0, +phi),
-    (0.0, -1.0, +phi),
-    (0.0, +1.0, -phi),
-    (0.0, -1.0, -phi),
-    (+1.0, +phi, 0.0),
-    (-1.0, +phi, 0.0),
-    (+1.0, -phi, 0.0),
-    (-1.0, -phi, 0.0),
-    (+phi, 0.0, +1.0),
-    (-phi, 0.0, +1.0),
-    (+phi, 0.0, -1.0),
-    (-phi, 0.0, -1.0)
+  private val iso0 = Array[Pt3](
+    Pt3(0.0, +1.0, +phi),
+    Pt3(0.0, -1.0, +phi),
+    Pt3(0.0, +1.0, -phi),
+    Pt3(0.0, -1.0, -phi),
+    Pt3(+1.0, +phi, 0.0),
+    Pt3(-1.0, +phi, 0.0),
+    Pt3(+1.0, -phi, 0.0),
+    Pt3(-1.0, -phi, 0.0),
+    Pt3(+phi, 0.0, +1.0),
+    Pt3(-phi, 0.0, +1.0),
+    Pt3(+phi, 0.0, -1.0),
+    Pt3(-phi, 0.0, -1.0)
   )
 
   // these rotations were applied by Gray;
@@ -36,73 +34,34 @@ object Dymaxion {
   private val rotX =  -9.28 // degrees
   private val rotY = -33.76 // degrees
 
-  private val isoR0 = iso0.map(i => rotateY(rotateX(i, rotX.toRadians), rotY.toRadians))
+  private val isoR0: Array[Pt3] = iso0.map(i => rotateY(rotateX(i, rotX.toRadians), rotY.toRadians))
 
-  private val normFactor  = 1.0 / mag((0, 1, phi))
+  private val normFactor  = 1.0 / mag(Pt3(0, 1, phi))
   private val isoR        = isoR0.map(i => mul(i, normFactor))
 
-  private val isoR_GRAY = Vector(
-    ( 0.420152426708710003,  0.078145249402782959,  0.904082550615019298),
-    ( 0.995009439436241649, -0.091347795276427931,  0.040147175877166645),
-    ( 0.518836730327364437,  0.835420380378235850,  0.181331837557262454),
-    (-0.414682225320335218,  0.655962405434800777,  0.630675807891475371),
-    (-0.515455959944041808, -0.381716898287133011,  0.767200992517747538),
-    ( 0.355781402532944713, -0.843580002466178147,  0.402234226602925571),
-    ( 0.414682225320335218, -0.655962405434800777, -0.630675807891475371),
-    ( 0.515455959944041808,  0.381716898287133011, -0.767200992517747538),
-    (-0.355781402532944713,  0.843580002466178147, -0.402234226602925571),
-    (-0.995009439436241649,  0.091347795276427931, -0.040147175877166645),
-    (-0.518836730327364437, -0.835420380378235850, -0.181331837557262454),
-    (-0.420152426708710003, -0.078145249402782959, -0.904082550615019298)
-  )
-
-  private val faces = Vector(
+  private val faces = Array[(Int, Int, Int)](
     ( 0, 1, 8), ( 0, 1, 9), ( 0, 4, 5), ( 0, 4, 8), ( 0, 5, 9),
-    ( 1, 6, 7), (/**/ 1, 6, 8), (/**/ 1, 7, 9), ( 3,10, 2), ( 3,11, 2),
-    ( 4, 5, 2), ( 4,10, 2), ( 5,11, 2), (/**/ 3, 6, 7), (/**/ 3, 6,10),
+    ( 1, 6, 7), ( 1, 6, 8), ( 1, 7, 9), ( 3,10, 2), ( 3,11, 2),
+    ( 4, 5, 2), ( 4,10, 2), ( 5,11, 2), ( 3, 6, 7), ( 3, 6,10),
     ( 7,11, 3), ( 8,10, 4), ( 9,11, 5), (10, 6, 8), ( 7, 9,11)
   )
 
-  private def face1(idx: Int) = faces(idx)._1
+  private def mag(in: Pt3): Double = sqrt(in.x * in.x + in.y * in.y + in.z * in.z)
 
-//  private val face1 = Vector(0, 0, 0, 0, 0,
-//                             1, 2, 2, 3, 3,
-//                             4, 4, 5, 1, 1,
-//                             7, 8, 9, 10, 7)
+  private def mul(in: Pt3, f: Double): Pt3 = Pt3(in.x * f, in.y * f, in.z *f)
 
-  private val faces_GRAY = Vector(
-    ( 1, 2, 3), ( 1, 3, 4), ( 1,  4, 5), ( 1,  5, 6), ( 1, 2, 6),
-    ( 2, 3, 8), ( 8, 3, 9), ( 9,  3, 4), (10,  9, 4), ( 5,10, 4),
-    ( 5,11,10), ( 5, 6,11), (11,  6, 7), ( 7,  6, 2), ( 8, 7, 2),
-    (12, 9, 8), (12, 9,10), (12, 11,10), (12, 11, 7), (12, 8, 7)
-  ) .map { case (a,b,c) => (a-1, b-1, c-1) }
-
-  private def mag(in: Pt3): Double = {
-    val (x, y, z) = in
-    (x.squared + y.squared + z.squared).sqrt
-  }
-
-  private def mul(in: Pt3, f: Double): Pt3 = {
-    val (x, y, z) = in
-    (x * f, y * f, z *f)
-  }
-
-  private def sub(a: Pt3, b: Pt3): Pt3 = {
-    val (x1, y1, z1) = a
-    val (x2, y2, z2) = b
-    (x2 - x1, y2 - y1, z2 - z1)
-  }
+  private def sub(a: Pt3, b: Pt3): Pt3 = Pt3(b.x - a.x, b.y - a.y, b.z - a.z)
 
   // cartesian coordinates of the centers of the 20 faces
-  val center: Vector[Pt3] = faces.map { case (a, b, c) =>
-    val (x1, y1, z1) = isoR(a)
-    val (x2, y2, z2) = isoR(b)
-    val (x3, y3, z3) = isoR(c)
-    val cx = (x1 + x2 + x3)/3
-    val cy = (y1 + y2 + y3)/3
-    val cz = (z1 + z2 + z3)/3
-    val m  = mag((cx, cy, cz))
-    (cx / m, cy / m, cz / m)
+  private val center: Array[Pt3] = faces.map { case (a, b, c) =>
+    val pa = isoR(a)
+    val pb = isoR(b)
+    val pc = isoR(c)
+    val cx = (pa.x + pb.x + pc.x)/3
+    val cy = (pa.y + pb.y + pc.y)/3
+    val cz = (pa.z + pb.z + pc.z)/3
+    val m  = mag(Pt3(cx, cy, cz))
+    Pt3(cx / m, cy / m, cz / m)
   }
 
   private def lonLatToCartesian(lon: Double, lat: Double): Pt3 = {
@@ -110,7 +69,7 @@ object Dymaxion {
     polarToCartesian(theta, phi)
   }
 
-  def findFaceIndex(lon: Double, lat: Double): Int /* (Double, Double) */ = {
+  def findFaceIndex(lon: Double, lat: Double): Int = {
     val pt = lonLatToCartesian(lon, lat)
     findFaceIndex(pt)
   }
@@ -130,11 +89,9 @@ object Dymaxion {
   def mapCartesian(h0: Pt3): Pt2 = {
     val faceIdx = findFaceIndex(h0)
 
-    // val vIdx    = faces(faceIdx)._1
-    val vIdx    = face1(faceIdx)
-
+    val vIdx    = faces(faceIdx)._1
     val h1      = isoR  (vIdx)      // cartesian coordinates of one of the face's vertices
-    val c       = center(faceIdx) // cartesian coordinates of        the face's center
+    val c       = center(faceIdx)   // cartesian coordinates of        the face's center
 
     val (hLng, hLat)    = cartesianToPolar(c)
     //    val ptNorm            = rotateY(rotateZ(pt, -cPhi), -cTheta)
@@ -157,7 +114,7 @@ object Dymaxion {
 //    // val (h0x, h0y, _)     = rotateZ(ptNorm, Pi - vPhiN)
 //    val (h0x, h0y, _)     = rotateZ_Gray(ptNorm, vPhiN - Pi)
 
-    val (h0x, h0y, _) = h0_d
+    val Pt3(h0x, h0y, _) = h0_d
 
     val gz = sqrt(1 - h0x * h0x - h0y * h0y)
     val gs = sqrt(5 + 2 * sqrt(5)) / (gz * sqrt(15))
@@ -192,59 +149,23 @@ object Dymaxion {
 
     val vy  = vyi * 2 + (vx % 2)
 
-    val korr = 1.0 / 0.8660254037844386 // XXX TODO
-    (vx + xr * 2, vy - yr * 3 * korr)
+    (vx + xr * xScale, vy - yr * yScale)
   }
 
-  private val triRota_FOO = Vector(
-    //  0  1  2  3  4   5   6   7   8  9 10 11 12  13   14   15 16 17 18  19
-    20, 0, 0, 0, 0, 30, 90, 330, 0, 0, 0, 0, 0, 150, 90, 210, 0, 0, 0, 270
-  )
-
-  private val triRota_GRAY = Vector(
-    //  0    1  2   3     4   5    6  7  8             9  10   11  12  13  14  15          16  17   18  19
-    240, 300, 0, 60, 180, 300, 300, 0, 0 /* 300 */, 60, 60, 120, 60, 0,  0,  0 /* 60 */, 0, 120, 120, 300
-  )
-
-  //  private val triRota = Vector(
-  //    //  0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
-  //      120,  60, 240, 180, 300, 120,   0, 240, 180, 120, 300, 180, 300,  60,  60,  60, 240, 240,  60,   0
-  //  )
+  private final val xScale = 2
+  private final val yScale = 2 * sqrt(3)
 
   // maps between face indices and dymaxion coordinates, as
   // corresponding to the labels in the dymaxion view (vx, vyi)
   private val triPos = Vector(
     //  0            1           2            3            4
     (7, 2, 120), (7, 3, 60), (5, 2, 240), (6, 2, 180), (5, 3, 300),
-    //  5            6          7            8            9
-    (9, 2, 120), (8, 2, 0), (9, 3, 240), (1, 3, 180), (2, 4, 120),
-    // 10            11          12            13           14
-    (4, 2, 300), (5, 0, 180), (3, 3, 300), (11, 2, 60), (12, 2, 60),
+    //  5            6            7           8            9
+    (9, 2, 120), (8, 2, 180), (9, 3, 60), (1, 3, 180), (2, 4, 120),
+    // 10            11          12            13            14
+    (4, 2, 300), (5, 0, 180), (3, 3, 300), (11, 2, 240), (12, 2, 180),
     //  15          16           17           18           19
     (11, 3, 60), (6, 1, 240), (4, 4, 240), (7, 0, 60), (10, 4, 0)
-  )
-
-  private val triPos_GRAY = Vector(
-    (2.0, 7.0 / (2.0 * sqrt(3.0))),
-    (2.0, 5.0 / (2.0 * sqrt(3.0))),
-    (2.5, 2.0 / sqrt(3.0)),
-    (3.0, 5.0 / (2.0 * sqrt(3.0))),
-    (2.5, 4.0 * sqrt(3.0) / 3.0),
-    (1.5, 4.0 * sqrt(3.0) / 3.0),
-    (1.0, 5.0 / (2.0 * sqrt(3.0))),
-    (1.5, 2.0 / sqrt(3.0)),
-    (2.0, 1.0 / (2.0 * sqrt(3.0))),  // X
-    (2.5, 1.0 / sqrt(3.0)),
-    (3.5, 1.0 / sqrt(3.0)),
-    (3.5, 2.0 / sqrt(3.0)),
-    (4.0, 5.0 / (2.0 * sqrt(3.0))),
-    (4.0, 7.0 / (2.0 * sqrt(3.0))),
-    (5.0, 7.0 / (2.0 * sqrt(3.0))),
-    (5.5, 2.0 / sqrt(3.0)),  // X
-    (1.0, 1.0 / (2.0 * sqrt(3.0))),
-    (4.0, 1.0 / (2.0 * sqrt(3.0))),
-    (4.5, 2.0 / sqrt(3.0)),
-    (5.0, 5.0 / (2.0 * sqrt(3.0)))
   )
 
   private def findFaceIndex(pt: Pt3): Int =
@@ -257,10 +178,9 @@ object Dymaxion {
     // 0 cos -sin
     // 0 sin  cos
 
-    val (x, y, z) = in
     val cs        = cos(theta)
     val sn        = sin(theta)
-    (x, y * cs - z * sn, y * sn + z * cs)
+    Pt3(in.x, in.y * cs - in.z * sn, in.y * sn + in.z * cs)
   }
 
   private def rotateY(in: Pt3, theta: Double): Pt3 = {
@@ -268,17 +188,15 @@ object Dymaxion {
     // 0    1 0
     // -sin 0 cos
 
-    val (x, y, z) = in
     val cs       = cos(theta)
     val sn       = sin(theta)
-    (x * cs + z * sn, y, -x * sn + z * cs)
+    Pt3(in.x * cs + in.z * sn, in.y, -in.x * sn + in.z * cs)
   }
 
   private def rotateY_Gray(in: Pt3, theta: Double): Pt3 = {
-    val (x, y, z) = in
     val cs       = cos(theta)
     val sn       = sin(theta)
-    (x * cs - z * sn, y, x * sn + z * cs)
+    Pt3(in.x * cs - in.z * sn, in.y, in.x * sn + in.z * cs)
   }
 
   private def rotateZ(in: Pt3, theta: Double): Pt3 = {
@@ -286,42 +204,42 @@ object Dymaxion {
     // sin  cos 0
     // 0    0   1
 
-    val (x, y, z) = in
     val cs        = cos(theta)
     val sn        = sin(theta)
-    (x * cs - y * sn, x * sn + y * cs, z)
+    Pt3(in.x * cs - in.y * sn, in.x * sn + in.y * cs, in.z)
   }
 
   private def rotateZ_Gray(in: Pt3, theta: Double): Pt3 = {
-    val (x, y, z) = in
     val cs        = cos(theta)
     val sn        = sin(theta)
-    (x * cs + y * sn, -x * sn + y * cs, z)
+    Pt3(in.x * cs + in.y * sn, -in.x * sn + in.y * cs, in.z)
   }
 
   private def r2(axis: Int, alpha: Double, in: Pt3): Pt3 = {
-    var (x, y, z) = in
-    val a = x
-    val b = y
-    val c = z
+    var x = in.x
+    var y = in.y
+    var z = in.z
+    val a = in.x
+    val b = in.y
+    val c = in.z
     if (axis == 1)
     {
-      y = b * cos(alpha) + c * sin(alpha);
-      z = c * cos(alpha) - b * sin(alpha);
+      y = b * cos(alpha) + c * sin(alpha)
+      z = c * cos(alpha) - b * sin(alpha)
     }
 
     if (axis == 2)
     {
-      x = a * cos(alpha) - c * sin(alpha);
-      z = a * sin(alpha) + c * cos(alpha);
+      x = a * cos(alpha) - c * sin(alpha)
+      z = a * sin(alpha) + c * cos(alpha)
     }
 
     if (axis == 3)
     {
-      x = a * cos(alpha) + b * sin(alpha);
-      y = b * cos(alpha) - a * sin(alpha);
+      x = a * cos(alpha) + b * sin(alpha)
+      y = b * cos(alpha) - a * sin(alpha)
     }
-    (x, y, z)
+    Pt3(x, y, z)
   }
 
   private def lonLatToPolar(lon: Double, lat: Double): (Double, Double) = {
@@ -334,11 +252,8 @@ object Dymaxion {
     val x = sin(theta) * cos(phi)
     val y = sin(theta) * sin(phi)
     val z = cos(theta)
-    (x, y, z)
+    Pt3(x, y, z)
   }
 
-  private def cartesianToPolar(pt: Pt3): (Double, Double) = {
-    val (x, y, z) = pt
-    (atan2(y, x), acos(z))
-  }
+  private def cartesianToPolar(in: Pt3): (Double, Double) = (atan2(in.y, in.x), acos(in.z))
 }
