@@ -55,7 +55,10 @@ class DymaxionView extends Component {
   def mark: Option[Pt2] = _mark
   def mark_=(value: Option[Pt2]): Unit = if (_mark != value) {
     _mark = value
-    repaint()
+    // repaint()
+    value.fold(repaint()) { pt =>
+      markUpdated(pt.x, pt.y)
+    }
   }
 
   override protected def paintComponent(g: Graphics2D): Unit = {
@@ -113,12 +116,12 @@ class DymaxionView extends Component {
   listenTo(mouse.moves)
   cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR)
 
-  private def indices(pt: Point): ((Int, Int, Float), (Int, Int, Float), (Int, Int, Float)) = {
-    // cf. https://stackoverflow.com/questions/8043947/indexing-in-equilateral-triangle-grid-given-simple-2d-cartesian-coordinates
-    val xf  = math.max(0f, (pt.x.toFloat - gainRadius) / hSz)
+  // cf. https://stackoverflow.com/questions/8043947/indexing-in-equilateral-triangle-grid-given-simple-2d-cartesian-coordinates
+  private def indices(xf0: Double, yf0: Double): ((Int, Int, Float), (Int, Int, Float), (Int, Int, Float)) = {
+    val xf  = math.max(0.0, xf0) // math.min(hNum, xf0))
+    val yf  = math.max(0.9, yf0) // math.min(vNum1, yf0))
     val x   = xf.toInt
     val u   = xf - x
-    val yf  = math.max(0f, (pt.y.toFloat - gainRadius) / vSz)
     val y0  = yf.toInt
     val v   = yf - y0
 
@@ -152,7 +155,7 @@ class DymaxionView extends Component {
     // println(s"triangle = [$vx1,$vy1i; $vx2,$vy2i; $vx3,$vy3i]")
 
     // cf. https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
-    def dist(x: Float, y: Float)(lx1: Int, ly1: Int, lx2: Int, ly2: Int): Float = {
+    def dist(x: Double, y: Double)(lx1: Int, ly1: Int, lx2: Int, ly2: Int): Double = {
       // |Dy x0 - Dx y0 - x1 y2 + x2 y1| / sqrt(Dx.squared + Dy.squared)
       // - we assume a normalized Dx, Dy, and thus drop the division
       // - indeed we know the height is two and divide by it
@@ -189,72 +192,82 @@ class DymaxionView extends Component {
 
   reactions += {
     case MousePressed(_, pt, _, _, _) =>
-      atomic { implicit tx =>
-        val synthOpt = Mellite.auralSystem.serverOption.map { s =>
-          val graph = SynthGraph {
-            import de.sciss.synth._
-            import ugen._
-            // val sig = PinkNoise.ar(0.5)
-            val sig = Dust.ar(400)
-            for (i <- 1 to 3) {
-              val bus   = s"c$i".ar(0f)
-              val gain  = s"g$i".ar(0f)
-              Out.ar(bus, sig * gain)
-            }
-          }
-          val df    = Escape.getSynthDef(s, graph, None)
-          val synth = Synth.expanded(s, df.peer.graph)
-          synth.play(s.defaultGroup, Nil, addToTail, Nil)
-          synth
-        }
-        setSynth(synthOpt)
-      }
+      play()
       mouseMoved(pt)
 
     case MouseReleased(_, pt, _, _, _) =>
-      atomic { implicit tx =>
-        setSynth(None)
-      }
+      stop()
 
     case MouseMoved  (_, pt, _) => mouseMoved(pt)
     case MouseDragged(_, pt, _) => mouseMoved(pt)
   }
 
-  private def mouseMoved(pt: Point): Unit = {
-      val ((vx1, vy1i, g1), (vx2, vy2i, g2), (vx3, vy3i, g3)) = indices(pt)
-
-      def move(x: Int, yi: Int, gain: Double, first: Boolean): Unit = {
-        val y   = yi * 2 + (x % 2)
-        val xp  = x * hSz + gainRadius
-        val yp  = y * vSz + gainRadius
-        if (first) gpFill.moveTo(xp, yp) else gpFill.lineTo(xp, yp)
-        val g = gain * 12
-        circle.setFrameFromCenter(xp, yp, xp + g, yp + g)
-        gpStroke.append(circle, false)
-      }
-
-      atomic { implicit tx =>
-        synthRef.get(tx.peer).foreach { synth =>
-          val c1Opt = Turbulence.ChannelMap.get((vx1, vy1i))
-          val c1    = c1Opt.map(_ - 1).getOrElse(0)
-          val c2Opt = Turbulence.ChannelMap.get((vx2, vy2i))
-          val c2    = c2Opt.map(_ - 1).getOrElse(0)
-          val c3Opt = Turbulence.ChannelMap.get((vx3, vy3i))
-          val c3    = c3Opt.map(_ - 1).getOrElse(0)
-          val g1b   = if (c1Opt.isEmpty) 0f else g1
-          val g2b   = if (c2Opt.isEmpty) 0f else g2
-          val g3b   = if (c3Opt.isEmpty) 0f else g3
-          // println(s"""set("c1" -> $c1, "g1" -> $g1b, "c2" -> $c2, "g2" -> $g2b, "c3" -> $c3, "g3" -> $g3b)""")
-          synth.set(true, "c1" -> c1, "g1" -> g1b, "c2" -> c2, "g2" -> g2b, "c3" -> c3, "g3" -> g3b)
+  def play(): Unit = atomic { implicit tx =>
+    val synthOpt = Mellite.auralSystem.serverOption.map { s =>
+      val graph = SynthGraph {
+        import de.sciss.synth._
+        import ugen._
+        // val sig = PinkNoise.ar(0.5)
+        val sig = Dust.ar(400)
+        for (i <- 1 to 3) {
+          val bus   = s"c$i".ar(0f)
+          val gain  = s"g$i".ar(0f)
+          Out.ar(bus, sig * gain)
         }
       }
+      val df    = Escape.getSynthDef(s, graph, None)
+      val synth = Synth.expanded(s, df.peer.graph)
+      synth.play(s.defaultGroup, Nil, addToTail, Nil)
+      synth
+    }
+    setSynth(synthOpt)
+  }
 
-      gpFill  .reset()
-      gpStroke.reset()
-      move(vx1, vy1i, g1, first = true )
-      move(vx2, vy2i, g2, first = false)
-      move(vx3, vy3i, g3, first = false)
-      // repaint(gp.getBounds)
-      repaint()
+  def stop(): Unit = atomic { implicit tx =>
+    setSynth(None)
+  }
+
+  private def mouseMoved(pt: Point): Unit = {
+    val xf = (pt.getX - gainRadius) / hSz
+    val yf = (pt.getY - gainRadius) / vSz
+    markUpdated(xf, yf)
+  }
+
+  private def markUpdated(xf: Double, yf: Double): Unit = {
+    val ((vx1, vy1i, g1), (vx2, vy2i, g2), (vx3, vy3i, g3)) = indices(xf, yf)
+
+    def move(x: Int, yi: Int, gain: Double, first: Boolean): Unit = {
+      val y   = yi * 2 + (x % 2)
+      val xp  = x * hSz + gainRadius
+      val yp  = y * vSz + gainRadius
+      if (first) gpFill.moveTo(xp, yp) else gpFill.lineTo(xp, yp)
+      val g = gain * 12
+      circle.setFrameFromCenter(xp, yp, xp + g, yp + g)
+      gpStroke.append(circle, false)
+    }
+
+    atomic { implicit tx =>
+      synthRef.get(tx.peer).foreach { synth =>
+        val c1Opt = Turbulence.ChannelMap.get((vx1, vy1i))
+        val c1    = c1Opt.map(_ - 1).getOrElse(0)
+        val c2Opt = Turbulence.ChannelMap.get((vx2, vy2i))
+        val c2    = c2Opt.map(_ - 1).getOrElse(0)
+        val c3Opt = Turbulence.ChannelMap.get((vx3, vy3i))
+        val c3    = c3Opt.map(_ - 1).getOrElse(0)
+        val g1b   = if (c1Opt.isEmpty) 0f else g1
+        val g2b   = if (c2Opt.isEmpty) 0f else g2
+        val g3b   = if (c3Opt.isEmpty) 0f else g3
+        // println(s"""set("c1" -> $c1, "g1" -> $g1b, "c2" -> $c2, "g2" -> $g2b, "c3" -> $c3, "g3" -> $g3b)""")
+        synth.set(true, "c1" -> c1, "g1" -> g1b, "c2" -> c2, "g2" -> g2b, "c3" -> c3, "g3" -> g3b)
+      }
+    }
+
+    gpFill  .reset()
+    gpStroke.reset()
+    move(vx1, vy1i, g1, first = true )
+    move(vx2, vy2i, g2, first = false)
+    move(vx3, vy3i, g3, first = false)
+    // repaint(gp.getBounds)
+    repaint()
   }
 }

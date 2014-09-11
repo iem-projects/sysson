@@ -7,7 +7,7 @@ import javax.swing.ImageIcon
 
 import de.sciss.numbers
 
-import scala.swing.event.{MouseDragged, MousePressed}
+import scala.swing.event.{MouseReleased, MouseDragged, MousePressed}
 import scala.swing.{Point, Swing, Graphics2D, Component}
 import numbers.Implicits._
 import Swing._
@@ -15,6 +15,8 @@ import Swing._
 class MercatorView(dymaxion: DymaxionView) extends Component {
   private val url         = getClass.getResource("mercator.jpg")
   private val image       = new ImageIcon(url)
+
+  var PRINT = false
 
   private val w = 800
   private val h = 400
@@ -39,8 +41,13 @@ class MercatorView(dymaxion: DymaxionView) extends Component {
   listenTo(mouse.clicks)
 
   reactions += {
-    case MousePressed(_, pt, _, _, _) => process(pt)
-    case MouseDragged(_, pt, _) => process(pt)
+    case MousePressed(_, pt, _, _, _) =>
+      dymaxion.play()
+      process(pt)
+    case MouseDragged(_, pt, _) =>
+      process(pt)
+    case MouseReleased(_, _, _, _, _) =>
+      dymaxion.stop()
   }
 
   private def process(pt: Point): Unit = {
@@ -52,7 +59,7 @@ class MercatorView(dymaxion: DymaxionView) extends Component {
     // val (h0x, h0y) = Dymaxion.mapCartesian(Dymaxion.center(idx))
     // mkPt(pt.x, pt.y)
     // repaint(new Rectangle(pt.x, pt.y, 1, 1))
-    println(f"idx = $idx, x = ${h0.x}%1.2f, y = ${h0.y}%1.2f")
+    if (PRINT) println(f"idx = $idx, x = ${h0.x}%1.2f, y = ${h0.y}%1.2f")
 
     dymaxion.mark = Some(h0)
   }
