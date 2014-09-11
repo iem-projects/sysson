@@ -5,8 +5,9 @@ import java.awt.EventQueue
 
 import scala.swing.Frame
 
-object Turbulence extends App with Runnable {
-  EventQueue.invokeLater(this)
+object Turbulence extends Runnable {
+  // don't use `App` because body will not be initialized if we don't use it as main entry
+  def main(args: Array[String]): Unit = EventQueue.invokeLater(this)
 
   /** Maps from (x, y) index with respect to the
     * equilateral triangle grid to speaker channel
