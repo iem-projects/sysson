@@ -63,7 +63,7 @@ object Turbulence extends App with Runnable {
   def run(): Unit = {
     Main.run()
 
-    val dyn   = new DymaxionView1
+    val dyn   = new DymaxionView
     val merc  = new MercatorView(dyn)
 
     new Frame {

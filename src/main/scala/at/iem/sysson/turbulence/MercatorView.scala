@@ -7,12 +7,12 @@ import javax.swing.ImageIcon
 
 import de.sciss.numbers
 
-import scala.swing.event.{MouseDragged, MousePressed, MouseMoved}
-import scala.swing.{Point, Rectangle, Swing, Graphics2D, Component}
+import scala.swing.event.{MouseDragged, MousePressed}
+import scala.swing.{Point, Swing, Graphics2D, Component}
 import numbers.Implicits._
 import Swing._
 
-class MercatorView(dymaxion: DymaxionView1) extends Component {
+class MercatorView(dymaxion: DymaxionView) extends Component {
   private val url         = getClass.getResource("mercator.jpg")
   private val image       = new ImageIcon(url)
 

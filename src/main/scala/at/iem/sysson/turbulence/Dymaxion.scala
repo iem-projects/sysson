@@ -39,9 +39,9 @@ object Dymaxion {
   private val isoR0 = iso0.map(i => rotateY(rotateX(i, rotX.toRadians), rotY.toRadians))
 
   private val normFactor  = 1.0 / mag((0, 1, phi))
-  private val isoR_FOO    = isoR0.map(i => mul(i, normFactor))
+  private val isoR        = isoR0.map(i => mul(i, normFactor))
 
-  private val isoR = Vector(
+  private val isoR_GRAY = Vector(
     ( 0.420152426708710003,  0.078145249402782959,  0.904082550615019298),
     ( 0.995009439436241649, -0.091347795276427931,  0.040147175877166645),
     ( 0.518836730327364437,  0.835420380378235850,  0.181331837557262454),
@@ -56,14 +56,14 @@ object Dymaxion {
     (-0.420152426708710003, -0.078145249402782959, -0.904082550615019298)
   )
 
-  private val faces_FOO = Vector(
+  private val faces = Vector(
     ( 0, 1, 8), ( 0, 1, 9), ( 0, 4, 5), ( 0, 4, 8), ( 0, 5, 9),
     ( 1, 6, 7), ( 1, 6, 8), ( 1, 7, 9), ( 2, 3,10), ( 2, 3,11),
     ( 2, 4, 5), ( 2, 4,10), ( 2, 5,11), ( 3, 6, 7), ( 3, 6,10),
     ( 3, 7,11), ( 4, 8,10), ( 5, 9,11), ( 6, 8,10), ( 7, 9,11)
   )
 
-  private val faces = Vector(
+  private val faces_GRAY = Vector(
     ( 1, 2, 3), ( 1, 3, 4), ( 1,  4, 5), ( 1,  5, 6), ( 1, 2, 6),
     ( 2, 3, 8), ( 8, 3, 9), ( 9,  3, 4), (10,  9, 4), ( 5,10, 4),
     ( 5,11,10), ( 5, 6,11), (11,  6, 7), ( 7,  6, 2), ( 8, 7, 2),
@@ -174,18 +174,18 @@ object Dymaxion {
     val x = gx / gArc
     val y = gy / gArc
 
-    val ang = triRota_GRAY(tri).toRadians
+    val ang = triRota(tri).toRadians
     val xr  = x * cos(ang) - y * sin(ang)
     val yr  = x * sin(ang) + y * cos(ang)
 
-    val (addX, addY) = triPos_GRAY(tri)
-    (xr + addX, yr + addY)
+    //    val (addX, addY) = triPos_GRAY(tri)
+    //    (xr + addX, yr + addY)
 
-    //    val (vx, vyi) = triPos(tri)
-    //    val vy  = vyi * 2 + (vx % 2)
-    //
-    //    val korr = 1.0 / 0.8660254037844386 // XXX TODO
-    //    (vx + xr * 2, vy - yr * 3 * korr)
+    val (vx, vyi) = triPos(tri)
+    val vy  = vyi * 2 + (vx % 2)
+
+    val korr = 1.0 / 0.8660254037844386 // XXX TODO
+    (vx + xr * 2, vy - yr * 3 * korr)
   }
 
   private val triRota_FOO = Vector(
@@ -199,13 +199,13 @@ object Dymaxion {
   )
 
   private val triRota = Vector(
-    //  0    1  2   3     4   5    6  7  8             9  10   11  12   13  14  15          16  17   18  19
-      240, 300, 0, 60, 180, 300, 300, 0, 0 /* 300 */, 60, 60, 120, 150, 0,  0,  0 /* 60 */, 0, 120, 120, 300
+    //  0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
+      120,  60, 240, 180, 300, 120,   0, 240, 180, 120, 300, 180, 300,  60,  60,  60, 240, 240,  60,   0
   )
 
   // maps between face indices and dymaxion coordinates, as
   // corresponding to the labels in the dymaxion view (vx, vyi)
-  private val triPos_FOO = Vector(
+  private val triPos = Vector(
     // 0       1       2       3      4       5       6       7       8       9
     (7, 2), (7, 3), (5, 2), (6, 2), (5, 3), (9, 2), (8, 2), (9, 3), (1, 3), (2, 4),
     //10      11      12      13      14       15       16      17      18      19
@@ -235,7 +235,7 @@ object Dymaxion {
     (5.0, 5.0 / (2.0 * sqrt(3.0)))
   )
 
-  private val triPos = Vector(
+  private val triPos_FOO = Vector(
     // 0       1       2       3      4       5       6       7       8       9
     (7, 2), (7, 3), (5, 2), (6, 2), (5, 3), (9, 2), (8, 2), (9, 3), (1, 3), (2, 4),
     //10      11      12      13      14       15       16      17      18      19
