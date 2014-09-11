@@ -31,8 +31,8 @@ object Dymaxion {
   // these rotations were applied by Gray;
   // why exactly this amount, I don't know,
   // apparently that's what Fuller used?
-  private val rotX =  -9.28 // degrees
-  private val rotY = -33.76 // degrees
+  private val rotX =  9.28 // degrees
+  private val rotY = 33.76 // degrees
 
   private val isoR0: Array[Pt3] = iso0.map(i => rotateY(rotateX(i, rotX.toRadians), rotY.toRadians))
 
@@ -91,14 +91,18 @@ object Dymaxion {
     val h1      = isoR  (vIdx)      // cartesian coordinates of one of the face's vertices
     val c       = center(faceIdx)   // cartesian coordinates of        the face's center
 
-    val Polar(hLat, hLng) = cartesianToPolar(c)
+    val Polar(hTheta, hPhi) = cartesianToPolar(c)
     //    val ptNorm            = rotateY(rotateZ(pt, -cPhi), -cTheta)
     //    val vNorm             = rotateY(rotateZ(v , -cPhi), -cTheta)
-    val h0_b = r2(3, hLng, h0)
-    val h1_b = r2(3, hLng, h1)
 
-    val h0_c = r2(2, hLat, h0_b)
-    val h1_c = r2(2, hLat, h1_b)
+    //    val h0_b = r2(3, hPhi, h0)
+    //    val h1_b = r2(3, hPhi, h1)
+
+    // val h0_c = r2(2, hTheta, h0_b)
+    // val h1_c = r2(2, hTheta, h1_b)
+
+    val h0_c = rotateY(rotateZ(h0, hPhi), hTheta)
+    val h1_c = rotateY(rotateZ(h1, hPhi), hTheta)
 
     val Polar(hlat_b, hlng_b) = cartesianToPolar(h1_c)
     val hlng_c = hlng_b - 90.0.toRadians
@@ -168,41 +172,27 @@ object Dymaxion {
 
   private def rotateX(in: Pt3, theta: Double): Pt3 = {
     // 1 0    0
-    // 0 cos -sin
-    // 0 sin  cos
+    // 0 cos  sin
+    // 0 -sin cos
 
     val cs        = cos(theta)
     val sn        = sin(theta)
-    Pt3(in.x, in.y * cs - in.z * sn, in.y * sn + in.z * cs)
+    Pt3(in.x, in.y * cs + in.z * sn, -in.y * sn + in.z * cs)
   }
 
   private def rotateY(in: Pt3, theta: Double): Pt3 = {
-    // cos  0 sin
+    // cos  0 -sin
     // 0    1 0
-    // -sin 0 cos
-
-    val cs       = cos(theta)
-    val sn       = sin(theta)
-    Pt3(in.x * cs + in.z * sn, in.y, -in.x * sn + in.z * cs)
-  }
-
-  private def rotateY_Gray(in: Pt3, theta: Double): Pt3 = {
+    // sin  0 cos
     val cs       = cos(theta)
     val sn       = sin(theta)
     Pt3(in.x * cs - in.z * sn, in.y, in.x * sn + in.z * cs)
   }
 
   private def rotateZ(in: Pt3, theta: Double): Pt3 = {
-    // cos -sin 0
-    // sin  cos 0
+    // cos  sin 0
+    // -sin cos 0
     // 0    0   1
-
-    val cs        = cos(theta)
-    val sn        = sin(theta)
-    Pt3(in.x * cs - in.y * sn, in.x * sn + in.y * cs, in.z)
-  }
-
-  private def rotateZ_Gray(in: Pt3, theta: Double): Pt3 = {
     val cs        = cos(theta)
     val sn        = sin(theta)
     Pt3(in.x * cs + in.y * sn, -in.x * sn + in.y * cs, in.z)
