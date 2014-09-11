@@ -129,7 +129,7 @@ object Dymaxion {
     val h1      = isoR(v1)      // cartesian coordinates of one of the face's vertices
     val c       = center(tri) // cartesian coordinates of        the face's center
 
-    val (hlng, hlat)    = c_to_s(c)
+    val (hlng, hlat)    = cartesianToPolar(c)
     //    val ptNorm            = rotateY(rotateZ(pt, -cPhi), -cTheta)
     //    val vNorm             = rotateY(rotateZ(v , -cPhi), -cTheta)
     val h0_b = r2(3, hlng, h0)
@@ -138,7 +138,7 @@ object Dymaxion {
     val h0_c = r2(2, hlat, h0_b)
     val h1_c = r2(2, hlat, h1_b)
 
-    val (hlng_b, hlat_b) = c_to_s(h1_c)
+    val (hlng_b, hlat_b) = cartesianToPolar(h1_c)
     val hlng_c = hlng_b - 90.0.toRadians
 
     val h0_d = r2(3,hlng_c,h0_c);
@@ -174,14 +174,15 @@ object Dymaxion {
     val x = gx / gArc
     val y = gy / gArc
 
-    val ang = triRota(tri).toRadians
+    val (vx, vyi, angDeg) = triPos(tri)
+
+    val ang = angDeg.toRadians
     val xr  = x * cos(ang) - y * sin(ang)
     val yr  = x * sin(ang) + y * cos(ang)
 
     //    val (addX, addY) = triPos_GRAY(tri)
     //    (xr + addX, yr + addY)
 
-    val (vx, vyi) = triPos(tri)
     val vy  = vyi * 2 + (vx % 2)
 
     val korr = 1.0 / 0.8660254037844386 // XXX TODO
@@ -198,18 +199,22 @@ object Dymaxion {
     240, 300, 0, 60, 180, 300, 300, 0, 0 /* 300 */, 60, 60, 120, 60, 0,  0,  0 /* 60 */, 0, 120, 120, 300
   )
 
-  private val triRota = Vector(
-    //  0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
-      120,  60, 240, 180, 300, 120,   0, 240, 180, 120, 300, 180, 300,  60,  60,  60, 240, 240,  60,   0
-  )
+  //  private val triRota = Vector(
+  //    //  0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
+  //      120,  60, 240, 180, 300, 120,   0, 240, 180, 120, 300, 180, 300,  60,  60,  60, 240, 240,  60,   0
+  //  )
 
   // maps between face indices and dymaxion coordinates, as
   // corresponding to the labels in the dymaxion view (vx, vyi)
   private val triPos = Vector(
-    // 0       1       2       3      4       5       6       7       8       9
-    (7, 2), (7, 3), (5, 2), (6, 2), (5, 3), (9, 2), (8, 2), (9, 3), (1, 3), (2, 4),
-    //10      11      12      13      14       15       16      17      18      19
-    (4, 2), (5, 0), (3, 3), (11, 2), (12, 2), (11, 3), (6, 1), (4, 4), (7, 0), (10, 4)
+    //  0            1           2            3            4
+    (7, 2, 120), (7, 3, 60), (5, 2, 240), (6, 2, 180), (5, 3, 300),
+    //  5            6          7            8            9
+    (9, 2, 120), (8, 2, 0), (9, 3, 240), (1, 3, 180), (2, 4, 120),
+    // 10            11          12            13           14
+    (4, 2, 300), (5, 0, 180), (3, 3, 300), (11, 2, 60), (12, 2, 60),
+    //  15          16           17           18           19
+    (11, 3, 60), (6, 1, 240), (4, 4, 240), (7, 0, 60), (10, 4, 0)
   )
 
   private val triPos_GRAY = Vector(
@@ -234,15 +239,6 @@ object Dymaxion {
     (4.5, 2.0 / sqrt(3.0)),
     (5.0, 5.0 / (2.0 * sqrt(3.0)))
   )
-
-  private val triPos_FOO = Vector(
-    // 0       1       2       3      4       5       6       7       8       9
-    (7, 2), (7, 3), (5, 2), (6, 2), (5, 3), (9, 2), (8, 2), (9, 3), (1, 3), (2, 4),
-    //10      11      12      13      14       15       16      17      18      19
-    (4, 2), (5, 0), (11, 2), (3, 3), (12, 2), (11, 3), (6, 1), (4, 4), (7, 0), (10, 4)
-  )
-
-  // val triRota = Vector(240, 300, 0, 60, 180, 300, 300, 0, 0 /* 300 */, 60, 60, 120, 60, 0, 0, 60 /* 0 */, 0, 120, 120, 300)
 
   private def findFaceIndex(pt: Pt3): Int =
     center.iterator.zipWithIndex.minBy {
@@ -334,29 +330,8 @@ object Dymaxion {
     (x, y, z)
   }
 
-  private def cartesianToPolar_FOO(pt: Pt3): (Double, Double) = {
+  private def cartesianToPolar(pt: Pt3): (Double, Double) = {
     val (x, y, z) = pt
-    (acos(z), atan2(y, x))
-  }
-
-  private def c_to_s(pt: Pt3): (Double, Double) = {
-    var a = 0.0
-    val (x, y, z) = pt
-
-    def radians(d: Double) = d.toRadians
-
-    if (x>0.0 && y>0.0){a = radians(0.0);}
-    if (x<0.0 && y>0.0){a = radians(180.0);}
-    if (x<0.0 && y<0.0){a = radians(180.0);}
-    if (x>0.0 && y<0.0){a = radians(360.0);}
-    val lat = acos(z)
-    var lng = 0.0
-    if (x==0.0 && y>0.0){ lng = radians(90.0);}
-    if (x==0.0 && y<0.0){ lng = radians(270.0);}
-    if (x>0.0 && y==0.0){ lng = radians(0.0);}
-    if (x<0.0 && y==0.0){ lng = radians(180.0);}
-    if (x!=0.0 && y!=0.0){ lng = atan(y/x) + a;}
-
-    (lng, lat)
+    (atan2(y, x), acos(z))
   }
 }
