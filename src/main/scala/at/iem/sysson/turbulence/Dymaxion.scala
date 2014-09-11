@@ -42,7 +42,6 @@ object Dymaxion {
   private val isoR_FOO    = isoR0.map(i => mul(i, normFactor))
 
   private val isoR = Vector(
-    ( -99.0, -99.0, -99.0),
     ( 0.420152426708710003,  0.078145249402782959,  0.904082550615019298),
     ( 0.995009439436241649, -0.091347795276427931,  0.040147175877166645),
     ( 0.518836730327364437,  0.835420380378235850,  0.181331837557262454),
@@ -65,12 +64,11 @@ object Dymaxion {
   )
 
   private val faces = Vector(
-    (0,0,0),
     ( 1, 2, 3), ( 1, 3, 4), ( 1,  4, 5), ( 1,  5, 6), ( 1, 2, 6),
     ( 2, 3, 8), ( 8, 3, 9), ( 9,  3, 4), (10,  9, 4), ( 5,10, 4),
     ( 5,11,10), ( 5, 6,11), (11,  6, 7), ( 7,  6, 2), ( 8, 7, 2),
     (12, 9, 8), (12, 9,10), (12, 11,10), (12, 11, 7), (12, 8, 7)
-  )
+  ) .map { case (a,b,c) => (a-1, b-1, c-1) }
 
   private def mag(in: Pt3): Double = {
     val (x, y, z) = in
@@ -120,7 +118,7 @@ object Dymaxion {
     mapCartesian(pt)
   }
 
-  private val face1Gray = Vector(-99, 1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6, 2, 2, 8, 9, 10, 11, 8)
+  private val face1Gray = Vector(1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6, 2, 2, 8, 9, 10, 11, 8).map(_ - 1)
 
   def mapCartesian(h0: Pt3): Pt2 = {
     val tri = findFaceIndex(h0)
@@ -176,19 +174,18 @@ object Dymaxion {
     val x = gx / gArc
     val y = gy / gArc
 
-    //    val (vx, vyi) = triPos(faceIdx)
-    //    val vy  = vyi * 2 + (vx % 2)
-
     val ang = triRota_GRAY(tri).toRadians
     val xr  = x * cos(ang) - y * sin(ang)
     val yr  = x * sin(ang) + y * cos(ang)
 
-    //    val korr = 1.0 / 0.8660254037844386 // XXX TODO
-    //
-    //    (vx + xr * 2 * korr, vy - yr * 3 / korr)
-
     val (addX, addY) = triPos_GRAY(tri)
     (xr + addX, yr + addY)
+
+    //    val (vx, vyi) = triPos(tri)
+    //    val vy  = vyi * 2 + (vx % 2)
+    //
+    //    val korr = 1.0 / 0.8660254037844386 // XXX TODO
+    //    (vx + xr * 2, vy - yr * 3 * korr)
   }
 
   private val triRota_FOO = Vector(
@@ -198,7 +195,7 @@ object Dymaxion {
 
   private val triRota_GRAY = Vector(
     //  0    1  2   3     4   5    6  7  8             9  10   11  12  13  14  15          16  17   18  19
-   -99, 240, 300, 0, 60, 180, 300, 300, 0, 0 /* 300 */, 60, 60, 120, 60, 0,  0,  0 /* 60 */, 0, 120, 120, 300
+    240, 300, 0, 60, 180, 300, 300, 0, 0 /* 300 */, 60, 60, 120, 60, 0,  0,  0 /* 60 */, 0, 120, 120, 300
   )
 
   private val triRota = Vector(
@@ -216,7 +213,6 @@ object Dymaxion {
   )
 
   private val triPos_GRAY = Vector(
-    (-99.0, -99.0),
     (2.0, 7.0 / (2.0 * sqrt(3.0))),
     (2.0, 5.0 / (2.0 * sqrt(3.0))),
     (2.5, 2.0 / sqrt(3.0)),
