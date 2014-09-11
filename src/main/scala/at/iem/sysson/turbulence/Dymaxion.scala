@@ -58,10 +58,17 @@ object Dymaxion {
 
   private val faces = Vector(
     ( 0, 1, 8), ( 0, 1, 9), ( 0, 4, 5), ( 0, 4, 8), ( 0, 5, 9),
-    ( 1, 6, 7), ( 1, 6, 8), ( 1, 7, 9), ( 2, 3,10), ( 2, 3,11),
-    ( 2, 4, 5), ( 2, 4,10), ( 2, 5,11), ( 3, 6, 7), ( 3, 6,10),
-    ( 3, 7,11), ( 4, 8,10), ( 5, 9,11), ( 6, 8,10), ( 7, 9,11)
+    ( 1, 6, 7), (/**/ 1, 6, 8), (/**/ 1, 7, 9), ( 3,10, 2), ( 3,11, 2),
+    ( 4, 5, 2), ( 4,10, 2), ( 5,11, 2), (/**/ 3, 6, 7), (/**/ 3, 6,10),
+    ( 7,11, 3), ( 8,10, 4), ( 9,11, 5), (10, 6, 8), ( 7, 9,11)
   )
+
+  private def face1(idx: Int) = faces(idx)._1
+
+//  private val face1 = Vector(0, 0, 0, 0, 0,
+//                             1, 2, 2, 3, 3,
+//                             4, 4, 5, 1, 1,
+//                             7, 8, 9, 10, 7)
 
   private val faces_GRAY = Vector(
     ( 1, 2, 3), ( 1, 3, 4), ( 1,  4, 5), ( 1,  5, 6), ( 1, 2, 6),
@@ -118,30 +125,30 @@ object Dymaxion {
     mapCartesian(pt)
   }
 
-  private val face1Gray = Vector(1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6, 2, 2, 8, 9, 10, 11, 8).map(_ - 1)
+  // private val face1 = Vector(0, 0, 0, 0, 0, 1, 2, 2, 3, 3, 4, 4, 5, 1, 1, 7, 8, 9, 10, 7)
 
   def mapCartesian(h0: Pt3): Pt2 = {
-    val tri = findFaceIndex(h0)
+    val faceIdx = findFaceIndex(h0)
 
     // val vIdx    = faces(faceIdx)._1
-    val v1 = face1Gray(tri)
+    val vIdx    = face1(faceIdx)
 
-    val h1      = isoR(v1)      // cartesian coordinates of one of the face's vertices
-    val c       = center(tri) // cartesian coordinates of        the face's center
+    val h1      = isoR  (vIdx)      // cartesian coordinates of one of the face's vertices
+    val c       = center(faceIdx) // cartesian coordinates of        the face's center
 
-    val (hlng, hlat)    = cartesianToPolar(c)
+    val (hLng, hLat)    = cartesianToPolar(c)
     //    val ptNorm            = rotateY(rotateZ(pt, -cPhi), -cTheta)
     //    val vNorm             = rotateY(rotateZ(v , -cPhi), -cTheta)
-    val h0_b = r2(3, hlng, h0)
-    val h1_b = r2(3, hlng, h1)
+    val h0_b = r2(3, hLng, h0)
+    val h1_b = r2(3, hLng, h1)
 
-    val h0_c = r2(2, hlat, h0_b)
-    val h1_c = r2(2, hlat, h1_b)
+    val h0_c = r2(2, hLat, h0_b)
+    val h1_c = r2(2, hLat, h1_b)
 
     val (hlng_b, hlat_b) = cartesianToPolar(h1_c)
     val hlng_c = hlng_b - 90.0.toRadians
 
-    val h0_d = r2(3,hlng_c,h0_c);
+    val h0_d = r2(3,hlng_c,h0_c)
 
     //    val ptNorm            = rotateY_Gray(rotateZ_Gray(/* c */ h0, hlng), hlat)
     //    val vNorm             = rotateY_Gray(rotateZ_Gray(h1 , hlng), hlat)
@@ -150,7 +157,7 @@ object Dymaxion {
 //    // val (h0x, h0y, _)     = rotateZ(ptNorm, Pi - vPhiN)
 //    val (h0x, h0y, _)     = rotateZ_Gray(ptNorm, vPhiN - Pi)
 
-    val (h0x, h0y, h0z) = h0_d
+    val (h0x, h0y, _) = h0_d
 
     val gz = sqrt(1 - h0x * h0x - h0y * h0y)
     val gs = sqrt(5 + 2 * sqrt(5)) / (gz * sqrt(15))
@@ -174,7 +181,7 @@ object Dymaxion {
     val x = gx / gArc
     val y = gy / gArc
 
-    val (vx, vyi, angDeg) = triPos(tri)
+    val (vx, vyi, angDeg) = triPos(faceIdx)
 
     val ang = angDeg.toRadians
     val xr  = x * cos(ang) - y * sin(ang)
