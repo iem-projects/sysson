@@ -6,10 +6,10 @@ import math.{sqrt, sin, cos, asin, acos, atan, atan2}
 object Dymaxion {
   private final val phi = (1 + sqrt(5)) / 2
 
-  type Pt2 = (Double, Double)
-  // type Pt3 = (Double, Double, Double)
-
   final case class Pt3(x: Double, y: Double, z: Double)
+  final case class Pt2(x: Double, y: Double)
+
+  final case class Polar(theta: Double, phi: Double)
 
   // cf. https://en.wikipedia.org/wiki/Icosahedron
   // cartesian coordinates of the 12 vertices
@@ -65,8 +65,8 @@ object Dymaxion {
   }
 
   private def lonLatToCartesian(lon: Double, lat: Double): Pt3 = {
-    val (theta, phi)  = lonLatToPolar(lon, lat)
-    polarToCartesian(theta, phi)
+    val p = lonLatToPolar(lon, lat)
+    polarToCartesian(p)
   }
 
   def findFaceIndex(lon: Double, lat: Double): Int = {
@@ -84,8 +84,6 @@ object Dymaxion {
     mapCartesian(pt)
   }
 
-  // private val face1 = Vector(0, 0, 0, 0, 0, 1, 2, 2, 3, 3, 4, 4, 5, 1, 1, 7, 8, 9, 10, 7)
-
   def mapCartesian(h0: Pt3): Pt2 = {
     val faceIdx = findFaceIndex(h0)
 
@@ -93,7 +91,7 @@ object Dymaxion {
     val h1      = isoR  (vIdx)      // cartesian coordinates of one of the face's vertices
     val c       = center(faceIdx)   // cartesian coordinates of        the face's center
 
-    val (hLng, hLat)    = cartesianToPolar(c)
+    val Polar(hLat, hLng) = cartesianToPolar(c)
     //    val ptNorm            = rotateY(rotateZ(pt, -cPhi), -cTheta)
     //    val vNorm             = rotateY(rotateZ(v , -cPhi), -cTheta)
     val h0_b = r2(3, hLng, h0)
@@ -102,7 +100,7 @@ object Dymaxion {
     val h0_c = r2(2, hLat, h0_b)
     val h1_c = r2(2, hLat, h1_b)
 
-    val (hlng_b, hlat_b) = cartesianToPolar(h1_c)
+    val Polar(hlat_b, hlng_b) = cartesianToPolar(h1_c)
     val hlng_c = hlng_b - 90.0.toRadians
 
     val h0_d = r2(3,hlng_c,h0_c)
@@ -133,8 +131,7 @@ object Dymaxion {
     val gx = 0.5 * (ga2 - ga3)
     val gy = (1.0 / (2.0 * sqrt(3))) * (2 * ga1 - ga2 - ga3)
 
-    // Re-scale so plane triangle edge length is 1.
-
+    // Normalize to triangle edge length 1
     val x = gx / gArc
     val y = gy / gArc
 
@@ -143,13 +140,9 @@ object Dymaxion {
     val ang = angDeg.toRadians
     val xr  = x * cos(ang) - y * sin(ang)
     val yr  = x * sin(ang) + y * cos(ang)
-
-    //    val (addX, addY) = triPos_GRAY(tri)
-    //    (xr + addX, yr + addY)
-
     val vy  = vyi * 2 + (vx % 2)
 
-    (vx + xr * xScale, vy - yr * yScale)
+    Pt2(vx + xr * xScale, vy - yr * yScale)
   }
 
   private final val xScale = 2
@@ -242,18 +235,18 @@ object Dymaxion {
     Pt3(x, y, z)
   }
 
-  private def lonLatToPolar(lon: Double, lat: Double): (Double, Double) = {
+  private def lonLatToPolar(lon: Double, lat: Double): Polar = {
     val theta = (90 - lat).toRadians
     val phi   = ((lon + 360) % 360).toRadians
-    (theta, phi)
+    Polar(theta, phi)
   }
 
-  private def polarToCartesian(theta: Double, phi: Double): Pt3 = {
-    val x = sin(theta) * cos(phi)
-    val y = sin(theta) * sin(phi)
-    val z = cos(theta)
+  private def polarToCartesian(in: Polar): Pt3 = {
+    val x = sin(in.theta) * cos(in.phi)
+    val y = sin(in.theta) * sin(in.phi)
+    val z = cos(in.theta)
     Pt3(x, y, z)
   }
 
-  private def cartesianToPolar(in: Pt3): (Double, Double) = (atan2(in.y, in.x), acos(in.z))
+  private def cartesianToPolar(in: Pt3): Polar = Polar(acos(in.z), atan2(in.y, in.x))
 }

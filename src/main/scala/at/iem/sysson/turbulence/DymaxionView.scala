@@ -99,7 +99,7 @@ class DymaxionView extends Component {
     g.draw(gpStroke)
     g.setStroke(strkOrig)
 
-    mark.foreach { case (vx, vy) =>
+    mark.foreach { case Pt2(vx, vy) =>
       val xp  = vx * hSz + gainRadius
       val yp  = vy * vSz + gainRadius
       circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)

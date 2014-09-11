@@ -48,13 +48,13 @@ class MercatorView(dymaxion: DymaxionView) extends Component {
     val lat = pt.y.linlin(0, h,   90, -90)
     tooltip = f"lat = $lat%1.2f, lon = $lon%1.2f"
     val idx = Dymaxion.findFaceIndex   (lon = lon, lat = lat)
-    val (h0x, h0y) = Dymaxion.mapLonLat(lon = lon, lat = lat)
+    val h0 = Dymaxion.mapLonLat(lon = lon, lat = lat)
     // val (h0x, h0y) = Dymaxion.mapCartesian(Dymaxion.center(idx))
     // mkPt(pt.x, pt.y)
     // repaint(new Rectangle(pt.x, pt.y, 1, 1))
-    println(f"idx = $idx, x = $h0x%1.2f, y = $h0y%1.2f")
+    println(f"idx = $idx, x = ${h0.x}%1.2f, y = ${h0.y}%1.2f")
 
-    dymaxion.mark = Some((h0x, h0y))
+    dymaxion.mark = Some(h0)
   }
 
   def mkPt(x: Int, y: Int): Unit = {
