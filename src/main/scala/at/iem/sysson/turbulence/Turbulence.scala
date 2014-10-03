@@ -1,6 +1,8 @@
 package at.iem.sysson
 package turbulence
 
+import de.sciss.pdflitz
+
 import java.awt.EventQueue
 
 import scala.swing.Frame
@@ -119,16 +121,20 @@ object Turbulence extends Runnable {
   def run(): Unit = {
     Main.run()
 
-    val dyn   = new DymaxionView
-    val merc  = new MercatorView(dyn)
+    val dyn     = new DymaxionView
+    dyn.crosses = Preparations.dymGrid.flatten
+    dyn.mouseControl = false
+    val merc    = new MercatorView(dyn)
 
-    new Frame {
+    val fDyn = new Frame {
       contents = dyn
       resizable = false
-      pack()
-      centerOnScreen()
-      open()
     }
+
+    new pdflitz.SaveAction(dyn :: Nil).setupMenu(fDyn)
+    fDyn.pack()
+    fDyn.centerOnScreen()
+    fDyn.open()
 
     new Frame {
       contents = merc

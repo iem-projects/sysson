@@ -69,8 +69,8 @@ class MercatorView(dymaxion: DymaxionView) extends Component {
       }
     }
 
-    val idx = Dymaxion.findFaceIndex   (lon = lon, lat = lat)
-    val h0 = Dymaxion.mapLonLat(lon = lon, lat = lat)
+    val idx = Dymaxion.findFaceIndex(lon = lon, lat = lat)
+    val h0  = Dymaxion.mapLonLat    (lon = lon, lat = lat)
     // val (h0x, h0y) = Dymaxion.mapCartesian(Dymaxion.center(idx))
     // mkPt(pt.x, pt.y)
     // repaint(new Rectangle(pt.x, pt.y, 1, 1))

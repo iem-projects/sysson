@@ -1,8 +1,8 @@
 package at.iem.sysson
 package turbulence
 
-import java.awt.geom.{Ellipse2D, Path2D, GeneralPath}
-import java.awt.{BasicStroke, Cursor, Color}
+import java.awt.geom.{Line2D, Ellipse2D, Path2D, GeneralPath}
+import java.awt.{RenderingHints, BasicStroke, Cursor, Color}
 import javax.swing.ImageIcon
 
 import de.sciss.lucre.synth.{Escape, Txn, Synth}
@@ -15,7 +15,15 @@ import scala.swing.event.{MouseDragged, MouseReleased, MousePressed, MouseMoved}
 import scala.swing.{Point, Swing, Graphics2D, Component}
 import Swing._
 
+object DymaxionView {
+  /** Horizontal scale factor */
+  final val hScale = 92
+  /** Vertical scale factor */
+  final val vScale = 53.33333f
+}
 class DymaxionView extends Component {
+  import DymaxionView._
+  
   private val DRAW_SPKR       = true
   private val DRAW_SPKR_IDX   = true
 
@@ -24,18 +32,16 @@ class DymaxionView extends Component {
   private val image       = new ImageIcon(url)
 
   private val hNum        = 13
-  private val hSz         = 92
   private val vNum        = 9 // 3
-  private val vSz         = 53.33333f // 160
   private val vNum1       = vNum / 2
 
   private val numCols     = hNum  + 1
   private val numRows     = vNum1 + 1
 
   private val gainRadius  = 16
-  private val w           = hNum * hSz  // 1196
+  private val w           = hNum * hScale  // 1196
   private val w1          = w + gainRadius + gainRadius
-  private val h           = (vNum * vSz + 0.5f).toInt //  480
+  private val h           = (vNum * vScale + 0.5f).toInt //  480
   private val h1          = h + gainRadius + gainRadius
 
   // private var tri = ((-1, -1), (-1, -1), (-1, -1))
@@ -43,6 +49,7 @@ class DymaxionView extends Component {
   private val gpFill      = new GeneralPath(Path2D.WIND_NON_ZERO,  4)
   private val gpStroke    = new GeneralPath(Path2D.WIND_NON_ZERO, 20)
   private val circle      = new Ellipse2D.Float()
+  private val line        = new Line2D.Float()
   private val colrTri     = new Color(0xFF, 0x00, 0x00, 0x7F)
   private val colrSpkr    = new Color(0x00, 0xFF, 0xFF, 0x7F)
   private val colrEmpty   = new Color(0x00, 0x00, 0x00, 0x4F)
@@ -51,6 +58,8 @@ class DymaxionView extends Component {
   private val strkGain    = new BasicStroke(2f)
 
   private var _mark = Option.empty[Pt2]
+
+  private var _crosses = Vec.empty[(Pt2, Double)]
 
   def mark: Option[Pt2] = _mark
   def mark_=(value: Option[Pt2]): Unit = if (_mark != value) {
@@ -61,7 +70,37 @@ class DymaxionView extends Component {
     }
   }
 
+  def crosses: Vec[(Pt2, Double)] = _crosses
+  def crosses_=(value: Vec[(Pt2, Double)]): Unit = {
+    _crosses = value
+    repaint()
+  }
+
+  private var _mouseCtl = false
+  def mouseControl: Boolean = _mouseCtl
+  def mouseControl_=(value: Boolean): Unit = if (_mouseCtl != value) {
+    _mouseCtl = value
+    if (value) {
+      listenTo(mouse.clicks)
+      listenTo(mouse.moves)
+    } else {
+      deafTo(mouse.clicks)
+      deafTo(mouse.moves)
+    }
+  }
+
+  private var _highQ = true
+  def highQuality: Boolean = _highQ
+  def highQuality_=(value: Boolean): Unit = if (_highQ != value) {
+    _highQ = value
+    repaint()
+  }
+
   override protected def paintComponent(g: Graphics2D): Unit = {
+    if (_highQ) {
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+    }
+
     g.setColor(Color.gray)
     g.fillRect(0, 0, w1, h1)
     // g.drawImage(image, 0, 0, peer)
@@ -71,8 +110,8 @@ class DymaxionView extends Component {
       var vx = 0; while (vx < numCols) {
         var vyi = 0; while (vyi < numRows) {
           val vy  = vyi * 2 + (vx % 2)
-          val xp  = vx * hSz + gainRadius
-          val yp  = vy * vSz + gainRadius
+          val xp  = vx * hScale + gainRadius
+          val yp  = vy * vScale + gainRadius
           circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
           val chanOpt = Turbulence.MatrixToChannelMap.get((vx, vyi))
           g.setColor(if (chanOpt.isDefined) colrSpkr else colrEmpty)
@@ -102,18 +141,33 @@ class DymaxionView extends Component {
     g.draw(gpStroke)
     g.setStroke(strkOrig)
 
-    mark.foreach { case Pt2(vx, vy) =>
-      val xp  = vx * hSz + gainRadius
-      val yp  = vy * vSz + gainRadius
+    if (_mark.isDefined) _mark.foreach { case Pt2(vx, vy) =>
+      val xp  = vx * hScale + gainRadius
+      val yp  = vy * vScale + gainRadius
       circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
       g.setColor(Color.yellow)
       g.fill(circle)
     }
+
+    if (_crosses.nonEmpty) {
+      g.setColor(Color.red)
+      val rad = 8
+      _crosses.foreach { case (Pt2(vx, vy), ang) =>
+        val xp  = vx * hScale + gainRadius
+        val yp  = vy * vScale + gainRadius
+        // line.setLine(xp - rad, yp - rad, xp + rad, yp + rad)
+        val angL = ang - 10.toRadians
+        line.setLine(xp, yp, xp + math.cos(angL) * rad, yp - math.sin(angL) * rad)
+        g.draw(line)
+        // line.setLine(xp - rad, yp + rad, xp + rad, yp - rad)
+        val angR = ang + 10.toRadians
+        line.setLine(xp, yp, xp + math.cos(angR) * rad, yp - math.sin(angR) * rad)
+        g.draw(line)
+      }
+    }
   }
 
   preferredSize = (w1, h1)
-  listenTo(mouse.clicks)
-  listenTo(mouse.moves)
   cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR)
 
   // cf. https://stackoverflow.com/questions/8043947/indexing-in-equilateral-triangle-grid-given-simple-2d-cartesian-coordinates
@@ -228,8 +282,8 @@ class DymaxionView extends Component {
   }
 
   private def mouseMoved(pt: Point): Unit = {
-    val xf = (pt.getX - gainRadius) / hSz
-    val yf = (pt.getY - gainRadius) / vSz
+    val xf = (pt.getX - gainRadius) / hScale
+    val yf = (pt.getY - gainRadius) / vScale
     markUpdated(xf, yf)
   }
 
@@ -238,8 +292,8 @@ class DymaxionView extends Component {
 
     def move(x: Int, yi: Int, gain: Double, first: Boolean): Unit = {
       val y   = yi * 2 + (x % 2)
-      val xp  = x * hSz + gainRadius
-      val yp  = y * vSz + gainRadius
+      val xp  = x * hScale + gainRadius
+      val yp  = y * vScale + gainRadius
       if (first) gpFill.moveTo(xp, yp) else gpFill.lineTo(xp, yp)
       val g = gain * 12
       circle.setFrameFromCenter(xp, yp, xp + g, yp + g)
