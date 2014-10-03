@@ -87,7 +87,10 @@ object Turbulence extends Runnable {
     DynGrid(11, 4) -> Spk(40)
   )
 
-  final case class LatLon(lat: Double, lon: Double)
+  final case class LatLon(lat: Double, lon: Double) {
+    override def toString = f"[lat: $lat%1.2f, lon: $lon%1.2f]"
+  }
+
   final case class LatLonIdx(latIdx: Int, lonIdx: Int) {
     def toLatLon = LatLon(latitude(latIdx), longitude(lonIdx))
   }
@@ -106,52 +109,50 @@ object Turbulence extends Runnable {
     * from the gap, so there are no two
     * loudspeakers with the same geo-coordinates.
     */
-  final val ChannelToGeoMap = Map[Spk, LatLon](
-    Spk( 3) -> LatLon( -40.0,  +35.0),
-    Spk( 6) -> LatLon( -12.5,  +30.0),
-    Spk( 5) -> LatLon(  +5.0,    0.0),
-    Spk( 7) -> LatLon( +35.0,  -25.0),
-    Spk( 4) -> LatLon( +27.5,  -60.0),
-    Spk(21) -> LatLon( -45.0,  +45.0),
-    Spk(25) -> LatLon( +10.0,  +57.5),
-    Spk( 8) -> LatLon( +27.5,  +22.5),
-    Spk(26) -> LatLon( +65.0,  +12.5),
-    Spk(33) -> LatLon( +27.5,  -67.5),
-    Spk(41) -> LatLon( +17.5,  -65.0),
-    Spk(45) -> LatLon(  +2.5,  -12.5),
-    Spk(22) -> LatLon( -25.0,  +72.5),
-    Spk(23) -> LatLon( +10.0,  +97.5),
-    Spk(27) -> LatLon( +45.0,  +72.5),
-    Spk(29) -> LatLon( +75.0, +142.5),
-    Spk(34) -> LatLon( +60.0,  -75.0),
-    Spk(35) -> LatLon( +25.0, -107.5),
-    Spk(43) -> LatLon( -10.0,  -82.5),
-    Spk(42) -> LatLon(  -5.0,  -42.5),
-    Spk(10) -> LatLon(  -7.5,   -5.0),
-    Spk(11) -> LatLon( -35.0,  -10.0),
-    Spk(13) -> LatLon( -52.5,  +27.5),
-    Spk(14) -> LatLon( -60.0, +102.5),
-    Spk(17) -> LatLon( -25.0, +112.5),
-    Spk(24) -> LatLon(  +5.0, +137.5),
-    Spk(28) -> LatLon( +40.0, +122.5),
-    Spk(31) -> LatLon( +35.0, +170.0),
-    Spk(30) -> LatLon( +50.0, -142.5),
-    Spk(36) -> LatLon( +12.5, -150.0),
-    Spk(37) -> LatLon( -10.0, -122.5),
-    Spk(44) -> LatLon( -45.0, -107.5),
-    Spk(46) -> LatLon( -37.5,  -60.0),
-    Spk(16) -> LatLon( -45.0,  -50.0),
-    Spk(15) -> LatLon( -75.0,  -35.0),
-    Spk(19) -> LatLon( -67.5, -172.5),
-    Spk(18) -> LatLon( -35.0, +152.5),
-    Spk(20) -> LatLon(  -7.5, +167.5),
-    Spk(32) -> LatLon(  +7.5, +172.5),
-    Spk(39) -> LatLon(  -5.0, +180.0),
-    Spk(38) -> LatLon( -27.5, -157.5),
-    Spk(40) -> LatLon( -62.5, -160.0)
-  )
-
-  assert(ChannelToGeoMap.size == 42 && ChannelToGeoMap.valuesIterator.toSet.size == 42)
+  //  final val ChannelToGeoMap = Map[Spk, LatLon](
+  //    Spk( 3) -> LatLon( -40.0,  +35.0),
+  //    Spk( 6) -> LatLon( -12.5,  +30.0),
+  //    Spk( 5) -> LatLon(  +5.0,    0.0),
+  //    Spk( 7) -> LatLon( +35.0,  -25.0),
+  //    Spk( 4) -> LatLon( +27.5,  -60.0),
+  //    Spk(21) -> LatLon( -45.0,  +45.0),
+  //    Spk(25) -> LatLon( +10.0,  +57.5),
+  //    Spk( 8) -> LatLon( +27.5,  +22.5),
+  //    Spk(26) -> LatLon( +65.0,  +12.5),
+  //    Spk(33) -> LatLon( +27.5,  -67.5),
+  //    Spk(41) -> LatLon( +17.5,  -65.0),
+  //    Spk(45) -> LatLon(  +2.5,  -12.5),
+  //    Spk(22) -> LatLon( -25.0,  +72.5),
+  //    Spk(23) -> LatLon( +10.0,  +97.5),
+  //    Spk(27) -> LatLon( +45.0,  +72.5),
+  //    Spk(29) -> LatLon( +75.0, +142.5),
+  //    Spk(34) -> LatLon( +60.0,  -75.0),
+  //    Spk(35) -> LatLon( +25.0, -107.5),
+  //    Spk(43) -> LatLon( -10.0,  -82.5),
+  //    Spk(42) -> LatLon(  -5.0,  -42.5),
+  //    Spk(10) -> LatLon(  -7.5,   -5.0),
+  //    Spk(11) -> LatLon( -35.0,  -10.0),
+  //    Spk(13) -> LatLon( -52.5,  +27.5),
+  //    Spk(14) -> LatLon( -60.0, +102.5),
+  //    Spk(17) -> LatLon( -25.0, +112.5),
+  //    Spk(24) -> LatLon(  +5.0, +137.5),
+  //    Spk(28) -> LatLon( +40.0, +122.5),
+  //    Spk(31) -> LatLon( +35.0, +170.0),
+  //    Spk(30) -> LatLon( +50.0, -142.5),
+  //    Spk(36) -> LatLon( +12.5, -150.0),
+  //    Spk(37) -> LatLon( -10.0, -122.5),
+  //    Spk(44) -> LatLon( -45.0, -107.5),
+  //    Spk(46) -> LatLon( -37.5,  -60.0),
+  //    Spk(16) -> LatLon( -45.0,  -50.0),
+  //    Spk(15) -> LatLon( -75.0,  -35.0),
+  //    Spk(19) -> LatLon( -67.5, -172.5),
+  //    Spk(18) -> LatLon( -35.0, +152.5),
+  //    Spk(20) -> LatLon(  -7.5, +167.5),
+  //    Spk(32) -> LatLon(  +7.5, +172.5),
+  //    Spk(39) -> LatLon(  -5.0, +180.0),
+  //    Spk(38) -> LatLon( -27.5, -157.5),
+  //    Spk(40) -> LatLon( -62.5, -160.0)
+  //  )
 
   private val chans = MatrixToChannelMap.valuesIterator.map(_.num).toVector.sorted
   assert(chans == (3 to 8) ++ (10 to 11) ++ (13 to 46), s"ChannelMap does not have expected values: $chans")
@@ -202,7 +203,15 @@ object Turbulence extends Runnable {
       }
     }
 
-  final val ChannelToGeoMap2: Map[Spk, LatLonIdx] = ChannelToMatrixMap.map { case (spk, dyn) =>
+  /** Maps from loudspeaker channels to
+    * quantized (lat, lon) pairs. Nearest
+    * raster points are used except where
+    * there are "jumps" in the Dymaxion,
+    * in which case we go "away" a little
+    * from the gap, so there are no two
+    * loudspeakers with the same geo-coordinates.
+    */
+  final val ChannelToGeoMap: Map[Spk, LatLonIdx] = ChannelToMatrixMap.map { case (spk, dyn) =>
     val pt1 = dyn.toPoint.equalize
     val nn  = LatLonDym.minBy { case (ll, pt2) =>
       pt1 distanceTo pt2.equalize
@@ -210,7 +219,9 @@ object Turbulence extends Runnable {
     spk -> nn._1
   }
 
-  ChannelToGeoMap2.foreach(println)
+  assert(ChannelToGeoMap.size == 42 && ChannelToGeoMap.valuesIterator.toSet.size == 42)
+
+  // ChannelToGeoMap2.toList.sortBy(_._1.num).map(tup => (tup._1, tup._2.toLatLon)).foreach(println)
 
   //  final val VoronoiMap: Map[Spk, Vec[LatLonIdx]] = {
   //    val norm = ChannelToMatrixMap.map { case (spk, dyn) => spk -> dyn.toPoint }
