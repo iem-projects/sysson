@@ -118,11 +118,18 @@ object Turbulence extends Runnable {
   private val chans = MatrixToChannelMap.valuesIterator.toVector.sorted
   assert(chans == (3 to 8) ++ (10 to 11) ++ (13 to 46), s"ChannelMap does not have expected values: $chans")
 
+  def decimate[A](in: Vec[A])(n: Int): Vec[A] = in.iterator.zipWithIndex.collect {
+    case (x, i) if i % n == 0 => x
+  } .toIndexedSeq
+
   def run(): Unit = {
     Main.run()
 
     val dyn     = new DymaxionView
-    dyn.crosses = Preparations.dymGrid.flatten
+    dyn.drawImage = false
+    dyn.drawSpeakers = false
+    // dyn.crosses = decimate(Preparations.dymGridAng.map(decimate(_)(8)))(4).flatten
+    dyn.crosses = Preparations.dymGridAng.flatten
     dyn.mouseControl = false
     val merc    = new MercatorView(dyn)
 

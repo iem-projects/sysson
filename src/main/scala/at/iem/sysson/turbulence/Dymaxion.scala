@@ -89,20 +89,16 @@ object Dymaxion {
     * @param lon  longitude in degrees
     * @param lat  latitude  in degrees
     */
-  def mapLonLat(lon: Double, lat: Double): Pt2 = mapLonLat2(lon = lon, lat = lat)._1
-
-  def mapLonLat2(lon: Double, lat: Double): (Pt2, Double) = {
+  def mapLonLat(lon: Double, lat: Double): Pt2 = {
     val pt = lonLatToCartesian(lon, lat)
-    mapCartesian2(pt)
+    mapCartesian(pt)
   }
 
   /** Maps a 3D cartesian coordinate with respect to the globe
     * to a 2D cartesian coordinate with respect to the Dymaxion
     * projection.
     */
-  def mapCartesian(pt: Pt3): Pt2 = mapCartesian2(pt)._1
-
-  def mapCartesian2(pt: Pt3): (Pt2, Double) = {
+  def mapCartesian(pt: Pt3): Pt2 = {
     val faceIdx = findFaceIndex(pt)
 
     val vIdx    = faces(faceIdx)._1
@@ -146,7 +142,7 @@ object Dymaxion {
     val yr   = x * sin(ang) + y * cos(ang)
     val vy   = pos.yi * 2 + (pos.x % 2)
 
-    Pt2(pos.x + xr * xScale, vy - yr * yScale) -> ang
+    Pt2(pos.x + xr * xScale, vy - yr * yScale)
   }
 
   private final val xScale = 2

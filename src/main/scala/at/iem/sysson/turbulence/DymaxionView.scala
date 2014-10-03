@@ -9,6 +9,7 @@ import de.sciss.lucre.synth.{Escape, Txn, Synth}
 import de.sciss.mellite.Mellite
 import de.sciss.synth.{addToTail, SynthGraph}
 import Dymaxion.Pt2
+import de.sciss.numbers.Implicits._
 
 import scala.concurrent.stm.{TxnExecutor, Ref}
 import scala.swing.event.{MouseDragged, MouseReleased, MousePressed, MouseMoved}
@@ -20,11 +21,20 @@ object DymaxionView {
   final val hScale = 92
   /** Vertical scale factor */
   final val vScale = 53.33333f
+
+  def scalePt(in: Pt2) = Pt2(in.x * hScale, in.y * vScale)
+
+  def scaledDist(a: Pt2, b: Pt2): Double = {
+    val dx = b.x - a.x
+    val dy = b.y - a.y
+    ((dx * hScale).squared + (dy * vScale).squared).sqrt
+  }
 }
 class DymaxionView extends Component {
   import DymaxionView._
-  
-  private val DRAW_SPKR       = true
+
+  private var _drawImage      = true
+  private var _drawSpkr       = true
   private val DRAW_SPKR_IDX   = true
 
   // private val image = Toolkit.getDefaultToolkit.createImage(getClass.getClassLoader.getResource("dymaxion.png"))
@@ -49,7 +59,8 @@ class DymaxionView extends Component {
   private val gpFill      = new GeneralPath(Path2D.WIND_NON_ZERO,  4)
   private val gpStroke    = new GeneralPath(Path2D.WIND_NON_ZERO, 20)
   private val circle      = new Ellipse2D.Float()
-  private val line        = new Line2D.Float()
+  // private val line        = new Line2D.Float()
+  private val gpTemp      = new GeneralPath(Path2D.WIND_NON_ZERO,  4)
   private val colrTri     = new Color(0xFF, 0x00, 0x00, 0x7F)
   private val colrSpkr    = new Color(0x00, 0xFF, 0xFF, 0x7F)
   private val colrEmpty   = new Color(0x00, 0x00, 0x00, 0x4F)
@@ -60,6 +71,18 @@ class DymaxionView extends Component {
   private var _mark = Option.empty[Pt2]
 
   private var _crosses = Vec.empty[(Pt2, Double)]
+
+  def drawImage: Boolean = _drawImage
+  def drawImage_=(value: Boolean): Unit = if (_drawImage != value) {
+    _drawImage = value
+    repaint()
+  }
+
+  def drawSpeakers: Boolean = _drawSpkr
+  def drawSpeakers_=(value: Boolean): Unit = if (_drawSpkr != value) {
+    _drawSpkr = value
+    repaint()
+  }
 
   def mark: Option[Pt2] = _mark
   def mark_=(value: Option[Pt2]): Unit = if (_mark != value) {
@@ -101,12 +124,13 @@ class DymaxionView extends Component {
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     }
 
-    g.setColor(Color.gray)
-    g.fillRect(0, 0, w1, h1)
-    // g.drawImage(image, 0, 0, peer)
-    image.paintIcon(peer, g, gainRadius, gainRadius)
+    if (_drawImage) {
+      g.setColor(Color.gray)
+      g.fillRect(0, 0, w1, h1)
+      image.paintIcon(peer, g, gainRadius, gainRadius)
+    }
 
-    if (DRAW_SPKR) {
+    if (_drawSpkr) {
       var vx = 0; while (vx < numCols) {
         var vyi = 0; while (vyi < numRows) {
           val vy  = vyi * 2 + (vx % 2)
@@ -151,18 +175,19 @@ class DymaxionView extends Component {
 
     if (_crosses.nonEmpty) {
       g.setColor(Color.red)
-      val rad = 8
+      val rad = 8 // 16
       _crosses.foreach { case (Pt2(vx, vy), ang) =>
         val xp  = vx * hScale + gainRadius
         val yp  = vy * vScale + gainRadius
         // line.setLine(xp - rad, yp - rad, xp + rad, yp + rad)
         val angL = ang - 10.toRadians
-        line.setLine(xp, yp, xp + math.cos(angL) * rad, yp - math.sin(angL) * rad)
-        g.draw(line)
+        gpTemp.reset()
+        gpTemp.moveTo(xp - math.cos(angL) * rad, yp + math.sin(angL) * rad)
+        gpTemp.lineTo(xp, yp)
         // line.setLine(xp - rad, yp + rad, xp + rad, yp - rad)
         val angR = ang + 10.toRadians
-        line.setLine(xp, yp, xp + math.cos(angR) * rad, yp - math.sin(angR) * rad)
-        g.draw(line)
+        gpTemp.lineTo(xp - math.cos(angR) * rad, yp + math.sin(angR) * rad)
+        g.draw(gpTemp)
       }
     }
   }
