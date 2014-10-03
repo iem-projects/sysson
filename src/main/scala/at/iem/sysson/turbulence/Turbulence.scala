@@ -13,7 +13,7 @@ object Turbulence extends Runnable {
     * equilateral triangle grid to speaker channel
     * (1-based offset)
     */
-  final val ChannelMap = Map[(Int, Int), Int](
+  final val MatrixToChannelMap = Map[(Int, Int), Int](
     ( 4, 0) ->  3,
     ( 6, 0) ->  5,
     ( 8, 0) ->  4,
@@ -58,7 +58,62 @@ object Turbulence extends Runnable {
     (11, 4) -> 40
   )
 
-  private val chans = ChannelMap.valuesIterator.toVector.sorted
+  /** Maps from loudspeaker channels to
+    * quantized (lat, lon) pairs. Nearest
+    * raster points are used except where
+    * there are "jumps" in the Dymaxion,
+    * in which case we go "away" a little
+    * from the gap, so there are no two
+    * loudspeakers with the same geo-coordinates.
+    */
+  final val ChannelToGeoMap = Map[Int, (Double, Double)](
+     3 -> ( -40.0,  +35.0),
+     6 -> ( -12.5,  +30.0),
+     5 -> (  +5.0,    0.0),
+     7 -> ( +35.0,  -25.0),
+     4 -> ( +27.5,  -60.0),
+    21 -> ( -45.0,  +45.0),
+    25 -> ( +10.0,  +57.5),
+     8 -> ( +27.5,  +22.5),
+    26 -> ( +65.0,  +12.5),
+    33 -> ( +27.5,  -67.5),
+    41 -> ( +17.5,  -65.0),
+    45 -> (  +2.5,  -12.5),
+    22 -> ( -25.0,  +72.5),
+    23 -> ( +10.0,  +97.5),
+    27 -> ( +45.0,  +72.5),
+    29 -> ( +75.0, +142.5),
+    34 -> ( +60.0,  -75.0),
+    35 -> ( +25.0, -107.5),
+    43 -> ( -10.0,  -82.5),
+    42 -> (  -5.0,  -42.5),
+    10 -> (  -7.5,   -5.0),
+    11 -> ( -35.0,  -10.0),
+    13 -> ( -52.5,  +27.5),
+    14 -> ( -60.0, +102.5),
+    17 -> ( -25.0, +112.5),
+    24 -> (  +5.0, +137.5),
+    28 -> ( +40.0, +122.5),
+    31 -> ( +35.0, +170.0),
+    30 -> ( +50.0, -142.5),
+    36 -> ( +12.5, -150.0),
+    37 -> ( -10.0, -122.5),
+    44 -> ( -45.0, -107.5),
+    46 -> ( -37.5,  -60.0),
+    16 -> ( -45.0,  -50.0),
+    15 -> ( -75.0,  -35.0),
+    19 -> ( -67.5, -172.5),
+    18 -> ( -35.0, +152.5),
+    20 -> (  -7.5, +167.5),
+    32 -> (  +7.5, +172.5),
+    39 -> (  -5.0, +180.0),
+    38 -> ( -27.5, -157.5),
+    40 -> ( -62.5, -160.0)
+  )
+
+  assert(ChannelToGeoMap.size == 42 && ChannelToGeoMap.valuesIterator.toSet.size == 42)
+
+  private val chans = MatrixToChannelMap.valuesIterator.toVector.sorted
   assert(chans == (3 to 8) ++ (10 to 11) ++ (13 to 46), s"ChannelMap does not have expected values: $chans")
 
   def run(): Unit = {

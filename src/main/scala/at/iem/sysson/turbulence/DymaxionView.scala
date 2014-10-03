@@ -74,7 +74,7 @@ class DymaxionView extends Component {
           val xp  = vx * hSz + gainRadius
           val yp  = vy * vSz + gainRadius
           circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
-          val chanOpt = Turbulence.ChannelMap.get((vx, vyi))
+          val chanOpt = Turbulence.MatrixToChannelMap.get((vx, vyi))
           g.setColor(if (chanOpt.isDefined) colrSpkr else colrEmpty)
           g.fill(circle)
           if (DRAW_SPKR_IDX) {
@@ -248,11 +248,11 @@ class DymaxionView extends Component {
 
     atomic { implicit tx =>
       synthRef.get(tx.peer).foreach { synth =>
-        val c1Opt = Turbulence.ChannelMap.get((vx1, vy1i))
+        val c1Opt = Turbulence.MatrixToChannelMap.get((vx1, vy1i))
         val c1    = c1Opt.map(_ - 1).getOrElse(0)
-        val c2Opt = Turbulence.ChannelMap.get((vx2, vy2i))
+        val c2Opt = Turbulence.MatrixToChannelMap.get((vx2, vy2i))
         val c2    = c2Opt.map(_ - 1).getOrElse(0)
-        val c3Opt = Turbulence.ChannelMap.get((vx3, vy3i))
+        val c3Opt = Turbulence.MatrixToChannelMap.get((vx3, vy3i))
         val c3    = c3Opt.map(_ - 1).getOrElse(0)
         val g1b   = if (c1Opt.isEmpty) 0f else g1
         val g2b   = if (c2Opt.isEmpty) 0f else g2

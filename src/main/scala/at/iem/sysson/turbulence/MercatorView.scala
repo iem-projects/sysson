@@ -41,19 +41,34 @@ class MercatorView(dymaxion: DymaxionView) extends Component {
   listenTo(mouse.clicks)
 
   reactions += {
-    case MousePressed(_, pt, _, _, _) =>
+    case m @ MousePressed(_, pt, _, _, _) =>
+      val alt = m.peer.isAltDown
       dymaxion.play()
-      process(pt)
-    case MouseDragged(_, pt, _) =>
-      process(pt)
+      process(pt, quant = alt)
+    case m @ MouseDragged(_, pt, mod) =>
+      val alt = m.peer.isAltDown
+      process(pt, quant = alt)
     case MouseReleased(_, _, _, _, _) =>
       dymaxion.stop()
   }
 
-  private def process(pt: Point): Unit = {
-    val lon = pt.x.linlin(0, w, -180, 180)
-    val lat = pt.y.linlin(0, h,   90, -90)
-    tooltip = f"lat = $lat%1.2f, lon = $lon%1.2f"
+  private var lastPrinted = (-999.0, -999.0)
+
+  private def process(pt: Point, quant: Boolean): Unit = {
+    val lon0 = pt.x.linlin(0, w, -180, 180)
+    val lat0 = pt.y.linlin(0, h,   90, -90)
+    val lat  = if (quant) lat0.roundTo(2.5) else lat0
+    val lon  = if (quant) lon0.roundTo(2.5) else lon0
+    val tt   = f"lat = $lat%1.2f, lon = $lon%1.2f"
+    tooltip  = tt
+    if (quant) {
+      val pair = (lat, lon)
+      if (lastPrinted != pair) {
+        println(tt)
+        lastPrinted = pair
+      }
+    }
+
     val idx = Dymaxion.findFaceIndex   (lon = lon, lat = lat)
     val h0 = Dymaxion.mapLonLat(lon = lon, lat = lat)
     // val (h0x, h0y) = Dymaxion.mapCartesian(Dymaxion.center(idx))
