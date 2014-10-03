@@ -25,7 +25,7 @@ import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.lucre.expr.{Expr, Double => DoubleEx, String => StringEx}
 import de.sciss.model
 import de.sciss.lucre.matrix.Matrix
-import de.sciss.synth.proc.impl.ElemImpl
+import de.sciss.synth.proc.impl.{ActiveElemImpl, ElemCompanionImpl}
 
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"
@@ -42,7 +42,7 @@ object SonificationImpl {
 
   // ---- elem ----
 
-  object SonificationElemImpl extends ElemImpl.Companion[Sonification.Elem] {
+  object SonificationElemImpl extends ElemCompanionImpl[Sonification.Elem] {
     final val typeID = Sonification.typeID
 
     // println("register sonification")
@@ -74,7 +74,7 @@ object SonificationImpl {
     private final class Impl[S <: Sys[S]](protected val targets: evt.Targets[S],
                                           val peer: Sonification[S])
       extends Sonification.Elem[S]
-      with ElemImpl.Active[S] {
+      with ActiveElemImpl[S] {
 
       def typeID = SonificationElemImpl.typeID
       def prefix = "Sonification"

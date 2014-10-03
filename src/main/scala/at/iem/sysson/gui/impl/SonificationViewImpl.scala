@@ -22,7 +22,7 @@ import de.sciss.lucre.synth.Sys
 import at.iem.sysson.sound.Sonification
 import de.sciss.lucre.stm
 import de.sciss.mellite.gui.edit.EditAttrMap
-import de.sciss.synth.proc.{Obj, BooleanElem, ObjKeys, ExprImplicits, Transport}
+import de.sciss.synth.proc.{StringElem, Obj, BooleanElem, ObjKeys, ExprImplicits, Transport}
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{OptionPane, UndoManager}
 import de.sciss.swingplus.{GroupPanel, Separator}
@@ -46,7 +46,7 @@ object SonificationViewImpl {
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] = {
     implicit val undoMgr = new UndoManagerImpl
     val sonifH    = tx.newHandle(sonification)
-    val nameView  = sonification.attr.expr[String](ObjKeys.attrName).map { expr =>
+    val nameView  = sonification.attr[StringElem](ObjKeys.attrName).map { expr =>
       // import workspace.cursor
       StringFieldView(expr, "Name")
     }
@@ -234,6 +234,7 @@ object SonificationViewImpl {
         def apply(): Unit = cursor.step { implicit tx =>
           val sonif = sonifH()
           // PatchCodeWindow(sonif.elem.peer.proc)
+          import Mellite.compiler
           CodeFrame.proc(sonif.elem.peer.proc)
         }
       }

@@ -65,7 +65,7 @@ private[gui] object InterpreterViewImpl {
       InterpreterPane(interpreterConfig = intpCfg, codePaneConfig = codeCfg)
     }
 
-    val component = Component.wrap(intp.component)
+    val component = intp.component
 
     val f = new desktop.impl.WindowImpl {
       frame =>

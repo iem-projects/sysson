@@ -17,7 +17,7 @@ import de.sciss.lucre.{event => evt, stm}
 import de.sciss.synth.proc
 import de.sciss.serial.DataInput
 import de.sciss.lucre.matrix.DataSource
-import de.sciss.synth.proc.impl.ElemImpl
+import de.sciss.synth.proc.impl.{BasicElemImpl, ElemCompanionImpl}
 import de.sciss.lucre.event.{EventLike, Sys}
 import de.sciss.lucre.synth.{Sys => SSys}
 import proc.Implicits._
@@ -95,7 +95,7 @@ object DataSourceObjView extends ObjView.Factory {
   }
 }
 
-object DataSourceElem extends ElemImpl.Companion[DataSourceElem] {
+object DataSourceElem extends ElemCompanionImpl[DataSourceElem] {
   final val typeID = 0x30005  // DataSource.typeID
 
   Elem.registerExtension(this)
@@ -126,7 +126,7 @@ object DataSourceElem extends ElemImpl.Companion[DataSourceElem] {
   private final class Impl[S <: Sys[S]](protected val targets: evt.Targets[S],
                                         val peer: DataSource[S])
     extends DataSourceElem[S]
-    with ElemImpl.Basic[S] with evt.Node[S] {
+    with BasicElemImpl[S] with evt.Node[S] {
 
     def typeID = DataSourceElem.typeID
     def prefix = "DataSource"

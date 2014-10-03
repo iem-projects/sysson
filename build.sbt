@@ -30,7 +30,7 @@ lazy val melliteVersion             = "0.11.0-SNAPSHOT"
 
 lazy val lucreMatrixVersion         = "0.3.0"
 
-lazy val scalaColliderSwingVersion  = "1.19.0"
+lazy val scalaColliderSwingVersion  = "1.20.0"
 
 lazy val fileCacheVersion           = "0.3.2"
 
