@@ -1,10 +1,25 @@
+/*
+ *  DymaxionView.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
+ *  Written by Hanns Holger Rutz.
+ *
+ *	This software is published under the GNU General Public License v3+
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
+
 package at.iem.sysson
 package turbulence
 
-import java.awt.geom.{Line2D, Ellipse2D, Path2D, GeneralPath}
+import java.awt.geom.{Ellipse2D, Path2D, GeneralPath}
 import java.awt.{RenderingHints, BasicStroke, Cursor, Color}
 import javax.swing.ImageIcon
 
+import at.iem.sysson.turbulence.Turbulence.{Radians, DynGrid}
 import de.sciss.lucre.synth.{Escape, Txn, Synth}
 import de.sciss.mellite.Mellite
 import de.sciss.synth.{addToTail, SynthGraph}
@@ -70,7 +85,7 @@ class DymaxionView extends Component {
 
   private var _mark = Option.empty[Pt2]
 
-  private var _crosses = Vec.empty[(Pt2, Double)]
+  private var _crosses = Vec.empty[(Pt2, Radians)]
 
   def drawImage: Boolean = _drawImage
   def drawImage_=(value: Boolean): Unit = if (_drawImage != value) {
@@ -93,8 +108,8 @@ class DymaxionView extends Component {
     }
   }
 
-  def crosses: Vec[(Pt2, Double)] = _crosses
-  def crosses_=(value: Vec[(Pt2, Double)]): Unit = {
+  def crosses: Vec[(Pt2, Radians)] = _crosses
+  def crosses_=(value: Vec[(Pt2, Radians)]): Unit = {
     _crosses = value
     repaint()
   }
@@ -137,7 +152,7 @@ class DymaxionView extends Component {
           val xp  = vx * hScale + gainRadius
           val yp  = vy * vScale + gainRadius
           circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
-          val chanOpt = Turbulence.MatrixToChannelMap.get((vx, vyi))
+          val chanOpt = Turbulence.MatrixToChannelMap.get(DynGrid(vx, vyi))
           g.setColor(if (chanOpt.isDefined) colrSpkr else colrEmpty)
           g.fill(circle)
           if (DRAW_SPKR_IDX) {
@@ -175,17 +190,18 @@ class DymaxionView extends Component {
 
     if (_crosses.nonEmpty) {
       g.setColor(Color.red)
-      val rad = 8 // 16
+      val rad  = 8 // 16
+      val angD = 10.toRadians
       _crosses.foreach { case (Pt2(vx, vy), ang) =>
         val xp  = vx * hScale + gainRadius
         val yp  = vy * vScale + gainRadius
         // line.setLine(xp - rad, yp - rad, xp + rad, yp + rad)
-        val angL = ang - 10.toRadians
+        val angL = ang.value - angD
         gpTemp.reset()
         gpTemp.moveTo(xp - math.cos(angL) * rad, yp + math.sin(angL) * rad)
         gpTemp.lineTo(xp, yp)
         // line.setLine(xp - rad, yp + rad, xp + rad, yp - rad)
-        val angR = ang + 10.toRadians
+        val angR = ang.value + angD
         gpTemp.lineTo(xp - math.cos(angR) * rad, yp + math.sin(angR) * rad)
         g.draw(gpTemp)
       }
@@ -327,12 +343,12 @@ class DymaxionView extends Component {
 
     atomic { implicit tx =>
       synthRef.get(tx.peer).foreach { synth =>
-        val c1Opt = Turbulence.MatrixToChannelMap.get((vx1, vy1i))
-        val c1    = c1Opt.map(_ - 1).getOrElse(0)
-        val c2Opt = Turbulence.MatrixToChannelMap.get((vx2, vy2i))
-        val c2    = c2Opt.map(_ - 1).getOrElse(0)
-        val c3Opt = Turbulence.MatrixToChannelMap.get((vx3, vy3i))
-        val c3    = c3Opt.map(_ - 1).getOrElse(0)
+        val c1Opt = Turbulence.MatrixToChannelMap.get(DynGrid(vx1, vy1i))
+        val c1    = c1Opt.map(_.toIndex).getOrElse(0)
+        val c2Opt = Turbulence.MatrixToChannelMap.get(DynGrid(vx2, vy2i))
+        val c2    = c2Opt.map(_.toIndex).getOrElse(0)
+        val c3Opt = Turbulence.MatrixToChannelMap.get(DynGrid(vx3, vy3i))
+        val c3    = c3Opt.map(_.toIndex).getOrElse(0)
         val g1b   = if (c1Opt.isEmpty) 0f else g1
         val g2b   = if (c2Opt.isEmpty) 0f else g2
         val g3b   = if (c3Opt.isEmpty) 0f else g3
