@@ -15,7 +15,9 @@
 package at.iem.sysson
 package turbulence
 
+import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.DymPt
+import de.sciss.file.File
 import de.sciss.{numbers, pdflitz, kollflitz}
 
 import java.awt.EventQueue
@@ -271,4 +273,14 @@ object Turbulence extends Runnable {
       open()
     }
   }
+
+  // ---------------------------------
+
+  def convertViaVoronoi(f: File, varName: String): Unit = {
+    import sysson.Implicits._
+    val nc  = openFile(f)
+    val vr  = nc.variableMap(varName)
+
+  }
+
 }
