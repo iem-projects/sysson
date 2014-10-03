@@ -15,21 +15,22 @@
 package at.iem.sysson
 package turbulence
 
-import at.iem.sysson.turbulence.Dymaxion.{DynPt, Pt2}
-import de.sciss.{numbers, pdflitz}
+import at.iem.sysson.turbulence.Dymaxion.DymPt
+import de.sciss.{numbers, pdflitz, kollflitz}
 
 import java.awt.EventQueue
 
 import scala.swing.Frame
+import scala.collection.breakOut
 
 object Turbulence extends Runnable {
   // don't use `App` because body will not be initialized if we don't use it as main entry
   def main(args: Array[String]): Unit = EventQueue.invokeLater(this)
 
-  final case class DynGrid(vx: Int, vyi: Int) {
-    def toPoint: DynPt = {
+  final case class DymGrid(vx: Int, vyi: Int) {
+    def toPoint: DymPt = {
       val vy = vyi * 2 + (vx % 2)
-      DynPt(vx, vy)
+      DymPt(vx, vy)
     }
   }
 
@@ -42,49 +43,49 @@ object Turbulence extends Runnable {
     * equilateral triangle grid to speaker channel
     * (1-based offset)
     */
-  final val MatrixToChannelMap = Map[DynGrid, Spk](
-    DynGrid( 4, 0) -> Spk( 3),
-    DynGrid( 6, 0) -> Spk( 5),
-    DynGrid( 8, 0) -> Spk( 4),
-    DynGrid( 5, 0) -> Spk( 6),
-    DynGrid( 7, 0) -> Spk( 7),
-    DynGrid( 6, 1) -> Spk( 8),
-    DynGrid( 3, 1) -> Spk(21),
-    DynGrid( 5, 1) -> Spk(25),
-    DynGrid( 7, 1) -> Spk(26),
-    DynGrid( 9, 1) -> Spk(33),
-    DynGrid(11, 1) -> Spk(41),
-    DynGrid(13, 1) -> Spk(45),
-    DynGrid( 4, 2) -> Spk(22),
-    DynGrid( 6, 2) -> Spk(27),
-    DynGrid( 8, 2) -> Spk(34),
-    DynGrid(12, 2) -> Spk(42),
-    DynGrid( 5, 2) -> Spk(23),
-    DynGrid( 7, 2) -> Spk(29),
-    DynGrid( 9, 2) -> Spk(35),
-    DynGrid(11, 2) -> Spk(43),
-    DynGrid( 0, 3) -> Spk(10),
-    DynGrid( 2, 3) -> Spk(13),
-    DynGrid( 4, 3) -> Spk(17),
-    DynGrid( 6, 3) -> Spk(28),
-    DynGrid( 8, 3) -> Spk(30),
-    DynGrid(10, 3) -> Spk(37),
-    DynGrid(12, 3) -> Spk(46),
-    DynGrid( 1, 3) -> Spk(11),
-    DynGrid( 3, 3) -> Spk(14),
-    DynGrid( 5, 3) -> Spk(24),
-    DynGrid( 7, 3) -> Spk(31),
-    DynGrid( 9, 3) -> Spk(36),
-    DynGrid(11, 3) -> Spk(44),
-    DynGrid( 2, 4) -> Spk(15),
-    DynGrid( 4, 4) -> Spk(18),
-    DynGrid(10, 4) -> Spk(38),
-    DynGrid( 1, 4) -> Spk(16),
-    DynGrid( 3, 4) -> Spk(19),
-    DynGrid( 5, 4) -> Spk(20),
-    DynGrid( 7, 4) -> Spk(32),
-    DynGrid( 9, 4) -> Spk(39),
-    DynGrid(11, 4) -> Spk(40)
+  final val MatrixToChannelMap = Map[DymGrid, Spk](
+    DymGrid( 4, 0) -> Spk( 3),
+    DymGrid( 6, 0) -> Spk( 5),
+    DymGrid( 8, 0) -> Spk( 4),
+    DymGrid( 5, 0) -> Spk( 6),
+    DymGrid( 7, 0) -> Spk( 7),
+    DymGrid( 6, 1) -> Spk( 8),
+    DymGrid( 3, 1) -> Spk(21),
+    DymGrid( 5, 1) -> Spk(25),
+    DymGrid( 7, 1) -> Spk(26),
+    DymGrid( 9, 1) -> Spk(33),
+    DymGrid(11, 1) -> Spk(41),
+    DymGrid(13, 1) -> Spk(45),
+    DymGrid( 4, 2) -> Spk(22),
+    DymGrid( 6, 2) -> Spk(27),
+    DymGrid( 8, 2) -> Spk(34),
+    DymGrid(12, 2) -> Spk(42),
+    DymGrid( 5, 2) -> Spk(23),
+    DymGrid( 7, 2) -> Spk(29),
+    DymGrid( 9, 2) -> Spk(35),
+    DymGrid(11, 2) -> Spk(43),
+    DymGrid( 0, 3) -> Spk(10),
+    DymGrid( 2, 3) -> Spk(13),
+    DymGrid( 4, 3) -> Spk(17),
+    DymGrid( 6, 3) -> Spk(28),
+    DymGrid( 8, 3) -> Spk(30),
+    DymGrid(10, 3) -> Spk(37),
+    DymGrid(12, 3) -> Spk(46),
+    DymGrid( 1, 3) -> Spk(11),
+    DymGrid( 3, 3) -> Spk(14),
+    DymGrid( 5, 3) -> Spk(24),
+    DymGrid( 7, 3) -> Spk(31),
+    DymGrid( 9, 3) -> Spk(36),
+    DymGrid(11, 3) -> Spk(44),
+    DymGrid( 2, 4) -> Spk(15),
+    DymGrid( 4, 4) -> Spk(18),
+    DymGrid(10, 4) -> Spk(38),
+    DymGrid( 1, 4) -> Spk(16),
+    DymGrid( 3, 4) -> Spk(19),
+    DymGrid( 5, 4) -> Spk(20),
+    DymGrid( 7, 4) -> Spk(32),
+    DymGrid( 9, 4) -> Spk(39),
+    DymGrid(11, 4) -> Spk(40)
   )
 
   final case class LatLon(lat: Double, lon: Double) {
@@ -99,7 +100,7 @@ object Turbulence extends Runnable {
     * to (x, y) index with respect to the
     * equilateral triangle grid
     */
-  final val ChannelToMatrixMap: Map[Spk, DynGrid] = MatrixToChannelMap.map(_.swap)
+  final val ChannelToMatrixMap: Map[Spk, DymGrid] = MatrixToChannelMap.map(_.swap)
 
   /** Maps from loudspeaker channels to
     * quantized (lat, lon) pairs. Nearest
@@ -166,41 +167,38 @@ object Turbulence extends Runnable {
   final val NumLon = 144
 
   /** Maps latitude index to longitude index to dymaxion coordinate. */
-  final val LatLonIndicesToDymMap: Vec[Vec[DynPt]] = Vector.tabulate(NumLat) { latIdx =>
-    Vector.tabulate(NumLon) { lonIdx =>
+  final val LatLonIndicesToDymMap: Map[LatLonIdx, DymPt] = (0 until NumLat).flatMap { latIdx =>
+    (0 until NumLon).map { lonIdx =>
       val lon = longitude(lonIdx)
       val lat = latitude (latIdx)
-      Dymaxion.mapLonLat(lat = lat, lon = lon)
+      val dym = Dymaxion.mapLonLat(lat = lat, lon = lon)
+      LatLonIdx(latIdx, lonIdx) -> dym
     }
-  }
+  } (breakOut)
 
-  final val LatLonDym: Vec[(LatLonIdx, DynPt)] = LatLonIndicesToDymMap.zipWithIndex.flatMap { case (inLat, latIdx) =>
-    inLat.zipWithIndex.map { case (pt, lonIdx) => LatLonIdx(latIdx, lonIdx) -> pt }
-  }
+  final val LatLonDym: Vec[(LatLonIdx, DymPt)] = LatLonIndicesToDymMap.toVector
 
   final case class Radians(value: Double) extends AnyVal
 
   /** Maps latitude index to longitude index to
     * a pair of dymaxion coordinate and northward direction ("compass")
     */
-  final val LatLonIndicesToDymCompassMap: Vec[Vec[(DynPt, Radians)]] =
-    LatLonIndicesToDymMap.zipWithIndex.map { case (inLat, latIdx) =>
-      inLat.zipWithIndex.map { case (pt1, lonIdx) =>
-        val latS = latIdx - 1
-        val latN = latIdx + 1
-        val ptS  = if (latS  <  0) DynPt(-99, -99) else LatLonIndicesToDymMap(latS)(lonIdx)
-        val ptN  = if (latN >= 73) DynPt(-99, -99) else LatLonIndicesToDymMap(latN)(lonIdx)
+  final val LatLonIndicesToDymCompassMap: Map[LatLonIdx, (DymPt, Radians)] =
+    LatLonIndicesToDymMap.map { case (idx, pt1) =>
+      val latS = idx.latIdx - 1
+      val latN = idx.latIdx + 1
+      val ptS  = if (latS  <  0) DymPt(-99, -99) else LatLonIndicesToDymMap(LatLonIdx(latS, idx.lonIdx))
+      val ptN  = if (latN >= 73) DymPt(-99, -99) else LatLonIndicesToDymMap(LatLonIdx(latN, idx.lonIdx))
 
-        val pt1Eq     = pt1.equalize
-        val ptSEq     = ptS.equalize
-        val ptNEq     = ptN.equalize
-        val useSouth  = (pt1Eq distanceTo ptSEq) < (pt1Eq distanceTo ptNEq)
-        val pt2Eq     = if (useSouth) ptSEq else ptNEq
-        val ang1      = math.atan2(-(pt2Eq.y - pt1Eq.y), pt2Eq.x - pt1Eq.x)
-        val ang       = if (useSouth) (ang1 + math.Pi) % (2 * math.Pi) else ang1
+      val pt1Eq     = pt1.equalize
+      val ptSEq     = ptS.equalize
+      val ptNEq     = ptN.equalize
+      val useSouth  = (pt1Eq distanceTo ptSEq) < (pt1Eq distanceTo ptNEq)
+      val pt2Eq     = if (useSouth) ptSEq else ptNEq
+      val ang1      = math.atan2(-(pt2Eq.y - pt1Eq.y), pt2Eq.x - pt1Eq.x)
+      val ang       = if (useSouth) (ang1 + math.Pi) % (2 * math.Pi) else ang1
 
-        (pt1, Radians(ang))
-      }
+      idx -> (pt1, Radians(ang))
     }
 
   /** Maps from loudspeaker channels to
@@ -211,8 +209,8 @@ object Turbulence extends Runnable {
     * from the gap, so there are no two
     * loudspeakers with the same geo-coordinates.
     */
-  final val ChannelToGeoMap: Map[Spk, LatLonIdx] = ChannelToMatrixMap.map { case (spk, dyn) =>
-    val pt1 = dyn.toPoint.equalize
+  final val ChannelToGeoMap: Map[Spk, LatLonIdx] = ChannelToMatrixMap.map { case (spk, dym) =>
+    val pt1 = dym.toPoint.equalize
     val nn  = LatLonDym.minBy { case (ll, pt2) =>
       pt1 distanceTo pt2.equalize
     }
@@ -223,10 +221,20 @@ object Turbulence extends Runnable {
 
   // ChannelToGeoMap2.toList.sortBy(_._1.num).map(tup => (tup._1, tup._2.toLatLon)).foreach(println)
 
-  //  final val VoronoiMap: Map[Spk, Vec[LatLonIdx]] = {
-  //    val norm = ChannelToMatrixMap.map { case (spk, dyn) => spk -> dyn.toPoint }
-  //
-  //  }
+  final val VoronoiMap: Map[Spk, Vec[LatLonIdx]] = {
+    val norm = ChannelToMatrixMap.map { case (spk, dym) => spk -> dym.toPoint }
+    val v: Vec[(Spk, LatLonIdx)] = LatLonDym.map { case (latLonIdx, dym2) =>
+      val pt2 = dym2.equalize
+      val spk = norm.minBy(_._2.equalize.distanceTo(pt2))._1
+      (spk, latLonIdx)
+    }
+    import kollflitz.Ops._
+    v.toMultiMap(_._1)(_._2)
+  }
+
+  def channelCrosses(spk: Spk): Vec[(DymPt, Radians)] = VoronoiMap.getOrElse(spk, Vec.empty).map { idx =>
+    LatLonIndicesToDymCompassMap(idx)
+  }
 
   def decimate[A](in: Vec[A])(n: Int): Vec[A] = in.iterator.zipWithIndex.collect {
     case (x, i) if i % n == 0 => x
@@ -239,7 +247,9 @@ object Turbulence extends Runnable {
     //    dyn.drawImage    = false
     //    dyn.drawSpeakers = false
     // dyn.crosses = decimate(Preparations.dymGridAng.map(decimate(_)(8)))(4).flatten
-    dyn.crosses      = LatLonIndicesToDymCompassMap.flatten
+
+    // dyn.crosses      = LatLonIndicesToDymCompassMap.valuesIterator.toVector
+    dyn.crosses = channelCrosses(Spk(1))
     dyn.mouseControl = false
     val merc    = new MercatorView(dyn)
 

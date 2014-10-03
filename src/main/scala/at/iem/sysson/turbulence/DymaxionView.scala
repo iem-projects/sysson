@@ -19,11 +19,11 @@ import java.awt.geom.{Ellipse2D, Path2D, GeneralPath}
 import java.awt.{RenderingHints, BasicStroke, Cursor, Color}
 import javax.swing.ImageIcon
 
-import at.iem.sysson.turbulence.Turbulence.{Radians, DynGrid}
+import at.iem.sysson.turbulence.Turbulence.{Radians, DymGrid}
 import de.sciss.lucre.synth.{Escape, Txn, Synth}
 import de.sciss.mellite.Mellite
 import de.sciss.synth.{addToTail, SynthGraph}
-import at.iem.sysson.turbulence.Dymaxion.DynPt
+import at.iem.sysson.turbulence.Dymaxion.DymPt
 
 import scala.concurrent.stm.{TxnExecutor, Ref}
 import scala.swing.event.{MouseDragged, MouseReleased, MousePressed, MouseMoved}
@@ -69,9 +69,9 @@ class DymaxionView extends Component {
   // private val strkGain    = new BasicStroke(2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array(2f, 2f), 0f)
   private val strkGain    = new BasicStroke(2f)
 
-  private var _mark = Option.empty[DynPt]
+  private var _mark = Option.empty[DymPt]
 
-  private var _crosses = Vec.empty[(DynPt, Radians)]
+  private var _crosses = Vec.empty[(DymPt, Radians)]
 
   def drawImage: Boolean = _drawImage
   def drawImage_=(value: Boolean): Unit = if (_drawImage != value) {
@@ -85,8 +85,8 @@ class DymaxionView extends Component {
     repaint()
   }
 
-  def mark: Option[DynPt] = _mark
-  def mark_=(value: Option[DynPt]): Unit = if (_mark != value) {
+  def mark: Option[DymPt] = _mark
+  def mark_=(value: Option[DymPt]): Unit = if (_mark != value) {
     _mark = value
     // repaint()
     value.fold(repaint()) { pt =>
@@ -94,8 +94,8 @@ class DymaxionView extends Component {
     }
   }
 
-  def crosses: Vec[(DynPt, Radians)] = _crosses
-  def crosses_=(value: Vec[(DynPt, Radians)]): Unit = {
+  def crosses: Vec[(DymPt, Radians)] = _crosses
+  def crosses_=(value: Vec[(DymPt, Radians)]): Unit = {
     _crosses = value
     repaint()
   }
@@ -138,7 +138,7 @@ class DymaxionView extends Component {
           val xp  = vx * hScale + gainRadius
           val yp  = vy * vScale + gainRadius
           circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
-          val chanOpt = Turbulence.MatrixToChannelMap.get(DynGrid(vx, vyi))
+          val chanOpt = Turbulence.MatrixToChannelMap.get(DymGrid(vx, vyi))
           g.setColor(if (chanOpt.isDefined) colrSpkr else colrEmpty)
           g.fill(circle)
           if (DRAW_SPKR_IDX) {
@@ -148,7 +148,7 @@ class DymaxionView extends Component {
             g.drawString(s"$vx,$vyi", xp +  9, yp - 6)
             chanOpt.foreach { ch =>
               g.setColor(Color.blue)
-              val s = ch.toString
+              val s = ch.num.toString
               g.drawString(ch.toString, xp + (if (s.length == 1) -4 else -7), yp + 4)
             }
           }
@@ -331,11 +331,11 @@ class DymaxionView extends Component {
 
     atomic { implicit tx =>
       synthRef.get(tx.peer).foreach { synth =>
-        val c1Opt = Turbulence.MatrixToChannelMap.get(DynGrid(vx1, vy1i))
+        val c1Opt = Turbulence.MatrixToChannelMap.get(DymGrid(vx1, vy1i))
         val c1    = c1Opt.map(_.toIndex).getOrElse(0)
-        val c2Opt = Turbulence.MatrixToChannelMap.get(DynGrid(vx2, vy2i))
+        val c2Opt = Turbulence.MatrixToChannelMap.get(DymGrid(vx2, vy2i))
         val c2    = c2Opt.map(_.toIndex).getOrElse(0)
-        val c3Opt = Turbulence.MatrixToChannelMap.get(DynGrid(vx3, vy3i))
+        val c3Opt = Turbulence.MatrixToChannelMap.get(DymGrid(vx3, vy3i))
         val c3    = c3Opt.map(_.toIndex).getOrElse(0)
         val g1b   = if (c1Opt.isEmpty) 0f else g1
         val g2b   = if (c2Opt.isEmpty) 0f else g2

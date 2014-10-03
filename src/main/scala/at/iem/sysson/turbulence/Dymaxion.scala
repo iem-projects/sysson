@@ -35,7 +35,7 @@ object Dymaxion {
     }
   }
 
-  final case class DynPt(x: Double, y: Double) {
+  final case class DymPt(x: Double, y: Double) {
     def equalize: Pt2 = Pt2(x * hScale, y * vScale)
   }
 
@@ -119,7 +119,7 @@ object Dymaxion {
     * @param lon  longitude in degrees
     * @param lat  latitude  in degrees
     */
-  def mapLonLat(lon: Double, lat: Double): DynPt = {
+  def mapLonLat(lon: Double, lat: Double): DymPt = {
     val pt = lonLatToCartesian(lon, lat)
     mapCartesian(pt)
   }
@@ -128,7 +128,7 @@ object Dymaxion {
     * to a 2D cartesian coordinate with respect to the Dymaxion
     * projection.
     */
-  def mapCartesian(pt: Pt3): DynPt = {
+  def mapCartesian(pt: Pt3): DymPt = {
     val faceIdx = findFaceIndex(pt)
 
     val vIdx    = faces(faceIdx)._1
@@ -172,7 +172,7 @@ object Dymaxion {
     val yr   = x * sin(ang) + y * cos(ang)
     val vy   = pos.yi * 2 + (pos.x % 2)
 
-    DynPt(pos.x + xr * xScale, vy - yr * yScale)
+    DymPt(pos.x + xr * xScale, vy - yr * yScale)
   }
 
   private final val xScale = 2
