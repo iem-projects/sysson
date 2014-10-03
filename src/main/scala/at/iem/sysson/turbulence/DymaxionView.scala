@@ -149,7 +149,7 @@ class DymaxionView extends Component {
             chanOpt.foreach { ch =>
               g.setColor(Color.blue)
               val s = ch.num.toString
-              g.drawString(ch.toString, xp + (if (s.length == 1) -4 else -7), yp + 4)
+              g.drawString(s, xp + (if (s.length == 1) -4 else -7), yp + 4)
             }
           }
           vyi += 1

@@ -249,7 +249,7 @@ object Turbulence extends Runnable {
     // dyn.crosses = decimate(Preparations.dymGridAng.map(decimate(_)(8)))(4).flatten
 
     // dyn.crosses      = LatLonIndicesToDymCompassMap.valuesIterator.toVector
-    dyn.crosses = channelCrosses(Spk(1))
+    dyn.crosses = channelCrosses(Spk(6))
     dyn.mouseControl = false
     val merc    = new MercatorView(dyn)
 
