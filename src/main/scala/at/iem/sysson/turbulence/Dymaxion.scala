@@ -20,8 +20,24 @@ import math.{sqrt, sin, cos, asin, acos, atan, atan2}
 object Dymaxion {
   private final val phi = (1 + sqrt(5)) / 2
 
+  /** Horizontal scale factor */
+  final val hScale = 92
+  /** Vertical scale factor */
+  final val vScale = 53.33333f
+
   final case class Pt3(x: Double, y: Double, z: Double)
-  final case class Pt2(x: Double, y: Double)
+
+  final case class Pt2(x: Double, y: Double) {
+    def distanceTo(that: Pt2): Double = {
+      val dx = that.x - this.x
+      val dy = that.y - this.y
+      sqrt(dx * dx + dy * dy)
+    }
+  }
+
+  final case class DynPt(x: Double, y: Double) {
+    def equalize: Pt2 = Pt2(x * hScale, y * vScale)
+  }
 
   final case class Polar(theta: Double, phi: Double)
 
@@ -103,7 +119,7 @@ object Dymaxion {
     * @param lon  longitude in degrees
     * @param lat  latitude  in degrees
     */
-  def mapLonLat(lon: Double, lat: Double): Pt2 = {
+  def mapLonLat(lon: Double, lat: Double): DynPt = {
     val pt = lonLatToCartesian(lon, lat)
     mapCartesian(pt)
   }
@@ -112,7 +128,7 @@ object Dymaxion {
     * to a 2D cartesian coordinate with respect to the Dymaxion
     * projection.
     */
-  def mapCartesian(pt: Pt3): Pt2 = {
+  def mapCartesian(pt: Pt3): DynPt = {
     val faceIdx = findFaceIndex(pt)
 
     val vIdx    = faces(faceIdx)._1
@@ -156,7 +172,7 @@ object Dymaxion {
     val yr   = x * sin(ang) + y * cos(ang)
     val vy   = pos.yi * 2 + (pos.x % 2)
 
-    Pt2(pos.x + xr * xScale, vy - yr * yScale)
+    DynPt(pos.x + xr * xScale, vy - yr * yScale)
   }
 
   private final val xScale = 2

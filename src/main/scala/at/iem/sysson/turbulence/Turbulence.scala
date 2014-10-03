@@ -15,7 +15,7 @@
 package at.iem.sysson
 package turbulence
 
-import at.iem.sysson.turbulence.Dymaxion.Pt2
+import at.iem.sysson.turbulence.Dymaxion.{DynPt, Pt2}
 import de.sciss.{numbers, pdflitz}
 
 import java.awt.EventQueue
@@ -27,9 +27,9 @@ object Turbulence extends Runnable {
   def main(args: Array[String]): Unit = EventQueue.invokeLater(this)
 
   final case class DynGrid(vx: Int, vyi: Int) {
-    def toPoint: Pt2 = {
+    def toPoint: DynPt = {
       val vy = vyi * 2 + (vx % 2)
-      Pt2(vx, vy)
+      DynPt(vx, vy)
     }
   }
 
@@ -165,7 +165,7 @@ object Turbulence extends Runnable {
   final val NumLon = 144
 
   /** Maps latitude index to longitude index to dymaxion coordinate. */
-  final val LatLonIndicesToDymMap: Vec[Vec[Pt2]] = Vector.tabulate(NumLat) { latIdx =>
+  final val LatLonIndicesToDymMap: Vec[Vec[DynPt]] = Vector.tabulate(NumLat) { latIdx =>
     Vector.tabulate(NumLon) { lonIdx =>
       val lon = longitude(lonIdx)
       val lat = latitude (latIdx)
@@ -173,7 +173,7 @@ object Turbulence extends Runnable {
     }
   }
 
-  final val LatLonDym: Vec[(LatLonIdx, Pt2)] = LatLonIndicesToDymMap.zipWithIndex.flatMap { case (inLat, latIdx) =>
+  final val LatLonDym: Vec[(LatLonIdx, DynPt)] = LatLonIndicesToDymMap.zipWithIndex.flatMap { case (inLat, latIdx) =>
     inLat.zipWithIndex.map { case (pt, lonIdx) => LatLonIdx(latIdx, lonIdx) -> pt }
   }
 
@@ -182,19 +182,20 @@ object Turbulence extends Runnable {
   /** Maps latitude index to longitude index to
     * a pair of dymaxion coordinate and northward direction ("compass")
     */
-  final val LatLonIndicesToDymCompassMap: Vec[Vec[(Pt2, Radians)]] =
+  final val LatLonIndicesToDymCompassMap: Vec[Vec[(DynPt, Radians)]] =
     LatLonIndicesToDymMap.zipWithIndex.map { case (inLat, latIdx) =>
       inLat.zipWithIndex.map { case (pt1, lonIdx) =>
         val latS = latIdx - 1
         val latN = latIdx + 1
-        val ptS  = if (latS  <  0) Pt2(-99, -99) else LatLonIndicesToDymMap(latS)(lonIdx)
-        val ptN  = if (latN >= 73) Pt2(-99, -99) else LatLonIndicesToDymMap(latN)(lonIdx)
+        val ptS  = if (latS  <  0) DynPt(-99, -99) else LatLonIndicesToDymMap(latS)(lonIdx)
+        val ptN  = if (latN >= 73) DynPt(-99, -99) else LatLonIndicesToDymMap(latN)(lonIdx)
 
-        import DymaxionView.{scaledDist, scalePt}
-        val useSouth  = scaledDist(pt1, ptS) < scaledDist(pt1, ptN)
-        val pt1Sc     = scalePt(pt1)
-        val pt2Sc     = scalePt(if (useSouth) ptS else ptN)
-        val ang1      = math.atan2(-(pt2Sc.y - pt1Sc.y), pt2Sc.x - pt1Sc.x)
+        val pt1Eq     = pt1.equalize
+        val ptSEq     = ptS.equalize
+        val ptNEq     = ptN.equalize
+        val useSouth  = (pt1Eq distanceTo ptSEq) < (pt1Eq distanceTo ptNEq)
+        val pt2Eq     = if (useSouth) ptSEq else ptNEq
+        val ang1      = math.atan2(-(pt2Eq.y - pt1Eq.y), pt2Eq.x - pt1Eq.x)
         val ang       = if (useSouth) (ang1 + math.Pi) % (2 * math.Pi) else ang1
 
         (pt1, Radians(ang))
@@ -202,14 +203,19 @@ object Turbulence extends Runnable {
     }
 
   final val ChannelToGeoMap2: Map[Spk, LatLonIdx] = ChannelToMatrixMap.map { case (spk, dyn) =>
-    val pt1 = dyn.toPoint
+    val pt1 = dyn.toPoint.equalize
     val nn  = LatLonDym.minBy { case (ll, pt2) =>
-      DymaxionView.scaledDist(pt1, pt2)
+      pt1 distanceTo pt2.equalize
     }
     spk -> nn._1
   }
 
-  // final val VoronoiMap: Map[Int, Vec[(Int, Int)]]
+  ChannelToGeoMap2.foreach(println)
+
+  //  final val VoronoiMap: Map[Spk, Vec[LatLonIdx]] = {
+  //    val norm = ChannelToMatrixMap.map { case (spk, dyn) => spk -> dyn.toPoint }
+  //
+  //  }
 
   def decimate[A](in: Vec[A])(n: Int): Vec[A] = in.iterator.zipWithIndex.collect {
     case (x, i) if i % n == 0 => x

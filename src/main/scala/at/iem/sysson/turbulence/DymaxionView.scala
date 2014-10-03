@@ -23,30 +23,16 @@ import at.iem.sysson.turbulence.Turbulence.{Radians, DynGrid}
 import de.sciss.lucre.synth.{Escape, Txn, Synth}
 import de.sciss.mellite.Mellite
 import de.sciss.synth.{addToTail, SynthGraph}
-import Dymaxion.Pt2
-import de.sciss.numbers.Implicits._
+import at.iem.sysson.turbulence.Dymaxion.DynPt
 
 import scala.concurrent.stm.{TxnExecutor, Ref}
 import scala.swing.event.{MouseDragged, MouseReleased, MousePressed, MouseMoved}
 import scala.swing.{Point, Swing, Graphics2D, Component}
 import Swing._
 
-object DymaxionView {
-  /** Horizontal scale factor */
-  final val hScale = 92
-  /** Vertical scale factor */
-  final val vScale = 53.33333f
-
-  def scalePt(in: Pt2) = Pt2(in.x * hScale, in.y * vScale)
-
-  def scaledDist(a: Pt2, b: Pt2): Double = {
-    val dx = b.x - a.x
-    val dy = b.y - a.y
-    ((dx * hScale).squared + (dy * vScale).squared).sqrt
-  }
-}
 class DymaxionView extends Component {
-  import DymaxionView._
+  // import DymaxionView._
+  import Dymaxion.{hScale, vScale}
 
   private var _drawImage      = true
   private var _drawSpkr       = true
@@ -83,9 +69,9 @@ class DymaxionView extends Component {
   // private val strkGain    = new BasicStroke(2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array(2f, 2f), 0f)
   private val strkGain    = new BasicStroke(2f)
 
-  private var _mark = Option.empty[Pt2]
+  private var _mark = Option.empty[DynPt]
 
-  private var _crosses = Vec.empty[(Pt2, Radians)]
+  private var _crosses = Vec.empty[(DynPt, Radians)]
 
   def drawImage: Boolean = _drawImage
   def drawImage_=(value: Boolean): Unit = if (_drawImage != value) {
@@ -99,8 +85,8 @@ class DymaxionView extends Component {
     repaint()
   }
 
-  def mark: Option[Pt2] = _mark
-  def mark_=(value: Option[Pt2]): Unit = if (_mark != value) {
+  def mark: Option[DynPt] = _mark
+  def mark_=(value: Option[DynPt]): Unit = if (_mark != value) {
     _mark = value
     // repaint()
     value.fold(repaint()) { pt =>
@@ -108,8 +94,8 @@ class DymaxionView extends Component {
     }
   }
 
-  def crosses: Vec[(Pt2, Radians)] = _crosses
-  def crosses_=(value: Vec[(Pt2, Radians)]): Unit = {
+  def crosses: Vec[(DynPt, Radians)] = _crosses
+  def crosses_=(value: Vec[(DynPt, Radians)]): Unit = {
     _crosses = value
     repaint()
   }
@@ -180,9 +166,10 @@ class DymaxionView extends Component {
     g.draw(gpStroke)
     g.setStroke(strkOrig)
 
-    if (_mark.isDefined) _mark.foreach { case Pt2(vx, vy) =>
-      val xp  = vx * hScale + gainRadius
-      val yp  = vy * vScale + gainRadius
+    if (_mark.isDefined) _mark.foreach { case dp =>
+      val p   = dp.equalize
+      val xp  = dp.x + gainRadius
+      val yp  = dp.y + gainRadius
       circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
       g.setColor(Color.yellow)
       g.fill(circle)
@@ -192,9 +179,10 @@ class DymaxionView extends Component {
       g.setColor(Color.red)
       val rad  = 8 // 16
       val angD = 10.toRadians
-      _crosses.foreach { case (Pt2(vx, vy), ang) =>
-        val xp  = vx * hScale + gainRadius
-        val yp  = vy * vScale + gainRadius
+      _crosses.foreach { case (dp, ang) =>
+        val p   = dp.equalize
+        val xp  = p.x + gainRadius
+        val yp  = p.y + gainRadius
         // line.setLine(xp - rad, yp - rad, xp + rad, yp + rad)
         val angL = ang.value - angD
         gpTemp.reset()
