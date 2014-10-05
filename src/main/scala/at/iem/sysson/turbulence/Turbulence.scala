@@ -20,17 +20,12 @@ import at.iem.sysson.turbulence.Dymaxion.DymPt
 import de.sciss.file._
 import de.sciss.{numbers, pdflitz, kollflitz}
 
-import java.awt.EventQueue
-
 import ucar.ma2
 
-import scala.swing.Frame
+import scala.swing.{Swing, Frame}
 import scala.collection.breakOut
 
-object Turbulence extends Runnable {
-  // don't use `App` because body will not be initialized if we don't use it as main entry
-  def main(args: Array[String]): Unit = EventQueue.invokeLater(this)
-
+object Turbulence {
   final case class DymGrid(vx: Int, vyi: Int) {
     def toPoint: DymPt = {
       val vy = vyi * 2 + (vx % 2)
@@ -108,58 +103,9 @@ object Turbulence extends Runnable {
 
   final val Channels: Vec[Spk] = ChannelToMatrixMap.keysIterator.toVector.sortBy(_.num)
 
-  /** Maps from loudspeaker channels to
-    * quantized (lat, lon) pairs. Nearest
-    * raster points are used except where
-    * there are "jumps" in the Dymaxion,
-    * in which case we go "away" a little
-    * from the gap, so there are no two
-    * loudspeakers with the same geo-coordinates.
-    */
-  //  final val ChannelToGeoMap = Map[Spk, LatLon](
-  //    Spk( 3) -> LatLon( -40.0,  +35.0),
-  //    Spk( 6) -> LatLon( -12.5,  +30.0),
-  //    Spk( 5) -> LatLon(  +5.0,    0.0),
-  //    Spk( 7) -> LatLon( +35.0,  -25.0),
-  //    Spk( 4) -> LatLon( +27.5,  -60.0),
-  //    Spk(21) -> LatLon( -45.0,  +45.0),
-  //    Spk(25) -> LatLon( +10.0,  +57.5),
-  //    Spk( 8) -> LatLon( +27.5,  +22.5),
-  //    Spk(26) -> LatLon( +65.0,  +12.5),
-  //    Spk(33) -> LatLon( +27.5,  -67.5),
-  //    Spk(41) -> LatLon( +17.5,  -65.0),
-  //    Spk(45) -> LatLon(  +2.5,  -12.5),
-  //    Spk(22) -> LatLon( -25.0,  +72.5),
-  //    Spk(23) -> LatLon( +10.0,  +97.5),
-  //    Spk(27) -> LatLon( +45.0,  +72.5),
-  //    Spk(29) -> LatLon( +75.0, +142.5),
-  //    Spk(34) -> LatLon( +60.0,  -75.0),
-  //    Spk(35) -> LatLon( +25.0, -107.5),
-  //    Spk(43) -> LatLon( -10.0,  -82.5),
-  //    Spk(42) -> LatLon(  -5.0,  -42.5),
-  //    Spk(10) -> LatLon(  -7.5,   -5.0),
-  //    Spk(11) -> LatLon( -35.0,  -10.0),
-  //    Spk(13) -> LatLon( -52.5,  +27.5),
-  //    Spk(14) -> LatLon( -60.0, +102.5),
-  //    Spk(17) -> LatLon( -25.0, +112.5),
-  //    Spk(24) -> LatLon(  +5.0, +137.5),
-  //    Spk(28) -> LatLon( +40.0, +122.5),
-  //    Spk(31) -> LatLon( +35.0, +170.0),
-  //    Spk(30) -> LatLon( +50.0, -142.5),
-  //    Spk(36) -> LatLon( +12.5, -150.0),
-  //    Spk(37) -> LatLon( -10.0, -122.5),
-  //    Spk(44) -> LatLon( -45.0, -107.5),
-  //    Spk(46) -> LatLon( -37.5,  -60.0),
-  //    Spk(16) -> LatLon( -45.0,  -50.0),
-  //    Spk(15) -> LatLon( -75.0,  -35.0),
-  //    Spk(19) -> LatLon( -67.5, -172.5),
-  //    Spk(18) -> LatLon( -35.0, +152.5),
-  //    Spk(20) -> LatLon(  -7.5, +167.5),
-  //    Spk(32) -> LatLon(  +7.5, +172.5),
-  //    Spk(39) -> LatLon(  -5.0, +180.0),
-  //    Spk(38) -> LatLon( -27.5, -157.5),
-  //    Spk(40) -> LatLon( -62.5, -160.0)
-  //  )
+  final val ChannelIndices: Vec[Int] = Channels.map(_.toIndex)
+
+  final val NumChannels = ChannelIndices.size
 
   private val chans = MatrixToChannelMap.valuesIterator.map(_.num).toVector.sorted
   assert(chans == (3 to 8) ++ (10 to 11) ++ (13 to 46), s"ChannelMap does not have expected values: $chans")
@@ -246,9 +192,13 @@ object Turbulence extends Runnable {
     case (x, i) if i % n == 0 => x
   } .toIndexedSeq
 
-  def run(): Unit = {
-    Main.run()
+  // don't use `App` because body will not be initialized if we don't use it as main entry
+  def main(args: Array[String]): Unit = {
+    Main.main(args :+ "--mellite-frame")
+    Swing.onEDT(initViews())
+  }
 
+  private def initViews(): Unit = {
     val dyn     = new DymaxionView
     //    dyn.drawImage    = false
     //    dyn.drawSpeakers = false

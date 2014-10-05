@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=SysSon
+Version=0.6.0-SNAPSHOT
+GenericName=SysSon
+Comment=SysSon Sonification Environment
+Exec=java -Xmx1024m -jar /home/hhrutz/Documents/devel/sysson/SysSon.jar
+StartupWMClass=at-iem-sysson-turbulence.Turbulence
+Icon=/home/hhrutz/Documents/devel/sysson/turbulence.png
+Categories=Audio;AudioVideo;
+Terminal=false
+Type=Application

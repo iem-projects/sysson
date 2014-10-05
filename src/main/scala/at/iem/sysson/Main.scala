@@ -19,11 +19,9 @@ import scala.util.control.NonFatal
 import at.iem.sysson.legacy.NcviewSync
 import at.iem.sysson
 
-object Main extends App with Runnable {
+object Main {
   final val useNcView = false
   final val useGUI    = true
-
-  run()
 
   lazy val name   : String = buildInfoString("name"   )
   lazy val version: String = buildInfoString("version")
@@ -36,7 +34,7 @@ object Main extends App with Runnable {
     case NonFatal(e) => "?"
   }
 
-  def run(): Unit = {
+  def main(args: Array[String]): Unit = {
     logInfo(s"Welcome to $name v$version")
 
     // ---- type extensions ----
@@ -52,7 +50,7 @@ object Main extends App with Runnable {
     }
 
     if (useGUI) {
-      SwingApplication.main(Array.empty)
+      SwingApplication.main(args)
       //      // this is just for simple IDEA run configurations.
       //      // the app-bundle will have these already
       //      sys.props("com.apple.mrj.application.apple.menu.about.name")  = name

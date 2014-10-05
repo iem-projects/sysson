@@ -24,17 +24,17 @@ object DataSets {
   def dataOutDir = sysSonDir / "installation" / "data"
 
   def main(args: Array[String]): Unit = args.headOption.getOrElse("") match {
-    case "--precipitation-voronoi" =>
-      val inF = dlrDir / "pr" / "25_pr_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
-      val outF = dataOutDir / "pr_Amon_hist_voronoi.nc"
-      Turbulence.convertViaVoronoi(inF = inF, varName = "pr", outF = outF)
+    case "--pr-voronoi" =>
+      val vr  = "pr"
+      val inF = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
+      val outF = dataOutDir / s"${vr}_Amon_hist_voronoi.nc"
+      Turbulence.convertViaVoronoi(inF = inF, varName = vr, outF = outF)
 
-    case "--precipitation-voronoi" =>
-      val sysSonDir = userHome / "IEM" / "SysSon"
-      val inF = sysSonDir / "Data" / "201211" / "gcm" / "New_Deutschlandradio_MPI_M" /
-        "pr" / "25_pr_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
-      val outF = dataOutDir / "pr_Amon_hist_voronoi.nc"
-      Turbulence.convertViaVoronoi(inF = inF, varName = "pr", outF = outF)
+    case "--tas-voronoi" =>
+      val vr  = "tas"
+      val inF = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
+      val outF = dataOutDir / s"${vr}_Amon_hist_voronoi.nc"
+      Turbulence.convertViaVoronoi(inF = inF, varName = vr, outF = outF)
 
     case other => sys.error(s"Unsupported command: $other")
   }

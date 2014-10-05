@@ -17,6 +17,7 @@ package gui
 
 import de.sciss.desktop.impl.{WindowHandlerImpl, SwingApplicationImpl}
 import de.sciss.desktop.{WindowHandler, Menu}
+import de.sciss.mellite
 import de.sciss.mellite.gui.LogFrame
 import language.existentials
 import javax.swing.UIManager
@@ -79,30 +80,13 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     DocumentHandler    .instance    // init
     DocumentViewHandler.instance    // init
 
-    // MMM
-    //    dh.addListener {
-    //      case DocumentHandler.Opened(doc) => mkDocView(doc)
-    //    }
-    //    dh.allDocuments.foreach(mkDocView)
+    val mlltFrame = args.contains("--mellite-frame")
 
-    //    // keep using IntelliJ console when debugging
-    //    if (!sys.props.getOrElse("sun.java.command", "?").contains("intellij")) {
-    //      Console.setOut(System.out) // stupidly deprecated, but needed, because Console is broken
-    //      Console.setErr(System.err) // stupidly deprecated, but needed, because Console is broken
-    //    }
-
-    MainFrame()
+    if (mlltFrame)
+      new mellite.gui.MainFrame
+    else
+      MainFrame()
   }
-
-  // MMM
-  //  // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
-  //  private def mkDocView(doc: Workspace[_]): Unit =
-  //    mkDocView1(doc.asInstanceOf[Workspace[S] forSome { type S <: Sys[S] }])
-  //
-  //  private def mkDocView1[S <: Sys[S]](doc: Workspace[S]): Unit =
-  //    doc.cursor.step { implicit tx =>
-  //      impl.DocumentViewHandlerImpl.mkWindow(doc)
-  //    }
 
   protected def menuFactory: Menu.Root = MenuFactory.root
 }
