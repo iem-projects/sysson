@@ -5,7 +5,7 @@ package impl
 import de.sciss.file._
 import de.sciss.lucre.swing.Window
 import de.sciss.mellite.Workspace
-import de.sciss.mellite.gui.ObjView
+import de.sciss.mellite.gui.{ActionArtifactLocation, ObjView}
 import de.sciss.lucre.stm.{Cursor, Source}
 import de.sciss.synth.proc.{Elem, Obj, Folder}
 import de.sciss.desktop
@@ -35,7 +35,7 @@ object DataSourceObjView extends ObjView.Factory {
   def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
     val name      = obj.attr.name
     val ds        = obj.elem.peer
-    val f         = ds.file
+    val f         = ds.artifact.value
     val vr        = ds.variables
     val rank      = if (vr.isEmpty) 1 else vr.map(_.reducedRank).max
     val multiDim  = vr.collect {
@@ -49,16 +49,25 @@ object DataSourceObjView extends ObjView.Factory {
                              (implicit cursor: Cursor[S]): Option[UndoableEdit] = {
     val dlg = FileDialog.open(title = "Add Data Source")
     dlg.setFilter(util.NetCdfFileFilter)
-    dlg.show(window).map { f =>
-      val edit = cursor.step { implicit tx =>
-        implicit val ws       = workspace
-        implicit val resolver = WorkspaceResolver[S]
-        val ds  = DataSource[S](f)
-        val obj = Obj(DataSourceElem(ds))
-        obj.attr.name = ds.file.base
-        ObjViewImpl.addObject[S](prefix, folderH(), obj)
+    val fOpt = dlg.show(window)
+
+    fOpt.flatMap { f =>
+      ActionArtifactLocation.query[S](folderH, file = f, folder = None, window = window).flatMap { locSource =>
+        val edit = cursor.step { implicit tx =>
+          val loc = locSource()
+          loc.elem.peer.modifiableOption.map { locM =>
+            implicit val ws       = workspace
+            implicit val resolver = WorkspaceResolver[S]
+            val artifact          = locM.add(f)
+            val ds                = DataSource[S](artifact)
+            val obj               = Obj(DataSourceElem(ds))
+            obj.attr.name         = f.base
+            // XXX TODO - adding artifact-location should go into a compound edit
+            ObjViewImpl.addObject[S](prefix, folderH(), obj)
+          }
+        }
+        edit
       }
-      edit
     }
   }
 

@@ -49,7 +49,7 @@ object DataSourceViewImpl {
     implicit val resolver = WorkspaceResolver[S]
     val data  = source.data()
     val docH  = tx.newHandle(source)
-    val res   = new Impl[S](docH, source.file, data)
+    val res   = new Impl[S](docH, source.artifact.value, data)
     deferTx(res.guiInit())
     res
   }

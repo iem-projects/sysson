@@ -28,7 +28,7 @@ resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 lazy val melliteVersion             = "0.11.0-SNAPSHOT"
 
-lazy val lucreMatrixVersion         = "0.3.0"
+lazy val lucreMatrixVersion         = "0.4.0"
 
 lazy val scalaColliderSwingVersion  = "1.20.0"
 
