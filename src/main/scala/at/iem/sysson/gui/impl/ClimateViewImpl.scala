@@ -185,6 +185,15 @@ object ClimateViewImpl {
           val f   = mkUnitsString(v)
           (i: Int) => f(dat(i))
 
+        case Some(v) if v.isInt =>
+          val dat = v.readSafe().int1D
+          if (v.units.isDefined) {
+            val f = mkUnitsString(v)
+            (i: Int) => f(dat(i).toDouble)
+          } else {
+            (i: Int) => dat(i).toString
+          }
+
         case _ => (i: Int) => i.toString
       }
 

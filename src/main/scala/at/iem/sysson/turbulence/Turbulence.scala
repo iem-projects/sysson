@@ -17,10 +17,12 @@ package turbulence
 
 import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.DymPt
-import de.sciss.file.File
+import de.sciss.file._
 import de.sciss.{numbers, pdflitz, kollflitz}
 
 import java.awt.EventQueue
+
+import ucar.ma2
 
 import scala.swing.Frame
 import scala.collection.breakOut
@@ -278,11 +280,28 @@ object Turbulence extends Runnable {
 
   // ---------------------------------
 
-  def convertViaVoronoi(f: File, varName: String): Unit = {
+  def convertViaVoronoi(inF: File, varName: String, outF: File): Unit = {
     import sysson.Implicits._
-    val nc  = openFile(f)
-    val vr  = nc.variableMap(varName)
-
+    import TransformNetcdfFile.{Keep, Create}
+    val in = openFile(inF)
+    println(in.variableMap(varName).dimensions.map(_.name))
+    try {
+      val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
+      TransformNetcdfFile(in, outF, varName, Vec("lat", "lon"), Vec(Keep("time"), Create("spk", None, spkData))) {
+        case (origin, arr) =>
+          val dIn   = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
+          val dOut: Array[Float] = Channels.map { spk =>
+            val latLonIndices = VoronoiMap(spk)
+            val sum = (0.0 /: latLonIndices) { case (n, idx) =>
+              n + dIn(idx.latIdx)(idx.lonIdx)
+            }
+            val mean = sum / latLonIndices.size
+            mean.toFloat
+          } (breakOut)
+          ma2.Array.factory(dOut)
+      }
+    } finally {
+      in.close()
+    }
   }
-
 }

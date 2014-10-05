@@ -16,6 +16,7 @@ package at.iem.sysson
 package turbulence
 
 import de.sciss.file._
+import ucar.nc2.constants.CDM
 import ucar.{ma2, nc2}
 import Implicits._
 
@@ -26,19 +27,24 @@ import scala.language.implicitConversions
 
 object TransformNetcdfFile {
   def main(args: Array[String]): Unit = {
+    testOutput()
+  }
+
+  def testOutput(): Unit = {
     val inF = userHome / "IEM" / "SysSon" / "Data" / "201211" / "gcm" / "New_Deutschlandradio_MPI_M" /
       "tas" / "ZON_tas_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
     val in = openFile(inF)
     try {
       val out = userHome / "Documents" / "temp" / "test.nc"
       val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
-      apply(in, out, "tas", Vec("lat", "lon"), Vec(Keep("time"), Create("spk", spkData))) { case (origin, arr) =>
-        val dIn0  = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
-        val dIn   = dIn0.flatten
-        val dOut = Array.tabulate(Turbulence.Channels.size) { i =>
-          (i + origin(0)).toFloat * dIn(i % dIn.length)
-        }
-        ma2.Array.factory(dOut)
+      apply(in, out, "tas", Vec("lat", "lon"), Vec(Keep("time"), Create("spk", units = None, spkData))) {
+        case (origin, arr) =>
+          val dIn0  = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
+          val dIn   = dIn0.flatten
+          val dOut = Array.tabulate(Turbulence.Channels.size) { i =>
+            (i + origin(0)).toFloat * dIn(i % dIn.length)
+          }
+          ma2.Array.factory(dOut)
       }
     } finally {
       in.close()
@@ -50,8 +56,12 @@ object TransformNetcdfFile {
   }
   sealed trait OutDim { def isCopy: Boolean }
   final case class Keep(name: String) extends OutDim { def isCopy = true }
-  object Create { def apply(name: String, values: ma2.Array): Create = new Create(name, values) }
-  final class Create(val name: String, val values: ma2.Array) extends OutDim { def isCopy = false }
+
+  object Create { def apply(name: String, units: Option[String], values: ma2.Array): Create =
+    new Create(name, units, values)
+  }
+  final class Create(val name: String, val units: Option[String], val values: ma2.Array)
+    extends OutDim { def isCopy = false }
 
   // def deinterleave[A](flat: Vec[A], shape: Vec[Int]): Vec[Vec[A]] = ...
 
@@ -88,9 +98,8 @@ object TransformNetcdfFile {
     val (keepOutDims, keepOutDimsV) = keepInDims.map { inDim =>
       val outDim  = writer.addDimension(null, inDim.name, inDim.size)
       val inVar   = in.variableMap(inDim.name)
-      //      val dimData = inVar.read()
       val outVarD = writer.addVariable(null, inVar.getShortName, inVar.dataType, Seq(outDim).asJava)
-      //      writer.write(outVarD, dimData)
+      inVar.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
       (outDim, outVarD)
     } .unzip
 
@@ -99,7 +108,7 @@ object TransformNetcdfFile {
         val outDim  = writer.addDimension(null, c.name, c.values.size.toInt)
         val dt      = ma2.DataType.getType(c.values.getElementType)
         val outVarD = writer.addVariable(null, c.name, dt, Seq(outDim).asJava)
-        //      writer.write(outVarD, dimData)
+        c.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
         (outDim, c.values, outVarD)
     } .unzip3
 

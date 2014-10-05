@@ -117,6 +117,8 @@ object Implicits {
     def units      : Option[String]     = Option(peer.getUnitsString)
     def isFloat    : Boolean            = dataType == ma2.DataType.FLOAT
     def isDouble   : Boolean            = dataType == ma2.DataType.DOUBLE
+    def isInt      : Boolean            = dataType == ma2.DataType.INT
+
     def fillValue  : Float = {
       require(isFloat, s"fillValue only defined for floating point variables ($dataType)")
       attributeMap.get("_FillValue").map(_.getNumericValue.floatValue()).getOrElse(Float.NaN)
@@ -152,14 +154,18 @@ object Implicits {
     //    def f1d_force: IndexedSeq[Float] = float1d(force = true)
     //    def f1d: IndexedSeq[Float] = float1d(force = true)
 
-    def isFloat    : Boolean            = peer.getElementType == classOf[Float]
+    def isFloat    : Boolean            = peer.getElementType == classOf[Float ]
     def isDouble   : Boolean            = peer.getElementType == classOf[Double]
+    def isInt      : Boolean            = peer.getElementType == classOf[Int   ]
 
     private def requireFloat(): Unit =
       require(isFloat, s"Wrong element type (${peer.getElementType}); required: Float")
 
     private def requireDouble(): Unit =
       require(isDouble, s"Wrong element type (${peer.getElementType}); required: Double")
+
+    private def requireInt(): Unit =
+      require(isInt, s"Wrong element type (${peer.getElementType}); required: Int")
 
     def scaled1D(scale: Scale): Vec[Float] = {
       val it = float1DIter
@@ -177,6 +183,12 @@ object Implicits {
       val it = double1DIter
       val sz = peer.getSize
       Vector.fill(sz.toInt)(it.getDoubleNext)
+    }
+
+    def int1D: Vec[Int] = {
+      val it = int1DIter
+      val sz = peer.getSize
+      Vector.fill(sz.toInt)(it.getIntNext)
     }
 
     def float1Diterator: Iterator[Float] = {
@@ -220,6 +232,13 @@ object Implicits {
     private def double1DIter: ma2.IndexIterator = {
       requireDouble()
       //      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
+      val sz = peer.getSize
+      require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
+      peer.getIndexIterator
+    }
+
+    private def int1DIter: ma2.IndexIterator = {
+      requireInt()
       val sz = peer.getSize
       require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
       peer.getIndexIterator
