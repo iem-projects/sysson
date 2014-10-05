@@ -104,6 +104,8 @@ object Turbulence extends Runnable {
     */
   final val ChannelToMatrixMap: Map[Spk, DymGrid] = MatrixToChannelMap.map(_.swap)
 
+  final val Channels: Vec[Spk] = ChannelToMatrixMap.keysIterator.toVector.sortBy(_.num)
+
   /** Maps from loudspeaker channels to
     * quantized (lat, lon) pairs. Nearest
     * raster points are used except where
