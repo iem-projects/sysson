@@ -3,7 +3,7 @@
 // *  (SysSon)
 // *
 // *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
-// *  Written by Hanns Holger Rutz.
+// *  Copyright (c) 2014 Hanns Holger Rutz. All rights reserved.
 // *
 // *	This software is published under the GNU General Public License v3+
 // *
