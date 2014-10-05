@@ -32,10 +32,13 @@ object TransformNetcdfFile {
     try {
       val out = userHome / "Documents" / "temp" / "test.nc"
       val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
-      apply(in, out, "tas", Vec("lat", "lon"), Vec(Keep("time"), Create("spk", spkData))) { arr =>
-        val jd = arr.copyToNDJavaArray()
-        println(s"Java array = $jd")
-        arr
+      apply(in, out, "tas", Vec("lat", "lon"), Vec(Keep("time"), Create("spk", spkData))) { case (origin, arr) =>
+        val dIn0  = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
+        val dIn   = dIn0.flatten
+        val dOut = Array.tabulate(Turbulence.Channels.size) { i =>
+          (i + origin(0)).toFloat * dIn(i % dIn.length)
+        }
+        ma2.Array.factory(dOut)
       }
     } finally {
       in.close()
@@ -56,6 +59,8 @@ object TransformNetcdfFile {
   /** Transform an input NetCDF file into an output NetCDF file, by copying a given
     * variable and applying an optional transform to the data.
     *
+    * '''Note:''' This is not optimized for speed, yet.
+    *
     * @param in         the input file to transform
     * @param out        the file to which the output will be written
     * @param varName    the variable to copy/transform
@@ -63,14 +68,16 @@ object TransformNetcdfFile {
     *                   from the target variable
     * @param outDimsSpec the dimensions of the output variable. each spec can either
     *                   indicate a verbatim copy (`Keep`) or the result of the transformation (`Create`)
-    * @param fun        a function that will transform the variable's data matrix. It is passed an object
+    * @param fun        a function that will transform the variable's data matrix. It is passed the origin
+    *                   in the kept dimensions (origin of the output shape minus the created dimensions)
+    *                   and an object
     *                   of dimension `inDims.size` and is required to output an object of
     *                   dimension `outDims.filterNot(_.isCopy).size`. The dimensions are sorted to
     *                   correspond with `inDims`. The function is called repeatedly, iterating
     *                   over all other input dimensions except those in `inDims`.
     */
   def apply(in: nc2.NetcdfFile, out: File, varName: String,
-            inDims: Vec[String], outDimsSpec: Vec[OutDim])(fun: ma2.Array => ma2.Array): Unit = {
+            inDims: Vec[String], outDimsSpec: Vec[OutDim])(fun: (Vec[Int], ma2.Array) => ma2.Array): Unit = {
     val location  = out.path
     val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
 
@@ -148,12 +155,26 @@ object TransformNetcdfFile {
     // val transformShape: Vec[Int] = inDims.map(name => in.dimensionMap(name).size)
     val permutations: Array[Int] = inDims.map(name => alterInDims.indexWhere(_.name == name))(breakOut)
 
-    def iter(sec: VariableSection, rem: Vec[nc2.Dimension]): Unit = rem match {
+    val expectedRank  = alterOutDimsD.size
+    val expectedSize  = alterOutDimsD.map(_.size).product
+    val writeShape: Array[Int] = outDimsSpec.map {
+      case Keep(_)    => 1
+      case c: Create  => c.values.size.toInt
+    } (breakOut)
+
+    def iter(sec: VariableSection, origin: Vec[Int], rem: Vec[OutDim]): Unit = rem match {
       case head +: tail =>
-        for (i <- 0 until head.size) {
-          val sec1 = (sec in head.name).select(i)
-          iter(sec1, tail)
+        head match {
+          case Keep(name) =>
+            val dim = keepInDims.find(_.name == name).get
+            for (i <- 0 until dim.size) {
+              val sec1 = (sec in name).select(i)
+              iter(sec1, origin :+ i, tail)
+            }
+          case c: Create =>
+            iter(sec, origin :+ 0, tail)
         }
+
       case _ =>
         // `dataInF` has the original rank and dimensional order
         val dataInF = sec.readSafe()
@@ -163,15 +184,24 @@ object TransformNetcdfFile {
         }
         // `dataIn` transposes the dimensions to reflect the order in `inDims`
         val dataIn  = dataInR.permute(permutations)
-        println(s"Shape = ${dataIn.shape}")
+        // println(s"Shape = ${dataIn.shape}")
         // assert(dataInF.getRank == inDims.size, s"Array has rank ${dataInF.getRank} while expecting ${inDims.size}")
-        val dataOut = fun(dataIn) // fun(dataIn)
-        //        val origin  = ??? : Array[Int]
-        //        val dataOutA = ??? : ma2.Array
-        //        writer.write(outVar, origin, dataOutA)
+        val originF = (origin zip outDimsSpec).collect {
+          case (i, Keep(_)) => i
+        }
+        val dataOut = fun(originF, dataIn) // fun(dataIn)
+
+        require(dataOut.getRank == expectedRank,
+          s"Transformation expected to output rank $expectedRank (observed: ${dataOut.getRank})")
+        require(dataOut.size == expectedSize,
+          s"Transformation expected to produce $expectedSize values (observed: ${dataOut.size})")
+
+        // println(s"Origin: $origin")
+        val dataOutR = dataOut.reshapeNoCopy(writeShape)
+        writer.write(outVar, origin.toArray, dataOutR)
     }
 
-    iter(inVar.selectAll, keepInDims)
+    iter(inVar.selectAll, Vec.empty, outDimsSpec)
 
 
   //    // write data to variable
