@@ -18,12 +18,15 @@ package turbulence
 import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.DymPt
 import de.sciss.file._
+import de.sciss.lucre.synth.Txn
+import de.sciss.synth.proc.Code
 import de.sciss.{numbers, pdflitz, kollflitz}
 
 import ucar.ma2
 
 import scala.swing.{Swing, Frame}
 import scala.collection.breakOut
+import scala.concurrent.stm.atomic
 
 object Turbulence {
   final case class DymGrid(vx: Int, vyi: Int) {
@@ -195,6 +198,14 @@ object Turbulence {
   // don't use `App` because body will not be initialized if we don't use it as main entry
   def main(args: Array[String]): Unit = {
     Main.main(args :+ "--mellite-frame")
+    val pkg = "at.iem.sysson.turbulence._" :: Nil
+    Code.registerImports(Code.Action    .id, pkg)
+    Code.registerImports(Code.SynthGraph.id, pkg)
+    atomic { implicit itx =>
+      implicit val tx = Txn.wrap(itx)
+      Sensors.init()
+    }
+
     Swing.onEDT(initViews())
   }
 
