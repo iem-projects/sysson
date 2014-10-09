@@ -243,7 +243,7 @@ object Turbulence {
 
     // dyn.crosses      = LatLonIndicesToDymCompassMap.valuesIterator.toVector
     dyn.crosses = channelCrosses(Spk(29)) ++ channelCrosses(Spk(6))
-    dyn.mouseControl = false
+    dyn.mouseControl = true // false
 
     // val merc = new MercatorView(dyn)
 
@@ -283,7 +283,7 @@ object Turbulence {
   private def toggleBinaural(on: Boolean): Unit = {
     atomic { implicit itx =>
       implicit val tx = Txn.wrap(itx)
-      val listener = Binaural.Person(ChannelToMatrixMap(Spk(27)).toPoint, Radians(0.0))
+      val listener = Binaural.Person(ChannelToMatrixMap(Spk(27)).toPoint, Radians(math.Pi / 2))
       Mellite.auralSystem.serverOption.foreach { s =>
         binGroup.swap(None)(tx.peer).foreach(_.dispose())
         if (on) {

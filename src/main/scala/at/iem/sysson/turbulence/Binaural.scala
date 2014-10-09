@@ -3,13 +3,15 @@ package at.iem.sysson.turbulence
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt, MetersPerPixel}
 import at.iem.sysson.turbulence.Turbulence.{LatLon, Spk, Radians}
 import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Escape, Buffer, Synth, Txn, Server}
-import de.sciss.{osc, synth, numbers}
+import de.sciss.{synth, numbers}
 import de.sciss.synth.{addBefore, ControlSet, addToTail, addToHead, addAfter, AddAction, SynthGraph, message}
 import de.sciss.file._
 
 import scala.collection.immutable.{IndexedSeq => Vec}
 
 object Binaural {
+  var DEBUG = false
+
   final case class Person(pos: DymPt, azi: Radians)
 
   // - there are 360 / 15 = 24 azimuth   samples
@@ -25,6 +27,8 @@ object Binaural {
     def toCartesian: Pt3 = toPolar.toCartesian
 
     def file(id: Int = 1004): File = Turbulence.audioWork / s"IRC_${id}_C" / f"IRC_${id}_C_R0195_T$t%03d_P$p%03d.wav"
+
+    override def toString = f"T$t%03d_P$p%03d"
   }
 
   //  final val Samples = Vector[IR](
@@ -64,6 +68,8 @@ object Binaural {
       val decibels = 1.1034 * d.squared - 12.6433 * d + 14.3775
       (decibels + 1.2).dbamp
     }
+
+    override def toString = f"Position(${Samples(index)}, distance = $distance%1.2f meters"
   }
 
   /** Calculates the closest HRIR sample index and distance of a person with respect
@@ -74,16 +80,17 @@ object Binaural {
     * @return a pair of HRIR sample index and distance in meters
     */
   def calc(listener: Person, spk: Spk): Position = {
-    val q   = Turbulence.ChannelToMatrixMap(spk).toPoint.equalize
-    val p   = listener.pos.equalize
-    val azi = p angleTo q
-    val dh  = (p distanceTo q) * MetersPerPixel
-    val dv  = 1.5 * MetersPerPixel    // ja?
-    val dist = math.sqrt(dh * dh + dv * dv)
-    val ele = math.atan2(dv, dh)
-    val ll  = LatLon(lat = ele.toDegrees, lon = azi.value.toDegrees)
-    val r   = ll.toCartesian
-    val idx = SamplePoints.minBy(_._1 distanceTo r)._2
+    val q     = Turbulence.ChannelToMatrixMap(spk).toPoint.equalize
+    val p     = listener.pos.equalize
+    val azi0  = p angleTo q
+    val azi   = azi0 + listener.azi
+    val dh    = (p distanceTo q) * MetersPerPixel
+    val dv    = 1.5   // ja?
+    val dist  = math.sqrt(dh * dh + dv * dv)
+    val ele   = math.atan2(dv, dh)
+    val ll    = LatLon(lat = ele.toDegrees, lon = azi.value.toDegrees)
+    val r     = ll.toCartesian
+    val idx   = SamplePoints.minBy(_._1 distanceTo r)._2
     Position(index = idx, distance = dist)
   }
 
@@ -214,6 +221,9 @@ object Binaural {
 
     Turbulence.Channels.zipWithIndex.foreach { case (spk, offset) =>
       val pos = calc(listener, spk)
+
+      if (DEBUG) println(s"$spk - $pos")
+
       if (pos.distance < 6) { // use binaural for less than 6 meters distance
         val chanSynth = Synth(s, chanGraph, Some("chan-bin"))
         val (bufL, bufR) = binBufs.getOrElse(pos.index, {
@@ -244,7 +254,7 @@ object Binaural {
       }
     }
 
-    println(s"Number of binaural filters: ${binBufs.size}")
+    if (DEBUG) println(s"Number of binaural filters: ${binBufs.size}")
 
     g.onEndTxn { implicit tx =>
       binBufs.valuesIterator.foreach { case (bufL, bufR) =>

@@ -50,7 +50,7 @@ object Dymaxion {
     }
 
     def angleTo(that: Pt2): Radians = {
-      val r = math.atan2(that.y - this.y, that.x - this.x)
+      val r = math.atan2(-(that.y - this.y), that.x - this.x)
       Radians(r)
     }
 
