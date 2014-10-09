@@ -30,9 +30,16 @@ import scala.swing.event.{MouseDragged, MouseReleased, MousePressed, MouseMoved}
 import scala.swing.{Point, Swing, Graphics2D, Component}
 import Swing._
 
+object DymaxionView {
+  sealed trait MouseControl
+  case object Off               extends MouseControl
+  case object TestSignal        extends MouseControl
+  case object ListenerPosition  extends MouseControl
+}
 class DymaxionView extends Component {
   // import DymaxionView._
   import Dymaxion.{hScale, vScale}
+  import DymaxionView._
 
   private var _drawImage      = true
   private var _drawSpkr       = true
@@ -100,11 +107,11 @@ class DymaxionView extends Component {
     repaint()
   }
 
-  private var _mouseCtl = false
-  def mouseControl: Boolean = _mouseCtl
-  def mouseControl_=(value: Boolean): Unit = if (_mouseCtl != value) {
+  private var _mouseCtl = Off: MouseControl
+  def mouseControl: MouseControl = _mouseCtl
+  def mouseControl_=(value: MouseControl): Unit = if (_mouseCtl != value) {
     _mouseCtl = value
-    if (value) {
+    if (value != Off) {
       listenTo(mouse.clicks)
       listenTo(mouse.moves)
     } else {
@@ -158,18 +165,20 @@ class DymaxionView extends Component {
       }
     }
 
-    g.setColor(colrTri)
-    g.fill(gpFill)
-    val strkOrig = g.getStroke
-    g.setColor(colrGain)
-    g.setStroke(strkGain)
-    g.draw(gpStroke)
-    g.setStroke(strkOrig)
+    if (_mouseCtl == TestSignal) {
+      g.setColor(colrTri)
+      g.fill(gpFill)
+      val strkOrig = g.getStroke
+      g.setColor(colrGain)
+      g.setStroke(strkGain)
+      g.draw(gpStroke)
+      g.setStroke(strkOrig)
+    }
 
     if (_mark.isDefined) _mark.foreach { case dp =>
       val p   = dp.equalize
-      val xp  = dp.x + gainRadius
-      val yp  = dp.y + gainRadius
+      val xp  = p.x + gainRadius
+      val yp  = p.y + gainRadius
       circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
       g.setColor(Color.yellow)
       g.fill(circle)
@@ -275,13 +284,13 @@ class DymaxionView extends Component {
 
   reactions += {
     case MousePressed(_, pt, _, _, _) =>
-      play()
+      if (_mouseCtl == TestSignal) play()
       mouseMoved(pt)
 
     case MouseReleased(_, pt, _, _, _) =>
       stop()
 
-    case MouseMoved  (_, pt, _) => mouseMoved(pt)
+    case MouseMoved  (_, pt, _) => if (_mouseCtl == TestSignal) mouseMoved(pt)
     case MouseDragged(_, pt, _) => mouseMoved(pt)
   }
 
@@ -291,7 +300,7 @@ class DymaxionView extends Component {
         import de.sciss.synth._
         import ugen._
         // val sig = PinkNoise.ar(0.5)
-        val sig = Dust.ar(400)
+        val sig = Dust.ar(400) * 0.25
         for (i <- 1 to 3) {
           val bus   = s"c$i".ar(0f)
           val gain  = s"g$i".ar(0f)
@@ -313,7 +322,10 @@ class DymaxionView extends Component {
   private def mouseMoved(pt: Point): Unit = {
     val xf = (pt.getX - gainRadius) / hScale
     val yf = (pt.getY - gainRadius) / vScale
-    markUpdated(xf, yf)
+    if      (_mouseCtl == TestSignal) markUpdated(xf, yf)
+    else if (_mouseCtl == ListenerPosition) {
+      mark = Some(DymPt(xf, yf))
+    }
   }
 
   private def markUpdated(xf: Double, yf: Double): Unit = {
@@ -329,7 +341,7 @@ class DymaxionView extends Component {
       gpStroke.append(circle, false)
     }
 
-    atomic { implicit tx =>
+    if (_mouseCtl == TestSignal) atomic { implicit tx =>
       synthRef.get(tx.peer).foreach { synth =>
         val c1Opt = Turbulence.MatrixToChannelMap.get(DymGrid(vx1, vy1i))
         val c1    = c1Opt.map(_.toIndex).getOrElse(0)

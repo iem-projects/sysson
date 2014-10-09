@@ -23,14 +23,15 @@ import de.sciss.mellite.Mellite
 import de.sciss.swingplus.CloseOperation
 import de.sciss.swingplus.Implicits._
 import de.sciss.synth.proc.Code
-import de.sciss.{numbers, pdflitz, kollflitz}
+import de.sciss.{desktop, numbers, pdflitz, kollflitz}
 
 import ucar.ma2
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{ToggleButton, Swing, Frame}
+import scala.swing.{FlowPanel, BoxPanel, Orientation, ButtonGroup, Rectangle, ToggleButton, Swing, Frame}
 import scala.collection.breakOut
 import scala.concurrent.stm.{Ref, atomic}
+import Swing._
 
 object Turbulence {
   final case class DymGrid(vx: Int, vyi: Int) {
@@ -235,15 +236,16 @@ object Turbulence {
     Swing.onEDT(initViews())
   }
 
+  private lazy val dyn = new DymaxionView
+
   private def initViews(): Unit = {
-    val dyn     = new DymaxionView
     //    dyn.drawImage    = false
     //    dyn.drawSpeakers = false
     // dyn.crosses = decimate(Preparations.dymGridAng.map(decimate(_)(8)))(4).flatten
 
     // dyn.crosses      = LatLonIndicesToDymCompassMap.valuesIterator.toVector
-    dyn.crosses = channelCrosses(Spk(29)) ++ channelCrosses(Spk(6))
-    dyn.mouseControl = true // false
+    // dyn.crosses = channelCrosses(Spk(29)) ++ channelCrosses(Spk(6))
+    // dyn.mouseControl = true // false
 
     // val merc = new MercatorView(dyn)
 
@@ -266,13 +268,41 @@ object Turbulence {
     //    }
 
     new Frame {
-      contents = new ToggleButton("Binaural Mix") {
-        listenTo(this)
-        reactions += {
-          case ButtonClicked(_) => toggleBinaural(selected)
+      title = "Turbulence"
+
+      private val ggOff   = new ToggleButton("Off")
+      private val ggTest  = new ToggleButton("Test")
+      private val ggPos   = new ToggleButton("Listener")
+      private val bg      = new ButtonGroup(ggOff, ggTest, ggPos)
+
+      listenTo(ggOff )
+      listenTo(ggTest)
+      listenTo(ggPos )
+      bg.select(ggOff)
+
+      reactions += {
+        case ButtonClicked(_) =>
+          val b = bg.selected.getOrElse(ggOff)
+          dyn.mouseControl =
+            if      (b == ggTest) DymaxionView.TestSignal
+            else if (b == ggPos ) DymaxionView.ListenerPosition
+            else                  DymaxionView.Off
+      }
+
+      contents = new BoxPanel(Orientation.Vertical) {
+        contents += new ToggleButton("Binaural Mix") {
+          listenTo(this)
+          reactions += {
+            case ButtonClicked(_) => toggleBinaural(selected)
+          }
         }
+        contents += VStrut(4)
+        contents += new FlowPanel(ggOff, ggTest, ggPos)
       }
       pack()
+
+      // bounds = new Rectangle(0, desktop.Util.maximumWindowBounds.height - 72, 148, 72)
+      location = (0, desktop.Util.maximumWindowBounds.height - size.height)
       this.defaultCloseOperation = CloseOperation.Ignore
       open()
     }
@@ -281,14 +311,18 @@ object Turbulence {
   private val binGroup = Ref(Option.empty[Group])
 
   private def toggleBinaural(on: Boolean): Unit = {
+    val markOpt = dyn.mark
     atomic { implicit itx =>
       implicit val tx = Txn.wrap(itx)
-      val listener = Binaural.Person(ChannelToMatrixMap(Spk(27)).toPoint, Radians(math.Pi / 2))
       Mellite.auralSystem.serverOption.foreach { s =>
         binGroup.swap(None)(tx.peer).foreach(_.dispose())
         if (on) {
-          val b = Binaural.build(s, listener)
-          binGroup.set(Some(b))(tx.peer)
+          markOpt.foreach { pt =>
+            // XXX TODO - azimuth
+            val listener = Binaural.Person(pt, Radians(math.Pi / 2))
+            val b = Binaural.build(s, listener)
+            binGroup.set(Some(b))(tx.peer)
+          }
         }
       }
     }

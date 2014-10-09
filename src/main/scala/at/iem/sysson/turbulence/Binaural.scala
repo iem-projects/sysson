@@ -10,7 +10,7 @@ import de.sciss.file._
 import scala.collection.immutable.{IndexedSeq => Vec}
 
 object Binaural {
-  var DEBUG = false
+  var DEBUG = true
 
   final case class Person(pos: DymPt, azi: Radians)
 
@@ -83,7 +83,7 @@ object Binaural {
     val q     = Turbulence.ChannelToMatrixMap(spk).toPoint.equalize
     val p     = listener.pos.equalize
     val azi0  = p angleTo q
-    val azi   = azi0 + listener.azi
+    val azi   = azi0 - listener.azi
     val dh    = (p distanceTo q) * MetersPerPixel
     val dv    = 1.5   // ja?
     val dist  = math.sqrt(dh * dh + dv * dv)
