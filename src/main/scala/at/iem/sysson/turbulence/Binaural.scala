@@ -4,7 +4,7 @@ import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt, MetersPerPixel}
 import at.iem.sysson.turbulence.Turbulence.{LatLon, Spk, Radians}
 import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Escape, Buffer, Synth, Txn, Server}
 import de.sciss.{osc, synth, numbers}
-import de.sciss.synth.{ControlSet, addToTail, addToHead, addAfter, AddAction, SynthGraph, message}
+import de.sciss.synth.{addBefore, ControlSet, addToTail, addToHead, addAfter, AddAction, SynthGraph, message}
 import de.sciss.file._
 
 import scala.collection.immutable.{IndexedSeq => Vec}
@@ -141,6 +141,8 @@ object Binaural {
       val outD  = "delay-out".kr
       // out.poll(0, "out")
       Out.ar(outD, inA)
+
+      // XXX TODO: correct delay (PartConv versus Convolution2 / binaural-kernel)
       Out.ar(outR, Seq(convL, convR))
     }
 
@@ -179,55 +181,77 @@ object Binaural {
       import ugen._
       val in  = "in".kr
       val sig = In.ar(in, 2)
-      Mix(sig).poll(1, "route")
+      // Mix(sig).poll(1, "route")
       ReplaceOut.ar(0, sig)
     }
 
     val rplcSynth = Synth(s, rplcGraph, Some("binaural-mix"))
     rplcSynth.play(g, Nil, addToTail, Nil)
-    val busR = BusNodeSetter.reader("in", stereoBus, rplcSynth)
-    busR.add()
+    val stereoBusR = BusNodeSetter.reader("in", stereoBus, rplcSynth)
+    stereoBusR.add()
     rplcSynth.onEndTxn { implicit tx =>
-      busR.remove()
+      stereoBusR.remove()
     }
 
     var binBufs = Map.empty[Int, (Buffer, Buffer)]
 
-    //    Turbulence.Channels.map { spk =>
-    //      val pos = calc(listener, spk)
-    //      val useConv = pos.distance < 6
-    //      val chanGraph = SynthGraph {
-    //        import synth._
-    //        import ugen._
-    //        val in      = "in".kr
-    //        val inSig   = In.ar(in)
-    //        val dly     = "delay".ir
-    //        val dlySig  = DelayN.ar(inSig, dly, dly)
-    //        val amp     = "amp".kr
-    //        val ampSig  = dlySig * amp
-    //
-    //        val outSig: GE = if (!useConv) Seq(ampSig, ampSig) else {
-    //          val bufL  = "bufL".ir
-    //          val bufR  = "bufR".ir
-    //          val convL = Convolution2.ar(ampSig, bufL, frameSize = 512)
-    //          val convR = Convolution2.ar(ampSig, bufR, frameSize = 512)
-    //          Seq(convL, convR)
-    //        }
-    //
-    //        val out   = "out".kr
-    //        Out.ar(out, outSig)
-    //      }
-    //
-    //      val chanSynth = Synth(s, chanGraph, Some(if (useConv) "model-chan-bin" else "model-chan"))
-    //      if (useConv) {
-    //        binBufs.getOrElse(pos.index, {
-    //          val bufL  = Buffer(s)(numFrames = 512)
-    //          val ir    = Samples(pos.index)
-    //          bufL.read(ir.file.absolutePath)
-    //
-    //        })
-    //      }
-    //    }
+    lazy val chanGraph = SynthGraph {
+      import synth._
+      import ugen._
+      val in      = "in".kr
+      val ch      = "chan".kr
+      val inSig   = Select.ar(ch, In.ar(in, N)) // XXX TODO - not nice. this is simply because delayBus is multi-chan
+
+      val bufL  = "bufL".ir
+      val bufR  = "bufR".ir
+      val convL = Convolution2.ar(inSig, bufL, frameSize = 512)
+      val convR = Convolution2.ar(inSig, bufR, frameSize = 512)
+      val outSig: GE = Seq(convL, convR)
+
+      val out   = "out".kr
+      Out.ar(out, outSig)
+    }
+
+    Turbulence.Channels.zipWithIndex.foreach { case (spk, offset) =>
+      val pos = calc(listener, spk)
+      if (pos.distance < 6) { // use binaural for less than 6 meters distance
+        val chanSynth = Synth(s, chanGraph, Some("chan-bin"))
+        val (bufL, bufR) = binBufs.getOrElse(pos.index, {
+          val ir    = Samples(pos.index)
+          val path  = ir.file().absolutePath
+          val _bufL = Buffer(s)(numFrames = 512)
+          val _bufR = Buffer(s)(numFrames = 512)
+          _bufL.readChannel(path, 0 :: Nil)
+          _bufR.readChannel(path, 1 :: Nil)
+          val tup = (_bufL, _bufR)
+          binBufs += pos.index -> tup
+          tup
+        })
+
+        val args: List[ControlSet] = List("chan" -> offset, "bufL" -> bufL.id, "bufR" -> bufR.id)
+        chanSynth.play(rplcSynth, args, addBefore, bufL :: bufR :: Nil)
+        val stereoBusW = BusNodeSetter.writer("out", stereoBus, chanSynth)
+        val delayBusR  = BusNodeSetter.reader("in" , delayBus , chanSynth)
+        stereoBusW.add()
+        delayBusR .add()
+        chanSynth.onEndTxn { implicit tx =>
+          stereoBusW.remove()
+          delayBusR .remove()
+        }
+
+      } else {
+        // ignore - just use the reverb tail and we're fine
+      }
+    }
+
+    println(s"Number of binaural filters: ${binBufs.size}")
+
+    g.onEndTxn { implicit tx =>
+      binBufs.valuesIterator.foreach { case (bufL, bufR) =>
+        bufL.dispose()
+        bufR.dispose()
+      }
+    }
 
     g
   }
