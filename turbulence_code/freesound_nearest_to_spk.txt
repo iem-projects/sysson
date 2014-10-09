@@ -1,0 +1,2027 @@
+Turbulence.ChannelToGeoMap.mapValues(_.toLatLon).toSeq.sortBy(_._1.num).foreach(println)
+(Spk(3),[lat: -47.50, lon: 37.50])
+(Spk(4),[lat: 25.00, lon: -65.00])
+(Spk(5),[lat: 2.50, lon: -5.00])
+(Spk(6),[lat: -12.50, lon: 30.00])
+(Spk(7),[lat: 35.00, lon: -25.00])
+(Spk(8),[lat: 27.50, lon: 22.50])
+(Spk(10),[lat: 0.00, lon: -5.00])
+(Spk(11),[lat: -35.00, lon: -10.00])
+(Spk(13),[lat: -50.00, lon: 35.00])
+(Spk(14),[lat: -60.00, lon: 102.50])
+(Spk(15),[lat: -75.00, lon: -35.00])
+(Spk(16),[lat: -40.00, lon: -57.50])
+(Spk(17),[lat: -25.00, lon: 112.50])
+(Spk(18),[lat: -35.00, lon: 155.00])
+(Spk(19),[lat: -65.00, lon: -170.00])
+(Spk(20),[lat: -2.50, lon: 175.00])
+(Spk(21),[lat: -50.00, lon: 37.50])
+(Spk(22),[lat: -25.00, lon: 72.50])
+(Spk(23),[lat: 10.00, lon: 97.50])
+(Spk(24),[lat: 5.00, lon: 137.50])
+(Spk(25),[lat: 10.00, lon: 57.50])
+(Spk(26),[lat: 65.00, lon: 12.50])
+(Spk(27),[lat: 45.00, lon: 72.50])
+(Spk(28),[lat: 40.00, lon: 122.50])
+(Spk(29),[lat: 75.00, lon: 145.00])
+(Spk(30),[lat: 50.00, lon: -142.50])
+(Spk(31),[lat: 35.00, lon: 170.00])
+(Spk(32),[lat: 0.00, lon: 175.00])
+(Spk(33),[lat: 25.00, lon: -67.50])
+(Spk(34),[lat: 60.00, lon: -77.50])
+(Spk(35),[lat: 25.00, lon: -107.50])
+(Spk(36),[lat: 12.50, lon: -150.00])
+(Spk(37),[lat: -10.00, lon: -122.50])
+(Spk(38),[lat: -27.50, lon: -157.50])
+(Spk(39),[lat: -2.50, lon: 177.50])
+(Spk(40),[lat: -65.00, lon: -167.50])
+(Spk(41),[lat: 22.50, lon: -67.50])
+(Spk(42),[lat: -5.00, lon: -42.50])
+(Spk(43),[lat: -10.00, lon: -82.50])
+(Spk(44),[lat: -45.00, lon: -107.50])
+(Spk(45),[lat: 2.50, lon: -7.50])
+(Spk(46),[lat: -37.50, lon: -57.50])
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+:::: 3 ::::
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-47.5,37.5%20d=2000}
+http://www.freesound.org/people/balaam/sounds/19550/
+
+{
+    "count": 1, 
+    "next": null, 
+    "results": [
+        {
+            "id": 19550, 
+            "name": "herdboys ePalini.mp3", 
+            "tags": [
+                "cow", 
+                "herdboys", 
+                "milking", 
+                "moo", 
+                "turkey", 
+                "walking", 
+                "xhosa"
+            ], 
+            "license": "http://creativecommons.org/licenses/sampling+/1.0/", 
+            "username": "balaam"
+        }
+    ], 
+    "previous": null
+}
+
+:::: 4 ::::
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-25,-65%20d=100}
+http://freesound.org/people/felix.blume/sounds/131927/
+
+{
+    "count": 1, 
+    "next": null, 
+    "results": [
+        {
+            "id": 131927, 
+            "name": "Argentina, Salta - Children are singing a patriotic song called Aurora at the beginning of they school day.", 
+            "tags": [
+                "aurora", 
+                "Children", 
+                "singing", 
+                "Argentina", 
+                "blume", 
+                "argentinian", 
+                "day", 
+                "Salta", 
+                "felix", 
+                "national", 
+                "anthem", 
+                "beginning", 
+                "school"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "felix.blume"
+        }
+    ], 
+    "previous": null
+}
+
+with d=201, also the following:
+
+http://freesound.org/people/felix.blume/sounds/234240/
+{
+            "id": 234240, 
+            "name": "Water flowing in north of Argentina (close to Salta)", 
+            "tags": [
+                "south", 
+                "america", 
+                "argentina", 
+                "north", 
+                "flowing", 
+                "drops", 
+                "luracatao", 
+                "water", 
+                "flow", 
+                "felix", 
+                "fields", 
+                "salta", 
+                "blume", 
+                "irrigate", 
+                "drop"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+:::: 5 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=2.5,-5%20d=1000}
+http://freesound.org/people/DL01/sounds/241956/
+
+(skipping this one: http://freesound.org/people/amorralteixe/sounds/233005/)
+
+{
+            "id": 241956, 
+            "name": "Fofonye - Song in ew\u00e9", 
+            "tags": [
+                "Togo", 
+                "Ewe", 
+                "Africa", 
+                "Song", 
+                "West"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "DL01"
+        }
+
+:::: 6 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-12.5,30%20d=1000}
+http://freesound.org/people/LukeIRL/sounds/176028/
+
+ {
+            "id": 176028, 
+            "name": "41_nightlife_chikangawa.WAV", 
+            "tags": [
+                "malawi", 
+                "buzzing", 
+                "night", 
+                "forest", 
+                "lake", 
+                "insects", 
+                "field-recording"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "LukeIRL"
+        }
+
+:::: 7 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=35,-25%20d=1000}
+http://freesound.org/people/E330/sounds/103189/
+http://freesound.org/people/E330/sounds/103190/
+
+{
+            "id": 103189, 
+            "name": "fish market Madeira.wav", 
+            "tags": [
+                "people", 
+                "field-recording", 
+                "indoor", 
+                "ambience", 
+                "portugal", 
+                "funchal", 
+                "madeira", 
+                "fishmongers", 
+                "confused-noise", 
+                "market", 
+                "noise"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "E330"
+        }, 
+        {
+            "id": 103190, 
+            "name": "waves, children & laughing gulls in Madeira.wav", 
+            "tags": [
+                "field-recording", 
+                "portugal", 
+                "madeira", 
+                "beach", 
+                "bird", 
+                "gull", 
+                "sea", 
+                "birdcall", 
+                "wave", 
+                "seagull", 
+                "nature"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "E330"
+        }
+
+:::: 8 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=27.5,22.5%20d=1000}
+
+http://freesound.org/people/14all41/sounds/69235/
+
+{
+            "id": 69235, 
+            "name": "Boat_00441.wav", 
+            "tags": [
+                "boat-with-machine", 
+                "fishing", 
+                "boat"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "14all41"
+        }
+
+(d=1500)
+
+http://freesound.org/people/arnaud%20coutancier/sounds/213492/
+
+{
+            "id": 213492, 
+            "name": "waves on big sand.wav", 
+            "tags": [
+                "beach", 
+                "ambience", 
+                "waves", 
+                "sea", 
+                "sand", 
+                "water", 
+                "coast", 
+                "seaside", 
+                "field-recording"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "arnaud coutancier"
+        }
+
+http://freesound.org/people/Ali@k/sounds/156562/
+
+{
+            "id": 156562, 
+            "name": "Singing Birds 2 - (Kouri Forest - Salonika) 22.05.12 18:27", 
+            "tags": [
+                "Forest", 
+                "Rellax", 
+                "Birds", 
+                "Kouri", 
+                "Environment"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Ali@k"
+        }
+
+http://freesound.org/people/surrey_film/sounds/162238/
+THIS ONE
+
+{
+            "id": 162238, 
+            "name": "Village Square, Kardamyli, Ciccadas and distant chat.aif", 
+            "tags": [
+                "Village", 
+                "atmosphere", 
+                "Kardamyli", 
+                "Square", 
+                "Greece"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "surrey_film"
+        }
+
+http://freesound.org/people/Akoustikos/sounds/137159/
+
+{
+            "id": 137159, 
+            "name": "Sea recorded from Seashore (near)", 
+            "tags": [
+                "wind", 
+                "waves-crashing", 
+                "Favignana", 
+                "boat", 
+                "Tonnara", 
+                "Trapani", 
+                "sea"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Akoustikos"
+        }
+
+http://freesound.org/people/Leandros.Ntounis/sounds/163606/
+
+{
+            "id": 163606, 
+            "name": "Wind, strong. through power cables.wav", 
+            "tags": [
+                "Wind", 
+                "Cables", 
+                "Cold-Wind"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Leandros.Ntounis"
+        }
+
+http://freesound.org/people/juan%20pablo%20escobar%20plaza/sounds/235812/
+
+{
+            "id": 235812, 
+            "name": "Canto 4 rezo Mohaidin.aiff", 
+            "tags": [
+                "islam", 
+                "muezzin", 
+                "call-to-prayer", 
+                "prayer", 
+                "morocco", 
+                "arab", 
+                "mosque", 
+                "muslim"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "juan pablo escobar plaza"
+        }
+
+http://freesound.org/people/arnaud%20coutancier/sounds/213542/
+
+{
+            "id": 213542, 
+            "name": "Mooring rope.wav", 
+            "tags": [
+                "boat", 
+                "beach", 
+                "ambience", 
+                "waves", 
+                "sea", 
+                "mooring", 
+                "shore", 
+                "rope", 
+                "harbour", 
+                "field-recording", 
+                "water"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "arnaud coutancier"
+        }
+
+:::: 10 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=0,-5%20d=1500}
+http://freesound.org/people/surrey_film/sounds/162238/
+http://freesound.org/people/felix.blume/sounds/176385/
+
+{
+            "id": 176622, 
+            "name": "An African town : Bamako (Mali). In front of a house.", 
+            "tags": [
+                "close", 
+                "by", 
+                "pass", 
+                "voice", 
+                "passing", 
+                "bamako", 
+                "front", 
+                "african", 
+                "music", 
+                "calaban", 
+                "coura", 
+                "voices", 
+                "africa", 
+                "mali", 
+                "cars", 
+                "car", 
+                "people", 
+                "district", 
+                "blume", 
+                "felix", 
+                "town"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+{
+            "id": 176385, 
+            "name": "African Town : BAMAKO", 
+            "tags": [
+                "road", 
+                "passing", 
+                "african", 
+                "Africa", 
+                "car", 
+                "blume", 
+                "town", 
+                "cycle", 
+                "by", 
+                "towns", 
+                "Bamako", 
+                "Mali", 
+                "cars", 
+                "A", 
+                "districtSome", 
+                "village", 
+                "motor", 
+                "Calaban", 
+                "Coura", 
+                "moto", 
+                "motocycle", 
+                "felix", 
+                "people"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+:::: 11 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-35,-10%20d=2600}
+http://freesound.org/people/restive/sounds/221865/
+http://freesound.org/people/restive/sounds/221863/
+http://freesound.org/people/restive/sounds/221861/
+http://freesound.org/people/restive/sounds/221859/
+
+    {
+            "id": 221865, 
+            "name": "121118_0084 table mountain 1 (-33.9487, 18.4226).mp3", 
+            "tags": [
+                "birds", 
+                "forest", 
+                "city", 
+                "insects", 
+                "nature", 
+                "field-recording", 
+                "summer"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "restive"
+        }, 
+        {
+            "id": 221863, 
+            "name": "111129_0015 sandy bay, tidal pool 2 (-34.0196, 18.3319).mp3", 
+            "tags": [
+                "tidal-pool", 
+                "waves", 
+                "sea", 
+                "water", 
+                "nature", 
+                "field-recording", 
+                "summer"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "restive"
+        }, 
+        {
+            "id": 221861, 
+            "name": "120129_0024 sandy bay, cicadas 2 (-34.0147, 18.3353).mp3", 
+            "tags": [
+                "sea", 
+                "heat", 
+                "cicadas", 
+                "insects", 
+                "nature", 
+                "field-recording", 
+                "summer"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "restive"
+        }, 
+        {
+            "id": 221859, 
+            "name": "120719_0058 valkenberg bird sanctuary (-33.93519, 18.47868).mp3", 
+            "tags": [
+                "bird-calls", 
+                "highway", 
+                "birds", 
+                "helicopter", 
+                "traffic", 
+                "field-recording", 
+                "wetland"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "restive"
+        }
+
+:::: 13 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-50,35.0%20d=2200}
+http://freesound.org/people/Leandros.Ntounis/sounds/163607/
+
+{
+            "id": 163607, 
+            "name": "Wind, Soft. Crickets.wav", 
+            "tags": [
+                "Wind", 
+                "Crickets", 
+                "South-Africa", 
+                "Mountain"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Leandros.Ntounis"
+        }
+
+:::: 14 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-60,102.5%20d=2000}
+http://freesound.org/people/stormpetrel/sounds/173095/
+
+{
+            "id": 173095, 
+            "name": "The sound of the Iceberg", 
+            "tags": [
+                "ocean", 
+                "soundscade", 
+                "air", 
+                "nature", 
+                "field-recording", 
+                "atmosphere", 
+                "cold", 
+                "rasping", 
+                "sea", 
+                "grinding", 
+                "Antarctica", 
+                "ice", 
+                "NT4", 
+                "rode", 
+                "friction", 
+                "shelf", 
+                "frozen", 
+                "incredible", 
+                "iceberg"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "stormpetrel"
+        }
+
+:::: 15 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-75,-35%20d=2000}
+http://www.freesound.org/people/al.barbosa/sounds/150865/
+
+{
+    "count": 1, 
+    "next": null, 
+    "results": [
+        {
+            "id": 150865, 
+            "name": "Penguin Colony at Danco Island at Antarctica Peninsula", 
+            "tags": [
+                "Penguin", 
+                "field-recording", 
+                "Colony", 
+                "Antarctica", 
+                "Peninsula"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "al.barbosa"
+        }
+    ], 
+    "previous": null
+}
+
+(d=2700)
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-75,-35%20d=2700}
+http://freesound.org/people/felix.blume/sounds/110919/geotag/
+
+{
+            "id": 110919, 
+            "name": "Forest in Tierra del Fuego (Argentina). Trees are cracking, wind is strong...", 
+            "tags": [
+                "cracking", 
+                "crack", 
+                "blume", 
+                "felix", 
+                "forest", 
+                "fuego", 
+                "garting", 
+                "patagonia", 
+                "argentina", 
+                "tierra", 
+                "tree", 
+                "wind", 
+                "strong", 
+                "creak", 
+                "creakling", 
+                "del"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+(hay mas)
+
+:::: 16 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-40,-57.5%20d=300}
+http://freesound.org/people/peterarg/sounds/52647/
+
+{
+            "id": 52647, 
+            "name": "Bosque con abejas.wav", 
+            "tags": [
+                "bee", 
+                "birds", 
+                "woods"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "peterarg"
+        }
+
+:::: 17 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-25,112.5%20d=1400}
+http://freesound.org/people/kangaroovindaloo/sounds/180025/
+(pretty poor mp3ish sound quality)
+
+{
+            "id": 180025, 
+            "name": "Esperance Wind Farm II", 
+            "tags": [
+                "Esperance", 
+                "wind", 
+                "australian", 
+                "atmos", 
+                "western-australia", 
+                "wind-farm", 
+                "field-recording", 
+                "wind-power", 
+                "Australia", 
+                "atmosphere"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "kangaroovindaloo"
+        }
+
+(d=1900)
+
+http://freesound.org/people/RTB45/sounds/233194/
+
+{
+            "id": 233194, 
+            "name": "Bali Cremmation Ceremony - Conclusion", 
+            "tags": [
+                "pyre", 
+                "traditional", 
+                "ritual", 
+                "Honor", 
+                "bury", 
+                "ngaben", 
+                "cymbal", 
+                "burn", 
+                "funeral", 
+                "funeral-music", 
+                "requiem", 
+                "field-recording", 
+                "Indonesia", 
+                "temple", 
+                "rite", 
+                "music", 
+                "percussion", 
+                "gamelan", 
+                "Bali", 
+                "death", 
+                "memorial", 
+                "cremation", 
+                "ceremony", 
+                "Buddha", 
+                "Asia", 
+                "Hindu", 
+                "Ubud", 
+                "burial"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "RTB45"
+        }
+
+http://freesound.org/people/plymrphx/sounds/244720/
+
+{
+            "id": 244720, 
+            "name": "Ubud Crickets.wav", 
+            "tags": [
+                "night", 
+                "Crickets", 
+                "frogs", 
+                "tropical", 
+                "insects", 
+                "nature", 
+                "field-recording", 
+                "stereo"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "plymrphx"
+        }
+
+http://freesound.org/people/bencarey/sounds/248195/
+
+ {
+            "id": 248195, 
+            "name": "Frogs and Crickets Wapa di Ume", 
+            "tags": [
+                "ricefields", 
+                "crickets", 
+                "indonesia", 
+                "H4n", 
+                "frogs", 
+                "bali", 
+                "field-recording"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "bencarey"
+        }
+
+http://freesound.org/people/kangaroovindaloo/sounds/138288/
+
+{
+            "id": 138288, 
+            "name": "Desert at Night", 
+            "tags": [
+                "night-air", 
+                "arid", 
+                "nature", 
+                "australia", 
+                "wind", 
+                "desert", 
+                "night", 
+                "crickets", 
+                "atmos", 
+                "field-recording", 
+                "atmosphere"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "kangaroovindaloo"
+        }
+
+:::: 18 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-35,155%20d=400}
+http://freesound.org/people/iankath/sounds/192683/
+
+{
+            "id": 192683, 
+            "name": "Restaurant Atmos", 
+            "tags": [
+                "Ambient", 
+                "Background", 
+                "MP3", 
+                "Restaurant", 
+                "Family", 
+                "Australia", 
+                "Lebanese"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "iankath"
+        }
+
+http://freesound.org/people/bencarey/sounds/154968/
+
+{
+            "id": 154968, 
+            "name": "The-Hub-7.30pm-2-6-10.aif", 
+            "tags": [
+                "truck", 
+                "ambience", 
+                "trains", 
+                "iPhone", 
+                "traffic", 
+                "plains", 
+                "Field-recording", 
+                "urban"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "bencarey"
+        }
+
+(d=500)
+
+http://freesound.org/people/exert.com.au/sounds/234888/
+THIS ONE
+
+{
+            "id": 234888, 
+            "name": "Open Valley Nature Sounds", 
+            "tags": [
+                "boat", 
+                "birds", 
+                "valley", 
+                "ambient", 
+                "traffic", 
+                "insect", 
+                "ambiance", 
+                "national-park", 
+                "nature", 
+                "field-recording"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "exert.com.au"
+        }
+
+:::: 19 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-65,-170%20d=1500}
+http://freesound.org/people/Corsica_S/sounds/233703/
+(despite the "Sennheiser MKE 600", quite crappy mp3 encoding)
+
+http://freesound.org/people/Corsica_S/sounds/233702/
+THIS ONE
+
+http://freesound.org/people/Corsica_S/sounds/233704/
+OR THIS ONE (---> 40)
+
+{
+            "id": 233703, 
+            "name": "rubbing ropes fore.wav", 
+            "tags": [
+                "rubbing", 
+                "friction", 
+                "drone", 
+                "water", 
+                "metallic", 
+                "scrape", 
+                "ropes", 
+                "field-recording", 
+                "engine"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "Corsica_S"
+        }
+
+ {
+            "id": 233702, 
+            "name": "Ship Fender.wav", 
+            "tags": [
+                "geotagged", 
+                "squeak", 
+                "water", 
+                "ships", 
+                "rubbing", 
+                "rub", 
+                "funny", 
+                "field-recording", 
+                "rubber"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "Corsica_S"
+        }
+
+{
+            "id": 233704, 
+            "name": "rubbing ropes aft.wav", 
+            "tags": [
+                "rubbing", 
+                "friction", 
+                "drone", 
+                "water", 
+                "metallic", 
+                "scrape", 
+                "ropes", 
+                "field-recording", 
+                "engine"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "Corsica_S"
+        }
+
+:::: 20 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-2.5,175%20d=1800}
+http://freesound.org/people/c97059890/sounds/36430/
+
+ {
+            "id": 36430, 
+            "name": "Fiji Beach (Stereo).mp3", 
+            "tags": [
+                "beach", 
+                "fiji", 
+                "ocean", 
+                "shore", 
+                "waves"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "c97059890"
+        }
+
+:::: 21 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-50,37.5%20d=2300}
+http://freesound.org/people/Leandros.Ntounis/sounds/163608/
+
+ {
+            "id": 163608, 
+            "name": "Wind, strong. through rocks 2.wav", 
+            "tags": [
+                "Rocks", 
+                "Wind", 
+                "South-Africa", 
+                "Mountain"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Leandros.Ntounis"
+        }
+
+:::: 22 ::::
+
+(perhaps this should be silent - it's 3800 km away from any recording)
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-25,72.5%20d=3800}
+http://freesound.org/people/genghis%20attenborough/sounds/28264/
+
+{
+            "id": 28264, 
+            "name": "Odayam sounds (night time).wav", 
+            "tags": [
+                "ambience", 
+                "asian", 
+                "beach", 
+                "birdsounds", 
+                "environmental", 
+                "field-recording", 
+                "india", 
+                "indian-flying-fox", 
+                "insects", 
+                "natural", 
+                "nature", 
+                "orthoptera", 
+                "spotted-owlet", 
+                "temple", 
+                "wildlife"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "genghis attenborough"
+        }
+
+:::: 23 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=10,95.5%20d=500}
+http://freesound.org/people/MayaButi/sounds/211063/
+
+{
+            "id": 211063, 
+            "name": "Breakfast in the street", 
+            "tags": [
+                "kitchen", 
+                "breakfast", 
+                "street", 
+                "morning", 
+                "rotis", 
+                "outdoor"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "MayaButi"
+        }
+
+http://freesound.org/people/zaem/sounds/232439/
+
+ {
+            "id": 232439, 
+            "name": "Long-tail boat with waves", 
+            "tags": [
+                "boat", 
+                "waves", 
+                "motor", 
+                "tail", 
+                "water", 
+                "ocean", 
+                "long", 
+                "shore", 
+                "sea"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "zaem"
+        }
+
+:::: 24 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=5,137.5%20d=1500}
+http://freesound.org/people/snog/sounds/67031/
+
+{
+            "id": 67031, 
+            "name": "water lap.WAV", 
+            "tags": [
+                "bay", 
+                "birds", 
+                "boat", 
+                "insects", 
+                "lapping", 
+                "nature", 
+                "paddling", 
+                "remote", 
+                "shoreline", 
+                "wilderness"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "snog"
+        }
+
+:::: 25 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=10,57.5%20d=1800}
+http://freesound.org/people/Benbojangles/sounds/65495/
+
+{
+            "id": 65495, 
+            "name": "Beach Binaural3.ogg", 
+            "tags": [
+                "ali", 
+                "beach", 
+                "binaural", 
+                "dubai", 
+                "jebel"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "Benbojangles"
+        }
+
+:::: 26 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=65,12.5%20d=200}
+http://freesound.org/people/klangstrand/sounds/179123/
+
+{
+            "id": 179123, 
+            "name": "Resonance.wav", 
+            "tags": [
+                "wind", 
+                "resonance", 
+                "hum", 
+                "Traffic", 
+                "drone", 
+                "pipes", 
+                "cars", 
+                "organ", 
+                "keynote"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "klangstrand"
+        }
+
+http://freesound.org/people/1ratatosk1/sounds/245826/
+THIS ONE
+
+{
+            "id": 245826, 
+            "name": "Nightscapes Asplund.mp3", 
+            "tags": [
+                "wind", 
+                "soft", 
+                "night", 
+                "background-sound", 
+                "leaves", 
+                "white-noise", 
+                "ash", 
+                "background", 
+                "trees", 
+                "nature", 
+                "field-recording", 
+                "blowing", 
+                "russeling", 
+                "ambience", 
+                "atmos", 
+                "forrest", 
+                "soundscape", 
+                "ambient", 
+                "nightscape", 
+                "ambiance", 
+                "ash-tree", 
+                "atmosphere"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "1ratatosk1"
+        }
+
+:::: 27 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=45,72.5%20d=1200}
+http://freesound.org/people/Zabuhailo/sounds/216642/
+
+{
+            "id": 216642, 
+            "name": "freight_train_2.flac", 
+            "tags": [
+                "locomotive", 
+                "railroad", 
+                "railway", 
+                "clatter", 
+                "trains", 
+                "freight", 
+                "freight-train", 
+                "train", 
+                "rumble", 
+                "rail-way", 
+                "rail", 
+                "passing", 
+                "vibrations", 
+                "wheels", 
+                "rail-road", 
+                "noise"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Zabuhailo"
+        }
+
+http://freesound.org/people/Zabuhailo/sounds/178648/
+
+{
+            "id": 178648, 
+            "name": "ChurchBells.flac", 
+            "tags": [
+                "ring", 
+                "bell", 
+                "church-bell", 
+                "bells", 
+                "chime", 
+                "church-bells", 
+                "church", 
+                "cathedral", 
+                "ringing", 
+                "cathedral-bells"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "Zabuhailo"
+        }
+
+http://freesound.org/people/Zabuhailo/sounds/159327/
+
+{
+            "id": 159327, 
+            "name": "rain_in_the_city_center_thunder.wav", 
+            "tags": [
+                "bird", 
+                "sparrow-tweet", 
+                "sparrows-chirp", 
+                "chirp", 
+                "tweet", 
+                "sparrow", 
+                "thunder", 
+                "rain", 
+                "bus-stop", 
+                "bus", 
+                "noise", 
+                "city-center", 
+                "city"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Zabuhailo"
+        }
+
+http://freesound.org/people/Zabuhailo/sounds/167672/
+
+{
+            "id": 167672, 
+            "name": "teeter.wav", 
+            "tags": [
+                "soundscape", 
+                "ambiance", 
+                "ambient", 
+                "people", 
+                "field-recording", 
+                "atmosphere", 
+                "swing", 
+                "children", 
+                "creak", 
+                "ambience", 
+                "rumble", 
+                "Autumn", 
+                "teeter", 
+                "yard", 
+                "noise", 
+                "city", 
+                "town"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Zabuhailo"
+        }
+
+:::: 28 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=40,122.5%20d=500}
+http://freesound.org/people/bmoreno/sounds/164169/
+
+{
+            "id": 164169, 
+            "name": "0353 Changing_guard.wav", 
+            "tags": [
+                "field-recording", 
+                "voice", 
+                "korean", 
+                "english", 
+                "music", 
+                "japanese", 
+                "seoul", 
+                "police", 
+                "korea"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "bmoreno"
+        }
+
+http://freesound.org/people/RTB45/sounds/232411/
+
+{
+            "id": 232411, 
+            "name": "JongsouTemple - Seoul South Korea", 
+            "tags": [
+                "monk", 
+                "chant", 
+                "Jogyesa", 
+                "chanting", 
+                "meditate", 
+                "monastery", 
+                "holy", 
+                "field-recording", 
+                "temple", 
+                "Buddhism", 
+                "religion", 
+                "pray", 
+                "Seoul", 
+                "Korea", 
+                "worship", 
+                "Korean", 
+                "prayer", 
+                "Buddha", 
+                "meditation", 
+                "mantra", 
+                "Jogye", 
+                "Asia", 
+                "monks", 
+                "Buddhist"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "RTB45"
+        }
+
+http://freesound.org/people/bmoreno/sounds/164175/
+
+{
+            "id": 164175, 
+            "name": "0378 Kids_ambience.wav", 
+            "tags": [
+                "field-recording", 
+                "voice", 
+                "korean", 
+                "ambience", 
+                "seoul", 
+                "korea"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "bmoreno"
+        }
+
+http://freesound.org/people/sazman/sounds/28251/
+
+{
+            "id": 28251, 
+            "name": "061224-chongnyangnyi-market2.wav", 
+            "tags": [
+                "environmental-sounds-research", 
+                "field-recording", 
+                "marketplace", 
+                "seoul"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "sazman"
+        }
+
+:::: 29 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=75,145%20d=2500}
+http://freesound.org/people/jeo/sounds/103115/
+
+{
+            "id": 103115, 
+            "name": "svalbard_phippsoya_20060829.wav", 
+            "tags": [
+                "nature", 
+                "field-recording", 
+                "flatuphony", 
+                "walrus"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "jeo"
+        }
+
+:::: 30 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=50,-142.5%20d=1400}
+http://freesound.org/people/womackje/sounds/241141/
+
+{
+            "id": 241141, 
+            "name": "14_06_23_Burnaby_rain.mp3", 
+            "tags": [
+                "wind", 
+                "chime", 
+                "rain", 
+                "Burnaby", 
+                "suburban", 
+                "crow", 
+                "SkyTrain"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "womackje"
+        }
+
+http://freesound.org/people/Sailor55/sounds/222037/
+THIS ONE
+
+{
+            "id": 222037, 
+            "name": "MarinePileDriver_sel.wav", 
+            "tags": [
+                "marine", 
+                "crane", 
+                "thumping", 
+                "pylon", 
+                "pile", 
+                "construction", 
+                "pounding", 
+                "dock", 
+                "piledriver", 
+                "weight", 
+                "site", 
+                "driver", 
+                "work", 
+                "working", 
+                "constructing", 
+                "drop"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "Sailor55"
+        }
+
+:::: 31 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=35,170%20d=2500}
+http://freesound.org/people/snotch/sounds/96175/
+(NICE BUT TOO SHORT)
+
+{
+            "id": 96175, 
+            "name": "20100501_183714_LakeAkan_Bokke.wav", 
+            "tags": [
+                "aynu", 
+                "bokke", 
+                "field-recording", 
+                "hokkaido", 
+                "japan", 
+                "kushiro", 
+                "lake", 
+                "mud", 
+                "akan", 
+                "volcano"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "snotch"
+        }
+
+:::: 32 ::::
+
+(perhaps this should be silent - the only recording is shared with Spkr 20)
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=0,175%20d=3700}
+
+THIS ONE DO KEEP SILENT, ALL NEXT SOUNDS ARE TAKEN BY NEIGHBOURING SPKR
+
+http://freesound.org/people/tec%20studios/sounds/222640/
+
+{
+            "id": 222640, 
+            "name": "Bugs at night Kauai.wav", 
+            "tags": [
+                "katydids", 
+                "night", 
+                "Kauai", 
+                "crickets", 
+                "night-time", 
+                "bugs", 
+                "Hawaii", 
+                "insects", 
+                "nature", 
+                "field-recording"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "tec studios"
+        }
+
+:::: 33 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=25,-67.5%20d=800}
+http://freesound.org/people/laurent/sounds/186860/
+
+{
+            "id": 186860, 
+            "name": "Casa Grande sonic environment.wav", 
+            "tags": [
+                "bark", 
+                "night", 
+                "jungle", 
+                "dog", 
+                "ambiance", 
+                "Field-recording", 
+                "cocki"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "laurent"
+        }
+
+http://freesound.org/people/Shamanatrix/sounds/44980/
+(TOO MUCH HISS AND WIND)
+
+{
+            "id": 44980, 
+            "name": "El Yunque Rainforest in Puerto Rico.mp3", 
+            "tags": [
+                "nature", 
+                "field-recording", 
+                "puerto-rico", 
+                "rainforest"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "Shamanatrix"
+        }
+
+:::: 34 ::::
+
+http://freesound.org/people/laurent/sounds/59071/
+
+{
+            "id": 59071, 
+            "name": "Tintamare.wav", 
+            "tags": [
+                "yelling", 
+                "march", 
+                "pedestrians", 
+                "rally", 
+                "reunion", 
+                "shouting", 
+                "street", 
+                "streetnoise", 
+                "town", 
+                "voice", 
+                "voices", 
+                "yell", 
+                "ambience", 
+                "applaud", 
+                "applause", 
+                "atmosphere", 
+                "cheer", 
+                "cheering", 
+                "city", 
+                "clap", 
+                "event", 
+                "female", 
+                "festival", 
+                "happy", 
+                "human", 
+                "hurray", 
+                "loud", 
+                "male", 
+                "acadian", 
+                "crowd", 
+                "party", 
+                "joy", 
+                "acadia", 
+                "caraquet", 
+                "celebration", 
+                "field-recording", 
+                "people", 
+                "horn", 
+                "whistle"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "laurent"
+        }
+
+(d=1700)
+
+http://freesound.org/people/laurent/sounds/16995/
+
+{
+            "id": 16995, 
+            "name": "Wind in the trees.wav", 
+            "tags": [
+                "field-recording", 
+                "forest", 
+                "trees", 
+                "wind"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "laurent"
+        }
+
+http://freesound.org/people/icuttv/sounds/181364/
+(NEEDS A BIT OF CUTTING)
+
+{
+            "id": 181364, 
+            "name": "WILDTRACK Swamp at night in Minnesota USA", 
+            "tags": [
+                "truck", 
+                "car", 
+                "road-noise", 
+                "drive-past", 
+                "driving", 
+                "river", 
+                "night", 
+                "marshes", 
+                "wetland", 
+                "atmos", 
+                "swamp", 
+                "wildtrack", 
+                "frog", 
+                "nighttime", 
+                "icuttv", 
+                "riverine", 
+                "nature", 
+                "calls", 
+                "field-recording", 
+                "marshland", 
+                "wildlife", 
+                "nocturnal"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "icuttv"
+        }
+
+http://freesound.org/people/laurent/sounds/17004/
+
+{
+            "id": 17004, 
+            "name": "snow melting.wav", 
+            "tags": [
+                "field-recording", 
+                "forest", 
+                "melting", 
+                "snow", 
+                "water", 
+                "winter"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "laurent"
+        }
+
+:::: 35 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=25,-107.5%20d=300}
+http://freesound.org/people/aguasonic/sounds/51904/
+
+{
+            "id": 51904, 
+            "name": "Bufadora_Punta_Arenas.mp3", 
+            "tags": [
+                "la-bufadora", 
+                "punta-arenas", 
+                "aguasonic"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "aguasonic"
+        }
+
+:::: 36 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=12.5,-150%20d=1300}
+
+http://freesound.org/people/Mista%20Bumpy/sounds/232333/
+(VERY CRAPPY RECORDING QUALITY)
+
+(d=1500)
+
+http://freesound.org/people/tec%20studios/sounds/222640/
+
+{
+            "id": 222640, 
+            "name": "Bugs at night Kauai.wav", 
+            "tags": [
+                "katydids", 
+                "night", 
+                "Kauai", 
+                "crickets", 
+                "night-time", 
+                "bugs", 
+                "Hawaii", 
+                "insects", 
+                "nature", 
+                "field-recording"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "tec studios"
+        }
+
+:::: 37 ::::
+
+SILENT
+
+:::: 38 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-27.5,-157.5%20d=2800}
+
+http://freesound.org/people/FRANAUDIO/sounds/39895/
+
+{
+            "id": 39895, 
+            "name": "EXT LIGHT RAIN SUBURBAN.wav", 
+            "tags": [
+                "atmos", 
+                "birds", 
+                "new-zealand", 
+                "rain", 
+                "suburban"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "FRANAUDIO"
+        }
+
+:::: 39 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-2.5,177.5%20d=3600}
+
+EINZIG DUPLIKAT:
+
+http://freesound.org/people/c97059890/sounds/36430/
+
+ {
+            "id": 36430, 
+            "name": "Fiji Beach (Stereo).mp3", 
+            "tags": [
+                "beach", 
+                "fiji", 
+                "ocean", 
+                "shore", 
+                "waves"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "c97059890"
+        }
+
+:::: 40 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-65,-167.5%20d=2000}
+http://freesound.org/people/Corsica_S/sounds/233703/
+(despite the "Sennheiser MKE 600", quite crappy mp3 encoding)
+
+http://freesound.org/people/Corsica_S/sounds/233702/
+OR THIS ONE (---> 19)
+
+http://freesound.org/people/Corsica_S/sounds/233704/
+THIS ONE
+
+{
+            "id": 233703, 
+            "name": "rubbing ropes fore.wav", 
+            "tags": [
+                "rubbing", 
+                "friction", 
+                "drone", 
+                "water", 
+                "metallic", 
+                "scrape", 
+                "ropes", 
+                "field-recording", 
+                "engine"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "Corsica_S"
+        }
+
+ {
+            "id": 233702, 
+            "name": "Ship Fender.wav", 
+            "tags": [
+                "geotagged", 
+                "squeak", 
+                "water", 
+                "ships", 
+                "rubbing", 
+                "rub", 
+                "funny", 
+                "field-recording", 
+                "rubber"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "Corsica_S"
+        }
+
+{
+            "id": 233704, 
+            "name": "rubbing ropes aft.wav", 
+            "tags": [
+                "rubbing", 
+                "friction", 
+                "drone", 
+                "water", 
+                "metallic", 
+                "scrape", 
+                "ropes", 
+                "field-recording", 
+                "engine"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "Corsica_S"
+        }
+
+:::: 41 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=22.5,-67.5%20d=1400}
+
+http://freesound.org/people/missteik/sounds/249504/
+
+{
+            "id": 249504, 
+            "name": "dise\u00f1o de ambiente_Paraguan\u00e1.mp3", 
+            "tags": [
+                "wind", 
+                "soundscape", 
+                "ambience", 
+                "ambient", 
+                "background", 
+                "atmosphere"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "missteik"
+        }
+
+:::: 42  ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-5,-42.5%20d=1400}
+http://freesound.org/people/reinsamba/sounds/19992/
+
+{
+            "id": 19992, 
+            "name": "Samba on the beach.wav", 
+            "tags": [
+                "beach", 
+                "brazil", 
+                "drums", 
+                "field-recording", 
+                "people", 
+                "seaside"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "reinsamba"
+        }
+
+:::: 43  ::::
+
+http://freesound.org/people/felix.blume/sounds/143115/
+
+{
+            "id": 143115, 
+            "name": "\"Tamales\" street seller in the central place of  small city of Pisco (Peru).", 
+            "tags": [
+                "scream", 
+                "voice", 
+                "passing", 
+                "walker", 
+                "blume", 
+                "by", 
+                "screaming", 
+                "walk", 
+                "horn", 
+                "field-recording", 
+                "selling", 
+                "peru", 
+                "latina", 
+                "seller", 
+                "pisco", 
+                "tamales", 
+                "tamal", 
+                "america", 
+                "city", 
+                "sell", 
+                "pass", 
+                "street", 
+                "voices", 
+                "felix", 
+                "latin"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+http://freesound.org/people/TheTunk/sounds/182102/
+
+{
+            "id": 182102, 
+            "name": "Jungle Yuwientsa Equador 10.8.wav", 
+            "tags": [
+                "Woloszyn-Mike", 
+                "Tunk", 
+                "The-Tunk", 
+                "Mike-Woloszyn", 
+                "Woloszy", 
+                "equador", 
+                "alone", 
+                "primary-rainforest", 
+                "night", 
+                "insects", 
+                "animals", 
+                "stereo", 
+                "rainforest", 
+                "ecuador", 
+                "field-recording", 
+                "atmo", 
+                "jungle"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "TheTunk"
+        }
+
+:::: 44 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-45,-107.5%20d=3100}
+
+http://freesound.org/people/felix.blume/sounds/110920/
+
+{
+            "id": 110920, 
+            "name": "A guanaco (kind of patagonian llama) calling his guanaco-children into the forest. Tierra del Fuego. Argentina. ", 
+            "tags": [
+                "felix", 
+                "field-recording", 
+                "blume", 
+                "llam", 
+                "guanaco", 
+                "lama", 
+                "llama", 
+                "argentina", 
+                "scream", 
+                "shout", 
+                "tierra", 
+                "patagonia", 
+                "calling", 
+                "del", 
+                "fuego"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "felix.blume"
+        }
+
+http://freesound.org/people/felix.blume/sounds/110921/
+
+{
+            "id": 110921, 
+            "name": "During the \"patagonian rodeo\", the farmers of the estancia go into the fields to collect the sheep. They are whistling and shouting to afraid the sheep and put them in the corner of the field, till they arrive to the estancia.", 
+            "tags": [
+                "felix", 
+                "field-recording", 
+                "blume", 
+                "fuego", 
+                "patagonia", 
+                "rodeo", 
+                "sheep", 
+                "argentina", 
+                "tierra", 
+                "whistle", 
+                "whistling", 
+                "shout", 
+                "del", 
+                "forest"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+:::: 45 ::::
+
+http://freesound.org/people/LukeIRL/sounds/62021/
+
+{
+            "id": 62021, 
+            "name": "Crickets and frogs in the Dogon night.wav", 
+            "tags": [
+                "frogs", 
+                "crickets", 
+                "field-recording", 
+                "mali", 
+                "night", 
+                "sound-scape", 
+                "africa", 
+                "soundscape", 
+                "dogon"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "LukeIRL"
+        }
+
+http://freesound.org/people/felix.blume/sounds/174933/
+
+{
+            "id": 174933, 
+            "name": "Dugout on the Niger river in Mali", 
+            "tags": [
+                "boat", 
+                "river", 
+                "niger", 
+                "mali", 
+                "paddle", 
+                "water", 
+                "dugout", 
+                "africa", 
+                "african", 
+                "paddling", 
+                "blume", 
+                "felix"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+http://freesound.org/people/felix.blume/sounds/173210/
+
+{
+            "id": 173210, 
+            "name": "A young girl singing while crushing millet in Africa, Mali", 
+            "tags": [
+                "song", 
+                "work", 
+                "voice", 
+                "girl", 
+                "sing", 
+                "mali", 
+                "africa", 
+                "crush", 
+                "millet", 
+                "young", 
+                "girls", 
+                "felix", 
+                "diafarabe", 
+                "diafarab", 
+                "african", 
+                "working", 
+                "cereal", 
+                "blume", 
+                "crushing", 
+                "village"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+http://freesound.org/people/felix.blume/sounds/133832/
+THIS ONE
+
+ {
+            "id": 133832, 
+            "name": "The Muezzin is calling the people for the praying. In this small village on the Niger river, the Muezzin still call without sound reinforcement. Sound recorder close to the Muezzin.", 
+            "tags": [
+                "mosquee", 
+                "praying", 
+                "niger", 
+                "Muezzin", 
+                "felix", 
+                "prayer", 
+                "call", 
+                "voice", 
+                "calling", 
+                "africa", 
+                "mali", 
+                "pray", 
+                "blume", 
+                "river", 
+                "imam"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+:::: 46 ::::
+
+http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=-37.5,-57.5%20d=300}
+http://freesound.org/people/diegomakedonsky/sounds/213529/
+
+{
+            "id": 213529, 
+            "name": "Medianoche junto a la costa del R\u00edo de la Plata- Atalaya, Magdalena", 
+            "tags": [
+                "birds", 
+                "forest", 
+                "paisaje-sonoro", 
+                "insects", 
+                "nature", 
+                "paisaje-nocturno", 
+                "field-recording"
+            ], 
+            "license": "http://creativecommons.org/licenses/by-nc/3.0/", 
+            "username": "diegomakedonsky"
+        }
+
+(d=400)
+
+http://freesound.org/people/josemaria/sounds/138997/
+
+{
+            "id": 138997, 
+            "name": "MERCADILLO", 
+            "tags": [
+                "market-ambience", 
+                "Montevideo", 
+                "Field-recordings", 
+                "Soundscape", 
+                "Mercado", 
+                "Paisaje-sonoro", 
+                "Uruguay"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "josemaria"
+        }
+
