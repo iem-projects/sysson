@@ -16,17 +16,21 @@ package at.iem.sysson
 package turbulence
 
 import at.iem.sysson
-import at.iem.sysson.turbulence.Dymaxion.DymPt
+import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt}
 import de.sciss.file._
-import de.sciss.lucre.synth.Txn
+import de.sciss.lucre.synth.{Group, Txn}
+import de.sciss.mellite.Mellite
+import de.sciss.swingplus.CloseOperation
+import de.sciss.swingplus.Implicits._
 import de.sciss.synth.proc.Code
 import de.sciss.{numbers, pdflitz, kollflitz}
 
 import ucar.ma2
 
-import scala.swing.{Swing, Frame}
+import scala.swing.event.ButtonClicked
+import scala.swing.{ToggleButton, Swing, Frame}
 import scala.collection.breakOut
-import scala.concurrent.stm.atomic
+import scala.concurrent.stm.{Ref, atomic}
 
 object Turbulence {
   final case class DymGrid(vx: Int, vyi: Int) {
@@ -92,6 +96,14 @@ object Turbulence {
 
   final case class LatLon(lat: Double, lon: Double) {
     override def toString = f"[lat: $lat%1.2f, lon: $lon%1.2f]"
+
+    def toPolar: Polar = {
+      val theta = (90 - lat).toRadians
+      val phi   = ((lon + 360) % 360).toRadians
+      Polar(theta, phi)
+    }
+
+    def toCartesian: Pt3 = toPolar.toCartesian
   }
 
   final case class LatLonIdx(latIdx: Int, lonIdx: Int) {
@@ -121,19 +133,33 @@ object Turbulence {
   final val NumLat =  73
   final val NumLon = 144
 
+  final val audioWork = userHome / "IEM" / "SysSon" / "installation" / "audio_work"
+
   /** Maps latitude index to longitude index to dymaxion coordinate. */
   final val LatLonIndicesToDymMap: Map[LatLonIdx, DymPt] = (0 until NumLat).flatMap { latIdx =>
     (0 until NumLon).map { lonIdx =>
       val lon = longitude(lonIdx)
       val lat = latitude (latIdx)
-      val dym = Dymaxion.mapLonLat(lat = lat, lon = lon)
+      val dym = Dymaxion.mapLonLat(LatLon(lat = lat, lon = lon))
       LatLonIdx(latIdx, lonIdx) -> dym
     }
   } (breakOut)
 
   final val LatLonDym: Vec[(LatLonIdx, DymPt)] = LatLonIndicesToDymMap.toVector
 
-  final case class Radians(value: Double) extends AnyVal
+  final case class Radians(value: Double) extends AnyVal {
+    /** Wraps the value to ensure it lies within -Pi ... +Pi */
+    def normalize: Radians = Radians(value.wrap2(math.Pi))
+
+    def - (that: Radians): Radians = Radians(this.value - that.value)
+    def + (that: Radians): Radians = Radians(this.value + that.value)
+
+    def angleTo(that: Radians): Radians = {
+      val thisN = this.normalize
+      val thatN = that.normalize
+      (thatN - thisN).normalize
+    }
+  }
 
   /** Maps latitude index to longitude index to
     * a pair of dymaxion coordinate and northward direction ("compass")
@@ -218,7 +244,8 @@ object Turbulence {
     // dyn.crosses      = LatLonIndicesToDymCompassMap.valuesIterator.toVector
     dyn.crosses = channelCrosses(Spk(29)) ++ channelCrosses(Spk(6))
     dyn.mouseControl = false
-    val merc = new MercatorView(dyn)
+
+    // val merc = new MercatorView(dyn)
 
     val fDyn = new Frame {
       contents = dyn
@@ -230,12 +257,40 @@ object Turbulence {
     fDyn.centerOnScreen()
     fDyn.open()
 
+    //    new Frame {
+    //      contents = merc
+    //      resizable = false
+    //      pack()
+    //      centerOnScreen()
+    //      open()
+    //    }
+
     new Frame {
-      contents = merc
-      resizable = false
+      contents = new ToggleButton("Binaural Mix") {
+        listenTo(this)
+        reactions += {
+          case ButtonClicked(_) => toggleBinaural(selected)
+        }
+      }
       pack()
-      centerOnScreen()
+      this.defaultCloseOperation = CloseOperation.Ignore
       open()
+    }
+  }
+
+  private val binGroup = Ref(Option.empty[Group])
+
+  private def toggleBinaural(on: Boolean): Unit = {
+    atomic { implicit itx =>
+      implicit val tx = Txn.wrap(itx)
+      val listener = Binaural.Person(ChannelToMatrixMap(Spk(27)).toPoint, Radians(0.0))
+      Mellite.auralSystem.serverOption.foreach { s =>
+        binGroup.swap(None)(tx.peer).foreach(_.dispose())
+        if (on) {
+          val b = Binaural.build(s, listener)
+          binGroup.set(Some(b))(tx.peer)
+        }
+      }
     }
   }
 

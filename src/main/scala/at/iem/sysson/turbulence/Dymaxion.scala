@@ -14,6 +14,8 @@
 
 package at.iem.sysson.turbulence
 
+import at.iem.sysson.turbulence.Turbulence.{LatLon, Radians}
+
 import math.{sqrt, sin, cos, asin, acos, atan, atan2}
 
 /** Utility functions for Dymaxion(TM) projections. */
@@ -25,7 +27,20 @@ object Dymaxion {
   /** Vertical scale factor */
   final val vScale = 53.33333f
 
-  final case class Pt3(x: Double, y: Double, z: Double)
+  final val MetersPerPixel = 1.5/hScale
+
+  final case class Pt3(x: Double, y: Double, z: Double) {
+    def distanceTo(that: Pt3): Double = {
+      val dx = that.x - this.x
+      val dy = that.y - this.y
+      val dz = that.z - this.z
+      sqrt(dx * dx + dy * dy + dz * dz)
+    }
+
+    def toPolar: Polar = Polar(acos(z), atan2(y, x))
+
+    override def toString = f"$productPrefix(x = $x%1.3f, y = $y%1.3f, z = $z%1.3f)"
+  }
 
   final case class Pt2(x: Double, y: Double) {
     def distanceTo(that: Pt2): Double = {
@@ -33,13 +48,34 @@ object Dymaxion {
       val dy = that.y - this.y
       sqrt(dx * dx + dy * dy)
     }
+
+    def angleTo(that: Pt2): Radians = {
+      val r = math.atan2(that.y - this.y, that.x - this.x)
+      Radians(r)
+    }
+
+    override def toString = f"$productPrefix(x = $x%1.3f, y = $y%1.3f)"
   }
 
   final case class DymPt(x: Double, y: Double) {
     def equalize: Pt2 = Pt2(x * hScale, y * vScale)
   }
 
-  final case class Polar(theta: Double, phi: Double)
+  /** Polar (two angles) representation of a 3D point.
+    *
+    * @param theta aka elevation
+    * @param phi   aka azimuth
+    */
+  final case class Polar(theta: Double, phi: Double) {
+    def toCartesian: Pt3 = {
+      val x = sin(theta) * cos(phi)
+      val y = sin(theta) * sin(phi)
+      val z = cos(theta)
+      Pt3(x, y, z)
+    }
+
+    override def toString = f"$productPrefix(theta = $theta%1.3f, phi = $phi%1.3f)"
+  }
 
   private final case class Pos(x: Int, yi: Int, rot: Int)
 
@@ -98,13 +134,8 @@ object Dymaxion {
     Pt3(cx / m, cy / m, cz / m)
   }
 
-  private def lonLatToCartesian(lon: Double, lat: Double): Pt3 = {
-    val p = lonLatToPolar(lon, lat)
-    polarToCartesian(p)
-  }
-
-  def findFaceIndex(lon: Double, lat: Double): Int = {
-    val pt = lonLatToCartesian(lon, lat)
+  def findFaceIndex(latLon: LatLon): Int = {
+    val pt = latLon.toCartesian
     findFaceIndex(pt)
   }
 
@@ -115,12 +146,9 @@ object Dymaxion {
 
   /** Maps a longitude and latitude coordinate to a
     * cartesian coordinate with respect to the Dymaxion projection.
-    *
-    * @param lon  longitude in degrees
-    * @param lat  latitude  in degrees
     */
-  def mapLonLat(lon: Double, lat: Double): DymPt = {
-    val pt = lonLatToCartesian(lon, lat)
+  def mapLonLat(latLon: LatLon): DymPt = {
+    val pt = latLon.toCartesian
     mapCartesian(pt)
   }
 
@@ -135,12 +163,12 @@ object Dymaxion {
     val v1      = isoR  (vIdx)      // cartesian coordinates of one of the face's vertices
     val c       = center(faceIdx)   // cartesian coordinates of        the face's center
 
-    val Polar(cTheta, cPhi) = cartesianToPolar(c)
+    val Polar(cTheta, cPhi) = c.toPolar
 
     val ptRot = rotateY(rotateZ(pt, cPhi), cTheta)
     val v1Rot = rotateY(rotateZ(v1, cPhi), cTheta)
 
-    val Polar(_, v1Phi)   = cartesianToPolar(v1Rot)
+    val Polar(_, v1Phi)   = v1Rot.toPolar
     val Pt3(h0x, h0y, _)  = rotateZ(ptRot, v1Phi - math.Pi/2)
 
     // Project the spherical triangle to the flat triangle
@@ -222,19 +250,4 @@ object Dymaxion {
     val sn        = sin(theta)
     Pt3(in.x * cs + in.y * sn, -in.x * sn + in.y * cs, in.z)
   }
-
-  private def lonLatToPolar(lon: Double, lat: Double): Polar = {
-    val theta = (90 - lat).toRadians
-    val phi   = ((lon + 360) % 360).toRadians
-    Polar(theta, phi)
-  }
-
-  private def polarToCartesian(in: Polar): Pt3 = {
-    val x = sin(in.theta) * cos(in.phi)
-    val y = sin(in.theta) * sin(in.phi)
-    val z = cos(in.theta)
-    Pt3(x, y, z)
-  }
-
-  private def cartesianToPolar(in: Pt3): Polar = Polar(acos(in.z), atan2(in.y, in.x))
 }

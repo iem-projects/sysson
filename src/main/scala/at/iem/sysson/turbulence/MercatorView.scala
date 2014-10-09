@@ -19,6 +19,7 @@ import java.awt.{Color, Cursor}
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
 
+import at.iem.sysson.turbulence.Turbulence.LatLon
 import de.sciss.numbers
 
 import scala.swing.event.{MouseReleased, MouseDragged, MousePressed}
@@ -83,8 +84,9 @@ class MercatorView(dymaxion: DymaxionView) extends Component {
       }
     }
 
-    val idx = Dymaxion.findFaceIndex(lon = lon, lat = lat)
-    val h0  = Dymaxion.mapLonLat    (lon = lon, lat = lat)
+    val latLon = LatLon(lon = lon, lat = lat)
+    val idx = Dymaxion.findFaceIndex(latLon)
+    val h0  = Dymaxion.mapLonLat    (latLon)
     // val (h0x, h0y) = Dymaxion.mapCartesian(Dymaxion.center(idx))
     // mkPt(pt.x, pt.y)
     // repaint(new Rectangle(pt.x, pt.y, 1, 1))
@@ -96,7 +98,7 @@ class MercatorView(dymaxion: DymaxionView) extends Component {
   def mkPt(x: Int, y: Int): Unit = {
     val lon = x.linlin(0, w, -180, 180)
     val lat = y.linlin(0, h,   90, -90)
-    val idx = Dymaxion.findFaceIndex(lon = lon, lat = lat)
+    val idx = Dymaxion.findFaceIndex(LatLon(lon = lon, lat = lat))
     val colr = Color.getHSBColor(idx.linlin(0, 19, 0.0f, 1.0f), 1f, 1f)
     testG.setColor(colr)
     testG.fillRect(x, y, 1, 1)
