@@ -16,8 +16,6 @@ package at.iem.sysson
 package gui
 package impl
 
-import javax.swing.undo.UndoableEdit
-
 import at.iem.sysson.sound.Sonification
 import at.iem.sysson.sound.impl.SonificationImpl.SonificationElemImpl
 import de.sciss.desktop
@@ -25,14 +23,13 @@ import desktop.OptionPane
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.{Cursor, Source}
-import de.sciss.lucre.swing.{Window, View}
+import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ObjView
 import de.sciss.mellite.gui.impl.ObjViewImpl
 import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.{ExprImplicits, Folder, Obj}
+import de.sciss.synth.proc.Obj
 
 import scala.swing.{Component, Label}
 
@@ -51,23 +48,22 @@ object SonificationObjView extends ObjView.Factory {
     new SonificationObjView.Impl(tx.newHandle(obj), name = name, value = new Value(procName))
   }
 
-  def initDialog[S <: SSys[S]](workspace: Workspace[S], folderH: Source[S#Tx, Folder[S]],
-                               window: Option[desktop.Window])
-                              (implicit cursor: Cursor[S]): Option[UndoableEdit] = {
+  type Config[S <: SSys[S]] = String
+
+  def initDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
+                              (implicit cursor: stm.Cursor[S]): Option[Config[S]] = {
     val opt = OptionPane.textInput(message = "Enter Sonification Name:",
       messageType = OptionPane.Message.Question, initial = "Sonification")
     opt.title = "Add Sonification"
     val res = opt.show(window)
-    res.map { name =>
-      cursor.step { implicit tx =>
-        val elem  = Sonification.Elem(Sonification[S])
-        val obj   = Obj(elem)
-        val imp   = ExprImplicits[S]
-        import imp._
-        obj.attr.name = name
-        ObjViewImpl.addObject(prefix, folderH(), obj)
-      }
-    }
+    res
+  }
+
+  def make[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {
+    val elem = Sonification.Elem(Sonification[S])
+    val obj = Obj(elem)
+    obj.attr.name = name
+    obj :: Nil
   }
 
   private final class Value(procName: String) {

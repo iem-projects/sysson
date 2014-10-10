@@ -131,6 +131,64 @@ http://freesound.org/people/felix.blume/sounds/234240/
             "username": "felix.blume"
         }
 
+(d=400)
+
+http://freesound.org/people/rfhache/sounds/64123/
+
+{
+            "id": 64123, 
+            "name": "FR.CTC.08.CoyuyoS.007.B.wav", 
+            "tags": [
+                "catamarca", 
+                "summer", 
+                "argentina", 
+                "insects", 
+                "barking", 
+                "cicadas", 
+                "ambience", 
+                "dog", 
+                "zoomh4", 
+                "nature", 
+                "sound", 
+                "field-recording"
+            ], 
+            "license": "http://creativecommons.org/licenses/by/3.0/", 
+            "username": "rfhache"
+        }
+
+(d=500)
+
+http://freesound.org/people/felix.blume/sounds/147794/
+
+{
+            "id": 147794, 
+            "name": "Wind blowing in a plastic bag, on the ground, in the desert (Chile)", 
+            "tags": [
+                "field-recording", 
+                "wind", 
+                "desert", 
+                "ground", 
+                "atacama", 
+                "camanchaca", 
+                "chile", 
+                "bag", 
+                "CAM120119T006", 
+                "plastic", 
+                "felix", 
+                "leaves", 
+                "light", 
+                "rustling", 
+                "rustle", 
+                "blume", 
+                "blowing", 
+                "leave", 
+                "blow"
+            ], 
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/", 
+            "username": "felix.blume"
+        }
+
+
 :::: 5 ::::
 
 http://www.freesound.org/apiv2/search/text/?query={!geofilt%20sfield=geotag%20pt=2.5,-5%20d=1000}

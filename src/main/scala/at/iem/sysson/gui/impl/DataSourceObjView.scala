@@ -58,30 +58,37 @@ object DataSourceObjView extends ObjView.Factory {
     new DataSourceObjView.Impl(tx.newHandle(obj), name = name, value = new Value(file = f, multiDim = multiDim))
   }
 
-  def initDialog[S <: SSys[S]](workspace: Workspace[S], folderH: Source[S#Tx, Folder[S]],
-                               window: Option[desktop.Window])
-                             (implicit cursor: Cursor[S]): Option[UndoableEdit] = {
+  final case class Config[S <: Sys[S]](file: File, location: ActionArtifactLocation.QueryResult[S],
+                                       workspace: Workspace[S])
+
+  def initDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
+                             (implicit cursor: Cursor[S]): Option[Config[S]] = {
     val dlg = FileDialog.open(title = "Add Data Source")
     dlg.setFilter(util.NetCdfFileFilter)
     val fOpt = dlg.show(window)
 
     fOpt.flatMap { f =>
-      ActionArtifactLocation.query[S](folderH, file = f, folder = None, window = window).flatMap { locSource =>
-        val edit = cursor.step { implicit tx =>
-          val loc = locSource()
-          loc.elem.peer.modifiableOption.map { locM =>
-            implicit val ws       = workspace
-            implicit val resolver = WorkspaceResolver[S]
-            val artifact          = locM.add(f)
-            val ds                = DataSource[S](artifact)
-            val obj               = Obj(DataSourceElem(ds))
-            obj.attr.name         = f.base
-            // XXX TODO - adding artifact-location should go into a compound edit
-            ObjViewImpl.addObject[S](prefix, folderH(), obj)
-          }
-        }
-        edit
+      ActionArtifactLocation.query[S](workspace.root, file = f, window = window).map { location =>
+        Config(file = f, location = location, workspace = workspace)
       }
+    }
+  }
+
+  def make[S <: Sys[S]](config: Config[S])(implicit tx: S#Tx): List[Obj[S]] = {
+    val (list0: List[Obj[S]], loc) = config.location match {
+      case Left(source) => (Nil, source())
+      case Right((name, directory)) =>
+        val objLoc  = ActionArtifactLocation.create(name = name, directory = directory)
+        (objLoc :: Nil, objLoc)
+    }
+    loc.elem.peer.modifiableOption.fold(list0) { locM =>
+      implicit val ws       = config.workspace
+      implicit val resolver = WorkspaceResolver[S]
+      val artifact          = locM.add(config.file)
+      val ds                = DataSource[S](artifact)
+      val obj               = Obj(DataSourceElem(ds))
+      obj.attr.name         = config.file.base
+      obj :: list0
     }
   }
 
