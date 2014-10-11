@@ -14,9 +14,9 @@ licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.11.2"
+scalaVersion  := "2.11.3"
 
-crossScalaVersions := Seq("2.11.2", "2.10.4")
+crossScalaVersions := Seq("2.11.3", "2.10.4")
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
