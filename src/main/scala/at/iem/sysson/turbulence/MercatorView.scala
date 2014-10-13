@@ -19,7 +19,7 @@ import java.awt.{Color, Cursor}
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
 
-import at.iem.sysson.turbulence.Turbulence.LatLon
+import at.iem.sysson.turbulence.Turbulence.{Radians, LatLon}
 import de.sciss.numbers
 
 import scala.swing.event.{MouseReleased, MouseDragged, MousePressed}
@@ -92,7 +92,7 @@ class MercatorView(dymaxion: DymaxionView) extends Component {
     // repaint(new Rectangle(pt.x, pt.y, 1, 1))
     if (PRINT) println(f"idx = $idx, x = ${h0.x}%1.2f, y = ${h0.y}%1.2f")
 
-    dymaxion.mark = Some(h0)
+    dymaxion.mark = Some((h0, Radians.North))
   }
 
   def mkPt(x: Int, y: Int): Unit = {

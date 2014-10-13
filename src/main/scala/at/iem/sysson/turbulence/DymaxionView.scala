@@ -35,6 +35,9 @@ object DymaxionView {
   case object Off               extends MouseControl
   case object TestSignal        extends MouseControl
   case object ListenerPosition  extends MouseControl
+
+  // private final val Pi23    = math.Pi * 2/3    // aka 120 degrees
+  private final val HeadAng = math.Pi * 0.8
 }
 class DymaxionView extends Component {
   // import DymaxionView._
@@ -76,7 +79,7 @@ class DymaxionView extends Component {
   // private val strkGain    = new BasicStroke(2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10f, Array(2f, 2f), 0f)
   private val strkGain    = new BasicStroke(2f)
 
-  private var _mark = Option.empty[DymPt]
+  private var _mark = Option.empty[(DymPt, Radians)]
 
   private var _crosses = Vec.empty[(DymPt, Radians)]
 
@@ -92,11 +95,11 @@ class DymaxionView extends Component {
     repaint()
   }
 
-  def mark: Option[DymPt] = _mark
-  def mark_=(value: Option[DymPt]): Unit = if (_mark != value) {
+  def mark: Option[(DymPt, Radians)] = _mark
+  def mark_=(value: Option[(DymPt, Radians)]): Unit = if (_mark != value) {
     _mark = value
     // repaint()
-    value.fold(repaint()) { pt =>
+    value.fold(repaint()) { case (pt, ang) =>
       markUpdated(pt.x, pt.y)
     }
   }
@@ -175,13 +178,27 @@ class DymaxionView extends Component {
       g.setStroke(strkOrig)
     }
 
-    if (_mark.isDefined) _mark.foreach { case dp =>
+    if (_mark.isDefined) _mark.foreach { case (dp, Radians(ang)) =>
       val p   = dp.equalize
       val xp  = p.x + gainRadius
       val yp  = p.y + gainRadius
-      circle.setFrameFromCenter(xp, yp, xp + 12, yp + 12)
+      val r   = 12
+      circle.setFrameFromCenter(xp, yp, xp + r, yp + r)
       g.setColor(Color.yellow)
       g.fill(circle)
+      gpTemp.reset()
+
+      val cos1 = math.cos(ang)
+      val sin1 = math.sin(ang)
+      gpTemp.moveTo(xp + r * cos1, yp - r * sin1)
+      val cos2 = math.cos(ang + HeadAng)
+      val sin2 = math.sin(ang + HeadAng)
+      gpTemp.lineTo(xp + r * cos2, yp - r * sin2)
+      val cos3 = math.cos(ang - HeadAng)
+      val sin3 = math.sin(ang - HeadAng)
+      gpTemp.lineTo(xp + r * cos3, yp - r * sin3)
+      g.setColor(Color.magenta)
+      g.fill(gpTemp)
     }
 
     if (_crosses.nonEmpty) {
@@ -286,6 +303,7 @@ class DymaxionView extends Component {
   reactions += {
     case MousePressed(_, pt, _, _, _) =>
       if (_mouseCtl == TestSignal) play()
+      last = screenToPt(pt)
       mouseMoved(pt)
 
     case MouseReleased(_, pt, _, _, _) =>
@@ -320,12 +338,25 @@ class DymaxionView extends Component {
     setSynth(None)
   }
 
-  private def mouseMoved(pt: Point): Unit = {
+  private var last: DymPt = DymPt(0,0)
+
+  private def screenToPt(pt: Point): DymPt = {
     val xf = (pt.getX - gainRadius) / hScale
     val yf = (pt.getY - gainRadius) / vScale
-    if      (_mouseCtl == TestSignal) markUpdated(xf, yf)
+    DymPt(xf, yf)
+  }
+
+  private def mouseMoved(pt: Point): Unit = {
+    val dp = screenToPt(pt)
+    if      (_mouseCtl == TestSignal) markUpdated(dp.x, dp.y)
     else if (_mouseCtl == ListenerPosition) {
-      mark = Some(DymPt(xf, yf))
+      val ang = if (last == dp) _mark.map(_._2).getOrElse(Radians.North)
+      else {
+        last.equalize angleTo dp.equalize
+      }
+      val lag = 0.95
+      last = DymPt(last.x * lag + dp.x * (1 - lag), last.y * lag + dp.y * (1 - lag))
+      mark = Some((dp, ang))
     }
   }
 

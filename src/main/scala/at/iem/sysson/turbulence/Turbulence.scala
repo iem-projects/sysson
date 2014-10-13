@@ -25,13 +25,13 @@ import de.sciss.file._
 import de.sciss.lucre.synth.{Group, Txn}
 import de.sciss.mellite.Mellite
 import de.sciss.swingplus.CloseOperation
-import de.sciss.swingplus.Implicits._
+import de.sciss.swingplus.Implicits._   // it _is_ used
 import de.sciss.synth.proc.Code
 import de.sciss.{desktop, numbers, pdflitz, kollflitz}
 
 import ucar.ma2
 
-import scala.swing.event.{Key, ButtonClicked}
+import scala.swing.event.{MousePressed, MouseReleased, Key, ButtonClicked}
 import scala.swing.{GridBagPanel, Action, FlowPanel, BoxPanel, Orientation, ButtonGroup, ToggleButton, Swing, Frame}
 import scala.collection.breakOut
 import scala.concurrent.stm.{Ref, atomic}
@@ -156,6 +156,9 @@ object Turbulence {
 
   final val LatLonDym: Vec[(LatLonIdx, DymPt)] = LatLonIndicesToDymMap.toVector
 
+  object Radians {
+    val North = Radians(math.Pi * 0.5)
+  }
   final case class Radians(value: Double) extends AnyVal {
     /** Wraps the value to ensure it lies within -Pi ... +Pi */
     def normalize: Radians = Radians(value.wrap2(math.Pi))
@@ -277,9 +280,22 @@ object Turbulence {
         fDyn.centerOnScreen()
       }
     }
+
+    // relax reaction time and coalesce multiple events, so
+    // building up the binaural filter isn't done too frequently
+    val binauralTimer = new javax.swing.Timer(100, ActionListener { _ =>
+      toggleBinaural(on = true)
+    })
+    binauralTimer.setRepeats(false)
+
     dyn.peer.getActionMap.put("full-screen", actionFullScreen.peer)
     dyn.peer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
       .put(KeyStrokes.menu1 + KeyStrokes.shift + Key.F, "full-screen")
+    dyn.listenTo(dyn.mouse.clicks)
+    dyn.reactions += {
+      case _: MousePressed  => binauralTimer.stop()
+      case _: MouseReleased => binauralTimer.restart()
+    }
 
     if (EnablePDF) new pdflitz.SaveAction(dyn :: Nil).setupMenu(fDyn)
     fDyn.pack()
@@ -316,13 +332,15 @@ object Turbulence {
             else                  DymaxionView.Off
       }
 
-      contents = new BoxPanel(Orientation.Vertical) {
-        contents += new ToggleButton("Binaural Mix") {
-          listenTo(this)
-          reactions += {
-            case ButtonClicked(_) => toggleBinaural(selected)
-          }
+      val ggBinaural = new ToggleButton("Binaural Mix") {
+        listenTo(this)
+        reactions += {
+          case ButtonClicked(_) => toggleBinaural(selected)
         }
+      }
+
+      contents = new BoxPanel(Orientation.Vertical) {
+        contents += ggBinaural
         contents += VStrut(4)
         contents += new FlowPanel(ggOff, ggTest, ggPos)
       }
@@ -332,6 +350,9 @@ object Turbulence {
       location = (0, desktop.Util.maximumWindowBounds.height - size.height)
       this.defaultCloseOperation = CloseOperation.Ignore
       open()
+
+      ggPos.doClick()
+      // ggBinaural.doClick()
     }
   }
 
@@ -342,11 +363,10 @@ object Turbulence {
     atomic { implicit itx =>
       implicit val tx = Txn.wrap(itx)
       Mellite.auralSystem.serverOption.foreach { s =>
-        binGroup.swap(None)(tx.peer).foreach(_.dispose())
+        binGroup.swap(None)(tx.peer).foreach(_.release())
         if (on) {
-          markOpt.foreach { pt =>
-            // XXX TODO - azimuth
-            val listener = Binaural.Person(pt, Radians(math.Pi / 2))
+          markOpt.foreach { case (pt, ang) =>
+            val listener = Binaural.Person(pt, ang)
             val b = Binaural.build(s, listener)
             binGroup.set(Some(b))(tx.peer)
           }

@@ -1,3 +1,17 @@
+/*
+ *  Binaural.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014 Hanns Holger Rutz. All rights reserved.
+ *
+ *	This software is published under the GNU General Public License v3+
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
+
 package at.iem.sysson.turbulence
 
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt, MetersPerPixel}
@@ -10,7 +24,7 @@ import de.sciss.file._
 import scala.collection.immutable.{IndexedSeq => Vec}
 
 object Binaural {
-  var DEBUG = true
+  var DEBUG = false
 
   final case class Person(pos: DymPt, azi: Radians)
 
@@ -189,7 +203,10 @@ object Binaural {
       val in  = "in".kr
       val sig = In.ar(in, 2)
       // Mix(sig).poll(1, "route")
-      ReplaceOut.ar(0, sig)
+      // ReplaceOut.ar(0, sig)
+      val asr   = Env.asr(attack = 0.1, release = 0.1, curve = Curve.lin)
+      val fade  = EnvGen.kr(asr, gate = "gate".kr(1f), doneAction = freeGroup)
+      XOut.ar(0, sig, fade)
     }
 
     val rplcSynth = Synth(s, rplcGraph, Some("binaural-mix"))
