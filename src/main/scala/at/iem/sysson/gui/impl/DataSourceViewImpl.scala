@@ -275,9 +275,11 @@ object DataSourceViewImpl {
             // open the actual plot if we got the dimensions
             xyOpt.foreach { case (yDim, xDim) =>
               cursor.step { implicit tx =>
-                val frame = new WindowImpl[S](s"Plot : ${v.name}") {
+                val frame = new WindowImpl[S]() {
                   val view: View[S] = ClimateView(source, v.selectAll, xDim = xDim, yDim = yDim)
                   // size = (600, 600)
+                  override protected def initGUI(): Unit =
+                    title = s"Plot : ${v.name}"
                 }
                 frame.init()
               }
