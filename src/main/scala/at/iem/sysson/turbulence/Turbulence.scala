@@ -15,8 +15,12 @@
 package at.iem.sysson
 package turbulence
 
+import java.awt.{Color, GraphicsEnvironment}
+import javax.swing.JComponent
+
 import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt}
+import de.sciss.desktop.KeyStrokes
 import de.sciss.file._
 import de.sciss.lucre.synth.{Group, Txn}
 import de.sciss.mellite.Mellite
@@ -27,13 +31,17 @@ import de.sciss.{desktop, numbers, pdflitz, kollflitz}
 
 import ucar.ma2
 
-import scala.swing.event.ButtonClicked
-import scala.swing.{FlowPanel, BoxPanel, Orientation, ButtonGroup, Rectangle, ToggleButton, Swing, Frame}
+import scala.swing.event.{Key, ButtonClicked}
+import scala.swing.{GridBagPanel, Action, FlowPanel, BoxPanel, Orientation, ButtonGroup, ToggleButton, Swing, Frame}
 import scala.collection.breakOut
 import scala.concurrent.stm.{Ref, atomic}
 import Swing._
 
 object Turbulence {
+  def UseMercator   = false
+  def EnablePDF     = false
+  def EnterBinaural = true
+
   final case class DymGrid(vx: Int, vyi: Int) {
     def toPoint: DymPt = {
       val vy = vyi * 2 + (vx % 2)
@@ -247,25 +255,44 @@ object Turbulence {
     // dyn.crosses = channelCrosses(Spk(29)) ++ channelCrosses(Spk(6))
     // dyn.mouseControl = true // false
 
-    // val merc = new MercatorView(dyn)
+    lazy val mercator = new MercatorView(dyn)
 
     val fDyn = new Frame {
-      contents = dyn
-      resizable = false
+      peer.setUndecorated(true)
+      contents = new GridBagPanel {
+        val cons = new Constraints()
+        layout(dyn) = cons
+        background = Color.black
+      }
+      // resizable = false
     }
 
-    new pdflitz.SaveAction(dyn :: Nil).setupMenu(fDyn)
+    val actionFullScreen = Action(null) {
+      val screen = GraphicsEnvironment.getLocalGraphicsEnvironment.getDefaultScreenDevice
+      val w = if (screen.getFullScreenWindow == null) fDyn.peer else null
+      screen.setFullScreenWindow(w)
+      if (w == null) {
+        // state is messy and often not correctly restored
+        fDyn.pack()
+        fDyn.centerOnScreen()
+      }
+    }
+    dyn.peer.getActionMap.put("full-screen", actionFullScreen.peer)
+    dyn.peer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+      .put(KeyStrokes.menu1 + KeyStrokes.shift + Key.F, "full-screen")
+
+    if (EnablePDF) new pdflitz.SaveAction(dyn :: Nil).setupMenu(fDyn)
     fDyn.pack()
     fDyn.centerOnScreen()
     fDyn.open()
 
-    //    new Frame {
-    //      contents = merc
-    //      resizable = false
-    //      pack()
-    //      centerOnScreen()
-    //      open()
-    //    }
+    if (UseMercator) new Frame {
+      contents  = mercator
+      resizable = false
+      pack()
+      centerOnScreen()
+      open()
+    }
 
     new Frame {
       title = "Turbulence"

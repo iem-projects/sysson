@@ -206,6 +206,7 @@ class DymaxionView extends Component {
   }
 
   preferredSize = (w1, h1)
+  maximumSize   = preferredSize
   cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR)
 
   // cf. https://stackoverflow.com/questions/8043947/indexing-in-equilateral-triangle-grid-given-simple-2d-cartesian-coordinates
