@@ -28,9 +28,11 @@ resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 lazy val melliteVersion             = "0.11.0"
 
+lazy val soundProcessesVersion      = "2.7.1-SNAPSHOT"
+
 lazy val lucreMatrixVersion         = "0.4.0"
 
-lazy val scalaColliderVersion       = "1.14.1"
+// lazy val scalaColliderVersion       = "1.14.1"
 
 lazy val scalaColliderSwingVersion  = "1.20.1"
 
@@ -48,7 +50,8 @@ lazy val scalaTestVersion           = "2.2.2"
 
 libraryDependencies ++= Seq(
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
-  "de.sciss" %% "scalacollider"               % scalaColliderVersion,
+  "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
+//  "de.sciss" %% "scalacollider"               % scalaColliderVersion,
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
   "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
   "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
