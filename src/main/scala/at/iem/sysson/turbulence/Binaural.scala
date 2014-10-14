@@ -17,6 +17,7 @@ package at.iem.sysson.turbulence
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt, MetersPerPixel}
 import at.iem.sysson.turbulence.Turbulence.{LatLon, Spk, Radians}
 import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Escape, Buffer, Synth, Txn, Server}
+import de.sciss.mellite.Prefs
 import de.sciss.{synth, numbers}
 import de.sciss.synth.{addBefore, ControlSet, addToTail, addToHead, addAfter, AddAction, SynthGraph, message}
 import de.sciss.file._
@@ -206,11 +207,13 @@ object Binaural {
       // ReplaceOut.ar(0, sig)
       val asr   = Env.asr(attack = 0.1, release = 0.1, curve = Curve.lin)
       val fade  = EnvGen.kr(asr, gate = "gate".kr(1f), doneAction = freeGroup)
-      XOut.ar(0, sig, fade)
+      val out   = "out".kr
+      XOut.ar(out, sig, fade)
     }
 
-    val rplcSynth = Synth(s, rplcGraph, Some("binaural-mix"))
-    rplcSynth.play(g, Nil, addToTail, Nil)
+    val rplcSynth   = Synth(s, rplcGraph, Some("binaural-mix"))
+    val headphones  = Prefs.headphonesBus.getOrElse(Prefs.defaultHeadphonesBus)
+    rplcSynth.play(g, List("out" -> headphones), addToTail, Nil)
     val stereoBusR = BusNodeSetter.reader("in", stereoBus, rplcSynth)
     stereoBusR.add()
     rplcSynth.onEndTxn { implicit tx =>
