@@ -4,7 +4,7 @@ import de.sciss.desktop.DocumentHandler
 import de.sciss.file._
 import de.sciss.lucre.expr.Expr
 import de.sciss.lucre.stm
-import de.sciss.lucre.swing.defer
+import de.sciss.lucre.swing.{defer, requireEDT}
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.lucre.event.Sys
 import de.sciss.mellite.{Mellite, Workspace, Application}
@@ -13,17 +13,29 @@ import de.sciss.synth.proc
 import de.sciss.synth.proc.{Scan, Proc, Transport, ExprImplicits, AuralObj, IntElem, Elem, Ensemble, Obj, Folder, SoundProcesses}
 import proc.Implicits._
 
-import scala.concurrent.stm.Txn
+import scala.concurrent.stm.{Ref, Txn}
 import scala.language.higherKinds
 
-object Motion extends Runnable {
-  def run(): Unit = defer {
+object Motion {
+  private var _instance: Option[Algorithm[_]] = None
+
+  def instance: Option[Algorithm[_]] = {
+    requireEDT()
+    _instance
+  }
+  
+  def run(start: Boolean): Unit = defer {
+    _instance.foreach(_.stopGUI())
+    _instance = None
     val f = Turbulence.baseDir / "workspaces" / "Turbulence.mllt"
     Application.documentHandler.addListener {
       case DocumentHandler.Added(doc: Workspace.Confluent) if doc.folder == f =>
         implicit val cursor = doc.cursors.cursor
         SoundProcesses.scheduledExecutorService.submit(new Runnable {
-          def run(): Unit = cursor.step { implicit tx => init(doc) }
+          def run(): Unit = {
+            val i = cursor.step { implicit tx => init(doc, start = start) }
+            defer { _instance = i }
+          }
         })
     }
     ActionOpenWorkspace.perform(f)
@@ -68,22 +80,22 @@ object Motion extends Runnable {
     }
   }
 
-  private def init[S <: SSys[S]](workspace: Workspace[S])(implicit tx: S#Tx, cursor: stm.Cursor[S]): Unit = {
+  private def init[S <: SSys[S]](workspace: Workspace[S], start: Boolean)
+                                (implicit tx: S#Tx, cursor: stm.Cursor[S]): Option[Algorithm[S]] = {
     val root = workspace.root()
     for {
       Ensemble.Obj(layers) <- root / "layers"
-    } {
+    } yield {
       // println(s"State is ${state.value}")
       info("Play layers")
       val t = Transport[S](Mellite.auralSystem)
       t.addObject(layers)
       // AuralObj(layers).play()
-      t.play()
+      // t.play()
 
-      val alg = new Algorithm(tx.newHandle(layers))
-      import alg._
-      stopAll()
-      iterate()
+      val alg = new Algorithm(tx.newHandle(layers), t)
+      if (start) alg.start()
+      alg
     }
   }
 
@@ -138,9 +150,22 @@ object Motion extends Runnable {
     if (value) play(obj, value)
   }
 
-  class Algorithm[S <: Sys[S]](layersH: stm.Source[S#Tx, Ensemble.Obj[S]])(implicit cursor: stm.Cursor[S]) {
+  class Algorithm[S <: SSys[S]](layersH: stm.Source[S#Tx, Ensemble.Obj[S]], transport: Transport[S])
+                              (implicit cursor: stm.Cursor[S]) {
     private val imp = ExprImplicits[S]
     import imp._
+    
+    def start()(implicit tx: S#Tx): Unit = {
+      stopAll()
+      iterate()
+      transport.play()
+    }
+    
+    def startGUI(): Unit = cursor.step { implicit tx => start() }
+    
+    def stop()(implicit tx: S#Tx): Unit = transport.stop()
+
+    def stopGUI(): Unit = cursor.step { implicit tx => stop() }
 
     def layers(implicit tx: S#Tx) = layersH()
 
@@ -149,7 +174,7 @@ object Motion extends Runnable {
         override def run(): Unit = {
           Thread.sleep((secs * 1000).toLong)
           cursor.step { implicit tx =>
-            code(tx)
+            if (transport.isPlaying) code(tx)
           }
         }
       }
@@ -164,14 +189,17 @@ object Motion extends Runnable {
 
     def toggleData1(value: Boolean)(implicit tx: S#Tx): Unit =
       for {
-        Proc.Obj(col1) <- layers / "col-1"
-        Proc.Obj(col2) <- layers / "out"
-        Ensemble.Obj(bgF) <- layers / "bg-filter"
-        Proc.Obj(bgFP) <- bgF / "proc"
+        Proc.Obj(col1)     <- layers  / "col-1"
+        Proc.Obj(col2)     <- layers  / "out"
+        Ensemble.Obj(bgF)  <- layers  / "bg-filter"
+        Proc.Obj(bgFP)     <- bgF     / "proc"
+        Ensemble.Obj(data) <- layers  / "data-1"
       } {
         info(s"---- ${if (value) "play" else "stop"} data-1 ----")
         play(bgF, value = value)
         toggleFilter(bgFP, pred = col1, succ = col2, bypass = !value)
+
+        playGate(data, value = value)
       }
 
     def iterate()(implicit tx: S#Tx): Unit =
@@ -213,147 +241,4 @@ object Motion extends Runnable {
   // E bg-filter
   // E data-1
   // P out
-
-  /*
-  // val a = self.attr
-
-// ---- utility functions ----
-
-val imp = ExprImplicits[S]
-import imp._  // XXX TODO - this should be provided
-
-def getInt(obj: Obj[S], key: String): Option[Int] = {
-  val res = obj.attr[IntElem](key).map(_.value)
-  if (res.isEmpty) println(s"WARNING: Int attr $key not found")
-  res
-}
-
-def getProc(obj: Obj[S], key: String): Option[Proc[S]] = {
-  val res = obj.attr[Proc.Elem](key)
-  if (res.isEmpty) println(s"WARNING: Proc attr $key not found")
-  res
-}
-
-def getEnsemble(obj: Obj[S], key: String): Option[Ensemble.Obj[S]] = {
-  val res = obj.attr.get(key).collect {
-    case Ensemble.Obj(e) => e
-  }
-  if (res.isEmpty) println(s"WARNING: Ensemble attr $key not found")
-  res
-}
-
-def getObj(obj: Obj[S], key: String): Option[Obj[S]] = {
-  val res = obj.attr.get(key)
-  if (res.isEmpty) println(s"WARNING: Attr $key not found")
-  res
-}
-
-def setInt(obj: Obj[S], key: String, value: Int): Unit = {
-  val res = obj.attr[IntElem](key).collect {
-    case Expr.Var(vr) => vr() = value
-  }
-  if (res.isEmpty) println(s"WARNING: Int attr $key not found / a var")
-}
-
-def setBoolean(obj: Obj[S], key: String, value: Boolean): Unit = {
-  val res = obj.attr[BooleanElem](key).collect {
-    case Expr.Var(vr) => vr() = value
-  }
-  if (res.isEmpty) println(s"WARNING: Boolean attr $key not found / a var")
-}
-
-def play(obj: Ensemble.Obj[S], value: Boolean): Unit = {
-  val res = Expr.Var.unapply(obj.elem.peer.playing)
-  res.foreach(vr => vr() = value)
-  if (res.isEmpty) println(s"WARNING: Ensemble playing not a var")
-}
-
-def playGate(obj: Ensemble.Obj[S], value: Boolean): Unit = {
-  setInt(obj, "gate", if (value) 1 else 0)
-  if (value) play(obj, value)
-}
-
-def getScan(p: Proc[S], key: String): Option[Scan[S]] = {
-  val res = p.scans.get(key)
-  if (res.isEmpty) println(s"WARNING: Scan $key not found")
-  res
-}
-
-def toggleFilter(p: Proc[S], pred: Proc[S], succ: Proc[S], bypass: Boolean): Unit =
-  for {
-    predOut   <- getScan(pred, "out")
-    succIn    <- getScan(succ, "in" )
-    filterIn  <- getScan(p,    "in" )
-    filterOut <- getScan(p,    "out")
-  } {
-    predOut  .removeSink  (Scan.Link.Scan(filterIn ))
-    filterOut.removeSink  (Scan.Link.Scan(succIn   ))
-    predOut  .removeSink  (Scan.Link.Scan(succIn   ))
-
-    if (bypass) {
-      predOut  .addSink     (Scan.Link.Scan(succIn   ))
-    } else {
-      filterOut.addSink     (Scan.Link.Scan(succIn   ))
-      predOut  .addSink     (Scan.Link.Scan(filterIn ))
-    }
-  }
-
-// ---- individual reactions ----
-
-def returnToBg(): Boolean = {
-  println("---- return to background ----")
-  val res = for {
-    bg   <- getEnsemble(self, "bg")
-    data <- getEnsemble(self, "data-1")
-  } yield {
-    playGate(bg  , true )
-    playGate(data, false)
-  }
-  res.isDefined
-}
-
-def firstData(): Boolean = {
-  println("---- engage first data ----")
-  val res = for {
-    col1 <- getProc    (self, "col-1")
-    col2 <- getProc    (self, "col-2")
-    bgF  <- getEnsemble(self, "bg-filter")
-    bgFP <- getProc    (bgF , "proc")
-    data <- getEnsemble(self, "data-1")
-  } yield {
-    // playGate(bgF , true)
-    play(bgF, true)
-    toggleFilter(bgFP, pred = col1, succ = col2, bypass = false)
-    playGate(data, true)
-  }
-  res.isDefined
-}
-
-def secondData(): Boolean = {
-  println("---- engage second data ----")
-  false
-}
-
-// ---- main ----
-
-for {
-  // 0 - background (present), 1 - data1, 2 - data2
-  state <- getInt(self, "state")
-} {
-  val ok = state match {
-    case 0 => returnToBg()
-    case 1 => firstData()
-    // case 2 => secondData()
-    case _ =>
-      println(s"Unexpected state value: $state")
-      false
-  }
-  if (ok) {
-    setInt(self, "state", (state + 1) % 2 /* 3 */)
-  } else {
-    sys.error("not yet working")
-  }
-}
-
-   */
 }

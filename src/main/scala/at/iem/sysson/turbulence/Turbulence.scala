@@ -42,7 +42,8 @@ object Turbulence {
   def UseMercator   = false
   def EnablePDF     = false
   def EnterBinaural = true
-  def AutoStart     = true
+  def AutoOpen      = true
+  def AutoStart     = false
 
   final case class DymGrid(vx: Int, vyi: Int) {
     def toPoint: DymPt = {
@@ -248,8 +249,9 @@ object Turbulence {
     }
 
     Swing.onEDT(initViews())
-    if (AutoStart) {
-      SoundProcesses.scheduledExecutorService.schedule(Motion, 3, TimeUnit.SECONDS)
+    if (AutoOpen) {
+      SoundProcesses.scheduledExecutorService.schedule(
+        new Runnable { def run() = Motion.run(start = AutoStart) }, 3, TimeUnit.SECONDS)
     }
   }
 
@@ -345,8 +347,18 @@ object Turbulence {
         }
       }
 
+      val ggRun = new ToggleButton("Run Installation") {
+        listenTo(this)
+        reactions += {
+          case ButtonClicked(_) =>
+            Motion.instance.foreach { in =>
+              if (selected) in.startGUI() else in.stopGUI()
+            }
+        }
+      }
+
       contents = new BoxPanel(Orientation.Vertical) {
-        contents += ggBinaural
+        contents += new FlowPanel(ggBinaural, ggRun)
         contents += VStrut(4)
         contents += new FlowPanel(ggOff, ggTest, ggPos)
       }
