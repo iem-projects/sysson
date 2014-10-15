@@ -2,7 +2,7 @@ package at.iem.sysson.turbulence
 
 import de.sciss.desktop.DocumentHandler
 import de.sciss.file._
-import de.sciss.lucre.expr.Expr
+import de.sciss.lucre.expr.{Expr, Double => DoubleEx}
 import de.sciss.lucre.stm
 import de.sciss.lucre.swing.{defer, requireEDT}
 import de.sciss.lucre.synth.{Sys => SSys}
@@ -10,7 +10,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.mellite.{Mellite, Workspace, Application}
 import de.sciss.mellite.gui.ActionOpenWorkspace
 import de.sciss.synth.proc
-import de.sciss.synth.proc.{Scan, Proc, Transport, ExprImplicits, AuralObj, IntElem, Elem, Ensemble, Obj, Folder, SoundProcesses}
+import de.sciss.synth.proc.{DoubleElem, Scan, Proc, Transport, ExprImplicits, AuralObj, IntElem, Elem, Ensemble, Obj, Folder, SoundProcesses}
 import proc.Implicits._
 
 import scala.concurrent.stm.{Ref, Txn}
@@ -117,6 +117,26 @@ object Motion {
     if (res.isEmpty && !quiet) warn(s"Int attr $key not found / a var, in ${obj.attr.name}")
   }
 
+  def setDouble[S <: Sys[S]](obj: Obj[S], key: String, value: Double, force: Boolean = false, quiet: Boolean = false)
+                            (implicit tx: S#Tx): Unit = {
+    val imp = ExprImplicits[S]
+    import imp._
+    val res = obj.attr[DoubleElem](key).collect {
+      case Expr.Var(vr) =>
+        vr() = value
+
+      case _ if force =>
+        obj.attr.put(key, Obj(DoubleElem(DoubleEx.newVar(value))))
+    }
+    if (res.isEmpty && !quiet) warn(s"Double attr $key not found / a var, in ${obj.attr.name}")
+  }
+
+  def getDouble[S <: Sys[S]](obj: Obj[S], key: String, quiet: Boolean = false)(implicit tx: S#Tx): Option[Double] = {
+    val res = obj.attr[DoubleElem](key).map(_.value)
+    if (res.isEmpty && !quiet) warn(s"Double attr $key not found, in ${obj.attr.name}")
+    res
+  }
+
   def toggleFilter[S <: Sys[S]](p: Proc.Obj[S], pred: Proc.Obj[S], succ: Proc.Obj[S], bypass: Boolean)(implicit tx: S#Tx): Unit =
     for {
       predOut   <- getScan(pred, "out")
@@ -187,19 +207,32 @@ object Motion {
 
     def stopAll()(implicit tx: S#Tx): Unit = toggleData1(value = false)
 
-    def toggleData1(value: Boolean)(implicit tx: S#Tx): Unit =
+    def toggleData1(value: Boolean)(implicit tx: S#Tx): Option[Double] =
       for {
-        Proc.Obj(col1)     <- layers  / "col-1"
-        Proc.Obj(col2)     <- layers  / "out"
-        Ensemble.Obj(bgF)  <- layers  / "bg-filter"
-        Proc.Obj(bgFP)     <- bgF     / "proc"
-        Ensemble.Obj(data) <- layers  / "data-1"
-      } {
+        Proc.Obj(col1)          <- layers  / "col-1"
+        Proc.Obj(col2)          <- layers  / "out"
+        Ensemble.Obj(bgF)       <- layers  / "bg-filter"
+        Proc.Obj(bgFP)          <- bgF     / "proc"
+        Ensemble.Obj(data)      <- layers  / "data-1"
+      } yield {
         info(s"---- ${if (value) "play" else "stop"} data-1 ----")
+        val atk = rrand(45, 90)
+        setDouble(bgF, "dur", atk)
         play(bgF, value = value)
         toggleFilter(bgFP, pred = col1, succ = col2, bypass = !value)
 
+        val tim = if (value) {
+          val rls = rrand(45, 90)
+          setDouble(data, "attack" , atk)
+          setDouble(data, "release", rls)
+          atk
+
+        } else {
+          getDouble(data, "release").getOrElse(10.0)
+        }
+
         playGate(data, value = value)
+        tim
       }
 
     def iterate()(implicit tx: S#Tx): Unit =
@@ -211,13 +244,13 @@ object Motion {
       } {
         info("---- start freesound ----")
         freesound.play()
-        val d = 20 // rrand(30, 60)
+        val d = rrand(60, 120)
         after(d) { implicit tx => enterData1() }
       }
 
     def enterData1()(implicit tx: S#Tx): Unit = {
-      toggleData1(value = true)
-      val d = 20 // rrand(30, 60)
+      val atk = toggleData1(value = true) .getOrElse(10.0)
+      val d   = atk
       after(d) { implicit tx => stopFreesound() }
     }
     
@@ -227,7 +260,7 @@ object Motion {
       } {
         info("---- stop freesound ----")
         freesound.release()
-        val d = 20 // rrand(30, 60)
+        val d = rrand(30, 60)
         after(d) { implicit tx =>
           stopAll()
           iterate()
