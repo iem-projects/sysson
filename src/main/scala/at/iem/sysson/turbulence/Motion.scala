@@ -206,7 +206,9 @@ object Motion {
     ////////////////////////////////////////////
 
     def stopAll()(implicit tx: S#Tx): Unit = {
-      toggleData1(value = false)
+      stopData1()
+      stopData2()
+      removeFilter()
     }
 
     def iterate()(implicit tx: S#Tx): Unit =
@@ -331,9 +333,9 @@ object Motion {
         playGate(data2, value = false)
         
         val rls = getDouble(data2, "release").getOrElse(10.0)
-        after(rls/2) { implicit tx =>
+        after(rls * 0.7) { implicit tx =>
           playFreesound()
-          after(rls/2) { implicit tx =>
+          after(rls * 0.5) { implicit tx =>
             stopData2()
             val d = rrand(60, 120)
             after(d) { implicit tx =>
