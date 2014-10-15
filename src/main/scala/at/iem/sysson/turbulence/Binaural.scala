@@ -191,9 +191,10 @@ object Binaural {
     res
   }
 
-  def build(s: Server, listener: Person)(implicit tx: Txn): Group = {
+  def build(target: Node, addAction: AddAction, listener: Person)(implicit tx: Txn): Group = {
     import Turbulence.{NumChannels => N}
-    val g         = Group(s.defaultGroup, addAfter)
+    val s         = target.server
+    val g         = Group(target, addAction)
     val stereoBus = Bus.audio(s, 2)
     val delayBus  = Bus.audio(s, N)
     mkTail(listener, g, addToHead, delayBus = delayBus, stereoBus = stereoBus)

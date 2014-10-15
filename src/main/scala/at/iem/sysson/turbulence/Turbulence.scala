@@ -23,12 +23,15 @@ import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt}
 import de.sciss.desktop.KeyStrokes
 import de.sciss.file._
-import de.sciss.lucre.synth.{Group, Txn}
+import de.sciss.lucre.synth.{Synth, Node, Group, Txn}
 import de.sciss.mellite.Mellite
 import de.sciss.swingplus.CloseOperation
-import de.sciss.swingplus.Implicits._   // it _is_ used
+import de.sciss.swingplus.Implicits._
+import de.sciss.synth.{SynthGraph, addBefore, addAfter, AddAction}
+
+// it _is_ used
 import de.sciss.synth.proc.{SoundProcesses, Code}
-import de.sciss.{desktop, numbers, pdflitz, kollflitz}
+import de.sciss.{synth, desktop, numbers, pdflitz, kollflitz}
 
 import ucar.ma2
 
@@ -347,6 +350,13 @@ object Turbulence {
         }
       }
 
+      val ggSpkMix = new ToggleButton("AAAA Speakers") {
+        listenTo(this)
+        reactions += {
+          case ButtonClicked(_) => toggleSpeakerMix(selected)
+        }
+      }
+
       val ggRun = new ToggleButton("Run Installation") {
         listenTo(this)
         reactions += {
@@ -358,7 +368,10 @@ object Turbulence {
       }
 
       contents = new BoxPanel(Orientation.Vertical) {
-        contents += new FlowPanel(ggBinaural, ggRun)
+        contents += ggRun
+        contents += ggSpkMix
+        contents += VStrut(4)
+        contents += ggBinaural
         contents += VStrut(4)
         contents += new FlowPanel(ggOff, ggTest, ggPos)
       }
@@ -374,7 +387,8 @@ object Turbulence {
     }
   }
 
-  private val binGroup = Ref(Option.empty[Group])
+  private val binGroup  = Ref(Option.empty[Group])
+  private val spkSynth  = Ref(Option.empty[Synth])
 
   private def toggleBinaural(on: Boolean): Unit = {
     val markOpt = dyn.mark
@@ -385,9 +399,42 @@ object Turbulence {
         if (on) {
           markOpt.foreach { case (pt, ang) =>
             val listener = Binaural.Person(pt, ang)
-            val b = Binaural.build(s, listener)
+            val (target, addAction) = spkSynth.get(tx.peer).fold[(Node, AddAction)](s.defaultGroup -> addAfter)(_ -> addBefore)
+            val b = Binaural.build(target = target, addAction = addAction, listener)
             binGroup.set(Some(b))(tx.peer)
           }
+        }
+      }
+    }
+  }
+
+  private def toggleSpeakerMix(on: Boolean): Unit = {
+    atomic { implicit itx =>
+      implicit val tx = Txn.wrap(itx)
+      Mellite.auralSystem.serverOption.foreach { s =>
+        spkSynth.swap(None)(tx.peer).foreach(_.free())
+        if (on) {
+          val target  = binGroup.get(tx.peer).getOrElse(s.defaultGroup)
+          val graph   = SynthGraph {
+            import synth._
+            import ugen._
+            val m = List(
+              List(11, 15, 14),
+              List(18, 24, 23),
+              List(22,  6,  7),
+              List( 8, 27, 29),
+              List(31, 34, 35),
+              List(36, 38, 44)
+            )
+            val insAll = m.map { case list =>
+              val ins = list.map { spk => In.ar(NumOutputBuses.ir + spk) }
+              Mix.mono(ins)
+            }
+            ReplaceOut.ar(0, insAll)
+          }
+          val syn = Synth(s, graph, nameHint = Some("aaaa"))
+          syn.play(target = target, args = Nil, addAction = addAfter, dependencies = Nil)
+          spkSynth.set(Some(syn))(tx.peer)
         }
       }
     }
