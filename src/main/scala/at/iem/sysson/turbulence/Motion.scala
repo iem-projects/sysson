@@ -205,38 +205,16 @@ object Motion {
 
     ////////////////////////////////////////////
 
-    def stopAll()(implicit tx: S#Tx): Unit = toggleData1(value = false)
-
-    def toggleData1(value: Boolean)(implicit tx: S#Tx): Option[Double] =
-      for {
-        Proc.Obj(col1)          <- layers  / "col-1"
-        Proc.Obj(col2)          <- layers  / "out"
-        Ensemble.Obj(bgF)       <- layers  / "bg-filter"
-        Proc.Obj(bgFP)          <- bgF     / "proc"
-        Ensemble.Obj(data)      <- layers  / "data-1"
-      } yield {
-        info(s"---- ${if (value) "play" else "stop"} data-1 ----")
-        val atk = rrand(45, 90)
-        setDouble(bgF, "dur", atk)
-        play(bgF, value = value)
-        toggleFilter(bgFP, pred = col1, succ = col2, bypass = !value)
-
-        val tim = if (value) {
-          val rls = rrand(45, 90)
-          setDouble(data, "attack" , atk)
-          setDouble(data, "release", rls)
-          atk
-
-        } else {
-          getDouble(data, "release").getOrElse(10.0)
-        }
-
-        playGate(data, value = value)
-        tim
-      }
+    def stopAll()(implicit tx: S#Tx): Unit = {
+      toggleData1(value = false)
+    }
 
     def iterate()(implicit tx: S#Tx): Unit =
-      if (layers.isPlaying) playFreesound()
+      if (layers.isPlaying) {
+        playFreesound()
+        val d = rrand(60, 120)
+        after(d) { implicit tx => playData1() }
+      }
 
     def playFreesound()(implicit tx: S#Tx): Unit =
       for {
@@ -244,28 +222,165 @@ object Motion {
       } {
         info("---- start freesound ----")
         freesound.play()
-        val d = rrand(60, 120)
-        after(d) { implicit tx => enterData1() }
       }
 
-    def enterData1()(implicit tx: S#Tx): Unit = {
-      val atk = toggleData1(value = true) .getOrElse(10.0)
-      val d   = atk
-      after(d) { implicit tx => stopFreesound() }
+    //    def playData1X()(implicit tx: S#Tx): Unit = {
+    //      val atk = toggleData1(value = true) .getOrElse(10.0)
+    //      val d   = atk
+    //      after(d) { implicit tx => stopFreesound() }
+    //    }
+
+    def playData1()(implicit tx: S#Tx): Unit = {
+      for {
+        Proc.Obj(col1)          <- layers  / "col-1"
+        Proc.Obj(col2)          <- layers  / "out"
+        Ensemble.Obj(bgF)       <- layers  / "bg-filter"
+        Proc.Obj(bgFP)          <- bgF     / "proc"
+        Ensemble.Obj(data1)     <- layers  / "data-1"
+      } {
+        info(s"---- play data-1 ----")
+        val atk = rrand(45, 90)
+        setDouble(bgF, "dur", atk)
+        play(bgF, value = true)
+        toggleFilter(bgFP, pred = col1, succ = col2, bypass = false)
+
+        val rls = rrand(45, 90)
+        setDouble(data1, "attack" , atk)
+        setDouble(data1, "release", rls)
+        playGate (data1, value = true)
+        
+        after(atk) { implicit tx => releaseFreesound() }
+      }
     }
-    
-    def stopFreesound()(implicit tx: S#Tx): Unit =
+
+    def releaseFreesound()(implicit tx: S#Tx): Unit = {
       for {
         Ensemble.Obj(freesound) <- layers / "freesound"
       } {
-        info("---- stop freesound ----")
+        info("---- release freesound ----")
         freesound.release()
-        val d = rrand(30, 60)
+        val d = rrand(45, 60)
         after(d) { implicit tx =>
-          stopAll()
-          iterate()
+//          for {
+//            Ensemble.Obj(freesound) <- layers / "freesound"
+//          } {
+//            info("---- stop freesound ----")
+//            play(freesound, value = false)
+//            startData2()
+//          }
+          removeFilter()
+          startData2()
         }
       }
+    }
+
+    def removeFilter()(implicit tx: S#Tx): Unit = {
+      for {
+        Proc.Obj(col1)          <- layers  / "col-1"
+        Proc.Obj(col2)          <- layers  / "out"
+        Ensemble.Obj(bgF)       <- layers  / "bg-filter"
+        Proc.Obj(bgFP)          <- bgF     / "proc"
+      } {
+        info(s"---- remove filter ----")
+        play(bgF, value = false)
+        toggleFilter(bgFP, pred = col1, succ = col2, bypass = true)
+      }
+    }
+
+    def startData2()(implicit tx: S#Tx): Unit = {
+      for {
+        Ensemble.Obj(data1) <- layers / "data-1"
+        Ensemble.Obj(data2) <- layers / "data-2"
+      } {
+        info(s"---- play data-2 ----")
+
+        val rls1 = getDouble(data1, "release").getOrElse(10.0)
+
+        val atk2 = rrand(45, 90)
+        val rls2 = rrand(45, 90)
+        setDouble(data2, "attack" , atk2)
+        setDouble(data2, "release", rls2)
+
+        playGate(data1, value = false)
+        playGate(data2, value = true )
+
+        val d = math.max(rls1, atk2)
+        after(d) { implicit tx =>
+          stopData1()
+          after(rrand(45, 90)) { implicit tx =>
+            releaseData2()
+          }
+        }
+      }
+    }
+
+    def stopData1()(implicit tx: S#Tx): Unit = {
+      for {
+        Ensemble.Obj(data1) <- layers / "data-1"
+      } {
+        info(s"---- stop data-1 ----")
+        play(data1, value = false)
+      }
+    }
+
+    def releaseData2()(implicit tx: S#Tx): Unit = {
+      for {
+        Ensemble.Obj(data2) <- layers / "data-2"
+      } {
+        info(s"---- release data-2 ----")
+        playGate(data2, value = false)
+        
+        val rls = getDouble(data2, "release").getOrElse(10.0)
+        after(rls/2) { implicit tx =>
+          playFreesound()
+          after(rls/2) { implicit tx =>
+            stopData2()
+            val d = rrand(60, 120)
+            after(d) { implicit tx =>
+              playData1()
+            }
+          }
+        }
+      }
+    }
+
+    def stopData2()(implicit tx: S#Tx): Unit = {
+      for {
+        Ensemble.Obj(data2) <- layers / "data-2"
+      } {
+        info(s"---- stop data-2 ----")
+        play(data2, value = false)
+      }
+    }
+
+//    def toggleData1(value: Boolean)(implicit tx: S#Tx): Option[Double] = {
+//      for {
+//        Proc.Obj(col1)          <- layers  / "col-1"
+//        Proc.Obj(col2)          <- layers  / "out"
+//        Ensemble.Obj(bgF)       <- layers  / "bg-filter"
+//        Proc.Obj(bgFP)          <- bgF     / "proc"
+//        Ensemble.Obj(data)      <- layers  / "data-1"
+//      } yield {
+//        info(s"---- ${if (value) "play" else "stop"} data-1 ----")
+//        val atk = rrand(45, 90)
+//        setDouble(bgF, "dur", atk)
+//        play(bgF, value = value)
+//        toggleFilter(bgFP, pred = col1, succ = col2, bypass = !value)
+//
+//        val tim = if (value) {
+//          val rls = rrand(45, 90)
+//          setDouble(data, "attack" , atk)
+//          setDouble(data, "release", rls)
+//          atk
+//
+//        } else {
+//          getDouble(data, "release").getOrElse(10.0)
+//        }
+//
+//        playGate(data, value = value)
+//        tim
+//      }
+//    }
   }
 
   // E freesound
