@@ -16,6 +16,7 @@ package at.iem.sysson
 package turbulence
 
 import java.awt.{Color, GraphicsEnvironment}
+import java.util.concurrent.TimeUnit
 import javax.swing.JComponent
 
 import at.iem.sysson
@@ -26,7 +27,7 @@ import de.sciss.lucre.synth.{Group, Txn}
 import de.sciss.mellite.Mellite
 import de.sciss.swingplus.CloseOperation
 import de.sciss.swingplus.Implicits._   // it _is_ used
-import de.sciss.synth.proc.Code
+import de.sciss.synth.proc.{SoundProcesses, Code}
 import de.sciss.{desktop, numbers, pdflitz, kollflitz}
 
 import ucar.ma2
@@ -41,6 +42,7 @@ object Turbulence {
   def UseMercator   = false
   def EnablePDF     = false
   def EnterBinaural = true
+  def AutoStart     = true
 
   final case class DymGrid(vx: Int, vyi: Int) {
     def toPoint: DymPt = {
@@ -142,7 +144,8 @@ object Turbulence {
   final val NumLat =  73
   final val NumLon = 144
 
-  final val audioWork = userHome / "IEM" / "SysSon" / "installation" / "audio_work"
+  final val baseDir   = userHome / "IEM" / "SysSon" / "installation"
+  final val audioWork = baseDir / "audio_work"
 
   /** Maps latitude index to longitude index to dymaxion coordinate. */
   final val LatLonIndicesToDymMap: Map[LatLonIdx, DymPt] = (0 until NumLat).flatMap { latIdx =>
@@ -245,6 +248,9 @@ object Turbulence {
     }
 
     Swing.onEDT(initViews())
+    if (AutoStart) {
+      SoundProcesses.scheduledExecutorService.schedule(Motion, 3, TimeUnit.SECONDS)
+    }
   }
 
   private lazy val dyn = new DymaxionView
