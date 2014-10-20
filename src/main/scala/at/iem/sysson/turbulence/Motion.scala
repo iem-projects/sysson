@@ -87,14 +87,16 @@ object Motion {
       Ensemble.Obj(layers) <- root / "layers"
     } yield {
       // println(s"State is ${state.value}")
-      info("Play layers")
       val t = Transport[S](Mellite.auralSystem)
       t.addObject(layers)
       // AuralObj(layers).play()
       // t.play()
 
       val alg = new Algorithm(tx.newHandle(layers), t)
-      if (start) alg.start()
+      if (start) {
+        info("Play layers")
+        alg.start()
+      }
       alg
     }
   }

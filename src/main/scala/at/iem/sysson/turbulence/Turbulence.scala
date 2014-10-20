@@ -232,6 +232,35 @@ object Turbulence {
     v.toMultiMap(_._1)(_._2)
   }
 
+  // maps sensors to (speakers, wired-yes-no)
+  final val SensorSpeakers = Vector(
+    Spk(11) -> false,
+    Spk(15) -> true,
+    Spk(14) -> true,
+    Spk(18) -> true,
+    Spk(24) -> true,
+    Spk(31) -> true,
+    Spk(36) -> false,
+    Spk(38) -> false,
+    Spk(44) -> true,
+    Spk(22) -> false,
+    Spk(23) -> true,
+    Spk(27) -> true,
+    Spk(29) -> true,
+    Spk(34) -> true,
+    Spk(35) -> true,
+    Spk(43) -> true,
+    Spk(42) -> true,
+    Spk( 6) -> true,
+    Spk( 8) -> true,
+    Spk( 7) -> true
+  )
+
+  // nominally - without 'non-wired' ones
+  final val NumSensors = SensorSpeakers.size
+
+  assert(NumSensors == 20 && SensorSpeakers.count(_._2) == 16)
+
   def channelCrosses(spk: Spk): Vec[(DymPt, Radians)] = VoronoiMap.getOrElse(spk, Vec.empty).map { idx =>
     LatLonIndicesToDymCompassMap(idx)
   }
@@ -427,7 +456,7 @@ object Turbulence {
               List(36, 38, 44)
             )
             val insAll = m.map { case list =>
-              val ins = list.map { spk => In.ar(NumOutputBuses.ir + spk) }
+              val ins = list.map { spk => In.ar(spk - 1) }
               Mix.mono(ins)
             }
             ReplaceOut.ar(0, insAll)
