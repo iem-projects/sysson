@@ -36,6 +36,8 @@ lazy val lucreMatrixVersion         = "0.4.0"
 
 lazy val scalaColliderSwingVersion  = "1.20.1"
 
+lazy val ugensVersion               = "1.11.2-SNAPSHOT"
+
 lazy val fileCacheVersion           = "0.3.2"
 
 lazy val swingTreeVersion           = "0.1.1"
@@ -53,6 +55,7 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
 //  "de.sciss" %% "scalacollider"               % scalaColliderVersion,
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
+  "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
   "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
   "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
   "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
