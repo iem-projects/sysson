@@ -52,8 +52,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="414.08235"
-     inkscape:cy="846.52778"
+     inkscape:cx="577.41614"
+     inkscape:cy="579.34561"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -83,7 +83,7 @@
     <rect
        y="90.430824"
        x="159.60413"
-       height="208.42064"
+       height="234.13493"
        width="462.2771"
        id="rect2989"
        style="color:#000000;fill:none;stroke:#000000;stroke-width:0.99999994;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
@@ -254,7 +254,7 @@
          y="36.148724">explicit un-/re-wire</tspan></text>
     <g
        id="g3040-4"
-       transform="translate(224.44626,234.58002)">
+       transform="translate(224.44626,268.58002)">
       <rect
          y="107.86954"
          x="215.16251"
@@ -276,21 +276,6 @@
    style="font-size:65.00091553%;baseline-shift:sub"
    id="tspan3072-6">i</tspan></tspan></text>
     </g>
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
-       x="466.42859"
-       y="386.36218"
-       id="text3093"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3095"
-         x="466.42859"
-         y="386.36218">filter</tspan><tspan
-         sodipodi:role="line"
-         x="466.42859"
-         y="401.36218"
-         id="tspan3097">switch</tspan></text>
     <g
        transform="translate(140.04571,25.253814)"
        id="g3036">
@@ -572,31 +557,19 @@
          y="126.6479"
          x="260"
          id="tspan4910"
-         sodipodi:role="line">ENS T</tspan></text>
+         sodipodi:role="line">ENS C</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
-       x="520"
-       y="384.21933"
+       x="467.85715"
+       y="371.79077"
        id="text4912"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4914"
-         x="520"
-         y="384.21933"
-         style="font-size:9px;font-style:normal;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold">ENS F</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text4916"
-       y="396.21933"
-       x="520"
-       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
-       xml:space="preserve"><tspan
-         style="font-size:9px;font-style:normal;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold"
-         y="396.21933"
-         x="520"
-         id="tspan4918"
-         sodipodi:role="line">ENS B</tspan></text>
+         x="467.85715"
+         y="371.79077"
+         style="font-size:9px;font-style:normal;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold">ENS T</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text4920"
@@ -674,129 +647,151 @@
        xml:space="preserve"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        x="299.9538"
-       y="274.07648"
+       y="304.07648"
        id="text5155"
        sodipodi:linespacing="125%"><tspan
          style="font-size:9px;text-align:start;text-anchor:start"
          sodipodi:role="line"
          x="299.9538"
-         y="274.07648"
-         id="tspan5157">active</tspan></text>
+         y="304.07648"
+         id="tspan5157">state</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text5159"
-       y="274.07648"
+       y="304.07648"
        x="371.9538"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        xml:space="preserve"><tspan
          id="tspan5161"
-         y="274.07648"
+         y="304.07648"
          x="371.9538"
          sodipodi:role="line"
-         style="font-size:9px;text-align:start;text-anchor:start">active</tspan></text>
+         style="font-size:9px;text-align:start;text-anchor:start">state</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        x="449.9538"
-       y="274.07648"
+       y="304.07648"
        id="text5163"
        sodipodi:linespacing="125%"><tspan
          style="font-size:9px;text-align:start;text-anchor:start"
          sodipodi:role="line"
          x="449.9538"
-         y="274.07648"
-         id="tspan5165">active</tspan></text>
+         y="304.07648"
+         id="tspan5165">state</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
-       x="507.81094"
-       y="333.50507"
+       x="489.2395"
+       y="363.21936"
        id="text5167"
        sodipodi:linespacing="125%"><tspan
          style="font-size:9px;text-align:start;text-anchor:start"
          sodipodi:role="line"
-         x="507.81094"
-         y="333.50507"
+         x="489.2395"
+         y="363.21936"
          id="tspan5169">tPlaying = transId sig_== ti</tspan></text>
     <text
        sodipodi:linespacing="125%"
-       id="text5171"
-       y="286.07648"
-       x="299.9538"
-       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
-       xml:space="preserve"><tspan
-         id="tspan5173"
-         y="286.07648"
-         x="299.9538"
-         sodipodi:role="line"
-         style="font-size:9px;text-align:start;text-anchor:start">gate</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
-       x="371.9538"
-       y="286.07648"
-       id="text5175"
-       sodipodi:linespacing="125%"><tspan
-         style="font-size:9px;text-align:start;text-anchor:start"
-         sodipodi:role="line"
-         x="371.9538"
-         y="286.07648"
-         id="tspan5177">gate</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
        id="text5179"
-       y="286.07648"
-       x="449.9538"
+       y="425.36221"
+       x="562.09668"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        xml:space="preserve"><tspan
          id="tspan5181"
-         y="286.07648"
-         x="449.9538"
+         y="425.36221"
+         x="562.09668"
          sodipodi:role="line"
-         style="font-size:9px;text-align:start;text-anchor:start">gate   = sensors(ch) sig_== li</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text5183"
-       y="382.79077"
-       x="539.9538"
-       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
-       xml:space="preserve"><tspan
-         id="tspan5185"
-         y="382.79077"
-         x="539.9538"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans">checkWorld:</tspan><tspan
+         y="440.36221"
+         x="562.09668"
          sodipodi:role="line"
-         style="font-size:9px;text-align:start;text-anchor:start">fPlaying = active</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
-       x="539.9538"
-       y="394.79077"
-       id="text5187"
-       sodipodi:linespacing="125%"><tspan
-         style="font-size:9px;text-align:start;text-anchor:start"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5392">val gate = sensors(ch) sig_== li</tspan><tspan
+         y="455.36221"
+         x="562.09668"
          sodipodi:role="line"
-         x="539.9538"
-         y="394.79077"
-         id="tspan5189">bPlaying = !active</tspan></text>
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5398">state transform {</tspan><tspan
+         y="470.36221"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5402">  case 0 if  gate =&gt; 2</tspan><tspan
+         y="485.36221"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5406">  case 1 if !gate =&gt; 3</tspan><tspan
+         y="500.36221"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5408">  case 2 if !gate =&gt; 3   !!!</tspan><tspan
+         y="515.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5410">  case 3 if  gate =&gt; 2   !!!</tspan><tspan
+         y="530.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5416">}</tspan><tspan
+         y="545.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5422" /><tspan
+         y="560.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5424">where !!! means we need to</tspan><tspan
+         y="575.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5426">enable a smart way inverting</tspan><tspan
+         y="590.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5428">fadeStart/fadeStop; basically</tspan><tspan
+         y="605.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5430">that also means we cannot</tspan><tspan
+         y="620.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5432">ise a Line, but probably should</tspan><tspan
+         y="635.36218"
+         x="562.09668"
+         sodipodi:role="line"
+         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5434">revert to EnvGen</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 438.57143,350.6479 -12.85714,0"
+       d="m 446.14505,385.00504 -20.14727,0"
        id="path5191"
        inkscape:connector-curvature="0" />
     <path
        inkscape:connector-curvature="0"
        id="path5193"
-       d="m 438.57143,360.6479 -12.85714,0"
+       d="m 446.83357,394.6479 -21.11929,0"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <text
        sodipodi:linespacing="125%"
        id="text5203"
-       y="351.36218"
+       y="385.36218"
        x="409.28571"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        xml:space="preserve"><tspan
          id="tspan5207"
-         y="351.36218"
+         y="385.36218"
          x="409.28571"
          sodipodi:role="line"
          style="font-size:9px;font-style:normal;-inkscape-font-specification:Liberation Sans">pred</tspan></text>
@@ -804,30 +799,30 @@
        xml:space="preserve"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        x="409.28571"
-       y="363.36218"
+       y="397.36218"
        id="text5211"
        sodipodi:linespacing="125%"><tspan
          style="font-size:9px;font-style:normal;-inkscape-font-specification:Liberation Sans"
          sodipodi:role="line"
          x="409.28571"
-         y="363.36218"
+         y="397.36218"
          id="tspan5213">succ</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path5215"
-       d="m 518.57143,354.6479 -12.85714,0"
+       d="m 518.57142,388.6479 -21.11929,0"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        x="526.71429"
-       y="357.07648"
+       y="391.07648"
        id="text5217"
        sodipodi:linespacing="125%"><tspan
          style="font-size:9px;font-style:normal;-inkscape-font-specification:Liberation Sans"
          sodipodi:role="line"
          x="526.71429"
-         y="357.07648"
+         y="391.07648"
          id="tspan5219">out</tspan></text>
     <text
        xml:space="preserve"
@@ -845,23 +840,23 @@
        xml:space="preserve"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        x="328.85715"
-       y="270.21933"
+       y="300.21933"
        id="text5225"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5227"
          x="328.85715"
-         y="270.21933"
+         y="300.21933"
          style="font-size:6px;font-style:normal;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold">VAR</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text5229"
-       y="270.21933"
+       y="300.21933"
        x="400.85715"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        xml:space="preserve"><tspan
          style="font-size:6px;font-style:normal;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold"
-         y="270.21933"
+         y="300.21933"
          x="400.85715"
          id="tspan5231"
          sodipodi:role="line">VAR</tspan></text>
@@ -869,13 +864,13 @@
        xml:space="preserve"
        style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
        x="478.85715"
-       y="270.21933"
+       y="300.21933"
        id="text5233"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5235"
          x="478.85715"
-         y="270.21933"
+         y="300.21933"
          style="font-size:6px;font-style:normal;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold">VAR</tspan></text>
     <text
        sodipodi:linespacing="125%"
@@ -889,5 +884,269 @@
          x="563.14288"
          id="tspan5239"
          sodipodi:role="line">VAR</tspan></text>
+    <g
+       transform="translate(66.04571,148.10663)"
+       id="g5260">
+      <rect
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect5262"
+         width="63.63961"
+         height="25.253813"
+         x="215.16251"
+         y="107.86954" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5264"
+         y="125.04214"
+         x="243.44676"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+         xml:space="preserve"><tspan
+           y="125.04214"
+           x="243.44676"
+           id="tspan5266"
+           sodipodi:role="line">By<tspan
+   id="tspan5268"
+   style="font-size:65.00091553%;baseline-shift:sub">0</tspan></tspan></text>
+    </g>
+    <g
+       id="g5270"
+       transform="translate(140.04571,148.10663)">
+      <rect
+         y="107.86954"
+         x="215.16251"
+         height="25.253813"
+         width="63.63961"
+         id="rect5272"
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+         x="243.44676"
+         y="125.04214"
+         id="text5274"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5276"
+           x="243.44676"
+           y="125.04214">By<tspan
+   style="font-size:65.00091553%;baseline-shift:sub"
+   id="tspan5278">1</tspan></tspan></text>
+    </g>
+    <g
+       transform="translate(220.04571,148.10663)"
+       id="g5280">
+      <rect
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect5282"
+         width="63.63961"
+         height="25.253813"
+         x="215.16251"
+         y="107.86954" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5284"
+         y="125.04214"
+         x="243.44676"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+         xml:space="preserve"><tspan
+           y="125.04214"
+           x="243.44676"
+           id="tspan5286"
+           sodipodi:role="line">By<tspan
+   id="tspan5288"
+   style="font-size:65.00091553%;baseline-shift:sub">M</tspan></tspan></text>
+    </g>
+    <g
+       id="g5290"
+       transform="translate(224.61714,327.24949)">
+      <rect
+         y="107.86954"
+         x="215.16251"
+         height="25.253813"
+         width="63.63961"
+         id="rect5292"
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Liberation Sans"
+         x="243.44676"
+         y="125.04214"
+         id="text5294"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5296"
+           x="243.44676"
+           y="125.04214">By<tspan
+   style="font-size:65.00091553%;baseline-shift:sub"
+   id="tspan5298">i</tspan></tspan></text>
+    </g>
+    <path
+       inkscape:connector-curvature="0"
+       id="path5300"
+       d="m 446.14505,443.00504 -20.14727,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 446.83357,452.6479 -21.11929,0"
+       id="path5302"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
+       x="409.28571"
+       y="443.36218"
+       id="text5304"
+       sodipodi:linespacing="125%"><tspan
+         style="font-size:9px;font-style:normal;-inkscape-font-specification:Liberation Sans"
+         sodipodi:role="line"
+         x="409.28571"
+         y="443.36218"
+         id="tspan5306">pred</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text5308"
+       y="455.36218"
+       x="409.28571"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
+       xml:space="preserve"><tspan
+         id="tspan5310"
+         y="455.36218"
+         x="409.28571"
+         sodipodi:role="line"
+         style="font-size:9px;font-style:normal;-inkscape-font-specification:Liberation Sans">succ</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 518.57142,446.6479 -21.11929,0"
+       id="path5312"
+       inkscape:connector-curvature="0" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text5314"
+       y="449.07648"
+       x="526.71429"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
+       xml:space="preserve"><tspan
+         id="tspan5316"
+         y="449.07648"
+         x="526.71429"
+         sodipodi:role="line"
+         style="font-size:9px;font-style:normal;-inkscape-font-specification:Liberation Sans">out</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text5318"
+       y="429.79077"
+       x="467.85715"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
+       xml:space="preserve"><tspan
+         style="font-size:9px;font-style:normal;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold"
+         y="429.79077"
+         x="467.85715"
+         id="tspan5320"
+         sodipodi:role="line">ENS B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
+       x="469.28571"
+       y="480.21933"
+       id="text5322"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5324"
+         x="469.28571"
+         y="480.21933"
+         style="font-size:9px;font-style:normal;font-weight:bold;-inkscape-font-specification:Liberation Sans Bold">ENS C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
+       x="670"
+       y="186.6479"
+       id="text5326"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5328"
+         x="670"
+         y="186.6479"
+         style="font-style:normal;-inkscape-font-specification:Liberation Sans">× NumLayers</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
+       x="182.9474"
+       y="354.50504"
+       id="text5348"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5350"
+         x="182.9474"
+         y="354.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans">possible value for `state`:</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="369.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5352">[0] = bypass</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="384.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5372">[1] = engaged</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="399.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5354">[2] = fade-in</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="414.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5362">[3] = fade-out</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="429.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5368" /><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="444.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5370">cPlaying = state &gt;= 2</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="459.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5376">bPlaying = state &lt;  2</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="474.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5378">fadeStart = state == 3</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="489.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5380">fadeStop = 1 - fadeStart</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="504.50504"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5382">bIndex = state</tspan><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="519.505"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5384" /><tspan
+         sodipodi:role="line"
+         x="182.9474"
+         y="534.505"
+         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
+         id="tspan5386">active = state &gt; 0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans Italic"
+       x="300.71429"
+       y="302.36218"
+       id="text5388"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5390"></tspan></text>
   </g>
 </svg>
