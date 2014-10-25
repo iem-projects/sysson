@@ -26,9 +26,9 @@ resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "0.11.1-SNAPSHOT"
+lazy val melliteVersion             = "0.12.0-SNAPSHOT"
 
-lazy val soundProcessesVersion      = "2.7.1-SNAPSHOT"
+lazy val soundProcessesVersion      = "2.8.0-SNAPSHOT"
 
 lazy val lucreMatrixVersion         = "0.4.0"
 
