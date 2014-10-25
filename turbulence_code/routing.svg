@@ -53,7 +53,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
      inkscape:cx="577.41614"
-     inkscape:cy="579.34561"
+     inkscape:cy="558.0798"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -727,52 +727,17 @@
          x="562.09668"
          sodipodi:role="line"
          style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5408">  case 2 if !gate =&gt; 3   !!!</tspan><tspan
+         id="tspan5408">  case 2 if !gate =&gt; 3</tspan><tspan
          y="515.36218"
          x="562.09668"
          sodipodi:role="line"
          style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5410">  case 3 if  gate =&gt; 2   !!!</tspan><tspan
+         id="tspan5410">  case 3 if  gate =&gt; 2</tspan><tspan
          y="530.36218"
          x="562.09668"
          sodipodi:role="line"
          style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5416">}</tspan><tspan
-         y="545.36218"
-         x="562.09668"
-         sodipodi:role="line"
-         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5422" /><tspan
-         y="560.36218"
-         x="562.09668"
-         sodipodi:role="line"
-         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5424">where !!! means we need to</tspan><tspan
-         y="575.36218"
-         x="562.09668"
-         sodipodi:role="line"
-         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5426">enable a smart way inverting</tspan><tspan
-         y="590.36218"
-         x="562.09668"
-         sodipodi:role="line"
-         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5428">fadeStart/fadeStop; basically</tspan><tspan
-         y="605.36218"
-         x="562.09668"
-         sodipodi:role="line"
-         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5430">that also means we cannot</tspan><tspan
-         y="620.36218"
-         x="562.09668"
-         sodipodi:role="line"
-         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5432">ise a Line, but probably should</tspan><tspan
-         y="635.36218"
-         x="562.09668"
-         sodipodi:role="line"
-         style="font-size:12px;font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5434">revert to EnvGen</tspan></text>
+         id="tspan5434">}</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 446.14505,385.00504 -20.14727,0"
@@ -1118,25 +1083,20 @@
          x="182.9474"
          y="474.50504"
          style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5378">fadeStart = state == 3</tspan><tspan
+         id="tspan5380">fade based on &quot;slew&quot; Synth Graph</tspan><tspan
          sodipodi:role="line"
          x="182.9474"
          y="489.50504"
          style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5380">fadeStop = 1 - fadeStart</tspan><tspan
+         id="tspan5382">bIndex = state</tspan><tspan
          sodipodi:role="line"
          x="182.9474"
          y="504.50504"
          style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
-         id="tspan5382">bIndex = state</tspan><tspan
-         sodipodi:role="line"
-         x="182.9474"
-         y="519.505"
-         style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
          id="tspan5384" /><tspan
          sodipodi:role="line"
          x="182.9474"
-         y="534.505"
+         y="519.505"
          style="font-style:normal;text-align:start;text-anchor:start;-inkscape-font-specification:Liberation Sans"
          id="tspan5386">active = state &gt; 0</tspan></text>
     <text
