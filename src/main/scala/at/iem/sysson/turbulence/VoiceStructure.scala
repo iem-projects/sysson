@@ -16,11 +16,12 @@ package at.iem.sysson.turbulence
 
 import de.sciss.file._
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.{Expr, Boolean => BooleanEx, Int => IntEx}
+import de.sciss.lucre.expr.{Expr, Boolean => BooleanEx, Int => IntEx, String => StringEx}
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.mellite.{Mellite, Workspace}
 import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.{SoundProcesses, BooleanElem, FolderElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
+import de.sciss.synth.proc.{StringElem, ObjKeys, SoundProcesses, BooleanElem, FolderElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
 import de.sciss.synth.{GE, SynthGraph}
 
 import scala.annotation.tailrec
@@ -28,11 +29,31 @@ import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
 
 object VoiceStructure {
-  def main(args: Array[String]): Unit =
-    add(userHome / "sysson" / "workspaces" / "layers_test.mllt")
+  val DumpOSC         = false
+  val ShowLog         = false
+  var ShowNodeTree    = false   // warning - buggy
+  val PrintStates     = false
+  val Shadowing       = true
+  val Attack          = 30  // 10
+  val Release         = 30  // 10
+  val FFTSize         = 512 // 1024
+
+  val NumLayers       = 15  // 3
+  val MaxVoices       = 3 // 2
+  val NumSpeakers     = 42  // 2
+  val NumTransitions  = 7   // 2
+
+  def main(args: Array[String]): Unit = {
+    val f = userHome / "sysson" / "workspaces" / "layers_test.mllt"
+    if (!f.exists()) {
+      val ws = Workspace.Confluent.empty(f, BerkeleyDB.Config())
+      ws.close()
+    }
+    add(f)
+  }
 
   def add(workspace: File, path: Seq[String] = Nil): Unit = {
-    val doc = Workspace.read(workspace)
+    val doc = Workspace.read(workspace, BerkeleyDB.Config())
     val fut = doc match {
       case cf : Workspace.Confluent =>
         implicit val cursor = cf.cursors.cursor
@@ -100,21 +121,7 @@ object VoiceStructure {
   }
 }
 class VoiceStructure[S <: Sys[S]] {
-  import VoiceStructure.ScanOps
-
-  val DumpOSC         = false
-  val ShowLog         = false
-  var ShowNodeTree    = false   // warning - buggy
-  val PrintStates     = false
-  val Shadowing       = true
-  val Attack          = 30  // 10
-  val Release         = 30  // 10
-  val FFTSize         = 512 // 1024
-
-  val NumLayers       = 15  // 3
-  val MaxVoices       = 3 // 2
-  val NumSpeakers     = 42  // 2
-  val NumTransitions  = 7   // 2
+  import VoiceStructure._
 
   private[this] val imp = ExprImplicits[S]
   import imp._
@@ -553,12 +560,14 @@ class VoiceStructure[S <: Sys[S]] {
       procB.graph() = switchGraph
       val procBObj  = Obj(Proc.Elem(procB))
       procBObj.attr.put("state", stateObj)
-      procBObj.attr.name = s"by$li$si"
+      val name = Obj(StringElem(StringEx.newVar[S](s"by${li}_$si")))
+      procBObj.attr.put(ObjKeys.attrName, name)
       val bPlaying  = state <  2
       val bFolder   = Folder[S]
       bFolder.addLast(procBObj)
       val ensB      = Ensemble(bFolder, 0L, bPlaying)
       val ensBObj   = Obj(Ensemble.Elem(ensB))
+      ensBObj.attr.put(ObjKeys.attrName, name)
       val predInB   = procB .scans.add("pred")
       val succInB   = procB .scans.add("succ")
       val outB      = procB .scans.add("out")
@@ -584,6 +593,7 @@ class VoiceStructure[S <: Sys[S]] {
 
     val ensL    = Ensemble[S](lFolder, 0L, lPlaying)
     val ensLObj = Obj(Ensemble.Elem(ensL))
+    ensLObj.attr.name = s"layer-$li"
 
     //    val bypassPlaying = !lPlaying
     //    val bypassF       = Folder[S]
@@ -602,12 +612,16 @@ class VoiceStructure[S <: Sys[S]] {
       val tFolder     = Folder[S]
       val ensT        = Ensemble[S](tFolder, 0L, tPlaying)
       val ensTObj     = Obj(Ensemble.Elem(ensT))
+      ensTObj.attr.name = s"trans-$gi"
       lFolder.addLast(ensTObj)
 
       vecChannels.zipWithIndex.foreach { case (channel, si) =>
         val fFolder   = Folder[S]
         val ensF      = Ensemble(fFolder, 0L, channel.fPlaying)
-        tFolder.addLast(Obj(Ensemble.Elem(ensF)))
+        val ensFObj   = Obj(Ensemble.Elem(ensF))
+        val name      = Obj(StringElem(StringEx.newVar[S](s"t${gi}_$si")))
+        ensFObj.attr.put(ObjKeys.attrName, name)
+        tFolder.addLast(ensFObj)
 
         val procT     = Proc[S]
         procT.graph() = g
@@ -621,7 +635,7 @@ class VoiceStructure[S <: Sys[S]] {
 
         val procTObj  = Obj(Proc.Elem(procT))
         val attr      = procTObj.attr
-        attr.name     = s"t$gi$si"
+        attr.put(ObjKeys.attrName, name)
         attr.put("state", channel.stateObj)
         attr.put("done" , channel.doneObj )
 
