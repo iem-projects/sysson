@@ -1,0 +1,18 @@
+transitions
+- correct start/stop without click (tiny fade-in/out)
+- kurven-verlauf
+- concurrency? (FFTs)
+- step-functions (versus glissandi)
+- atk / rls -- could be dependent on type of transition
+
+background
+- asynchronous starting point
+
+mellite
+- setting for auto-start sensors
+- in-memory variant (as backup)
+- obj view - should really update playing state of ensembles
+
+settings
+- blockSize 128 relaxes the CPU quite a lot
+
