@@ -47,7 +47,7 @@ object DataSourceObjView extends ObjView.Factory {
   final val typeID  = DataSourceElem.typeID
 
   def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
-    val name      = obj.attr.name
+    val name      = obj.name
     val ds        = obj.elem.peer
     val f         = ds.artifact.value
     val vr        = ds.variables
@@ -68,7 +68,7 @@ object DataSourceObjView extends ObjView.Factory {
     val fOpt = dlg.show(window)
 
     fOpt.flatMap { f =>
-      ActionArtifactLocation.query[S](workspace.root, file = f, window = window).map { location =>
+      ActionArtifactLocation.query[S](workspace.rootH, file = f, window = window).map { location =>
         Config(file = f, location = location, workspace = workspace)
       }
     }
@@ -87,7 +87,7 @@ object DataSourceObjView extends ObjView.Factory {
       val artifact          = locM.add(config.file)
       val ds                = DataSource[S](artifact)
       val obj               = Obj(DataSourceElem(ds))
-      obj.attr.name         = config.file.base
+      obj.name              = config.file.base
       obj :: list0
     }
   }

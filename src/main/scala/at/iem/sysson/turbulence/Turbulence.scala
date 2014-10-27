@@ -235,31 +235,33 @@ object Turbulence {
   // maps sensors to (speakers, wired-yes-no)
   final val SensorSpeakers = Vector(
     Spk(11) -> false,
-    Spk(15) -> true,
+    Spk(15) -> false,
     Spk(14) -> true,
     Spk(18) -> true,
     Spk(24) -> true,
-    Spk(31) -> true,
-    Spk(36) -> false,
-    Spk(38) -> false,
+    Spk(31) -> false,
+    Spk(36) -> true,
+    Spk(38) -> true,
     Spk(44) -> true,
-    Spk(22) -> false,
+    Spk(22) -> true,
     Spk(23) -> true,
     Spk(27) -> true,
     Spk(29) -> true,
     Spk(34) -> true,
     Spk(35) -> true,
     Spk(43) -> true,
-    Spk(42) -> true,
-    Spk( 6) -> true,
+    Spk(42) -> false,
+    Spk( 6) -> false,
     Spk( 8) -> true,
     Spk( 7) -> true
   )
 
   // nominally - without 'non-wired' ones
-  final val NumSensors = SensorSpeakers.size
+  final val NumSensors        = SensorSpeakers.size
+  final val NumWiredSensors   = SensorSpeakers.count(_._2)
 
-  assert(NumSensors == 20 && SensorSpeakers.count(_._2) == 16)
+  assert(NumSensors == 20 && NumWiredSensors == 15)
+
 
   def channelCrosses(spk: Spk): Vec[(DymPt, Radians)] = VoronoiMap.getOrElse(spk, Vec.empty).map { idx =>
     LatLonIndicesToDymCompassMap(idx)
@@ -271,6 +273,9 @@ object Turbulence {
 
   // don't use `App` because body will not be initialized if we don't use it as main entry
   def main(args: Array[String]): Unit = {
+    //    de.sciss.lucre.stm  .showLog = true
+    //    de.sciss.lucre.event.showLog = true
+
     Main.main(args :+ "--mellite-frame")
     val pkg = "at.iem.sysson.turbulence._" :: Nil
     Code.registerImports(Code.Action    .id, pkg)
@@ -281,10 +286,10 @@ object Turbulence {
     }
 
     Swing.onEDT(initViews())
-    if (AutoOpen) {
-      SoundProcesses.scheduledExecutorService.schedule(
-        new Runnable { def run() = Motion.run(start = AutoStart) }, 3, TimeUnit.SECONDS)
-    }
+//    if (AutoOpen) {
+//      SoundProcesses.scheduledExecutorService.schedule(
+//        new Runnable { def run() = Motion.run(start = AutoStart) }, 3, TimeUnit.SECONDS)
+//    }
   }
 
   private lazy val dyn = new DymaxionView
@@ -338,9 +343,9 @@ object Turbulence {
     }
 
     if (EnablePDF) new pdflitz.SaveAction(dyn :: Nil).setupMenu(fDyn)
-    fDyn.pack()
-    fDyn.centerOnScreen()
-    fDyn.open()
+    // fDyn.pack()
+    // fDyn.centerOnScreen()
+    // fDyn.open()
 
     if (UseMercator) new Frame {
       contents  = mercator
@@ -379,26 +384,26 @@ object Turbulence {
         }
       }
 
-      val ggSpkMix = new ToggleButton("AAAA Speakers") {
-        listenTo(this)
-        reactions += {
-          case ButtonClicked(_) => toggleSpeakerMix(selected)
-        }
-      }
+//      val ggSpkMix = new ToggleButton("AAAA Speakers") {
+//        listenTo(this)
+//        reactions += {
+//          case ButtonClicked(_) => toggleSpeakerMix(selected)
+//        }
+//      }
 
       val ggRun = new ToggleButton("Run Installation") {
         listenTo(this)
         reactions += {
           case ButtonClicked(_) =>
-            Motion.instance.foreach { in =>
-              if (selected) in.startGUI() else in.stopGUI()
-            }
+//            Motion.instance.foreach { in =>
+//              if (selected) in.startGUI() else in.stopGUI()
+//            }
         }
       }
 
       contents = new BoxPanel(Orientation.Vertical) {
         contents += ggRun
-        contents += ggSpkMix
+        // contents += ggSpkMix
         contents += VStrut(4)
         contents += ggBinaural
         contents += VStrut(4)

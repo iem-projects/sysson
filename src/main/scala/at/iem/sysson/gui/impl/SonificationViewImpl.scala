@@ -75,7 +75,7 @@ object SonificationViewImpl {
   }
 
   private def mkTransport[S <: Sys[S]](sonif: Sonification.Obj[S])
-                                      (implicit tx: S#Tx, cursor: stm.Cursor[S]): Transport[S] = {
+                                      (implicit tx: S#Tx, cursor: stm.Cursor[S], workspace: Workspace[S]): Transport[S] = {
     val res = Transport[S](Mellite.auralSystem)
     res.addObject(sonif)
     res

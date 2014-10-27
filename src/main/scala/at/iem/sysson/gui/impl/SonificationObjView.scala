@@ -42,9 +42,9 @@ object SonificationObjView extends ObjView.Factory {
   ObjView.addFactory(this)
 
   def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
-    val name      = obj.attr.name
+    val name      = obj.name
     val son       = obj.elem.peer
-    val procName  = son.proc.attr.name
+    val procName  = son.proc.name
     new SonificationObjView.Impl(tx.newHandle(obj), name = name, value = new Value(procName))
   }
 
@@ -60,9 +60,9 @@ object SonificationObjView extends ObjView.Factory {
   }
 
   def make[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {
-    val elem = Sonification.Elem(Sonification[S])
-    val obj = Obj(elem)
-    obj.attr.name = name
+    val elem  = Sonification.Elem(Sonification[S])
+    val obj   = Obj(elem)
+    obj.name  = name
     obj :: Nil
   }
 

@@ -19,6 +19,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{Expr, Boolean => BooleanEx, Int => IntEx, String => StringEx}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.store.BerkeleyDB
+import de.sciss.mellite
 import de.sciss.mellite.{Mellite, Workspace}
 import de.sciss.synth.proc.Implicits._
 import de.sciss.synth.proc.{StringElem, ObjKeys, SoundProcesses, BooleanElem, FolderElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
@@ -38,63 +39,33 @@ object VoiceStructure {
   val Release         = 30  // 10
   val FFTSize         = 512 // 1024
 
-  val NumLayers       = 15  // 3
-  val MaxVoices       = 3 // 2
-  val NumSpeakers     = 42  // 2
+  def NumLayers       = Turbulence.NumWiredSensors  // 15  // 3
+  val MaxVoices       = 3   // 2
+  def NumSpeakers     = Turbulence.NumChannels      // 42  // 2
   val NumTransitions  = 7   // 2
 
-  def main(args: Array[String]): Unit = {
-    val f = userHome / "sysson" / "workspaces" / "layers_test.mllt"
-    if (!f.exists()) {
-      val ws = Workspace.Confluent.empty(f, BerkeleyDB.Config())
-      ws.close()
-    }
-    add(f)
-  }
+  //  def add(workspace: File, path: Seq[String] = Nil): Unit = {
+  //    val doc = Workspace.read(workspace, BerkeleyDB.Config())
+  //    val fut = doc match {
+  //      case cf : Workspace.Confluent =>
+  //        implicit val cursor = cf.cursors.cursor
+  //        cursor.step { implicit tx =>
+  //          add(cf , path)
+  //        }
+  //      case dur: Workspace.Ephemeral =>
+  //        implicit val cursor = dur.cursor
+  //        cursor.step { implicit tx =>
+  //          add(dur, path)
+  //        }
+  //    }
+  //    import SoundProcesses.executionContext
+  //    fut.foreach { _ =>
+  //      println("Done.")
+  //      sys.exit(0)
+  //    }
+  //  }
 
-  def add(workspace: File, path: Seq[String] = Nil): Unit = {
-    val doc = Workspace.read(workspace, BerkeleyDB.Config())
-    val fut = doc match {
-      case cf : Workspace.Confluent =>
-        implicit val cursor = cf.cursors.cursor
-        cursor.step { implicit tx =>
-          add(cf , path)
-        }
-      case dur: Workspace.Ephemeral =>
-        implicit val cursor = dur.cursor
-        cursor.step { implicit tx =>
-          add(dur, path)
-        }
-    }
-    import SoundProcesses.executionContext
-    fut.foreach { _ =>
-      println("Done.")
-      sys.exit(0)
-    }
-  }
-
-  def add[S <: Sys[S]](workspace: Workspace[S], path: Seq[String])
-                      (implicit tx: S#Tx, cursor: stm.Cursor[S]): Future[Unit] = {
-    import Motion.NavigateFolder
-
-    println("Adding layers...")
-
-    @tailrec def loop(parent: Folder[S], children: Seq[String]): Folder[S] =
-      children match {
-        case head +: tail =>
-          val sub = parent / head match {
-            case Some(FolderElem.Obj(f)) => f.elem.peer
-            case Some(Ensemble  .Obj(e)) => e.elem.peer.folder
-          }
-          loop(sub, tail)
-        case _ => parent
-      }
-
-    val child = loop(workspace.root(), path)
-    import Mellite.compiler
-    apply(parent = child)
-  }
-
+  // (1)
   def apply[S <: Sys[S]](parent: Folder[S])(implicit tx: S#Tx, cursor: stm.Cursor[S],
                          compiler: Code.Compiler): Future[Unit] = {
     val vs        = new VoiceStructure[S]
@@ -126,126 +97,11 @@ class VoiceStructure[S <: Sys[S]] {
   private[this] val imp = ExprImplicits[S]
   import imp._
 
-  //  class Layer(val ensemble:     stm.Source[S#Tx, Ensemble.Obj[S]],
-  //              val states  : Vec[stm.Source[S#Tx, Expr.Var[S, Int    ]]],
-  //              val playing :     stm.Source[S#Tx, Expr.Var[S, Boolean]],
-  //              val transId :     stm.Source[S#Tx, Expr.Var[S, Int    ]],
-  //              val input   :     stm.Source[S#Tx, Proc.Obj[S]],
-  //              val output  :     stm.Source[S#Tx, Proc.Obj[S]])
-
-  //  class World(val diffusion     :     stm.Source[S#Tx, Proc.Obj[S]],
-  //              val layers        : Vec[Layer],
-  //              val sensors       : Vec[stm.Source[S#Tx, Expr.Var[S, Int    ]]],
-  //              val transId       :     stm.Source[S#Tx, Expr.Var[S, Int    ]],
-  //              val activeVoices  :     stm.Source[S#Tx, Expr    [S, Int    ]],
-  //              val hasFreeVoices :     stm.Source[S#Tx, Expr    [S, Boolean]])
-
-  def rrand(lo: Int, hi: Int): Int = util.Random.nextInt(hi - lo + 1) + lo
-
-  //  def mkAural(w: World)(implicit tx: S#Tx, cursor: stm.Cursor[S]): (AuralSystem, Transport[S]) = {
-  //    val aural = AuralSystem()
-  //    if (DumpOSC) aural.whenStarted(_.peer.dumpOSC())
-  //    val transport = Transport[S](aural)
-  //    transport.addObject(w.diffusion())
-  //    w.layers.zipWithIndex.foreach { case (l, li) =>
-  //      transport.addObject(l.ensemble())
-  //    }
-  //    transport.play()
-  //    val config = Server.Config()
-  //    config.audioBusChannels  = 4096 // 1024
-  //    config.transport         = osc.TCP
-  //    config.pickPort()
-  //    aural.start(config)
-  //    (aural, transport)
-  //  }
-
-//  def checkWorld(w: World, debug: Boolean = false)(implicit tx: S#Tx): Unit = {
-//    val free  = w.hasFreeVoices()
-//    val sense: Vec[Int] = w.sensors.map(_.apply().value)
-//    w.layers.zipWithIndex /* .scramble() */.foreach { case (l, li) =>
-//      if (PrintStates && debug) {
-//        println(s"----- LAYER $li -----")
-//      }
-//
-//      val isActive        = l.playing().value
-//      val mayBecomeActive = !isActive && free.value
-//
-//      val hasFadeIn = (isActive || mayBecomeActive) && (false /: l.states.zipWithIndex) { case (res, (stateH, si)) =>
-//        val state   = stateH()
-//        val gate    = sense(si) == li
-//        val before  = state().value
-//        val now     = before match {
-//          case 0 | 3 if  gate => 2
-//          case 1 | 2 if !gate => 3
-//          case _ => before
-//        }
-//        if (now != before) state() = now
-//        res | (now == 2)
-//      }
-//
-//      if (PrintStates && debug) {
-//        println(l.states.zipWithIndex.map { case (s, si) => f"s$si%02d = ${s.apply().value}" } .mkString(", "))
-//      }
-//
-//      val becomesActive = mayBecomeActive && hasFadeIn
-//
-//      if (becomesActive) {
-//        if (PrintStates) println(s"Layer $li becomes active.")
-//        l.transId().update(w.transId().value)
-//        if (Shadowing) layerToFront(w, l)
-//        l.playing().update(true)
-//      }
-//    }
-//  }
-
-//  def unlinkLayer(l: Layer)(implicit tx: S#Tx): Unit =
-//    for {
-//      layerIn  <- l.input    ().elem.peer.scans.get("in" )
-//      layerOut <- l.output   ().elem.peer.scans.get("out")
-//    } {
-//      val oldLayerIn = layerIn.sources.collect {
-//        case l @ Scan.Link.Scan(_) => l
-//      } .toSet
-//      val oldLayerOut = layerOut.sinks.collect {
-//        case l @ Scan.Link.Scan(_) => l
-//      } .toSet
-//
-//      // disconnect old inputs
-//      oldLayerIn .foreach(layerIn .removeSource)
-//      // disconnect old outputs
-//      oldLayerOut.foreach(layerOut.removeSink  )
-//      // connect old layer inputs to old layer outputs
-//      oldLayerIn.foreach { in =>
-//        oldLayerOut.foreach { out =>
-//          in.peer.addSink(out)
-//        }
-//      }
-//    }
-
-//  def layerToFront(w: World, l: Layer)(implicit tx: S#Tx): Unit =
-//    for {
-//      layerIn  <- l.input    ().elem.peer.scans.get("in" )
-//      layerOut <- l.output   ().elem.peer.scans.get("out")
-//      diffIn   <- w.diffusion().elem.peer.scans.get("in" )
-//    } {
-//      val oldDiffIn = diffIn.sources.collect {
-//        case l @ Scan.Link.Scan(_) => l
-//      } .toSet
-//      val layerOutL = Scan.Link.Scan(layerOut)
-//      // only act if we're not there
-//      if (!oldDiffIn.contains(layerOutL)) {
-//        unlinkLayer(l)
-//        // disconnect old diff inputs
-//        oldDiffIn  .foreach(diffIn  .removeSource)
-//        // connect old diff inputs as new layer inputs
-//        oldDiffIn  .foreach(layerIn .addSource   )
-//        // connect layer output to diff input
-//        diffIn.addSource(layerOutL)
-//      }
-//    }
+  // def rrand(lo: Int, hi: Int): Int = util.Random.nextInt(hi - lo + 1) + lo
 
   def mkAction(c: Code.Compiler)(implicit tx: S#Tx, cursor: stm.Cursor[S],
                                  compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
+    println("Making Voices Action")
     val source =
       """val imp = ExprImplicits[S]
         |import imp._
@@ -253,11 +109,19 @@ class VoiceStructure[S <: Sys[S]] {
         |for {
         |  Expr.Var(state) <- self.attr[IntElem]("state")
         |} {
-        |  state.transform(x => x.value match {
-        |    case 2 => 1
-        |    case 3 => 0
-        |    case y => y // should not occur
-        |  })
+        |  val old = state.value
+        |  if (old == 2) {        // fade-in  -> engaged
+        |    state() = 1
+        |  } else if (old == 3) { // fade-out -> bypass
+        |    state() = 0
+        |    val stop = self.attr[IntElem]("active").exists(_.value == 0)
+        |    if (stop) for {
+        |        Proc.Obj(pred) <- self.attr.get("pred")
+        |        Proc.Obj(out)  <- self.attr.get("out" )
+        |      } {
+        |        (pred, out).unlink()
+        |      }
+        |  }
         |}
         |""".stripMargin
     implicit val compiler = c
@@ -384,11 +248,12 @@ class VoiceStructure[S <: Sys[S]] {
   import IntEx    .{serializer => intSer , varSerializer => intVarSer }
 
   def mkWorld(done: Action[S])(implicit tx: S#Tx): Ensemble.Obj[S] = {
-    val sensors = Vec.tabulate(NumSpeakers) { speaker =>
-      val sensor = IntEx.newVar[S](-1)
-      if (PrintStates) sensor.changed.react(_ => ch => println(s"sensor$speaker -> ${ch.now}"))
-      sensor
-    }
+    println("Making Voices World")
+    //    val sensors = Vec.tabulate(NumSpeakers) { speaker =>
+    //      val sensor = IntEx.newVar[S](-1)
+    //      if (PrintStates) sensor.changed.react(_ => ch => println(s"sensor$speaker -> ${ch.now}"))
+    //      sensor
+    //    }
 
     val diff = Proc[S]
     diff.graph() = SynthGraph {
@@ -405,10 +270,10 @@ class VoiceStructure[S <: Sys[S]] {
     }
     diff.scans.add("in")
     val diffObj = Obj(Proc.Elem(diff))
-    diffObj.attr.name = "diff"
+    diffObj.name = "diff"
 
     val vecLayer = Vec.tabulate(NumLayers) { li =>
-      mkLayer(sensors, diff, done, li)
+      mkLayer(diff, done, li)
     }
 
     val vecPlaying      = vecLayer.map(_.elem.peer.playing)
@@ -423,20 +288,13 @@ class VoiceStructure[S <: Sys[S]] {
     allFolder.addLast(diffObj)
     vecLayer.foreach(ensLObj => allFolder.addLast(ensLObj))
     val allObj    = Obj(Ensemble.Elem(all))
-    sensors.zipWithIndex.foreach { case (s, si) =>
-      allObj.attr.put(f"s$si%02d", Obj(IntElem(s)))
-    }
+    //    sensors.zipWithIndex.foreach { case (s, si) =>
+    //      allObj.attr.put(f"s$si%02d", Obj(IntElem(s)))
+    //    }
     allObj.attr.put("trans", Obj(IntElem(wTransId)))
     allObj.attr.put("free-voices", Obj(BooleanElem(hasFreeVoices)))
-    allObj.attr.name = "layers"
+    allObj.name = "layers"
     allObj
-
-    //    new World(diffusion     = tx.newHandle(diffObj),
-    //      layers        = vecLayer,
-    //      sensors       = sensors.map(tx.newHandle(_)),
-    //      transId       = tx.newHandle(wTransId),
-    //      activeVoices  = tx.newHandle(activeVoices),
-    //      hasFreeVoices = tx.newHandle(hasFreeVoices))
   }
 
   // for simplicity, same graph for
@@ -485,7 +343,7 @@ class VoiceStructure[S <: Sys[S]] {
     graph.ScanOut(sig)
   }
 
-  private def mkLayer(sensors: Vec[Expr[S, Int]], diff: Proc[S], done: Action[S], li: Int)
+  private def mkLayer(diff: Proc[S], done: Action[S], li: Int)
                      (implicit tx: S#Tx): Ensemble.Obj[S] = {
     val transId = IntEx.newVar[S](-1) // "sampled" in `checkWorld`
 
@@ -498,7 +356,7 @@ class VoiceStructure[S <: Sys[S]] {
     val genObj    = Obj(Proc.Elem(gen))
     val liObj     = Obj(IntElem(li))
     genObj.attr.put("li", liObj)
-    genObj.attr.name = s"gen$li"
+    genObj.name = s"gen$li"
     lFolder.addLast(genObj)
 
     // layer-ensemble input from predecessor
@@ -506,14 +364,14 @@ class VoiceStructure[S <: Sys[S]] {
     pred.graph()    = throughGraph
     pred.scans.add("in")
     val predObj     = Obj(Proc.Elem(pred))
-    predObj.attr.name = s"pred$li"
+    predObj.name = s"pred$li"
     lFolder.addLast(predObj)
 
     // aka background splitter
     val split       = Proc[S]
     split.graph()   = splitGraph
     val splitObj    = Obj(Proc.Elem(split))
-    splitObj.attr.name = s"split$li"
+    splitObj.name = s"split$li"
     lFolder.addLast(splitObj)
     pred.scans.add("out") ~> split.scans.add("in")
 
@@ -521,7 +379,7 @@ class VoiceStructure[S <: Sys[S]] {
     val succ        = Proc[S]
     succ.graph()    = splitGraph
     val succObj     = Obj(Proc.Elem(succ))
-    succObj.attr.name = s"succ$li"
+    succObj.name = s"succ$li"
     lFolder.addLast(succObj)
     gen.scans.add("out") ~> succ.scans.add("in")
 
@@ -529,7 +387,7 @@ class VoiceStructure[S <: Sys[S]] {
     val coll        = Proc[S]
     coll.graph()    = collGraph
     val collObj     = Obj(Proc.Elem(coll))
-    collObj.attr.name = s"coll$li"
+    collObj.name = s"coll$li"
     lFolder.addLast(collObj)
 
     // layer-ensemble output to successor
@@ -537,7 +395,7 @@ class VoiceStructure[S <: Sys[S]] {
     out.graph()     = throughGraph
     out.scans.add("out")
     val outObj      = Obj(Proc.Elem(out))
-    outObj.attr.name = s"foo$li"
+    outObj.name = s"foo$li"
     lFolder.addLast(outObj)
     coll.scans.add("out") ~> out.scans.add("in")
 
@@ -547,7 +405,7 @@ class VoiceStructure[S <: Sys[S]] {
 
     val vecChannels = Vec.tabulate[Channel](NumSpeakers) { si =>
       val state     = IntEx.newVar[S](0)  // 0 - bypass, 1 - engaged, 2 - fade-in, 3 - fade-out
-    val stateObj  = Obj(IntElem(state))
+      val stateObj  = Obj(IntElem(state))
       if (PrintStates) state.changed.react(_ => ch => println(s"state${li}_$si -> ${ch.now}"))
       val fPlaying  = state >= 2 // ongoing transition per channel
       if (PrintStates) fPlaying.changed.react(_ => ch => println(s"fPlaying${li}_$si -> ${ch.now}"))
@@ -580,6 +438,8 @@ class VoiceStructure[S <: Sys[S]] {
 
       val doneObj   = Obj(Action.Elem(done))
       doneObj.attr.put("state", stateObj)
+      doneObj.attr.put("pred" , predObj )
+      doneObj.attr.put("out"  , outObj  )
 
       new Channel(stateObj = stateObj, state = state, fPlaying = fPlaying, active = active,
         predOut = predOut, succOut = succOut, collIn = collIn, doneObj = doneObj)
@@ -587,32 +447,22 @@ class VoiceStructure[S <: Sys[S]] {
 
     val activeCount = count(vecChannels.map(_.active))
     if (PrintStates) activeCount.changed.react(_ => ch => println(s"activeCount$li -> ${ch.now}"))
+    val activeCountObj = Obj(IntElem(activeCount))
+    vecChannels.foreach { ch => ch.doneObj.attr.put("active", activeCountObj) }
 
     val lPlaying    = BooleanEx.newVar[S](false)
     // if (PrintStates) lPlaying.changed.react(_ => ch => println(s"lPlaying$li -> ${ch.now}"))
 
     val ensL    = Ensemble[S](lFolder, 0L, lPlaying)
     val ensLObj = Obj(Ensemble.Elem(ensL))
-    ensLObj.attr.name = s"layer-$li"
-
-    //    val bypassPlaying = !lPlaying
-    //    val bypassF       = Folder[S]
-    //    val ensBypass     = Ensemble[S](bypassF, 0L, bypassPlaying)
-    //    val ensBypassObj  = Obj(Ensemble.Elem(ensBypass))
-    //    val bypass        = Proc[S]
-    //    bypass.graph()    = throughGraph
-    //    val bypassObj     = Obj(Proc.Elem(bypass))
-    //    bypassObj.attr.name = s"bypass$li"
-    //    bypassF.addLast(bypassObj)
-    //    pred  .scans.add("out") ~> bypass.scans.add("in")
-    //    bypass.scans.add("out") ~> out   .scans.add("in")
+    ensLObj.name = s"layer-$li"
 
     transGraphs.zipWithIndex.foreach { case (g, gi) =>
       val tPlaying    = transId sig_== gi
       val tFolder     = Folder[S]
       val ensT        = Ensemble[S](tFolder, 0L, tPlaying)
       val ensTObj     = Obj(Ensemble.Elem(ensT))
-      ensTObj.attr.name = s"trans-$gi"
+      ensTObj.name = s"trans-$gi"
       lFolder.addLast(ensTObj)
 
       vecChannels.zipWithIndex.foreach { case (channel, si) =>
@@ -647,28 +497,13 @@ class VoiceStructure[S <: Sys[S]] {
     if (!Shadowing) coll.scans.add("out") ~> diff.scans.add("in")
 
     ensLObj
-//    val states = vecChannels.map { channel => tx.newHandle(channel.state) }
-//    val l = new Layer(
-//      ensemble  = tx.newHandle(ensLObj),
-//      states    = states,
-//      playing   = tx.newHandle(lPlaying),
-//      transId   = tx.newHandle(transId),
-//      input     = tx.newHandle(predObj),
-//      output    = tx.newHandle(outObj))
-//    activeCount.changed.react { implicit tx => ch =>
-//      if (ch.now == 0) {
-//        if (PrintStates) println(s"Layer $li becomes inactive.")
-//        l.playing().update(false)
-//        unlinkLayer(l)
-//      }
-//    }
-//    l
   }
 
   private def count(in: Vec[Expr[S, Boolean]])(implicit tx: S#Tx): Expr[S, Int] = {
     val imp = ExprImplicits[S]
     import imp._
-    reduce(in.map(_.toInt))(_ + _)
+    val res = reduce(in.map(_.toInt))(_ + _)
+    IntEx.newVar(res)   // helps decreasing serialization space usage :-E
   }
 
   // like Vec.reduce, but splitting at the half,
