@@ -72,7 +72,7 @@ object VoiceStructure {
   def apply[S <: Sys[S]](parent: Folder[S])(implicit tx: S#Tx, cursor: stm.Cursor[S],
                          compiler: Code.Compiler): Future[Unit] = {
     val vs        = new VoiceStructure[S]
-    val actionFut = vs.mkAction(compiler)
+    val actionFut = vs.mkAction()
     import Folder.serializer
     val parentH   = tx.newHandle(parent)
     import SoundProcesses.executionContext
@@ -103,38 +103,40 @@ class VoiceStructure[S <: Sys[S]] {
   private[this] val imp = ExprImplicits[S]
   import imp._
 
-  def mkAction(c: Code.Compiler)(implicit tx: S#Tx, cursor: stm.Cursor[S],
-                                 compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
+  def mkAction()(implicit tx: S#Tx, cursor: stm.Cursor[S],
+                 compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
     println("Making Voices Action")
     val source =
       """val imp = ExprImplicits[S]
         |import imp._
-        |
-        |println("DONE")
+        |import MakeWorkspace.DEBUG
         |
         |for {
-        |  IntElem.Obj(stateObj) <- self.attr.get("state")
+        |  Expr.Var(state) <- self.attr[IntElem]("state")
         |} {
-        |  val state = stateObj.elem.peer.asVar
-        |  val old   = state.value
-        |  println(s"OLD STATE = $old")
+        |  val old = state.value
         |  if (old == 2) {        // fade-in  -> engaged
         |    state() = 1
         |  } else if (old == 3) { // fade-out -> bypass
         |    state() = 0
         |    val stop = self.attr[IntElem]("active").exists(_.value == 0)
-        |    if (stop) println(s"STOPPING LAYER ${stateObj.name}")
-        |    if (stop) for {
-        |        Proc.Obj(pred) <- self.attr.get("pred")
-        |        Proc.Obj(out)  <- self.attr.get("out" )
+        |    if (stop) {
+        |      val li = self.attr[IntElem]("li").get.value
+        |      if (DEBUG) println(s"Layer $li stopping")
+        |      for {
+        |        Ensemble.Obj(layers) <- root   / "layers"
+        |        Ensemble.Obj(lObj)   <- layers / s"layer-$li"
+        |        Proc.Obj(pred)       <- lObj   / s"pred$li"
+        |        Proc.Obj(out )       <- lObj   / s"foo$li"
         |      } {
-        |        println("UNLINK")
+        |        if (DEBUG) println(s"Unlink (${pred.name}, ${out.name})")
         |        (pred, out).unlink()
+        |        lObj.stop()
         |      }
+        |    }
         |  }
         |}
         |""".stripMargin
-    implicit val compiler = c
     val code  = Code.Action(source)
     Action.compile[S](code)
   }
@@ -450,8 +452,9 @@ class VoiceStructure[S <: Sys[S]] {
 
       val doneObj   = Obj(Action.Elem(done))
       doneObj.attr.put("state", stateObj)
-      doneObj.attr.put("pred" , predObj )
-      doneObj.attr.put("out"  , outObj  )
+      doneObj.attr.put("li"   , liObj   )
+      // doneObj.attr.put("pred" , predObj )
+      // doneObj.attr.put("out"  , outObj  )
 
       new Channel(stateObj = stateObj, state = state, fPlaying = fPlaying, active = active,
         predOut = predOut, succOut = succOut, collIn = collIn, doneObj = doneObj)

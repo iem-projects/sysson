@@ -27,7 +27,7 @@ object MakingWaves {
   // (2)
   def apply[S <: Sys[S]](parent: Folder[S])
                         (implicit tx: S#Tx, cursor: stm.Cursor[S], compiler: Code.Compiler): Future[Unit] = {
-    val actionFut = mkAction(compiler)
+    val actionFut = mkAction()
     import Folder.serializer
     val parentH   = tx.newHandle(parent)
     import SoundProcesses.executionContext
@@ -105,18 +105,20 @@ object MakingWaves {
     // parent.addLast(procObj)
   }
 
-  private def mkAction[S <: Sys[S]](c: Code.Compiler)(implicit tx: S#Tx, cursor: stm.Cursor[S],
-                                 compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
+  private def mkAction[S <: Sys[S]]()(implicit tx: S#Tx, cursor: stm.Cursor[S],
+                                      compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
     println("Making Waves Action")
     val source =
-      """val sense = values.map(_.toInt)
-        |val debug = self.attr[BooleanElem]("debug").exists(_.value)
-        |if (debug) println(sense.map(_.toHexString).mkString("sense: [", ",", "]"))
-        |
-        |import at.iem.sysson.turbulence._
+      """import at.iem.sysson.turbulence._
         |import Turbulence.NumChannels
+        |import MakeWorkspace.DEBUG
         |val imp = ExprImplicits[S]
         |import imp._
+        |
+        |val sense = values.map(_.toInt)
+        |// val debug = self.attr[BooleanElem]("debug").exists(_.value)
+        |
+        |if (DEBUG) println(sense.map(_.toHexString).mkString("sense: [", ",", "]"))
         |
         |for {
         |  Ensemble.Obj(layers) <- root / "layers"
@@ -154,23 +156,22 @@ object MakingWaves {
         |          res1Opt.getOrElse(res)
         |      }
         |      val becomesActive = mayBecomeActive && hasFadeIn
+        |      if (DEBUG) println(s"Layer $li isActive? $isActive; mayBecomeActive? $mayBecomeActive; hasFadeIn? $hasFadeIn.")
         |
         |      if (becomesActive) {
-        |        /* if (debug) */ println(s"Layer $li becomes active.")
         |        val tid = VoiceStructure.rrand(0, VoiceStructure.NumTransitions - 1) // XXX TODO
         |        transId.update(tid)
         |        for {
         |          Proc.Obj(pred) <- lObj / s"pred$li"
         |          Proc.Obj(out ) <- lObj / s"foo$li"
         |        } {
-        |          println("LINK")
+        |          println(s"LINK $li")
         |          (pred, out).linkBefore(diff)
         |          lObj.play()
         |        }
         |      }
         |}
         |""".stripMargin
-    implicit val compiler = c
     val code  = Code.Action(source)
     Action.compile[S](code)
   }
