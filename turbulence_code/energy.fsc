@@ -1,0 +1,19 @@
+#Created by FScape; do not edit manually!
+#Mon Oct 27 15:46:08 CET 2014
+OutEnergy=true
+OutTilt=false
+Class=de.sciss.fscape.gui.SerialKillaDlg
+NOutputFile=/home/hhrutz/IEM/SysSon/installation/audio_work/fsm/04_152656-LSKNoise.aif
+NOutputReso=0
+EOutputFile=/home/hhrutz/IEM/SysSon/installation/audio_work/test/_killmeSKEnergy.aif
+Overlap=2
+EOutputReso=0
+FrameSize=5
+TOutputFile=/home/hhrutz/IEM/SysSon/installation/audio_work/fsm/04_152656-LSKTilt.aif
+NOutputType=0
+GainType=0
+OutNoise=false
+TOutputReso=0
+EOutputType=0
+InputFile=/home/hhrutz/IEM/SysSon/installation/audio_work/fsm/04_152656-L.aif
+TOutputType=0
