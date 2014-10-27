@@ -39,7 +39,7 @@ private[gui] object MainViewImpl {
     res
   }
 
-  private def AUTO_BOOT = Prefs.autoBoot.getOrElse(false)
+  private def AUTO_BOOT = Prefs.audioAutoBoot.getOrElse(false)
 
   private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
 

@@ -9,9 +9,10 @@ background
 - asynchronous starting point
 
 mellite
-- setting for auto-start sensors
-- in-memory variant (as backup)
-- obj view - should really update playing state of ensembles
+[OK]    - setting for auto-start sensors
+[OK]    - in-memory variant (as backup)
+[ok]    - obj view - should really update playing state of ensembles
+        - optionally disable meters
 
 settings
 - blockSize 128 relaxes the CPU quite a lot

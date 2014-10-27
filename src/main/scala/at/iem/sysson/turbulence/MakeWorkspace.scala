@@ -39,7 +39,7 @@ object MakeWorkspace {
     val f   = dir / "turbulence.mllt"
     if (!f.exists()) {
       // val ws = Workspace.Confluent.empty(f, BerkeleyDB.Config())
-      val ws = Workspace.Ephemeral.empty(f, BerkeleyDB.Config())
+      val ws = Workspace.Durable.empty(f, BerkeleyDB.Config())
       ws.close()
     }
     run(f)
@@ -66,9 +66,12 @@ object MakeWorkspace {
     val doc = Workspace.read(workspace, BerkeleyDB.Config())
     val fut = doc match {
       case doc1: Workspace.Confluent =>
-        implicit val cursor = doc1.cursors.cursor
+        implicit val cursor = doc1.cursor
         build(doc1)
-      case doc1: Workspace.Ephemeral =>
+      case doc1: Workspace.Durable =>
+        implicit val cursor = doc1.cursor
+        build(doc1)
+      case doc1: Workspace.InMemory =>
         implicit val cursor = doc1.cursor
         build(doc1)
     }
