@@ -343,8 +343,8 @@ object Turbulence {
     }
 
     if (EnablePDF) new pdflitz.SaveAction(dyn :: Nil).setupMenu(fDyn)
-    // fDyn.pack()
-    // fDyn.centerOnScreen()
+    fDyn.pack()
+    fDyn.centerOnScreen()
     // fDyn.open()
 
     if (UseMercator) new Frame {
@@ -358,6 +358,13 @@ object Turbulence {
     new Frame {
       title = "Turbulence"
 
+      private val ggDyn   = new ToggleButton("Dymaxion") {
+        listenTo(this)
+        reactions += {
+          case ButtonClicked(_) =>
+            fDyn.visible = selected
+        }
+      }
       private val ggOff   = new ToggleButton("Off")
       private val ggTest  = new ToggleButton("Test")
       private val ggPos   = new ToggleButton("Listener")
@@ -391,21 +398,23 @@ object Turbulence {
 //        }
 //      }
 
-      val ggRun = new ToggleButton("Run Installation") {
-        listenTo(this)
-        reactions += {
-          case ButtonClicked(_) =>
-//            Motion.instance.foreach { in =>
-//              if (selected) in.startGUI() else in.stopGUI()
-//            }
-        }
-      }
+//      val ggRun = new ToggleButton("Run Installation") {
+//        listenTo(this)
+//        reactions += {
+//          case ButtonClicked(_) =>
+////            Motion.instance.foreach { in =>
+////              if (selected) in.startGUI() else in.stopGUI()
+////            }
+//        }
+//      }
 
       contents = new BoxPanel(Orientation.Vertical) {
-        contents += ggRun
-        // contents += ggSpkMix
-        contents += VStrut(4)
+//        contents += ggRun
+//        // contents += ggSpkMix
+//        contents += VStrut(4)
         contents += ggBinaural
+        contents += VStrut(4)
+        contents += ggDyn
         contents += VStrut(4)
         contents += new FlowPanel(ggOff, ggTest, ggPos)
       }

@@ -110,7 +110,7 @@ object MakingWaves {
     println("Making Waves Action")
     val source =
       """import at.iem.sysson.turbulence._
-        |import Turbulence.NumChannels
+        |import VoiceStructure.NumChannels
         |import MakeWorkspace.DEBUG
         |val imp = ExprImplicits[S]
         |import imp._
@@ -149,7 +149,7 @@ object MakingWaves {
         |            }
         |            if (now != before) {
         |              state() = now
-        |              println(s"LAYER ${li}_$si. gate = $gate, before = $before, now = $now")
+        |              if (DEBUG) println(s"LAYER ${li}_$si. gate = $gate, before = $before, now = $now")
         |            }
         |            res | (now == 2)
         |          }
@@ -165,7 +165,7 @@ object MakingWaves {
         |          Proc.Obj(pred) <- lObj / s"pred$li"
         |          Proc.Obj(out ) <- lObj / s"foo$li"
         |        } {
-        |          println(s"LINK $li")
+        |          if (DEBUG) println(s"LINK $li")
         |          (pred, out).linkBefore(diff)
         |          lObj.play()
         |        }

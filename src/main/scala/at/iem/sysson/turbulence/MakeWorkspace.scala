@@ -28,7 +28,7 @@ import scala.annotation.tailrec
 import scala.concurrent.Future
 
 object MakeWorkspace {
-  val DEBUG = true
+  val DEBUG = false
 
   def main(args: Array[String]): Unit = {
     // de.sciss.lucre.stm.showLog = true

@@ -14,18 +14,13 @@
 
 package at.iem.sysson.turbulence
 
-import de.sciss.file._
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{Expr, Boolean => BooleanEx, Int => IntEx, String => StringEx}
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.store.BerkeleyDB
-import de.sciss.mellite
-import de.sciss.mellite.{Mellite, Workspace}
 import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.{StringElem, ObjKeys, SoundProcesses, BooleanElem, FolderElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
+import de.sciss.synth.proc.{StringElem, ObjKeys, SoundProcesses, BooleanElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
 import de.sciss.synth.{GE, SynthGraph}
 
-import scala.annotation.tailrec
 import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
 
@@ -44,7 +39,7 @@ object VoiceStructure {
 
   lazy val NumLayers      = if (DEBUG) 2 else Turbulence.NumWiredSensors
   lazy val MaxVoices      = if (DEBUG) 1 else 3
-  lazy val NumSpeakers    = if (DEBUG) 2 else Turbulence.NumChannels
+  lazy val NumChannels    = /* if (DEBUG) 2 else */ Turbulence.NumChannels
   lazy val NumTransitions = if (DEBUG) 1 else 7
 
   //  def add(workspace: File, path: Seq[String] = Nil): Unit = {
@@ -109,6 +104,7 @@ class VoiceStructure[S <: Sys[S]] {
     val source =
       """val imp = ExprImplicits[S]
         |import imp._
+        |import at.iem.sysson.turbulence._
         |import MakeWorkspace.DEBUG
         |
         |for {
@@ -272,14 +268,19 @@ class VoiceStructure[S <: Sys[S]] {
     diff.graph() = SynthGraph {
       import de.sciss.synth._
       import de.sciss.synth.ugen._
-      val in = graph.ScanInFix(NumSpeakers)
-      val mix = Mix.tabulate(NumSpeakers) { ch =>
+      val in = graph.ScanInFix(NumChannels)
+      Turbulence.ChannelIndices.zipWithIndex.foreach { case (bus, ch) =>
         val inc = in \ ch
-        val pan = if (NumSpeakers == 1) 0.0 else ch.linlin(0, NumSpeakers - 1, -1, 1)
-        val sig = Pan2.ar(inc, pan)
-        sig
+        Out.ar(bus, inc)
       }
-      Out.ar(0, mix)
+
+//      val mix = Mix.tabulate(NumChannels) { ch =>
+//        val inc = in \ ch
+//        val pan = if (NumChannels == 1) 0.0 else ch.linlin(0, NumChannels - 1, -1, 1)
+//        val sig = Pan2.ar(inc, pan)
+//        sig
+//      }
+//      Out.ar(0, mix)
     }
     diff.scans.add("in")
     val diffObj = Obj(Proc.Elem(diff))
@@ -320,15 +321,15 @@ class VoiceStructure[S <: Sys[S]] {
     val li    = graph.Attribute.ir("li", 0)
     val freq  = if (NumLayers == 1) 1000.0: GE else li.linexp(0, NumLayers - 1, 200.0, 4000.0)
     val amp   = 0.5
-    val dust  = Decay.ar(Dust.ar(Seq.fill(NumSpeakers)(10)), 1).min(1)
+    val dust  = Decay.ar(Dust.ar(Seq.fill(NumChannels)(10)), 1).min(1)
     val sig   = Resonz.ar(dust, freq, 0.5) * amp
     graph.ScanOut(sig)
   }
 
   // multi-channel single scan in, multiple signal-channel scan outs
   private lazy val splitGraph = SynthGraph {
-    val in = graph.ScanInFix(NumSpeakers)
-    Vec.tabulate(NumSpeakers) { ch =>
+    val in = graph.ScanInFix(NumChannels)
+    Vec.tabulate(NumChannels) { ch =>
       graph.ScanOut(s"out$ch", in \ ch)
     }
   }
@@ -336,7 +337,7 @@ class VoiceStructure[S <: Sys[S]] {
   // multiple signal-channel scan ins, multi-channel single scan out,
   private lazy val collGraph = SynthGraph {
     import de.sciss.synth.ugen._
-    val in = Vec.tabulate(NumSpeakers) { ch =>
+    val in = Vec.tabulate(NumChannels) { ch =>
       graph.ScanInFix(s"in$ch", 1)
     }
     graph.ScanOut(Flatten(in))
@@ -417,7 +418,7 @@ class VoiceStructure[S <: Sys[S]] {
                   val active: Expr[S, Boolean], val predOut: Scan[S], val succOut: Scan[S], val collIn: Scan[S],
                   val doneObj: Action.Obj[S])
 
-    val vecChannels = Vec.tabulate[Channel](NumSpeakers) { si =>
+    val vecChannels = Vec.tabulate[Channel](NumChannels) { si =>
       val state     = IntEx.newVar[S](0)  // 0 - bypass, 1 - engaged, 2 - fade-in, 3 - fade-out
       val stateObj  = Obj(IntElem(state))
       if (PrintStates) state.changed.react(_ => ch => println(s"state${li}_$si -> ${ch.now}"))
