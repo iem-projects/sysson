@@ -144,7 +144,10 @@ object MakingWaves {
         |              case 1 | 2 if !gate => 3
         |              case _ => before
         |            }
-        |            if (now != before) state() = now
+        |            if (now != before) {
+        |              state() = now
+        |              println(s"LAYER ${li}_$si. gate = $gate, before = $before, now = $now")
+        |            }
         |            res | (now == 2)
         |          }
         |          res1Opt.getOrElse(res)
@@ -152,12 +155,13 @@ object MakingWaves {
         |      val becomesActive = mayBecomeActive && hasFadeIn
         |
         |      if (becomesActive) {
-        |        if (debug) println(s"Layer $li becomes active.")
+        |        /* if (debug) */ println(s"Layer $li becomes active.")
         |        // l.transId().update(w.transId().value)
         |        for {
         |          Proc.Obj(pred) <- lObj / s"pred$li"
         |          Proc.Obj(out ) <- lObj / s"foo$li"
         |        } {
+        |          println("LINK")
         |          (pred, out).linkBefore(diff)
         |          lObj.play()
         |        }

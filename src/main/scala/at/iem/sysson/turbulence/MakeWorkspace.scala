@@ -28,6 +28,8 @@ import scala.annotation.tailrec
 import scala.concurrent.Future
 
 object MakeWorkspace {
+  val DEBUG = true
+
   def main(args: Array[String]): Unit = {
     // de.sciss.lucre.stm.showLog = true
     mellite.initTypes()

@@ -30,19 +30,22 @@ import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
 
 object VoiceStructure {
+  import MakeWorkspace.DEBUG
+
   val DumpOSC         = false
   val ShowLog         = false
   var ShowNodeTree    = false   // warning - buggy
   val PrintStates     = false
   val Shadowing       = true
+
   val Attack          = 30  // 10
   val Release         = 30  // 10
   val FFTSize         = 512 // 1024
 
-  def NumLayers       = Turbulence.NumWiredSensors  // 15  // 3
-  val MaxVoices       = 3   // 2
-  def NumSpeakers     = Turbulence.NumChannels      // 42  // 2
-  val NumTransitions  = 7   // 2
+  lazy val NumLayers      = if (DEBUG) 2 else Turbulence.NumWiredSensors
+  lazy val MaxVoices      = if (DEBUG) 1 else 3
+  lazy val NumSpeakers    = if (DEBUG) 2 else Turbulence.NumChannels
+  lazy val NumTransitions = if (DEBUG) 1 else 7
 
   //  def add(workspace: File, path: Seq[String] = Nil): Unit = {
   //    val doc = Workspace.read(workspace, BerkeleyDB.Config())
@@ -93,6 +96,7 @@ object VoiceStructure {
 }
 class VoiceStructure[S <: Sys[S]] {
   import VoiceStructure._
+  import MakeWorkspace.DEBUG
 
   private[this] val imp = ExprImplicits[S]
   import imp._
@@ -106,19 +110,25 @@ class VoiceStructure[S <: Sys[S]] {
       """val imp = ExprImplicits[S]
         |import imp._
         |
+        |println("DONE")
+        |
         |for {
-        |  Expr.Var(state) <- self.attr[IntElem]("state")
+        |  IntElem.Obj(stateObj) <- self.attr.get("state")
         |} {
-        |  val old = state.value
+        |  val state = stateObj.elem.peer.asVar
+        |  val old   = state.value
+        |  println(s"OLD STATE = $old")
         |  if (old == 2) {        // fade-in  -> engaged
         |    state() = 1
         |  } else if (old == 3) { // fade-out -> bypass
         |    state() = 0
         |    val stop = self.attr[IntElem]("active").exists(_.value == 0)
+        |    if (stop) println(s"STOPPING LAYER ${stateObj.name}")
         |    if (stop) for {
         |        Proc.Obj(pred) <- self.attr.get("pred")
         |        Proc.Obj(out)  <- self.attr.get("out" )
         |      } {
+        |        println("UNLINK")
         |        (pred, out).unlink()
         |      }
         |  }
@@ -142,6 +152,7 @@ class VoiceStructure[S <: Sys[S]] {
       val rls    = 10.0
       val in     = Select.kr(ToggleFF.kr(1), Seq(start, target))
       val fade   = Slew.kr(in, atk.reciprocal, rls.reciprocal)
+      if (DEBUG) fade.poll(1, "fade")
       val done   = fade sig_== target
       graph.Action(done, "done")
       val sig   = fun(pred, succ, fade)
