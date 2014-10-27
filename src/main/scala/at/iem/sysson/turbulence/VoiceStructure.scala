@@ -93,6 +93,8 @@ object VoiceStructure {
     def ~/> (that: Scan[S])(implicit tx: S#Tx): Unit =
       `this`.removeSink(Scan.Link.Scan(that))
   }
+
+  def rrand(lo: Int, hi: Int): Int = util.Random.nextInt(hi - lo + 1) + lo
 }
 class VoiceStructure[S <: Sys[S]] {
   import VoiceStructure._
@@ -100,8 +102,6 @@ class VoiceStructure[S <: Sys[S]] {
 
   private[this] val imp = ExprImplicits[S]
   import imp._
-
-  // def rrand(lo: Int, hi: Int): Int = util.Random.nextInt(hi - lo + 1) + lo
 
   def mkAction(c: Code.Compiler)(implicit tx: S#Tx, cursor: stm.Cursor[S],
                                  compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
@@ -292,17 +292,17 @@ class VoiceStructure[S <: Sys[S]] {
     val hasFreeVoices   = activeVoices < MaxVoices
     if (PrintStates) activeVoices.changed.react(_ => ch => println(s"activeVoices -> ${ch.now}"))
 
-    val wTransId = IntEx.newVar[S](0)
+    // val wTransId = IntEx.newVar[S](0)
 
     val allFolder = Folder[S]
-    val all       = Ensemble(allFolder, 0L, BooleanEx.newVar[S](false))
+    val all       = Ensemble(allFolder, 0L, BooleanEx.newVar[S](true))
     allFolder.addLast(diffObj)
     vecLayer.foreach(ensLObj => allFolder.addLast(ensLObj))
     val allObj    = Obj(Ensemble.Elem(all))
     //    sensors.zipWithIndex.foreach { case (s, si) =>
     //      allObj.attr.put(f"s$si%02d", Obj(IntElem(s)))
     //    }
-    allObj.attr.put("trans", Obj(IntElem(wTransId)))
+    // allObj.attr.put("trans", Obj(IntElem(wTransId)))
     allObj.attr.put("free-voices", Obj(BooleanElem(hasFreeVoices)))
     allObj.name = "layers"
     allObj
@@ -356,7 +356,8 @@ class VoiceStructure[S <: Sys[S]] {
 
   private def mkLayer(diff: Proc[S], done: Action[S], li: Int)
                      (implicit tx: S#Tx): Ensemble.Obj[S] = {
-    val transId = IntEx.newVar[S](-1) // "sampled" in `checkWorld`
+    val transId     = IntEx.newVar[S](0) // "sampled" in `checkWorld`
+    val transIdObj  = Obj(IntElem(transId))
 
     // layer-level ensemble
     val lFolder = Folder[S]
@@ -467,6 +468,7 @@ class VoiceStructure[S <: Sys[S]] {
     val ensL    = Ensemble[S](lFolder, 0L, lPlaying)
     val ensLObj = Obj(Ensemble.Elem(ensL))
     ensLObj.name = s"layer-$li"
+    ensLObj.attr.put("trans", transIdObj)
 
     transGraphs.zipWithIndex.foreach { case (g, gi) =>
       val tPlaying    = transId sig_== gi

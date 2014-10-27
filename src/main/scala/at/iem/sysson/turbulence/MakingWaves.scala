@@ -124,6 +124,7 @@ object MakingWaves {
         |  Proc.Obj(diff)       <- layers / "diff"
         |  li                   <- 0 until VoiceStructure.NumLayers
         |  Ensemble.Obj(lObj)   <- layers / s"layer-$li"
+        |  Expr.Var(transId)    <- lObj.attr[IntElem]("trans")
         |} {
         |      val l               = lObj.elem.peer
         |      val isActive        = l.playing.value
@@ -156,7 +157,8 @@ object MakingWaves {
         |
         |      if (becomesActive) {
         |        /* if (debug) */ println(s"Layer $li becomes active.")
-        |        // l.transId().update(w.transId().value)
+        |        val tid = VoiceStructure.rrand(0, VoiceStructure.NumTransitions - 1) // XXX TODO
+        |        transId.update(tid)
         |        for {
         |          Proc.Obj(pred) <- lObj / s"pred$li"
         |          Proc.Obj(out ) <- lObj / s"foo$li"
