@@ -150,6 +150,7 @@ object Turbulence {
 
   final val baseDir   = userHome / "IEM" / "SysSon" / "installation"
   final val audioWork = baseDir / "audio_work"
+  final val dataDir   = baseDir / "data"
 
   /** Maps latitude index to longitude index to dymaxion coordinate. */
   final val LatLonIndicesToDymMap: Map[LatLonIdx, DymPt] = (0 until NumLat).flatMap { latIdx =>

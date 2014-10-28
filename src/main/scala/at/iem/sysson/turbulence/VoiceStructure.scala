@@ -14,12 +14,12 @@
 
 package at.iem.sysson.turbulence
 
-import de.sciss.lucre.artifact.ArtifactLocation
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{Expr, Boolean => BooleanEx, Int => IntEx, String => StringEx}
 import de.sciss.lucre.stm
+import de.sciss.mellite.Workspace
 import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.{ArtifactLocationElem, StringElem, ObjKeys, SoundProcesses, BooleanElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
+import de.sciss.synth.proc.{StringElem, ObjKeys, SoundProcesses, BooleanElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
 import de.sciss.synth.{GE, SynthGraph}
 
 import scala.collection.immutable.{IndexedSeq => Vec}
@@ -44,23 +44,17 @@ object VoiceStructure {
   lazy val NumTransitions = if (DEBUG) 1 else 7
 
   // (1)
-  def apply[S <: Sys[S]](parent: Folder[S])(implicit tx: S#Tx, cursor: stm.Cursor[S],
-                         compiler: Code.Compiler): Future[Unit] = {
+  def apply[S <: Sys[S]]()(implicit tx: S#Tx, cursor: stm.Cursor[S], workspace: Workspace[S],
+                           compiler: Code.Compiler): Future[Unit] = {
     val vs        = new VoiceStructure[S]
     val actionFut = vs.mkAction()
     import Folder.serializer
-    val parentH   = tx.newHandle(parent)
     import SoundProcesses.executionContext
     actionFut.map { actionH =>
       cursor.step { implicit tx =>
-        val loc       = ArtifactLocation[S](Turbulence.baseDir)
-        val locObj    = Obj(ArtifactLocationElem(loc))
-        locObj.name   = "base"
-        val all       = vs.mkWorld(loc, actionH())
-        val parent    = parentH()
+        val all = vs.mkWorld(actionH())
+        workspace.root.addHead(all)
         // tx.newHandle(all)
-        parent.addLast(all)
-        parent.addLast(locObj)
       }
     }
   }
@@ -240,7 +234,7 @@ class VoiceStructure[S <: Sys[S]] {
   import BooleanEx.{serializer => boolSer, varSerializer => boolVarSer}
   import IntEx    .{serializer => intSer , varSerializer => intVarSer }
 
-  def mkWorld(loc: ArtifactLocation.Modifiable[S], done: Action[S])(implicit tx: S#Tx): Ensemble.Obj[S] = {
+  def mkWorld(done: Action[S])(implicit tx: S#Tx, workspace: Workspace[S]): Ensemble.Obj[S] = {
     println("Making Voices World")
     //    val sensors = Vec.tabulate(NumSpeakers) { speaker =>
     //      val sensor = IntEx.newVar[S](-1)
@@ -271,7 +265,7 @@ class VoiceStructure[S <: Sys[S]] {
     diffObj.name = "diff"
 
     val vecLayer  = MakeLayers.all.zipWithIndex.map { case (factory, li) =>
-      mkLayer(diff, done, li, loc, factory)
+      mkLayer(diff, done, li, factory)
     }
 
     val vecPlaying      = vecLayer.map(_.elem.peer.playing)
@@ -341,9 +335,9 @@ class VoiceStructure[S <: Sys[S]] {
     graph.ScanOut(sig)
   }
 
-  private def mkLayer(diff: Proc[S], done: Action[S], li: Int, loc: ArtifactLocation.Modifiable[S],
+  private def mkLayer(diff: Proc[S], done: Action[S], li: Int,
                       factory: LayerFactory)
-                     (implicit tx: S#Tx): Ensemble.Obj[S] = {
+                     (implicit tx: S#Tx, workspace: Workspace[S]): Ensemble.Obj[S] = {
     val transId     = IntEx.newVar[S](0) // "sampled" in `checkWorld`
     val transIdObj  = Obj(IntElem(transId))
 
@@ -351,7 +345,7 @@ class VoiceStructure[S <: Sys[S]] {
     val lFolder = Folder[S]
 
     // the actual sound layer
-    val (genObj, gen) = factory.mkLayer(loc)
+    val (genObj, gen) = factory.mkLayer()
     //    val gen       = Proc[S]
     //    gen.graph()   = genGraph
     //    val genObj    = Obj(Proc.Elem(gen))

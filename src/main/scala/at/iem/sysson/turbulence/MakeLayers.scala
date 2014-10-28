@@ -14,23 +14,59 @@
 
 package at.iem.sysson.turbulence
 
+import at.iem.sysson
+import at.iem.sysson.WorkspaceResolver
+import at.iem.sysson.sound.Sonification
 import de.sciss.file._
 import de.sciss.lucre.artifact.ArtifactLocation
 import de.sciss.lucre.event.Sys
-import de.sciss.mellite.ObjectActions
+import de.sciss.lucre.expr.{String => StringEx}
+import de.sciss.lucre.matrix.DataSource
+import de.sciss.mellite.{Workspace, ObjectActions}
 import de.sciss.numbers
 import de.sciss.synth
 import de.sciss.synth.io.AudioFile
 import de.sciss.synth.{proc, SynthGraph}
-import de.sciss.synth.proc.{DoubleElem, ExprImplicits, Obj, Proc, graph}
+import de.sciss.synth.proc.{ArtifactLocationElem, FolderElem, Folder, ObjKeys, StringElem, DoubleElem, ExprImplicits, Obj, Proc, graph}
+import proc.Implicits._
 
 import scala.collection.breakOut
 import scala.collection.immutable.{IndexedSeq => Vec}
 
+import VoiceStructure.{NumChannels, NumLayers}
+
 object MakeLayers {
   lazy val all: Vec[LayerFactory] = {
-    val real = Vec(Freesound)
-    real.padTo(VoiceStructure.NumLayers, Placeholder)
+    val real = Vec(Freesound, VoronoiPitch)
+    real.padTo(NumLayers, Placeholder)
+  }
+
+  /** Retrieves or creates (if not found) the `"data"` folder in the workspace root. */
+  def getDataFolder[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): Folder[S] = {
+    val r = workspace.root
+    (r / "data").fold[Folder[S]] {
+      val f     = Folder[S]
+      val fObj  = Obj(FolderElem(f))
+      fObj.name = "data"
+      r.addLast(fObj)
+      f
+    } {
+      case FolderElem.Obj(f) => f.elem.peer
+    }
+  }
+
+  /** Retrieves or creates (if not found) the `"base"` location in the data folder of the workspace. */
+  def getBaseLocation[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): ArtifactLocation.Modifiable[S] = {
+    val data = getDataFolder()
+    (data / "base").fold[ArtifactLocation.Modifiable[S]] {
+      val loc       = ArtifactLocation[S](Turbulence.baseDir)
+      val locObj    = Obj(ArtifactLocationElem(loc))
+      locObj.name   = "base"
+      data.addLast(locObj)
+      loc
+    } {
+      case ArtifactLocationElem.Obj(locObj) => locObj.elem.peer.modifiableOption.get
+    }
   }
 
   // -------------------- Freesound --------------------
@@ -65,7 +101,7 @@ object MakeLayers {
 
     val totalGain = -6
 
-    def mkLayer[S <: Sys[S]](loc: ArtifactLocation.Modifiable[S])(implicit tx: S#Tx): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
       val dir = Turbulence.audioWork / "fsm"  // selected sounds, looped and mono
       // key = speaker-num
       val files: Map[Int, File] = dir.children(_.ext.toLowerCase == "aif").map { f =>
@@ -85,7 +121,7 @@ object MakeLayers {
       proc.graph() = SynthGraph {
         import synth._
         import ugen._
-        val sig = Vec.tabulate(VoiceStructure.NumChannels) { ch =>
+        val sig = Vec.tabulate(NumChannels) { ch =>
           val spk = Turbulence.Channels(ch)
           // not all chans do have files
           files.get(spk.num).fold[GE](DC.ar(0)) { f =>
@@ -95,6 +131,8 @@ object MakeLayers {
         }
         graph.ScanOut(sig)
       }
+
+      val loc = getBaseLocation()
 
       files.foreach { case (num, f) =>
         val spec    = AudioFile.readSpec(f)
@@ -109,12 +147,74 @@ object MakeLayers {
     }
   }
 
+  // -------------------- VoronoiPitch --------------------
+
+  object VoronoiPitch extends LayerFactory {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+      val imp = ExprImplicits[S]
+      import imp._
+
+      val son     = Sonification[S]
+      val sonObj  = Obj(Sonification.Elem(son))
+      val name    = Obj(StringElem(StringEx.newConst[S]("voronoi-pitch")))
+      val pObj    = son.proc
+      sonObj.attr.put(ObjKeys.attrName, name)
+      pObj  .attr.put(ObjKeys.attrName, name)
+      val p       = pObj.elem.peer
+
+      p.graph() = SynthGraph {
+        import synth._; import ugen._; import proc.graph._; import sysson.graph._
+
+        val v       = Var("tas")
+        val dTime   = Dim(v, "time")
+        // val dSpk  = Dim(v, "spk" )
+
+        val speed   = Attribute.kr("speed", 0.1)
+        val time    = dTime.play(speed)
+        val data    = v.play(time)
+
+        val period  = speed.reciprocal
+        val lag     = Ramp.ar(data, period)
+
+        val amp     = Attribute.kr("gain", 1) // UserValue("amp", 1).kr
+
+        // for historical dataset:
+        val minTas  = 232
+        val maxTas  = 304
+
+        val dustFreq = 10
+
+        val freq    = lag.linexp(minTas, maxTas, 10000, 100)
+
+        val sig = Vec.tabulate(NumChannels) { ch =>
+          val dust    = Dust.ar(dustFreq)
+          val resFreq = freq \ ch
+          val amp1    = amp * AmpCompA.kr(resFreq, root = 100)
+          val res     = Resonz.ar(dust, freq = resFreq, rq = 0.1) * 10
+          res * amp1
+        }
+        ScanOut(sig)
+      }
+
+      implicit val resolver = WorkspaceResolver[S]
+      val loc     = getBaseLocation()
+      val art     = loc.add(Turbulence.dataDir / "tas_Amon_hist_voronoi.nc")
+      val ds      = DataSource(art)
+      val sources = son.sources.modifiableOption.get
+      val m       = ds.variables.find(_.name == "tas").get
+      val src     = Sonification.Source(m)
+      val dims    = src.dims.modifiableOption.get
+      dims.put("time", "time")
+      sources.put("tas", src)
+
+      (sonObj, p)
+    }
+  }
+
   // -------------------- Placeholder --------------------
 
   object Placeholder extends LayerFactory {
-    def mkLayer[S <: Sys[S]](loc: ArtifactLocation.Modifiable[S])(implicit tx: S#Tx): (Obj[S], Proc[S]) = {
-      import VoiceStructure.{NumChannels, NumLayers}
-
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
       val imp = ExprImplicits[S]
       import imp._
 
@@ -138,9 +238,9 @@ object MakeLayers {
 trait LayerFactory {
   /** Creates a layer.
     *
-    * @param loc  location for registering artifacts (if needed)
+    * @param workspace location for finding and adding additional components (if needed)
     * @return a tuple consisting of the container object and the proc whose `"out"`
     *         can should be wired. Often the container object will be the object of that proc.
     */
-  def mkLayer[S <: Sys[S]](loc: ArtifactLocation.Modifiable[S])(implicit tx: S#Tx): (Obj[S], Proc[S])
+  def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S])
 }

@@ -66,14 +66,14 @@ object MakeWorkspace {
     val doc = Workspace.read(workspace, BerkeleyDB.Config())
     val fut = doc match {
       case doc1: Workspace.Confluent =>
-        implicit val cursor = doc1.cursor
-        build(doc1)
+        implicit val ws = doc1
+        build()
       case doc1: Workspace.Durable =>
-        implicit val cursor = doc1.cursor
-        build(doc1)
+        implicit val ws = doc1
+        build()
       case doc1: Workspace.InMemory =>
-        implicit val cursor = doc1.cursor
-        build(doc1)
+        implicit val ws = doc1
+        build()
     }
     import SoundProcesses.executionContext
     fut.foreach { _ =>
@@ -82,10 +82,11 @@ object MakeWorkspace {
     }
   }
 
-  private def build[S <: Sys[S]](workspace: Workspace[S])(implicit cursor: stm.Cursor[S]): Future[Unit] = {
+  private def build[S <: Sys[S]]()(implicit workspace: Workspace[S]): Future[Unit] = {
     implicit val compiler = Mellite.compiler
+    implicit val cursor: stm.Cursor[S] = workspace.cursor
     val fut1 = cursor.step { implicit tx =>
-      VoiceStructure(getParent(workspace, Nil))
+      VoiceStructure()
     }
     import SoundProcesses.executionContext
     fut1.flatMap { _ =>
