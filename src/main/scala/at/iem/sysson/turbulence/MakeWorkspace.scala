@@ -34,7 +34,7 @@ object MakeWorkspace {
     // de.sciss.lucre.stm.showLog = true
     mellite.initTypes()
 
-    val dir = userHome / "sysson" / "workspaces"
+    val dir = Turbulence.baseDir / "workspaces"
     dir.mkdirs()
     val f   = dir / "turbulence.mllt"
     if (!f.exists()) {
