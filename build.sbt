@@ -24,6 +24,8 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 // maven repository for Oracle BDB JE
 resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
+fork in run := true
+
 // ---- library versions ----
 
 lazy val melliteVersion             = "0.12.0"
