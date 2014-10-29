@@ -131,7 +131,7 @@ object Turbulence {
     */
   final val ChannelToMatrixMap: Map[Spk, DymGrid] = MatrixToChannelMap.map(_.swap)
 
-  final val Channels: Vec[Spk] = ChannelToMatrixMap.keysIterator.toVector.sortBy(_.num)
+    final val Channels: Vec[Spk] = ChannelToMatrixMap.keysIterator.toVector.sortBy(_.num)
 
   final val ChannelIndices: Vec[Int] = Channels.map(_.toIndex)
 
@@ -494,33 +494,6 @@ object Turbulence {
           spkSynth.set(Some(syn))(tx.peer)
         }
       }
-    }
-  }
-
-  // ---------------------------------
-
-  def convertViaVoronoi(inF: File, varName: String, outF: File): Unit = {
-    import sysson.Implicits._
-    import TransformNetcdfFile.{Keep, Create}
-    val in = openFile(inF)
-    println(in.variableMap(varName).dimensions.map(_.name))
-    try {
-      val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
-      TransformNetcdfFile(in, outF, varName, Vec("lat", "lon"), Vec(Keep("time"), Create("spk", None, spkData))) {
-        case (origin, arr) =>
-          val dIn   = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
-          val dOut: Array[Float] = Channels.map { spk =>
-            val latLonIndices = VoronoiMap(spk)
-            val sum = (0.0 /: latLonIndices) { case (n, idx) =>
-              n + dIn(idx.latIdx)(idx.lonIdx)
-            }
-            val mean = sum / latLonIndices.size
-            mean.toFloat
-          } (breakOut)
-          ma2.Array.factory(dOut)
-      }
-    } finally {
-      in.close()
     }
   }
 }

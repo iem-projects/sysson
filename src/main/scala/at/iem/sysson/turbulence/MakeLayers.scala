@@ -22,7 +22,7 @@ import de.sciss.file._
 import de.sciss.lucre.artifact.ArtifactLocation
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{String => StringEx}
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import de.sciss.mellite.{Workspace, ObjectActions}
 import de.sciss.numbers
 import de.sciss.synth
@@ -39,9 +39,10 @@ import VoiceStructure.{NumChannels, NumLayers}
 object MakeLayers {
   final val DataAmonHist_Tas  = ("tas_Amon_hist_voronoi", "tas")
   final val DataAmonHist_Pr   = ("pr_Amon_hist_voronoi" , "pr" )
+  final val DataTaAnom        = ("ta_anom_spk" , "Temperature")
 
   lazy val all: Vec[LayerFactory] = {
-    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper)
+    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom)
     real.padTo(NumLayers, Placeholder)
   }
 
@@ -73,7 +74,28 @@ object MakeLayers {
     }
   }
 
-  def getDataSource[S <: Sys[S]](nameVar: (String, String))
+  def getMatrix[S <: Sys[S]](nameVar: (String, String))
+                            (implicit tx: S#Tx, workspace: Workspace[S]): Matrix[S] = {
+    val (name, variable) = nameVar
+    val data    = getDataFolder[S]()
+    val ds = (data / name).fold[DataSource[S]] {
+      val loc     = getBaseLocation()
+      val art     = loc.add(Turbulence.dataDir / s"$name.nc")
+      implicit val resolver = WorkspaceResolver[S]
+      val ds0     = DataSource(art)
+      val dsObj   = Obj(DataSourceElem(ds0))
+      dsObj.name  = name
+      data.addLast(dsObj)
+      ds0
+    } {
+      case DataSourceElem.Obj(dsObj) => dsObj.elem.peer
+    }
+
+    val m = ds.variables.find(_.name == variable).get
+    m
+  }
+
+  def getSonificationSource[S <: Sys[S]](nameVar: (String, String))
                                 (implicit tx: S#Tx, workspace: Workspace[S]): Sonification.Source[S] = {
     val (name, variable) = nameVar
     val data    = getDataFolder[S]()
@@ -92,6 +114,22 @@ object MakeLayers {
 
     val m = ds.variables.find(_.name == variable).get
     Sonification.Source(m)
+  }
+
+  def mkSonif[S <: Sys[S]](name: String)(graphFun: => Unit)(implicit tx: S#Tx): Sonification.Obj[S] = {
+    val imp     = ExprImplicits[S]
+    import imp._
+    val son     = Sonification[S]
+    val sonObj  = Obj(Sonification.Elem(son))
+    val nameObj = Obj(StringElem(StringEx.newConst[S](name)))
+    val pObj    = son.proc
+    sonObj.attr.put(ObjKeys.attrName, nameObj)
+    pObj  .attr.put(ObjKeys.attrName, nameObj)
+    val p       = pObj.elem.peer
+    p.graph()   = SynthGraph {
+      graphFun
+    }
+    sonObj
   }
 
   // -------------------- Freesound --------------------
@@ -179,15 +217,7 @@ object MakeLayers {
       val imp = ExprImplicits[S]
       import imp._
 
-      val son     = Sonification[S]
-      val sonObj  = Obj(Sonification.Elem(son))
-      val name    = Obj(StringElem(StringEx.newConst[S]("voronoi-pitch")))
-      val pObj    = son.proc
-      sonObj.attr.put(ObjKeys.attrName, name)
-      pObj  .attr.put(ObjKeys.attrName, name)
-      val p       = pObj.elem.peer
-
-      p.graph() = SynthGraph {
+      val sonObj  = mkSonif[S]("voronoi-pitch") {
         import synth._; import ugen._; import proc.graph._; import sysson.graph._
 
         val v       = Var("tas")
@@ -221,13 +251,14 @@ object MakeLayers {
         ScanOut(sig)
       }
 
+      val son     = sonObj.elem.peer
       val sources = son.sources.modifiableOption.get
-      val src     = getDataSource(DataAmonHist_Tas)
+      val src     = getSonificationSource(DataAmonHist_Tas)
       val dims    = src.dims.modifiableOption.get
       dims.put("time", "time")
       sources.put("tas", src)
 
-      (sonObj, p)
+      (sonObj, son.proc.elem.peer)
     }
   }
 
@@ -235,18 +266,8 @@ object MakeLayers {
 
   object VoronoiPaper extends LayerFactory {
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
-      val imp = ExprImplicits[S]
-      import imp._
 
-      val son     = Sonification[S]
-      val sonObj  = Obj(Sonification.Elem(son))
-      val name    = Obj(StringElem(StringEx.newConst[S]("voronoi-paper")))
-      val pObj    = son.proc
-      sonObj.attr.put(ObjKeys.attrName, name)
-      pObj  .attr.put(ObjKeys.attrName, name)
-      val p       = pObj.elem.peer
-
-      p.graph() = SynthGraph {
+      val sonObj  = mkSonif[S]("voronoi-paper") {
         import synth._; import ugen._; import sysson.graph._
 
         val DEBUG = false
@@ -321,6 +342,10 @@ object MakeLayers {
 
       val loc         = getBaseLocation[S]()
 
+      val imp = ExprImplicits[S]
+      import imp._
+
+      val son         = sonObj.elem.peer
       val fPaper      = Turbulence.audioWork / "DroppingLeaves1SortM.aif"
       val specPaper   = AudioFile.readSpec(fPaper)
       val artPaperObj = ObjectActions.mkAudioFile(loc, fPaper, specPaper)
@@ -332,8 +357,8 @@ object MakeLayers {
       son.proc.attr.put("marks", artMarkObj)
 
       val sources = son.sources.modifiableOption.get
-      val srcTas  = getDataSource(DataAmonHist_Tas)
-      val srcPr   = getDataSource(DataAmonHist_Pr )
+      val srcTas  = getSonificationSource(DataAmonHist_Tas)
+      val srcPr   = getSonificationSource(DataAmonHist_Pr )
       val dimsTas = srcTas.dims.modifiableOption.get
       val dimsPr  = srcPr .dims.modifiableOption.get
       dimsTas.put("time", "time")
@@ -341,9 +366,139 @@ object MakeLayers {
       dimsPr .put("time", "time")
       sources.put("pr"  , srcPr )
 
-      (sonObj, p)
+      (sonObj, son.proc.elem.peer)
     }
   }
+
+  // -------------------- TaAnom --------------------
+
+  object TaAnom extends LayerFactory {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+      val imp     = ExprImplicits[S]
+      import imp._
+
+      val sonObj  = mkSonif[S]("ta-anom") {
+        import synth._; import ugen._; import sysson.graph._
+        val vr        = Var("anom")
+        val dTime     = Dim(vr, "time")
+
+        val speed     = graph.Attribute.kr("speed", 0.1)
+        val time      = dTime.play(speed)
+        val dat0      = vr.play(time)
+        val period    = speed.reciprocal
+        val dat       = Ramp.ar(dat0, period)
+
+        val amp       = graph.Attribute.kr("gain", 1)
+
+        val min = -12.5   // degrees celsius (in data set)
+        val max = +17.8   // degrees celsius (in data set)
+        val mAbs = math.max(math.abs(min), math.abs(max))
+
+        val sig = Vec.tabulate(NumChannels) { ch =>
+          // val spk = Turbulence.Channels(ch)
+          val anom  = dat \ ch
+          val amt   = anom.abs.linlin(0, mAbs, -40, 0).dbamp
+          val amp1  = amt * amp
+          PinkNoise.ar(amp1)
+        }
+        graph.ScanOut(sig)
+      }
+
+      val nameTime  = "Time"  // stupid capitalization !
+      val son     = sonObj.elem.peer
+      val sources = son.sources.modifiableOption.get
+      val m0      = getMatrix(DataTaAnom)
+      val m       = Reduce(m0, Dimension.Selection.Name(nameTime), Reduce.Op.Slice(from = 12, to = 143))
+      val src     = Sonification.Source(m)
+      val dims    = src.dims.modifiableOption.get
+      dims.put("time", nameTime)
+      sources.put("anom" , src)
+
+      (sonObj, son.proc.elem.peer)
+    }
+  }
+
+
+  /*
+  // graph function source code
+
+val v       = Var("ta")
+val dimPres = Dim(v, "pres")
+val dimTime = Dim(v, "time")
+val dimLat  = Dim(v, "lat" )
+
+val normBuf = Buffer("norm")
+val presBuf = Buffer("pres")
+
+val tempo   = UserValue("speed", 1).kr
+val timeP   = dimTime.play(tempo)
+val ta      = v.play(timeP)
+
+val presVals = ta.axis(dimPres).values
+val latVals  = ta.axis(dimLat ).values
+
+def presIdx(pres: GE) = DetectIndex.ar(presBuf, pres)
+def latIdx (lat : GE) = lat.linlin(-85, 85, 0, 17)
+
+// time dimension unit is already months!
+// thus the month in a year is the time
+// value modulus 12
+val month     = timeP % 12
+val normIndex = (presIdx(presVals) * 18 + latIdx(latVals)) * 12 + month
+
+val norm    = Index.ar(normBuf, normIndex)
+
+val anom0   = ta - norm
+val anom    = Ramp.ar(anom0, tempo.reciprocal)
+
+val trig = Impulse.ar(tempo)  // time-synchronous trigger for general use
+
+// --- debug printing ---
+val PRINT = false
+
+if (PRINT) {
+  ta.poll  (trig, "ta ")
+  normIndex.poll(trig, "idx ")
+  norm.poll(trig, "norm")
+  anom.poll(trig, "anom")
+}
+
+// pressure level range:
+// 100 hPa ... 10 hPa
+// where 10 hPa highest pitch
+//      100 hPa lowest  pitch
+// values are roughly logarithmically spaced
+
+val side       = anom < 0  // too cold = 1, too hot = 0
+val octave     = side * 2
+val pitchRange = K2A.ar(UserValue("pitch-range", 12).kr)
+
+val pitchClass = presVals.max(1.0e-10).explin(10, 100, pitchRange, 0).roundTo(1)
+// val pitchClass = presVals.max(1.0e-10).explin(40, 50, pitchRange, 0).roundTo(1)
+
+val pitch = octave * 12 + 60 + pitchClass
+
+if (PRINT) pitch.poll(trig, "pch")
+
+val freq    = pitch.clip(12, 135).midicps
+val ampCorr = AmpCompA.ar(freq)
+val amp     = (anom.abs / 4) * ampCorr
+
+val ok   = (ta \ 0) > 0
+val gain = UserValue("gain", -12).kr.dbamp * ok
+
+val osc = SinOsc.ar(freq) * amp
+val sig = Mix(osc) * K2A.ar(gain)
+
+val yearTrig = Trig1.ar(month sig_== 0, dur = SampleDur.ir)
+val yearAmp = K2A.ar(UserValue("year-pulse", 0.1).kr)
+val yearSig = Decay.ar(yearTrig, 0.1).min(1) * WhiteNoise.ar(yearAmp)
+
+val outSig = sig + yearSig
+
+output := Pan2.ar(outSig)  // TODO: decide panorama / stero image
+
+   */
 
   // -------------------- Placeholder --------------------
 
