@@ -249,7 +249,8 @@ class VoiceStructure[S <: Sys[S]] {
       val in = graph.ScanInFix(NumChannels)
       Turbulence.ChannelIndices.zipWithIndex.foreach { case (bus, ch) =>
         val inc = in \ ch
-        Out.ar(bus, inc)
+        val flt = HPF.ar(inc, 110.25)  // make Georgios happy, and perhaps the amplifier
+        Out.ar(bus, flt)
       }
 
 //      val mix = Mix.tabulate(NumChannels) { ch =>

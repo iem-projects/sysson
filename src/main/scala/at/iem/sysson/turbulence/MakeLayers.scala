@@ -388,18 +388,24 @@ object MakeLayers {
         val period    = speed.reciprocal
         val dat       = Ramp.ar(dat0, period)
 
-        val amp       = graph.Attribute.kr("gain", 1)
+        val amp       = graph.Attribute.kr("gain", 1.4)
 
         val min = -12.5   // degrees celsius (in data set)
         val max = +17.8   // degrees celsius (in data set)
         val mAbs = math.max(math.abs(min), math.abs(max))
 
+        val hot   = GrayNoise.ar(0.25)
+        val cold  = Dust.ar(SampleRate.ir / 40) // c. 1000 Hz
+
         val sig = Vec.tabulate(NumChannels) { ch =>
           // val spk = Turbulence.Channels(ch)
           val anom  = dat \ ch
-          val amt   = anom.abs.linlin(0, mAbs, -40, 0).dbamp
+          val side  = anom < 0  // too cold = 1, too hot = 0
+
+          val amt   = anom.abs.linlin(0, mAbs, -40, 0).dbamp - (-40.dbamp) // make sure it becomes zero
           val amp1  = amt * amp
-          PinkNoise.ar(amp1)
+          // PinkNoise.ar(amp1)
+          Select.ar(side, Seq(hot, cold)) * amp1
         }
         graph.ScanOut(sig)
       }
