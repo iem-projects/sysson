@@ -39,7 +39,7 @@ import VoiceStructure.{NumChannels, NumLayers}
 object MakeLayers {
   final val DataAmonHist_Tas  = ("tas_Amon_hist_voronoi", "tas")
   final val DataAmonHist_Pr   = ("pr_Amon_hist_voronoi" , "pr" )
-  final val DataTaAnom        = ("ta_anom_spk2" , "Temperature")
+  final val DataTaAnom        = ("ta_anom_spk" , "Temperature")
 
   lazy val all: Vec[LayerFactory] = {
     val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom)
@@ -386,14 +386,21 @@ object MakeLayers {
         val time      = dTime.play(speed)
         val dat0      = vr.play(time)
         val period    = speed.reciprocal
-        val dat       = Ramp.ar(dat0, period)
 
-        val amp       = graph.Attribute.kr("gain", 1.4)
+        val altCorr: GE = Vector(1.0, 1.0, 1.0, 0.5, 0.5, 0.3333, 0.1429, 0.125, 0.1429, 0.125, 0.1111, 0.1, 0.1429,
+          0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.25, 0.2, 0.1429, 0.1667, 0.1429, 0.125, 0.1, 0.25,
+          0.2, 0.1667, 0.125, 0.1429, 0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.1429)
 
-        val min = -12.5   // degrees celsius (in data set)
-        val max = +12.5   // +17.8   // degrees celsius (in data set)
-        // val mAbs = math.max(math.abs(min), math.abs(max))
-        // val min1 = (min - max) / 2  // -15.15; make it more symmetric
+        val dat1      = dat0 * altCorr
+        val dat       = Ramp.ar(dat1, period)
+        val amp       = graph.Attribute.kr("gain", 1.0)
+
+        //        val min = -12.5   // degrees celsius (in data set)
+        //        val max = +12.5   // +17.8   // degrees celsius (in data set)
+        //        // val mAbs = math.max(math.abs(min), math.abs(max))
+        //        // val min1 = (min - max) / 2  // -15.15; make it more symmetric
+        val min = -2.4
+        val max = +2.4
 
         val hot   = GrayNoise.ar(0.25)
         val cold  = Dust.ar(SampleRate.ir / 40) // c. 1000 Hz
