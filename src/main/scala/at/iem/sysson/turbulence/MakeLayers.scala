@@ -164,15 +164,20 @@ object MakeLayers {
 
     val totalGain = -8
 
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def fileMap: Map[Int, File] = {
       val dir = Turbulence.audioWork / "fsm"  // selected sounds, looped and mono
       // key = speaker-num
       val files: Map[Int, File] = dir.children(_.ext.toLowerCase == "aif").map { f =>
-        val n   = f.name
-        val i   = n.indexOf('_')
-        val id  = n.substring(0, i).toInt
-        id -> f
-      } (breakOut)
+          val n   = f.name
+          val i   = n.indexOf('_')
+          val id  = n.substring(0, i).toInt
+          id -> f
+        } (breakOut)
+      files
+    }
+
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+      val files = fileMap
 
       val imp = ExprImplicits[S]
       import imp._

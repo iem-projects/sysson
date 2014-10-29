@@ -48,6 +48,8 @@ lazy val swingTreeVersion           = "0.1.1"
 
 lazy val kollFlitzVersion           = "0.2.0"
 
+lazy val fscapeJobsVersion          = "1.5.0-SNAPSHOT"
+
 lazy val slfVersion                 = "1.7.7"
 
 lazy val scalaTestVersion           = "2.2.2"
@@ -67,6 +69,7 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
   "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
   "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
+  "de.sciss" %% "fscapejobs"                  % fscapeJobsVersion,
 //  "org.jfree" % "jfreechart"                % jfreechartVersion,          // plotting
   "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
 )

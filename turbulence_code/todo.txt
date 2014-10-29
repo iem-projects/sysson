@@ -17,3 +17,6 @@ mellite
 settings
 - blockSize 128 relaxes the CPU quite a lot
 
+::::::::::::::::::::::::::
+
+fsm - no.6 escaped (not mono)
