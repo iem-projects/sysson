@@ -39,7 +39,7 @@ import VoiceStructure.{NumChannels, NumLayers}
 object MakeLayers {
   final val DataAmonHist_Tas  = ("tas_Amon_hist_voronoi", "tas")
   final val DataAmonHist_Pr   = ("pr_Amon_hist_voronoi" , "pr" )
-  final val DataTaAnom        = ("ta_anom_spk" , "Temperature")
+  final val DataTaAnom        = ("ta_anom_spk2" , "Temperature")
 
   lazy val all: Vec[LayerFactory] = {
     val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom)
@@ -391,8 +391,9 @@ object MakeLayers {
         val amp       = graph.Attribute.kr("gain", 1.4)
 
         val min = -12.5   // degrees celsius (in data set)
-        val max = +17.8   // degrees celsius (in data set)
-        val mAbs = math.max(math.abs(min), math.abs(max))
+        val max = +12.5   // +17.8   // degrees celsius (in data set)
+        // val mAbs = math.max(math.abs(min), math.abs(max))
+        // val min1 = (min - max) / 2  // -15.15; make it more symmetric
 
         val hot   = GrayNoise.ar(0.25)
         val cold  = Dust.ar(SampleRate.ir / 40) // c. 1000 Hz
@@ -400,12 +401,17 @@ object MakeLayers {
         val sig = Vec.tabulate(NumChannels) { ch =>
           // val spk = Turbulence.Channels(ch)
           val anom  = dat \ ch
-          val side  = anom < 0  // too cold = 1, too hot = 0
+          // val side  = anom < 0  // too cold = 1, too hot = 0
 
-          val amt   = anom.abs.linlin(0, mAbs, -40, 0).dbamp - (-40.dbamp) // make sure it becomes zero
-          val amp1  = amt * amp
-          // PinkNoise.ar(amp1)
-          Select.ar(side, Seq(hot, cold)) * amp1
+          val aHot  = anom.clip(0, max).linlin(0, max, -36, 0).dbamp - (-36.dbamp) // make sure it becomes zero
+          val aCold = anom.clip(min, 0).linlin(0, min, -36, 0).dbamp - (-36.dbamp)
+
+          val mix   = (hot * aHot + cold * aCold) * amp
+
+          //          val amt   = anom.abs.linlin(0, mAbs, -36, 0).dbamp - (-36.dbamp)
+          //          val amp1  = amt * amp
+          //          Select.ar(side, Seq(hot, cold)) * amp1
+          mix
         }
         graph.ScanOut(sig)
       }

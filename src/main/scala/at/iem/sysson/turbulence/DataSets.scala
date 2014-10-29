@@ -40,12 +40,13 @@ object DataSets {
       val outF = dataOutDir / s"${vr}_Amon_hist_voronoi.nc"
       convertViaVoronoi(inF = inF, varName = vr, outF = outF)
 
-    case "--ta-anomalies" => calcTemperatureAnomalies()
+    case "--ta-anomalies"  => calcTemperatureAnomalies(1)
+    case "--ta-anomalies2" => calcTemperatureAnomalies(2)
 
     case other => sys.error(s"Unsupported command: $other")
   }
 
-  def calcTemperatureAnomalies(): Unit = {
+  def calcTemperatureAnomalies(version: Int): Unit = {
     import Turbulence._
     import Implicits._
     import numbers.Implicits._
@@ -59,7 +60,11 @@ object DataSets {
     val latitudes = in.variableMap(latName).read().float1D
     val nc        = in.variableMap(varName)
     val numTime   = nc.dimensionMap(timeName).size
-    val presIdx0  = pressures.indexOf(100.0)    // 100 hPa to 10 hPa
+    val p0 = version match {
+      case 1 => 100.0
+      case 2 =>  70.0
+    }
+    val presIdx0  = pressures.indexOf(p0)    // was: 100 hPa to 10 hPa
 
     val grid = Channels.map { spk =>
       val ptd     = ChannelToMatrixMap(spk).toPoint
@@ -98,7 +103,7 @@ object DataSets {
 
     val norm: Vec[Vec[Float]] = Vec.tabulate(12)(calcNorm)
 
-    val outF = dataOutDir / "ta_anom_spk.nc"
+    val outF = dataOutDir / s"ta_anom_spk${if (version == 1) "" else version.toString}.nc"
 
     import TransformNetcdfFile.{Keep, Create}
     val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
