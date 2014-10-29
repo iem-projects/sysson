@@ -387,9 +387,15 @@ object MakeLayers {
         val dat0      = vr.play(time)
         val period    = speed.reciprocal
 
-        val altCorr: GE = Vector(1.0, 1.0, 1.0, 0.5, 0.5, 0.3333, 0.1429, 0.125, 0.1429, 0.125, 0.1111, 0.1, 0.1429,
-          0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.25, 0.2, 0.1429, 0.1667, 0.1429, 0.125, 0.1, 0.25,
-          0.2, 0.1667, 0.125, 0.1429, 0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.1429)
+        //        val altCorr: GE = Vector(1.0, 1.0, 1.0, 0.5, 0.5, 0.3333, 0.1429, 0.125, 0.1429, 0.125, 0.1111, 0.1, 0.1429,
+        //          0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.25, 0.2, 0.1429, 0.1667, 0.1429, 0.125, 0.1, 0.25,
+        //          0.2, 0.1667, 0.125, 0.1429, 0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.1429)
+        val altCorr: GE = Vector(1.0000, 1.0000, 1.0000, 0.7071, 0.7071, 0.5774, 0.3780, 0.3536,
+                                 0.3780, 0.3536, 0.3333, 0.3162, 0.3780, 0.3333, 0.3162, 0.3162,
+                                 0.5000, 0.4472, 0.4082, 0.3536, 0.5000, 0.5000, 0.4472, 0.3780,
+                                 0.4082, 0.3780, 0.3536, 0.3162, 0.5000, 0.4472, 0.4082, 0.3536,
+                                 0.3780, 0.3333, 0.3162, 0.3162, 0.5000, 0.4472, 0.4082, 0.3536,
+                                 0.5000, 0.3780)
 
         val dat1      = dat0 * altCorr
         val dat       = Ramp.ar(dat1, period)
@@ -399,8 +405,8 @@ object MakeLayers {
         //        val max = +12.5   // +17.8   // degrees celsius (in data set)
         //        // val mAbs = math.max(math.abs(min), math.abs(max))
         //        // val min1 = (min - max) / 2  // -15.15; make it more symmetric
-        val min = -2.4
-        val max = +2.4
+        val min = -5.5 // -2.4
+        val max = +5.5 // +2.4
 
         val hot   = GrayNoise.ar(0.25)
         val cold  = Dust.ar(SampleRate.ir / 40) // c. 1000 Hz
@@ -410,8 +416,10 @@ object MakeLayers {
           val anom  = dat \ ch
           // val side  = anom < 0  // too cold = 1, too hot = 0
 
-          val aHot  = anom.clip(0, max).linlin(0, max, -36, 0).dbamp - (-36.dbamp) // make sure it becomes zero
-          val aCold = anom.clip(min, 0).linlin(0, min, -36, 0).dbamp - (-36.dbamp)
+          val dbMin = -40.0
+
+          val aHot  = anom.clip(0, max).linlin(0, max, dbMin, 0).dbamp - dbMin.dbamp // make sure it becomes zero
+          val aCold = anom.clip(min, 0).linlin(0, min, dbMin, 0).dbamp - dbMin.dbamp
 
           val mix   = (hot * aHot + cold * aCold) * amp
 
