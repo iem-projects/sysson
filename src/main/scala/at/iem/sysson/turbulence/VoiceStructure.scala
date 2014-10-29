@@ -124,8 +124,8 @@ class VoiceStructure[S <: Sys[S]] {
       val state = graph.Attribute.kr("state", 2)
       val target = 3 - state // 1 for fade-in, 0 for fade-out
       val start  = 1 - target
-      val atk    = 10.0
-      val rls    = 10.0
+      val atk    = Attack
+      val rls    = Release
       val in     = Select.kr(ToggleFF.kr(1), Seq(start, target))
       val fade   = Slew.kr(in, atk.reciprocal, rls.reciprocal)
       if (DEBUG) fade.poll(1, "fade")

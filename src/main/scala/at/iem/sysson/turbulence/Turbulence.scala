@@ -17,7 +17,7 @@ package turbulence
 
 import java.awt.{Color, GraphicsEnvironment}
 import java.util.concurrent.TimeUnit
-import javax.swing.JComponent
+import javax.swing.{SpinnerNumberModel, JComponent}
 
 import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt}
@@ -25,7 +25,7 @@ import de.sciss.desktop.KeyStrokes
 import de.sciss.file._
 import de.sciss.lucre.synth.{Synth, Node, Group, Txn}
 import de.sciss.mellite.Mellite
-import de.sciss.swingplus.CloseOperation
+import de.sciss.swingplus.{Spinner, CloseOperation}
 import de.sciss.swingplus.Implicits._
 import de.sciss.synth.{SynthGraph, addBefore, addAfter, AddAction}
 
@@ -35,8 +35,8 @@ import de.sciss.{synth, desktop, numbers, pdflitz, kollflitz}
 
 import ucar.ma2
 
-import scala.swing.event.{MousePressed, MouseReleased, Key, ButtonClicked}
-import scala.swing.{GridBagPanel, Action, FlowPanel, BoxPanel, Orientation, ButtonGroup, ToggleButton, Swing, Frame}
+import scala.swing.event.{ValueChanged, MousePressed, MouseReleased, Key, ButtonClicked}
+import scala.swing.{Label, GridBagPanel, Action, FlowPanel, BoxPanel, Orientation, ButtonGroup, ToggleButton, Swing, Frame}
 import scala.collection.breakOut
 import scala.concurrent.stm.{Ref, atomic}
 import Swing._
@@ -366,6 +366,17 @@ object Turbulence {
             fDyn.visible = selected
         }
       }
+
+      private val mOverride = new SpinnerNumberModel(-1, -1, VoiceStructure.NumLayers, 1)
+      private val ggOverride = new Spinner(mOverride) {
+        listenTo(this)
+        reactions += {
+          case ValueChanged(_) =>
+            val i = mOverride.getNumber.intValue
+            MakingWaves.overrideValue = i
+        }
+      }
+
       private val ggOff   = new ToggleButton("Off")
       private val ggTest  = new ToggleButton("Test")
       private val ggPos   = new ToggleButton("Listener")
@@ -416,6 +427,8 @@ object Turbulence {
         contents += ggBinaural
         contents += VStrut(4)
         contents += ggDyn
+        contents += VStrut(4)
+        contents += new FlowPanel(new Label("Force Layer:"), ggOverride)
         contents += VStrut(4)
         contents += new FlowPanel(ggOff, ggTest, ggPos)
       }

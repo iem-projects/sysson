@@ -1,0 +1,6 @@
+Multicores
+
+A, B, C, D, G, H - 15m
+E, F, I, J - 8m
+
+

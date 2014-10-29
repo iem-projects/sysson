@@ -16,6 +16,7 @@ package at.iem.sysson.turbulence
 
 import at.iem.sysson
 import at.iem.sysson.WorkspaceResolver
+import at.iem.sysson.gui.impl.DataSourceElem
 import at.iem.sysson.sound.Sonification
 import de.sciss.file._
 import de.sciss.lucre.artifact.ArtifactLocation
@@ -36,8 +37,11 @@ import scala.collection.immutable.{IndexedSeq => Vec}
 import VoiceStructure.{NumChannels, NumLayers}
 
 object MakeLayers {
+  final val DataAmonHist_Tas  = ("tas_Amon_hist_voronoi", "tas")
+  final val DataAmonHist_Pr   = ("pr_Amon_hist_voronoi" , "pr" )
+
   lazy val all: Vec[LayerFactory] = {
-    val real = Vec(Freesound, VoronoiPitch)
+    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper)
     real.padTo(NumLayers, Placeholder)
   }
 
@@ -69,6 +73,27 @@ object MakeLayers {
     }
   }
 
+  def getDataSource[S <: Sys[S]](nameVar: (String, String))
+                                (implicit tx: S#Tx, workspace: Workspace[S]): Sonification.Source[S] = {
+    val (name, variable) = nameVar
+    val data    = getDataFolder[S]()
+    val ds = (data / name).fold[DataSource[S]] {
+      val loc     = getBaseLocation()
+      val art     = loc.add(Turbulence.dataDir / s"$name.nc")
+      implicit val resolver = WorkspaceResolver[S]
+      val ds0     = DataSource(art)
+      val dsObj   = Obj(DataSourceElem(ds0))
+      dsObj.name  = name
+      data.addLast(dsObj)
+      ds0
+    } {
+      case DataSourceElem.Obj(dsObj) => dsObj.elem.peer
+    }
+
+    val m = ds.variables.find(_.name == variable).get
+    Sonification.Source(m)
+  }
+
   // -------------------- Freesound --------------------
 
   /** the field recording based layer, using
@@ -87,7 +112,7 @@ object MakeLayers {
     //      44 -> -42.7, 45 -> -28.6, 46 -> -45.9
     //    )
 
-    //    val x = energy.map { case (k, v) => k -> (-36 - v/2) } .toIndexedSeq.sorted.map {
+    //    val gains = energy.map { case (k, v) => k -> (-36 - v/2) } .toIndexedSeq.sorted.map {
     //      case (k, v) => f"$k -> $v%1.1f" } .mkString("Map[Int, Double](", ", ", ")")
 
     val gains = Map[Int, Double](
@@ -99,7 +124,7 @@ object MakeLayers {
       36 -> -24.0, 38 -> -17.2, 40 -> -16.0, 41 -> -13.3, 42 -> -21.0, 43 -> -21.4,
       44 -> -14.6, 45 -> -21.7, 46 -> -13.1)
 
-    val totalGain = -6
+    val totalGain = -8
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
       val dir = Turbulence.audioWork / "fsm"  // selected sounds, looped and mono
@@ -176,7 +201,7 @@ object MakeLayers {
         val period  = speed.reciprocal
         val lag     = Ramp.ar(data, period)
 
-        val amp     = Attribute.kr("gain", 1) // UserValue("amp", 1).kr
+        val amp     = Attribute.kr("gain", 1.5) // UserValue("amp", 1).kr
 
         // for historical dataset:
         val minTas  = 232
@@ -196,16 +221,125 @@ object MakeLayers {
         ScanOut(sig)
       }
 
-      implicit val resolver = WorkspaceResolver[S]
-      val loc     = getBaseLocation()
-      val art     = loc.add(Turbulence.dataDir / "tas_Amon_hist_voronoi.nc")
-      val ds      = DataSource(art)
       val sources = son.sources.modifiableOption.get
-      val m       = ds.variables.find(_.name == "tas").get
-      val src     = Sonification.Source(m)
+      val src     = getDataSource(DataAmonHist_Tas)
       val dims    = src.dims.modifiableOption.get
       dims.put("time", "time")
       sources.put("tas", src)
+
+      (sonObj, p)
+    }
+  }
+
+  // -------------------- VoronoiPaper --------------------
+
+  object VoronoiPaper extends LayerFactory {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+      val imp = ExprImplicits[S]
+      import imp._
+
+      val son     = Sonification[S]
+      val sonObj  = Obj(Sonification.Elem(son))
+      val name    = Obj(StringElem(StringEx.newConst[S]("voronoi-paper")))
+      val pObj    = son.proc
+      sonObj.attr.put(ObjKeys.attrName, name)
+      pObj  .attr.put(ObjKeys.attrName, name)
+      val p       = pObj.elem.peer
+
+      p.graph() = SynthGraph {
+        import synth._; import ugen._; import sysson.graph._
+
+        val DEBUG = false
+
+        val vTas      = Var("tas")
+        val vPr       = Var("pr" )
+        val dTimeTas  = Dim(vTas, "time")
+        val dTimePr   = Dim(vPr , "time")  // XXX TODO - should be able to share
+
+        val speed     = graph.Attribute.kr("speed", 0.1)
+        val timeTas   = dTimeTas.play(speed)
+        val timePr    = dTimePr .play(speed)
+        val datTas    = vTas.play(timeTas)
+        val datPr     = vPr .play(timePr )
+
+        val amp       = graph.Attribute.kr("gain", 6)
+
+        val period    = speed.reciprocal
+        val lagTas    = Ramp.ar(datTas, period)
+        val lagPr     = Ramp.ar(datPr , period)
+
+        // for historical dataset:
+        val minTas = 232
+        val maxTas = 304
+
+        val minPr  = 4.6e-7
+        val maxPr  = 1.9e-4
+
+        val maxDust     = graph.Attribute.kr("dust", 10)  // 5 // 10
+
+        val numSpk      = Turbulence.NumChannels
+        val resFreq     = lagTas.linexp(minTas, maxTas, 10000, 100)
+        val dustFreq    = lagPr .linlin(minPr , maxPr ,     0, maxDust)
+
+        val paperBuf    = graph.Buffer("paper")
+        val marksBuf    = graph.Buffer("marks")
+        val numRegions  = BufFrames.ir(marksBuf) - 1
+        val bufSR       = 44100 // BufSampleRate.ir("paper")
+        val bufFrames   = BufFrames.ir(paperBuf)
+
+        if (DEBUG) {
+          bufFrames .poll(0, "bufFrames" )
+          numRegions.poll(0, "numRegions")
+        }
+
+        val sig = Vec.tabulate(numSpk) { ch =>
+          val dust    = Dust.kr(dustFreq \ ch)
+          val index   = TIRand.kr(lo = 0, hi = numRegions - 1, trig = dust)
+          val startF  = Index.kr(marksBuf, index)
+          val stopF   = Index.kr(marksBuf, index + 1)
+          val numF    = stopF - startF
+          val pos     = startF / bufFrames   // 0 to 1 normalised
+          val dur     = numF   / bufSR
+          val grain = GrainBuf.ar(buf = paperBuf, numChannels = 1, trig = dust,
+            dur = dur, speed = 1, pos = pos, interp = 1, pan = 0, envBuf = -1, maxGrains = 512)
+          val resFreqCh = resFreq \ ch
+          val res   = Resonz.ar(grain, freq = resFreq \ ch, rq = 1 /* 0.1 */)
+
+          if (DEBUG) {
+            index.poll(dust, "idx")
+            pos  .poll(dust, "pos")
+            dur  .poll(dust, "dur")
+          }
+
+          val amp1 = amp * AmpCompA.kr(resFreqCh, root = 100)
+
+          res * amp1
+        }
+
+        graph.ScanOut(sig)
+      }
+
+      val loc         = getBaseLocation[S]()
+
+      val fPaper      = Turbulence.audioWork / "DroppingLeaves1SortM.aif"
+      val specPaper   = AudioFile.readSpec(fPaper)
+      val artPaperObj = ObjectActions.mkAudioFile(loc, fPaper, specPaper)
+      son.proc.attr.put("paper", artPaperObj)
+
+      val fMark       = Turbulence.audioWork / "DroppingLeaves1Mark.aif"
+      val specMark    = AudioFile.readSpec(fMark)
+      val artMarkObj = ObjectActions.mkAudioFile(loc, fMark, specMark)
+      son.proc.attr.put("marks", artMarkObj)
+
+      val sources = son.sources.modifiableOption.get
+      val srcTas  = getDataSource(DataAmonHist_Tas)
+      val srcPr   = getDataSource(DataAmonHist_Pr )
+      val dimsTas = srcTas.dims.modifiableOption.get
+      val dimsPr  = srcPr .dims.modifiableOption.get
+      dimsTas.put("time", "time")
+      sources.put("tas" , srcTas)
+      dimsPr .put("time", "time")
+      sources.put("pr"  , srcPr )
 
       (sonObj, p)
     }

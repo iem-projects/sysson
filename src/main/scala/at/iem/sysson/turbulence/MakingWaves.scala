@@ -15,12 +15,14 @@
 package at.iem.sysson.turbulence
 
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.expr.Expr
 import de.sciss.lucre.stm
 import de.sciss.synth
 import de.sciss.synth.{proc, SynthGraph}
-import de.sciss.synth.proc.{Ensemble, SoundProcesses, Action, Code, ExprImplicits, FolderElem, Obj, Proc, Folder, graph}
+import de.sciss.synth.proc.{IntElem, BooleanElem, Ensemble, SoundProcesses, Action, Code, ExprImplicits, FolderElem, Obj, Proc, Folder, graph}
 import proc.Implicits._
 
+import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
 
 object MakingWaves {
@@ -43,6 +45,8 @@ object MakingWaves {
       }
     }
   }
+
+  var overrideValue = -1 // -1 to _not_ override, otherwise layer index
 
   private def mkWorld[S <: Sys[S]](ping: Action[S])
                                   (implicit tx: S#Tx, cursor: stm.Cursor[S]): Proc.Obj[S] = {
@@ -105,74 +109,77 @@ object MakingWaves {
     // parent.addLast(procObj)
   }
 
+  def react[S <: Sys[S]](values: Vec[Float], root: Folder[S])(implicit tx: S#Tx): Unit = {
+    import VoiceStructure.NumChannels
+    import MakeWorkspace.DEBUG
+    val imp = ExprImplicits[S]
+    import imp._
+
+    val sense = if (overrideValue < 0) values.map(_.toInt) else Vector.fill(values.size)(overrideValue)
+
+    if (DEBUG) println(sense.map(_.toHexString).mkString("sense: [", ",", "]"))
+
+    for {
+      Ensemble.Obj(layers) <- root / "layers"
+      free                 <- layers.attr[BooleanElem]("free-voices")
+      Proc.Obj(diff)       <- layers / "diff"
+      li                   <- 0 until VoiceStructure.NumLayers
+      Ensemble.Obj(lObj)   <- layers / s"layer-$li"
+      Expr.Var(transId)    <- lObj.attr[IntElem]("trans")
+    } {
+      val l               = lObj.elem.peer
+      val isActive        = l.playing.value
+      val mayBecomeActive = !isActive && free.value
+
+      val hasFadeIn = (isActive || mayBecomeActive) && (false /: (0 until NumChannels)) {
+        case (res, si) =>
+          val byName  = s"by${li}_$si"
+          val res1Opt = for {
+            Ensemble.Obj(bEns) <- lObj / byName
+            Proc.Obj(bProc)    <- bEns / byName
+            Expr.Var(state)    <- bProc.attr[IntElem]("state")
+          } yield {
+            val gate    = sense(si) == li
+            val before  = state.value
+            val now     = before match {
+              case 0 | 3 if  gate => 2
+              case 1 | 2 if !gate => 3
+              case _ => before
+            }
+            if (now != before) {
+              state() = now
+              if (DEBUG) println(s"LAYER ${li}_$si. gate = $gate, before = $before, now = $now")
+            }
+            res | (now == 2)
+          }
+          res1Opt.getOrElse(res)
+      }
+      val becomesActive = mayBecomeActive && hasFadeIn
+      if (DEBUG) println(s"Layer $li isActive? $isActive; mayBecomeActive? $mayBecomeActive; hasFadeIn? $hasFadeIn.")
+
+      if (becomesActive) {
+        val tid = VoiceStructure.rrand(0, VoiceStructure.NumTransitions - 1) // XXX TODO
+        transId.update(tid)
+        for {
+          Proc.Obj(pred) <- lObj / s"pred$li"
+          Proc.Obj(out ) <- lObj / s"foo$li"
+        } {
+          if (DEBUG) println(s"LINK $li")
+          (pred, out).linkBefore(diff)
+          lObj.play()
+        }
+      }
+    }
+  }
+
   private def mkAction[S <: Sys[S]]()(implicit tx: S#Tx, cursor: stm.Cursor[S],
                                       compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
     println("Making Waves Action")
     val source =
       """import at.iem.sysson.turbulence._
-        |import VoiceStructure.NumChannels
-        |import MakeWorkspace.DEBUG
-        |val imp = ExprImplicits[S]
-        |import imp._
-        |
-        |val sense = values.map(_.toInt)
-        |// val debug = self.attr[BooleanElem]("debug").exists(_.value)
-        |
-        |if (DEBUG) println(sense.map(_.toHexString).mkString("sense: [", ",", "]"))
-        |
-        |for {
-        |  Ensemble.Obj(layers) <- root / "layers"
-        |  free                 <- layers.attr[BooleanElem]("free-voices")
-        |  Proc.Obj(diff)       <- layers / "diff"
-        |  li                   <- 0 until VoiceStructure.NumLayers
-        |  Ensemble.Obj(lObj)   <- layers / s"layer-$li"
-        |  Expr.Var(transId)    <- lObj.attr[IntElem]("trans")
-        |} {
-        |      val l               = lObj.elem.peer
-        |      val isActive        = l.playing.value
-        |      val mayBecomeActive = !isActive && free.value
-        |
-        |      val hasFadeIn = (isActive || mayBecomeActive) && (false /: (0 until NumChannels)) {
-        |        case (res, si) =>
-        |          val byName  = s"by${li}_$si"
-        |          val res1Opt = for {
-        |            Ensemble.Obj(bEns) <- lObj / byName
-        |            Proc.Obj(bProc)    <- bEns / byName
-        |            Expr.Var(state)    <- bProc.attr[IntElem]("state")
-        |          } yield {
-        |            val gate    = sense(si) == li
-        |            val before  = state.value
-        |            val now     = before match {
-        |              case 0 | 3 if  gate => 2
-        |              case 1 | 2 if !gate => 3
-        |              case _ => before
-        |            }
-        |            if (now != before) {
-        |              state() = now
-        |              if (DEBUG) println(s"LAYER ${li}_$si. gate = $gate, before = $before, now = $now")
-        |            }
-        |            res | (now == 2)
-        |          }
-        |          res1Opt.getOrElse(res)
-        |      }
-        |      val becomesActive = mayBecomeActive && hasFadeIn
-        |      if (DEBUG) println(s"Layer $li isActive? $isActive; mayBecomeActive? $mayBecomeActive; hasFadeIn? $hasFadeIn.")
-        |
-        |      if (becomesActive) {
-        |        val tid = VoiceStructure.rrand(0, VoiceStructure.NumTransitions - 1) // XXX TODO
-        |        transId.update(tid)
-        |        for {
-        |          Proc.Obj(pred) <- lObj / s"pred$li"
-        |          Proc.Obj(out ) <- lObj / s"foo$li"
-        |        } {
-        |          if (DEBUG) println(s"LINK $li")
-        |          (pred, out).linkBefore(diff)
-        |          lObj.play()
-        |        }
-        |      }
-        |}
+        |MakingWaves.react(values, root)
         |""".stripMargin
-    val code  = Code.Action(source)
+    val code = Code.Action(source)
     Action.compile[S](code)
   }
 }
