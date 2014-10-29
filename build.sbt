@@ -30,9 +30,9 @@ fork in run := true
 
 lazy val melliteVersion             = "0.12.0"
 
-lazy val soundProcessesVersion      = "2.8.0"
+lazy val soundProcessesVersion      = "2.8.1-SNAPSHOT"
 
-lazy val lucreMatrixVersion         = "0.4.0"
+lazy val lucreMatrixVersion         = "0.5.0"
 
 // lazy val scalaColliderVersion       = "1.14.1"
 
@@ -52,7 +52,12 @@ lazy val slfVersion                 = "1.7.7"
 
 lazy val scalaTestVersion           = "2.2.2"
 
+// ---- Ivy probs ----
+
+lazy val lucreSwingVersion          = "0.6.1"
+
 libraryDependencies ++= Seq(
+  "de.sciss" %% "lucreswing" % lucreSwingVersion,
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
   "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
 //  "de.sciss" %% "scalacollider"               % scalaColliderVersion,

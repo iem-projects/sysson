@@ -260,8 +260,9 @@ object MatrixPrepare {
       val path          = value.file.getAbsolutePath
       val ctlName       = mkCtlName(key = key, idx = index, isStreaming = isStreaming)
       if (isStreaming) {
+        // XXX TODO - dirty workaround for Turbulence. Generally enable loop.
         val trig  = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
-          path = path, fileFrames = numFrames, interp = 1 /* info.interp */)
+          path = path, fileFrames = numFrames, interp = 1, startFrame = 0L, loop = true, resetFrame = 0L)
         trig.install()
       } else {
         buf.read(path)
