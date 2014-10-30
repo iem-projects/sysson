@@ -202,7 +202,7 @@ object DataSets {
 
       val sorted = labels.sortBy(_.sum).take(maxBlobs)    // (1) (2)
 
-      val (blob0, rem0) = ((emptyFrame, sorted) /: sorted) { case ((res, rem), lb) =>
+      val (blob0, rem0) = ((emptyFrame, Vector.empty[Blob]) /: sorted) { case ((res, rem), lb) =>
         val carryIdx = (prev zip res).indexWhere {
           case (p, x) => x.isFree && p.resembles(lb)
         }
@@ -219,13 +219,15 @@ object DataSets {
     }
 
     val outF    = dataOutDir / s"pr_amon_hist_blob.nc"
-    val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
+    val blobData = ma2.Array.factory((0 until (5 * maxBlobs)).toArray)
 
     var prevFrame = emptyFrame  // XXX not cool, TransformNetcdfFile doesn't thread state
     var maxSum = 0.0
     var maxMax = 0.0
 
-    TransformNetcdfFile(in, outF, vrName, Vec("lat", "lon"), Vec(Keep("time"), Create("blob", None, spkData))) {
+    // [state, cx, cy, sum, max] x maxBlobs
+
+    TransformNetcdfFile(in, outF, vrName, Vec("lat", "lon"), Vec(Keep("time"), Create("blob", None, blobData))) {
       case (origin, arr) =>
         val nextFrame = analyze(prevFrame, arr)
         prevFrame     = nextFrame // yeah, I know...
