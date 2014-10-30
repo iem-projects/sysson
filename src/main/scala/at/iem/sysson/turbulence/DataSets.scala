@@ -18,10 +18,11 @@ package turbulence
 import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.DymPt
 import at.iem.sysson.turbulence.TransformNetcdfFile.{Create, Keep}
-import at.iem.sysson.turbulence.Turbulence.{LatLonIdx, LatLon}
+import at.iem.sysson.turbulence.Turbulence.{DymGrid, LatLonIdx, LatLon}
 import de.sciss.file._
 import de.sciss.lucre.geom.IntRectangle
 import de.sciss.numbers
+import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import ucar.ma2
 
 import scala.collection.breakOut
@@ -50,14 +51,33 @@ object DataSets {
 
     case "--precipitation-blobs" => calcPrecipitationBlobs()
 
+    case "--dymgrid-chan-map" => calcDymGridChans()
+
     case other => sys.error(s"Unsupported command: $other")
+  }
+
+  // ----------- calcDymChans -----------
+
+  def calcDymGridChans(): Unit = {
+    val outF  = dataOutDir / "dymgrid-chan-map.aif"
+    val out   = AudioFile.openWrite(outF, AudioFileSpec(numChannels = 1, sampleRate = 44100))
+    val buf   = for {
+      x <- 0 until 14
+      y <- 0 until  5
+    } yield {
+      val idx = Turbulence.MatrixToChannelMap.get(DymGrid(vx = x, vyi = y))
+        .map(Turbulence.Channels.indexOf).getOrElse(-1)
+      idx.toFloat
+    }
+    out.write(Array(buf.toArray))
+    out.close()
   }
 
   // ----------- calcPrecipitationBlobs -----------
 
   def calcPrecipitationBlobs(): Unit = {
     val threshold = 1.0e-5
-    val maxBlobs  = 8
+    import MakeLayers.NumBlobs
 
     sealed trait State {
       def isFree: Boolean
@@ -133,7 +153,7 @@ object DataSets {
     }
 
     type Frame      = Vector[State]
-    val numVoices   = 2 * maxBlobs
+    val numVoices   = 2 * NumBlobs
     val emptyFrame  = Vector.fill[State](numVoices)(Free)
 
     import sysson.Implicits._
@@ -218,7 +238,7 @@ object DataSets {
       // then we'll have to find connections to the
       // previous frame.
 
-      val sorted = labels.sortBy(_.sum).take(maxBlobs)    // (1) (2)
+      val sorted = labels.sortBy(_.sum).take(NumBlobs)    // (1) (2)
 
       val (blob0, rem0) = ((emptyFrame, Vector.empty[Blob]) /: sorted) { case ((res, rem), lb) =>
         val carryIdx = (prev zip res).indexWhere {

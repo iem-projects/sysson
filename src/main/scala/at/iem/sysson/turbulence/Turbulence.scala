@@ -465,35 +465,35 @@ object Turbulence {
     }
   }
 
-  private def toggleSpeakerMix(on: Boolean): Unit = {
-    atomic { implicit itx =>
-      implicit val tx = Txn.wrap(itx)
-      Mellite.auralSystem.serverOption.foreach { s =>
-        spkSynth.swap(None)(tx.peer).foreach(_.free())
-        if (on) {
-          val target  = binGroup.get(tx.peer).getOrElse(s.defaultGroup)
-          val graph   = SynthGraph {
-            import synth._
-            import ugen._
-            val m = List(
-              List(11, 15, 14),
-              List(18, 24, 23),
-              List(22,  6,  7),
-              List( 8, 27, 29),
-              List(31, 34, 35),
-              List(36, 38, 44)
-            )
-            val insAll = m.map { case list =>
-              val ins = list.map { spk => In.ar(spk - 1) }
-              Mix.mono(ins)
-            }
-            ReplaceOut.ar(0, insAll)
-          }
-          val syn = Synth(s, graph, nameHint = Some("aaaa"))
-          syn.play(target = target, args = Nil, addAction = addAfter, dependencies = Nil)
-          spkSynth.set(Some(syn))(tx.peer)
-        }
-      }
-    }
-  }
+//  private def toggleSpeakerMix(on: Boolean): Unit = {
+//    atomic { implicit itx =>
+//      implicit val tx = Txn.wrap(itx)
+//      Mellite.auralSystem.serverOption.foreach { s =>
+//        spkSynth.swap(None)(tx.peer).foreach(_.free())
+//        if (on) {
+//          val target  = binGroup.get(tx.peer).getOrElse(s.defaultGroup)
+//          val graph   = SynthGraph {
+//            import synth._
+//            import ugen._
+//            val m = List(
+//              List(11, 15, 14),
+//              List(18, 24, 23),
+//              List(22,  6,  7),
+//              List( 8, 27, 29),
+//              List(31, 34, 35),
+//              List(36, 38, 44)
+//            )
+//            val insAll = m.map { case list =>
+//              val ins = list.map { spk => In.ar(spk - 1) }
+//              Mix.mono(ins)
+//            }
+//            ReplaceOut.ar(0, insAll)
+//          }
+//          val syn = Synth(s, graph, nameHint = Some("aaaa"))
+//          syn.play(target = target, args = Nil, addAction = addAfter, dependencies = Nil)
+//          spkSynth.set(Some(syn))(tx.peer)
+//        }
+//      }
+//    }
+//  }
 }
