@@ -538,7 +538,8 @@ object MakeLayers {
         val dt    = Dim(vr, "time")
         val speed = graph.Attribute.kr("speed", 1)
         val time  = dt.play(speed)
-        val data  = vr.play(time)
+        val data0 = vr.play(time)
+        val data  = A2K.kr(data0)
 
         val period = speed.reciprocal
 
@@ -558,20 +559,20 @@ object MakeLayers {
           // val sum   = data \ (off + 3)
           val max   = data \ (off + 4)
 
-          val gateTr    = Trig.ar(gate, SampleDur.ir)
-          val toggle    = gateTr + TDelay.ar(gateTr, period)
-          val ff        = ToggleFF.ar(toggle)
+          val gateTr    = Trig.kr(gate, ControlDur.ir)
+          val toggle    = gateTr + TDelay.kr(gateTr, period)
+          val ff        = ToggleFF.kr(toggle)
 
           def mkCoord(in: GE): GE = {
-            val dif0    = in absdif Delay1.ar(in)
-            val dif     = Latch.ar(dif0, dif0 > 0)
+            val dif0    = in absdif Delay1.kr(in)
+            val dif     = Latch.kr(dif0, dif0 > 0)
             val slewRate= dif * speed   // makes Slew work like Ramp
-            val inR     = Slew.ar(in, slewRate, slewRate)
-            Select.ar(ff, Seq(inR, in))
+            val inR     = Slew.kr(in, slewRate, slewRate)
+            Select.kr(ff, Seq(inR, in))
           }
 
           val env   = Env.asr(attack = period, release = period, curve = Curve.linear)
-          val eg    = EnvGen.ar(env, gate = gate)
+          val eg    = EnvGen.kr(env, gate = gate)
 
           // val amp   = sum.linlin(0, maxSum, dbMin, 0).dbamp - dbMin.dbamp
           val amp   = max.linlin(0, maxMax, 0, 1)
@@ -643,7 +644,7 @@ object MakeLayers {
 
         def mkOutChan(in: GE, xi: GE, yi: GE, gain: GE): GE = {
           val idx  = xi * 5 + yi
-          val ch   = Index.ar(chanBuf, idx)
+          val ch   = Index.kr(chanBuf, idx)
           val chOk = ch >= 0
           val amp  = gain * chOk
           val sig  = in * amp
