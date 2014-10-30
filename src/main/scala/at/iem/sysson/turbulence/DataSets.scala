@@ -58,8 +58,8 @@ object DataSets {
   // ----------- calcPrecipitationBlobs -----------
 
   def calcPrecipitationBlobs(): Unit = {
-    val threshold = 2.0e-5
-    val maxBlobs  = 10
+    val threshold = 1.0e-5
+    val maxBlobs  = 8
 
     sealed trait State { def id: Int }
     case object Free  extends State { val id = 0 }
@@ -81,10 +81,11 @@ object DataSets {
       }
 
       // because we don't have a `touch` method
-      private def enlarge(r: IntRectangle) = r.copy(width = r.width + 1, height = r.height + 1)
+      private def enlarge(r: IntRectangle, amt: Int) =
+        r.copy(width = r.width + amt, height = r.height + amt)
 
       private def touch(a: IntRectangle, b: IntRectangle): Boolean =
-        overlapArea(enlarge(a), enlarge(b)) > 0
+        overlapArea(enlarge(a, math.max(1, a.width * 2 / 3)), enlarge(b, math.max(1, b.width * 2 / 3))) > 0
 
       private def overlapArea(r1: IntRectangle, r2: IntRectangle): Long = {
         val l = math.max(r1.left , r2.left).toLong
@@ -107,8 +108,8 @@ object DataSets {
         val thisA = area(thisR)
         val thatA = area(thatR)
         val change = math.max(thisA, thatA).toDouble / math.min(thisA, thatA) // growth or shrinkage in percent
-        val mercator  = touch(thisR, thatR) && change <= 2.3456  // your favourite number here
-        val dym       = (this.toDym.equalize distanceTo that.toDym.equalize) <= Dymaxion.hScale
+        val mercator  = touch(thisR, thatR) && change <= 4 // 2.3456  // your favourite number here
+        val dym       = (this.toDym.equalize distanceTo that.toDym.equalize) <= Dymaxion.hScale * 2
 
         mercator && dym // what do you want more?
       }
@@ -224,6 +225,8 @@ object DataSets {
     var prevFrame = emptyFrame  // XXX not cool, TransformNetcdfFile doesn't thread state
     var maxSum = 0.0
     var maxMax = 0.0
+    var totalCont = 0
+    var totalFree = 0
 
     // [state, cx, cy, sum, max] x maxBlobs
 
@@ -232,7 +235,11 @@ object DataSets {
         val nextFrame = analyze(prevFrame, arr)
         prevFrame     = nextFrame // yeah, I know...
 
-        println(s"Blobs: ${nextFrame.count(!_.isFree)}. Contiguous = ${nextFrame.count(_.state == Carry)}")
+        val numCont = nextFrame.count(_.state == Carry)
+        val numFree = nextFrame.count(_.isFree)
+        totalCont += numCont
+        totalFree += numFree
+        //  println(s"Blobs: ${nextFrame.count(!_.isFree)}. Contiguous = $numCont")
 
         val dOut: Array[Float] = nextFrame.flatMap { b =>
           val dymPt = b.toDym
@@ -244,6 +251,7 @@ object DataSets {
     }
 
     println(s"maxSum = $maxSum, maxMax = $maxMax")
+    println(s"Total number of contiguous blobs: $totalCont; total free: $totalFree")
 
     in.close()
   }
