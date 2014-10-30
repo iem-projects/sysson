@@ -16,6 +16,9 @@ package at.iem.sysson
 package turbulence
 
 import at.iem.sysson
+import at.iem.sysson.turbulence.Dymaxion.DymPt
+import at.iem.sysson.turbulence.TransformNetcdfFile.{Create, Keep}
+import at.iem.sysson.turbulence.Turbulence.{LatLonIdx, LatLon}
 import de.sciss.file._
 import de.sciss.lucre.geom.IntRectangle
 import de.sciss.numbers
@@ -70,6 +73,13 @@ object DataSets {
 
       def toRectangle = IntRectangle(latIdx, lonIdx, latExtent, lonExtent)
 
+      def toDym: DymPt = {
+        val ll1 = LatLonIdx(latIdx = latIdx, lonIdx = lonIdx).toLatLon
+        val ll2 = LatLonIdx(latIdx = latIdx + latExtent - 1, lonIdx = lonIdx + lonExtent - 1).toLatLon
+        val ll3 = LatLon(lat = (ll1.lat + ll2.lat)/2, lon = (ll1.lon + ll2.lon)/2) // blob center
+        Dymaxion.mapLonLat(ll3)
+      }
+
       // because we don't have a `touch` method
       private def enlarge(r: IntRectangle) = r.copy(width = r.width + 1, height = r.height + 1)
 
@@ -97,7 +107,10 @@ object DataSets {
         val thisA = area(thisR)
         val thatA = area(thatR)
         val change = math.max(thisA, thatA).toDouble / math.min(thisA, thatA) // growth or shrinkage in percent
-        touch(thisR, thatR) && change <= 2.3456  // your favourite number here
+        val mercator  = touch(thisR, thatR) && change <= 2.3456  // your favourite number here
+        val dym       = (this.toDym.equalize distanceTo that.toDym.equalize) <= Dymaxion.hScale
+
+        mercator && dym // what do you want more?
       }
     }
 
@@ -116,9 +129,7 @@ object DataSets {
     val numLats = dims("lat" ).size
     val numLons = dims("lon" ).size
 
-    def analyze(prev: Frame, t: Int): Frame = {
-      val sec   = vr in "time" select t
-      val arr0  = sec.read()
+    def analyze(prev: Frame, arr0: ma2.Array): Frame = {
       // [lat][lon]
       val arr     = arr0.reduce().copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
       // indices into the blob list we're building.
@@ -207,21 +218,31 @@ object DataSets {
       next
     }
 
-    val outF  = dataOutDir / s"pr_amon_hist_blob.nc"
+    val outF    = dataOutDir / s"pr_amon_hist_blob.nc"
     val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
-//    TransformNetcdfFile(in, outF, varName, Vec("lat", "lon"), Vec(Keep("time"), Create("spk", None, spkData))) {
-//
-//    }
 
-    ???
+    var prevFrame = emptyFrame  // XXX not cool, TransformNetcdfFile doesn't thread state
+    var maxSum = 0.0
+    var maxMax = 0.0
 
-    @tailrec def loop(prev: Frame, t: Int): Unit = if (t < numTime) {
-      val next = analyze(prev, t)
+    TransformNetcdfFile(in, outF, vrName, Vec("lat", "lon"), Vec(Keep("time"), Create("blob", None, spkData))) {
+      case (origin, arr) =>
+        val nextFrame = analyze(prevFrame, arr)
+        prevFrame     = nextFrame // yeah, I know...
 
-      loop(next, t + 1)
+        println(s"Blobs: ${nextFrame.count(!_.isFree)}. Contiguous = ${nextFrame.count(_.state == Carry)}")
+
+        val dOut: Array[Float] = nextFrame.flatMap { b =>
+          val dymPt = b.toDym
+          maxSum    = math.max(maxSum, b.sum) // yeah, I know...
+          maxMax    = math.max(maxMax, b.max) // yeah, I know...
+          Array(b.state.id.toFloat, dymPt.x.toFloat, dymPt.y.toFloat, b.sum.toFloat, b.max.toFloat)
+        } (breakOut)
+        ma2.Array.factory(dOut)
     }
 
-    loop(emptyFrame, t = 0)
+    println(s"maxSum = $maxSum, maxMax = $maxMax")
+
     in.close()
   }
 
