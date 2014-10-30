@@ -521,6 +521,18 @@ object MakeLayers {
     }
   }
 
+  // -------------------- PrecipBlobs --------------------
+
+  object PrecipBlobs extends LayerFactory {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+      ???
+    }
+  }
+
+  // precip-blobs:
+  // maxSum = 0.29875579476356506
+  // maxMax = 5.231246468611062E-4
+
 
   /*
   // graph function source code

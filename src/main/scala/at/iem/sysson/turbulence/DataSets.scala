@@ -22,11 +22,9 @@ import at.iem.sysson.turbulence.Turbulence.{LatLonIdx, LatLon}
 import de.sciss.file._
 import de.sciss.lucre.geom.IntRectangle
 import de.sciss.numbers
-import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import ucar.ma2
 
-import scala.annotation.tailrec
-import scala.collection._
+import scala.collection.breakOut
 
 object DataSets {
   def sysSonDir   = userHome / "IEM" / "SysSon"
@@ -61,15 +59,29 @@ object DataSets {
     val threshold = 1.0e-5
     val maxBlobs  = 8
 
-    sealed trait State { def id: Int }
-    case object Free  extends State { val id = 0 }
-    case object Born  extends State { val id = 1 }
-    case object Carry extends State { val id = 2 }
+    sealed trait State {
+      def isFree: Boolean
+      def toArray(prev: State): Array[Float]
+    }
+    case object Free extends State {
+      def isFree = true
+
+      def toArray(prev: State): Array[Float] = {
+        prev match {
+          case Free => Array(0f, 0f, 0f, 0f, 0f)
+          case b: Blob =>
+            // yo, a bit dirty. repeat last frame and set gate to zero
+            val arr = b.toArray(Free)
+            arr(0)  = 0f
+            arr
+        }
+      }
+    }
 
     // latIdx and lonIdx are "left-top" coordinates
-    case class Blob(state: State, latIdx: Int, lonIdx: Int, latExtent: Int, lonExtent: Int,
-                    sum: Double, max: Double) {
-      def isFree = state == Free
+    case class Blob(latIdx: Int, lonIdx: Int, latExtent: Int, lonExtent: Int,
+                    sum: Double, max: Double) extends State {
+      def isFree = false
 
       def toRectangle = IntRectangle(latIdx, lonIdx, latExtent, lonExtent)
 
@@ -78,6 +90,11 @@ object DataSets {
         val ll2 = LatLonIdx(latIdx = latIdx + latExtent - 1, lonIdx = lonIdx + lonExtent - 1).toLatLon
         val ll3 = LatLon(lat = (ll1.lat + ll2.lat)/2, lon = (ll1.lon + ll2.lon)/2) // blob center
         Dymaxion.mapLonLat(ll3)
+      }
+
+      def toArray(prev: State): Array[Float] = {
+        val dymPt = toDym
+        Array(1f, dymPt.x.toFloat, dymPt.y.toFloat, sum.toFloat, max.toFloat)
       }
 
       // because we don't have a `touch` method
@@ -115,9 +132,9 @@ object DataSets {
       }
     }
 
-    type Frame      = Vector[Blob]
-    val freeBlob    = Blob(Free, 0, 0, 0, 0, 0.0, 0.0)
-    val emptyFrame  = Vector.fill(maxBlobs)(freeBlob)
+    type Frame      = Vector[State]
+    val numVoices   = 2 * maxBlobs
+    val emptyFrame  = Vector.fill[State](numVoices)(Free)
 
     import sysson.Implicits._
 
@@ -126,7 +143,7 @@ object DataSets {
     val in      = openFile(inF)
     val vr      = in.variableMap(vrName)
     val dims    = vr.dimensionMap
-    val numTime = dims("time").size
+    // val numTime = dims("time").size
     val numLats = dims("lat" ).size
     val numLons = dims("lon" ).size
 
@@ -159,7 +176,7 @@ object DataSets {
                 val fLatE = math.max(lb1.latIdx + lb1.latExtent, lb2.latIdx + lb2.latExtent) - fLat
                 val fLonE = math.max(lb1.lonIdx + lb1.lonExtent, lb2.lonIdx + lb2.lonExtent) - fLon
                 // state is irrelevant here
-                val lb3   = Blob(state = Free, latIdx = fLat, lonIdx = fLon, latExtent = fLatE, lonExtent = fLonE,
+                val lb3   = Blob(latIdx = fLat, lonIdx = fLon, latExtent = fLatE, lonExtent = fLonE,
                   sum = lb1.sum + lb2.sum, max = math.max(lb1.max, lb2.max))
                 // (1) we simply replace the left label,
                 // then (2) we'll overwrite the top label map entries
@@ -190,7 +207,7 @@ object DataSets {
             } else {  // new blob
               labelMap(lat)(lon) = labels.size
               // state is irrelevant here
-              labels :+= Blob(state = Free, latIdx = lat, lonIdx = lon, latExtent = 1, lonExtent = 1, sum = pr, max = pr)
+              labels :+= Blob(latIdx = lat, lonIdx = lon, latExtent = 1, lonExtent = 1, sum = pr, max = pr)
             }
           }
         }
@@ -205,26 +222,28 @@ object DataSets {
 
       val (blob0, rem0) = ((emptyFrame, Vector.empty[Blob]) /: sorted) { case ((res, rem), lb) =>
         val carryIdx = (prev zip res).indexWhere {
-          case (p, x) => x.isFree && p.resembles(lb)
+          case (p: Blob, x) => x.isFree && p.resembles(lb)
+          case _ => false
         }
         // no fusion? keep label in remaining
         if (carryIdx < 0) (res, rem :+ lb)
-        else (res.updated(carryIdx, lb.copy(state = Carry)), rem)
+        else (res.updated(carryIdx, lb /* .copy(state = Carry) */), rem)
       }
 
       val next = (blob0 /: rem0) { case (res, lb) =>
-        res.updated(res.indexWhere(_.isFree), lb.copy(state = Born))
+        val idx = (res zip prev).indexWhere { case (n, p) => n.isFree && p.isFree }
+        res.updated(idx, lb /* .copy(state = Born) */)
       }
 
       next
     }
 
-    val outF    = dataOutDir / s"pr_amon_hist_blob.nc"
-    val blobData = ma2.Array.factory((0 until (5 * maxBlobs)).toArray)
+    val outF      = dataOutDir / s"pr_amon_hist_blob.nc"
+    val blobData  = ma2.Array.factory((0 until (5 * numVoices)).toArray)
 
     var prevFrame = emptyFrame  // XXX not cool, TransformNetcdfFile doesn't thread state
-    var maxSum = 0.0
-    var maxMax = 0.0
+    var maxSum    = 0.0
+    var maxMax    = 0.0
     var totalCont = 0
     var totalFree = 0
 
@@ -233,20 +252,25 @@ object DataSets {
     TransformNetcdfFile(in, outF, vrName, Vec("lat", "lon"), Vec(Keep("time"), Create("blob", None, blobData))) {
       case (origin, arr) =>
         val nextFrame = analyze(prevFrame, arr)
-        prevFrame     = nextFrame // yeah, I know...
 
-        val numCont = nextFrame.count(_.state == Carry)
+        val numCont = (nextFrame zip prevFrame).count { case (n, p) => !n.isFree && !p.isFree }
         val numFree = nextFrame.count(_.isFree)
         totalCont += numCont
         totalFree += numFree
         //  println(s"Blobs: ${nextFrame.count(!_.isFree)}. Contiguous = $numCont")
 
-        val dOut: Array[Float] = nextFrame.flatMap { b =>
-          val dymPt = b.toDym
-          maxSum    = math.max(maxSum, b.sum) // yeah, I know...
-          maxMax    = math.max(maxMax, b.max) // yeah, I know...
-          Array(b.state.id.toFloat, dymPt.x.toFloat, dymPt.y.toFloat, b.sum.toFloat, b.max.toFloat)
+        val dOut: Array[Float] = (nextFrame zip prevFrame).flatMap { case (b, bPrev) =>
+          val arr   = b.toArray(bPrev)
+          require(arr.length == 5)
+          val bSum  = arr(3)
+          val bMax  = arr(4)
+          maxSum    = math.max(maxSum, bSum) // yeah, I know...
+          maxMax    = math.max(maxMax, bMax) // yeah, I know...
+          arr
         } (breakOut)
+
+        prevFrame     = nextFrame // yeah, I know...
+
         ma2.Array.factory(dOut)
     }
 
