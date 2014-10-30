@@ -131,7 +131,7 @@ object Turbulence {
     */
   final val ChannelToMatrixMap: Map[Spk, DymGrid] = MatrixToChannelMap.map(_.swap)
 
-    final val Channels: Vec[Spk] = ChannelToMatrixMap.keysIterator.toVector.sortBy(_.num)
+  final val Channels: Vec[Spk] = ChannelToMatrixMap.keysIterator.toVector.sortBy(_.num)
 
   final val ChannelIndices: Vec[Int] = Channels.map(_.toIndex)
 

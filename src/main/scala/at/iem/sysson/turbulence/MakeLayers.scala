@@ -18,6 +18,7 @@ import at.iem.sysson
 import at.iem.sysson.WorkspaceResolver
 import at.iem.sysson.gui.impl.DataSourceElem
 import at.iem.sysson.sound.Sonification
+import at.iem.sysson.turbulence.Turbulence.Spk
 import de.sciss.file._
 import de.sciss.lucre.artifact.ArtifactLocation
 import de.sciss.lucre.event.Sys
@@ -42,7 +43,7 @@ object MakeLayers {
   final val DataTaAnom        = ("ta_anom_spk" , "Temperature")
 
   lazy val all: Vec[LayerFactory] = {
-    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom)
+    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip)
     real.padTo(NumLayers, Placeholder)
   }
 
@@ -162,7 +163,7 @@ object MakeLayers {
       36 -> -24.0, 38 -> -17.2, 40 -> -16.0, 41 -> -13.3, 42 -> -21.0, 43 -> -21.4,
       44 -> -14.6, 45 -> -21.7, 46 -> -13.1)
 
-    val totalGain = -8
+    val totalGain = -6
 
     def fileMap: Map[Int, File] = {
       val dir = Turbulence.audioWork / "fsm"  // selected sounds, looped and mono
@@ -193,7 +194,8 @@ object MakeLayers {
           val spk = Turbulence.Channels(ch)
           // not all chans do have files
           files.get(spk.num).fold[GE](DC.ar(0)) { f =>
-            val amp = graph.Attribute.ir("gain", 0.5)
+            // val amp = graph.Attribute.ir("gain", 0.5)
+            val amp = (gains(spk.num) + totalGain).dbamp
             graph.DiskIn.ar(mkKey(spk.num), loop = 1) * amp
           }
         }
@@ -204,11 +206,12 @@ object MakeLayers {
 
       files.foreach { case (num, f) =>
         val spec    = AudioFile.readSpec(f)
+        require(spec.numChannels == 1, s"File $f should be mono, but has ${spec.numChannels} channels")
         val artObj  = ObjectActions.mkAudioFile(loc, f, spec)
         procObj.attr.put(mkKey(num), artObj)
-        import numbers.Implicits._
-        val gain    = (gains(num) + totalGain).dbamp
-        procObj.attr.put("gain", Obj(DoubleElem(gain)))
+        // import numbers.Implicits._
+        // val gain    = (gains(num) + totalGain).dbamp
+        // procObj.attr.put("gain", Obj(DoubleElem(gain)))
       }
 
       (procObj, proc)
@@ -447,6 +450,74 @@ object MakeLayers {
       sources.put("anom" , src)
 
       (sonObj, son.proc.elem.peer)
+    }
+  }
+
+  // -------------------- ConvPrecip --------------------
+
+  object ConvPrecip extends LayerFactory {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+      val imp     = ExprImplicits[S]
+      import imp._
+
+      val dir = Turbulence.audioWork / "conv"
+      //      val files = Turbulence.Channels.map { case Spk(num) =>
+      //        dir / s"fsm${num}conv.aif"
+      //      }
+
+      def mkKey(num: Int) = s"file$num"
+
+      val sonObj  = mkSonif[S]("conv-precip") {
+        import synth._; import ugen._; import sysson.graph._
+
+        val vPr       = Var("pr" )
+        val dTimePr   = Dim(vPr , "time")
+
+        val speed     = graph.Attribute.kr("speed", 0.2)
+        val timePr    = dTimePr .play(speed)
+        val datPr     = vPr .play(timePr )
+
+        val amp       = graph.Attribute.kr("gain", 1.2)
+
+        val period    = speed.reciprocal
+        val lagPr     = Ramp.ar(datPr , period)
+
+        val minPr  = 4.6e-7
+        val maxPr  = 1.9e-4
+
+        // XXX TODO not all channels have files yet: 32, 37, 39
+        // right now, we use 32 = 20, 39 = 40, 37 = 38
+
+        val dbMin = -40.0
+
+        val sig = Turbulence.Channels.zipWithIndex.map { case (Spk(num), ch) =>
+          val prc   = lagPr \ ch
+          val amp0  = prc.linlin(minPr, maxPr, dbMin, 0).dbamp - dbMin.dbamp
+          val amp1  = amp0 * amp
+          graph.DiskIn.ar(mkKey(num), loop = 1) * amp1
+        }
+        graph.ScanOut(sig)
+      }
+
+      val loc     = getBaseLocation()
+      val son     = sonObj.elem.peer
+      val procObj = son.proc
+
+      val sources = son.sources.modifiableOption.get
+      val srcPr   = getSonificationSource(DataAmonHist_Pr )
+      val dimsPr  = srcPr .dims.modifiableOption.get
+      dimsPr .put("time", "time")
+      sources.put("pr"  , srcPr )
+
+      Turbulence.Channels.foreach { case Spk(num) =>
+        val f = dir / s"fsm${num}conv.aif"
+        val spec    = AudioFile.readSpec(f)
+        require(spec.numChannels == 1, s"File $f should be mono, but has ${spec.numChannels} channels")
+        val artObj  = ObjectActions.mkAudioFile(loc, f, spec)
+        procObj.attr.put(mkKey(num), artObj)
+      }
+
+      (sonObj, procObj.elem.peer)
     }
   }
 
