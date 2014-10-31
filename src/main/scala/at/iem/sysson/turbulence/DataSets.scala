@@ -75,23 +75,25 @@ object DataSets {
 
   // ----------- calcPrecipitationBlobs -----------
 
+  final val PrecipBlobThreshold = 1.0e-6
+
   def calcPrecipitationBlobs(): Unit = {
-    val threshold = 1.0e-6 // 1.0e-5
+    val threshold = PrecipBlobThreshold // 1.0e-5
     import MakeLayers.NumBlobs
 
     sealed trait State {
       def isFree: Boolean
-      def toArray(prev: State): Array[Float]
+      def toAudioFrame(prev: State): Array[Float]
     }
     case object Free extends State {
       def isFree = true
 
-      def toArray(prev: State): Array[Float] = {
+      def toAudioFrame(prev: State): Array[Float] = {
         prev match {
-          case Free => Array(0f, 0f, 0f, 0f, 0f)
+          case Free => Array(0f, 0f, 0f, PrecipBlobThreshold.toFloat, PrecipBlobThreshold.toFloat)
           case b: Blob =>
             // yo, a bit dirty. repeat last frame and set gate to zero
-            val arr = b.toArray(Free)
+            val arr = b.toAudioFrame(Free)
             arr(0)  = 0f
             arr
         }
@@ -114,8 +116,10 @@ object DataSets {
         Dymaxion.mapLonLat(ll3)
       }
 
-      def toArray(prev: State): Array[Float] = {
+      def toAudioFrame(prev: State): Array[Float] = {
         val dymPt = toDym
+        assert(sum >= PrecipBlobThreshold)
+        assert(max >= PrecipBlobThreshold)
         Array(1f, dymPt.x.toFloat, dymPt.y.toFloat, sum.toFloat, max.toFloat)
       }
 
@@ -297,7 +301,7 @@ object DataSets {
         //  println(s"Blobs: ${nextFrame.count(!_.isFree)}. Contiguous = $numCont")
 
         val dOut: Array[Float] = (nextFrame zip prevFrame).flatMap { case (b, bPrev) =>
-          val arr   = b.toArray(bPrev)
+          val arr   = b.toAudioFrame(bPrev)
           require(arr.length == 5)
           val bSum  = arr(3)
           val bMax  = arr(4)

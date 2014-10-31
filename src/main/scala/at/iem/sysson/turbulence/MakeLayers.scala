@@ -543,14 +543,14 @@ object MakeLayers {
 
         val period = speed.reciprocal
 
-        val maxSum = 0.3
-        val maxMax = 5.3e-4
+        val maxSum = 0.30788
+        val maxMax = 5.63343e-4
 
         // val dbMin = -36.0
 
         val numVoices = NumBlobs * 2
 
-        val amp = graph.Attribute.kr("amp", 4)
+        val amp = graph.Attribute.kr("amp", 2)
 
         // (sig, x, y)
         def mkVoice(blobID: Int): (GE, GE, GE, GE) = {
@@ -577,10 +577,17 @@ object MakeLayers {
           val eg    = EnvGen.kr(env, gate = gate)
 
           // val amp   = sum.linlin(0, maxSum, dbMin, 0).dbamp - dbMin.dbamp
-          val amp1  = max.linlin(0, maxMax, 0, amp)
+          // val amp1  = max.linlin(0, maxMax, 0, amp)
+          val amp0  = max.explin(DataSets.PrecipBlobThreshold, maxMax, 0, amp)
+          val ctl   = sum.explin(DataSets.PrecipBlobThreshold, maxSum, 0, 1)
+          val amp1  = amp0 / ctl.max(0.1)
+
           // val sig   = eg * amp1 // PinkNoise.ar(eg * amp1)
           val eg1   = eg * amp1
-          val ctl   = sum / maxSum
+          // val ctl   = sum / maxSum
+
+          amp1.poll(gateTr, s"voice$blobID - amp")
+          ctl .poll(gateTr, s"voice$blobID - ctl")
 
           (eg1, ctl, mkCoord(x), mkCoord(y))
         }
@@ -626,7 +633,8 @@ object MakeLayers {
 
             val dx = lx2 - lx1
             val dy = ly2 - ly1
-            (dy * x - dx * y - lx1 * ly2 + lx2 * ly1).abs / 2
+            //  (dy * x - dx * y - lx1 * ly2 + lx2 * ly1).abs / 2
+            Sum4(dy * x, -dx * y, -lx1 * ly2, lx2 * ly1).abs / 2
           }
 
           val df = dist(xf, yf) _
@@ -647,7 +655,7 @@ object MakeLayers {
           PanAz.ar(NumChannels, in, pos = index * 2 / NumChannels)
 
         def mkOutChan(freqCtl: GE, xi: GE, yi: GE, gain: GE): GE = {
-          val freq0 = freqCtl.linlin /* exp */(0, 1, 400, SampleRate.ir * 0.25)
+          val freq0 = freqCtl.linlin /* exp */(0, 1, 400, 44100 /* SampleRate.ir */ * 0.25)
           val freq  = freq0 * GrayNoise.ar.linexp(-1, 1, 0.5, 2.0)
           val in0   = CuspL.ar(freq, 1.01, 1.91)
           val in    = HPZ1.ar(Resonz.ar(in0, 600) + Resonz.ar(in0, 3000)) // * 4
@@ -659,14 +667,26 @@ object MakeLayers {
           OutChan(ch, sig)
         }
 
-        val mix = Mix.tabulate(numVoices) { vci =>
+        val mix0 = Mix.tabulate(numVoices) { vci =>
           val (env, ctl, xf, yf) = mkVoice(vci)
           val ((vx1, vy1i, g1), (vx2, vy2i, g2), (vx3, vy3i, g3)) =
             calcIndices(xf = xf, yf = yf)
           val sig1 = mkOutChan(freqCtl = ctl, xi = vx1, yi = vy1i, gain = g1 * env)
           val sig2 = mkOutChan(freqCtl = ctl, xi = vx2, yi = vy2i, gain = g2 * env)
           val sig3 = mkOutChan(freqCtl = ctl, xi = vx3, yi = vy3i, gain = g3 * env)
-          sig1 + sig2 + sig3
+
+          // sig1 + sig2 + sig3
+          Sum3(sig1, sig2, sig3)
+        }
+
+        // val mix = CombN.ar(mix0, 0.2, 0.2, 4)
+        //        val mix = Mix.fold(mix0, 2) { in =>
+        //          AllpassN.ar(in, 0.050, Seq.fill(1 /* NumChannels */)(Rand(0, 0.050)), 1)
+        //        }
+        val mix = {
+          val mix1 = AllpassN.ar(mix0, 0.3162, 0.3162, 4.236068)
+          val mix2 = AllpassN.ar(mix0, 0.1414, 0.1414, 4.236068)
+          mix2
         }
 
         graph.ScanOut(mix)
