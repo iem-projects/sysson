@@ -26,6 +26,8 @@ import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
 
 object MakingWaves {
+  final val MaxFadeIns = 8  // at once
+
   // (2)
   def apply[S <: Sys[S]](parent: Folder[S])
                         (implicit tx: S#Tx, cursor: stm.Cursor[S], compiler: Code.Compiler): Future[Unit] = {
@@ -131,6 +133,8 @@ object MakingWaves {
       val isActive        = l.playing.value
       val mayBecomeActive = !isActive && free.value
 
+      var numFadeIns  = 0 // dirty...; XXX TODO - we should thus scramble the channels
+
       val hasFadeIn = (isActive || mayBecomeActive) && (false /: (0 until NumChannels)) {
         case (res, si) =>
           val byName  = s"by${li}_$si"
@@ -142,7 +146,9 @@ object MakingWaves {
             val gate    = sense(si) == li
             val before  = state.value
             val now     = before match {
-              case 0 | 3 if  gate => 2
+              case 0 | 3 if  gate && numFadeIns < MaxFadeIns =>
+                numFadeIns += 1
+                2
               case 1 | 2 if !gate => 3
               case _ => before
             }

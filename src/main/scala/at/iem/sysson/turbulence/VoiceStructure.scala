@@ -68,6 +68,39 @@ object VoiceStructure {
   }
 
   def rrand(lo: Int, hi: Int): Int = util.Random.nextInt(hi - lo + 1) + lo
+
+  def doneAction[S <: Sys[S]](self: Action.Obj[S], root: Folder[S])(implicit tx: S#Tx): Unit = {
+    val imp = ExprImplicits[S]
+    import imp._
+    import at.iem.sysson.turbulence._
+    import MakeWorkspace.DEBUG
+
+    for {
+      Expr.Var(state) <- self.attr[IntElem]("state")
+    } {
+      val old = state.value
+      if (old == 2) {        // fade-in  -> engaged
+        state() = 1
+      } else if (old == 3) { // fade-out -> bypass
+        state() = 0
+        val stop = self.attr[IntElem]("active").exists(_.value == 0)
+        if (stop) {
+          val li = self.attr[IntElem]("li").get.value
+          if (DEBUG) println(s"Layer $li stopping")
+          for {
+            Ensemble.Obj(layers) <- root   / "layers"
+            Ensemble.Obj(lObj)   <- layers / s"layer-$li"
+            Proc.Obj(pred)       <- lObj   / s"pred$li"
+            Proc.Obj(out )       <- lObj   / s"foo$li"
+          } {
+            if (DEBUG) println(s"Unlink (${pred.name}, ${out.name})")
+            (pred, out).unlink()
+            lObj.stop()
+          }
+        }
+      }
+    }
+  }
 }
 class VoiceStructure[S <: Sys[S]] {
   import VoiceStructure._
@@ -80,36 +113,8 @@ class VoiceStructure[S <: Sys[S]] {
                  compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
     println("Making Voices Action")
     val source =
-      """val imp = ExprImplicits[S]
-        |import imp._
-        |import at.iem.sysson.turbulence._
-        |import MakeWorkspace.DEBUG
-        |
-        |for {
-        |  Expr.Var(state) <- self.attr[IntElem]("state")
-        |} {
-        |  val old = state.value
-        |  if (old == 2) {        // fade-in  -> engaged
-        |    state() = 1
-        |  } else if (old == 3) { // fade-out -> bypass
-        |    state() = 0
-        |    val stop = self.attr[IntElem]("active").exists(_.value == 0)
-        |    if (stop) {
-        |      val li = self.attr[IntElem]("li").get.value
-        |      if (DEBUG) println(s"Layer $li stopping")
-        |      for {
-        |        Ensemble.Obj(layers) <- root   / "layers"
-        |        Ensemble.Obj(lObj)   <- layers / s"layer-$li"
-        |        Proc.Obj(pred)       <- lObj   / s"pred$li"
-        |        Proc.Obj(out )       <- lObj   / s"foo$li"
-        |      } {
-        |        if (DEBUG) println(s"Unlink (${pred.name}, ${out.name})")
-        |        (pred, out).unlink()
-        |        lObj.stop()
-        |      }
-        |    }
-        |  }
-        |}
+      """import at.iem.sysson.turbulence._
+        |VoiceStructure.doneAction(self, root)
         |""".stripMargin
     val code  = Code.Action(source)
     Action.compile[S](code)
