@@ -686,13 +686,14 @@ object MakeLayers {
         //        val mix = Mix.fold(mix0, 2) { in =>
         //          AllpassN.ar(in, 0.050, Seq.fill(1 /* NumChannels */)(Rand(0, 0.050)), 1)
         //        }
-        val mix = {
-          // val mix1 = AllpassN.ar(mix0, 0.3162, 0.3162, 4.236068)
-          val dly   = (period * 0.1414).clip(0.05, 0.2)
-          val decay = (period * 4.2361).clip(1.0 , 5.0)
-          val mix2  = AllpassN.ar(mix0, 0.2, dly, decay)
-          mix2
-        }
+//        val mix = {
+//          // val mix1 = AllpassN.ar(mix0, 0.3162, 0.3162, 4.236068)
+//          val dly   = (period * 0.1414).clip(0.05, 0.2)
+//          val decay = (period * 4.2361).clip(1.0 , 5.0)
+//          val mix2  = AllpassN.ar(mix0, 0.2, dly, decay)
+//          mix2
+//        }
+val mix = FreeVerb.ar(mix0)
 
         graph.ScanOut(mix)
 
