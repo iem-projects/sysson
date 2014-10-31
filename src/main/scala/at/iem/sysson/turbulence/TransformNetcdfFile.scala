@@ -212,19 +212,65 @@ object TransformNetcdfFile {
 
     iter(inVar.selectAll, Vec.empty, outDimsSpec)
 
+    writer.close()
+  }
 
-  //    // write data to variable
-  //    val v = writer.findVariable("temperature")
-  //    val shape = v.getShape
-  //    val A = new ma2.ArrayFloat /*  ArrayDouble */ .D2(shape(0), shape(1))
-  //    val ima = A.getIndex
-  //    for (i <- 0 until shape(0)) {
-  //      for (j <- 0 until shape(1)) {
-  //        A.setFloat /* .setDouble */ (ima.set(i, j), (i * 100 + j).toFloat /* .toDouble */)
-  //      }
-  //    }
-  //    val origin = new Array[Int](2)
-  //    writer.write(v, origin, A)
+  def concat(in1: nc2.NetcdfFile, in2: nc2.NetcdfFile, out: File, varName: String, dimName: String = "time"): Unit = {
+    val location  = out.path
+    val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
+
+    val inVar1    = in1.variableMap(varName)
+    val inVar2    = in2.variableMap(varName)
+
+    val allInDims = inVar1.dimensions
+
+    val (outDims, keepOutDimsV) = allInDims.map { inDim =>
+      val size    = if (inDim.name == dimName) inDim.size + inVar2.dimensionMap(inDim.name).size else inDim.size
+      val outDim  = writer.addDimension(null, inDim.name, size)
+      val inVar   = in1.variableMap(inDim.name)
+      val outVarD = writer.addVariable(null, inVar.getShortName, inVar.dataType, Seq(outDim).asJava)
+      inVar.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+      (outDim, outVarD)
+    } .unzip
+
+    val outVar  = writer.addVariable(null, inVar1.getShortName, inVar1.getDataType, outDims.asJava)
+
+    // create the file; ends "define mode"
+    writer.create()
+
+    (allInDims zip keepOutDimsV).zipWithIndex.foreach { case ((inDim, outDimV), dimIdx0) =>
+      val inVar1    = in1.variableMap(inDim.name)
+      val dimData1  = inVar1.read()
+      writer.write(outDimV, dimData1)
+      if (inDim.name == dimName) {
+        val inVar2      = in2.variableMap(inDim.name)
+        val dimData2    = inVar2.read()
+        val origin      = new Array[Int](dimData2.rank)
+        origin(dimIdx0) = dimData1.shape(dimIdx0)
+        writer.write(outDimV, origin, dimData2)
+      }
+    }
+
+    val dim1    = inVar1.dimensionMap(dimName)
+    val dim2    = inVar2.dimensionMap(dimName)
+    val dimIdx  = inVar1.dimensions.indexWhere(_.name == dimName)
+
+    for (i <- 0 until dim1.size) {
+      val sec     = (inVar1 in dimName) select i
+      val d       = sec.read()
+      val origin  = new Array[Int](inVar1.rank)
+      origin(dimIdx) = i
+      writer.write(outVar, origin, d)
+    }
+
+    for (i <- 0 until dim2.size) {
+      val sec     = (inVar2 in dimName) select i
+      val d0      = sec.read()
+      val d       = d0.copy()
+      val origin  = new Array[Int](inVar2.rank)
+      origin(dimIdx) = i + dim1.size
+      writer.write(outVar, origin, d)
+    }
 
     writer.close()
   }

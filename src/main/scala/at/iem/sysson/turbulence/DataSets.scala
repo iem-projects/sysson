@@ -41,19 +41,31 @@ object DataSets {
       convertViaVoronoi(inF = inF, varName = vr, outF = outF)
 
     case "--tas-voronoi" =>
-      val vr  = "tas"
-      val inF = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
-      val outF = dataOutDir / s"${vr}_Amon_hist_voronoi.nc"
+      val vr    = "tas"
+      val inF   = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
+      val outF  = dataOutDir / s"${vr}_Amon_hist_voronoi.nc"
       convertViaVoronoi(inF = inF, varName = vr, outF = outF)
 
-    case "--ta-anomalies"  => calcTemperatureAnomalies(1)
-    case "--ta-anomalies2" => calcTemperatureAnomalies(2)
-
-    case "--precipitation-blobs" => calcPrecipitationBlobs()
-
-    case "--dymgrid-chan-map" => calcDymGridChans()
+    case "--ta-anomalies"         => calcTemperatureAnomalies(1)
+    case "--ta-anomalies2"        => calcTemperatureAnomalies(2)
+    case "--precipitation-blobs"  => calcPrecipitationBlobs()
+    case "--dymgrid-chan-map"     => calcDymGridChans()
+    case "--glue"                 => createGluedFiles()
 
     case other => sys.error(s"Unsupported command: $other")
+  }
+
+  // ----------- createGluedFiles -----------
+
+  def createGluedFiles(): Unit = {
+    val in1F  = dlrDir / "radiation" / "avg_hfls_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
+    val in2F  = dlrDir / "radiation" / "avg_hfls_Amon_MPI-ESM-LR_rcp45_r1i1p1_200601-230012.nc"
+    val out   = userHome / "Documents" / "temp" / "concat_test.nc"
+    val in1   = openFile(in1F)
+    val in2   = openFile(in2F)
+    TransformNetcdfFile.concat(in1, in2, out, "hfls")
+    in1.close()
+    in2.close()
   }
 
   // ----------- calcDymChans -----------
