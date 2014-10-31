@@ -16,25 +16,23 @@ package at.iem.sysson
 package turbulence
 
 import java.awt.{Color, GraphicsEnvironment}
-import java.util.concurrent.TimeUnit
 import javax.swing.{SpinnerNumberModel, JComponent}
 
-import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt}
 import de.sciss.desktop.KeyStrokes
 import de.sciss.file._
-import de.sciss.lucre.synth.{Synth, Node, Group, Txn}
-import de.sciss.mellite.Mellite
+import de.sciss.lucre.swing.defer
+import de.sciss.lucre.synth.{InMemory, Synth, Node, Group, Txn}
+import de.sciss.mellite.{Workspace, Mellite}
+import de.sciss.mellite.gui.{ActionOpenWorkspace, ActionNewWorkspace}
 import de.sciss.swingplus.{Spinner, CloseOperation}
 import de.sciss.swingplus.Implicits._
-import de.sciss.synth.{SynthGraph, addBefore, addAfter, AddAction}
+import de.sciss.synth.{addBefore, addAfter, AddAction}
 
-// it _is_ used
-import de.sciss.synth.proc.{SoundProcesses, Code}
-import de.sciss.{synth, desktop, numbers, pdflitz, kollflitz}
+import de.sciss.synth.proc.Code
+import de.sciss.{desktop, numbers, pdflitz, kollflitz}
 
-import ucar.ma2
-
+import scala.concurrent.ExecutionContext
 import scala.swing.event.{ValueChanged, MousePressed, MouseReleased, Key, ButtonClicked}
 import scala.swing.{Label, GridBagPanel, Action, FlowPanel, BoxPanel, Orientation, ButtonGroup, ToggleButton, Swing, Frame}
 import scala.collection.breakOut
@@ -286,7 +284,20 @@ object Turbulence {
       Sensors.init()
     }
 
-    Swing.onEDT(initViews())
+    Swing.onEDT {
+      initViews()
+    }
+
+    if (args.headOption == Some("--in-memory")) {
+      implicit val ws = Workspace.InMemory()
+      println("Building workspace...")
+      val fut = MakeWorkspace.build[InMemory]
+      import ExecutionContext.Implicits.global
+      fut.onSuccess {
+        case _ => defer(ActionOpenWorkspace.openGUI(ws))
+      }
+    }
+
 //    if (AutoOpen) {
 //      SoundProcesses.scheduledExecutorService.schedule(
 //        new Runnable { def run() = Motion.run(start = AutoStart) }, 3, TimeUnit.SECONDS)

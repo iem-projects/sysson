@@ -82,7 +82,7 @@ object MakeWorkspace {
     }
   }
 
-  private def build[S <: Sys[S]]()(implicit workspace: Workspace[S]): Future[Unit] = {
+  def build[S <: Sys[S]]()(implicit workspace: Workspace[S]): Future[Unit] = {
     implicit val compiler = Mellite.compiler
     implicit val cursor: stm.Cursor[S] = workspace.cursor
     val fut1 = cursor.step { implicit tx =>

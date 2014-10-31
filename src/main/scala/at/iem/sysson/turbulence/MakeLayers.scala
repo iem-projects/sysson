@@ -532,6 +532,8 @@ object MakeLayers {
       val imp     = ExprImplicits[S]
       import imp._
 
+      val DEBUG = false
+
       val sonObj  = mkSonif[S]("pr-blob") {
         import synth._; import ugen._; import sysson.graph._
         val vr    = Var("blob")
@@ -586,8 +588,10 @@ object MakeLayers {
           val eg1   = eg * amp1
           // val ctl   = sum / maxSum
 
-          amp1.poll(gateTr, s"voice$blobID - amp")
-          ctl .poll(gateTr, s"voice$blobID - ctl")
+          if (DEBUG) {
+            amp1.poll(gateTr, s"voice$blobID - amp")
+            ctl .poll(gateTr, s"voice$blobID - ctl")
+          }
 
           (eg1, ctl, mkCoord(x), mkCoord(y))
         }
@@ -684,8 +688,10 @@ object MakeLayers {
         //          AllpassN.ar(in, 0.050, Seq.fill(1 /* NumChannels */)(Rand(0, 0.050)), 1)
         //        }
         val mix = {
-          val mix1 = AllpassN.ar(mix0, 0.3162, 0.3162, 4.236068)
-          val mix2 = AllpassN.ar(mix0, 0.1414, 0.1414, 4.236068)
+          // val mix1 = AllpassN.ar(mix0, 0.3162, 0.3162, 4.236068)
+          val dly   = (period * 0.1414).clip(0.05, 0.2)
+          val decay = (period * 4.2361).clip(1.0 , 5.0)
+          val mix2  = AllpassN.ar(mix0, 0.2, dly, decay)
           mix2
         }
 
