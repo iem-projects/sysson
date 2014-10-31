@@ -25,7 +25,6 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{String => StringEx}
 import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import de.sciss.mellite.{Workspace, ObjectActions}
-import de.sciss.numbers
 import de.sciss.synth
 import de.sciss.synth.io.AudioFile
 import de.sciss.synth.{proc, SynthGraph}

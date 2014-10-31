@@ -38,6 +38,7 @@ import scala.swing.{Label, GridBagPanel, Action, FlowPanel, BoxPanel, Orientatio
 import scala.collection.breakOut
 import scala.concurrent.stm.{Ref, atomic}
 import Swing._
+import scala.util.{Failure, Success}
 
 object Turbulence {
   def UseMercator   = false
@@ -293,10 +294,14 @@ object Turbulence {
       println("Building workspace...")
       val fut = MakeWorkspace.build[InMemory]
       import ExecutionContext.Implicits.global
-      fut.onSuccess {
-        case _ =>
+      fut.onComplete {
+        case Success(_) =>
           println("Done.")
           defer(ActionOpenWorkspace.openGUI(ws))
+        case Failure(e) =>
+          println("Failed to build workspace:")
+          e.printStackTrace()
+
       }
     }
 
