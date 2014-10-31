@@ -253,8 +253,10 @@ class VoiceStructure[S <: Sys[S]] {
       import de.sciss.synth.ugen._
       val in = graph.ScanInFix(NumChannels)
       Turbulence.ChannelIndices.zipWithIndex.foreach { case (bus, ch) =>
-        val inc = in \ ch
-        val flt = HPF.ar(inc, 110.25)  // make Georgios happy, and perhaps the amplifier
+        val inc   = in \ ch
+        val check = CheckBadValues.ar(inc, ch)
+        val ok    = Gate.ar(inc, check sig_== 0)
+        val flt   = HPF.ar(ok, 110.25)  // make Georgios happy, and perhaps the amplifier
         Out.ar(bus, flt)
       }
 

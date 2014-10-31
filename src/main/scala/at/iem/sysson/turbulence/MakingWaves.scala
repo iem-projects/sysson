@@ -146,7 +146,7 @@ object MakingWaves {
             val gate    = sense(si) == li
             val before  = state.value
             val now     = before match {
-              case 0 | 3 if  gate && numFadeIns < MaxFadeIns =>
+              case 0 | 3 if gate && numFadeIns < MaxFadeIns =>
                 numFadeIns += 1
                 2
               case 1 | 2 if !gate => 3

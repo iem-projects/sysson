@@ -294,7 +294,9 @@ object Turbulence {
       val fut = MakeWorkspace.build[InMemory]
       import ExecutionContext.Implicits.global
       fut.onSuccess {
-        case _ => defer(ActionOpenWorkspace.openGUI(ws))
+        case _ =>
+          println("Done.")
+          defer(ActionOpenWorkspace.openGUI(ws))
       }
     }
 
