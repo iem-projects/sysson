@@ -546,12 +546,14 @@ object MakeLayers {
         // val maxSum = 0.3
         val maxMax = 5.3e-4
 
-        val dbMin = -36.0
+        // val dbMin = -36.0
 
         val numVoices = NumBlobs * 2
 
+        val amp = graph.Attribute.kr("amp", 4)
+
         // (sig, x, y)
-        def mkVoice(blobID: Int): (GE, GE, GE) = {
+        def mkVoice(blobID: Int): (GE, GE, GE, GE) = {
           val off   = blobID * 5
           val gate  = data \ (off + 0)
           val x     = data \ (off + 1)
@@ -575,10 +577,10 @@ object MakeLayers {
           val eg    = EnvGen.kr(env, gate = gate)
 
           // val amp   = sum.linlin(0, maxSum, dbMin, 0).dbamp - dbMin.dbamp
-          val amp   = max.linlin(0, maxMax, 0, 1)
-          val sig   = PinkNoise.ar(eg * amp)
+          val amp1  = max.linlin(0, maxMax, 0, amp)
+          // val sig   = eg * amp1 // PinkNoise.ar(eg * amp1)
 
-          (sig, mkCoord(x), mkCoord(y))
+          (eg, amp1, mkCoord(x), mkCoord(y))
         }
 
         def calcIndices(xf: GE, yf: GE): ((GE, GE, GE), (GE, GE, GE), (GE, GE, GE)) = {
@@ -642,22 +644,27 @@ object MakeLayers {
         def OutChan(index: GE, in: GE) =
           PanAz.ar(NumChannels, in, pos = index * 2 / NumChannels)
 
-        def mkOutChan(in: GE, xi: GE, yi: GE, gain: GE): GE = {
-          val idx  = xi * 5 + yi
-          val ch   = Index.kr(chanBuf, idx)
-          val chOk = ch >= 0
-          val amp  = gain * chOk
-          val sig  = in * amp
+        def mkOutChan(freqCtl: GE, xi: GE, yi: GE, gain: GE): GE = {
+          val freq0 = freqCtl.linexp(0, 1, 400, SampleRate.ir * 0.25)
+          val freq  = freq0 * GrayNoise.ar.linexp(-1, 1, 0.5, 2.0)
+          val in0   = CuspL.ar(freq, 1.01, 1.91)
+          val in    = HPZ1.ar(Resonz.ar(in0, 600) + Resonz.ar(in0, 3000)) // * 4
+          val idx   = xi * 5 + yi
+          val ch    = Index.kr(chanBuf, idx)
+          val chOk  = ch >= 0
+          val amp1  = gain * chOk
+          val sig   = in * amp1
           OutChan(ch, sig)
         }
 
         val mix = Mix.tabulate(numVoices) { vci =>
-          val (in, xf, yf) = mkVoice(vci)
+          val (env, amp, xf, yf) = mkVoice(vci)
           val ((vx1, vy1i, g1), (vx2, vy2i, g2), (vx3, vy3i, g3)) =
             calcIndices(xf = xf, yf = yf)
-          val sig1 = mkOutChan(in = in, xi = vx1, yi = vy1i, gain = g1)
-          val sig2 = mkOutChan(in = in, xi = vx2, yi = vy2i, gain = g2)
-          val sig3 = mkOutChan(in = in, xi = vx3, yi = vy3i, gain = g3)
+          val env1 = env * amp
+          val sig1 = mkOutChan(freqCtl = amp, xi = vx1, yi = vy1i, gain = g1 * env1)
+          val sig2 = mkOutChan(freqCtl = amp, xi = vx2, yi = vy2i, gain = g2 * env1)
+          val sig3 = mkOutChan(freqCtl = amp, xi = vx3, yi = vy3i, gain = g3 * env1)
           sig1 + sig2 + sig3
         }
 
