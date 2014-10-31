@@ -543,7 +543,7 @@ object MakeLayers {
 
         val period = speed.reciprocal
 
-        // val maxSum = 0.3
+        val maxSum = 0.3
         val maxMax = 5.3e-4
 
         // val dbMin = -36.0
@@ -558,7 +558,7 @@ object MakeLayers {
           val gate  = data \ (off + 0)
           val x     = data \ (off + 1)
           val y     = data \ (off + 2)
-          // val sum   = data \ (off + 3)
+          val sum   = data \ (off + 3)
           val max   = data \ (off + 4)
 
           val gateTr    = Trig.kr(gate, ControlDur.ir)
@@ -579,8 +579,10 @@ object MakeLayers {
           // val amp   = sum.linlin(0, maxSum, dbMin, 0).dbamp - dbMin.dbamp
           val amp1  = max.linlin(0, maxMax, 0, amp)
           // val sig   = eg * amp1 // PinkNoise.ar(eg * amp1)
+          val eg1   = eg * amp1
+          val ctl   = sum / maxSum
 
-          (eg, amp1, mkCoord(x), mkCoord(y))
+          (eg1, ctl, mkCoord(x), mkCoord(y))
         }
 
         def calcIndices(xf: GE, yf: GE): ((GE, GE, GE), (GE, GE, GE), (GE, GE, GE)) = {
@@ -645,7 +647,7 @@ object MakeLayers {
           PanAz.ar(NumChannels, in, pos = index * 2 / NumChannels)
 
         def mkOutChan(freqCtl: GE, xi: GE, yi: GE, gain: GE): GE = {
-          val freq0 = freqCtl.linexp(0, 1, 400, SampleRate.ir * 0.25)
+          val freq0 = freqCtl.linlin /* exp */(0, 1, 400, SampleRate.ir * 0.25)
           val freq  = freq0 * GrayNoise.ar.linexp(-1, 1, 0.5, 2.0)
           val in0   = CuspL.ar(freq, 1.01, 1.91)
           val in    = HPZ1.ar(Resonz.ar(in0, 600) + Resonz.ar(in0, 3000)) // * 4
@@ -658,13 +660,12 @@ object MakeLayers {
         }
 
         val mix = Mix.tabulate(numVoices) { vci =>
-          val (env, amp, xf, yf) = mkVoice(vci)
+          val (env, ctl, xf, yf) = mkVoice(vci)
           val ((vx1, vy1i, g1), (vx2, vy2i, g2), (vx3, vy3i, g3)) =
             calcIndices(xf = xf, yf = yf)
-          val env1 = env * amp
-          val sig1 = mkOutChan(freqCtl = amp, xi = vx1, yi = vy1i, gain = g1 * env1)
-          val sig2 = mkOutChan(freqCtl = amp, xi = vx2, yi = vy2i, gain = g2 * env1)
-          val sig3 = mkOutChan(freqCtl = amp, xi = vx3, yi = vy3i, gain = g3 * env1)
+          val sig1 = mkOutChan(freqCtl = ctl, xi = vx1, yi = vy1i, gain = g1 * env)
+          val sig2 = mkOutChan(freqCtl = ctl, xi = vx2, yi = vy2i, gain = g2 * env)
+          val sig3 = mkOutChan(freqCtl = ctl, xi = vx3, yi = vy3i, gain = g3 * env)
           sig1 + sig2 + sig3
         }
 
