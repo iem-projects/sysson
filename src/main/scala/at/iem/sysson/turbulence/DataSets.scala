@@ -76,7 +76,7 @@ object DataSets {
   // ----------- calcPrecipitationBlobs -----------
 
   def calcPrecipitationBlobs(): Unit = {
-    val threshold = 1.0e-5
+    val threshold = 1.0e-6 // 1.0e-5
     import MakeLayers.NumBlobs
 
     sealed trait State {
@@ -104,6 +104,8 @@ object DataSets {
       def isFree = false
 
       def toRectangle = IntRectangle(latIdx, lonIdx, latExtent, lonExtent)
+
+      def area: Long = area(toRectangle)
 
       def toDym: DymPt = {
         val ll1 = LatLonIdx(latIdx = latIdx, lonIdx = lonIdx).toLatLon
@@ -152,9 +154,9 @@ object DataSets {
       }
     }
 
-    type Frame      = Vector[State]
+    type Frame      = Vec[State]
     val numVoices   = 2 * NumBlobs
-    val emptyFrame  = Vector.fill[State](numVoices)(Free)
+    val emptyFrame  = Vec.fill[State](numVoices)(Free)
 
     import sysson.Implicits._
 
@@ -172,7 +174,7 @@ object DataSets {
       val arr     = arr0.reduce().copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
       // indices into the blob list we're building.
       val labelMap  = Array.ofDim[Int](numLats, numLons)
-      var labels    = Vector.empty[Blob]
+      var labels    = Vec.empty[Blob]
 
       for (lat <- 0 until numLats) {
         for (lon <- 0 until numLons) {
@@ -238,19 +240,34 @@ object DataSets {
       // then we'll have to find connections to the
       // previous frame.
 
-      val sorted = labels.sortBy(_.sum).take(NumBlobs)    // (1) (2)
+      val sorted0 = labels.sortBy(lb => (lb.area, lb.max))   // (1)
 
-      val (blob0, rem0) = ((emptyFrame, Vector.empty[Blob]) /: sorted) { case ((res, rem), lb) =>
-        val carryIdx = (prev zip res).indexWhere {
-          case (p: Blob, x) => x.isFree && p.resembles(lb)
-          case _ => false
+      val sorted = sorted0.take(NumBlobs)  // (2)
+
+      // first try to find contiguous blobs
+      val (blob0, rem0) = ((Vec.empty[State], sorted) /: prev) { case ((res, rem), prevElem) =>
+        val fuseOpt = prevElem match {
+          case b: Blob => rem.find(_ resembles b)
+          case _ => None
         }
-        // no fusion? keep label in remaining
-        if (carryIdx < 0) (res, rem :+ lb)
-        else (res.updated(carryIdx, lb /* .copy(state = Carry) */), rem)
+        val (n, rem1) = fuseOpt.fold[(State, Vec[Blob])]((Free, rem))(p => (p, rem.filterNot(_ == p)))
+
+        (res :+ n, rem1)
       }
 
-      val next = (blob0 /: rem0) { case (res, lb) =>
+      //      val (blob0, rem0) = ((emptyFrame, Vector.empty[Blob]) /: sorted) { case ((res, rem), lb) =>
+      //        val carryIdx = (prev zip res).indexWhere {
+      //          case (p: Blob, x) => x.isFree && p.resembles(lb)
+      //          case _ => false
+      //        }
+      //        // no fusion? keep label in remaining
+      //        if (carryIdx < 0) (res, rem :+ lb)
+      //        else (res.updated(carryIdx, lb /* .copy(state = Carry) */), rem)
+      //      }
+
+      val numFree = (blob0 zip prev).count { case (n, p) => n.isFree && p.isFree }
+
+      val next = (blob0 /: rem0.take(numFree)) { case (res, lb) =>
         val idx = (res zip prev).indexWhere { case (n, p) => n.isFree && p.isFree }
         res.updated(idx, lb /* .copy(state = Born) */)
       }
