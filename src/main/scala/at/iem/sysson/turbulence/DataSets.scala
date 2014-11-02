@@ -26,6 +26,10 @@ import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import ucar.ma2
 
 import scala.collection.breakOut
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Future, Await, ExecutionContext}
+import scala.concurrent.stm.TxnExecutor
+import scala.util.{Failure, Success}
 
 object DataSets {
   def sysSonDir   = userHome / "IEM" / "SysSon"
@@ -58,14 +62,36 @@ object DataSets {
   // ----------- createGluedFiles -----------
 
   def createGluedFiles(): Unit = {
-    val in1F  = dlrDir / "radiation" / "avg_hfls_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
-    val in2F  = dlrDir / "radiation" / "avg_hfls_Amon_MPI-ESM-LR_rcp45_r1i1p1_200601-230012.nc"
-    val out   = userHome / "Documents" / "temp" / "concat_test.nc"
-    val in1   = openFile(in1F)
-    val in2   = openFile(in2F)
-    TransformNetcdfFile.concat(in1, in2, out, "hfls")
-    in1.close()
-    in2.close()
+    val vrs   = Seq("hfls", "hfss", "rlds", "rlus", "rlut", "rsds", "rsdt", "rsus", "rsut", "rtmt")
+
+    import ExecutionContext.Implicits.global
+    val futs = vrs.map { name =>
+      println(s"Joining $name...")
+      val in1F  = dlrDir / "radiation" / s"avg_${name}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
+      val in2F  = dlrDir / "radiation" / s"avg_${name}_Amon_MPI-ESM-LR_rcp45_r1i1p1_200601-230012.nc"
+      val outF  = dataOutDir / s"avg_${name}_amon_join.nc"
+      val in1   = openFile(in1F)
+      val in2   = openFile(in2F)
+      TransformNetcdfFile.concat(in1, in2, outF, name)
+      val in3   = openFile(outF)
+      val stats = TxnExecutor.defaultAtomic { implicit tx => Stats.get(in3) }
+      stats.onComplete { tr =>
+        in3.close()
+        tr match {
+          case Success(s) =>
+            println(s"======== stats for '$name' ========")
+            println(s(name).total)
+          case Failure(e) =>
+            println(s"Failed to read file $outF")
+            e.printStackTrace()
+        }
+      }
+      in1.close()
+      in2.close()
+      stats
+    }
+    Await.ready(Future.sequence(futs), Duration.Inf)
+    println("Done.")
   }
 
   // ----------- calcDymChans -----------

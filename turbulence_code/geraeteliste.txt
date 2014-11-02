@@ -1,0 +1,32 @@
+=== Kabel ===
+
+- Multicores (Speakon x4)
+
+  A, B, C, D, G, H - 15m
+  E, F, I, J, K, L - 8m
+  6x verlaengerungen 5m
+
+- BNC RJ59 20m
+
+- "FW 400" aka MADIface
+
+- Rack komplett verkabelt
+
+- 48x Peitsche Speakon-4-ch auf 4x2 Banane
+
+=== Hardware ===
+
+- Kabeltruhe Thon, 3 Unterteiler
+
+=== Geraete ===
+
+- Fujitsu Linux laptop w/ Netzteil und Tasche
+- RME MADIface, ExpressCard und Breakout Box
+- Rack komplett (MADI-to-ADAT, Behringer ADAT-to-analog, Amps, Power-dist)
+- 44x Kleinlautsprecher (42 im Einsatz, 2x Backup); uebrige 4 bleiben im SID lab; mit Schrauben und "Loops"
+
+=== Kram ===
+
+- Schukoverteiler 7fach
+- Gaffa
+- Schraubenschluessel (Stefan) fuer LS

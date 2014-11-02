@@ -28,7 +28,7 @@ import de.sciss.mellite.{Workspace, ObjectActions}
 import de.sciss.synth
 import de.sciss.synth.io.AudioFile
 import de.sciss.synth.{proc, SynthGraph}
-import de.sciss.synth.proc.{ArtifactLocationElem, FolderElem, Folder, ObjKeys, StringElem, DoubleElem, ExprImplicits, Obj, Proc, graph}
+import de.sciss.synth.proc.{ArtifactLocationElem, FolderElem, Folder, ObjKeys, StringElem, ExprImplicits, Obj, Proc, graph}
 import proc.Implicits._
 
 import scala.collection.breakOut
@@ -45,8 +45,8 @@ object MakeLayers {
   final val NumBlobs = 4
 
   lazy val all: Vec[LayerFactory] = {
-    //             0          1             2             3       4           5
-    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs)
+    //             0          1             2             3       4           5            6
+    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips)
     real.padTo(NumLayers, Placeholder)
   }
 
@@ -725,87 +725,124 @@ val mix = FreeVerb.ar(mix0)
   // maxSum = 0.29875579476356506
   // maxMax = 5.231246468611062E-4
 
+  // -------------------- RadiationBlips --------------------
 
-  /*
-  // graph function source code
+  object RadiationBlips extends LayerFactory {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+      val imp     = ExprImplicits[S]
+      import imp._
 
-val v       = Var("ta")
-val dimPres = Dim(v, "pres")
-val dimTime = Dim(v, "time")
-val dimLat  = Dim(v, "lat" )
+      val vrNames = Vector(
+        "hfls", "hfss", "rlds", "rlus", "rsds", "rsus", "rlut", "rsut", "rsdt", "rtmt"
+      )
 
-val normBuf = Buffer("norm")
-val presBuf = Buffer("pres")
+      val sonObj  = mkSonif[S]("radiation") {
+        import synth._; import ugen._; import sysson.graph._
 
-val tempo   = UserValue("speed", 1).kr
-val timeP   = dimTime.play(tempo)
-val ta      = v.play(timeP)
+        // hfls - Surface Upward Latent   Heat Flux
+        // hfss - Surface Upward Sensible Heat Flux
+        // rlds - Surface Downwelling Longwave  Radiation
+        // rlus - Surface Upwelling   Longwave  Radiation
+        // rsds - Surface Downwelling Shortwave Radiation
+        // rsus - Surface Upwelling   Shortwave Radiation
+        // rlut - TOA Outgoing        Longwave  Radiation
+        // rsut - TOA Outgoing        Shortwave Radiation
+        // rsdt - TOA Incident        Shortwave Radiation
+        // rtmt - Net Downward Flux at Top of Model
 
-val presVals = ta.axis(dimPres).values
-val latVals  = ta.axis(dimLat ).values
+        val minMaxMean = Map(
+          "hfls" -> ( 83.0965   ,  89.58005  ,  86.584335 ),
+          "hfss" -> ( 18.544447 ,  21.011463 ,  19.53071  ),
+          "rlds" -> (332.53802  , 358.69363  , 347.64407  ),
+          "rlus" -> (390.01828  , 410.90927  , 402.34683  ),
+          "rsds" -> (183.77844  , 188.36255  , 185.71547  ),
+          "rsus" -> ( 22.443113 ,  25.105354 ,  23.493246 ),
+          "rlut" -> (234.36313  , 239.54384  , 237.6493   ),
+          "rsut" -> ( 99.65853  , 107.35386  , 101.578735 ),
+          "rsdt" -> (340.19525  , 340.58527  , 340.39017  ),
+          "rtmt" -> ( -1.4149872,   2.4347672,   1.1621329)
+        )
 
-def presIdx(pres: GE) = DetectIndex.ar(presBuf, pres)
-def latIdx (lat : GE) = lat.linlin(-85, 85, 0, 17)
+        val speed  = graph.Attribute.kr("speed", 6.0)
+        val amp    = graph.Attribute.kr("gain" , 0.08)
+        val period = speed.reciprocal
 
-// time dimension unit is already months!
-// thus the month in a year is the time
-// value modulus 12
-val month     = timeP % 12
-val normIndex = (presIdx(presVals) * 18 + latIdx(latVals)) * 12 + month
+        val (vars, times) = vrNames.map { name =>
+          val v    = Var(name)
+          val dt   = Dim(v, "time")
+          val time = dt.play(speed)
+          val vp   = v.play(time)
+          val (min, max, _) = minMaxMean(name)
+          val norm0 = vp.linlin(min, max, 0, 1)
+          val norm = Ramp.ar(norm0, period)
+          (norm, time)
+        } .unzip
 
-val norm    = Index.ar(normBuf, normIndex)
+        // hfls - spirals upwards
+        // hfss - spirals downwards
 
-val anom0   = ta - norm
-val anom    = Ramp.ar(anom0, tempo.reciprocal)
+        // rlds - spirals upwards
+        // rlus - spirals upwards
+        // rsds - spirals downwards
+        // rsus - spirals downwards
 
-val trig = Impulse.ar(tempo)  // time-synchronous trigger for general use
+        // rlut - spirals up
+        // rsut - spirals down (few spikes in beginning)
 
-// --- debug printing ---
-val PRINT = false
+        // rsdt - spirals up (rises in ambitus)
+        // rtmt - spirals up (then down?)
 
-if (PRINT) {
-  ta.poll  (trig, "ta ")
-  normIndex.poll(trig, "idx ")
-  norm.poll(trig, "norm")
-  anom.poll(trig, "anom")
-}
+        val minDensity  =  0.1
+        val maxDensity  = 20.0
+        val powF        =  0.95   // richer spectrum, not plain whole numbered overtones
 
-// pressure level range:
-// 100 hPa ... 10 hPa
-// where 10 hPa highest pitch
-//      100 hPa lowest  pitch
-// values are roughly logarithmically spaced
+        val f0   = 240 // 80      // fundamental frequency
+        val p   = vrNames.size    // number of partials per channel
+        val sig = Mix.tabulate(p) { i =>
+            val trig = vars(i).linexp(0, 1, minDensity, maxDensity)
+            val freq = f0 * (i + 1).pow(powF)
+            val decF = f0 / freq
+            // println(s"i = $i, decF = $decF")
 
-val side       = anom < 0  // too cold = 1, too hot = 0
-val octave     = side * 2
-val pitchRange = K2A.ar(UserValue("pitch-range", 12).kr)
+            val dust0 = Dust.kr(trig)
+            val spkLat = Turbulence.Channels.zipWithIndex.map { case (spk, ch) =>
+              val lli = Turbulence.ChannelToGeoMap(spk)
+              val lat = Turbulence.latitude(lli.latIdx)
+              (ch, lat)
+            }
+            val start = spkLat.sortBy(_._2).map(_._1)
+            // we spred the pulses across the channels,
+            // using a quasi-random-but-not ordering (order by latitudes)
+            val dust  = PulseDivider.kr(dust0, NumChannels, start)
 
-val pitchClass = presVals.max(1.0e-10).explin(10, 100, pitchRange, 0).roundTo(1)
-// val pitchClass = presVals.max(1.0e-10).explin(40, 50, pitchRange, 0).roundTo(1)
+            val env = Decay2.kr(dust * amp,
+              0.005,        // grain attack time
+              Rand(0.25 * 2,0.333 * 2) * decF   // grain decay time
+            )
+            FSinOsc.ar(freq) * env
+          }
 
-val pitch = octave * 12 + 60 + pitchClass
+        graph.ScanOut(sig)
 
-if (PRINT) pitch.poll(trig, "pch")
+        //        ChannelIndices.zipWithIndex.foreach { case (bus, ch) =>
+        //          Out.ar(bus, sig \ ch)
+        //        }
+      }
 
-val freq    = pitch.clip(12, 135).midicps
-val ampCorr = AmpCompA.ar(freq)
-val amp     = (anom.abs / 4) * ampCorr
+      val son     = sonObj.elem.peer
+      val procObj = son.proc
 
-val ok   = (ta \ 0) > 0
-val gain = UserValue("gain", -12).kr.dbamp * ok
+      val sources = son.sources.modifiableOption.get
+      vrNames.foreach { name =>
+        val srcPr   = getSonificationSource(s"avg_${name}_amon_join" -> name)
+        val dimsPr  = srcPr .dims.modifiableOption.get
+        dimsPr .put("time", "time")
+        sources.put(name, srcPr )
+      }
 
-val osc = SinOsc.ar(freq) * amp
-val sig = Mix(osc) * K2A.ar(gain)
-
-val yearTrig = Trig1.ar(month sig_== 0, dur = SampleDur.ir)
-val yearAmp = K2A.ar(UserValue("year-pulse", 0.1).kr)
-val yearSig = Decay.ar(yearTrig, 0.1).min(1) * WhiteNoise.ar(yearAmp)
-
-val outSig = sig + yearSig
-
-output := Pan2.ar(outSig)  // TODO: decide panorama / stero image
-
-   */
+      (sonObj, procObj.elem.peer)
+    }
+  }
 
   // -------------------- Placeholder --------------------
 
