@@ -14,6 +14,7 @@
 
 package at.iem.sysson.turbulence
 
+import de.sciss.kollflitz.RandomOps
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.Expr
 import de.sciss.lucre.stm
@@ -24,6 +25,7 @@ import proc.Implicits._
 
 import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
+import scala.util.Random
 
 object MakingWaves {
   final val MaxFadeIns = 8  // at once
@@ -111,6 +113,8 @@ object MakingWaves {
     // parent.addLast(procObj)
   }
 
+  private lazy val ChanSeq = (0 until VoiceStructure.NumChannels).toIndexedSeq
+
   def react[S <: Sys[S]](values: Vec[Float], root: Folder[S])(implicit tx: S#Tx): Unit = {
     import VoiceStructure.NumChannels
     import MakeWorkspace.DEBUG
@@ -133,9 +137,13 @@ object MakingWaves {
       val isActive        = l.playing.value
       val mayBecomeActive = !isActive && free.value
 
-      var numFadeIns  = 0 // dirty...; XXX TODO - we should thus scramble the channels
+      var numFadeIns  = 0 // dirty...
 
-      val hasFadeIn = (isActive || mayBecomeActive) && (false /: (0 until NumChannels)) {
+      import RandomOps._
+      implicit val rnd = new Random(sense.hashCode())
+      // val chans = (0 until NumChannels).toUrn
+
+      val hasFadeIn = (isActive || mayBecomeActive) && (false /: ChanSeq.toUrn(infinite = false)) {
         case (res, si) =>
           val byName  = s"by${li}_$si"
           val res1Opt = for {
@@ -164,7 +172,7 @@ object MakingWaves {
       if (DEBUG) println(s"Layer $li isActive? $isActive; mayBecomeActive? $mayBecomeActive; hasFadeIn? $hasFadeIn.")
 
       if (becomesActive) {
-        val tid = VoiceStructure.rrand(0, VoiceStructure.NumTransitions - 1) // XXX TODO
+        val tid = VoiceStructure.rrand(0, VoiceStructure.NumTransitions - 1)
         transId.update(tid)
         for {
           Proc.Obj(pred) <- lObj / s"pred$li"

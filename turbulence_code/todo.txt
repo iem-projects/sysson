@@ -19,4 +19,10 @@ settings
 
 ::::::::::::::::::::::::::
 
-fsm - no.6 escaped (not mono)
+[OK]    fsm - no.6 escaped (not mono)
+
+::::::::::::::::::::::::::
+
+try `renice` scsynth
+
+time pulse: like a "light" process, but use small high-feedback delays (similar to the effect that the XRUNS produce)

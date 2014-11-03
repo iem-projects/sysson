@@ -67,7 +67,7 @@ object VoiceStructure {
       `this`.removeSink(Scan.Link.Scan(that))
   }
 
-  def rrand(lo: Int, hi: Int): Int = util.Random.nextInt(hi - lo + 1) + lo
+  def rrand(lo: Int, hi: Int)(implicit rnd: util.Random): Int = rnd.nextInt(hi - lo + 1) + lo
 
   def doneAction[S <: Sys[S]](self: Action.Obj[S], root: Folder[S])(implicit tx: S#Tx): Unit = {
     val imp = ExprImplicits[S]

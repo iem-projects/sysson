@@ -767,7 +767,7 @@ val mix = FreeVerb.ar(mix0)
         val amp    = graph.Attribute.kr("gain" , 0.08)
         val period = speed.reciprocal
 
-        val (vars, times) = vrNames.map { name =>
+        val (vars, _ /* times */) = vrNames.map { name =>
           val v    = Var(name)
           val dt   = Dim(v, "time")
           val time = dt.play(speed)
