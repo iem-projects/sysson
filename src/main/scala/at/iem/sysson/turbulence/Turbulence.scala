@@ -64,48 +64,48 @@ object Turbulence {
     * (1-based offset)
     */
   final val MatrixToChannelMap = Map[DymGrid, Spk](
-    DymGrid( 4, 0) -> Spk( 3),
-    DymGrid( 6, 0) -> Spk( 5),
-    DymGrid( 8, 0) -> Spk( 4),
-    DymGrid( 5, 0) -> Spk( 6),
-    DymGrid( 7, 0) -> Spk( 7),
-    DymGrid( 6, 1) -> Spk( 8),
+    DymGrid( 4, 0) -> Spk(17),
+    DymGrid( 6, 0) -> Spk(29),
+    DymGrid( 8, 0) -> Spk(30),
+    DymGrid( 5, 0) -> Spk(18),
+    DymGrid( 7, 0) -> Spk(31),
+    DymGrid( 6, 1) -> Spk(19),
     DymGrid( 3, 1) -> Spk(21),
-    DymGrid( 5, 1) -> Spk(25),
-    DymGrid( 7, 1) -> Spk(26),
-    DymGrid( 9, 1) -> Spk(33),
-    DymGrid(11, 1) -> Spk(41),
-    DymGrid(13, 1) -> Spk(45),
+    DymGrid( 5, 1) -> Spk(20),
+    DymGrid( 7, 1) -> Spk(32),
+    DymGrid( 9, 1) -> Spk(13),
+    DymGrid(11, 1) -> Spk( 5),
+    DymGrid(13, 1) -> Spk( 3),
     DymGrid( 4, 2) -> Spk(22),
-    DymGrid( 6, 2) -> Spk(27),
-    DymGrid( 8, 2) -> Spk(34),
-    DymGrid(12, 2) -> Spk(42),
-    DymGrid( 5, 2) -> Spk(23),
-    DymGrid( 7, 2) -> Spk(29),
-    DymGrid( 9, 2) -> Spk(35),
-    DymGrid(11, 2) -> Spk(43),
-    DymGrid( 0, 3) -> Spk(10),
-    DymGrid( 2, 3) -> Spk(13),
-    DymGrid( 4, 3) -> Spk(17),
-    DymGrid( 6, 3) -> Spk(28),
-    DymGrid( 8, 3) -> Spk(30),
-    DymGrid(10, 3) -> Spk(37),
-    DymGrid(12, 3) -> Spk(46),
-    DymGrid( 1, 3) -> Spk(11),
-    DymGrid( 3, 3) -> Spk(14),
-    DymGrid( 5, 3) -> Spk(24),
-    DymGrid( 7, 3) -> Spk(31),
-    DymGrid( 9, 3) -> Spk(36),
-    DymGrid(11, 3) -> Spk(44),
-    DymGrid( 2, 4) -> Spk(15),
-    DymGrid( 4, 4) -> Spk(18),
-    DymGrid(10, 4) -> Spk(38),
-    DymGrid( 1, 4) -> Spk(16),
-    DymGrid( 3, 4) -> Spk(19),
-    DymGrid( 5, 4) -> Spk(20),
-    DymGrid( 7, 4) -> Spk(32),
-    DymGrid( 9, 4) -> Spk(39),
-    DymGrid(11, 4) -> Spk(40)
+    DymGrid( 6, 2) -> Spk(23),
+    DymGrid( 8, 2) -> Spk(14),
+    DymGrid(12, 2) -> Spk( 4),
+    DymGrid( 5, 2) -> Spk(24),
+    DymGrid( 7, 2) -> Spk(25),
+    DymGrid( 9, 2) -> Spk(15),
+    DymGrid(11, 2) -> Spk( 6),
+    DymGrid( 0, 3) -> Spk(41),
+    DymGrid( 2, 3) -> Spk(42),
+    DymGrid( 4, 3) -> Spk(33),
+    DymGrid( 6, 3) -> Spk(34),
+    DymGrid( 8, 3) -> Spk(26),
+    DymGrid(10, 3) -> Spk( 9),
+    DymGrid(12, 3) -> Spk( 7),
+    DymGrid( 1, 3) -> Spk(43),
+    DymGrid( 3, 3) -> Spk(39),
+    DymGrid( 5, 3) -> Spk(35),
+    DymGrid( 7, 3) -> Spk(27),
+    DymGrid( 9, 3) -> Spk(16),
+    DymGrid(11, 3) -> Spk( 8),
+    DymGrid( 2, 4) -> Spk(38),
+    DymGrid( 4, 4) -> Spk(37),
+    DymGrid(10, 4) -> Spk(10),
+    DymGrid( 1, 4) -> Spk(44),
+    DymGrid( 3, 4) -> Spk(40),
+    DymGrid( 5, 4) -> Spk(36),
+    DymGrid( 7, 4) -> Spk(28),
+    DymGrid( 9, 4) -> Spk(11),
+    DymGrid(11, 4) -> Spk(12)
   )
 
   final case class LatLon(lat: Double, lon: Double) {
@@ -137,7 +137,8 @@ object Turbulence {
   final val NumChannels = ChannelIndices.size
 
   private val chans = MatrixToChannelMap.valuesIterator.map(_.num).toVector.sorted
-  assert(chans == (3 to 8) ++ (10 to 11) ++ (13 to 46), s"ChannelMap does not have expected values: $chans")
+  // assert(chans == (3 to 8) ++ (10 to 11) ++ (13 to 46), s"ChannelMap does not have expected values: $chans")
+  assert(chans == (3 to 44), s"ChannelMap does not have expected values: $chans")
 
   import numbers.Implicits._
 
@@ -234,26 +235,26 @@ object Turbulence {
 
   // maps sensors to (speakers, wired-yes-no)
   final val SensorSpeakers = Vector(
-    Spk(11) -> false,
-    Spk(15) -> false,
-    Spk(14) -> true,
-    Spk(18) -> true,
-    Spk(24) -> true,
-    Spk(31) -> false,
-    Spk(36) -> true,
-    Spk(38) -> true,
-    Spk(44) -> true,
-    Spk(22) -> true,
-    Spk(23) -> true,
-    Spk(27) -> true,
-    Spk(29) -> true,
-    Spk(34) -> true,
+    Spk(43) -> false,
+    Spk(38) -> false,
+    Spk(39) -> true,
+    Spk(37) -> true,
     Spk(35) -> true,
-    Spk(43) -> true,
-    Spk(42) -> false,
-    Spk( 6) -> false,
+    Spk(27) -> false,
+    Spk(16) -> true,
+    Spk(10) -> true,
     Spk( 8) -> true,
-    Spk( 7) -> true
+    Spk(22) -> true,
+    Spk(24) -> true,
+    Spk(23) -> true,
+    Spk(25) -> true,
+    Spk(14) -> true,
+    Spk(15) -> true,
+    Spk( 6) -> true,
+    Spk( 4) -> false,
+    Spk(18) -> false,
+    Spk(19) -> true,
+    Spk(31) -> true
   )
 
   // nominally - without 'non-wired' ones

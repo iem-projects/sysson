@@ -844,6 +844,49 @@ val mix = FreeVerb.ar(mix0)
     }
   }
 
+  // ---- Window TODO ----
+
+/*
+// graph function source code
+
+val latValues = (-85.0 to 85.0 by 10.0)
+
+import at.iem.sysson.turbulence._
+
+val v     = Var("ua")
+val dt    = Dim(v, "time")
+val speed = UserValue("speed", 1).kr
+val time  = dt.play(speed)
+val data0 = v.play(time)
+val period = speed.reciprocal
+val data  = Ramp.ar(data0, period)
+
+// meters per second
+val min = -15.46  // expected from data
+val max = +48.88
+
+val sound = DiskIn.ar("sound", loop = 1)
+
+val thresh = UserValue("thresh", 2).kr
+
+Turbulence.Channels.zipWithIndex.foreach { case (spk, idx) =>
+  val lli    = Turbulence.ChannelToGeoMap(spk)
+  val lat    = Turbulence.latitude(lli.latIdx)
+  val d      = latValues.map(_ absdif lat)
+  val idx    = d.indexOf(d.min)
+  val x      = data \ idx
+
+//  val thresh = 5.0  // m/s
+
+  val amt    = (thresh - x.abs).max(0) / thresh // 0 ... 1
+  val lr     = idx % 2
+  val ch     = sound \ lr
+  val amp    = amt  // TODO
+  val sig    = ch * amp
+  Out.ar(spk.toIndex, sig)
+}
+ */
+
   // -------------------- Placeholder --------------------
 
   object Placeholder extends LayerFactory {
