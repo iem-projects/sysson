@@ -120,26 +120,48 @@ class VoiceStructure[S <: Sys[S]] {
     Action.compile[S](code)
   }
 
-  private lazy val transGraphs: Vec[SynthGraph] = {
-    def mkTransition(fun: (GE, GE, GE) => GE): SynthGraph = SynthGraph {
-      import de.sciss.synth._
-      import de.sciss.synth.ugen._
-      val pred  = graph.ScanInFix("pred", 1)
-      val succ  = graph.ScanInFix("succ", 1)
-      val state = graph.Attribute.kr("state", 2)
-      val target = 3 - state // 1 for fade-in, 0 for fade-out
-      val start  = 1 - target
-      val atk    = Attack
-      val rls    = Release
-      val in     = Select.kr(ToggleFF.kr(1), Seq(start, target))
-      val fade   = Slew.kr(in, atk.reciprocal, rls.reciprocal)
-      if (DEBUG) fade.poll(1, "fade")
-      val done   = fade sig_== target
-      graph.Action(done, "done")
-      val sig   = fun(pred, succ, fade)
-      graph.ScanOut(sig)
-    }
+  // a 10% direct fade-in/out, possibly with delay to compensate for FFT
+  private def mkBlend(pred: GE, succ: GE, z: GE, fade: GE, dt: GE): GE = {
+    import de.sciss.synth._
+    import de.sciss.synth.ugen._
+    val dpa = fade.min(0.1) * 10
+    val pa = 1 - dpa
+    val sa = (fade - 0.9).max(0.0) * 10
+    val dsa = 1 - sa
+    val za = 1 - (pa max sa)
+    // val pm = pred * pa
+    // val sm = succ * sa
+    val dp = if (dt == Constant(0)) pred else DelayN.ar(pred, dt, dt * dpa)
+    val sp = if (dt == Constant(0)) succ else DelayN.ar(succ, dt, dt * dsa)
+    val pm = dp * pa
+    val sm = sp * sa
+    val zm = z    * za
+    //       pa.poll(1, "pa")
+    //       sa.poll(1, "sa")
+    //       za.poll(1, "za")
+    pm + sm + zm
+  }
 
+  private def mkTransition(fun: (GE, GE, GE) => GE): SynthGraph = SynthGraph {
+    import de.sciss.synth._
+    import de.sciss.synth.ugen._
+    val pred  = graph.ScanInFix("pred", 1)
+    val succ  = graph.ScanInFix("succ", 1)
+    val state = graph.Attribute.kr("state", 2)
+    val target = 3 - state // 1 for fade-in, 0 for fade-out
+    val start  = 1 - target
+    val atk    = Attack
+    val rls    = Release
+    val in     = Select.kr(ToggleFF.kr(1), Seq(start, target))
+    val fade   = Slew.kr(in, atk.reciprocal, rls.reciprocal)
+    if (DEBUG) fade.poll(1, "fade")
+    val done   = fade sig_== target
+    graph.Action(done, "done")
+    val sig   = fun(pred, succ, fade)
+    graph.ScanOut(sig)
+  }
+
+  private lazy val transGraphs: Vec[SynthGraph] = {
     // transition 1: rising LPF
     val t1 = mkTransition { (pred, succ, fade) =>
       import de.sciss.synth._
@@ -165,7 +187,8 @@ class VoiceStructure[S <: Sys[S]] {
       val bufSucc = LocalBuf(FFTSize)
       val fltPred = IFFT.ar(PV_MagAbove(FFT(bufPred, pred), thresh))
       val fltSucc = IFFT.ar(PV_MagBelow(FFT(bufSucc, succ), thresh))
-      fltSucc + fltPred
+      val z = fltPred + fltSucc
+      mkBlend(pred, succ, z, fade, FFTSize / SampleRate.ir)
     }
 
     // transition 4: descending PV_MagAbove
@@ -177,14 +200,15 @@ class VoiceStructure[S <: Sys[S]] {
       val bufSucc = LocalBuf(FFTSize)
       val fltPred = IFFT.ar(PV_MagBelow(FFT(bufPred, pred), thresh))
       val fltSucc = IFFT.ar(PV_MagAbove(FFT(bufSucc, succ), thresh))
-      fltSucc + fltPred
+      val z = fltPred + fltSucc
+      mkBlend(pred, succ, z, fade, FFTSize / SampleRate.ir)
     }
 
     // transition 5: to dust
     val t5 = mkTransition { (pred, succ, fade) =>
       import de.sciss.synth._
       import de.sciss.synth.ugen._
-      val f1   =   20
+      val f1   =   10
       val f2   = 2000
 
       val dustFreqS = fade.linexp(0, 1, f1, f2)
@@ -199,8 +223,9 @@ class VoiceStructure[S <: Sys[S]] {
 
       //      val fadeIn = Line.kr(0, 1, dur = 2)
       //      val sig = in * (1 - fadeIn) + mod * fadeIn
+      val z = fltSucc + fltPred
 
-      fltSucc + fltPred
+      mkBlend(pred, succ, z, fade, 0)
     }
 
     // transition 6: shift upwards
@@ -208,12 +233,26 @@ class VoiceStructure[S <: Sys[S]] {
       import de.sciss.synth._
       import de.sciss.synth.ugen._
 
-      val freq = fade.linexp(1, 0, 22.05, 22050) - 22.05
+      val numSteps = 16 // 10
+      val x        = fade * numSteps
+      val xh       = x / 2
+      val a        = (xh + 0.5).floor        * 2
+      val b        = (xh       .floor + 0.5) * 2
+      val ny       = 20000 // 22050
+      val aFreq    = a.linexp(numSteps, 0, 22.05, ny) - 22.05
+      val bFreq    = b.linexp(numSteps, 0, 22.05, ny) - 22.05
+      val freq: GE = Seq(aFreq, bFreq)
 
-      val fltSucc = FreqShift.ar(LPF.ar(succ, 22050 - freq),  freq)
-      val fltPred = FreqShift.ar(HPF.ar(pred, 22050 - freq), -freq)
+      val fltSucc = FreqShift.ar(LPF.ar(succ, ny - freq),  freq)
+      val fltPred = FreqShift.ar(HPF.ar(pred, ny - freq), -freq)
 
-      fltSucc + fltPred
+      val z0  = fltSucc + fltPred
+      val zig = x.fold(0, 1)
+      val az  = zig     // .sqrt
+      val bz  = 1 - zig // .sqrt
+      val z   = az * (z0 \ 1 /* aka ceil */) + bz * (z0 \ 0 /* aka floor */)
+
+      mkBlend(pred, succ, z, fade, 0)
     }
 
     // transition 7: shift downwards
@@ -221,12 +260,26 @@ class VoiceStructure[S <: Sys[S]] {
       import de.sciss.synth._
       import de.sciss.synth.ugen._
 
-      val freq = fade.linexp(0, 1, 22.05, 22050) - 22.05
+      val numSteps = 16
+      val x        = fade * numSteps
+      val xh       = x / 2
+      val a        = (xh + 0.5).floor        * 2
+      val b        = (xh       .floor + 0.5) * 2
+      val fd: GE   = Seq(a, b)
+      val ny       = 20000 // 22050
+      val freq1    = fd.linexp(0, numSteps, ny, 22.05)
+      val freq2    = fd.linexp(0, numSteps, 22.05, ny) - 22.05
 
-      val fltSucc = FreqShift.ar(HPF.ar(succ, 22050 - freq), -freq)
-      val fltPred = FreqShift.ar(LPF.ar(pred, 22050 - freq),  freq)
+      val fltSucc = FreqShift.ar(HPF.ar(succ, freq1), -freq1)
+      val fltPred = FreqShift.ar(LPF.ar(pred, ny - freq2),  freq2)
 
-      fltSucc + fltPred
+      val z0  = fltSucc + fltPred
+      val zig = x.fold(0, 1)
+      val az  = zig       // .sqrt
+      val bz  = (1 - zig) // .sqrt
+      val z   = az * (z0 \ 1 /* aka ceil */) + bz * (z0 \ 0 /* aka floor */)
+
+      mkBlend(pred, succ, z, fade, 0)
     }
 
     val transGraphs0  = Vec(t1, t2, t3, t4, t5, t6, t7)

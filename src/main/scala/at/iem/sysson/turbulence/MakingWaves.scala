@@ -115,6 +115,8 @@ object MakingWaves {
 
   private lazy val ChanSeq = (0 until VoiceStructure.NumChannels).toIndexedSeq
 
+  private implicit val rnd = new Random() // it's ok, leave it seeded with clock
+
   def react[S <: Sys[S]](values: Vec[Float], root: Folder[S])(implicit tx: S#Tx): Unit = {
     import VoiceStructure.NumChannels
     import MakeWorkspace.DEBUG
@@ -140,7 +142,7 @@ object MakingWaves {
       var numFadeIns  = 0 // dirty...
 
       import RandomOps._
-      implicit val rnd = new Random(sense.hashCode())
+      // implicit val rnd = new Random(sense.hashCode())
       // val chans = (0 until NumChannels).toUrn
 
       val hasFadeIn = (isActive || mayBecomeActive) && (false /: ChanSeq.toUrn(infinite = false)) {

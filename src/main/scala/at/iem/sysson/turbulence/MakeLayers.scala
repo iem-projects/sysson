@@ -410,17 +410,23 @@ object MakeLayers {
         val dat0      = vr.play(time)
         val period    = speed.reciprocal
 
-        // XXX TODO -- altCorr is the order still valid???
-
         //        val altCorr: GE = Vector(1.0, 1.0, 1.0, 0.5, 0.5, 0.3333, 0.1429, 0.125, 0.1429, 0.125, 0.1111, 0.1, 0.1429,
         //          0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.25, 0.2, 0.1429, 0.1667, 0.1429, 0.125, 0.1, 0.25,
         //          0.2, 0.1667, 0.125, 0.1429, 0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.1429)
-        val altCorr: GE = Vector(1.0000, 1.0000, 1.0000, 0.7071, 0.7071, 0.5774, 0.3780, 0.3536,
-                                 0.3780, 0.3536, 0.3333, 0.3162, 0.3780, 0.3333, 0.3162, 0.3162,
-                                 0.5000, 0.4472, 0.4082, 0.3536, 0.5000, 0.5000, 0.4472, 0.3780,
-                                 0.4082, 0.3780, 0.3536, 0.3162, 0.5000, 0.4472, 0.4082, 0.3536,
-                                 0.3780, 0.3333, 0.3162, 0.3162, 0.5000, 0.4472, 0.4082, 0.3536,
-                                 0.5000, 0.3780)
+
+        //        val altCorr: GE = Vector(1.0000, 1.0000, 1.0000, 0.7071, 0.7071, 0.5774, 0.3780, 0.3536,
+        //                                 0.3780, 0.3536, 0.3333, 0.3162, 0.3780, 0.3333, 0.3162, 0.3162,
+        //                                 0.5000, 0.4472, 0.4082, 0.3536, 0.5000, 0.5000, 0.4472, 0.3780,
+        //                                 0.4082, 0.3780, 0.3536, 0.3162, 0.5000, 0.4472, 0.4082, 0.3536,
+        //                                 0.3780, 0.3333, 0.3162, 0.3162, 0.5000, 0.4472, 0.4082, 0.3536,
+        //                                 0.5000, 0.3780)
+
+        val altCorr: GE = Vector(0.5000, 0.4472, 0.5000, 0.4082, 0.3780, 0.3536, 0.3780, 0.3333,
+                                 0.3162, 0.3162, 0.5000, 0.4472, 0.4082, 0.3536, 1.0000, 0.7071,
+                                 0.5774, 0.5000, 0.5000, 0.4472, 0.4472, 0.4082, 0.4082, 0.3780,
+                                 0.3536, 0.3162, 1.0000, 1.0000, 0.7071, 0.5000, 0.3780, 0.3780,
+                                 0.3536, 0.3162, 0.3333, 0.3333, 0.3536, 0.3162, 0.3780, 0.3780,
+                                 0.3536, 0.3162)
 
         val dat1      = dat0 * altCorr
         val dat       = Ramp.ar(dat1, period)
@@ -868,7 +874,7 @@ val mix = FreeVerb.ar(mix0)
       val sonObj  = mkSonif[S]("eastwind") {
         import synth._; import ugen._; import sysson.graph._
 
-        val latValues = (-85.0 to 85.0 by 10.0) // that file has a more coarse raster
+        val latValues = -85.0 to 85.0 by 10.0 // that file has a more coarse raster
 
         val v       = Var("ua")
         val dt      = Dim(v, "time")
@@ -883,7 +889,7 @@ val mix = FreeVerb.ar(mix0)
         val min = -15.46  // expected from data
         val max = +48.88
 
-        val amp   = graph.Attribute.kr("gain", 1)
+        val amp   = graph.Attribute.kr("gain", 2)
 
         val sound = graph.DiskIn.ar("sound", loop = 1)
 
@@ -899,7 +905,9 @@ val mix = FreeVerb.ar(mix0)
 
           //  val thresh = 5.0  // m/s
 
-          val amt    = (thresh - x.abs).max(0) / thresh // 0 ... 1
+          // val amt    = (thresh - x.abs).max(0) / thresh // 0 ... 1
+          val amt = x.max(0) / max
+
           val lr     = idx % 2
           val ch     = sound \ lr
           val amp1   = amt * amp  // XXX TODO - elaborate
