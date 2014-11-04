@@ -150,6 +150,63 @@
       mkBlend(pred, succ, z, fade, 0)
     }
 
+
+    // transition 7: shift downwards
+    def t7(): Unit = mkTransition { (pred, succ, fade) =>
+      val freq = fade.linexp(0, 1, 22.05, 22050) - 22.05
+
+      val fltSucc = FreqShift.ar(HPF.ar(succ, 22050 - freq), -freq)
+      val fltPred = FreqShift.ar(LPF.ar(pred, 22050 - freq),  freq)
+
+      val z = fltSucc + fltPred
+      mkBlend(pred, succ, z, fade, 0)
+    }
+
+    // transition 7: shift downwards
+    def t7b(): Unit = mkTransition { (pred, succ, fade) =>
+      val ny    = 20000 // 22050
+      val freq1 = fade.linexp(0, 1, ny, 22.05)
+      // val freq1 = 22050 - freq
+      val freq2 = fade.linexp(0, 1, 22.05, ny) - 22.05
+
+      val fltSucc = FreqShift.ar(HPF.ar(succ, freq1), -freq1)
+      val fltPred = FreqShift.ar(LPF.ar(pred, ny - freq2), freq2)
+
+      val z = fltSucc + fltPred
+      mkBlend(pred, succ, z, fade, 0)
+    }
+
+    def mkSteps(num: Int, fade: GE): GE = {
+      val x        = fade * num
+      val xh       = x / 2
+      val a        = (xh + 0.5).floor        * 2
+      val b        = (xh       .floor + 0.5) * 2
+      Seq(a, b)
+    }
+
+    // transition 7: shift downwards - steps
+    def t7c(): Unit = mkTransition { (pred, succ, fade) =>
+      val numSteps = 16
+      val x        = fade * numSteps
+      val xh       = x / 2
+      val a        = (xh + 0.5).floor        * 2
+      val b        = (xh       .floor + 0.5) * 2
+      val fd: GE   = Seq(a, b)
+      val ny       = 20000 // 22050
+      val freq1    = fd.linexp(0, numSteps, ny, 22.05)
+      val freq2    = fd.linexp(0, numSteps, 22.05, ny) - 22.05
+
+      val fltSucc = FreqShift.ar(HPF.ar(succ, freq1), -freq1)
+      val fltPred = FreqShift.ar(LPF.ar(pred, ny - freq2),  freq2)
+
+      val z0  = fltSucc + fltPred
+      val zig = x.fold(0, 1)
+      val az  = zig       // .sqrt
+      val bz  = (1 - zig) // .sqrt
+      val z   = az * (z0 \ 1 /* aka ceil */) + bz * (z0 \ 0 /* aka floor */)
+      
+      mkBlend(pred, succ, z, fade, 0)
+    }
   
 val pred = Bus.audio(s, 1)
 val succ = Bus.audio(s, 1)
@@ -183,7 +240,7 @@ val y = play {
 }
 
 SynthDef.recv("foo") {
-  t6c()
+  t7c()
 }
 
 val t = Synth.play("foo", args = Seq("pred" -> pred.index, "succ" -> succ.index, "state" -> 2),
