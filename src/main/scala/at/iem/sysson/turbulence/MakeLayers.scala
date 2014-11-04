@@ -41,12 +41,15 @@ object MakeLayers {
   final val DataAmonHist_Pr   = ("pr_Amon_hist_voronoi" , "pr" )
   final val DataTaAnom        = ("ta_anom_spk"          , "Temperature")
   final val DataPrBlog        = ("pr_amon_hist_blob"    , "pr")
+  final val DataEastWind      = ("ZON_200hPa_ua_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512", "ua")
 
   final val NumBlobs = 4
 
   lazy val all: Vec[LayerFactory] = {
     //             0          1             2             3       4           5            6
-    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips)
+    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips,
+    //             7
+                   Wind)
     real.padTo(NumLayers, Placeholder)
   }
 
@@ -855,48 +858,77 @@ val mix = FreeVerb.ar(mix0)
     }
   }
 
-  // ---- Window TODO ----
+  // -------------------- Wind --------------------
 
-/*
-// graph function source code
+  object Wind extends LayerFactory {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+      val imp     = ExprImplicits[S]
+      import imp._
 
-val latValues = (-85.0 to 85.0 by 10.0)
+      val sonObj  = mkSonif[S]("eastwind") {
+        import synth._; import ugen._; import sysson.graph._
 
-import at.iem.sysson.turbulence._
+        val latValues = (-85.0 to 85.0 by 10.0) // that file has a more coarse raster
 
-val v     = Var("ua")
-val dt    = Dim(v, "time")
-val speed = UserValue("speed", 1).kr
-val time  = dt.play(speed)
-val data0 = v.play(time)
-val period = speed.reciprocal
-val data  = Ramp.ar(data0, period)
+        val v       = Var("ua")
+        val dt      = Dim(v, "time")
+        // val speed = UserValue("speed", 1).kr
+        val speed   = graph.Attribute.kr("speed", 1)
+        val time    = dt.play(speed)
+        val data0   = v.play(time)
+        val period  = speed.reciprocal
+        val data    = Ramp.ar(data0, period)
 
-// meters per second
-val min = -15.46  // expected from data
-val max = +48.88
+        // meters per second
+        val min = -15.46  // expected from data
+        val max = +48.88
 
-val sound = DiskIn.ar("sound", loop = 1)
+        val amp   = graph.Attribute.kr("gain", 1)
 
-val thresh = UserValue("thresh", 2).kr
+        val sound = graph.DiskIn.ar("sound", loop = 1)
 
-Turbulence.Channels.zipWithIndex.foreach { case (spk, idx) =>
-  val lli    = Turbulence.ChannelToGeoMap(spk)
-  val lat    = Turbulence.latitude(lli.latIdx)
-  val d      = latValues.map(_ absdif lat)
-  val idx    = d.indexOf(d.min)
-  val x      = data \ idx
+        // val thresh = UserValue("thresh", 2).kr
+        val thresh = graph.Attribute.kr("thresh", 2)
 
-//  val thresh = 5.0  // m/s
+        val sig1: GE = Turbulence.Channels.zipWithIndex.map { case (spk, idx) =>
+          val lli    = Turbulence.ChannelToGeoMap(spk)
+          val lat    = Turbulence.latitude(lli.latIdx)
+          val d      = latValues.map(_ absdif lat)
+          val idx    = d.indexOf(d.min)
+          val x      = data \ idx
 
-  val amt    = (thresh - x.abs).max(0) / thresh // 0 ... 1
-  val lr     = idx % 2
-  val ch     = sound \ lr
-  val amp    = amt  // TODO
-  val sig    = ch * amp
-  Out.ar(spk.toIndex, sig)
-}
- */
+          //  val thresh = 5.0  // m/s
+
+          val amt    = (thresh - x.abs).max(0) / thresh // 0 ... 1
+          val lr     = idx % 2
+          val ch     = sound \ lr
+          val amp1   = amt * amp  // XXX TODO - elaborate
+          val sig    = ch * amp1
+          sig // Out.ar(spk.toIndex, sig)
+        }
+
+        graph.ScanOut(sig1)
+      }
+
+      val son     = sonObj.elem.peer
+      val procObj = son.proc
+
+      val sources = son.sources.modifiableOption.get
+      val srcUA   = getSonificationSource(DataEastWind)
+      val dimsUA  = srcUA.dims.modifiableOption.get
+      dimsUA .put("time", "time")
+      sources.put("ua", srcUA)
+
+      val loc   = getBaseLocation()
+      val f     = Turbulence.audioWork / "P22_tree-leaves-rustling.wav"
+      val spec  = AudioFile.readSpec(f)
+      require(spec.numChannels == 2, s"File $f should be stereo, but has ${spec.numChannels} channels")
+      val artObj  = ObjectActions.mkAudioFile(loc, f, spec)
+      procObj.attr.put("sound", artObj)
+
+      (sonObj, procObj.elem.peer)
+    }
+  }
 
   // -------------------- Placeholder --------------------
 
