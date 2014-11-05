@@ -139,6 +139,11 @@ object MakeLayers {
     sonObj
   }
 
+  private def mkTimeRecord(time: GE): Unit = {
+    import synth._; import ugen._; import proc.graph._
+    Reaction(Impulse.kr(0.5), time, "time")
+  }
+
   // -------------------- Freesound --------------------
 
   /** the field recording based layer, using
@@ -146,6 +151,8 @@ object MakeLayers {
     * sound-file names contain ID and consequently resolve author on Freesound.
     */
   object Freesound extends LayerFactory {
+    final val varName = "geo-tag"
+
     //    // spk-num to avg energy in decibels
     //    val energy = Map[Int, Double](
     //       3 -> -42.5,  4 -> -33.4,  5 -> -28.9,  6 -> -30.5,  7 -> -36.7,  8 -> -31.8,
@@ -235,12 +242,9 @@ object MakeLayers {
 
   // -------------------- VoronoiPitch --------------------
 
-  private def mkTimeRecord(time: GE): Unit = {
-    import synth._; import ugen._; import proc.graph._
-    Reaction(Impulse.kr(0.5), time, "time")
-  }
-
   object VoronoiPitch extends LayerFactory {
+    final val varName = "tas"
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp = ExprImplicits[S]
       import imp._
@@ -300,6 +304,8 @@ object MakeLayers {
   // -------------------- VoronoiPaper --------------------
 
   object VoronoiPaper extends LayerFactory {
+    final val varName = "pr+tas"
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
 
       val sonObj  = mkSonif[S]("voronoi-paper") {
@@ -317,6 +323,7 @@ object MakeLayers {
         val timePr    = dTimePr .play(speed)
         val datTas    = vTas.play(timeTas)
         val datPr     = vPr .play(timePr )
+        mkTimeRecord(timeTas)
 
         val amp       = graph.Attribute.kr("gain", 6)
 
@@ -408,6 +415,8 @@ object MakeLayers {
   // -------------------- TaAnom --------------------
 
   object TaAnom extends LayerFactory {
+    final val varName = "RO-ta-anom"
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
@@ -416,6 +425,7 @@ object MakeLayers {
         import synth._; import ugen._; import sysson.graph._
         val vr        = Var("anom")
         val dTime     = Dim(vr, "time")
+        // XXX TODO - has different base - mkTimeRecord(time)
 
         val speed     = graph.Attribute.kr("speed", 0.1)
         val time      = dTime.play(speed)
@@ -491,6 +501,8 @@ object MakeLayers {
   // -------------------- ConvPrecip --------------------
 
   object ConvPrecip extends LayerFactory {
+    final val varName = "pr"
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
@@ -509,8 +521,9 @@ object MakeLayers {
         val dTimePr   = Dim(vPr , "time")
 
         val speed     = graph.Attribute.kr("speed", 0.2)
-        val timePr    = dTimePr .play(speed)
-        val datPr     = vPr .play(timePr )
+        val time      = dTimePr .play(speed)
+        val datPr     = vPr .play(time )
+        mkTimeRecord(time)
 
         val amp       = graph.Attribute.kr("gain", 1.2)
 
@@ -559,6 +572,8 @@ object MakeLayers {
   // -------------------- PrecipBlobs --------------------
 
   object PrecipBlobs extends LayerFactory {
+    final val varName = "pr-blobs"
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
@@ -573,6 +588,7 @@ object MakeLayers {
         val time  = dt.play(speed)
         val data0 = vr.play(time)
         val data  = A2K.kr(data0)
+        mkTimeRecord(time)
 
         val period = speed.reciprocal
 
@@ -760,6 +776,8 @@ val mix = FreeVerb.ar(mix0)
   // -------------------- RadiationBlips --------------------
 
   object RadiationBlips extends LayerFactory {
+    final val varName = "radiation"
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
@@ -809,6 +827,8 @@ val mix = FreeVerb.ar(mix0)
           val norm = Ramp.ar(norm0, period)
           (norm, time)
         } .unzip
+
+        // XXX TODO - has different base - mkTimeRecord(time)
 
         // hfls - spirals upwards
         // hfss - spirals downwards
@@ -879,6 +899,8 @@ val mix = FreeVerb.ar(mix0)
   // -------------------- Wind --------------------
 
   object Wind extends LayerFactory {
+    final val varName = "ua"
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
@@ -896,6 +918,7 @@ val mix = FreeVerb.ar(mix0)
         val data0   = v.play(time)
         val period  = speed.reciprocal
         val data    = Ramp.ar(data0, period)
+        mkTimeRecord(time)
 
         // meters per second
         val min = -15.46  // expected from data
@@ -953,6 +976,8 @@ val mix = FreeVerb.ar(mix0)
   // -------------------- Placeholder --------------------
 
   object Placeholder extends LayerFactory {
+    final val varName = "none"
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp = ExprImplicits[S]
       import imp._
@@ -982,4 +1007,6 @@ trait LayerFactory {
     *         can should be wired. Often the container object will be the object of that proc.
     */
   def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S])
+
+  def varName: String
 }

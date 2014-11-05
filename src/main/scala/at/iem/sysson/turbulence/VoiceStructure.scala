@@ -119,8 +119,11 @@ object VoiceStructure {
     timeFramesSince1850.set(frames)(tx.peer)
     val date    = date1850.add(days, CalendarPeriod.Field.Day)
     val s       = CalendarDateFormatter.toDateTimeString(date)
+    val li      = self.attr[IntElem]("li").map(_.value).getOrElse(-1)
+    val varName = if (li < 0) "???" else MakeLayers.all(li).varName
 
-    println(s"TIME = $s; FRAMES = $frames")
+    Report.send[S](li = li, varName = varName, date = s)
+    // println(s"TIME = $s; FRAMES = $frames")
   }
 }
 class VoiceStructure[S <: Sys[S]] {

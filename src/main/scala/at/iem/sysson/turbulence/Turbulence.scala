@@ -281,6 +281,7 @@ object Turbulence {
     val pkg = "at.iem.sysson.turbulence._" :: Nil
     Code.registerImports(Code.Action    .id, pkg)
     Code.registerImports(Code.SynthGraph.id, pkg)
+    Report.init()
     atomic { implicit itx =>
       implicit val tx = Txn.wrap(itx)
       Sensors.init()
