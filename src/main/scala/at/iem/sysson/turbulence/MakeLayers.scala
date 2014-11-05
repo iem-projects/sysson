@@ -27,7 +27,7 @@ import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
 import de.sciss.mellite.{Workspace, ObjectActions}
 import de.sciss.synth
 import de.sciss.synth.io.AudioFile
-import de.sciss.synth.{proc, SynthGraph}
+import de.sciss.synth.{GE, proc, SynthGraph}
 import de.sciss.synth.proc.{ArtifactLocationElem, FolderElem, Folder, ObjKeys, StringElem, ExprImplicits, Obj, Proc, graph}
 import proc.Implicits._
 
@@ -192,7 +192,7 @@ object MakeLayers {
       files
     }
 
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val files = fileMap
 
       val imp = ExprImplicits[S]
@@ -229,14 +229,19 @@ object MakeLayers {
         // procObj.attr.put("gain", Obj(DoubleElem(gain)))
       }
 
-      (procObj, proc)
+      (procObj, procObj)
     }
   }
 
   // -------------------- VoronoiPitch --------------------
 
+  private def mkTimeRecord(time: GE): Unit = {
+    import synth._; import ugen._; import proc.graph._
+    Reaction(Impulse.kr(0.5), time, "time")
+  }
+
   object VoronoiPitch extends LayerFactory {
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp = ExprImplicits[S]
       import imp._
 
@@ -249,6 +254,7 @@ object MakeLayers {
 
         val speed   = Attribute.kr("speed", 0.1)
         val time    = dTime.play(speed)
+        mkTimeRecord(time)
         val data    = v.play(time)
 
         val period  = speed.reciprocal
@@ -281,14 +287,14 @@ object MakeLayers {
       dims.put("time", "time")
       sources.put("tas", src)
 
-      (sonObj, son.proc.elem.peer)
+      (sonObj, son.proc)
     }
   }
 
   // -------------------- VoronoiPaper --------------------
 
   object VoronoiPaper extends LayerFactory {
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
 
       val sonObj  = mkSonif[S]("voronoi-paper") {
         import synth._; import ugen._; import sysson.graph._
@@ -389,14 +395,14 @@ object MakeLayers {
       dimsPr .put("time", "time")
       sources.put("pr"  , srcPr )
 
-      (sonObj, son.proc.elem.peer)
+      (sonObj, son.proc)
     }
   }
 
   // -------------------- TaAnom --------------------
 
   object TaAnom extends LayerFactory {
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
 
@@ -472,14 +478,14 @@ object MakeLayers {
       dims.put("time", nameTime)
       sources.put("anom" , src)
 
-      (sonObj, son.proc.elem.peer)
+      (sonObj, son.proc)
     }
   }
 
   // -------------------- ConvPrecip --------------------
 
   object ConvPrecip extends LayerFactory {
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
 
@@ -540,14 +546,14 @@ object MakeLayers {
         procObj.attr.put(mkKey(num), artObj)
       }
 
-      (sonObj, procObj.elem.peer)
+      (sonObj, procObj)
     }
   }
 
   // -------------------- PrecipBlobs --------------------
 
   object PrecipBlobs extends LayerFactory {
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
 
@@ -737,7 +743,7 @@ val mix = FreeVerb.ar(mix0)
       val artObj  = ObjectActions.mkAudioFile(loc, fMap, spec)
       procObj.attr.put("chan-map", artObj)
 
-      (sonObj, procObj.elem.peer)
+      (sonObj, procObj)
     }
   }
 
@@ -748,7 +754,7 @@ val mix = FreeVerb.ar(mix0)
   // -------------------- RadiationBlips --------------------
 
   object RadiationBlips extends LayerFactory {
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
 
@@ -860,14 +866,14 @@ val mix = FreeVerb.ar(mix0)
         sources.put(name, srcPr )
       }
 
-      (sonObj, procObj.elem.peer)
+      (sonObj, procObj)
     }
   }
 
   // -------------------- Wind --------------------
 
   object Wind extends LayerFactory {
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
 
@@ -894,7 +900,7 @@ val mix = FreeVerb.ar(mix0)
         val sound = graph.DiskIn.ar("sound", loop = 1)
 
         // val thresh = UserValue("thresh", 2).kr
-        val thresh = graph.Attribute.kr("thresh", 2)
+        // val thresh = graph.Attribute.kr("thresh", 2)
 
         val sig1: GE = Turbulence.Channels.zipWithIndex.map { case (spk, idx) =>
           val lli    = Turbulence.ChannelToGeoMap(spk)
@@ -934,14 +940,14 @@ val mix = FreeVerb.ar(mix0)
       val artObj  = ObjectActions.mkAudioFile(loc, f, spec)
       procObj.attr.put("sound", artObj)
 
-      (sonObj, procObj.elem.peer)
+      (sonObj, procObj)
     }
   }
 
   // -------------------- Placeholder --------------------
 
   object Placeholder extends LayerFactory {
-    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S]) = {
+    def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp = ExprImplicits[S]
       import imp._
 
@@ -958,7 +964,7 @@ val mix = FreeVerb.ar(mix0)
         graph.ScanOut(sig)
       }
 
-      (procObj, proc)
+      (procObj, procObj)
     }
   }
 }
@@ -969,5 +975,5 @@ trait LayerFactory {
     * @return a tuple consisting of the container object and the proc whose `"out"`
     *         can should be wired. Often the container object will be the object of that proc.
     */
-  def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc[S])
+  def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S])
 }

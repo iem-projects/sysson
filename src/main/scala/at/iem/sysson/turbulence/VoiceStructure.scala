@@ -47,12 +47,13 @@ object VoiceStructure {
   def apply[S <: Sys[S]]()(implicit tx: S#Tx, cursor: stm.Cursor[S], workspace: Workspace[S],
                            compiler: Code.Compiler): Future[Unit] = {
     val vs        = new VoiceStructure[S]
-    val actionFut = vs.mkAction()
+    val doneFut   = vs.mkDoneAction()
+    val timeFut   = vs.mkTimeAction()
     import Folder.serializer
     import SoundProcesses.executionContext
-    actionFut.map { actionH =>
+    Future.sequence(Seq(doneFut, timeFut)).map { case Seq(doneH, timeH) =>
       cursor.step { implicit tx =>
-        val all = vs.mkWorld(actionH())
+        val all = vs.mkWorld(done = doneH(), time = timeH())
         workspace.root.addHead(all)
         // tx.newHandle(all)
       }
@@ -72,7 +73,6 @@ object VoiceStructure {
   def doneAction[S <: Sys[S]](self: Action.Obj[S], root: Folder[S])(implicit tx: S#Tx): Unit = {
     val imp = ExprImplicits[S]
     import imp._
-    import at.iem.sysson.turbulence._
     import MakeWorkspace.DEBUG
 
     for {
@@ -101,6 +101,14 @@ object VoiceStructure {
       }
     }
   }
+
+  def timeAction[S <: Sys[S]](self: Action.Obj[S], root: Folder[S], values: Vec[Float])(implicit tx: S#Tx): Unit = {
+    val imp = ExprImplicits[S]
+    import imp._
+
+    val time = values(0)
+    println(s"TIME = $time")
+  }
 }
 class VoiceStructure[S <: Sys[S]] {
   import VoiceStructure._
@@ -109,12 +117,23 @@ class VoiceStructure[S <: Sys[S]] {
   private[this] val imp = ExprImplicits[S]
   import imp._
 
-  def mkAction()(implicit tx: S#Tx, cursor: stm.Cursor[S],
-                 compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
-    println("Making Voices Action")
+  def mkDoneAction()(implicit tx: S#Tx, cursor: stm.Cursor[S],
+                     compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
+    println("Making Voices Done Action")
     val source =
       """import at.iem.sysson.turbulence._
         |VoiceStructure.doneAction(self, root)
+        |""".stripMargin
+    val code  = Code.Action(source)
+    Action.compile[S](code)
+  }
+
+  def mkTimeAction()(implicit tx: S#Tx, cursor: stm.Cursor[S],
+                 compiler: Code.Compiler): Future[stm.Source[S#Tx, Action[S]]] = {
+    println("Making Voices Time Action")
+    val source =
+      """import at.iem.sysson.turbulence._
+        |VoiceStructure.timeAction(self, root, values)
         |""".stripMargin
     val code  = Code.Action(source)
     Action.compile[S](code)
@@ -292,7 +311,7 @@ class VoiceStructure[S <: Sys[S]] {
   import BooleanEx.{serializer => boolSer, varSerializer => boolVarSer}
   import IntEx    .{serializer => intSer , varSerializer => intVarSer }
 
-  def mkWorld(done: Action[S])(implicit tx: S#Tx, workspace: Workspace[S]): Ensemble.Obj[S] = {
+  def mkWorld(done: Action[S], time: Action[S])(implicit tx: S#Tx, workspace: Workspace[S]): Ensemble.Obj[S] = {
     println("Making Voices World")
     //    val sensors = Vec.tabulate(NumSpeakers) { speaker =>
     //      val sensor = IntEx.newVar[S](-1)
@@ -326,7 +345,7 @@ class VoiceStructure[S <: Sys[S]] {
     diffObj.name = "diff"
 
     val vecLayer  = MakeLayers.all.zipWithIndex.map { case (factory, li) =>
-      mkLayer(diff, done, li, factory)
+      mkLayer(diff = diff, done = done, time = time, li = li, factory = factory)
     }
 
     val vecPlaying      = vecLayer.map(_.elem.peer.playing)
@@ -396,24 +415,27 @@ class VoiceStructure[S <: Sys[S]] {
     graph.ScanOut(sig)
   }
 
-  private def mkLayer(diff: Proc[S], done: Action[S], li: Int,
+  private def mkLayer(diff: Proc[S], done: Action[S], time: Action[S], li: Int,
                       factory: LayerFactory)
                      (implicit tx: S#Tx, workspace: Workspace[S]): Ensemble.Obj[S] = {
     val transId     = IntEx.newVar[S](0) // "sampled" in `checkWorld`
     val transIdObj  = Obj(IntElem(transId))
 
     // layer-level ensemble
-    val lFolder = Folder[S]
+    val lFolder     = Folder[S]
 
     // the actual sound layer
-    val (genObj, gen) = factory.mkLayer()
+    val (genOuterObj, genProcObj) = factory.mkLayer()
     //    val gen       = Proc[S]
     //    gen.graph()   = genGraph
     //    val genObj    = Obj(Proc.Elem(gen))
-    val liObj     = Obj(IntElem(li))
-    genObj.attr.put("li", liObj)
-    genObj.name = s"gen$li"
-    lFolder.addLast(genObj)
+    val liObj       = Obj(IntElem(li))
+    genOuterObj.attr.put("li", liObj)
+    genOuterObj.name = s"gen$li"
+    val timeObj     = Obj(Action.Elem(time))
+    timeObj.attr.put("li"   , liObj   )
+    genProcObj.attr.put("time", timeObj)
+    lFolder.addLast(genOuterObj)
 
     // layer-ensemble input from predecessor
     val pred        = Proc[S]
@@ -427,7 +449,7 @@ class VoiceStructure[S <: Sys[S]] {
     val split       = Proc[S]
     split.graph()   = splitGraph
     val splitObj    = Obj(Proc.Elem(split))
-    splitObj.name = s"split$li"
+    splitObj.name   = s"split$li"
     lFolder.addLast(splitObj)
     pred.scans.add("out") ~> split.scans.add("in")
 
@@ -435,15 +457,16 @@ class VoiceStructure[S <: Sys[S]] {
     val succ        = Proc[S]
     succ.graph()    = splitGraph
     val succObj     = Obj(Proc.Elem(succ))
-    succObj.name = s"succ$li"
+    succObj.name    = s"succ$li"
     lFolder.addLast(succObj)
-    gen.scans.add("out") ~> succ.scans.add("in")
+    val genProc     = genProcObj.elem.peer
+    genProc.scans.add("out") ~> succ.scans.add("in")
 
     // aka collector
     val coll        = Proc[S]
     coll.graph()    = collGraph
     val collObj     = Obj(Proc.Elem(coll))
-    collObj.name = s"coll$li"
+    collObj.name    = s"coll$li"
     lFolder.addLast(collObj)
 
     // layer-ensemble output to successor
@@ -451,7 +474,7 @@ class VoiceStructure[S <: Sys[S]] {
     out.graph()     = throughGraph
     out.scans.add("out")
     val outObj      = Obj(Proc.Elem(out))
-    outObj.name = s"foo$li"
+    outObj.name     = s"foo$li"
     lFolder.addLast(outObj)
     coll.scans.add("out") ~> out.scans.add("in")
 
@@ -495,8 +518,6 @@ class VoiceStructure[S <: Sys[S]] {
       val doneObj   = Obj(Action.Elem(done))
       doneObj.attr.put("state", stateObj)
       doneObj.attr.put("li"   , liObj   )
-      // doneObj.attr.put("pred" , predObj )
-      // doneObj.attr.put("out"  , outObj  )
 
       new Channel(stateObj = stateObj, state = state, fPlaying = fPlaying, active = active,
         predOut = predOut, succOut = succOut, collIn = collIn, doneObj = doneObj)
