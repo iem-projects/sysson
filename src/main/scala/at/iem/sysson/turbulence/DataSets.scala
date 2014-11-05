@@ -32,31 +32,52 @@ import scala.concurrent.stm.TxnExecutor
 import scala.util.{Failure, Success}
 
 object DataSets {
-  def sysSonDir   = userHome / "IEM" / "SysSon"
+  def sysSonDir   = userHome  / "IEM" / "SysSon"
   def dlrDir      = sysSonDir / "Data" / "201211" / "gcm" / "New_Deutschlandradio_MPI_M"
   def workshopDir = sysSonDir / "WorkshopSep2014"
   def dataOutDir  = sysSonDir / "installation" / "data"
 
-  def main(args: Array[String]): Unit = args.headOption.getOrElse("") match {
-    case "--pr-voronoi" =>
-      val vr  = "pr"
-      val inF = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
-      val outF = dataOutDir / s"${vr}_Amon_hist_voronoi.nc"
-      convertViaVoronoi(inF = inF, varName = vr, outF = outF)
+  private def join(vr: String, outF: File): Unit = {
+    val in1F  = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
+    val in2F  = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_rcp45_r1i1p1_200601-230012.nc"
+    val in1   = openFile(in1F)
+    val in2   = openFile(in2F)
+    TransformNetcdfFile.concat(in1, in2, outF, vr)
+    in1.close(); in2.close()
+  }
 
-    case "--tas-voronoi" =>
-      val vr    = "tas"
-      val inF   = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
-      val outF  = dataOutDir / s"${vr}_Amon_hist_voronoi.nc"
-      convertViaVoronoi(inF = inF, varName = vr, outF = outF)
+  private def mkVoronoi(vr: String): Unit = {
+    val outFJ = File.createTemp("turbulence", ".nc")
+    join(vr, outFJ)
+    val outF  = dataOutDir / s"${vr}_amon_join_voronoi.nc"
+    convertViaVoronoi(inF = outFJ, varName = vr, outF = outF)
+  }
+
+  def main(args: Array[String]): Unit = args.headOption.getOrElse("") match {
+    case "--pr-voronoi"   => mkVoronoi("pr")
+    case "--tas-voronoi"  => mkVoronoi("tas")
 
     case "--ta-anomalies"         => calcTemperatureAnomalies(1)
     case "--ta-anomalies2"        => calcTemperatureAnomalies(2)
     case "--precipitation-blobs"  => calcPrecipitationBlobs()
     case "--dymgrid-chan-map"     => calcDymGridChans()
     case "--glue"                 => createGluedFiles()
+    case "--wind"                 => createWindFiles()
 
     case other => sys.error(s"Unsupported command: $other")
+  }
+
+  // ----------- createWindFiles -----------
+
+  def createWindFiles(): Unit = {
+    val vrName = "ua"
+
+    val in1F  = dlrDir / vrName / s"ZON_200hPa_${vrName}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
+    val in2F  = dlrDir / vrName / s"ZON_200hPa_${vrName}_Amon_MPI-ESM-LR_rcp45_r1i1p1_200601-230012.nc"
+    val outF  = dataOutDir / s"ZON_200hPa_${vrName}_amon_join.nc"
+    val in1   = openFile(in1F)
+    val in2   = openFile(in2F)
+    TransformNetcdfFile.concat(in1, in2, outF, vrName)
   }
 
   // ----------- createGluedFiles -----------
@@ -203,7 +224,10 @@ object DataSets {
     import sysson.Implicits._
 
     val vrName  = "pr"
-    val inF     = dlrDir / vrName / s"25_${vrName}_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
+    val outFJ = File.createTemp("turbulence", ".nc")
+    join(vrName, outFJ)
+    val inF     = outFJ
+
     val in      = openFile(inF)
     val vr      = in.variableMap(vrName)
     val dims    = vr.dimensionMap
@@ -317,7 +341,7 @@ object DataSets {
       next
     }
 
-    val outF      = dataOutDir / s"pr_amon_hist_blob.nc"
+    val outF      = dataOutDir / s"pr_amon_join_blob.nc"
     val blobData  = ma2.Array.factory((0 until (5 * numVoices)).toArray)
 
     var prevFrame = emptyFrame  // XXX not cool, TransformNetcdfFile doesn't thread state

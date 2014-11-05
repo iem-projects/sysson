@@ -37,13 +37,15 @@ import scala.collection.immutable.{IndexedSeq => Vec}
 import VoiceStructure.{NumChannels, NumLayers}
 
 object MakeLayers {
-  final val DataAmonHist_Tas  = ("tas_Amon_hist_voronoi", "tas")
-  final val DataAmonHist_Pr   = ("pr_Amon_hist_voronoi" , "pr" )
+  final val DataAmonHist_Tas  = ("tas_amon_join_voronoi", "tas")
+  final val DataAmonHist_Pr   = ("pr_amon_join_voronoi" , "pr" )
   final val DataTaAnom        = ("ta_anom_spk"          , "Temperature")
-  final val DataPrBlog        = ("pr_amon_hist_blob"    , "pr")
-  final val DataEastWind      = ("ZON_200hPa_ua_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512", "ua")
+  final val DataPrBlog        = ("pr_amon_join_blob"    , "pr")
+  final val DataEastWind      = ("ZON_200hPa_ua_amon_join", "ua")
 
   final val NumBlobs = 4
+
+  final val VerifyBounds = true
 
   lazy val all: Vec[LayerFactory] = {
     //             0          1             2             3       4           5            6
@@ -249,10 +251,12 @@ object MakeLayers {
       val imp = ExprImplicits[S]
       import imp._
 
+      val varName = "!1850tas"
+
       val sonObj  = mkSonif[S]("voronoi-pitch") {
         import synth._; import ugen._; import proc.graph._; import sysson.graph._
 
-        val v       = Var("tas")
+        val v       = Var(varName)
         val dTime   = Dim(v, "time")
         // val dSpk  = Dim(v, "spk" )
 
@@ -266,13 +270,19 @@ object MakeLayers {
 
         val amp     = Attribute.kr("gain", 1.5) // UserValue("amp", 1).kr
 
-        // for historical dataset:
-        val minTas  = 231.962
-        val maxTas  = 304
+        //        // for hist dataset:
+        //        val minTas  = 231.962
+        //        val maxTas  = 304
+
+        // for joined dataset:
+        val minTas  = 232.0196
+        val maxTas  = 306.7474
 
         val dustFreq = 10
 
-        // lag.poll((lag < minTas) + (lag > maxTas), "TAS-OFF")
+        if (VerifyBounds) {
+          lag.poll((lag < minTas) + (lag > maxTas), "TAS-OFF")
+        }
 
         val freq    = lag.linexp(minTas, maxTas, 10000, 150)
 
@@ -295,7 +305,7 @@ object MakeLayers {
       val src     = getSonificationSource(DataAmonHist_Tas)
       val dims    = src.dims.modifiableOption.get
       dims.put("time", "time")
-      sources.put("tas", src)
+      sources.put(varName, src)
 
       (sonObj, son.proc)
     }
@@ -307,14 +317,16 @@ object MakeLayers {
     final val varName = "pr+tas"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
+      val varNameTas = "!1850tas"
+      val varNamePr  = "!1850pr"
 
       val sonObj  = mkSonif[S]("voronoi-paper") {
         import synth._; import ugen._; import sysson.graph._
 
         val DEBUG = false
 
-        val vTas      = Var("tas")
-        val vPr       = Var("pr" )
+        val vTas      = Var(varNameTas)
+        val vPr       = Var(varNamePr )
         val dTimeTas  = Dim(vTas, "time")
         val dTimePr   = Dim(vPr , "time")  // XXX TODO - should be able to share
 
@@ -331,12 +343,26 @@ object MakeLayers {
         val lagTas    = Ramp.ar(datTas, period)
         val lagPr     = Ramp.ar(datPr , period)
 
-        // for historical dataset:
-        val minTas = 232
-        val maxTas = 304
+        //        // for historical dataset:
+        //        val minTas = 232
+        //        val maxTas = 304
 
-        val minPr  = 4.6e-7
-        val maxPr  = 1.9e-4
+        // for joined dataset:
+        val minTas  = 232.0196
+        val maxTas  = 306.7474
+
+        //        // for historical dataset
+        //        val minPr  = 4.6e-7
+        //        val maxPr  = 1.9e-4
+
+        // for joined dataset
+        val minPr  = 2.4664e-7
+        val maxPr  = 2.2184e-4
+
+        if (VerifyBounds) {
+          lagTas.poll((lagTas < minTas) + (lagTas > maxTas), "TAS-OFF")
+          lagPr .poll((lagPr  < minPr ) + (lagPr  > maxPr ), "PR -OFF")
+        }
 
         val maxDust     = graph.Attribute.kr("dust", 10)  // 5 // 10
 
@@ -404,9 +430,9 @@ object MakeLayers {
       val dimsTas = srcTas.dims.modifiableOption.get
       val dimsPr  = srcPr .dims.modifiableOption.get
       dimsTas.put("time", "time")
-      sources.put("tas" , srcTas)
+      sources.put(varNameTas, srcTas)
       dimsPr .put("time", "time")
-      sources.put("pr"  , srcPr )
+      sources.put(varNamePr , srcPr )
 
       (sonObj, son.proc)
     }
@@ -514,14 +540,16 @@ object MakeLayers {
 
       def mkKey(num: Int) = s"file$num"
 
+      val varName = "!1850pr"
+
       val sonObj  = mkSonif[S]("conv-precip") {
         import synth._; import ugen._; import sysson.graph._
 
-        val vPr       = Var("pr" )
-        val dTimePr   = Dim(vPr , "time")
+        val vPr       = Var(varName)
+        val dTime     = Dim(vPr, "time")
 
         val speed     = graph.Attribute.kr("speed", 0.2)
-        val time      = dTimePr .play(speed)
+        val time      = dTime .play(speed)
         val datPr     = vPr .play(time )
         mkTimeRecord(time)
 
@@ -530,8 +558,17 @@ object MakeLayers {
         val period    = speed.reciprocal
         val lagPr     = Ramp.ar(datPr , period)
 
-        val minPr  = 4.6e-7
-        val maxPr  = 1.9e-4
+      //        // for hist data
+      //        val minPr  = 4.6e-7
+      //        val maxPr  = 1.9e-4
+
+        // for joined dataset
+        val minPr  = 2.4664e-7
+        val maxPr  = 2.2184e-4
+
+        if (VerifyBounds) {
+          lagPr.poll((lagPr < minPr) + (lagPr > maxPr), "PR-OFF")
+        }
 
         // XXX TODO not all channels have files yet: 32, 37, 39
         // right now, we use 32 = 20, 39 = 40, 37 = 38
@@ -555,7 +592,7 @@ object MakeLayers {
       val srcPr   = getSonificationSource(DataAmonHist_Pr )
       val dimsPr  = srcPr .dims.modifiableOption.get
       dimsPr .put("time", "time")
-      sources.put("pr"  , srcPr )
+      sources.put(varName, srcPr)
 
       Turbulence.Channels.foreach { case Spk(num) =>
         val f = dir / s"fsm${num}conv.aif"
@@ -580,9 +617,11 @@ object MakeLayers {
 
       val DEBUG = false
 
+      val varName = "!1850blob"
+
       val sonObj  = mkSonif[S]("pr-blob") {
         import synth._; import ugen._; import sysson.graph._
-        val vr    = Var("blob")
+        val vr    = Var(varName)
         val dt    = Dim(vr, "time")
         val speed = graph.Attribute.kr("speed", 1)
         val time  = dt.play(speed)
@@ -592,7 +631,12 @@ object MakeLayers {
 
         val period = speed.reciprocal
 
-        val maxSum = 0.30788
+        //        // in hist data
+        //        val maxSum = 0.30788
+        //        val maxMax = 5.63343e-4
+
+        // in joined data
+        val maxSum = 0.32873
         val maxMax = 5.63343e-4
 
         // val dbMin = -36.0
@@ -609,6 +653,11 @@ object MakeLayers {
           val y     = data \ (off + 2)
           val sum   = data \ (off + 3)
           val max   = data \ (off + 4)
+
+          if (VerifyBounds) {
+            sum.poll(sum > maxSum, "SUM-OFF")
+            max.poll(max > maxMax, "MAX-OFF")
+          }
 
           val gateTr    = Trig.kr(gate, ControlDur.ir)
           val toggle    = gateTr + TDelay.kr(gateTr, period)
@@ -758,7 +807,7 @@ val mix = FreeVerb.ar(mix0)
       val srcPr   = getSonificationSource(DataPrBlog)
       val dimsPr  = srcPr .dims.modifiableOption.get
       dimsPr .put("time", "time")
-      sources.put("blob", srcPr )
+      sources.put(varName, srcPr)
 
       val fMap    = DataSets.dataOutDir / "dymgrid-chan-map.aif"
       val spec    = AudioFile.readSpec(fMap)
@@ -905,12 +954,14 @@ val mix = FreeVerb.ar(mix0)
       val imp     = ExprImplicits[S]
       import imp._
 
+      val varName = "!1850ua"
+
       val sonObj  = mkSonif[S]("eastwind") {
         import synth._; import ugen._; import sysson.graph._
 
         val latValues = -85.0 to 85.0 by 10.0 // that file has a more coarse raster
 
-        val v       = Var("ua")
+        val v       = Var(varName)
         val dt      = Dim(v, "time")
         // val speed = UserValue("speed", 1).kr
         val speed   = graph.Attribute.kr("speed", 1)
@@ -920,9 +971,15 @@ val mix = FreeVerb.ar(mix0)
         val data    = Ramp.ar(data0, period)
         mkTimeRecord(time)
 
+        //        // expected from hist data
+        //        // meters per second
+        //        val minUA = -15.46
+        //        val maxUA = +48.88
+
+        // expected from joined data
         // meters per second
-        val min = -15.46  // expected from data
-        val max = +48.88
+        val minUA = -16.22
+        val maxUA = +53.55
 
         val amp   = graph.Attribute.kr("gain", 2)
 
@@ -938,10 +995,14 @@ val mix = FreeVerb.ar(mix0)
           val idx    = d.indexOf(d.min)
           val x      = data \ idx
 
+          if (VerifyBounds) {
+            x.poll((x < minUA) + (x > maxUA), "UA-OFF")
+          }
+
           //  val thresh = 5.0  // m/s
 
           // val amt    = (thresh - x.abs).max(0) / thresh // 0 ... 1
-          val amt = x.max(0) / max
+          val amt = x.max(0) / maxUA
 
           val lr     = idx % 2
           val ch     = sound \ lr
@@ -960,7 +1021,7 @@ val mix = FreeVerb.ar(mix0)
       val srcUA   = getSonificationSource(DataEastWind)
       val dimsUA  = srcUA.dims.modifiableOption.get
       dimsUA .put("time", "time")
-      sources.put("ua", srcUA)
+      sources.put(varName, srcUA)
 
       val loc   = getBaseLocation()
       val f     = Turbulence.audioWork / "P22_tree-leaves-rustling.wav"

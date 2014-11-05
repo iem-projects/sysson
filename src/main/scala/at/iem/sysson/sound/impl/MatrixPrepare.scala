@@ -16,6 +16,7 @@ package at.iem.sysson
 package sound
 package impl
 
+import at.iem.sysson.turbulence.VoiceStructure
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.synth.{Server, Sys, Buffer}
@@ -260,9 +261,18 @@ object MatrixPrepare {
       val path          = value.file.getAbsolutePath
       val ctlName       = mkCtlName(key = key, idx = index, isStreaming = isStreaming)
       if (isStreaming) {
-        // XXX TODO - dirty workaround for Turbulence. Generally enable loop.
+        // XXX TODO - dirty workaround for Turbulence. Generally enable loop. Read start frame
+        val startFrame = if (key.contains("!1850")) {
+          val res = VoiceStructure.CurrentFrame1850 % numFrames
+          // println(s"MatrixPrepare : install $key - startFrame = $res")
+          res
+        } else {
+          // println(s"MatrixPrepare : install $key - no startFrame")
+          0L
+        }
+
         val trig  = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
-          path = path, fileFrames = numFrames, interp = 1, startFrame = 0L, loop = true, resetFrame = 0L)
+          path = path, fileFrames = numFrames, interp = 1, startFrame = startFrame, loop = true, resetFrame = 0L)
         trig.install()
       } else {
         buf.read(path)

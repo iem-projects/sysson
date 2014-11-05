@@ -17,6 +17,7 @@ package at.iem.sysson.turbulence
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{Expr, Boolean => BooleanEx, Int => IntEx, String => StringEx}
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.TxnLike
 import de.sciss.mellite.Workspace
 import de.sciss.synth.proc.Implicits._
 import de.sciss.synth.proc.{StringElem, ObjKeys, SoundProcesses, BooleanElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
@@ -109,6 +110,8 @@ object VoiceStructure {
   private val timeFramesSince1850 = Ref(0)
 
   private final val daysPerMonth = 365.2422 / 12  // cf. http://pumas.jpl.nasa.gov/examples/index.php?id=46
+
+  def CurrentFrame1850(implicit tx: TxnLike): Int = timeFramesSince1850.get(tx.peer)
 
   def timeAction[S <: Sys[S]](self: Action.Obj[S], root: Folder[S], values: Vec[Float])(implicit tx: S#Tx): Unit = {
     val imp = ExprImplicits[S]
