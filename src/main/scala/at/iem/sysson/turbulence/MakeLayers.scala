@@ -252,7 +252,7 @@ object MakeLayers {
         val dTime   = Dim(v, "time")
         // val dSpk  = Dim(v, "spk" )
 
-        val speed   = Attribute.kr("speed", 0.1)
+        val speed   = Attribute.kr("speed", 0.1) // TODO - make it modulable up to 6.0
         val time    = dTime.play(speed)
         mkTimeRecord(time)
         val data    = v.play(time)
@@ -263,18 +263,24 @@ object MakeLayers {
         val amp     = Attribute.kr("gain", 1.5) // UserValue("amp", 1).kr
 
         // for historical dataset:
-        val minTas  = 232
+        val minTas  = 231.962
         val maxTas  = 304
 
         val dustFreq = 10
 
-        val freq    = lag.linexp(minTas, maxTas, 10000, 100)
+        // lag.poll((lag < minTas) + (lag > maxTas), "TAS-OFF")
+
+        val freq    = lag.linexp(minTas, maxTas, 10000, 150)
 
         val sig = Vec.tabulate(NumChannels) { ch =>
-          val dust    = Dust.ar(dustFreq)
-          val resFreq = freq \ ch
-          val amp1    = amp * AmpCompA.kr(resFreq, root = 100)
-          val res     = Resonz.ar(dust, freq = resFreq, rq = 0.1) * 10
+          val dust      = Dust.ar(dustFreq)
+          val resFreq0  = freq \ ch
+          val resFreq   = Slew.ar(resFreq0, 10000 * 30, 10000 * 30) // c. 30 ms for full range, to avoid Inf/NaN in Resonz
+          val amp1      = amp * AmpCompA.kr(resFreq, root = 100)
+          val res       = Resonz.ar(dust, freq = resFreq, rq = 0.1) * 10
+
+          // CheckBadValues.ar(res , id = 1000)
+          // CheckBadValues.kr(amp1, id = 1001)
           res * amp1
         }
         ScanOut(sig)

@@ -21,9 +21,11 @@ import de.sciss.mellite.Workspace
 import de.sciss.synth.proc.Implicits._
 import de.sciss.synth.proc.{StringElem, ObjKeys, SoundProcesses, BooleanElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
 import de.sciss.synth.{GE, SynthGraph}
+import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 
 import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
+import scala.concurrent.stm.Ref
 
 object VoiceStructure {
   import MakeWorkspace.DEBUG
@@ -102,12 +104,23 @@ object VoiceStructure {
     }
   }
 
+  private val date1850 = CalendarDateFormatter.isoStringToCalendarDate(null, "1850-01-01 00:00:00")
+
+  private val timeFramesSince1850 = Ref(0)
+
+  private final val daysPerMonth = 365.2422 / 12  // cf. http://pumas.jpl.nasa.gov/examples/index.php?id=46
+
   def timeAction[S <: Sys[S]](self: Action.Obj[S], root: Folder[S], values: Vec[Float])(implicit tx: S#Tx): Unit = {
     val imp = ExprImplicits[S]
     import imp._
 
-    val time = values(0)
-    println(s"TIME = $time")
+    val days    = values(0)
+    val frames  = (days / daysPerMonth).toInt
+    timeFramesSince1850.set(frames)(tx.peer)
+    val date    = date1850.add(days, CalendarPeriod.Field.Day)
+    val s       = CalendarDateFormatter.toDateTimeString(date)
+
+    println(s"TIME = $s; FRAMES = $frames")
   }
 }
 class VoiceStructure[S <: Sys[S]] {
