@@ -9,25 +9,34 @@ import scala.util.Try
 import scala.util.control.NonFatal
 
 object Report {
-  final val DefaultTargetHost = "172.17.0.103"
-  final val DefaultTargetPort = 19821
+  final val DefaultRemoteHost = "172.17.0.101"
+  final val DefaultRemotePort = 19821
+  final val DefaultLocalHost  = "172.17.0.102"
+  final val DefaultLocalPort  = 19822
 
-  private lazy val client = {
-    val res = osc.UDP.Transmitter()
-    try {
-      res.connect()
-    } catch {
-      case NonFatal(e) =>
-        Console.err.println("Error while connecting 'report' transmitter:")
-        e.printStackTrace()
-    }
-    res
-  }
-  
-  private val target: SocketAddress = {
-    val host = sys.props.getOrElse("report-host", DefaultTargetHost)
-    val port = sys.props.get("report-post").flatMap(n => Try(n.toInt).toOption).getOrElse(DefaultTargetPort)
+  private val local: InetSocketAddress = {
+    val host = sys.props.getOrElse("report-local-host", DefaultLocalHost)
+    val port = sys.props.get("report-local-port").flatMap(n => Try(n.toInt).toOption).getOrElse(DefaultLocalPort)
     new InetSocketAddress(host, port)
+  }
+
+  private val target: InetSocketAddress = {
+    val host = sys.props.getOrElse("report-remote-host", DefaultRemoteHost)
+    val port = sys.props.get("report-remote-post").flatMap(n => Try(n.toInt).toOption).getOrElse(DefaultRemotePort)
+    new InetSocketAddress(host, port)
+  }
+
+  private lazy val client: osc.UDP.Transmitter.Undirected = try {
+    val config = osc.UDP.Config()
+    config.localSocketAddress = local
+    val res                   = osc.UDP.Transmitter(config)
+    res.connect()
+    res
+  } catch {
+    case NonFatal(e) =>
+      Console.err.println("Error while creating 'report' transmitter:")
+      e.printStackTrace()
+      null
   }
   
   def init(): Unit = client
@@ -37,7 +46,8 @@ object Report {
   def send[S <: Sys[S]](li: Int, varName: String, date: String)(implicit tx: S#Tx): Unit = tx.afterCommit {
     val m = osc.Message("/report", li, varName, date)
     try {
-      client.send(m, target)
+      val c = client
+      if (c != null) c.send(m, target)
     } catch {
       case NonFatal(e) =>
         failCount += 1
