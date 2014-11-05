@@ -989,7 +989,7 @@ val mix = FreeVerb.ar(mix0)
         val minUA = -16.22
         val maxUA = +53.55
 
-        val amp   = graph.Attribute.kr("gain", 2)
+        val amp   = graph.Attribute.kr("gain", 3)
 
         val sound = graph.DiskIn.ar("sound", loop = 1)
 

@@ -19,12 +19,13 @@ import java.awt.{Color, GraphicsEnvironment}
 import javax.swing.{SpinnerNumberModel, JComponent}
 
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt}
+
 import de.sciss.desktop.KeyStrokes
 import de.sciss.file._
 import de.sciss.lucre.swing.defer
 import de.sciss.lucre.synth.{InMemory, Synth, Node, Group, Txn}
-import de.sciss.mellite.{Workspace, Mellite}
-import de.sciss.mellite.gui.{ActionOpenWorkspace, ActionNewWorkspace}
+import de.sciss.mellite.{Prefs, Workspace, Mellite}
+import de.sciss.mellite.gui.ActionOpenWorkspace
 import de.sciss.swingplus.{Spinner, CloseOperation}
 import de.sciss.swingplus.Implicits._
 import de.sciss.synth.{addBefore, addAfter, AddAction}
@@ -43,9 +44,6 @@ import scala.util.{Failure, Success}
 object Turbulence {
   def UseMercator   = false
   def EnablePDF     = false
-  def EnterBinaural = true
-  def AutoOpen      = true
-  def AutoStart     = false
 
   final case class DymGrid(vx: Int, vyi: Int) {
     def toPoint: DymPt = {
@@ -135,6 +133,8 @@ object Turbulence {
   final val ChannelIndices: Vec[Int] = Channels.map(_.toIndex)
 
   final val NumChannels = ChannelIndices.size
+
+  final val MasterVolume = -3 // decibels
 
   private val chans = MatrixToChannelMap.valuesIterator.map(_.num).toVector.sorted
   // assert(chans == (3 to 8) ++ (10 to 11) ++ (13 to 46), s"ChannelMap does not have expected values: $chans")
@@ -277,6 +277,17 @@ object Turbulence {
     //    de.sciss.lucre.stm  .showLog = true
     //    de.sciss.lucre.event.showLog = true
 
+    val argH    = args.headOption.getOrElse("")
+    val isInMem = argH == "--in-memory"
+    val isAuto  = argH == "--auto"
+
+    if (isAuto) {
+      Prefs.useAudioMeters  = false
+      Prefs.useSensorMeters = false
+      Prefs.useLogFrame     = false
+    }
+    Prefs.initialMasterVolume = MasterVolume
+
     Main.main(args :+ "--mellite-frame")
     val pkg = "at.iem.sysson.turbulence._" :: Nil
     Code.registerImports(Code.Action    .id, pkg)
@@ -288,10 +299,10 @@ object Turbulence {
     }
 
     Swing.onEDT {
-      initViews()
+      initViews(isAuto = isAuto)
     }
 
-    if (args.headOption == Some("--in-memory")) {
+    if (isInMem || isAuto) {
       implicit val ws = Workspace.InMemory()
       println("Building workspace...")
       val fut = MakeWorkspace.build[InMemory]
@@ -315,7 +326,7 @@ object Turbulence {
 
   private lazy val dyn = new DymaxionView
 
-  private def initViews(): Unit = {
+  private def initViews(isAuto: Boolean): Unit = {
     //    dyn.drawImage    = false
     //    dyn.drawSpeakers = false
     // dyn.crosses = decimate(Preparations.dymGridAng.map(decimate(_)(8)))(4).flatten
@@ -357,10 +368,12 @@ object Turbulence {
     dyn.peer.getActionMap.put("full-screen", actionFullScreen.peer)
     dyn.peer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
       .put(KeyStrokes.menu1 + KeyStrokes.shift + Key.F, "full-screen")
-    dyn.listenTo(dyn.mouse.clicks)
-    dyn.reactions += {
-      case _: MousePressed  => binauralTimer.stop()
-      case _: MouseReleased => binauralTimer.restart()
+    if (!isAuto) {
+      dyn.listenTo(dyn.mouse.clicks)
+      dyn.reactions += {
+        case _: MousePressed  => binauralTimer.stop()
+        case _: MouseReleased => binauralTimer.restart()
+      }
     }
 
     if (EnablePDF) new pdflitz.SaveAction(dyn :: Nil).setupMenu(fDyn)
@@ -451,7 +464,7 @@ object Turbulence {
 //        contents += ggRun
 //        // contents += ggSpkMix
 //        contents += VStrut(4)
-        contents += ggBinaural
+        if (!isAuto) contents += ggBinaural
         contents += VStrut(4)
         contents += ggDyn
         contents += VStrut(4)
@@ -459,7 +472,7 @@ object Turbulence {
         contents += VStrut(4)
         contents += ggDumpReport
         contents += VStrut(4)
-        contents += new FlowPanel(ggOff, ggTest, ggPos)
+        if (!isAuto) contents += new FlowPanel(ggOff, ggTest, ggPos)
       }
       pack()
 
@@ -468,7 +481,7 @@ object Turbulence {
       this.defaultCloseOperation = CloseOperation.Ignore
       open()
 
-      ggPos.doClick()
+      if (!isAuto) ggPos.doClick()
       // ggBinaural.doClick()
     }
   }

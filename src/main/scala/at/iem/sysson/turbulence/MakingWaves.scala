@@ -20,7 +20,7 @@ import de.sciss.lucre.expr.Expr
 import de.sciss.lucre.stm
 import de.sciss.synth
 import de.sciss.synth.{proc, SynthGraph}
-import de.sciss.synth.proc.{IntElem, BooleanElem, Ensemble, SoundProcesses, Action, Code, ExprImplicits, FolderElem, Obj, Proc, Folder, graph}
+import de.sciss.synth.proc.{IntElem, BooleanElem, Ensemble, SoundProcesses, Action, Code, ExprImplicits, Obj, Proc, Folder, graph}
 import proc.Implicits._
 
 import scala.collection.immutable.{IndexedSeq => Vec}
@@ -71,7 +71,7 @@ object MakingWaves {
 
       // between all speakers (rounded up)
       val maxDist     = 1206.7 // equalized pixels
-      val maxDelay    = 30.0   // seconds
+      val maxDelay    = 60.0 // 30.0   // seconds
       val maxAtt      = -24.0  // decibels
 
       val mis = Channels.map { spkA =>
@@ -84,6 +84,8 @@ object MakingWaves {
               val dist = ptA distanceTo ptB
               val dt   =  dist / maxDist * maxDelay
               val att  = (dist / maxDist * maxAtt).dbamp
+              // val buf  = LocalBuf((dt * 44100).ceil.toInt)
+              // BufDelayN.kr(buf, in, dt) * att
               DelayN.kr(in, dt, dt) * att
             }
         }

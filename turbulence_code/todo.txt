@@ -1,9 +1,9 @@
 transitions
-- correct start/stop without click (tiny fade-in/out)
-- kurven-verlauf
-- concurrency? (FFTs)
-- step-functions (versus glissandi)
-- atk / rls -- could be dependent on type of transition
+[OK]    - correct start/stop without click (tiny fade-in/out)
+[--]    - kurven-verlauf
+[--]    - concurrency? (FFTs)
+[OK]    - step-functions (versus glissandi)
+        - atk / rls -- could be dependent on type of transition
 
 background
 - asynchronous starting point
@@ -11,8 +11,8 @@ background
 mellite
 [OK]    - setting for auto-start sensors
 [OK]    - in-memory variant (as backup)
-[ok]    - obj view - should really update playing state of ensembles
-        - optionally disable meters
+[OK]    - obj view - should really update playing state of ensembles
+[low]   - optionally disable meters
 
 settings
 - blockSize 128 relaxes the CPU quite a lot
@@ -29,8 +29,8 @@ time pulse: like a "light" process, but use small high-feedback delays (similar 
 
 ::::::::::::::::::::::::::
 
-- layer 1 - resonz (?) bricht aus schon bei 6 Hz
-- layer blips - longer decay 6 ?   max density  aus sensoren?
-  ; rsdt - TOA Incident --- als modulator fuer decay/density ?
+[OK]    - layer 1 - resonz (?) bricht aus schon bei 6 Hz
+        - layer blips - longer decay 6 ?   max density  aus sensoren?
+         ; rsdt - TOA Incident --- als modulator fuer decay/density ?
 
 - blob had occasional spike in amplitude; perhaps clip input values if there are disk drop outs?
