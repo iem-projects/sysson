@@ -47,11 +47,19 @@ object MakeLayers {
 
   final val VerifyBounds = true
 
+  //  lazy val all: Vec[LayerFactory] = {
+  //    //             0          1             2             3       4           5            6
+  //    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips,
+  //    //             7
+  //                   Wind)
+  //    real.padTo(NumLayers, Placeholder)
+  //  }
+
   lazy val all: Vec[LayerFactory] = {
-    //             0          1             2             3       4           5            6
-    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips,
-    //             7
-                   Wind)
+    //             0          1             2             3            4            5
+    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, Placeholder, Placeholder, Placeholder,
+    //             6       7           8            9               10
+                   TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips, Wind)
     real.padTo(NumLayers, Placeholder)
   }
 
