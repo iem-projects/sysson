@@ -5,6 +5,7 @@ import java.net.{InetSocketAddress, InetAddress, SocketAddress}
 import de.sciss.lucre.event.Sys
 import de.sciss.osc
 
+import scala.concurrent.stm.Txn
 import scala.util.Try
 import scala.util.control.NonFatal
 
@@ -37,6 +38,10 @@ object Report {
       Console.err.println("Error while creating 'report' transmitter:")
       e.printStackTrace()
       null
+  }
+
+  def dumpOSC(on: Boolean): Unit = {
+    client.dump(if (on) osc.Dump.Text else osc.Dump.Off)
   }
   
   def init(): Unit = client

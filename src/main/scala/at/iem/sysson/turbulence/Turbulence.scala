@@ -423,7 +423,14 @@ object Turbulence {
         }
       }
 
-//      val ggSpkMix = new ToggleButton("AAAA Speakers") {
+      val ggDumpReport = new ToggleButton("Dump Report") {
+        listenTo(this)
+        reactions += {
+          case ButtonClicked(_) => Report.dumpOSC(selected)
+        }
+      }
+
+      //      val ggSpkMix = new ToggleButton("AAAA Speakers") {
 //        listenTo(this)
 //        reactions += {
 //          case ButtonClicked(_) => toggleSpeakerMix(selected)
@@ -449,6 +456,8 @@ object Turbulence {
         contents += ggDyn
         contents += VStrut(4)
         contents += new FlowPanel(new Label("Force Layer:"), ggOverride)
+        contents += VStrut(4)
+        contents += ggDumpReport
         contents += VStrut(4)
         contents += new FlowPanel(ggOff, ggTest, ggPos)
       }
