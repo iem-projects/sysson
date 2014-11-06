@@ -164,7 +164,7 @@ object Binaural {
       // out.poll(0, "out")
       Out.ar(outD, inA)
 
-      // XXX TODO: correct delay (PartConv versus Convolution2 / binaural-kernel)
+      // todo - correct delay (PartConv versus Convolution2 / binaural-kernel)
       Out.ar(outR, Seq(convL, convR))
     }
 
@@ -228,7 +228,7 @@ object Binaural {
       import ugen._
       val in      = "in".kr
       val ch      = "chan".kr
-      val inSig   = Select.ar(ch, In.ar(in, N)) // XXX TODO - not nice. this is simply because delayBus is multi-chan
+      val inSig   = Select.ar(ch, In.ar(in, N)) // todo - not nice. this is simply because delayBus is multi-chan
 
       val bufL  = "bufL".ir
       val bufR  = "bufR".ir

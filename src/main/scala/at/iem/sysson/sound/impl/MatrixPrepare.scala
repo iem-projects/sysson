@@ -266,6 +266,9 @@ object MatrixPrepare {
           val res = VoiceStructure.currentFrame1850 % numFrames
           // println(s"MatrixPrepare : install $key - startFrame = $res")
           res
+        } else if (key.contains("!2001")) {
+          val res = VoiceStructure.currentFrame2001 % numFrames
+          res
         } else {
           // println(s"MatrixPrepare : install $key - no startFrame")
           0L

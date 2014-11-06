@@ -59,11 +59,12 @@ object MakeLayers {
   //  }
 
   lazy val all: Vec[LayerFactory] = {
-    //             0          1             2             3            4            5
-    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, Placeholder, Placeholder, Placeholder,
-    //             6       7           8            9               10
-                   TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips, Wind)
-    real.padTo(NumLayers, Placeholder)
+    //              0          1             2             3       4           5            6               7
+    val real  = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips, Wind)
+    val ph    = Vector.tabulate(NumLayers - real.size)(i => new PlaceHolder(real.size + i))
+    val res   = real ++ ph
+    assert(res.map(_.identifier) == (0 until NumLayers))
+    res
   }
 
   /** Retrieves or creates (if not found) the `"data"` folder in the workspace root. */
@@ -173,6 +174,8 @@ object MakeLayers {
   object Freesound extends Timeless {
     final val varName = "geo-tag"
 
+    final val identifier = 0
+
     //    // spk-num to avg energy in decibels
     //    val energy = Map[Int, Double](
     //       3 -> -42.5,  4 -> -33.4,  5 -> -28.9,  6 -> -30.5,  7 -> -36.7,  8 -> -31.8,
@@ -268,6 +271,8 @@ object MakeLayers {
   object VoronoiPitch extends Base1850 {
     final val varName = "tas"
 
+    final val identifier = 1
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp = ExprImplicits[S]
       import imp._
@@ -337,6 +342,8 @@ object MakeLayers {
   object VoronoiPaper extends Base1850 {
     final val varName = "pr+tas"
 
+    final val identifier = 2
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val varNameTas = "!1850tas"
       val varNamePr  = "!1850pr"
@@ -349,7 +356,7 @@ object MakeLayers {
         val vTas      = Var(varNameTas)
         val vPr       = Var(varNamePr )
         val dTimeTas  = Dim(vTas, "time")
-        val dTimePr   = Dim(vPr , "time")  // XXX TODO - should be able to share
+        val dTimePr   = Dim(vPr , "time")  // todo - should be able to share
 
         val speed     = graph.Attribute.kr("speed", 0.1)
         val timeTas   = dTimeTas.play(speed)
@@ -466,18 +473,28 @@ object MakeLayers {
   object TaAnom extends LayerFactory {
     final val varName = "RO-ta-anom"
 
-    def updateTime(time: Float)(implicit tx: TxnLike): String = {
-      // XXX TODO - has different base
-      s"base-TODO: $time"
+    final val identifier = 3
+
+    private val date2001 = CalendarDateFormatter.isoStringToCalendarDate(null, "2001-01-15")
+
+    def updateTime(months: Float)(implicit tx: TxnLike): String = {
+      val frames  = months.toInt
+      VoiceStructure.currentFrame2001 = frames
+      val date    = date2001.add(months, CalendarPeriod.Field.Month)
+      val s       = CalendarDateFormatter.toDateString(date)
+      // println(s"TaAnom date = $s")
+      s
     }
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
 
+      val vrName = "!1850anom"
+
       val sonObj  = mkSonif[S]("ta-anom") {
         import synth._; import ugen._; import sysson.graph._
-        val vr        = Var("anom")
+        val vr        = Var(vrName)
         val dTime     = Dim(vr, "time")
 
         val speed     = graph.Attribute.kr("speed", 0.1)
@@ -549,7 +566,7 @@ object MakeLayers {
       val src     = Sonification.Source(m)
       val dims    = src.dims.modifiableOption.get
       dims.put("time", nameTime)
-      sources.put("anom" , src)
+      sources.put(vrName, src)
 
       (sonObj, son.proc)
     }
@@ -559,6 +576,8 @@ object MakeLayers {
 
   object ConvPrecip extends Base1850 {
     final val varName = "pr"
+
+    final val identifier = 4
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
@@ -641,6 +660,8 @@ object MakeLayers {
 
   object PrecipBlobs extends Base1850 {
     final val varName = "pr-blobs"
+
+    final val identifier = 5
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
@@ -860,6 +881,8 @@ val mix = FreeVerb.ar(mix0)
   object RadiationBlips extends LayerFactory {
     final val varName = "radiation"
 
+    final val identifier = 6
+
     def updateTime(time: Float)(implicit tx: TxnLike): String = {
       // XXX TODO - has different base
       s"base-TODO: $time"
@@ -1004,6 +1027,8 @@ val mix = FreeVerb.ar(mix0)
   object Wind extends Base1850 {
     final val varName = "ua"
 
+    final val identifier = 7
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
@@ -1092,7 +1117,7 @@ val mix = FreeVerb.ar(mix0)
 
   // -------------------- Placeholder --------------------
 
-  object Placeholder extends Timeless {
+  class PlaceHolder(val identifier: Int) extends Timeless {
     final val varName = "" // "none"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
@@ -1150,6 +1175,9 @@ trait LayerFactory {
   def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S])
 
   def varName: String
+
+  /** Used solely for the visual display. To be consistent with the text. */
+  def identifier: Int
 
   def updateTime(time: Float)(implicit tx: TxnLike): String
 }

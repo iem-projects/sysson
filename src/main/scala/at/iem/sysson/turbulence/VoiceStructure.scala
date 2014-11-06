@@ -108,6 +108,10 @@ object VoiceStructure {
   def currentFrame1850(implicit tx: TxnLike): Int = _currentFrame1850.get(tx.peer)
   def currentFrame1850_=(value: Int)(implicit tx: TxnLike): Unit = _currentFrame1850.set(value)(tx.peer)
 
+  private val _currentFrame2001 = Ref(0)
+  def currentFrame2001(implicit tx: TxnLike): Int = _currentFrame2001.get(tx.peer)
+  def currentFrame2001_=(value: Int)(implicit tx: TxnLike): Unit = _currentFrame2001.set(value)(tx.peer)
+
   def timeAction[S <: Sys[S]](self: Action.Obj[S], root: Folder[S], values: Vec[Float])(implicit tx: S#Tx): Unit = {
     val imp = ExprImplicits[S]
     import imp._
@@ -118,7 +122,7 @@ object VoiceStructure {
       val varName     = layer.varName
       val time        = values(0)
       val dateString  = layer.updateTime(time)
-      Report.send[S](li = li, varName = varName, date = dateString)
+      Report.send[S](li = layer.identifier, varName = varName, date = dateString)
       // println(s"TIME = $s; FRAMES = $frames")
     }
   }
