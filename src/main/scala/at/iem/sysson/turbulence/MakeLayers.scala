@@ -286,7 +286,7 @@ object MakeLayers {
         val dTime   = Dim(v, "time")
         // val dSpk  = Dim(v, "spk" )
 
-        val speed   = Attribute.kr("speed", 0.1) // TODO - make it modulatable up to 6.0
+        val speed   = Attribute.kr("speed", 0.1)
         val time    = dTime.play(speed)
         mkTimeRecord(time)
         val data    = v.play(time)
@@ -883,9 +883,12 @@ val mix = FreeVerb.ar(mix0)
 
     final val identifier = 6
 
-    def updateTime(time: Float)(implicit tx: TxnLike): String = {
-      // XXX TODO - has different base
-      s"base-TODO: $time"
+    def updateTime(days: Float)(implicit tx: TxnLike): String = {
+      val frames  = (days / daysPerMonth).toInt
+      VoiceStructure.currentFrame1850 = frames
+      val date    = date1850.add(days, CalendarPeriod.Field.Day)
+      val s       = CalendarDateFormatter.toDateString(date)
+      s
     }
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
@@ -928,7 +931,7 @@ val mix = FreeVerb.ar(mix0)
         val period = speed.reciprocal
 
         val (vars, times) = vrNames.map { name =>
-          val v    = Var(name)
+          val v    = Var(s"!rad$name")
           val dt   = Dim(v, "time")
           val time = dt.play(speed)
           val vp   = v.play(time)
@@ -951,8 +954,6 @@ val mix = FreeVerb.ar(mix0)
         } .unzip
 
         mkTimeRecord(times.head)
-
-        // XXX TODO - has different base - mkTimeRecord(time)
 
         // hfls - spirals upwards
         // hfss - spirals downwards
@@ -1015,7 +1016,7 @@ val mix = FreeVerb.ar(mix0)
         val srcPr   = getSonificationSource(s"avg_${name}_amon_join" -> name)
         val dimsPr  = srcPr .dims.modifiableOption.get
         dimsPr .put("time", "time")
-        sources.put(name, srcPr )
+        sources.put(s"!rad$name", srcPr )
       }
 
       (sonObj, procObj)
@@ -1085,7 +1086,7 @@ val mix = FreeVerb.ar(mix0)
 
           val lr     = idx % 2
           val ch     = sound \ lr
-          val amp1   = amt * amp  // XXX TODO - elaborate
+          val amp1   = amt * amp
           val sig    = ch * amp1
           sig // Out.ar(spk.toIndex, sig)
         }

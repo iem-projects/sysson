@@ -269,6 +269,10 @@ object MatrixPrepare {
         } else if (key.contains("!2001")) {
           val res = VoiceStructure.currentFrame2001 % numFrames
           res
+        } else if (key.contains("!rad")) {
+          // one frame is one year
+          val res = (VoiceStructure.currentFrame1850 / 12) % numFrames
+          res
         } else {
           // println(s"MatrixPrepare : install $key - no startFrame")
           0L
