@@ -263,7 +263,7 @@ object MatrixPrepare {
       if (isStreaming) {
         // XXX TODO - dirty workaround for Turbulence. Generally enable loop. Read start frame
         val startFrame = if (key.contains("!1850")) {
-          val res = VoiceStructure.CurrentFrame1850 % numFrames
+          val res = VoiceStructure.currentFrame1850 % numFrames
           // println(s"MatrixPrepare : install $key - startFrame = $res")
           res
         } else {

@@ -105,28 +105,23 @@ object VoiceStructure {
     }
   }
 
-  private val date1850 = CalendarDateFormatter.isoStringToCalendarDate(null, "1850-01-01 00:00:00")
-
-  private val timeFramesSince1850 = Ref(0)
-
-  private final val daysPerMonth = 365.2422 / 12  // cf. http://pumas.jpl.nasa.gov/examples/index.php?id=46
-
-  def CurrentFrame1850(implicit tx: TxnLike): Int = timeFramesSince1850.get(tx.peer)
+  private val _currentFrame1850 = Ref(0)
+  def currentFrame1850(implicit tx: TxnLike): Int = _currentFrame1850.get(tx.peer)
+  def currentFrame1850_=(value: Int)(implicit tx: TxnLike): Unit = _currentFrame1850.set(value)(tx.peer)
 
   def timeAction[S <: Sys[S]](self: Action.Obj[S], root: Folder[S], values: Vec[Float])(implicit tx: S#Tx): Unit = {
     val imp = ExprImplicits[S]
     import imp._
 
-    val days    = values(0)
-    val frames  = (days / daysPerMonth).toInt
-    timeFramesSince1850.set(frames)(tx.peer)
-    val date    = date1850.add(days, CalendarPeriod.Field.Day)
-    val s       = CalendarDateFormatter.toDateTimeString(date)
-    val li      = self.attr[IntElem]("li").map(_.value).getOrElse(-1)
-    val varName = if (li < 0) "???" else MakeLayers.all(li).varName
-
-    Report.send[S](li = li, varName = varName, date = s)
-    // println(s"TIME = $s; FRAMES = $frames")
+    self.attr[IntElem]("li").foreach { ex =>
+      val li          = ex.value
+      val layer       = MakeLayers.all(li)
+      val varName     = layer.varName
+      val time        = values(0)
+      val dateString  = layer.updateTime(time)
+      Report.send[S](li = li, varName = varName, date = dateString)
+      // println(s"TIME = $s; FRAMES = $frames")
+    }
   }
 }
 class VoiceStructure[S <: Sys[S]] {

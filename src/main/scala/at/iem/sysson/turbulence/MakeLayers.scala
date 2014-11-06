@@ -24,12 +24,14 @@ import de.sciss.lucre.artifact.ArtifactLocation
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{String => StringEx}
 import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix, DataSource}
+import de.sciss.lucre.stm.TxnLike
 import de.sciss.mellite.{Workspace, ObjectActions}
 import de.sciss.synth
 import de.sciss.synth.io.AudioFile
 import de.sciss.synth.{GE, proc, SynthGraph}
 import de.sciss.synth.proc.{ArtifactLocationElem, FolderElem, Folder, ObjKeys, StringElem, ExprImplicits, Obj, Proc, graph}
 import proc.Implicits._
+import ucar.nc2.time.{CalendarDateFormatter, CalendarPeriod}
 
 import scala.collection.breakOut
 import scala.collection.immutable.{IndexedSeq => Vec}
@@ -151,7 +153,7 @@ object MakeLayers {
 
   private def mkTimeRecord(time: GE): Unit = {
     import synth._; import ugen._; import proc.graph._
-    Reaction(Impulse.kr(0.5), time, "time")
+    Reaction(Impulse.kr(1.0), time, "time")
   }
 
   // -------------------- Freesound --------------------
@@ -160,8 +162,10 @@ object MakeLayers {
     * geo-tagged sound files from Freesound.org.
     * sound-file names contain ID and consequently resolve author on Freesound.
     */
-  object Freesound extends LayerFactory {
+  object Freesound extends Timeless {
     final val varName = "geo-tag"
+
+
 
     //    // spk-num to avg energy in decibels
     //    val energy = Map[Int, Double](
@@ -222,6 +226,9 @@ object MakeLayers {
       proc.graph() = SynthGraph {
         import synth._
         import ugen._
+
+        mkTimeRecord(0)
+
         val sig = Vec.tabulate(NumChannels) { ch =>
           val spk = Turbulence.Channels(ch)
           // not all chans do have files
@@ -252,7 +259,7 @@ object MakeLayers {
 
   // -------------------- VoronoiPitch --------------------
 
-  object VoronoiPitch extends LayerFactory {
+  object VoronoiPitch extends Base1850 {
     final val varName = "tas"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
@@ -268,7 +275,7 @@ object MakeLayers {
         val dTime   = Dim(v, "time")
         // val dSpk  = Dim(v, "spk" )
 
-        val speed   = Attribute.kr("speed", 0.1) // TODO - make it modulable up to 6.0
+        val speed   = Attribute.kr("speed", 0.1) // TODO - make it modulatable up to 6.0
         val time    = dTime.play(speed)
         mkTimeRecord(time)
         val data    = v.play(time)
@@ -292,16 +299,16 @@ object MakeLayers {
           lag.poll((lag < minTas) + (lag > maxTas), "TAS-OFF")
         }
 
-        val freq    = lag.linexp(minTas, maxTas, 10000, 150)
+        val freq    = lag.clip(minTas, maxTas).linexp(minTas, maxTas, 10000, 150)
 
         val sig = Vec.tabulate(NumChannels) { ch =>
           val dust      = Dust.ar(dustFreq)
           val resFreq0  = freq \ ch
-          val resFreq   = Slew.ar(resFreq0, 10000 * 30, 10000 * 30) // c. 30 ms for full range, to avoid Inf/NaN in Resonz
+          val resFreq   = resFreq0 // Slew.ar(resFreq0, 10000 * 30, 10000 * 30) // c. 30 ms for full range, to avoid Inf/NaN in Resonz
           val amp1      = amp * AmpCompA.kr(resFreq, root = 100)
           val res       = Resonz.ar(dust, freq = resFreq, rq = 0.1) * 10
 
-          // CheckBadValues.ar(res , id = 1000)
+          if (VerifyBounds) CheckBadValues.ar(res , id = 1000)
           // CheckBadValues.kr(amp1, id = 1001)
           res * amp1
         }
@@ -321,7 +328,7 @@ object MakeLayers {
 
   // -------------------- VoronoiPaper --------------------
 
-  object VoronoiPaper extends LayerFactory {
+  object VoronoiPaper extends Base1850 {
     final val varName = "pr+tas"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
@@ -375,8 +382,8 @@ object MakeLayers {
         val maxDust     = graph.Attribute.kr("dust", 10)  // 5 // 10
 
         val numSpk      = Turbulence.NumChannels
-        val resFreq     = lagTas.linexp(minTas, maxTas, 10000, 100)
-        val dustFreq    = lagPr .linlin(minPr , maxPr ,     0, maxDust)
+        val resFreq     = lagTas.clip(minTas, maxTas).linexp(minTas, maxTas, 10000, 150)
+        val dustFreq    = lagPr .clip(minPr , maxPr ).linlin(minPr , maxPr ,     0, maxDust)
 
         val paperBuf    = graph.Buffer("paper")
         val marksBuf    = graph.Buffer("marks")
@@ -401,6 +408,8 @@ object MakeLayers {
             dur = dur, speed = 1, pos = pos, interp = 1, pan = 0, envBuf = -1, maxGrains = 512)
           val resFreqCh = resFreq \ ch
           val res   = Resonz.ar(grain, freq = resFreq \ ch, rq = 1 /* 0.1 */)
+
+          if (VerifyBounds) CheckBadValues.ar(res , id = 1001)
 
           if (DEBUG) {
             index.poll(dust, "idx")
@@ -451,6 +460,11 @@ object MakeLayers {
   object TaAnom extends LayerFactory {
     final val varName = "RO-ta-anom"
 
+    def updateTime(time: Float)(implicit tx: TxnLike): String = {
+      // XXX TODO - has different base
+      s"base-TODO: $time"
+    }
+
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
       import imp._
@@ -459,12 +473,13 @@ object MakeLayers {
         import synth._; import ugen._; import sysson.graph._
         val vr        = Var("anom")
         val dTime     = Dim(vr, "time")
-        // XXX TODO - has different base - mkTimeRecord(time)
 
         val speed     = graph.Attribute.kr("speed", 0.1)
         val time      = dTime.play(speed)
         val dat0      = vr.play(time)
         val period    = speed.reciprocal
+
+        mkTimeRecord(time)
 
         //        val altCorr: GE = Vector(1.0, 1.0, 1.0, 0.5, 0.5, 0.3333, 0.1429, 0.125, 0.1429, 0.125, 0.1111, 0.1, 0.1429,
         //          0.1111, 0.1, 0.1, 0.25, 0.2, 0.1667, 0.125, 0.25, 0.25, 0.2, 0.1429, 0.1667, 0.1429, 0.125, 0.1, 0.25,
@@ -510,6 +525,8 @@ object MakeLayers {
 
           val mix   = (hot * aHot + cold * aCold) * amp
 
+          if (VerifyBounds) CheckBadValues.ar(mix , id = 1002)
+
           //          val amt   = anom.abs.linlin(0, mAbs, -36, 0).dbamp - (-36.dbamp)
           //          val amp1  = amt * amp
           //          Select.ar(side, Seq(hot, cold)) * amp1
@@ -534,7 +551,7 @@ object MakeLayers {
 
   // -------------------- ConvPrecip --------------------
 
-  object ConvPrecip extends LayerFactory {
+  object ConvPrecip extends Base1850 {
     final val varName = "pr"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
@@ -585,7 +602,7 @@ object MakeLayers {
 
         val sig = Turbulence.Channels.zipWithIndex.map { case (Spk(num), ch) =>
           val prc   = lagPr \ ch
-          val amp0  = prc.linlin(minPr, maxPr, dbMin, 0).dbamp - dbMin.dbamp
+          val amp0  = prc.clip(minPr, maxPr).linlin(minPr, maxPr, dbMin, 0).dbamp - dbMin.dbamp
           val amp1  = amp0 * amp
           graph.DiskIn.ar(mkKey(num), loop = 1) * amp1
         }
@@ -616,7 +633,7 @@ object MakeLayers {
 
   // -------------------- PrecipBlobs --------------------
 
-  object PrecipBlobs extends LayerFactory {
+  object PrecipBlobs extends Base1850 {
     final val varName = "pr-blobs"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
@@ -684,8 +701,8 @@ object MakeLayers {
 
           // val amp   = sum.linlin(0, maxSum, dbMin, 0).dbamp - dbMin.dbamp
           // val amp1  = max.linlin(0, maxMax, 0, amp)
-          val amp0  = max.explin(DataSets.PrecipBlobThreshold, maxMax, 0, amp)
-          val ctl   = sum.explin(DataSets.PrecipBlobThreshold, maxSum, 0, 1)
+          val amp0  = max.clip(0, maxMax).explin(DataSets.PrecipBlobThreshold, maxMax, 0, amp)
+          val ctl   = sum.clip(0, maxSum).explin(DataSets.PrecipBlobThreshold, maxSum, 0, 1)
           val amp1  = amp0 / ctl.max(0.1)
 
           // val sig   = eg * amp1 // PinkNoise.ar(eg * amp1)
@@ -800,6 +817,8 @@ object MakeLayers {
 //        }
 val mix = FreeVerb.ar(mix0)
 
+        if (VerifyBounds) CheckBadValues.ar(mix, id = 1003)
+
         graph.ScanOut(mix)
 
         //        Turbulence.Channels.zipWithIndex.foreach { case (spk, ch) =>
@@ -834,6 +853,11 @@ val mix = FreeVerb.ar(mix0)
 
   object RadiationBlips extends LayerFactory {
     final val varName = "radiation"
+
+    def updateTime(time: Float)(implicit tx: TxnLike): String = {
+      // XXX TODO - has different base
+      s"base-TODO: $time"
+    }
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp     = ExprImplicits[S]
@@ -874,16 +898,30 @@ val mix = FreeVerb.ar(mix0)
         val amp    = graph.Attribute.kr("gain" , 0.08)
         val period = speed.reciprocal
 
-        val (vars, _ /* times */) = vrNames.map { name =>
+        val (vars, times) = vrNames.map { name =>
           val v    = Var(name)
           val dt   = Dim(v, "time")
           val time = dt.play(speed)
           val vp   = v.play(time)
           val (min, max, _) = minMaxMean(name)
+
+          if (VerifyBounds) {
+            vp.poll((vp < min) + (vp > max), s"$name-OFF")
+          }
+
+          // val norm0 = vp.clip(min, max).linlin(min, max, 0, 1)
           val norm0 = vp.linlin(min, max, 0, 1)
-          val norm = Ramp.ar(norm0, period)
+          val norm1 = Ramp.ar(norm0, period)
+          val norm  = norm1.clip(0, 1)
+
+          if (VerifyBounds) {
+            norm.poll((norm < 0) + (norm > 1), s"$name-NORM-OFF")
+          }
+
           (norm, time)
         } .unzip
+
+        mkTimeRecord(times.head)
 
         // XXX TODO - has different base - mkTimeRecord(time)
 
@@ -931,6 +969,8 @@ val mix = FreeVerb.ar(mix0)
             FSinOsc.ar(freq) * env
           }
 
+        if (VerifyBounds) CheckBadValues.ar(sig, id = 1004)
+
         graph.ScanOut(sig)
 
         //        ChannelIndices.zipWithIndex.foreach { case (bus, ch) =>
@@ -955,7 +995,7 @@ val mix = FreeVerb.ar(mix0)
 
   // -------------------- Wind --------------------
 
-  object Wind extends LayerFactory {
+  object Wind extends Base1850 {
     final val varName = "ua"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
@@ -1010,7 +1050,7 @@ val mix = FreeVerb.ar(mix0)
           //  val thresh = 5.0  // m/s
 
           // val amt    = (thresh - x.abs).max(0) / thresh // 0 ... 1
-          val amt = x.max(0) / maxUA
+          val amt = x.clip(0, maxUA) / maxUA
 
           val lr     = idx % 2
           val ch     = sound \ lr
@@ -1018,6 +1058,8 @@ val mix = FreeVerb.ar(mix0)
           val sig    = ch * amp1
           sig // Out.ar(spk.toIndex, sig)
         }
+
+        if (VerifyBounds) CheckBadValues.ar(sig1, id = 1005)
 
         graph.ScanOut(sig1)
       }
@@ -1044,7 +1086,7 @@ val mix = FreeVerb.ar(mix0)
 
   // -------------------- Placeholder --------------------
 
-  object Placeholder extends LayerFactory {
+  object Placeholder extends Timeless {
     final val varName = "none"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
@@ -1061,11 +1103,35 @@ val mix = FreeVerb.ar(mix0)
         val amp   = 0.5
         val dust  = Decay.ar(Dust.ar(Seq.fill(NumChannels)(10)), 1).min(1)
         val sig   = Resonz.ar(dust, freq, 0.5) * amp
+
+        if (VerifyBounds) CheckBadValues.ar(sig, id = li + 2000)
+
+        mkTimeRecord(0)
+
         graph.ScanOut(sig)
       }
 
       (procObj, procObj)
     }
+  }
+
+  // --------------------------------
+
+  private val date1850 = CalendarDateFormatter.isoStringToCalendarDate(null, "1850-01-01 00:00:00")
+  private final val daysPerMonth = 365.2422 / 12  // cf. http://pumas.jpl.nasa.gov/examples/index.php?id=46
+
+  trait Base1850 extends LayerFactory {
+    def updateTime(days: Float)(implicit tx: TxnLike): String = {
+      val frames  = (days / daysPerMonth).toInt
+      VoiceStructure.currentFrame1850 = frames
+      val date    = date1850.add(days, CalendarPeriod.Field.Day)
+      val s       = CalendarDateFormatter.toDateTimeString(date)
+      s
+    }
+  }
+
+  trait Timeless extends LayerFactory {
+    def updateTime(time: Float)(implicit tx: TxnLike): String = ""
   }
 }
 trait LayerFactory {
@@ -1078,4 +1144,6 @@ trait LayerFactory {
   def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S])
 
   def varName: String
+
+  def updateTime(time: Float)(implicit tx: TxnLike): String
 }
