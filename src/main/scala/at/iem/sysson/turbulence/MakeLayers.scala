@@ -47,8 +47,10 @@ object MakeLayers {
 
   final val NumBlobs = 4
 
-  final val VerifyBounds = false
-  final val VerifyNaNs   = true
+  final val VerifyBounds  = false
+  final val VerifyNaNs    = true
+
+  final val DebugSpeed    = true
 
   //  lazy val all: Vec[LayerFactory] = {
   //    //             0          1             2             3       4           5            6
@@ -286,7 +288,9 @@ object MakeLayers {
         val dTime   = Dim(v, "time")
         // val dSpk  = Dim(v, "spk" )
 
-        val speed   = Attribute.kr("speed", 0.1)
+        // val speed   = Attribute.kr("speed", 0.1)
+        val speed   = mkSpeed(0.1)
+
         val time    = dTime.play(speed)
         mkTimeRecord(time)
         val data    = v.play(time)
@@ -358,7 +362,8 @@ object MakeLayers {
         val dTimeTas  = Dim(vTas, "time")
         val dTimePr   = Dim(vPr , "time")  // todo - should be able to share
 
-        val speed     = graph.Attribute.kr("speed", 0.1)
+        // val speed     = graph.Attribute.kr("speed", 0.1)
+        val speed     = mkSpeed(0.1)
         val timeTas   = dTimeTas.play(speed)
         val timePr    = dTimePr .play(speed)
         val datTas    = vTas.play(timeTas)
@@ -497,7 +502,8 @@ object MakeLayers {
         val vr        = Var(vrName)
         val dTime     = Dim(vr, "time")
 
-        val speed     = graph.Attribute.kr("speed", 0.1)
+        // val speed     = graph.Attribute.kr("speed", 0.1)
+        val speed     = mkSpeed(0.1)
         val time      = dTime.play(speed)
         val dat0      = vr.play(time)
         val period    = speed.reciprocal
@@ -598,7 +604,8 @@ object MakeLayers {
         val vPr       = Var(varName)
         val dTime     = Dim(vPr, "time")
 
-        val speed     = graph.Attribute.kr("speed", 0.2)
+        // val speed     = graph.Attribute.kr("speed", 0.2)
+        val speed     = mkSpeed(0.2)
         val time      = dTime .play(speed)
         val datPr     = vPr .play(time )
         mkTimeRecord(time)
@@ -675,7 +682,8 @@ object MakeLayers {
         import synth._; import ugen._; import sysson.graph._
         val vr    = Var(varName)
         val dt    = Dim(vr, "time")
-        val speed = graph.Attribute.kr("speed", 1)
+        // val speed = graph.Attribute.kr("speed", 1)
+        val speed = mkSpeed(1)
         val time  = dt.play(speed)
         val data0 = vr.play(time)
         val data  = A2K.kr(data0)
@@ -926,7 +934,8 @@ val mix = FreeVerb.ar(mix0)
           "rtmt" -> ( -1.4149872,   2.4347672,   1.1621329)
         )
 
-        val speed  = graph.Attribute.kr("speed", 6.0)
+        // val speed  = graph.Attribute.kr("speed", 6.0)
+        val speed  = mkSpeed(3.0)
         val amp    = graph.Attribute.kr("gain" , 0.08)
         val period = speed.reciprocal
 
@@ -1043,8 +1052,8 @@ val mix = FreeVerb.ar(mix0)
 
         val v       = Var(varName)
         val dt      = Dim(v, "time")
-        // val speed = UserValue("speed", 1).kr
-        val speed   = graph.Attribute.kr("speed", 1)
+        // val speed   = graph.Attribute.kr("speed", 1)
+        val speed   = mkSpeed(1.0)
         val time    = dt.play(speed)
         val data0   = v.play(time)
         val period  = speed.reciprocal
@@ -1167,6 +1176,13 @@ val mix = FreeVerb.ar(mix0)
   }
 }
 trait LayerFactory {
+  protected def mkSpeed(min: Double): GE = {
+    import synth._; import ugen._
+    val res = ExpRand(min * 0.05, (min * 10).min(12)).max(min)
+    if (MakeLayers.DebugSpeed) res.poll(0, s"li-$identifier speed")
+    res
+  }
+
   /** Creates a layer.
     *
     * @param workspace location for finding and adding additional components (if needed)

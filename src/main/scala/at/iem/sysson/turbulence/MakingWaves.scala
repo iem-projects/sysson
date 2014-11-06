@@ -33,7 +33,7 @@ object MakingWaves {
   final val MaxFadeIns = 8  // at once
 
   final val BackgroundThresh  = 4.0e-4
-  final val BackgroundSum     = 5.0e-4
+  final val BackgroundSum     = 7.5e-4
 
   // (2)
   def apply[S <: Sys[S]](parent: Folder[S])
