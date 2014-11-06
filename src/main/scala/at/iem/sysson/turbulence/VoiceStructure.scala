@@ -41,7 +41,7 @@ object VoiceStructure {
   val Release         = 30  // 10
   val FFTSize         = 512 // 1024
 
-  lazy val NumLayers      = if (DEBUG) 2 else Turbulence.NumWiredSensors
+  lazy val NumLayers      = if (DEBUG) 2 else Turbulence.NumWiredSensors + 1  // one for each sensor plus bg
   lazy val MaxVoices      = if (DEBUG) 1 else 3
   lazy val NumChannels    = /* if (DEBUG) 2 else */ Turbulence.NumChannels
   lazy val NumTransitions = if (DEBUG) 1 else 7

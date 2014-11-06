@@ -27,8 +27,13 @@ import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
 import scala.util.Random
 
+import VoiceStructure.NumChannels
+
 object MakingWaves {
   final val MaxFadeIns = 8  // at once
+
+  final val BackgroundThresh  = 4.0e-4
+  final val BackgroundSum     = 5.0e-4
 
   // (2)
   def apply[S <: Sys[S]](parent: Folder[S])
@@ -74,7 +79,7 @@ object MakingWaves {
       val maxDelay    = 60.0 // 30.0   // seconds
       val maxAtt      = -24.0  // decibels
 
-      val mis = Channels.map { spkA =>
+      val mis = Channels.flatMap { spkA =>
         val ptA  = ChannelToMatrixMap(spkA).toPoint.equalize
         val coll = SensorSpeakers.zipWithIndex.collect {
           case ((spkB, true), sIdx) =>
@@ -91,8 +96,10 @@ object MakingWaves {
         }
 
         // aka coll.maxIndex
-        val mi = ArrayMax.kr(coll).index
-        mi // .poll(Impulse.kr(period.reciprocal), s"max-$spkA")
+        val am = ArrayMax.kr(coll)
+        val mi = am.index
+        val mv = am.value
+        Seq(mi, mv) // .poll(Impulse.kr(period.reciprocal), s"max-$spkA")
       }
       graph.Reaction(Impulse.kr(period.reciprocal), mis, "ping")
     }
@@ -115,17 +122,30 @@ object MakingWaves {
     // parent.addLast(procObj)
   }
 
-  private lazy val ChanSeq = (0 until VoiceStructure.NumChannels).toIndexedSeq
+  private lazy val ChanSeq = (0 until NumChannels).toIndexedSeq
 
   private implicit val rnd = new Random() // it's ok, leave it seeded with clock
 
   def react[S <: Sys[S]](values: Vec[Float], root: Folder[S])(implicit tx: S#Tx): Unit = {
-    import VoiceStructure.NumChannels
     import MakeWorkspace.DEBUG
     val imp = ExprImplicits[S]
     import imp._
 
-    val sense = if (overrideValue < 0) values.map(_.toInt) else Vector.fill(values.size)(overrideValue)
+    val sense: Vec[Int] = if (overrideValue < 0) {
+      val sumEnergy = (0.0 /: (0 until NumChannels)) { case (sum, si) =>
+        val sit = si << 1
+        sum + values(sit + 1)
+      }
+      // println(s"SUM ENERGY = $sumEnergy")
+      val lowEnergy = sumEnergy < BackgroundSum
+      Vector.tabulate(NumChannels) { si =>
+        val sit = si << 1
+        val li  = values(sit).toInt + 1
+        if (lowEnergy && values(sit + 1) < BackgroundThresh) 0 else li
+      }
+    } else {
+      Vector.fill(NumChannels)(overrideValue)
+    }
 
     if (DEBUG) println(sense.map(_.toHexString).mkString("sense: [", ",", "]"))
 
