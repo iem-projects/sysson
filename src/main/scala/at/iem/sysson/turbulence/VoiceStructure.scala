@@ -22,7 +22,6 @@ import de.sciss.mellite.Workspace
 import de.sciss.synth.proc.Implicits._
 import de.sciss.synth.proc.{StringElem, ObjKeys, SoundProcesses, BooleanElem, Folder, IntElem, Action, Code, Ensemble, ExprImplicits, Obj, Proc, Scan, graph}
 import de.sciss.synth.{GE, SynthGraph}
-import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
 
 import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
@@ -175,7 +174,7 @@ class VoiceStructure[S <: Sys[S]] {
     pm + sm + zm
   }
 
-  private def mkTransition(fun: (GE, GE, GE) => GE): SynthGraph = SynthGraph {
+  private def mkTransition(id: Int)(fun: (GE, GE, GE) => GE): SynthGraph = SynthGraph {
     import de.sciss.synth._
     import de.sciss.synth.ugen._
     val pred  = graph.ScanInFix("pred", 1)
@@ -191,12 +190,15 @@ class VoiceStructure[S <: Sys[S]] {
     val done   = fade sig_== target
     graph.Action(done, "done")
     val sig   = fun(pred, succ, fade)
+
+    MakeLayers.mkVerifyNaNs(sig, 3000 + id)
+
     graph.ScanOut(sig)
   }
 
   private lazy val transGraphs: Vec[SynthGraph] = {
     // transition 1: rising LPF
-    val t1 = mkTransition { (pred, succ, fade) =>
+    val t1 = mkTransition(1) { (pred, succ, fade) =>
       import de.sciss.synth._
       import de.sciss.synth.ugen._
       val freq = fade.linexp(0, 1, 22.05, 22050)
@@ -204,7 +206,7 @@ class VoiceStructure[S <: Sys[S]] {
     }
 
     // transition 2: descending HPF
-    val t2 = mkTransition { (pred, succ, fade) =>
+    val t2 = mkTransition(2) { (pred, succ, fade) =>
       import de.sciss.synth._
       import de.sciss.synth.ugen._
       val freq = fade.linexp(1, 0, 22.05, 22050)
@@ -212,7 +214,7 @@ class VoiceStructure[S <: Sys[S]] {
     }
 
     // transition 3: rising PV_MagBelow
-    val t3 = mkTransition { (pred, succ, fade) =>
+    val t3 = mkTransition(3) { (pred, succ, fade) =>
       import de.sciss.synth._
       import de.sciss.synth.ugen._
       val thresh  = fade.linexp(0, 1, 1.0e-3, 1.0e1)
@@ -225,7 +227,7 @@ class VoiceStructure[S <: Sys[S]] {
     }
 
     // transition 4: descending PV_MagAbove
-    val t4 = mkTransition { (pred, succ, fade) =>
+    val t4 = mkTransition(4) { (pred, succ, fade) =>
       import de.sciss.synth._
       import de.sciss.synth.ugen._
       val thresh  = fade.linexp(1, 0, 1.0e-3, 1.0e1)
@@ -238,7 +240,7 @@ class VoiceStructure[S <: Sys[S]] {
     }
 
     // transition 5: to dust
-    val t5 = mkTransition { (pred, succ, fade) =>
+    val t5 = mkTransition(5) { (pred, succ, fade) =>
       import de.sciss.synth._
       import de.sciss.synth.ugen._
       val f1   =   10
@@ -262,7 +264,7 @@ class VoiceStructure[S <: Sys[S]] {
     }
 
     // transition 6: shift upwards
-    val t6 = mkTransition { (pred, succ, fade) =>
+    val t6 = mkTransition(6) { (pred, succ, fade) =>
       import de.sciss.synth._
       import de.sciss.synth.ugen._
 
@@ -289,7 +291,7 @@ class VoiceStructure[S <: Sys[S]] {
     }
 
     // transition 7: shift downwards
-    val t7 = mkTransition { (pred, succ, fade) =>
+    val t7 = mkTransition(7) { (pred, succ, fade) =>
       import de.sciss.synth._
       import de.sciss.synth.ugen._
 
@@ -308,8 +310,8 @@ class VoiceStructure[S <: Sys[S]] {
 
       val z0  = fltSucc + fltPred
       val zig = x.fold(0, 1)
-      val az  = zig       // .sqrt
-      val bz  = (1 - zig) // .sqrt
+      val az  = zig      // .sqrt
+      val bz  = 1 - zig  // .sqrt
       val z   = az * (z0 \ 1 /* aka ceil */) + bz * (z0 \ 0 /* aka floor */)
 
       mkBlend(pred, succ, z, fade, 0)

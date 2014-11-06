@@ -47,7 +47,8 @@ object MakeLayers {
 
   final val NumBlobs = 4
 
-  final val VerifyBounds = true
+  final val VerifyBounds = false
+  final val VerifyNaNs   = true
 
   //  lazy val all: Vec[LayerFactory] = {
   //    //             0          1             2             3       4           5            6
@@ -156,6 +157,13 @@ object MakeLayers {
     Reaction(Impulse.kr(1.0), time, "time")
   }
 
+  def mkVerifyNaNs(sig: GE, id: Int): Unit =
+    if (VerifyNaNs) {
+      import synth._; import ugen._
+      CheckBadValues.ar(sig, id = id)
+      sig.poll(sig.abs > 10, s"SPIKE $id")
+    }
+
   // -------------------- Freesound --------------------
 
   /** the field recording based layer, using
@@ -164,8 +172,6 @@ object MakeLayers {
     */
   object Freesound extends Timeless {
     final val varName = "geo-tag"
-
-
 
     //    // spk-num to avg energy in decibels
     //    val energy = Map[Int, Double](
@@ -308,7 +314,7 @@ object MakeLayers {
           val amp1      = amp * AmpCompA.kr(resFreq, root = 100)
           val res       = Resonz.ar(dust, freq = resFreq, rq = 0.1) * 10
 
-          if (VerifyBounds) CheckBadValues.ar(res , id = 1000)
+          mkVerifyNaNs(res, 1000)
           // CheckBadValues.kr(amp1, id = 1001)
           res * amp1
         }
@@ -409,7 +415,7 @@ object MakeLayers {
           val resFreqCh = resFreq \ ch
           val res   = Resonz.ar(grain, freq = resFreq \ ch, rq = 1 /* 0.1 */)
 
-          if (VerifyBounds) CheckBadValues.ar(res , id = 1001)
+          mkVerifyNaNs(res, 1001)
 
           if (DEBUG) {
             index.poll(dust, "idx")
@@ -525,7 +531,7 @@ object MakeLayers {
 
           val mix   = (hot * aHot + cold * aCold) * amp
 
-          if (VerifyBounds) CheckBadValues.ar(mix , id = 1002)
+          mkVerifyNaNs(mix, 1002)
 
           //          val amt   = anom.abs.linlin(0, mAbs, -36, 0).dbamp - (-36.dbamp)
           //          val amp1  = amt * amp
@@ -817,7 +823,7 @@ object MakeLayers {
 //        }
 val mix = FreeVerb.ar(mix0)
 
-        if (VerifyBounds) CheckBadValues.ar(mix, id = 1003)
+        mkVerifyNaNs(mix, 1003)
 
         graph.ScanOut(mix)
 
@@ -969,7 +975,7 @@ val mix = FreeVerb.ar(mix0)
             FSinOsc.ar(freq) * env
           }
 
-        if (VerifyBounds) CheckBadValues.ar(sig, id = 1004)
+        mkVerifyNaNs(sig, 1004)
 
         graph.ScanOut(sig)
 
@@ -1059,7 +1065,7 @@ val mix = FreeVerb.ar(mix0)
           sig // Out.ar(spk.toIndex, sig)
         }
 
-        if (VerifyBounds) CheckBadValues.ar(sig1, id = 1005)
+        mkVerifyNaNs(sig1, 1005)
 
         graph.ScanOut(sig1)
       }
@@ -1104,7 +1110,7 @@ val mix = FreeVerb.ar(mix0)
         val dust  = Decay.ar(Dust.ar(Seq.fill(NumChannels)(10)), 1).min(1)
         val sig   = Resonz.ar(dust, freq, 0.5) * amp
 
-        if (VerifyBounds) CheckBadValues.ar(sig, id = li + 2000)
+        mkVerifyNaNs(sig, /* li + */ 2000)
 
         mkTimeRecord(0)
 
