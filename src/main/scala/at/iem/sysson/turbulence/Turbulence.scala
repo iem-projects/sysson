@@ -15,7 +15,7 @@
 package at.iem.sysson
 package turbulence
 
-import java.awt.{Color, GraphicsEnvironment}
+import java.awt.{Font, Color, GraphicsEnvironment}
 import javax.swing.{SpinnerNumberModel, JComponent}
 
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt}
@@ -351,6 +351,7 @@ object Turbulence {
     lazy val mercator = new MercatorView(dyn)
 
     lazy val ggShutdown = new Button("Shutdown") {
+      font = new Font("Sans", Font.PLAIN, 36)
       focusable = false
       listenTo(this)
       reactions += {
@@ -497,12 +498,10 @@ object Turbulence {
       // bounds = new Rectangle(0, desktop.Util.maximumWindowBounds.height - 72, 148, 72)
       location = (0, desktop.Util.maximumWindowBounds.height - size.height)
       this.defaultCloseOperation = CloseOperation.Ignore
-      open()
 
       if (isAuto) {
         val t = new javax.swing.Timer(12000, ActionListener { _ =>
           fDyn.visible = true
-          ggDyn.selected = true
           actionFullScreen()
         })
         t.setRepeats(false)
@@ -513,6 +512,7 @@ object Turbulence {
           case _: MousePressed  => binauralTimer.stop()
           case _: MouseReleased => binauralTimer.restart()
         }
+        open()
         ggPos.doClick()
       }
       // ggBinaural.doClick()
