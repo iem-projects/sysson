@@ -272,10 +272,12 @@ class VoiceStructure[S <: Sys[S]] {
       val x        = fade * numSteps
       val xh       = x / 2
       val a        = (xh + 0.5).floor        * 2
-      val b        = (xh       .floor + 0.5) * 2
+      val b0       = (xh       .floor + 0.5) * 2
+      val b        = b0.min(numSteps)
       val ny       = 20000 // 22050
-      val aFreq    = a.linexp(numSteps, 0, 22.05, ny) - 22.05
-      val bFreq    = b.linexp(numSteps, 0, 22.05, ny) - 22.05
+      val zero     = 22.05
+      val aFreq    = a.linexp(numSteps, 0, zero, ny) - zero
+      val bFreq    = b.linexp(numSteps, 0, zero, ny) - zero
       val freq: GE = Seq(aFreq, bFreq)
 
       val fltSucc = FreqShift.ar(LPF.ar(succ, ny - freq),  freq)
@@ -299,16 +301,30 @@ class VoiceStructure[S <: Sys[S]] {
       val x        = fade * numSteps
       val xh       = x / 2
       val a        = (xh + 0.5).floor        * 2
-      val b        = (xh       .floor + 0.5) * 2
+      val b0       = (xh       .floor + 0.5) * 2
+      val b        = b0.min(numSteps)
       val fd: GE   = Seq(a, b)
-      val ny       = 20000 // 22050
-      val freq1    = fd.linexp(0, numSteps, ny, 22.05)
-      val freq2    = fd.linexp(0, numSteps, 22.05, ny) - 22.05
+      val ny       = 20000 // 20000 // 22050
+      val zero     = 22.05
+      val freq1    = fd.linexp(0, numSteps, ny, zero)
+      val freq2    = fd.linexp(0, numSteps, zero, ny) - zero
 
-      val fltSucc = FreqShift.ar(HPF.ar(succ, freq1), -freq1)
-      val fltPred = FreqShift.ar(LPF.ar(pred, ny - freq2),  freq2)
+      // fd.poll((fd < 0) + (fd > numSteps), "fd"  )
 
-      val z0  = fltSucc + fltPred
+      val fltSucc   = HPF.ar(succ, freq1)
+      val fltPred   = LPF.ar(pred, ny - freq2)
+      val shiftSucc = FreqShift.ar(fltSucc, -freq1)
+      val shiftPred = FreqShift.ar(fltPred,  freq2)
+
+      //      succ          .poll(succ     .abs > 10, "succ"     )
+      //      pred          .poll(pred     .abs > 10, "pred"     )
+
+      //      freq1         .poll(fltSucc  .abs > 10, "fltSucc"  )
+      //      (ny - freq2)  .poll(fltPred  .abs > 10, "fltPred"  )
+      //      (-freq1)      .poll(shiftSucc.abs > 10, "shiftSucc")
+      //      freq2         .poll(shiftPred.abs > 10, "shiftPred")
+
+      val z0  = shiftSucc + shiftPred
       val zig = x.fold(0, 1)
       val az  = zig      // .sqrt
       val bz  = 1 - zig  // .sqrt
