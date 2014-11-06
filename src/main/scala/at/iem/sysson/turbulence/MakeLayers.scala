@@ -1087,7 +1087,7 @@ val mix = FreeVerb.ar(mix0)
   // -------------------- Placeholder --------------------
 
   object Placeholder extends Timeless {
-    final val varName = "none"
+    final val varName = "" // "none"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp = ExprImplicits[S]
