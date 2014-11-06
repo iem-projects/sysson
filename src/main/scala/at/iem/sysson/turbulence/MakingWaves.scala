@@ -173,7 +173,7 @@ object MakingWaves {
           val res1Opt = for {
             Ensemble.Obj(bEns) <- lObj / byName
             Proc.Obj(bProc)    <- bEns / byName
-            Expr.Var(state)    <- bProc.attr[IntElem]("state")
+            Expr.Var(state)    <- bProc.attr[IntElem]("st")
           } yield {
             val gate    = sense(si) == li
             val before  = state.value

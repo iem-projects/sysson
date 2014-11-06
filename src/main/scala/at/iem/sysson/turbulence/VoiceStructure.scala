@@ -78,7 +78,7 @@ object VoiceStructure {
     import MakeWorkspace.DEBUG
 
     for {
-      Expr.Var(state) <- self.attr[IntElem]("state")
+      Expr.Var(state) <- self.attr[IntElem]("st")
     } {
       val old = state.value
       if (old == 2) {        // fade-in  -> engaged
@@ -177,9 +177,9 @@ class VoiceStructure[S <: Sys[S]] {
   private def mkTransition(id: Int)(fun: (GE, GE, GE) => GE): SynthGraph = SynthGraph {
     import de.sciss.synth._
     import de.sciss.synth.ugen._
-    val pred  = graph.ScanInFix("pred", 1)
-    val succ  = graph.ScanInFix("succ", 1)
-    val state = graph.Attribute.kr("state", 2)
+    val pred  = graph.ScanInFix("pr", 1)
+    val succ  = graph.ScanInFix("su", 1)
+    val state = graph.Attribute.kr("st", 2)
     val target = 3 - state // 1 for fade-in, 0 for fade-out
     val start  = 1 - target
     val atk    = Attack
@@ -316,8 +316,8 @@ class VoiceStructure[S <: Sys[S]] {
       val shiftSucc = FreqShift.ar(fltSucc, -freq1)
       val shiftPred = FreqShift.ar(fltPred,  freq2)
 
-      //      succ          .poll(succ     .abs > 10, "succ"     )
-      //      pred          .poll(pred     .abs > 10, "pred"     )
+      //      succ          .poll(succ     .abs > 10, "su"     )
+      //      pred          .poll(pred     .abs > 10, "pr"     )
 
       //      freq1         .poll(fltSucc  .abs > 10, "fltSucc"  )
       //      (ny - freq2)  .poll(fltPred  .abs > 10, "fltPred"  )
@@ -440,9 +440,9 @@ class VoiceStructure[S <: Sys[S]] {
 
   private lazy val switchGraph = SynthGraph {
     import de.sciss.synth.ugen._
-    val pred    = graph.ScanInFix("pred", 1)
-    val succ    = graph.ScanInFix("succ", 1)
-    val state   = graph.Attribute.kr("state", 2)  // 0 - bypass (pred), 1 - engage (succ)
+    val pred    = graph.ScanInFix("pr", 1)
+    val succ    = graph.ScanInFix("su", 1)
+    val state   = graph.Attribute.kr("st", 2)  // 0 - bypass (pred), 1 - engage (succ)
     val sig     = Select.ar(state, Seq(pred, succ))
     graph.ScanOut(sig)
   }
@@ -528,7 +528,7 @@ class VoiceStructure[S <: Sys[S]] {
       val procB     = Proc[S]   // transition bypass/engage per channel
       procB.graph() = switchGraph
       val procBObj  = Obj(Proc.Elem(procB))
-      procBObj.attr.put("state", stateObj)
+      procBObj.attr.put("st", stateObj)
       val name = Obj(StringElem(StringEx.newVar[S](s"by${li}_$si")))
       procBObj.attr.put(ObjKeys.attrName, name)
       val bPlaying  = state <  2
@@ -537,8 +537,8 @@ class VoiceStructure[S <: Sys[S]] {
       val ensB      = Ensemble(bFolder, 0L, bPlaying)
       val ensBObj   = Obj(Ensemble.Elem(ensB))
       ensBObj.attr.put(ObjKeys.attrName, name)
-      val predInB   = procB .scans.add("pred")
-      val succInB   = procB .scans.add("succ")
+      val predInB   = procB .scans.add("pr")
+      val succInB   = procB .scans.add("su")
       val outB      = procB .scans.add("out")
       lFolder.addLast(ensBObj)
       predOut ~> predInB
@@ -548,7 +548,7 @@ class VoiceStructure[S <: Sys[S]] {
       val active    = state > 0
 
       val doneObj   = Obj(Action.Elem(done))
-      doneObj.attr.put("state", stateObj)
+      doneObj.attr.put("st", stateObj)
       doneObj.attr.put("li"   , liObj   )
 
       new Channel(stateObj = stateObj, state = state, fPlaying = fPlaying, active = active,
@@ -586,8 +586,8 @@ class VoiceStructure[S <: Sys[S]] {
 
         val procT     = Proc[S]
         procT.graph() = g
-        val predInT   = procT.scans.add("pred")
-        val succInT   = procT.scans.add("succ")
+        val predInT   = procT.scans.add("pr")
+        val succInT   = procT.scans.add("su")
         val outT      = procT.scans.add("out")
 
         channel.predOut ~> predInT
@@ -597,7 +597,7 @@ class VoiceStructure[S <: Sys[S]] {
         val procTObj  = Obj(Proc.Elem(procT))
         val attr      = procTObj.attr
         attr.put(ObjKeys.attrName, name)
-        attr.put("state", channel.stateObj)
+        attr.put("st", channel.stateObj)
         attr.put("done" , channel.doneObj )
 
         fFolder.addLast(procTObj)

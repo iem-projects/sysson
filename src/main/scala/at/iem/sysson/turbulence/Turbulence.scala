@@ -30,12 +30,12 @@ import de.sciss.swingplus.{Spinner, CloseOperation}
 import de.sciss.swingplus.Implicits._
 import de.sciss.synth.{addBefore, addAfter, AddAction}
 
-import de.sciss.synth.proc.Code
+import de.sciss.synth.proc.{Transport, Ensemble, Code}
 import de.sciss.{desktop, numbers, pdflitz, kollflitz}
 
 import scala.concurrent.ExecutionContext
 import scala.swing.event.{ValueChanged, MousePressed, MouseReleased, Key, ButtonClicked}
-import scala.swing.{Label, GridBagPanel, Action, FlowPanel, BoxPanel, Orientation, ButtonGroup, ToggleButton, Swing, Frame}
+import scala.swing.{Component, Button, Label, GridBagPanel, Action, FlowPanel, BoxPanel, Orientation, ButtonGroup, ToggleButton, Swing, Frame}
 import scala.collection.breakOut
 import scala.concurrent.stm.{Ref, atomic}
 import Swing._
@@ -305,12 +305,25 @@ object Turbulence {
     if (isInMem || isAuto) {
       implicit val ws = Workspace.InMemory()
       println("Building workspace...")
-      val fut = MakeWorkspace.build[InMemory]
+      type S = InMemory
+      val fut = MakeWorkspace.build[S]
       import ExecutionContext.Implicits.global
       fut.onComplete {
         case Success(_) =>
           println("Done.")
-          defer(ActionOpenWorkspace.openGUI(ws))
+          if (isAuto) {
+            implicit val cursor = ws.cursor
+            cursor.step { implicit tx =>
+              import de.sciss.synth.proc.Implicits._
+              val Some(Ensemble.Obj(ensObj)) = ws.root / "layers"
+              val transport = Transport[S](Mellite.auralSystem)
+              transport.addObject(ensObj)
+              transport.play()
+            }
+          } else {
+            defer(ActionOpenWorkspace.openGUI(ws))
+          }
+
         case Failure(e) =>
           println("Failed to build workspace:")
           e.printStackTrace()
@@ -337,11 +350,23 @@ object Turbulence {
 
     lazy val mercator = new MercatorView(dyn)
 
+    lazy val ggShutdown = new Button("Shutdown") {
+      focusable = false
+      listenTo(this)
+      reactions += {
+        case ButtonClicked(_) =>
+          import sys.process._
+          "/sbin/shutdown now".!
+      }
+    }
+
+    val fsComp = if (isAuto) ggShutdown else dyn
+
     val fDyn = new Frame {
       peer.setUndecorated(true)
       contents = new GridBagPanel {
         val cons = new Constraints()
-        layout(dyn) = cons
+        layout(fsComp) = cons
         background = Color.black
       }
       // resizable = false
@@ -365,16 +390,9 @@ object Turbulence {
     })
     binauralTimer.setRepeats(false)
 
-    dyn.peer.getActionMap.put("full-screen", actionFullScreen.peer)
-    dyn.peer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+    fsComp.peer.getActionMap.put("full-screen", actionFullScreen.peer)
+    fsComp.peer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
       .put(KeyStrokes.menu1 + KeyStrokes.shift + Key.F, "full-screen")
-    if (!isAuto) {
-      dyn.listenTo(dyn.mouse.clicks)
-      dyn.reactions += {
-        case _: MousePressed  => binauralTimer.stop()
-        case _: MouseReleased => binauralTimer.restart()
-      }
-    }
 
     if (EnablePDF) new pdflitz.SaveAction(dyn :: Nil).setupMenu(fDyn)
     fDyn.pack()
@@ -481,7 +499,22 @@ object Turbulence {
       this.defaultCloseOperation = CloseOperation.Ignore
       open()
 
-      if (!isAuto) ggPos.doClick()
+      if (isAuto) {
+        val t = new javax.swing.Timer(12000, ActionListener { _ =>
+          fDyn.visible = true
+          ggDyn.selected = true
+          actionFullScreen()
+        })
+        t.setRepeats(false)
+        t.start()
+      } else {
+        dyn.listenTo(dyn.mouse.clicks)
+        dyn.reactions += {
+          case _: MousePressed  => binauralTimer.stop()
+          case _: MouseReleased => binauralTimer.restart()
+        }
+        ggPos.doClick()
+      }
       // ggBinaural.doClick()
     }
   }

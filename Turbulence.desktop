@@ -1,11 +1,11 @@
 [Desktop Entry]
 Name=Turbulence
-Version=0.6.0-SNAPSHOT
+Version=0.10.0-SNAPSHOT
 GenericName=Turbulence
 Comment=Turbulence Sound Installation
-Exec=java -Xms2048m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=512m -server -cp /home/hhrutz/Documents/devel/sysson/SysSon.jar at.iem.sysson.turbulence.Turbulence
+Exec=java -Xms2048m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=512m -server -cp /home/hhrutz/Documents/devel/sysson/SysSon.jar at.iem.sysson.turbulence.Turbulence --auto
 StartupWMClass=at-iem-sysson-turbulence-Turbulence
 Icon=/home/hhrutz/Documents/devel/sysson/turbulence.png
 Categories=Audio;AudioVideo;
-Terminal=false
+Terminal=true
 Type=Application
