@@ -237,24 +237,24 @@ object Turbulence {
   final val SensorSpeakers = Vector(
     Spk(43) -> false,
     Spk(38) -> false,
-    Spk(39) -> true,    //  0
-    Spk(37) -> true,    //  1
-    Spk(35) -> true,    //  2
+    Spk(39) -> true,    //  0 A
+    Spk(37) -> true,    //  1 A
+    Spk(35) -> true,    //  2 A
     Spk(27) -> false,
-    Spk(16) -> true,    //  3 PROB
-    Spk(10) -> true,    //  4 PROB
-    Spk( 8) -> true,    //  5 PROB
-    Spk(22) -> true,    //  6
-    Spk(24) -> true,    //  7
-    Spk(23) -> true,    //  8
-    Spk(25) -> true,    //  9
-    Spk(14) -> true,    // 10
-    Spk(15) -> true,    // 11 PROB
-    Spk( 6) -> true,    // 12 PROB
+    Spk(16) -> true,    //  3 C
+    Spk(10) -> true,    //  4 C
+    Spk( 8) -> true,    //  5 C
+    Spk(22) -> true,    //  6 A
+    Spk(24) -> true,    //  7 A
+    Spk(23) -> true,    //  8 B
+    Spk(25) -> true,    //  9 B
+    Spk(14) -> true,    // 10 B
+    Spk(15) -> true,    // 11 C
+    Spk( 6) -> true,    // 12 C
     Spk( 4) -> false,
     Spk(18) -> false,
-    Spk(19) -> true,    // 13 PROB
-    Spk(31) -> true     // 14
+    Spk(19) -> true,    // 13 B
+    Spk(31) -> true     // 14 B
   )
 
   // nominally - without 'non-wired' ones

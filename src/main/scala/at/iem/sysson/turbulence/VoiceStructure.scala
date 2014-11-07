@@ -40,7 +40,7 @@ object VoiceStructure {
   val Release         = 30  // 10
   val FFTSize         = 512 // 1024
 
-  lazy val NumLayers      = if (DEBUG) 2 else Turbulence.NumWiredSensors + 1  // one for each sensor plus bg
+  lazy val NumLayers      = 9 // if (DEBUG) 2 else Turbulence.NumWiredSensors + 1  // one for each sensor plus bg
   lazy val MaxVoices      = if (DEBUG) 1 else 3
   lazy val NumChannels    = /* if (DEBUG) 2 else */ Turbulence.NumChannels
   lazy val NumTransitions = if (DEBUG) 1 else 7
@@ -405,21 +405,6 @@ class VoiceStructure[S <: Sys[S]] {
     allObj
   }
 
-  // for simplicity, same graph for
-  // all layers, distinguished by
-  // resonant frequency depending on
-  // attribute 0 <= `li` < NumLayers
-  private lazy val genGraph = SynthGraph {
-    import de.sciss.synth._
-    import de.sciss.synth.ugen._
-    val li    = graph.Attribute.ir("li", 0)
-    val freq  = if (NumLayers == 1) 1000.0: GE else li.linexp(0, NumLayers - 1, 200.0, 4000.0)
-    val amp   = 0.5
-    val dust  = Decay.ar(Dust.ar(Seq.fill(NumChannels)(10)), 1).min(1)
-    val sig   = Resonz.ar(dust, freq, 0.5) * amp
-    graph.ScanOut(sig)
-  }
-
   // multi-channel single scan in, multiple signal-channel scan outs
   private lazy val splitGraph = SynthGraph {
     val in = graph.ScanInFix(NumChannels)
@@ -462,9 +447,6 @@ class VoiceStructure[S <: Sys[S]] {
 
     // the actual sound layer
     val (genOuterObj, genProcObj) = factory.mkLayer()
-    //    val gen       = Proc[S]
-    //    gen.graph()   = genGraph
-    //    val genObj    = Obj(Proc.Elem(gen))
     val liObj       = Obj(IntElem(li))
     genOuterObj.attr.put("li", liObj)
     genOuterObj.name = s"gen$li"

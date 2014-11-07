@@ -48,24 +48,28 @@ object MakeLayers {
   final val NumBlobs = 4
 
   final val VerifyBounds  = false
-  final val VerifyNaNs    = true
+  final val VerifyNaNs    = false
 
-  final val DebugSpeed    = true
-
-  //  lazy val all: Vec[LayerFactory] = {
-  //    //             0          1             2             3       4           5            6
-  //    val real = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips,
-  //    //             7
-  //                   Wind)
-  //    real.padTo(NumLayers, Placeholder)
-  //  }
+  final val DebugSpeed    = false
 
   lazy val all: Vec[LayerFactory] = {
     //              0          1             2             3       4           5            6               7
-    val real  = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips, Wind)
-    val ph    = Vector.tabulate(NumLayers - real.size)(i => new PlaceHolder(real.size + i))
-    val res   = real ++ ph
+    val res = Vec(Freesound, VoronoiPitch, VoronoiPaper, TaAnom, ConvPrecip, PrecipBlobs, RadiationBlips, Wind,
+      new PlaceHolder(8))
     assert(res.map(_.identifier) == (0 until NumLayers))
+    res
+  }
+
+  /** Maps sensor-ids (counting from 0 until num-wired) to layer-ids. */
+  lazy val map: Map[Int, Int] = {
+    // first-loop counter-clockwise:  0,  1, 2, 7,  6
+    // second-loop                 : 14, 13, 8, 9, 10
+    // third-loop                  : 11,  3, 4, 5, 12
+
+    val res = Map( 0 -> 1,  1 -> 2,  2 -> 3,  7 -> 4,  6 -> 5,
+                  14 -> 6, 13 -> 7,  8 -> 8,  9 -> 1, 10 -> 2,
+                  11 -> 3,  3 -> 4,  4 -> 5,  5 -> 6, 12 -> 7)
+    assert(res.size == Turbulence.NumWiredSensors)
     res
   }
 
@@ -1140,7 +1144,17 @@ val mix = FreeVerb.ar(mix0)
         import synth._
         import ugen._
         val li    = graph.Attribute.ir("li", 0)
-        val freq  = if (NumLayers == 1) 1000.0: GE else li.linexp(0, NumLayers - 1, 200.0, 4000.0)
+        val xy    = SensorIn.kr(offset = 18, numChannels = 2)
+        val cx    = (xy \ 0) - 0.5
+        val cy    = (xy \ 1) - 0.5
+        val ang0  = (cy atan2 cx) / math.Pi   // -pi to +pi  --> -1 to +1
+        val ang   = Lag.kr(ang0, 10)
+        cx .poll(1, "cx")
+        cy .poll(1, "cy")
+        ang.poll(1, "ang")
+
+        // val freq  = if (NumLayers == 1) 1000.0: GE else li.linexp(0, NumLayers - 1, 200.0, 4000.0)
+        val freq  = ang.clip(-1, 1).linexp(-1, 1, 200.0, 4000.0)
         val amp   = 0.5
         val dust  = Decay.ar(Dust.ar(Seq.fill(NumChannels)(10)), 1).min(1)
         val sig   = Resonz.ar(dust, freq, 0.5) * amp

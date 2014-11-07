@@ -133,14 +133,15 @@ object MakingWaves {
 
     val sense: Vec[Int] = if (overrideValue < 0) {
       val sumEnergy = (0.0 /: (0 until NumChannels)) { case (sum, si) =>
-        val sit = si << 1
+        val sit = si << 1  // offset for [sensor-id, sensor-value]
         sum + values(sit + 1)
       }
       // println(s"SUM ENERGY = $sumEnergy")
       val lowEnergy = sumEnergy < BackgroundSum
       Vector.tabulate(NumChannels) { si =>
-        val sit = si << 1
-        val li  = values(sit).toInt + 1
+        val sit     = si << 1
+        val senseID = values(sit).toInt + 1
+        val li      = MakeLayers.map.getOrElse(senseID, -1)
         if (lowEnergy && values(sit + 1) < BackgroundThresh) 0 else li
       }
     } else {
@@ -175,7 +176,8 @@ object MakingWaves {
             Proc.Obj(bProc)    <- bEns / byName
             Expr.Var(state)    <- bProc.attr[IntElem]("st")
           } yield {
-            val gate    = sense(si) == li
+            val li2     = sense(si)
+            val gate    = li2 == li
             val before  = state.value
             val now     = before match {
               case 0 | 3 if gate && numFadeIns < MaxFadeIns =>
