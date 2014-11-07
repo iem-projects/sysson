@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.10.1"
+version       := "0.10.2"
 
 organization  := "at.iem.sysson"
 
@@ -30,7 +30,7 @@ fork in run := true
 
 lazy val melliteVersion             = "0.13.1"
 
-// lazy val soundProcessesVersion      = "2.8.1"
+lazy val soundProcessesVersion      = "2.8.2"
 
 lazy val lucreMatrixVersion         = "0.5.0"
 
@@ -61,7 +61,7 @@ lazy val lucreSwingVersion          = "0.6.1"
 libraryDependencies ++= Seq(
   "de.sciss" %% "lucreswing" % lucreSwingVersion,
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
-//  "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
+  "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
 //  "de.sciss" %% "scalacollider"               % scalaColliderVersion,
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
   "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens

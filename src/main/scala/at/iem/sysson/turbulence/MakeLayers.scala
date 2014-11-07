@@ -205,16 +205,17 @@ object MakeLayers {
     //      36 -> -24.0, 38 -> -17.2, 40 -> -16.0, 41 -> -13.3, 42 -> -21.0, 43 -> -21.4,
     //      44 -> -14.6, 45 -> -21.7, 46 -> -13.1)
 
+    /* Maps from spk-num to decibels */
     val gains = Map[Int, Double](
-       5 -> -13.3, 10 -> -17.2, 42 -> -16.3, 24 -> -12.3, 37 -> -17.5, 25 -> -10.9,
-      14 -> -14.4, 20 -> -18.1, 29 -> -21.6,  6 -> -21.4, 38 -> -16.7, 21 -> -11.5,
-      33 -> -20.0, 13 -> -26.2, 41 -> -21.1, 32 -> -21.3, 34 -> -22.6, 17 -> -14.8,
-      22 -> -18.7, 44 -> -18.9, 27 -> -17.4, 12 -> -16.0,  7 -> -13.1, 39 -> -19.2,
-       3 -> -21.7, 35 -> -15.3, 18 -> -20.8, 16 -> -24.0, 31 -> -17.7, 43 -> -21.6,
-      40 -> -18.8, 26 -> -18.7, 23 -> -23.6,  8 -> -14.6, 36 -> -18.7, 30 -> -19.3,
-      19 -> -20.1,  4 -> -21.0, 15 -> -19.0)
+       5 -> -10.3, 10 -> -17.2, 42 -> -14.3, 24 -> -12.3, 37 -> -17.5, 25 ->  -8.9,
+      14 -> -14.4, 20 -> -16.1, 29 -> -23.6,  6 -> -22.4, 38 -> -16.7, 21 ->  -8.5,
+      33 -> -18.0, 13 -> -26.2, 41 -> -20.1, 32 -> -19.3, 34 -> -22.6, 17 -> -13.8,
+      22 -> -18.7, 44 -> -18.9, 27 -> -16.4, 12 -> -16.0,  7 -> -10.1, 39 -> -19.2,
+       3 -> -22.7, 35 -> -15.3, 18 -> -20.8, 16 -> -24.0, 31 -> -15.7, 43 -> -21.6,
+      40 -> -16.8, 26 -> -18.7, 23 -> -23.6,  8 -> -12.6, 36 -> -18.7, 30 -> -19.3,
+      19 -> -20.1,  4 -> -22.0, 15 -> -19.0)
 
-    val totalGain = -6
+    val totalGain = -6.5
 
     def fileMap: Map[Int, File] = {
       val dir = Turbulence.audioWork / "fsm"  // selected sounds, looped and mono
@@ -234,7 +235,7 @@ object MakeLayers {
       val imp = ExprImplicits[S]
       import imp._
 
-      def mkKey(num: Int) = s"file$num"
+      def mkKey(num: Int) = s"!rnd$num"
 
       val proc    = Proc[S]
       val procObj = Obj(Proc.Elem(proc))
@@ -374,7 +375,7 @@ object MakeLayers {
         val datPr     = vPr .play(timePr )
         mkTimeRecord(timeTas)
 
-        val amp       = graph.Attribute.kr("gain", 6)
+        val amp       = graph.Attribute.kr("gain", 6.7)
 
         val period    = speed.reciprocal
         val lagTas    = Ramp.ar(datTas, period)
@@ -598,7 +599,7 @@ object MakeLayers {
       //        dir / s"fsm${num}conv.aif"
       //      }
 
-      def mkKey(num: Int) = s"file$num"
+      def mkKey(num: Int) = s"!rnd$num"
 
       val varName = "!1850pr"
 
@@ -1048,6 +1049,7 @@ val mix = FreeVerb.ar(mix0)
       import imp._
 
       val varName = "!1850ua"
+      val keyDisk = "!rnd"
 
       val sonObj  = mkSonif[S]("eastwind") {
         import synth._; import ugen._; import sysson.graph._
@@ -1076,7 +1078,7 @@ val mix = FreeVerb.ar(mix0)
 
         val amp   = graph.Attribute.kr("gain", 3)
 
-        val sound = graph.DiskIn.ar("sound", loop = 1)
+        val sound = graph.DiskIn.ar(keyDisk, loop = 1)
 
         // val thresh = UserValue("thresh", 2).kr
         // val thresh = graph.Attribute.kr("thresh", 2)
@@ -1123,7 +1125,7 @@ val mix = FreeVerb.ar(mix0)
       val spec  = AudioFile.readSpec(f)
       require(spec.numChannels == 2, s"File $f should be stereo, but has ${spec.numChannels} channels")
       val artObj  = ObjectActions.mkAudioFile(loc, f, spec)
-      procObj.attr.put("sound", artObj)
+      procObj.attr.put(keyDisk, artObj)
 
       (sonObj, procObj)
     }
@@ -1132,7 +1134,7 @@ val mix = FreeVerb.ar(mix0)
   // -------------------- Placeholder --------------------
 
   class PlaceHolder(val identifier: Int) extends Timeless {
-    final val varName = "" // "none"
+    final val varName = "center-of-gravity" // "none"
 
     def mkLayer[S <: Sys[S]]()(implicit tx: S#Tx, workspace: Workspace[S]): (Obj[S], Proc.Obj[S]) = {
       val imp = ExprImplicits[S]
