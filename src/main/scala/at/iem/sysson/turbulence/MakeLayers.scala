@@ -551,7 +551,7 @@ object MakeLayers {
           val anom  = dat \ ch
           // val side  = anom < 0  // too cold = 1, too hot = 0
 
-          val dbMin = -40.0
+          val dbMin = -36.0 // -40.0
 
           val aHot  = anom.clip(0, max).linlin(0, max, dbMin, 0).dbamp - dbMin.dbamp // make sure it becomes zero
           val aCold = anom.clip(min, 0).linlin(0, min, dbMin, 0).dbamp - dbMin.dbamp
@@ -1143,15 +1143,15 @@ val mix = FreeVerb.ar(mix0)
       proc.graph() = SynthGraph {
         import synth._
         import ugen._
-        val li    = graph.Attribute.ir("li", 0)
+        // val li    = graph.Attribute.ir("li", 0)
         val xy    = SensorIn.kr(offset = 18, numChannels = 2)
         val cx    = (xy \ 0) - 0.5
         val cy    = (xy \ 1) - 0.5
         val ang0  = (cy atan2 cx) / math.Pi   // -pi to +pi  --> -1 to +1
         val ang   = Lag.kr(ang0, 10)
-        cx .poll(1, "cx")
-        cy .poll(1, "cy")
-        ang.poll(1, "ang")
+        //        cx .poll(1, "cx")
+        //        cy .poll(1, "cy")
+        //        ang.poll(1, "ang")
 
         // val freq  = if (NumLayers == 1) 1000.0: GE else li.linexp(0, NumLayers - 1, 200.0, 4000.0)
         val freq  = ang.clip(-1, 1).linexp(-1, 1, 200.0, 4000.0)

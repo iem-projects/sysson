@@ -140,7 +140,7 @@ object MakingWaves {
       val lowEnergy = sumEnergy < BackgroundSum
       Vector.tabulate(NumChannels) { si =>
         val sit     = si << 1
-        val senseID = values(sit).toInt + 1
+        val senseID = values(sit).toInt // + 1
         val li      = MakeLayers.map.getOrElse(senseID, -1)
         if (lowEnergy && values(sit + 1) < BackgroundThresh) 0 else li
       }

@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.10.0"
+version       := "0.10.1"
 
 organization  := "at.iem.sysson"
 
