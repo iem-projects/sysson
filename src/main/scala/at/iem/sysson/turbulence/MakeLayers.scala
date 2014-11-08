@@ -215,7 +215,7 @@ object MakeLayers {
       40 -> -16.8, 26 -> -18.7, 23 -> -23.6,  8 -> -12.6, 36 -> -18.7, 30 -> -19.3,
       19 -> -20.1,  4 -> -22.0, 15 -> -19.0)
 
-    val totalGain = -6.5
+    val totalGain = -9.5
 
     def fileMap: Map[Int, File] = {
       val dir = Turbulence.audioWork / "fsm"  // selected sounds, looped and mono
@@ -941,7 +941,7 @@ val mix = FreeVerb.ar(mix0)
 
         // val speed  = graph.Attribute.kr("speed", 6.0)
         val speed  = mkSpeed(3.0)
-        val amp    = graph.Attribute.kr("gain" , 0.08)
+        val amp    = graph.Attribute.kr("gain" , 0.065)
         val period = speed.reciprocal
 
         val (vars, times) = vrNames.map { name =>

@@ -134,7 +134,7 @@ object Turbulence {
 
   final val NumChannels = ChannelIndices.size
 
-  final val MasterVolume = -3 // decibels
+  final val MasterVolume = -1 // decibels
 
   private val chans = MatrixToChannelMap.valuesIterator.map(_.num).toVector.sorted
   // assert(chans == (3 to 8) ++ (10 to 11) ++ (13 to 46), s"ChannelMap does not have expected values: $chans")
