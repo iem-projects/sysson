@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.10.3-SNAPSHOT"
+version       := "0.10.3"
 
 organization  := "at.iem.sysson"
 
@@ -30,7 +30,7 @@ fork in run := true
 
 lazy val melliteVersion             = "0.13.1"
 
-lazy val soundProcessesVersion      = "2.8.2"
+lazy val soundProcessesVersion      = "2.8.3"
 
 lazy val lucreMatrixVersion         = "0.5.0"
 
