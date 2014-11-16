@@ -25,15 +25,18 @@ import proc.Implicits._
 
 import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.concurrent.Future
-import scala.util.Random
+import scala.util.{Try, Random}
 
 import VoiceStructure.NumChannels
 
 object MakingWaves {
   final val MaxFadeIns = 8  // at once
 
-  final val BackgroundThresh  = 4.0e-4
-  final val BackgroundSum     = 7.5e-4
+  final val BackgroundThresh  = sys.props.get("turbulence-bg-thresh").flatMap(s => Try(s.toDouble).toOption)
+    .getOrElse(4.0e-4)
+
+  final val BackgroundSum     = sys.props.get("turbulence-bg-sum"   ).flatMap(s => Try(s.toDouble).toOption)
+    .getOrElse(7.5e-4)
 
   // (2)
   def apply[S <: Sys[S]](parent: Folder[S])
@@ -68,7 +71,13 @@ object MakingWaves {
       val period      = graph.Attribute.kr("period", 5)     // seconds between polls
       val ripple      = graph.Attribute.kr("ripple", 0.1)   // percent
 
-      val sense       = SensorIn(0, SensorSpeakers.size)
+      val sense0      = SensorIn(0, SensorSpeakers.size)
+      val sense: GE   = Vec.tabulate(SensorSpeakers.size) { i =>
+        val in = sense0 \ i
+        val th = sys.props.get(s"turbulence-s$i-thresh").flatMap(s => Try(s.toDouble).toOption).getOrElse(0.0)
+        if (th > 0) println(f"For sensor T$i%02d threshold is $th%1.5f")
+        if (th <= 0) in else (in - th).max(0)
+      }
       val frequencies = sense.linexp(0, 1, 1.0/4, 4.0)
       val sin         = SinOsc.kr(frequencies)
       val sqr         = sense.squared

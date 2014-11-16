@@ -10,6 +10,12 @@ Repository for the software developed during the [SysSon Project](http://sysson.
 
 Please see the `licenses` folder for details. It contains the license headers for all dependencies and transitive dependencies. For the binary release of SysSon, source code is not included but available via the respective OSS project pages, as indicated in the license files, or&mdash;in compliance with GPL/LGPL&mdash;on request via E-Mail. All source code with group-ID `de.sciss` is available from [github.com/Sciss](https://github.com/Sciss).
 
+## System Properties
+
+- `turbulence-bg-thresh`; default is 4.0e-4
+- `turbulence-bg-sum`; default is 7.5e-4
+- `turbulence-s<Idx>-thresh`; default is zero
+
 ## Installation
 
 __Please see [the wiki](https://github.com/iem-projects/sysson/wiki) for the most up-to-date information!__
