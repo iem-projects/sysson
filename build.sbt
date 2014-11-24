@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.10.4"
+version       := "0.10.5"
 
 organization  := "at.iem.sysson"
 
@@ -14,9 +14,9 @@ licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.11.2"
+scalaVersion  := "2.11.4"
 
-crossScalaVersions := Seq("2.11.2", "2.10.4")
+crossScalaVersions := Seq("2.11.4", "2.10.4")
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
@@ -54,12 +54,10 @@ lazy val slfVersion                 = "1.7.7"
 
 lazy val scalaTestVersion           = "2.2.2"
 
-// ---- Ivy probs ----
-
-lazy val lucreSwingVersion          = "0.6.1"
+lazy val lucreSwingVersion          = "0.6.2"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "lucreswing" % lucreSwingVersion,
+  "de.sciss" %% "lucreswing"                  % lucreSwingVersion,
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
   "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
 //  "de.sciss" %% "scalacollider"               % scalaColliderVersion,
