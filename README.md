@@ -1,20 +1,10 @@
 ![logo](https://raw.githubusercontent.com/iem-projects/sysson/master/src/main/resources/at/iem/sysson/SysSon-Logo_web_noshadow.png)
 
-# SysSon - Turbulence Branch
-
-_Note_: This is the branch containing the code for the sound installation 'Turbulence' at Forum Stadtpark Graz.
-
----
+# SysSon
 
 Repository for the software developed during the [SysSon Project](http://sysson.kug.ac.at/) at IEM Graz &ndash; SysSon is a systematic procedure to develop sonifications. Published under the GNU General Public License v3+.
 
 Please see the `licenses` folder for details. It contains the license headers for all dependencies and transitive dependencies. For the binary release of SysSon, source code is not included but available via the respective OSS project pages, as indicated in the license files, or&mdash;in compliance with GPL/LGPL&mdash;on request via E-Mail. All source code with group-ID `de.sciss` is available from [github.com/Sciss](https://github.com/Sciss).
-
-## System Properties
-
-- `turbulence-bg-thresh`; default is 4.0e-4
-- `turbulence-bg-sum`; default is 7.5e-4
-- `turbulence-s<Idx>-thresh`; default is zero
 
 ## Installation
 
