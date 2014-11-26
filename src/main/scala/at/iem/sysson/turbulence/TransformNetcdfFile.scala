@@ -113,8 +113,8 @@ object TransformNetcdfFile {
     } .unzip3
 
     val outDims = outDimsSpec.map {
-      case Keep(name) => keepOutDims .find(_.name ==   name).get
-      case c: Create  => alterOutDims.find(_.name == c.name).get
+      case Keep(name) => keepOutDims .find(_.name ==   name).getOrElse(sys.error(s"No dimension '$name'"))
+      case c: Create  => alterOutDims.find(_.name == c.name).getOrElse(sys.error(s"No dimension '${c.name}'"))
     }
 
     val outVar = writer.addVariable(null, inVar.getShortName, inVar.getDataType, outDims.asJava)
