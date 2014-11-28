@@ -241,7 +241,7 @@ object MakeLayers {
       val procObj = Obj(Proc.Elem(proc))
       proc.graph() = SynthGraph {
         import synth._
-        import ugen._
+        import ugen.{NumChannels => _, _}
 
         mkTimeRecord(0)
 
@@ -287,7 +287,7 @@ object MakeLayers {
       val varName = "!1850tas"
 
       val sonObj  = mkSonif[S]("voronoi-pitch") {
-        import synth._; import ugen._; import proc.graph._; import sysson.graph._
+        import synth._; import ugen.{NumChannels => _, _}; import proc.graph._; import sysson.graph._
 
         val v       = Var(varName)
         val dTime   = Dim(v, "time")
@@ -503,7 +503,7 @@ object MakeLayers {
       val vrName = "!1850anom"
 
       val sonObj  = mkSonif[S]("ta-anom") {
-        import synth._; import ugen._; import sysson.graph._
+        import synth._; import ugen.{NumChannels => _, _}; import sysson.graph._
         val vr        = Var(vrName)
         val dTime     = Dim(vr, "time")
 
@@ -684,7 +684,7 @@ object MakeLayers {
       val varName = "!1850blob"
 
       val sonObj  = mkSonif[S]("pr-blob") {
-        import synth._; import ugen._; import sysson.graph._
+        import synth._; import ugen.{NumChannels => _, _}; import sysson.graph._
         val vr    = Var(varName)
         val dt    = Dim(vr, "time")
         // val speed = graph.Attribute.kr("speed", 1)
@@ -913,7 +913,7 @@ val mix = FreeVerb.ar(mix0)
       )
 
       val sonObj  = mkSonif[S]("radiation") {
-        import synth._; import ugen._; import sysson.graph._
+        import synth._; import ugen.{NumChannels => _, _}; import sysson.graph._
 
         // hfls - Surface Upward Latent   Heat Flux
         // hfss - Surface Upward Sensible Heat Flux
@@ -1144,7 +1144,7 @@ val mix = FreeVerb.ar(mix0)
       val procObj = Obj(Proc.Elem(proc))
       proc.graph() = SynthGraph {
         import synth._
-        import ugen._
+        import ugen.{NumChannels => _, _}
         // val li    = graph.Attribute.ir("li", 0)
         val xy    = SensorIn.kr(offset = 18, numChannels = 2)
         val cx    = (xy \ 0) - 0.5

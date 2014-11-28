@@ -28,15 +28,17 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "0.13.1"
+lazy val wolkenpumpeVersion         = "1.0.0-SNAPSHOT"
 
-lazy val soundProcessesVersion      = "2.8.3"
+lazy val melliteVersion             = "0.14.0"
+
+// lazy val soundProcessesVersion      = "2.9.0"
 
 lazy val lucreMatrixVersion         = "0.5.0"
 
 // lazy val scalaColliderVersion       = "1.14.1"
 
-lazy val scalaColliderSwingVersion  = "1.20.1"
+lazy val scalaColliderSwingVersion  = "1.20.2"
 
 lazy val ugensVersion               = "1.11.2"
 
@@ -54,12 +56,13 @@ lazy val slfVersion                 = "1.7.7"
 
 lazy val scalaTestVersion           = "2.2.2"
 
-lazy val lucreSwingVersion          = "0.6.2"
+// lazy val lucreSwingVersion          = "0.6.2"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "lucreswing"                  % lucreSwingVersion,
+  "de.sciss" %% "wolkenpumpe"                 % wolkenpumpeVersion,         // live interface
+//  "de.sciss" %% "lucreswing"                  % lucreSwingVersion,
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
-  "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
+//  "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
 //  "de.sciss" %% "scalacollider"               % scalaColliderVersion,
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
   "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens

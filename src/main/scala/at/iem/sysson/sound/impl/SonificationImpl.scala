@@ -203,7 +203,7 @@ object SonificationImpl {
       }
     }
 
-    final def select(slot: Int): Event[S, Any, Any] = (slot: @switch) match {
+    final def select(slot: Int): Event[S, Any, Any] = slot match {
       case changed    .slot => changed
       //      case attr .slot => attr
       // case StateEvent .slot => StateEvent

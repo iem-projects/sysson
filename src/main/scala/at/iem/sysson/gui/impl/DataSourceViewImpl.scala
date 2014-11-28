@@ -78,14 +78,14 @@ object DataSourceViewImpl {
 
   private final class AttrsModel(val data: Vec[nc2.Attribute]) extends TableModel[nc2.Attribute] {
     def getColumnCount  = 2 // name, value representation
-    override def getColumnName(col: Int) = (col: @switch) match {
+    override def getColumnName(col: Int) = col match {
       case 0 => "Name"
       case 1 => "Value"
     }
 
     def getValueAt(row: Int, col: Int) = {
       val attr = data(row)
-      (col: @switch) match {
+      col match {
         case 0 => attr.name
         case 1 =>
           //          val typ = attr.dataType
