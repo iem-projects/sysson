@@ -1,0 +1,43 @@
+[OK]	- streaming buffer
+[OK}	- random access buffer
+[OK}	- synchronise two views
+[OK]	- pause
+	- resampling of data
+[OK}	- proper labels
+[OK]	- duration / time position feedback
+[OK]	- mute
+
+	- plot: color palette and labels
+
+	- regression: library / cross-document DnD
+
+::::
+
+check
+
+[OK]	time slice later - the same grapheme is re-used, but it seems the offset is always zero?
+
+::::
+
+[OK]	elapsed:
+	   - associate grapheme production with Dim.Play attrKey
+	   - associate Dim.Play attrKey with Elapsed attrKey
+	   - when grapheme production done, check key; find elapsed key; set attr to value
+
+	   on the other hand
+	   - there should be a Dim.Size element
+
+::::
+
+aw.add   (grapheme): Proxy
+aw.remove(grapheme)
+
+as.bufferMap[String, Proxy]
+
+Proxy
+  val grapheme
+
+aw
+  - aural started
+      spawn loading process
+      
