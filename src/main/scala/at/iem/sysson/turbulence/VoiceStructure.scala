@@ -358,7 +358,7 @@ class VoiceStructure[S <: Sys[S]] {
     val diff = Proc[S]
     diff.graph() = SynthGraph {
       import de.sciss.synth._
-      import de.sciss.synth.ugen._
+      import de.sciss.synth.ugen.{NumChannels => _, _}
       val in = graph.ScanInFix(NumChannels)
       Turbulence.ChannelIndices.zipWithIndex.foreach { case (bus, ch) =>
         val inc   = in \ ch
@@ -415,7 +415,7 @@ class VoiceStructure[S <: Sys[S]] {
 
   // multiple signal-channel scan ins, multi-channel single scan out,
   private lazy val collGraph = SynthGraph {
-    import de.sciss.synth.ugen._
+    import de.sciss.synth.ugen.{NumChannels => _, _}
     val in = Vec.tabulate(NumChannels) { ch =>
       graph.ScanInFix(s"in$ch", 1)
     }

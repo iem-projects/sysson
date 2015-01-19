@@ -16,10 +16,10 @@ package at.iem.sysson.turbulence
 
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt, MetersPerPixel}
 import at.iem.sysson.turbulence.Turbulence.{LatLon, Spk, Radians}
-import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Escape, Buffer, Synth, Txn, Server}
+import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Escape, Buffer, Synth, Txn}
 import de.sciss.mellite.Prefs
 import de.sciss.{synth, numbers}
-import de.sciss.synth.{addBefore, ControlSet, addToTail, addToHead, addAfter, AddAction, SynthGraph, message}
+import de.sciss.synth.{addBefore, ControlSet, addToTail, addToHead, AddAction, SynthGraph, message}
 import de.sciss.file._
 
 import scala.collection.immutable.{IndexedSeq => Vec}
@@ -146,7 +146,7 @@ object Binaural {
 
     val tailGraph = SynthGraph {
       import synth._
-      import ugen._
+      import ugen.{ChannelIndices => _, _}
       val in    = In.ar(ChannelIndices)
       val inF   = Flatten(in)
       val dlyT  = "delay".ir(Vec.fill(N)(0f))
