@@ -15,27 +15,29 @@
 package at.iem.sysson
 package gui
 
-import de.sciss.desktop.{OptionPane, Desktop, KeyStrokes, Menu}
-import de.sciss.lucre.synth.Txn
-import scala.concurrent.stm.TxnExecutor
-import scala.swing.{Label, Action}
-import de.sciss.lucre.event.{Sys, Durable}
-import de.sciss.lucre.stm.store.BerkeleyDB
-import de.sciss.file._
-import gui.{SwingApplication => App}
-import language.existentials
-import de.sciss.{osc, synth}
-import scala.swing.event.{Key, MouseClicked}
 import java.net.URL
-import de.sciss.mellite.gui.{ActionPreferences, LogFrame, ActionNewWorkspace, ActionOpenWorkspace}
+
+import at.iem.sysson.gui.{SwingApplication => App}
+import de.sciss.desktop.{Desktop, KeyStrokes, Menu, OptionPane}
+import de.sciss.file._
+import de.sciss.lucre.event.{Durable, Sys}
+import de.sciss.lucre.stm.store.BerkeleyDB
+import de.sciss.lucre.synth.Txn
+import de.sciss.mellite.gui.{ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
 import de.sciss.mellite.{Mellite, Workspace}
+import de.sciss.osc
+
+import scala.concurrent.stm.TxnExecutor
+import scala.language.existentials
+import scala.swing.event.{Key, MouseClicked}
+import scala.swing.{Action, Label}
 
 object MenuFactory {
   def root: Menu.Root = _root
 
   private lazy val _root = {
-    import Menu._
     import KeyStrokes._
+    import de.sciss.desktop.Menu._
 
     val dh = DocumentHandler.instance
 
@@ -104,11 +106,6 @@ object MenuFactory {
             openInterpreter()
           }
         )
-        .add(
-          Item("new-library")("Library..." -> (menu1 + Key.L)) {
-            openLibrary()
-          }
-        )
       )
       .add(Item("open", ActionOpenWorkspace))
       .add(ActionOpenWorkspace.recentMenu)
@@ -136,16 +133,14 @@ object MenuFactory {
     if (itPrefs.visible /* && Desktop.isLinux */) gEdit.addLine().add(itPrefs)
 
     val gActions = Group("actions", "Actions")
-//    val gDebug = Group("debug", "Debug")
-//    gDebug
-//      .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + Key.D))(dumpOSC()))
+    val gDebug = Group("debug", "Debug")
+    gDebug
+      .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + Key.D))(dumpOSC()))
+      // .add(Item("debug-print", proxy("Debug Print", menu2 + Key.P)))
+      .add(Item("toggle-log")("Debug Logging")(toggleLog()))
 
     gActions
       .add(Item("stop-all-sound",     proxy("Stop All Sound",           menu1 + Key.Period)))
-      .addLine()
-      .add(Item("debug-print",        proxy("Debug Print",              menu2 + Key.P)))
-      .add(Item("dump-osc")("Dump OSC" -> (ctrl + shift + Key.D))(dumpOSC()))
-      .add(Item("toggle-log")("Debug Logging")(toggleLog()))
 
     // if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
 
@@ -153,9 +148,8 @@ object MenuFactory {
       .add(Item("show-log" )("Show Log Window"  -> (menu1         + Key.P))(logToFront()))
       .add(Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P))(clearLog  ()))
     val gWindow = Group("window", "Window")
-    //  .add(Item("windowShot",         proxy("Export Window as PDF...")))
 
-    val r = Root().add(gFile).add(gEdit).add(gActions).add(gView).add(gWindow)
+    val r = Root().add(gFile).add(gEdit).add(gActions).add(gView).add(gWindow).add(gDebug)
     if (itAbout.visible) r.add(Group("help", "Help").add(itAbout))
     r
   }
@@ -172,9 +166,6 @@ object MenuFactory {
     docs.foreach(doc => screwYou(doc.asInstanceOf[Workspace[~] forSome { type ~ <: Sys[~] }]))
   }
 
-  //  def openSoundDesigner(): Unit =
-  //    sound.designer.DesignerView()
-
   def openInterpreter(): Unit = InterpreterView()
 
   private type S = Durable
@@ -182,25 +173,6 @@ object MenuFactory {
     val store = BerkeleyDB.factory(dir = syssonDir / "library")
     Durable(store)
   }
-
-  //  private lazy val libraryH: stm.Source[S#Tx, Library[S]] =
-  //    system.root { implicit tx =>
-  //      val _lib  = Library[S]
-  //      //      val imp   = ExprImplicits[S]
-  //      //      import imp._
-  //      //      _lib.root.insertLeaf  (0, "Test-Leaf", "Test-Source")
-  //      //      val sub = _lib.root.insertBranch(0, "Test-Branch")
-  //      //      sub.insertLeaf       (0, "Test-Child", "Test-Source")
-  //      _lib
-  //    }
-
-  def openLibrary(): Unit = println("TODO: open library")
-//    system.step { implicit tx =>
-//      val lib = libraryH()
-//      LibraryWindow(lib)
-//    }
-
-  private var resp = Option.empty[synth.message.Responder]
 
   private var dumpMode: osc.Dump = osc.Dump.Off
 

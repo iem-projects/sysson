@@ -16,40 +16,36 @@ package at.iem.sysson
 package gui
 package impl
 
-import javax.swing.{JTable, SwingConstants, JSpinner, SpinnerNumberModel}
-
-import ucar.nc2
-import org.jfree.chart.{JFreeChart, ChartPanel}
-import Implicits._
-import org.jfree.chart.renderer.xy.XYBlockRenderer
-import org.jfree.chart.renderer.{PaintScale, LookupPaintScale}
-import org.jfree.chart.axis.{SymbolAxis, NumberAxis}
-import org.jfree.chart.plot.{ValueMarker, IntervalMarker, XYPlot}
-import org.jfree.data.xy.{MatrixSeriesCollection, MatrixSeries}
+import java.awt
 import java.awt.{BasicStroke, Color}
-import scala.swing.{BoxPanel, Orientation, Alignment, BorderPanel, Table, CheckBox, Label, Component, Swing, Action}
-import Swing._
-import scala.swing.event.ValueChanged
-import de.sciss.intensitypalette.IntensityPalette
 import javax.swing.event.{ChangeEvent, ChangeListener}
+import javax.swing.table.{AbstractTableModel, DefaultTableCellRenderer}
+import javax.swing.{JSpinner, JTable, SpinnerNumberModel, SwingConstants}
+
+import at.iem.sysson.Implicits._
 import de.sciss.audiowidgets.{DualRangeModel, DualRangeSlider}
-import collection.breakOut
-import de.sciss.synth.SynthGraph
-import de.sciss.swingplus.GroupPanel
-import ucar.nc2.time.{CalendarPeriod, CalendarDateFormatter}
+import de.sciss.intensitypalette.IntensityPalette
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.stm
-import scala.concurrent.stm.atomic
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx, requireEDT}
-import de.sciss.lucre.matrix.DataSource
-import de.sciss.icons.raphael
-import de.sciss.desktop.OptionPane
-import javax.swing.table.DefaultTableCellRenderer
-import scala.swing.event.ButtonClicked
-import java.awt
 import de.sciss.mellite.Workspace
-import de.sciss.mellite.gui.GUI
+import de.sciss.swingplus.GroupPanel
+import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
+import org.jfree.chart.plot.{IntervalMarker, ValueMarker, XYPlot}
+import org.jfree.chart.renderer.xy.XYBlockRenderer
+import org.jfree.chart.renderer.{LookupPaintScale, PaintScale}
+import org.jfree.chart.{ChartPanel, JFreeChart}
+import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
+import ucar.nc2
+import ucar.nc2.time.{CalendarDateFormatter, CalendarPeriod}
+
+import scala.collection.breakOut
+import scala.concurrent.stm.atomic
+import scala.swing.Swing._
+import scala.swing.event.{ButtonClicked, ValueChanged}
+import scala.swing.{BoxPanel, Orientation, Alignment, BorderPanel, CheckBox, Component, Label, Table}
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -155,9 +151,6 @@ object ClimateViewImpl {
                            xDim: nc2.Dimension, yDim: nc2.Dimension)(implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
     extends ClimateView[S] with ComponentHolder[Component] {
 
-    //    models: Map[String, DualRangeSlider],
-    //    chart: JFreeChart, redGroup: Component
-
     private val red     = section.reducedDimensions.filterNot(d => d == yDim || d == xDim)
     private val width   = xDim.size
     private val height  = yDim.size
@@ -199,12 +192,12 @@ object ClimateViewImpl {
 
     private def spawnStats(): Unit = {
       // get the statistics from the cache manager
-      import Stats.executionContext
+      import at.iem.sysson.Stats.executionContext
       atomic { implicit tx => Stats.get(in) } .onSuccess {
         case Stats(map) => defer {
           // see if stats are available for the plotted variable
           val s = map.get(section.name)
-          if (s.isDefined) {
+          s.foreach { sv =>
             stats = s
             updateData()  // repaint with user defined normalization
             // enable the user definable normalization (checkboxes)
@@ -216,7 +209,8 @@ object ClimateViewImpl {
                 case ButtonClicked(_) => updateData()
               }
             }
-            actionStats.enabled = s.isDefined
+            // actionStats.enabled = s.isDefined
+            updateStatsTable(sv)
           }
         }
       }
@@ -224,6 +218,7 @@ object ClimateViewImpl {
 
     private def mkReduction(dim: nc2.Dimension, idx: Int, update: Boolean): Reduction = {
       val norm  = new CheckBox {
+        text      = "Normalize"
         enabled   = false
         selected  = true
         tooltip   = "Normalize using the selected slice"
@@ -358,65 +353,53 @@ object ClimateViewImpl {
 
     private var redGUI: Vec[Reduction] = _
 
-    // private var userValues  = Map.empty[String, SpinnerNumberModel]
+    private lazy val tabStats = {
+      val tab = new Table(
+        // use `.toString` for now, because default renderer applies some bad truncation
+        Array[Array[Any]](
+          Array("size"   , "?" /* tot.num    */),
+          Array("min"    , "?" /* tot.min    */), // format tot.min   ),
+          Array("max"    , "?" /* tot.max    */), // format tot.max   ),
+          Array("mean"   , "?" /* tot.mean   */), // format tot.mean  ),
+          Array("std-dev", "?" /* tot.stddev */)  // format tot.stddev)
+        ),
+        List("Key", "Value"))
 
-    //    private var ggSonifName: TextField = _
+      val colKey = tab.peer.getColumnModel.getColumn(0)
+      colKey.setPreferredWidth(80)
+      val colVal = tab.peer.getColumnModel.getColumn(1)
+      tab.peer.setDefaultRenderer(classOf[java.lang.Double], new DefaultTableCellRenderer {
+        setHorizontalAlignment(SwingConstants.RIGHT)
 
-    // private var playing     = Option.empty[Future[Synth]]
-
-    // private var ggBusy: ProgressBar = _
-
-    // private var transport: Component with Transport.ButtonStrip = _
-
-    //    private var pUserValues: BoxPanel = _
-    //
-    //    private var pSonif2: BoxPanel = _
-
-    private var actionStats: Action = _
-
-    private def showStats(): Unit =
-      stats.foreach { sv =>
-        val tot = sv.total
-        // println(tot)
-        // val fmt = NumberFormat.getNumberInstance(Locale.US)
-        // fmt.setMaximumFractionDigits(6)
-        val tab = new Table(
-          // use `.toString` for now, because default renderer applies some bad truncation
-          Array[Array[Any]](
-            Array("size"   , tot.num   ),
-            Array("min"    , tot.min   ), // format tot.min   ),
-            Array("max"    , tot.max   ), // format tot.max   ),
-            Array("mean"   , tot.mean  ), // format tot.mean  ),
-            Array("std-dev", tot.stddev)  // format tot.stddev)
-          ),
-          List("Key", "Value"))
-        val colKey = tab.peer.getColumnModel.getColumn(0)
-        colKey.setPreferredWidth(80)
-        val colVal = tab.peer.getColumnModel.getColumn(1)
-        tab.peer.setDefaultRenderer(classOf[java.lang.Double], new DefaultTableCellRenderer {
-          setHorizontalAlignment(SwingConstants.RIGHT)
-
-          private def formatValue(in: Any): Any = {
-            // println("Aqui")
-            if (in == null) return null
-            // fmt.format(in)
-            // better support for exponentials actually
-            in match {
-              case d: Double => d.toFloat.toString
-              case _ => in
-            }
+        private def formatValue(in: Any): Any = {
+          // println("Aqui")
+          if (in == null) return null
+          // fmt.format(in)
+          // better support for exponentials actually
+          in match {
+            case d: Double => d.toFloat.toString
+            case _ => in
           }
+        }
 
-          override def getTableCellRendererComponent(table: JTable, value: Any, isSelected: Boolean,
-                                                     hasFocus: Boolean, row: Int,
-                                                     column: Int): awt.Component =
-            super.getTableCellRendererComponent(table, formatValue(value), isSelected, hasFocus, row, column)
-        })
-        colVal.setPreferredWidth(140)
-        val opt   = OptionPane.message(message = tab, messageType = OptionPane.Message.Plain)
-        opt.title = s"Statistics: ${sv.name}"
-        opt.show(GUI.findWindow(component))
-      }
+        override def getTableCellRendererComponent(table: JTable, value: Any, isSelected: Boolean,
+                                                   hasFocus: Boolean, row: Int,
+                                                   column: Int): awt.Component =
+          super.getTableCellRendererComponent(table, formatValue(value), isSelected, hasFocus, row, column)
+      })
+      colVal.setPreferredWidth(140)
+      tab
+    }
+
+    private def updateStatsTable(sv: Stats.Variable): Unit = {
+      val tot = sv.total
+      val m   = tabStats.model.asInstanceOf[AbstractTableModel]
+      m.setValueAt(tot.num   , 0, 1)
+      m.setValueAt(tot.min   , 1, 1)
+      m.setValueAt(tot.max   , 2, 1)
+      m.setValueAt(tot.mean  , 3, 1)
+      m.setValueAt(tot.stddev, 4, 1)
+    }
 
     def guiInit(): Unit = {
       requireEDT()
@@ -433,7 +416,7 @@ object ClimateViewImpl {
       lazy val redGUIAll = xDimRed +: yDimRed +: redGUI
 
       val redGroup  = new GroupPanel {
-        import GroupPanel.Element
+        import de.sciss.swingplus.GroupPanel.Element
         horizontal = Seq(
           Par(redGUIAll.map(_.norm      : Element): _*),
           Par(redGUIAll.map(_.nameLabel : Element): _*),
@@ -481,239 +464,18 @@ object ClimateViewImpl {
 
       val main        = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
 
-      val pButtons    = new BoxPanel(Orientation.Horizontal)
-      //      ggSonifName     = new TextField(16)
-      //      ggSonifName.maximumSize = ggSonifName.preferredSize
-      //      ggSonifName.editable    = false
-      //      ggSonifName.peer.putClientProperty("JComponent.sizeVariant", "small")
-      //      pUserValues = new BoxPanel(Orientation.Horizontal)  // cannot nest!: new FlowPanel()
-      actionStats = Action(null)(showStats())
-      actionStats.enabled = stats.isDefined
-      val ggStats = GUI.toolButton(actionStats, raphael.Shapes.InformationCircle, tooltip = "Show Statistics")
-      pButtons.contents += ggStats
-      pButtons.contents += HGlue
-
-      //      transport   = Transport.makeButtonStrip {
-      //        import Transport._
-      //        Seq(
-      //          GoToBegin {
-      //            rtz()
-      //          },
-      //          Stop {
-      //            stop()
-      //          },
-      //          Play {
-      //            play()
-      //          }
-      //        )
-      //      }
-
-      // ggBusy = mkIndetProgress()
-
-      //      pSonif2     = new BoxPanel(Orientation.Horizontal) {
-      //        contents += ggSonifName
-      //        contents += transport
-      //        contents += pUserValues
-      //      }
-      //      pSonif2.visible         = false
-
-      //      val butSonif    = new Button(null: String)
-      //      butSonif.icon           = Icons.Target(24)
-      //      butSonif.focusable      = false
-      //      butSonif.tooltip        = "Drop Sonification Patch From the Library Here"
-
-      //      pSonif.contents += butSonif
-      //      pSonif.contents += new OverlayPanel {
-      //        contents += RigidBox(ggBusy.preferredSize)
-      //        contents += ggBusy
-      //      }
-      //      pSonif.contents += pSonif2
-
-      //      butSonif.peer.setTransferHandler(new TransferHandler(null) {
-      //        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
-      //        override def canImport(support: TransferSupport): Boolean = {
-      //          val res =
-      //            if (support.isDataFlavorSupported(DragAndDrop.LibraryNodeFlavor) &&
-      //              ((support.getSourceDropActions & TransferHandler.LINK) != 0)) {
-      //              support.setDropAction(TransferHandler.LINK)
-      //              true
-      //            } else
-      //              false
-      //
-      //          // println(s"canImport? $res")
-      //          res
-      //        }
-      //
-      //        override def importData(support: TransferSupport): Boolean = {
-      //          val t           = support.getTransferable
-      //          // val source      = t.getTransferData(PatchSourceFlavor).asInstanceOf[Patch.Source]
-      //          val drag      = t.getTransferData(DragAndDrop.LibraryNodeFlavor).asInstanceOf[LibraryNodeDrag]
-      //          val sourceOpt = drag.cursor.step { implicit tx =>
-      //            drag.node() match {
-      //              case TreeLike.IsLeaf(l) => Some(l.name.value -> l.source.value)
-      //              case _ => None: Option[(String, String)]
-      //            }
-      //          }
-      //          sourceOpt.exists { case (name, source) =>
-      //            import ExecutionContext.Implicits.global
-      //            val fut         = Library.compile(source)
-      //            ggBusy.visible  = true
-      //            fut.onComplete(_ => defer { ggBusy.visible = false })
-      //            fut.foreach { p => patch = Some(p) }
-      //            true
-      //          }
-      //        }
-      //      })
-
       component = new BorderPanel {
         add(Component.wrap(main), BorderPanel.Position.Center)
         add(new BorderPanel {
           add(redGroup, BorderPanel.Position.Center)
-          add(pButtons  , BorderPanel.Position.South )
+          add(new BoxPanel(Orientation.Vertical) {
+            border = EmptyBorder(0, 16, 0, 0)
+            contents += new Label("<html><body><b>Statistics</b></body>")
+            contents += VStrut(6)
+            contents += tabStats
+          }, BorderPanel.Position.East)
         }, BorderPanel.Position.South)
       }
-
-      // ---- constructor ----
-      // markPlayStop(playing = false)
-    }
-
-    //    private def mkIndetProgress() = new ProgressBar {
-    //      visible       = false
-    //      indeterminate = true
-    //      preferredSize = (24, 24)
-    //      peer.putClientProperty("JProgressBar.style", "circular")
-    //    }
-
-    private var _patch = Option.empty[SynthGraph]
-
-    def play(): Unit = {
-//      stop()
-//      markPlayStop(playing = true)
-//      patch.foreach { p =>
-//        val son          = SonificationOLD(p.name)
-//        son.patch        = p
-//        son.variableMap += SonificationOLD.DefaultVariable -> section
-//        models.foreach { case (key, model) =>
-//          val (start, end) = model.range
-//          val section = net.variableMap(key) in key select (start to end)
-//          son.variableMap += key -> section
-//        }
-//        userValues.foreach { case (key, model) =>
-//          son.userValueMap += key -> model.getValue.asInstanceOf[Double]
-//        }
-//        // println(s"sonfication.userValueMap = ${son.userValueMap}")
-//
-//        import ExecutionContext.Implicits.global
-//        val fut          = son.prepare().map(_.play())
-//        playing          = Some(fut)
-//        ggBusy.visible = true
-//
-//        def done(): Unit = GUI.defer {
-//          // only react if we're still talking about the same synth
-//          if (playing == Some(fut)) markPlayStop(playing = false)
-//        }
-//
-//        fut.onComplete {
-//          case _ => GUI.defer(ggBusy.visible = false)
-//        }
-//        fut.onComplete {
-//          case Success(synth) => synth.onEnd(done())
-//          case _              => done()
-//        }
-//        fut.onFailure {
-//          case ex: Exception =>
-//            DialogSource.Exception(ex -> s"Playing ${p.name}").show(None) // XXX TODO find window
-//          case f => f.printStackTrace()
-//        }
-//      }
-    }
-
-    //    private def markPlayStop(playing: Boolean): Unit = {
-    //      transport.button(Transport.Stop).get.selected = !playing
-    //      transport.button(Transport.Play).get.selected = playing
-    //    }
-
-    //    def stop(): Unit = {
-    //      markPlayStop(playing = false)
-    //      playing.foreach { fut =>
-    //        import ExecutionContext.Implicits.global
-    //        fut.onSuccess {
-    //          case synth =>
-    //            import Ops._
-    //            synth.free()
-    //        }
-    //        playing = None
-    //      }
-    //    }
-    //
-    //    def rtz(): Unit = {
-    //      println("NOT YET IMPLEMENTED: Return-to-zero")
-    //    }
-
-    def patch: Option[SynthGraph] = _patch
-    def patch_=(value: Option[SynthGraph]): Unit = {
-//      value match {
-//        case Some(p) =>
-//          ggSonifName.text    = p.name
-//          val sources         = p.graph.sources
-//          val interactiveVars = sources.collect {
-//            // case i: UserInteraction => i
-//            case SelectedRange(v) => v
-//            case SelectedValue(v) => v
-//          }
-//          // val docVars = document.data.variables
-//          val docVars = section.dimensions.flatMap(d => net.variableMap.get(d.name))
-//          val (foundVars, missingVars) = interactiveVars.map(v => v -> v.find(docVars).map(_.name))
-//            .partition(_._2.isDefined)
-//          if (missingVars.nonEmpty) {
-//            val msg = "The patch requires the following dimensions\nwhich are not part of this view:\n" +
-//              missingVars.map(_._1).mkString("\n  ", "\n  ", "")
-//            val opt = OptionPane.message(message = msg, messageType = OptionPane.Message.Error)
-//            opt.show(None)
-//          } else {
-//            val nameSet: Set[String] = foundVars.collect {
-//              case (_, Some(name)) => name
-//            } (breakOut)
-//            models.foreach { case (key, sli) =>
-//              sli.rangeVisible = nameSet.contains(key)
-//            }
-//          }
-//
-//          val _userValues = sources.collect {
-//            case graph.UserValue(key, default) =>
-//              val m = new SpinnerNumberModel(default, Double.MinValue, Double.MaxValue, 0.1)
-//              key -> m
-//          }
-//
-//          userValues = _userValues.toMap
-//
-//          // println(userValues.map(_._1).mkString(", "))
-//
-//          _userValues.foreach { case (key, m) =>
-//            val lb = new Label(s"${key.capitalize}:")
-//            lb.peer.putClientProperty("JComponent.sizeVariant", "small")
-//            val spi = new Spinner(m)
-//            val d   = spi.preferredSize
-//            d.width = math.min(d.width, 80) // XXX TODO WTF
-//            spi.preferredSize = d
-//            spi.maximumSize   = d
-//            pUserValues.contents += HStrut(8)
-//            pUserValues.contents += lb
-//            pUserValues.contents += spi
-//          }
-//
-//          pUserValues.contents += HGlue
-//          pUserValues.contents += HStrut(16)  // OS X resize gadget
-//          pSonif2.visible     = true
-//          pSonif2.revalidate()
-//          pSonif2.repaint()
-//
-//        case _ =>
-//          pSonif2.visible   = false
-//          userValues        = Map.empty
-//          pUserValues.contents.clear()
-//      }
-      _patch = value
     }
   }
 }
