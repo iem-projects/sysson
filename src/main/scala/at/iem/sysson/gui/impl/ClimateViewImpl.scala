@@ -17,7 +17,7 @@ package gui
 package impl
 
 import java.awt
-import java.awt.{BasicStroke, Color}
+import java.awt.{Graphics2D, BasicStroke, Color}
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import javax.swing.table.{AbstractTableModel, DefaultTableCellRenderer}
 import javax.swing.{JSpinner, JTable, SpinnerNumberModel, SwingConstants}
@@ -31,8 +31,10 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx, requireEDT}
 import de.sciss.mellite.Workspace
+import de.sciss.numbers
 import de.sciss.swingplus.GroupPanel
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
+import org.jfree.chart.panel.{Overlay, AbstractOverlay}
 import org.jfree.chart.plot.{IntervalMarker, ValueMarker, XYPlot}
 import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.renderer.{LookupPaintScale, PaintScale}
@@ -42,10 +44,11 @@ import ucar.nc2
 import ucar.nc2.time.{CalendarDateFormatter, CalendarPeriod}
 
 import scala.collection.breakOut
+import scala.concurrent.{ExecutionContext, blocking}
 import scala.concurrent.stm.atomic
 import scala.swing.Swing._
 import scala.swing.event.{ButtonClicked, ValueChanged}
-import scala.swing.{BoxPanel, Orientation, Alignment, BorderPanel, CheckBox, Component, Label, Table}
+import scala.swing.{ToggleButton, FlowPanel, BoxPanel, Orientation, Alignment, BorderPanel, CheckBox, Component, Label, Table}
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -456,18 +459,93 @@ object ClimateViewImpl {
       plot.setBackgroundPaint(Color.lightGray)
       plot.setDomainGridlinesVisible(false)
       plot.setRangeGridlinePaint(Color.white)
-      val chart     = new JFreeChart(section.variable.description.getOrElse(section.variable.name), plot)
+      val chart = new JFreeChart(section.variable.description.getOrElse(section.variable.name), plot)
       chart.removeLegend()
       chart.setBackgroundPaint(Color.white)
 
       models = redGUIAll.map(r => r.name -> r.slider)(breakOut)
 
-      val main        = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
+      val main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
+
+      lazy val mapOverlay: Overlay = new AbstractOverlay with Overlay {
+        import ExecutionContext.Implicits.global
+
+        private def readDim(dim: nc2.Dimension): Vec[Double] = blocking {
+          val v   = vm(dim.name)    // NoSuchElement will fail the future, ok
+          val arr = v.readSafe()
+          if (v.isDouble) arr.double1D else arr.float1D.map(_.toDouble)
+        }
+
+        private val shapeFut = WorldMapOverlay()
+          .map { shape =>
+            val xDat = readDim(xDim)
+            val yDat = readDim(yDim)
+            (shape, xDat, yDat)
+          }
+
+        shapeFut.onSuccess {
+          case _ => defer(fireOverlayChanged())
+        }
+        shapeFut.onFailure {
+          case ex => ex.printStackTrace()
+        }
+
+        def paintOverlay(g2: Graphics2D, chartPanel: ChartPanel): Unit =
+          for {
+            opt <- shapeFut.value
+            (shape, xDat, yDat) <- opt
+          } {
+            val xRange  = plot.getDomainAxis.getRange
+            val yRange  = plot.getRangeAxis .getRange
+            val xMin    = xRange.getLowerBound
+            val xMax    = xRange.getUpperBound
+            val yMin    = yRange.getLowerBound
+            val yMax    = yRange.getUpperBound
+            // println(f"x = [$xMin%1.1f, $xMax%1.1f], y = [$yMin%1.1f, $yMax%1.1f]; x-size ${xDim.size}; y-size ${yDim.size}")
+            import numbers.Implicits._
+            val xMinD   = xMin.linlin(0, xDat.size - 1, xDat.head, xDat.last)
+            val xMaxD   = xMax.linlin(0, xDat.size - 1, xDat.head, xDat.last)
+            val yMinD   = yMin.linlin(0, yDat.size - 1, yDat.head, yDat.last)
+            val yMaxD   = yMax.linlin(0, yDat.size - 1, yDat.head, yDat.last)
+
+            // println(f"x = [$xMinD%1.1f, $xMaxD%1.1f], y = [$yMinD%1.1f, $yMaxD%1.1f]")
+
+            val r         = chartPanel.getScreenDataArea
+            val rw        = r.getWidth
+            val rh        = r.getHeight
+            val sxD       = xMaxD - xMinD
+            val syD       = yMaxD - yMinD
+            val ox        = -xMinD -180.0
+            val oy        = yMaxD  - 90.0
+
+            if (rw > 0 && rh > 0 && sxD > 0 && syD > 0) {
+              val atOrig    = g2.getTransform
+              val clipOrig  = g2.getClip
+              g2.clip(r)
+              g2.setColor(Color.gray)
+              g2.translate(r.getMinX, r.getMinY)
+              g2.scale(rw / sxD, rh / syD)
+              g2.translate(ox, oy)
+              g2.draw(shape)
+              g2.setTransform(atOrig)
+              g2.setClip(clipOrig)
+            }
+          }
+      }
+
+      val butMapOverlay = new ToggleButton("Map Overlay") {
+        listenTo(this)
+        reactions += {
+          case ButtonClicked(_) => if (selected) main.addOverlay(mapOverlay) else main.removeOverlay(mapOverlay)
+        }
+      }
+      val viewPanel     = new FlowPanel(butMapOverlay)
 
       component = new BorderPanel {
         add(Component.wrap(main), BorderPanel.Position.Center)
         add(new BorderPanel {
-          add(redGroup, BorderPanel.Position.Center)
+          add(viewPanel, BorderPanel.Position.North)
+          add(redGroup , BorderPanel.Position.Center)
           add(new BoxPanel(Orientation.Vertical) {
             border = EmptyBorder(0, 16, 0, 0)
             contents += new Label("<html><body><b>Statistics</b></body>")
