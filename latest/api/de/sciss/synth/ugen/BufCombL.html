@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufCombL - SysSon 0.8.0 API - de.sciss.synth.ugen.BufCombL</title>
-          <meta name="description" content="BufCombL - SysSon 0.8.0 API - de.sciss.synth.ugen.BufCombL" />
-          <meta name="keywords" content="BufCombL SysSon 0.8.0 API de.sciss.synth.ugen.BufCombL" />
+          <title>BufCombL - SysSon 0.11.0 API - de.sciss.synth.ugen.BufCombL</title>
+          <meta name="description" content="BufCombL - SysSon 0.11.0 API - de.sciss.synth.ugen.BufCombL" />
+          <meta name="keywords" content="BufCombL SysSon 0.11.0 API de.sciss.synth.ugen.BufCombL" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BufCombL$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BufCombL$.html" title="Go to companion">BufCombL</a></h1> <span class="permalink">
+        <h1><a href="BufCombL$.html" title="Go to companion">BufCombL</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BufCombL$.html" title="See companion">object BufCombL</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BufCombL" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -52,7 +56,11 @@ memory.
 </p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>Buffer id.</p></dd><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
-                        octave lower.
+                        octave lower. <b>Warning</b>: For reasons of efficiency,
+                        the effective buffer size is the allocated size rounded
+                        down to the next power of two. For example, if 44100
+                        samples are allocated, the maximum delay would be 32768
+                        samples. Also note that the buffer must be monophonic.
 </p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufCombC$.html" class="extype" name="de.sciss.synth.ugen.BufCombC">BufCombC</a>
 </p></span><span class="cmt"><p><a href="BufCombN$.html" class="extype" name="de.sciss.synth.ugen.BufCombN">BufCombN</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -113,7 +121,11 @@ memory.
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>Buffer id.</p></dd><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
-                        octave lower.
+                        octave lower. <b>Warning</b>: For reasons of efficiency,
+                        the effective buffer size is the allocated size rounded
+                        down to the next power of two. For example, if 44100
+                        samples are allocated, the maximum delay would be 32768
+                        samples. Also note that the buffer must be monophonic.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -251,7 +263,11 @@ memory.
       <p class="shortcomment cmt">Time for the echoes to decay by 60 decibels.</p><div class="fullcomment"><div class="comment cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
-                        octave lower.
+                        octave lower. <b>Warning</b>: For reasons of efficiency,
+                        the effective buffer size is the allocated size rounded
+                        down to the next power of two. For example, if 44100
+                        samples are allocated, the maximum delay would be 32768
+                        samples. Also note that the buffer must be monophonic.
 </p></div></div>
     </li><li name="de.sciss.synth.ugen.BufCombL#delayTime" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="delayTime:de.sciss.synth.GE"></a>

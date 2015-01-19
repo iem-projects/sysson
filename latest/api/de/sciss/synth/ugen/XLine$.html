@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>XLine - SysSon 0.8.0 API - de.sciss.synth.ugen.XLine</title>
-          <meta name="description" content="XLine - SysSon 0.8.0 API - de.sciss.synth.ugen.XLine" />
-          <meta name="keywords" content="XLine SysSon 0.8.0 API de.sciss.synth.ugen.XLine" />
+          <title>XLine - SysSon 0.11.0 API - de.sciss.synth.ugen.XLine</title>
+          <meta name="description" content="XLine - SysSon 0.11.0 API - de.sciss.synth.ugen.XLine" />
+          <meta name="keywords" content="XLine SysSon 0.11.0 API de.sciss.synth.ugen.XLine" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="XLine.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="XLine.html" title="Go to companion">XLine</a></h1> <span class="permalink">
+        <h1><a href="XLine.html" title="Go to companion">XLine</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="XLine.html" title="See companion">class XLine</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.XLine$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,14 +51,15 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A exponential curve generator UGen that moves from a start value to the end
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An exponential curve generator UGen that moves from a start value to the end
 value in a given duration.</p><p>At a given point in time <code>0 &lt;= t &lt;= dur</code> , the output value is
 <code>start * (stop/start).pow(t/dur)</code> .</p><p><b>Warning</b>: It must be ensured that the both <code>start</code> is not zero and <code>start</code>
 and <code>end</code> have the same sign (e.g. a <code>start</code> of <code>-1</code> and an end of <code>-0.001</code> are
 valid), otherwise the UGen will output a <code>NaN</code> ! While in the case of <code>end</code>
 being zero the UGen will also output zero, it is recommended to treat this case
-as pathological as well.
-</p></div><div class="toggleContainer block">
+as pathological as well.</p><h5>Examples</h5><pre><span class="cmt">// glissando</span>
+play { SinOsc.ar(Line.kr(<span class="num">200</span>, <span class="num">2000</span>, <span class="num">10</span>, freeSelf)) * <span class="num">0.2</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Line$.html" class="extype" name="de.sciss.synth.ugen.Line">Line</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -167,7 +172,7 @@ as pathological as well.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting value</p></dd><dt class="param">end</dt><dd class="cmt"><p>Ending value</p></dd><dt class="param">dur</dt><dd class="cmt"><p>Duration in seconds</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>A done-action that is evaluated when the Line has
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting value</p></dd><dt class="param">end</dt><dd class="cmt"><p>Ending value</p></dd><dt class="param">dur</dt><dd class="cmt"><p>Duration in seconds</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>A done-action that is evaluated when the <code>Line</code> has
                         reached the end value after the given duration
 </p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.XLine#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
@@ -351,7 +356,7 @@ as pathological as well.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting value</p></dd><dt class="param">end</dt><dd class="cmt"><p>Ending value</p></dd><dt class="param">dur</dt><dd class="cmt"><p>Duration in seconds</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>A done-action that is evaluated when the Line has
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting value</p></dd><dt class="param">end</dt><dd class="cmt"><p>Ending value</p></dd><dt class="param">dur</dt><dd class="cmt"><p>Duration in seconds</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>A done-action that is evaluated when the <code>Line</code> has
                         reached the end value after the given duration
 </p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.XLine#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">

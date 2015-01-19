@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>IEnvGen - SysSon 0.8.0 API - de.sciss.synth.ugen.IEnvGen</title>
-          <meta name="description" content="IEnvGen - SysSon 0.8.0 API - de.sciss.synth.ugen.IEnvGen" />
-          <meta name="keywords" content="IEnvGen SysSon 0.8.0 API de.sciss.synth.ugen.IEnvGen" />
+          <title>IEnvGen - SysSon 0.11.0 API - de.sciss.synth.ugen.IEnvGen</title>
+          <meta name="description" content="IEnvGen - SysSon 0.11.0 API - de.sciss.synth.ugen.IEnvGen" />
+          <meta name="keywords" content="IEnvGen SysSon 0.11.0 API de.sciss.synth.ugen.IEnvGen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="IEnvGen$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="IEnvGen$.html" title="Go to companion">IEnvGen</a></h1> <span class="permalink">
+        <h1><a href="IEnvGen$.html" title="Go to companion">IEnvGen</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="IEnvGen$.html" title="See companion">object IEnvGen</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.IEnvGen" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,18 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Envelope generator UGen with random access index pointer into the break-point
+function.</p><p><b>Warning</b>: The envelope must be generated using <code>IEnv</code> not <code>Env</code> . <code>IEnv</code>
+has a completely different format. Using the wrong format ( <code>Env</code> ) may crash
+the server.</p><p>To construct a manual envelope without the use of the <code>IEnv</code> class, the format
+should be as follows:</p><pre><span class="kw">val</span> env = <span class="std">Seq</span>[GE](offset, startLevel, numSegments, totalDuration,
+duration1, curveType1, curvature1, targetLevel1,
+duration2, curveType2, curvature2, targetLevel2
+...)</pre></div><dl class="paramcmts block"><dt class="param">envelope</dt><dd class="cmt"><p>the description of the envelope break-points. Typically
+                        you pass an instance of <code>IEnv</code> which will then
+                        automatically expand to the correct format.</p></dd><dt class="param">index</dt><dd class="cmt"><p>index point into the envelope, given as time in seconds
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="EnvGen$.html" class="extype" name="de.sciss.synth.ugen.EnvGen">EnvGen</a>
+</p></span><span class="cmt"><p><a href="IEnv$.html" class="extype" name="de.sciss.synth.ugen.IEnv">IEnv</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +102,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.IEnvGen#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.IEnvGen#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,envelope:de.sciss.synth.GE,index:de.sciss.synth.GE):de.sciss.synth.ugen.IEnvGen"></a>
       <a id="&lt;init&gt;:IEnvGen"></a>
       <h4 class="signature">
@@ -103,7 +118,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">envelope</dt><dd class="cmt"><p>the description of the envelope break-points. Typically
+                        you pass an instance of <code>IEnv</code> which will then
+                        automatically expand to the correct format.</p></dd><dt class="param">index</dt><dd class="cmt"><p>index point into the envelope, given as time in seconds
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -204,7 +222,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.IEnvGen#envelope" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.IEnvGen#envelope" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="envelope:de.sciss.synth.GE"></a>
       <a id="envelope:GE"></a>
       <h4 class="signature">
@@ -220,7 +238,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the description of the envelope break-points.</p><div class="fullcomment"><div class="comment cmt"><p>the description of the envelope break-points. Typically
+                        you pass an instance of <code>IEnv</code> which will then
+                        automatically expand to the correct format.</p></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -294,7 +314,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">index point into the envelope, given as time in seconds
+</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

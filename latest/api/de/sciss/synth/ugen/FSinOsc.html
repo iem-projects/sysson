@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>FSinOsc - SysSon 0.8.0 API - de.sciss.synth.ugen.FSinOsc</title>
-          <meta name="description" content="FSinOsc - SysSon 0.8.0 API - de.sciss.synth.ugen.FSinOsc" />
-          <meta name="keywords" content="FSinOsc SysSon 0.8.0 API de.sciss.synth.ugen.FSinOsc" />
+          <title>FSinOsc - SysSon 0.11.0 API - de.sciss.synth.ugen.FSinOsc</title>
+          <meta name="description" content="FSinOsc - SysSon 0.11.0 API - de.sciss.synth.ugen.FSinOsc" />
+          <meta name="keywords" content="FSinOsc SysSon 0.11.0 API de.sciss.synth.ugen.FSinOsc" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="FSinOsc$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="FSinOsc$.html" title="Go to companion">FSinOsc</a></h1> <span class="permalink">
+        <h1><a href="FSinOsc$.html" title="Go to companion">FSinOsc</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="FSinOsc$.html" title="See companion">object FSinOsc</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.FSinOsc" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,18 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A sine oscillator UGen using a fast approximation. It uses a ringing filter and
+is less CPU expensive than <code>SinOsc</code> . However, the amplitude of the wave will
+vary with frequency. Generally the amplitude will go down when the frequency
+rises and it will go up as if the frequency is lowered.</p><p><b>Warning</b>: In the current implementation, the amplitude can blow up if the
+frequency is modulated by certain alternating signals (e.g. abruptly by <code>TRand</code>
+).
+</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of the oscillator in radians. This cannot
+                        be modulated. A value of <code>0.5 Pi</code> means the output
+                        starts at +1. A value of <code>1.5 Pi</code> means the output
+                        starts at -1,
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SinOscFB$.html" class="extype" name="de.sciss.synth.ugen.SinOscFB">SinOscFB</a>
+</p></span><span class="cmt"><p><a href="SinOsc$.html" class="extype" name="de.sciss.synth.ugen.SinOsc">SinOsc</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +102,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.FSinOsc#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.FSinOsc#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,freq:de.sciss.synth.GE,iphase:de.sciss.synth.GE):de.sciss.synth.ugen.FSinOsc"></a>
       <a id="&lt;init&gt;:FSinOsc"></a>
       <h4 class="signature">
@@ -103,7 +118,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of the oscillator in radians. This cannot
+                        be modulated. A value of <code>0.5 Pi</code> means the output
+                        starts at +1. A value of <code>1.5 Pi</code> means the output
+                        starts at -1,
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -260,7 +279,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">frequency in Hertz</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -278,7 +297,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.FSinOsc#iphase" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.FSinOsc#iphase" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="iphase:de.sciss.synth.GE"></a>
       <a id="iphase:GE"></a>
       <h4 class="signature">
@@ -294,7 +313,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">initial phase of the oscillator in radians.</p><div class="fullcomment"><div class="comment cmt"><p>initial phase of the oscillator in radians. This cannot
+                        be modulated. A value of <code>0.5 Pi</code> means the output
+                        starts at +1. A value of <code>1.5 Pi</code> means the output
+                        starts at -1,
+</p></div></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

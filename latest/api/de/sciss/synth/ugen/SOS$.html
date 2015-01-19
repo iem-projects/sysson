@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SOS - SysSon 0.8.0 API - de.sciss.synth.ugen.SOS</title>
-          <meta name="description" content="SOS - SysSon 0.8.0 API - de.sciss.synth.ugen.SOS" />
-          <meta name="keywords" content="SOS SysSon 0.8.0 API de.sciss.synth.ugen.SOS" />
+          <title>SOS - SysSon 0.11.0 API - de.sciss.synth.ugen.SOS</title>
+          <meta name="description" content="SOS - SysSon 0.11.0 API - de.sciss.synth.ugen.SOS" />
+          <meta name="keywords" content="SOS SysSon 0.11.0 API de.sciss.synth.ugen.SOS" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="SOS.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="SOS.html" title="Go to companion">SOS</a></h1> <span class="permalink">
+        <h1><a href="SOS.html" title="Go to companion">SOS</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="SOS.html" title="See companion">class SOS</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.SOS$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,24 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A second order filter section (biquad) UGen. Filter coefficients are given
+directly rather than calculated for you. The formula is equivalent to:</p><pre>out(i) = a0 * in(i) + a1 * in(i-<span class="num">1</span>) + a2 * in(i-<span class="num">2</span>) + b1 * out(i-<span class="num">1</span>) + b2 * out(i-<span class="num">2</span>)</pre><h5>Examples</h5><pre><span class="cmt">// same as TwoPole</span>
+play {
+  <span class="kw">val</span> theta = MouseX.kr(<span class="num">0.2</span>*math.Pi, <span class="num">0.9</span>*math.Pi)
+  <span class="kw">val</span> rho   = MouseY.kr(<span class="num">0.6</span>, <span class="num">0.98</span>)
+  <span class="kw">val</span> b1    = <span class="num">2.0</span> * rho * theta.cos
+  <span class="kw">val</span> b2    = -(rho.squared)
+  SOS.ar(WhiteNoise.ar(<span class="std">Seq</span>(<span class="num">0.05</span>, <span class="num">0.05</span>)), <span class="num">1.0</span>, <span class="num">0.0</span>, <span class="num">0.0</span>, b1, b2)
+}</pre><pre><span class="cmt">// used as control signal</span>
+play {
+  <span class="kw">val</span> theta = MouseX.kr(<span class="num">0.2</span>*math.Pi, math.Pi)
+  <span class="kw">val</span> rho   = MouseY.kr(<span class="num">0.6</span>, <span class="num">0.99</span>)
+  <span class="kw">val</span> b1    = <span class="num">2.0</span> * rho * theta.cos
+  <span class="kw">val</span> b2    = -(rho.squared)
+  <span class="kw">val</span> vib   = SOS.kr(LFSaw.kr(<span class="num">3.16</span>), <span class="num">1.0</span>, <span class="num">0.0</span>, <span class="num">0.0</span>, b1, b2)
+  SinOsc.ar(vib * <span class="num">200</span> + <span class="num">600</span>) * <span class="num">0.2</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FOS$.html" class="extype" name="de.sciss.synth.ugen.FOS">FOS</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +165,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.SOS#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.SOS#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,a0:de.sciss.synth.GE,a1:de.sciss.synth.GE,a2:de.sciss.synth.GE,b1:de.sciss.synth.GE,b2:de.sciss.synth.GE):de.sciss.synth.ugen.SOS"></a>
       <a id="ar(GE,GE,GE,GE,GE,GE):SOS"></a>
       <h4 class="signature">
@@ -160,7 +181,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +331,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.SOS#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.SOS#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,a0:de.sciss.synth.GE,a1:de.sciss.synth.GE,a2:de.sciss.synth.GE,b1:de.sciss.synth.GE,b2:de.sciss.synth.GE):de.sciss.synth.ugen.SOS"></a>
       <a id="kr(GE,GE,GE,GE,GE,GE):SOS"></a>
       <h4 class="signature">
@@ -325,7 +347,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

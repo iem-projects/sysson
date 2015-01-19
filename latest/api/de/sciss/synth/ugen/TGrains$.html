@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>TGrains - SysSon 0.8.0 API - de.sciss.synth.ugen.TGrains</title>
-          <meta name="description" content="TGrains - SysSon 0.8.0 API - de.sciss.synth.ugen.TGrains" />
-          <meta name="keywords" content="TGrains SysSon 0.8.0 API de.sciss.synth.ugen.TGrains" />
+          <title>TGrains - SysSon 0.11.0 API - de.sciss.synth.ugen.TGrains</title>
+          <meta name="description" content="TGrains - SysSon 0.11.0 API - de.sciss.synth.ugen.TGrains" />
+          <meta name="keywords" content="TGrains SysSon 0.11.0 API de.sciss.synth.ugen.TGrains" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="TGrains.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="TGrains.html" title="Go to companion">TGrains</a></h1> <span class="permalink">
+        <h1><a href="TGrains.html" title="Go to companion">TGrains</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="TGrains.html" title="See companion">class TGrains</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.TGrains$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,8 +51,11 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Triggers generate grains from a buffer. Each grain has a Hanning envelope</p><pre>(sin2(x) <span class="kw">for</span> x from <span class="num">0</span> to ￏﾀ)</pre><p> and is panned between two channels of multiple outputs.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Triggers generate grains from a buffer. Each grain has a Hanning envelope</p><pre>(sin2(x) <span class="kw">for</span> x from <span class="num">0</span> to pi)</pre><p> and is panned between two channels of multiple outputs.
+<b>Warning</b>: Due to a bug (SC 3.6.6), this UGen does not work with <code>LocalBuf</code>
+but requires a regular buffer.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GrainBuf$.html" class="extype" name="de.sciss.synth.ugen.GrainBuf">GrainBuf</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>

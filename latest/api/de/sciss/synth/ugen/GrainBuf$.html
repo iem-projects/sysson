@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>GrainBuf - SysSon 0.8.0 API - de.sciss.synth.ugen.GrainBuf</title>
-          <meta name="description" content="GrainBuf - SysSon 0.8.0 API - de.sciss.synth.ugen.GrainBuf" />
-          <meta name="keywords" content="GrainBuf SysSon 0.8.0 API de.sciss.synth.ugen.GrainBuf" />
+          <title>GrainBuf - SysSon 0.11.0 API - de.sciss.synth.ugen.GrainBuf</title>
+          <meta name="description" content="GrainBuf - SysSon 0.11.0 API - de.sciss.synth.ugen.GrainBuf" />
+          <meta name="keywords" content="GrainBuf SysSon 0.11.0 API de.sciss.synth.ugen.GrainBuf" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="GrainBuf.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="GrainBuf.html" title="Go to companion">GrainBuf</a></h1> <span class="permalink">
+        <h1><a href="GrainBuf.html" title="Go to companion">GrainBuf</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="GrainBuf.html" title="See companion">class GrainBuf</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.GrainBuf$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,8 +51,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The argument order is different from its sclang counterpart.
-</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A granular synthesis UGen taking sound stored in a buffer. Another buffer can
+be used to provide an amplitude envelope. The input sound buffer must be
+monophonic, but output may be multi-channel, using a panorama control.</p><p>All arguments except <code>numChannels</code> and <code>maxGrain</code> are polled at grain creation
+(trigger) time.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PanAz$.html" class="extype" name="de.sciss.synth.ugen.PanAz">PanAz</a>
+</p></span><span class="cmt"><p><a href="PlayBuf$.html" class="extype" name="de.sciss.synth.ugen.PlayBuf">PlayBuf</a></p></span><span class="cmt"><p><a href="TGrains$.html" class="extype" name="de.sciss.synth.ugen.TGrains">TGrains</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -145,23 +153,39 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.GrainBuf#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ar(buf:de.sciss.synth.GE,numChannels:Int,trig:de.sciss.synth.GE,dur:de.sciss.synth.GE,speed:de.sciss.synth.GE,pos:de.sciss.synth.GE,interp:de.sciss.synth.GE,pan:de.sciss.synth.GE,envBuf:de.sciss.synth.GE,maxGrains:de.sciss.synth.GE):de.sciss.synth.ugen.GrainBuf"></a>
-      <a id="ar(GE,Int,GE,GE,GE,GE,GE,GE,GE,GE):GrainBuf"></a>
+    </li><li name="de.sciss.synth.ugen.GrainBuf#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ar(numChannels:Int,trig:de.sciss.synth.GE,dur:de.sciss.synth.GE,buf:de.sciss.synth.GE,speed:de.sciss.synth.GE,pos:de.sciss.synth.GE,interp:de.sciss.synth.GE,pan:de.sciss.synth.GE,envBuf:de.sciss.synth.GE,maxGrains:de.sciss.synth.GE):de.sciss.synth.ugen.GrainBuf"></a>
+      <a id="ar(Int,GE,GE,GE,GE,GE,GE,GE,GE,GE):GrainBuf"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ar</span><span class="params">(<span name="buf">buf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="speed">speed: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="pos">pos: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="interp">interp: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">2</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512.0f</a></span></span></span>)</span><span class="result">: <a href="GrainBuf.html" class="extype" name="de.sciss.synth.ugen.GrainBuf">GrainBuf</a></span>
+        <span class="name">ar</span><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="buf">buf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="speed">speed: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="pos">pos: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="interp">interp: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">2</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512.0f</a></span></span></span>)</span><span class="result">: <a href="GrainBuf.html" class="extype" name="de.sciss.synth.ugen.GrainBuf">GrainBuf</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.GrainBuf$@ar(buf:de.sciss.synth.GE,numChannels:Int,trig:de.sciss.synth.GE,dur:de.sciss.synth.GE,speed:de.sciss.synth.GE,pos:de.sciss.synth.GE,interp:de.sciss.synth.GE,pan:de.sciss.synth.GE,envBuf:de.sciss.synth.GE,maxGrains:de.sciss.synth.GE):de.sciss.synth.ugen.GrainBuf" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.GrainBuf$@ar(numChannels:Int,trig:de.sciss.synth.GE,dur:de.sciss.synth.GE,buf:de.sciss.synth.GE,speed:de.sciss.synth.GE,pos:de.sciss.synth.GE,interp:de.sciss.synth.GE,pan:de.sciss.synth.GE,envBuf:de.sciss.synth.GE,maxGrains:de.sciss.synth.GE):de.sciss.synth.ugen.GrainBuf" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>the number of channels to output. If <code>1</code> , a monophonic
+                        signal is returned and the <code>pan</code> argument is ignored.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>a control- or audio-rate trigger to start a new grain.
+                        For audio-rate, timing is sample frame accurate.</p></dd><dt class="param">dur</dt><dd class="cmt"><p>grain duration in seconds</p></dd><dt class="param">buf</dt><dd class="cmt"><p>buffer holding a mono audio signal portions of which
+                        are read as grains</p></dd><dt class="param">speed</dt><dd class="cmt"><p>playback speed of the grain, where <code>1.0</code> is original
+                        rate, <code>0.5</code> is half speed etc.</p></dd><dt class="param">pos</dt><dd class="cmt"><p>grain start position, where <code>0</code> is beginning and <code>1</code> is
+                        the end of the input buffer</p></dd><dt class="param">interp</dt><dd class="cmt"><p>interpolation type when using pitch-shifting via
+                        <code>speed</code> . <code>1</code> for no interpolation (nearest sample), <code>2</code>
+                        for linear interpolation, and <code>4</code> for cubic
+                        interpolation.</p></dd><dt class="param">pan</dt><dd class="cmt"><p>panning position when <code>numChannels</code> is greater than
+                        one. Equivalent to the pan position of <code>Pan2</code> (for
+                        stereo output) or <code>PanAz</code> (for more than two channels)</p></dd><dt class="param">envBuf</dt><dd class="cmt"><p>identifier of a buffer containing a signal to use for
+                        the grain envelope. The default value of <code>-1</code> means that
+                        a built-in Hann envelope is used.</p></dd><dt class="param">maxGrains</dt><dd class="cmt"><p>maximum number of overlapping grains that can be used
+                        at a given time. This value is set at the UGens init
+                        time and cannot be modified later. Lower value mean that
+                        less memory is used.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

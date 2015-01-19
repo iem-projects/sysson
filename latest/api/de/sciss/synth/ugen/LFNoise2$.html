@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LFNoise2 - SysSon 0.8.0 API - de.sciss.synth.ugen.LFNoise2</title>
-          <meta name="description" content="LFNoise2 - SysSon 0.8.0 API - de.sciss.synth.ugen.LFNoise2" />
-          <meta name="keywords" content="LFNoise2 SysSon 0.8.0 API de.sciss.synth.ugen.LFNoise2" />
+          <title>LFNoise2 - SysSon 0.11.0 API - de.sciss.synth.ugen.LFNoise2</title>
+          <meta name="description" content="LFNoise2 - SysSon 0.11.0 API - de.sciss.synth.ugen.LFNoise2" />
+          <meta name="keywords" content="LFNoise2 SysSon 0.11.0 API de.sciss.synth.ugen.LFNoise2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LFNoise2.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LFNoise2.html" title="Go to companion">LFNoise2</a></h1> <span class="permalink">
+        <h1><a href="LFNoise2.html" title="Go to companion">LFNoise2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LFNoise2.html" title="See companion">class LFNoise2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LFNoise2$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A quadratically interpolating noise UGen. This interpolation happens between
+breakpoints chosen randomly between <code>-1</code> and <code>+1</code> at a specified frequency.</p><p>The frequency is quantized to the nearest integer division of the sample rate,
+and changes in frequency are only picked up at the next trigger. In contrast,
+variant <code>LFDNoise3</code> has precise frequency and reacts to frequency changes
+instantly.</p><p><b>Note:</b> Due to the interpolation, the output values can occasionally extend
+beyond the normal range of -1 to +1, if the frequency varies in certain ways.</p><h5>Examples</h5><pre><span class="cmt">// plain noise</span>
+play { LFNoise2.ar(<span class="num">1000</span>) * <span class="num">0.25</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LFNoise1$.html" class="extype" name="de.sciss.synth.ugen.LFNoise1">LFNoise1</a>
+</p></span><span class="cmt"><p><a href="LFNoise0$.html" class="extype" name="de.sciss.synth.ugen.LFNoise0">LFNoise0</a></p></span><span class="cmt"><p><a href="LFDNoise3$.html" class="extype" name="de.sciss.synth.ugen.LFDNoise3">LFDNoise3</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +155,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFNoise2#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFNoise2#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(freq:de.sciss.synth.GE):de.sciss.synth.ugen.LFNoise2"></a>
       <a id="ar(GE):LFNoise2"></a>
       <h4 class="signature">
@@ -160,7 +171,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>rate at which to generate new breakpoints.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFNoise2#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.LFNoise2"></a>
       <a id="ar:LFNoise2"></a>
@@ -326,7 +338,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFNoise2#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFNoise2#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(freq:de.sciss.synth.GE):de.sciss.synth.ugen.LFNoise2"></a>
       <a id="kr(GE):LFNoise2"></a>
       <h4 class="signature">
@@ -342,7 +354,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>rate at which to generate new breakpoints.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFNoise2#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.LFNoise2"></a>
       <a id="kr:LFNoise2"></a>

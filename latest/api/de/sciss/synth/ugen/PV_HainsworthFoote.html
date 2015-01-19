@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PV_HainsworthFoote - SysSon 0.8.0 API - de.sciss.synth.ugen.PV_HainsworthFoote</title>
-          <meta name="description" content="PV HainsworthFoote - SysSon 0.8.0 API - de.sciss.synth.ugen.PV HainsworthFoote" />
-          <meta name="keywords" content="PV HainsworthFoote SysSon 0.8.0 API de.sciss.synth.ugen.PV HainsworthFoote" />
+          <title>PV_HainsworthFoote - SysSon 0.11.0 API - de.sciss.synth.ugen.PV_HainsworthFoote</title>
+          <meta name="description" content="PV HainsworthFoote - SysSon 0.11.0 API - de.sciss.synth.ugen.PV HainsworthFoote" />
+          <meta name="keywords" content="PV HainsworthFoote SysSon 0.11.0 API de.sciss.synth.ugen.PV HainsworthFoote" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PV_HainsworthFoote$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PV_HainsworthFoote$.html" title="Go to companion">PV_HainsworthFoote</a></h1> <span class="permalink">
+        <h1><a href="PV_HainsworthFoote$.html" title="Go to companion">PV_HainsworthFoote</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PV_HainsworthFoote$.html" title="See companion">object PV_HainsworthFoote</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,11 +47,21 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">PV_HainsworthFoote</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="propH">propH: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="propF">propF: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="waitTime">waitTime: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.04f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">PV_HainsworthFoote</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="hainsworth">hainsworth: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="foote">foote: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="waitTime">waitTime: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.04f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An FFT based onset detector UGen using a balance of two features. It is based
+on work described in Hainsworth (2003), &quot;Techniques for the Automated Analysis
+of Musical Audio,&quot; PhD thesis, University of Cambridge. See especially p. 128.
+The Hainsworth metric is a modification of the Kullback Liebler distance.
+</p></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>the fft signal (buffer) to analyze</p></dd><dt class="param">hainsworth</dt><dd class="cmt"><p>what strength of detection signal from Hainsworth
+                        metric (0 to 1) to use.</p></dd><dt class="param">foote</dt><dd class="cmt"><p>what strength of detection signal from normalized Foote
+                        metric (0 to 1) to use.</p></dd><dt class="param">thresh</dt><dd class="cmt"><p>threshold level for detection</p></dd><dt class="param">waitTime</dt><dd class="cmt"><p>after an onset is detected, further detections are
+                        suppressed for this period in seconds, preventing
+                        multiple rapid triggers
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PV_JensenAndersen$.html" class="extype" name="de.sciss.synth.ugen.PV_JensenAndersen">PV_JensenAndersen</a>
+</p></span><span class="cmt"><p><a href="Onsets$.html" class="extype" name="de.sciss.synth.ugen.Onsets">Onsets</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,8 +101,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.PV_HainsworthFoote#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,chain:de.sciss.synth.GE,propH:de.sciss.synth.GE,propF:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_HainsworthFoote"></a>
+              <ol><li name="de.sciss.synth.ugen.PV_HainsworthFoote#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,chain:de.sciss.synth.GE,hainsworth:de.sciss.synth.GE,foote:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_HainsworthFoote"></a>
       <a id="&lt;init&gt;:PV_HainsworthFoote"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -96,14 +110,19 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PV_HainsworthFoote</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="propH">propH: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="propF">propF: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="waitTime">waitTime: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.04f</a></span></span></span>)</span>
+        <span class="name">PV_HainsworthFoote</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="hainsworth">hainsworth: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="foote">foote: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="waitTime">waitTime: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.04f</a></span></span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote@&lt;init&gt;(rate:de.sciss.synth.Rate,chain:de.sciss.synth.GE,propH:de.sciss.synth.GE,propF:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_HainsworthFoote" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote@&lt;init&gt;(rate:de.sciss.synth.Rate,chain:de.sciss.synth.GE,hainsworth:de.sciss.synth.GE,foote:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_HainsworthFoote" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>the fft signal (buffer) to analyze</p></dd><dt class="param">hainsworth</dt><dd class="cmt"><p>what strength of detection signal from Hainsworth
+                        metric (0 to 1) to use.</p></dd><dt class="param">foote</dt><dd class="cmt"><p>what strength of detection signal from normalized Foote
+                        metric (0 to 1) to use.</p></dd><dt class="param">thresh</dt><dd class="cmt"><p>threshold level for detection</p></dd><dt class="param">waitTime</dt><dd class="cmt"><p>after an onset is detected, further detections are
+                        suppressed for this period in seconds, preventing
+                        multiple rapid triggers
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -197,7 +216,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the fft signal (buffer) to analyze</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -261,6 +280,24 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.PV_HainsworthFoote#foote" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="foote:de.sciss.synth.GE"></a>
+      <a id="foote:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foote</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote@foote:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">what strength of detection signal from normalized Foote
+                        metric (0 to 1) to use.</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -278,6 +315,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.PV_HainsworthFoote#hainsworth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="hainsworth:de.sciss.synth.GE"></a>
+      <a id="hainsworth:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hainsworth</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote@hainsworth:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">what strength of detection signal from Hainsworth
+                        metric (0 to 1) to use.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -402,40 +457,6 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PV_HainsworthFoote#propF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="propF:de.sciss.synth.GE"></a>
-      <a id="propF:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">propF</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote@propF:de.sciss.synth.GE" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.ugen.PV_HainsworthFoote#propH" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="propH:de.sciss.synth.GE"></a>
-      <a id="propH:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">propH</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote@propH:de.sciss.synth.GE" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="de.sciss.synth.ugen.PV_HainsworthFoote#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rate:de.sciss.synth.Rate"></a>
       <a id="rate:Rate"></a>
@@ -503,7 +524,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">threshold level for detection</p>
     </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
       <a id="unwrap(IndexedSeq[UGenInLike]):UGenInLike"></a>
@@ -606,7 +627,10 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">after an onset is detected, further detections are
+                        suppressed for this period in seconds, preventing
+                        multiple rapid triggers
+</p>
     </li></ol>
             </div>
 

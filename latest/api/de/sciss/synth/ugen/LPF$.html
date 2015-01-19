@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LPF - SysSon 0.8.0 API - de.sciss.synth.ugen.LPF</title>
-          <meta name="description" content="LPF - SysSon 0.8.0 API - de.sciss.synth.ugen.LPF" />
-          <meta name="keywords" content="LPF SysSon 0.8.0 API de.sciss.synth.ugen.LPF" />
+          <title>LPF - SysSon 0.11.0 API - de.sciss.synth.ugen.LPF</title>
+          <meta name="description" content="LPF - SysSon 0.11.0 API - de.sciss.synth.ugen.LPF" />
+          <meta name="keywords" content="LPF SysSon 0.11.0 API de.sciss.synth.ugen.LPF" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LPF.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LPF.html" title="Go to companion">LPF</a></h1> <span class="permalink">
+        <h1><a href="LPF.html" title="Go to companion">LPF</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LPF.html" title="See companion">class LPF</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LPF$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,18 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A second order low pass filter UGen.</p><h5>Examples</h5><pre><span class="cmt">// modulated frequency</span>
+play {
+  <span class="kw">val</span> in   = Saw.ar(<span class="num">200</span>) * <span class="num">0.5</span>
+  <span class="kw">val</span> freq = SinOsc.ar(XLine.ar(<span class="num">0.3</span>, <span class="num">100</span>, <span class="num">20</span>)).madd(<span class="num">3600</span>, <span class="num">4000</span>)
+  LPF.ar(in, freq)
+}</pre><pre><span class="cmt">// mouse controlled frequency</span>
+play {
+  <span class="kw">val</span> in   = WhiteNoise.ar(<span class="num">0.5</span>)
+  <span class="kw">val</span> freq = MouseX.kr(<span class="num">200</span>, <span class="num">10000</span>, <span class="num">1</span>)
+  LPF.ar(in, freq)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LPZ1$.html" class="extype" name="de.sciss.synth.ugen.LPZ1">LPZ1</a>
+</p></span><span class="cmt"><p><a href="RLPF$.html" class="extype" name="de.sciss.synth.ugen.RLPF">RLPF</a></p></span><span class="cmt"><p><a href="BRF$.html" class="extype" name="de.sciss.synth.ugen.BRF">BRF</a></p></span><span class="cmt"><p><a href="BPF$.html" class="extype" name="de.sciss.synth.ugen.BPF">BPF</a></p></span><span class="cmt"><p><a href="HPF$.html" class="extype" name="de.sciss.synth.ugen.HPF">HPF</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +159,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LPF#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LPF#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,freq:de.sciss.synth.GE):de.sciss.synth.ugen.LPF"></a>
       <a id="ar(GE,GE):LPF"></a>
       <h4 class="signature">
@@ -160,7 +175,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>cutoff frequency in Hertz
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +325,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LPF#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LPF#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,freq:de.sciss.synth.GE):de.sciss.synth.ugen.LPF"></a>
       <a id="kr(GE,GE):LPF"></a>
       <h4 class="signature">
@@ -325,7 +341,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>cutoff frequency in Hertz
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

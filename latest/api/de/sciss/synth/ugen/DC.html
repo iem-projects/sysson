@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>DC - SysSon 0.8.0 API - de.sciss.synth.ugen.DC</title>
-          <meta name="description" content="DC - SysSon 0.8.0 API - de.sciss.synth.ugen.DC" />
-          <meta name="keywords" content="DC SysSon 0.8.0 API de.sciss.synth.ugen.DC" />
+          <title>DC - SysSon 0.11.0 API - de.sciss.synth.ugen.DC</title>
+          <meta name="description" content="DC - SysSon 0.11.0 API - de.sciss.synth.ugen.DC" />
+          <meta name="keywords" content="DC SysSon 0.11.0 API de.sciss.synth.ugen.DC" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="DC$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="DC$.html" title="Go to companion">DC</a></h1> <span class="permalink">
+        <h1><a href="DC$.html" title="Go to companion">DC</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="DC$.html" title="See companion">object DC</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.DC" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,13 +47,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">DC</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">DC</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that creates a constant signal at a given calculation rate.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>constant value to output, fixed at initialisation time.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LeakDC$.html" class="extype" name="de.sciss.synth.ugen.LeakDC">LeakDC</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -67,7 +74,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.synth.ugen.DC"><span>DC</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="de.sciss.synth.UGenSource.MultiOut"><span>MultiOut</span></li><li class="in" name="de.sciss.synth.UGenSource.SomeOut"><span>SomeOut</span></li><li class="in" name="de.sciss.synth.GE.Lazy"><span>Lazy</span></li><li class="in" name="de.sciss.synth.GE"><span>GE</span></li><li class="in" name="de.sciss.synth.UGenSource"><span>UGenSource</span></li><li class="in" name="de.sciss.synth.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.synth.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.synth.ugen.DC"><span>DC</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="de.sciss.synth.UGenSource.SingleOut"><span>SingleOut</span></li><li class="in" name="de.sciss.synth.UGenSource.SomeOut"><span>SomeOut</span></li><li class="in" name="de.sciss.synth.GE.Lazy"><span>Lazy</span></li><li class="in" name="de.sciss.synth.GE"><span>GE</span></li><li class="in" name="de.sciss.synth.UGenSource"><span>UGenSource</span></li><li class="in" name="de.sciss.synth.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.synth.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -87,7 +94,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.DC#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.DC#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE):de.sciss.synth.ugen.DC"></a>
       <a id="&lt;init&gt;:DC"></a>
       <h4 class="signature">
@@ -103,7 +110,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>constant value to output, fixed at initialisation time.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -277,7 +285,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">constant value to output, fixed at initialisation time.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -552,8 +560,8 @@ expansion
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="de.sciss.synth.UGenSource.MultiOut">
-              <h3>Inherited from <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a></h3>
+            </div><div class="parent" name="de.sciss.synth.UGenSource.SingleOut">
+              <h3>Inherited from <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a></h3>
             </div><div class="parent" name="de.sciss.synth.UGenSource.SomeOut">
               <h3>Inherited from <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a></h3>
             </div><div class="parent" name="de.sciss.synth.GE.Lazy">

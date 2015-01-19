@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>control - SysSon 0.8.0 API - de.sciss.synth.control</title>
-          <meta name="description" content="control - SysSon 0.8.0 API - de.sciss.synth.control" />
-          <meta name="keywords" content="control SysSon 0.8.0 API de.sciss.synth.control" />
+          <title>control - SysSon 0.11.0 API - de.sciss.synth.control</title>
+          <meta name="description" content="control - SysSon 0.11.0 API - de.sciss.synth.control" />
+          <meta name="keywords" content="control SysSon 0.11.0 API de.sciss.synth.control" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,9 @@
       <div id="definition">
         <img src="../../../lib/object_big.png" />
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
-        <h1>control</h1> <span class="permalink">
+        <h1>control</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="de.sciss.synth">package synth</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.control$" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
@@ -130,7 +132,7 @@ the control rate would be 44100/64 = approx. 689 per second.</p></div><div class
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.math.Ordered#&lt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;(that:&lt;?&gt;):Boolean"></a>
+      <a id="&lt;(that:A):Boolean"></a>
       <a id="&lt;(Rate):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -147,7 +149,7 @@ the control rate would be 44100/64 = approx. 689 per second.</p></div><div class
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Ordered</dd></dl></div>
     </li><li name="scala.math.Ordered#&lt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;=(that:&lt;?&gt;):Boolean"></a>
+      <a id="&lt;=(that:A):Boolean"></a>
       <a id="&lt;=(Rate):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -181,7 +183,7 @@ the control rate would be 44100/64 = approx. 689 per second.</p></div><div class
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.math.Ordered#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&gt;(that:&lt;?&gt;):Boolean"></a>
+      <a id="&gt;(that:A):Boolean"></a>
       <a id="&gt;(Rate):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -198,7 +200,7 @@ the control rate would be 44100/64 = approx. 689 per second.</p></div><div class
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Ordered</dd></dl></div>
     </li><li name="scala.math.Ordered#&gt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&gt;=(that:&lt;?&gt;):Boolean"></a>
+      <a id="&gt;=(that:A):Boolean"></a>
       <a id="&gt;=(Rate):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -271,7 +273,7 @@ the control rate would be 44100/64 = approx. 689 per second.</p></div><div class
       </a>
     </span>
       <p class="shortcomment cmt">Compares this and another rate, based on their identifiers
-(e.</p><div class="fullcomment"><div class="comment cmt"><p>Compares this and another rate, based on their identifiers
+(e.g., <code>scalar compare control == -1</code> and <code>audio compare audio == 0</code>).</p><div class="fullcomment"><div class="comment cmt"><p>Compares this and another rate, based on their identifiers
 (e.g., <code>scalar compare control == -1</code> and <code>audio compare audio == 0</code>).
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a> → Ordered</dd></dl></div>
     </li><li name="scala.math.Ordered#compareTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -433,7 +435,7 @@ the control rate would be 44100/64 = approx. 689 per second.</p></div><div class
       </a>
     </span>
       <p class="shortcomment cmt">Returns the maximum of this and another rate, based on their identifiers
-(e.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the maximum of this and another rate, based on their identifiers
+(e.g., <code>control &gt; scalar</code>).</p><div class="fullcomment"><div class="comment cmt"><p>Returns the maximum of this and another rate, based on their identifiers
 (e.g., <code>control &gt; scalar</code>).
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></dd></dl></div>
     </li><li name="de.sciss.synth.control#methodName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -470,7 +472,7 @@ the control rate would be 44100/64 = approx. 689 per second.</p></div><div class
       </a>
     </span>
       <p class="shortcomment cmt">Returns the minimum of this and another rate, based on their identifiers
-(e.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the minimum of this and another rate, based on their identifiers
+(e.g., <code>scalar &lt; control</code>).</p><div class="fullcomment"><div class="comment cmt"><p>Returns the minimum of this and another rate, based on their identifiers
 (e.g., <code>scalar &lt; control</code>).
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></dd></dl></div>
     </li><li name="de.sciss.synth.MaybeRate#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

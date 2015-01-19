@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Rate - SysSon 0.8.0 API - de.sciss.synth.Rate</title>
-          <meta name="description" content="Rate - SysSon 0.8.0 API - de.sciss.synth.Rate" />
-          <meta name="keywords" content="Rate SysSon 0.8.0 API de.sciss.synth.Rate" />
+          <title>Rate - SysSon 0.11.0 API - de.sciss.synth.Rate</title>
+          <meta name="description" content="Rate - SysSon 0.11.0 API - de.sciss.synth.Rate" />
+          <meta name="keywords" content="Rate SysSon 0.11.0 API de.sciss.synth.Rate" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Rate$.html" title="Go to companion"><img src="../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
-        <h1><a href="Rate$.html" title="Go to companion">Rate</a></h1> <span class="permalink">
+        <h1><a href="Rate$.html" title="Go to companion">Rate</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Rate$.html" title="See companion">object Rate</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth">package synth</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Rate" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
@@ -89,27 +93,7 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.Rate#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():de.sciss.synth.Rate"></a>
-      <a id="&lt;init&gt;:Rate"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Rate</span><span class="params">()</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Rate@&lt;init&gt;():de.sciss.synth.Rate" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
+        
 
         
 
@@ -381,7 +365,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Compares this and another rate, based on their identifiers
-(e.</p><div class="fullcomment"><div class="comment cmt"><p>Compares this and another rate, based on their identifiers
+(e.g., <code>scalar compare control == -1</code> and <code>audio compare audio == 0</code>).</p><div class="fullcomment"><div class="comment cmt"><p>Compares this and another rate, based on their identifiers
 (e.g., <code>scalar compare control == -1</code> and <code>audio compare audio == 0</code>).
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.Rate">Rate</a> → Ordered</dd></dl></div>
     </li><li name="scala.math.Ordered#compareTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -526,7 +510,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.Rate#max" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="de.sciss.synth.Rate#max" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="max(that:de.sciss.synth.Rate):de.sciss.synth.Rate"></a>
       <a id="max(Rate):Rate"></a>
       <h4 class="signature">
@@ -543,10 +527,8 @@
       </a>
     </span>
       <p class="shortcomment cmt">Returns the maximum of this and another rate, based on their identifiers
-(e.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the maximum of this and another rate, based on their identifiers
-(e.g., <code>control &gt; scalar</code>).
-</p></div></div>
-    </li><li name="de.sciss.synth.Rate#min" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+(e.g., <code>control &gt; scalar</code>).</p>
+    </li><li name="de.sciss.synth.Rate#min" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="min(that:de.sciss.synth.Rate):de.sciss.synth.Rate"></a>
       <a id="min(Rate):Rate"></a>
       <h4 class="signature">
@@ -563,9 +545,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Returns the minimum of this and another rate, based on their identifiers
-(e.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the minimum of this and another rate, based on their identifiers
-(e.g., <code>scalar &lt; control</code>).
-</p></div></div>
+(e.g., <code>scalar &lt; control</code>).</p>
     </li><li name="de.sciss.synth.MaybeRate#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>MouseY - SysSon 0.8.0 API - de.sciss.synth.ugen.MouseY</title>
-          <meta name="description" content="MouseY - SysSon 0.8.0 API - de.sciss.synth.ugen.MouseY" />
-          <meta name="keywords" content="MouseY SysSon 0.8.0 API de.sciss.synth.ugen.MouseY" />
+          <title>MouseY - SysSon 0.11.0 API - de.sciss.synth.ugen.MouseY</title>
+          <meta name="description" content="MouseY - SysSon 0.11.0 API - de.sciss.synth.ugen.MouseY" />
+          <meta name="keywords" content="MouseY SysSon 0.11.0 API de.sciss.synth.ugen.MouseY" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="MouseY$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="MouseY$.html" title="Go to companion">MouseY</a></h1> <span class="permalink">
+        <h1><a href="MouseY$.html" title="Go to companion">MouseY</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="MouseY$.html" title="See companion">object MouseY</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.MouseY" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,23 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that maps the vertical screen location of the mouse to a given linear or
+exponential range. The <code>lo</code> value corresponds to the <i>bottom</i> of the screen,
+and the <code>hi</code> value corresponds to the <i>top</i> of the screen (not vice-versa).</p><p>This UGen is useful for testing purposes. Mouse interaction with the regular
+desktop and windowing system is in no way altered by running this UGen.
+</p></div><dl class="paramcmts block"><dt class="param">lo</dt><dd class="cmt"><p>value when the mouse is on the bottom side of the
+                        screen. <b>Note</b>: this value is never reached, because
+                        the maximum mouse coordinate is one pixel less than the
+                        screen height. For example, if the screen height is 900,
+                        <code>lo</code> is 0.0 and <code>hi</code> is 1.0, the minimum value output is
+                        <code>1.0 - 1.0 * 899.0/900 = 0.001111</code> .</p></dd><dt class="param">hi</dt><dd class="cmt"><p>value when the mouse is on the top side of the screen</p></dd><dt class="param">warp</dt><dd class="cmt"><p>curve shape. Either zero (default) for a linear
+                        mapping, or 1 for an exponential mapping. <b>Note</b>:
+                        When using exponential mapping, make sure the <code>lo</code> value
+                        is greater than zero, otherwise NaN values will be
+                        output.</p></dd><dt class="param">lag</dt><dd class="cmt"><p>60 dB decay time of a lag-time smoothing. Use zero to
+                        avoid any smoothing.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="KeyState$.html" class="extype" name="de.sciss.synth.ugen.KeyState">KeyState</a>
+</p></span><span class="cmt"><p><a href="MouseButton$.html" class="extype" name="de.sciss.synth.ugen.MouseButton">MouseButton</a></p></span><span class="cmt"><p><a href="MouseX$.html" class="extype" name="de.sciss.synth.ugen.MouseX">MouseX</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../ControlRated.html" class="extype" name="de.sciss.synth.ControlRated">ControlRated</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +107,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.MouseY#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.MouseY#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,warp:de.sciss.synth.GE,lag:de.sciss.synth.GE):de.sciss.synth.ugen.MouseY"></a>
       <a id="&lt;init&gt;:MouseY"></a>
       <h4 class="signature">
@@ -103,7 +123,18 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">lo</dt><dd class="cmt"><p>value when the mouse is on the bottom side of the
+                        screen. <b>Note</b>: this value is never reached, because
+                        the maximum mouse coordinate is one pixel less than the
+                        screen height. For example, if the screen height is 900,
+                        <code>lo</code> is 0.0 and <code>hi</code> is 1.0, the minimum value output is
+                        <code>1.0 - 1.0 * 899.0/900 = 0.001111</code> .</p></dd><dt class="param">hi</dt><dd class="cmt"><p>value when the mouse is on the top side of the screen</p></dd><dt class="param">warp</dt><dd class="cmt"><p>curve shape. Either zero (default) for a linear
+                        mapping, or 1 for an exponential mapping. <b>Note</b>:
+                        When using exponential mapping, make sure the <code>lo</code> value
+                        is greater than zero, otherwise NaN values will be
+                        output.</p></dd><dt class="param">lag</dt><dd class="cmt"><p>60 dB decay time of a lag-time smoothing. Use zero to
+                        avoid any smoothing.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -277,7 +308,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">value when the mouse is on the top side of the screen</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -295,7 +326,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.MouseY#lag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.MouseY#lag" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lag:de.sciss.synth.GE"></a>
       <a id="lag:GE"></a>
       <h4 class="signature">
@@ -311,8 +342,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.synth.ugen.MouseY#lo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">60 dB decay time of a lag-time smoothing.</p><div class="fullcomment"><div class="comment cmt"><p>60 dB decay time of a lag-time smoothing. Use zero to
+                        avoid any smoothing.
+</p></div></div>
+    </li><li name="de.sciss.synth.ugen.MouseY#lo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lo:de.sciss.synth.GE"></a>
       <a id="lo:GE"></a>
       <h4 class="signature">
@@ -328,7 +361,13 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">value when the mouse is on the bottom side of the
+                        screen.</p><div class="fullcomment"><div class="comment cmt"><p>value when the mouse is on the bottom side of the
+                        screen. <b>Note</b>: this value is never reached, because
+                        the maximum mouse coordinate is one pixel less than the
+                        screen height. For example, if the screen height is 900,
+                        <code>lo</code> is 0.0 and <code>hi</code> is 1.0, the minimum value output is
+                        <code>1.0 - 1.0 * 899.0/900 = 0.001111</code> .</p></div></div>
     </li><li name="de.sciss.synth.ugen.MouseY#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>
@@ -573,7 +612,7 @@ expansion
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.MouseY#warp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.MouseY#warp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warp:de.sciss.synth.GE"></a>
       <a id="warp:GE"></a>
       <h4 class="signature">
@@ -589,7 +628,11 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">curve shape.</p><div class="fullcomment"><div class="comment cmt"><p>curve shape. Either zero (default) for a linear
+                        mapping, or 1 for an exponential mapping. <b>Note</b>:
+                        When using exponential mapping, make sure the <code>lo</code> value
+                        is greater than zero, otherwise NaN values will be
+                        output.</p></div></div>
     </li></ol>
             </div>
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>MostChange - SysSon 0.8.0 API - de.sciss.synth.ugen.MostChange</title>
-          <meta name="description" content="MostChange - SysSon 0.8.0 API - de.sciss.synth.ugen.MostChange" />
-          <meta name="keywords" content="MostChange SysSon 0.8.0 API de.sciss.synth.ugen.MostChange" />
+          <title>MostChange - SysSon 0.11.0 API - de.sciss.synth.ugen.MostChange</title>
+          <meta name="description" content="MostChange - SysSon 0.11.0 API - de.sciss.synth.ugen.MostChange" />
+          <meta name="keywords" content="MostChange SysSon 0.11.0 API de.sciss.synth.ugen.MostChange" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="MostChange$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="MostChange$.html" title="Go to companion">MostChange</a></h1> <span class="permalink">
+        <h1><a href="MostChange$.html" title="Go to companion">MostChange</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="MostChange$.html" title="See companion">object MostChange</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.MostChange" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that switches between two input signal depending on which is changing
+more. Change is based on the absolute of the differentiation of the respective
+signals.
+</p></div><dl class="paramcmts block"><dt class="param">a</dt><dd class="cmt"><p>first input signal to select from</p></dd><dt class="param">b</dt><dd class="cmt"><p>second input signal to select from
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LeastChange$.html" class="extype" name="de.sciss.synth.ugen.LeastChange">LeastChange</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +96,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.MostChange#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.MostChange#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,a:de.sciss.synth.GE,b:de.sciss.synth.GE):de.sciss.synth.ugen.MostChange"></a>
       <a id="&lt;init&gt;:MostChange"></a>
       <h4 class="signature">
@@ -103,7 +112,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">a</dt><dd class="cmt"><p>first input signal to select from</p></dd><dt class="param">b</dt><dd class="cmt"><p>second input signal to select from
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -180,7 +190,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">first input signal to select from</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -214,7 +224,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">second input signal to select from
+</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>

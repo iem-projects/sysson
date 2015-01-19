@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Resonz - SysSon 0.8.0 API - de.sciss.synth.ugen.Resonz</title>
-          <meta name="description" content="Resonz - SysSon 0.8.0 API - de.sciss.synth.ugen.Resonz" />
-          <meta name="keywords" content="Resonz SysSon 0.8.0 API de.sciss.synth.ugen.Resonz" />
+          <title>Resonz - SysSon 0.11.0 API - de.sciss.synth.ugen.Resonz</title>
+          <meta name="description" content="Resonz - SysSon 0.11.0 API - de.sciss.synth.ugen.Resonz" />
+          <meta name="keywords" content="Resonz SysSon 0.11.0 API de.sciss.synth.ugen.Resonz" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Resonz$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Resonz$.html" title="Go to companion">Resonz</a></h1> <span class="permalink">
+        <h1><a href="Resonz$.html" title="Go to companion">Resonz</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Resonz$.html" title="See companion">object Resonz</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Resonz" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A two pole resonant filter UGen. It has zeroes at <code>z = +1</code> and <code>z = -1</code>.</p><p>Based on K. Steiglitz, &quot;A Note on Constant-Gain Digital Resonators&quot;, Computer
+Music Journal, vol 18, no. 4, pp. 8-10, Winter 1994.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>resonant frequency in Hertz</p></dd><dt class="param">rq</dt><dd class="cmt"><p>reciprocal of Q. The Q (or quality) is conventionally
+                        defined as center-frequency / bandwidth, meaning that rq
+                        &nbsp;= bandwidth / center-frequency. A higher Q or
+                        lower rq produces a steeper filter.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="MidEQ$.html" class="extype" name="de.sciss.synth.ugen.MidEQ">MidEQ</a>
+</p></span><span class="cmt"><p><a href="LPF$.html" class="extype" name="de.sciss.synth.ugen.LPF">LPF</a></p></span><span class="cmt"><p><a href="HPF$.html" class="extype" name="de.sciss.synth.ugen.HPF">HPF</a></p></span><span class="cmt"><p><a href="Ringz$.html" class="extype" name="de.sciss.synth.ugen.Ringz">Ringz</a></p></span><span class="cmt"><p><a href="BPF$.html" class="extype" name="de.sciss.synth.ugen.BPF">BPF</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +98,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Resonz#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Resonz#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.MaybeRate,in:de.sciss.synth.GE,freq:de.sciss.synth.GE,rq:de.sciss.synth.GE):de.sciss.synth.ugen.Resonz"></a>
       <a id="&lt;init&gt;:Resonz"></a>
       <h4 class="signature">
@@ -103,7 +114,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>resonant frequency in Hertz</p></dd><dt class="param">rq</dt><dd class="cmt"><p>reciprocal of Q. The Q (or quality) is conventionally
+                        defined as center-frequency / bandwidth, meaning that rq
+                        &nbsp;= bandwidth / center-frequency. A higher Q or
+                        lower rq produces a steeper filter.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -260,7 +275,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">resonant frequency in Hertz</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -294,7 +309,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">input signal to be filtered</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -453,7 +468,7 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Resonz#rq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Resonz#rq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rq:de.sciss.synth.GE"></a>
       <a id="rq:GE"></a>
       <h4 class="signature">
@@ -469,7 +484,11 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">reciprocal of Q.</p><div class="fullcomment"><div class="comment cmt"><p>reciprocal of Q. The Q (or quality) is conventionally
+                        defined as center-frequency / bandwidth, meaning that rq
+                        &nbsp;= bandwidth / center-frequency. A higher Q or
+                        lower rq produces a steeper filter.
+</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

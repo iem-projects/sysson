@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Axis - SysSon 0.8.0 API - at.iem.sysson.graph.Var.Axis</title>
-          <meta name="description" content="Axis - SysSon 0.8.0 API - at.iem.sysson.graph.Var.Axis" />
-          <meta name="keywords" content="Axis SysSon 0.8.0 API at.iem.sysson.graph.Var.Axis" />
+          <title>Axis - SysSon 0.11.0 API - at.iem.sysson.graph.Var.Axis</title>
+          <meta name="description" content="Axis - SysSon 0.11.0 API - at.iem.sysson.graph.Var.Axis" />
+          <meta name="keywords" content="Axis SysSon 0.11.0 API at.iem.sysson.graph.Var.Axis" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Var$$Axis.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a>.<a href="package.html" class="extype" name="at.iem.sysson.graph">graph</a>.<a href="Var$.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></p>
-        <h1><a href="Var$$Axis.html" title="Go to companion">Axis</a></h1> <span class="permalink">
+        <h1><a href="Var$$Axis.html" title="Go to companion">Axis</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Var$$Axis.html" title="See companion">class Axis</a>
+            | <a href="Var$.html" class="extype" name="at.iem.sysson.graph.Var">package Var</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.Var$$Axis$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -89,19 +93,36 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="at.iem.sysson.graph.Var.Axis.Values" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ValuesextendsGE.LazywithSonificationElementwithScalarRatedwithProductwithSerializable"></a>
-      <a id="Values:Values"></a>
+              <ol><li name="at.iem.sysson.graph.Var.Axis.Key" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KeyextendsUGenGraphBuilder.KeywithProductwithSerializable"></a>
+      <a id="Key:Key"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Var$$Axis$$Values.html"><span class="name">Values</span></a><span class="params">(<span name="axis">axis: <a href="Var$$Axis.html" class="extype" name="at.iem.sysson.graph.Var.Axis">Axis</a></span>)</span><span class="result"> extends <a href="../../../../de/sciss/synth/GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">Lazy</a> with <a href="SonificationElement.html" class="extype" name="at.iem.sysson.graph.SonificationElement">SonificationElement</a> with <a href="../../../../de/sciss/synth/ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Var$$Axis$$Key.html"><span class="name">Key</span></a><span class="params">(<span name="stream">stream: <a href="Dim.html" class="extype" name="at.iem.sysson.graph.Dim">Dim</a></span>, <span name="axis">axis: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">de.sciss.synth.proc.UGenGraphBuilder.Key</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Var$$Axis$@ValuesextendsGE.LazywithSonificationElementwithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.Var$$Axis$@KeyextendsUGenGraphBuilder.KeywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="at.iem.sysson.graph.Var.Axis.Values" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ValuesextendsMatrixPrepare.GEwithScalarRatedwithProductwithSerializable"></a>
+      <a id="Values:Values"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Var$$Axis$$Values.html"><span class="name">Values</span></a><span class="params">(<span name="axis">axis: <a href="Var$$Axis.html" class="extype" name="at.iem.sysson.graph.Var.Axis">Axis</a></span>)</span><span class="result"> extends <span class="extype" name="at.iem.sysson.sound.impl.MatrixPrepare.GE">GE</span> with <a href="../../../../de/sciss/synth/ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.graph.Var$$Axis$@ValuesextendsMatrixPrepare.GEwithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>

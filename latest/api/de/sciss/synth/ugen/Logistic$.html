@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Logistic - SysSon 0.8.0 API - de.sciss.synth.ugen.Logistic</title>
-          <meta name="description" content="Logistic - SysSon 0.8.0 API - de.sciss.synth.ugen.Logistic" />
-          <meta name="keywords" content="Logistic SysSon 0.8.0 API de.sciss.synth.ugen.Logistic" />
+          <title>Logistic - SysSon 0.11.0 API - de.sciss.synth.ugen.Logistic</title>
+          <meta name="description" content="Logistic - SysSon 0.11.0 API - de.sciss.synth.ugen.Logistic" />
+          <meta name="keywords" content="Logistic SysSon 0.11.0 API de.sciss.synth.ugen.Logistic" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Logistic.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Logistic.html" title="Go to companion">Logistic</a></h1> <span class="permalink">
+        <h1><a href="Logistic.html" title="Go to companion">Logistic</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Logistic.html" title="See companion">class Logistic</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Logistic$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A noise generator UGen based on the logistic map. Its formula is</p><pre>y[n+<span class="num">1</span>] = chaos * y[n] * (<span class="num">1.0</span> - y[n])</pre><h5>Examples</h5><pre><span class="cmt">// increasing parameter</span>
+play { Logistic.ar(Line.kr(<span class="num">3.55</span>, <span class="num">4.0</span>, <span class="num">15</span>), <span class="num">1000</span>) * <span class="num">0.5</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LatoocarfianN$.html" class="extype" name="de.sciss.synth.ugen.LatoocarfianN">LatoocarfianN</a>
+</p></span><span class="cmt"><p><a href="Crackle$.html" class="extype" name="de.sciss.synth.ugen.Crackle">Crackle</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +150,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Logistic#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Logistic#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(chaos:de.sciss.synth.GE,freq:de.sciss.synth.GE,init:de.sciss.synth.GE):de.sciss.synth.ugen.Logistic"></a>
       <a id="ar(GE,GE,GE):Logistic"></a>
       <h4 class="signature">
@@ -160,7 +166,12 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chaos</dt><dd class="cmt"><p>a parameter of the chaotic function with useful values
+                        from 0.0 to 4.0. Chaotic behavior occurs from 3.57 up.
+                        Using values outside this range can make the UGen blow
+                        up, resulting in NaNs.</p></dd><dt class="param">freq</dt><dd class="cmt"><p>Frequency of calculation in Hertz. The value is limited
+                        by the sampling rate.</p></dd><dt class="param">init</dt><dd class="cmt"><p>Initial value of the recursive function
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Logistic#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.Logistic"></a>
       <a id="ar:Logistic"></a>
@@ -326,7 +337,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Logistic#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Logistic#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(chaos:de.sciss.synth.GE,freq:de.sciss.synth.GE,init:de.sciss.synth.GE):de.sciss.synth.ugen.Logistic"></a>
       <a id="kr(GE,GE,GE):Logistic"></a>
       <h4 class="signature">
@@ -342,7 +353,12 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chaos</dt><dd class="cmt"><p>a parameter of the chaotic function with useful values
+                        from 0.0 to 4.0. Chaotic behavior occurs from 3.57 up.
+                        Using values outside this range can make the UGen blow
+                        up, resulting in NaNs.</p></dd><dt class="param">freq</dt><dd class="cmt"><p>Frequency of calculation in Hertz. The value is limited
+                        by the sampling rate.</p></dd><dt class="param">init</dt><dd class="cmt"><p>Initial value of the recursive function
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Logistic#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.Logistic"></a>
       <a id="kr:Logistic"></a>

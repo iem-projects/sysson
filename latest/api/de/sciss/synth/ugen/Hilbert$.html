@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Hilbert - SysSon 0.8.0 API - de.sciss.synth.ugen.Hilbert</title>
-          <meta name="description" content="Hilbert - SysSon 0.8.0 API - de.sciss.synth.ugen.Hilbert" />
-          <meta name="keywords" content="Hilbert SysSon 0.8.0 API de.sciss.synth.ugen.Hilbert" />
+          <title>Hilbert - SysSon 0.11.0 API - de.sciss.synth.ugen.Hilbert</title>
+          <meta name="description" content="Hilbert - SysSon 0.11.0 API - de.sciss.synth.ugen.Hilbert" />
+          <meta name="keywords" content="Hilbert SysSon 0.11.0 API de.sciss.synth.ugen.Hilbert" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Hilbert.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Hilbert.html" title="Go to companion">Hilbert</a></h1> <span class="permalink">
+        <h1><a href="Hilbert.html" title="Go to companion">Hilbert</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Hilbert.html" title="See companion">class Hilbert</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Hilbert$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,20 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Hilbert transform UGen. This transformation produces two signals from a given
+input with identical frequency content, but with their respective phases shifted
+to be 90 degrees apart (0.5 pi radians).</p><p>The two signals output by <code>Hilbert</code> correspond to the real and imaginary part
+of the complex transformed signal. Due to the method used (an IIR filter),
+distortion occurs in the upper octave of the frequency spectrum.</p><p>The transform can be used to implemented single-side-band (SSB) modulation, but
+a dedicated UGen <code>FreqShift</code> is already provided for this case.</p><h5>Examples</h5><pre><span class="cmt">// a form of envelope tracking</span>
+play {
+  <span class="kw">val</span> in = SinOsc.ar(<span class="num">440</span>)
+  <span class="kw">val</span> h  = Hilbert.ar(in)
+  <span class="kw">val</span> x  = h.real.squared + h.imag.squared
+  x.poll(<span class="num">1</span>)  <span class="cmt">// cos(x)^2 + sin(x)^2 == 1 (ideally)</span>
+  <span class="num">0</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FreqShift$.html" class="extype" name="de.sciss.synth.ugen.FreqShift">FreqShift</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +161,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Hilbert#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Hilbert#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE):de.sciss.synth.ugen.Hilbert"></a>
       <a id="ar(GE):Hilbert"></a>
       <h4 class="signature">
@@ -160,7 +177,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be processed
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

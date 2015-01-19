@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PanB2 - SysSon 0.8.0 API - de.sciss.synth.ugen.PanB2</title>
-          <meta name="description" content="PanB2 - SysSon 0.8.0 API - de.sciss.synth.ugen.PanB2" />
-          <meta name="keywords" content="PanB2 SysSon 0.8.0 API de.sciss.synth.ugen.PanB2" />
+          <title>PanB2 - SysSon 0.11.0 API - de.sciss.synth.ugen.PanB2</title>
+          <meta name="description" content="PanB2 - SysSon 0.11.0 API - de.sciss.synth.ugen.PanB2" />
+          <meta name="keywords" content="PanB2 SysSon 0.11.0 API de.sciss.synth.ugen.PanB2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PanB2.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PanB2.html" title="Go to companion">PanB2</a></h1> <span class="permalink">
+        <h1><a href="PanB2.html" title="Go to companion">PanB2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PanB2.html" title="See companion">class PanB2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PanB2$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,21 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A two dimensional Ambisonics B-format encoding UGen. B-format is the name for
+first order Ambisonics which normally has four channels W, X, Y, Z. By omitting
+the elevation control, we get a two dimensional planar encoded signal consisting
+only of the W, X and Y channels.</p><p>Note that unlike <code>PanB</code>, azimuth is normalized between -1 and +1.</p><h5>Examples</h5><pre><span class="cmt">// 4-channel rotation of opposite sounds</span>
+play {
+  <span class="kw">val</span> p = WhiteNoise.ar(<span class="num">0.05</span>)                     <span class="cmt">// first source</span>
+  <span class="kw">val</span> q = Mix(LFSaw.ar(<span class="std">Seq</span>(<span class="num">200</span>, <span class="num">200.37</span>))) * <span class="num">0.03</span>  <span class="cmt">// second source</span>
+  <span class="cmt">// B-format encode 2 signals at opposite sides of the circle</span>
+  <span class="kw">val</span> enc = PanB2.ar(p, -<span class="num">0.5</span>) + PanB2.ar(q, +<span class="num">0.5</span>)
+  <span class="kw">val</span> <span class="std">Seq</span>(w, x, y) = (<span class="num">0</span> to <span class="num">2</span>).map(enc \ _)
+  <span class="kw">val</span> rot = Rotate2.ar(x, y, MouseX.kr(-<span class="num">1</span>, +<span class="num">1</span>))
+  <span class="cmt">// B-format decode to quad (front-left, front-right, rear-left, rear-right)</span>
+  DecodeB2.ar(<span class="num">4</span>, w, rot.xr, rot.yr)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Pan2$.html" class="extype" name="de.sciss.synth.ugen.Pan2">Pan2</a>
+</p></span><span class="cmt"><p><a href="DecodeB2$.html" class="extype" name="de.sciss.synth.ugen.DecodeB2">DecodeB2</a></p></span><span class="cmt"><p><a href="BiPanB2$.html" class="extype" name="de.sciss.synth.ugen.BiPanB2">BiPanB2</a></p></span><span class="cmt"><p><a href="PanB$.html" class="extype" name="de.sciss.synth.ugen.PanB">PanB</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +162,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PanB2#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PanB2#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,azimuth:de.sciss.synth.GE,level:de.sciss.synth.GE):de.sciss.synth.ugen.PanB2"></a>
       <a id="ar(GE,GE,GE):PanB2"></a>
       <h4 class="signature">
@@ -160,7 +178,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>(monophonic) input signal to be encoded</p></dd><dt class="param">azimuth</dt><dd class="cmt"><p>position around the circle from -1 to +1. -1 and +1
+                        correspond to -180/+180 degrees (behind), -0.5 is 90
+                        degrees to the left, 0 is frontal, +0.5 is 90 degrees to
+                        the right.</p></dd><dt class="param">level</dt><dd class="cmt"><p>additional gain control
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +331,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PanB2#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PanB2#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,azimuth:de.sciss.synth.GE,level:de.sciss.synth.GE):de.sciss.synth.ugen.PanB2"></a>
       <a id="kr(GE,GE,GE):PanB2"></a>
       <h4 class="signature">
@@ -325,7 +347,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>(monophonic) input signal to be encoded</p></dd><dt class="param">azimuth</dt><dd class="cmt"><p>position around the circle from -1 to +1. -1 and +1
+                        correspond to -180/+180 degrees (behind), -0.5 is 90
+                        degrees to the left, 0 is frontal, +0.5 is 90 degrees to
+                        the right.</p></dd><dt class="param">level</dt><dd class="cmt"><p>additional gain control
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Logistic - SysSon 0.8.0 API - de.sciss.synth.ugen.Logistic</title>
-          <meta name="description" content="Logistic - SysSon 0.8.0 API - de.sciss.synth.ugen.Logistic" />
-          <meta name="keywords" content="Logistic SysSon 0.8.0 API de.sciss.synth.ugen.Logistic" />
+          <title>Logistic - SysSon 0.11.0 API - de.sciss.synth.ugen.Logistic</title>
+          <meta name="description" content="Logistic - SysSon 0.11.0 API - de.sciss.synth.ugen.Logistic" />
+          <meta name="keywords" content="Logistic SysSon 0.11.0 API de.sciss.synth.ugen.Logistic" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Logistic$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Logistic$.html" title="Go to companion">Logistic</a></h1> <span class="permalink">
+        <h1><a href="Logistic$.html" title="Go to companion">Logistic</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Logistic$.html" title="See companion">object Logistic</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Logistic" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,13 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A noise generator UGen based on the logistic map. Its formula is</p><pre>y[n+<span class="num">1</span>] = chaos * y[n] * (<span class="num">1.0</span> - y[n])</pre></div><dl class="paramcmts block"><dt class="param">chaos</dt><dd class="cmt"><p>a parameter of the chaotic function with useful values
+                        from 0.0 to 4.0. Chaotic behavior occurs from 3.57 up.
+                        Using values outside this range can make the UGen blow
+                        up, resulting in NaNs.</p></dd><dt class="param">freq</dt><dd class="cmt"><p>Frequency of calculation in Hertz. The value is limited
+                        by the sampling rate.</p></dd><dt class="param">init</dt><dd class="cmt"><p>Initial value of the recursive function
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LatoocarfianN$.html" class="extype" name="de.sciss.synth.ugen.LatoocarfianN">LatoocarfianN</a>
+</p></span><span class="cmt"><p><a href="Crackle$.html" class="extype" name="de.sciss.synth.ugen.Crackle">Crackle</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +97,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Logistic#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Logistic#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,chaos:de.sciss.synth.GE,freq:de.sciss.synth.GE,init:de.sciss.synth.GE):de.sciss.synth.ugen.Logistic"></a>
       <a id="&lt;init&gt;:Logistic"></a>
       <h4 class="signature">
@@ -103,7 +113,12 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chaos</dt><dd class="cmt"><p>a parameter of the chaotic function with useful values
+                        from 0.0 to 4.0. Chaotic behavior occurs from 3.57 up.
+                        Using values outside this range can make the UGen blow
+                        up, resulting in NaNs.</p></dd><dt class="param">freq</dt><dd class="cmt"><p>Frequency of calculation in Hertz. The value is limited
+                        by the sampling rate.</p></dd><dt class="param">init</dt><dd class="cmt"><p>Initial value of the recursive function
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -181,7 +196,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Logistic#chaos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Logistic#chaos" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="chaos:de.sciss.synth.GE"></a>
       <a id="chaos:GE"></a>
       <h4 class="signature">
@@ -197,7 +212,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">a parameter of the chaotic function with useful values
+                        from 0.0 to 4.0.</p><div class="fullcomment"><div class="comment cmt"><p>a parameter of the chaotic function with useful values
+                        from 0.0 to 4.0. Chaotic behavior occurs from 3.57 up.
+                        Using values outside this range can make the UGen blow
+                        up, resulting in NaNs.</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -261,7 +280,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Logistic#freq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Logistic#freq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="freq:de.sciss.synth.GE"></a>
       <a id="freq:GE"></a>
       <h4 class="signature">
@@ -277,7 +296,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Frequency of calculation in Hertz.</p><div class="fullcomment"><div class="comment cmt"><p>Frequency of calculation in Hertz. The value is limited
+                        by the sampling rate.</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -311,7 +331,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Initial value of the recursive function
+</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

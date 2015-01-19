@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Builder - SysSon 0.8.0 API - de.sciss.osc.PacketCodec.Builder</title>
-          <meta name="description" content="Builder - SysSon 0.8.0 API - de.sciss.osc.PacketCodec.Builder" />
-          <meta name="keywords" content="Builder SysSon 0.8.0 API de.sciss.osc.PacketCodec.Builder" />
+          <title>Builder - SysSon 0.11.0 API - de.sciss.osc.PacketCodec.Builder</title>
+          <meta name="description" content="Builder - SysSon 0.11.0 API - de.sciss.osc.PacketCodec.Builder" />
+          <meta name="keywords" content="Builder SysSon 0.11.0 API de.sciss.osc.PacketCodec.Builder" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,9 @@
       <div id="definition">
         <img src="../../../lib/trait_big.png" />
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.osc">osc</a>.<a href="PacketCodec$.html" class="extype" name="de.sciss.osc.PacketCodec">PacketCodec</a></p>
-        <h1>Builder</h1> <span class="permalink">
+        <h1>Builder</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="PacketCodec$.html" class="extype" name="de.sciss.osc.PacketCodec">package PacketCodec</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.osc.PacketCodec$$Builder" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
@@ -107,7 +109,7 @@
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Enables support for the OSC 1.</p><div class="fullcomment"><div class="comment cmt"><p>Enables support for the OSC 1.0 extended spec's array tags. An 'array' is
+      <p class="shortcomment cmt">Enables support for the OSC 1.0 extended spec's array tags.</p><div class="fullcomment"><div class="comment cmt"><p>Enables support for the OSC 1.0 extended spec's array tags. An 'array' is
 written out as a type tag '[' (without associated value), followed by the
 normal encoding of the array elements, and finally another type tag ']'
 (without associated value).</p><p>On the Scala side, we wish to enforce a immutable type, hence
@@ -352,7 +354,7 @@ while the encoder accepts any <code>Traversable</code>
       </a>
     </span>
       
-    </li><li name="de.sciss.osc.PacketCodec.Builder#v1_0" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+    </li><li name="de.sciss.osc.PacketCodec.Builder#v1_0" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="v1_0():de.sciss.osc.PacketCodec.Builder"></a>
       <a id="v1_0():Builder"></a>
       <h4 class="signature">
@@ -368,11 +370,10 @@ while the encoder accepts any <code>Traversable</code>
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Resets the builder to strict OSC 1.</p><div class="fullcomment"><div class="comment cmt"><p>Resets the builder to strict OSC 1.0 spec,
+      <p class="shortcomment cmt">Resets the builder to strict OSC 1.0 spec,
 meaning that it accepts only the pairs
 <code>Int</code> - <code>i</code>, <code>Float</code> - <code>f</code>, <code>String</code> - <code>s</code>,
-and <code>ByteBuffer</code> - <code>b</code>.
-</p></div></div>
+and <code>ByteBuffer</code> - <code>b</code>.</p>
     </li></ol>
             </div>
 
@@ -750,7 +751,10 @@ and packet arguments as blobs, and.
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Resets the builder to strict OSC 1.</p><div class="fullcomment"><div class="comment cmt"><p>Resets the builder to strict OSC 1.1 spec,
+      <p class="shortcomment cmt">Resets the builder to strict OSC 1.1 spec,
+meaning that it accepts only the OSC 1.0 pairs,
+as well as <code>Boolean</code> - <code>T</code> and <code>F</code>, <code>None</code> - <code>N</code>,
+<code>Unit</code> - <code>I</code>, <code>Timetag</code> - <code>t</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Resets the builder to strict OSC 1.1 spec,
 meaning that it accepts only the OSC 1.0 pairs,
 as well as <code>Boolean</code> - <code>T</code> and <code>F</code>, <code>None</code> - <code>N</code>,
 <code>Unit</code> - <code>I</code>, <code>Timetag</code> - <code>t</code>.</p><p>Note that this does not affect the way that

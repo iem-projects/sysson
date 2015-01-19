@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ReplaceOut - SysSon 0.8.0 API - de.sciss.synth.ugen.ReplaceOut</title>
-          <meta name="description" content="ReplaceOut - SysSon 0.8.0 API - de.sciss.synth.ugen.ReplaceOut" />
-          <meta name="keywords" content="ReplaceOut SysSon 0.8.0 API de.sciss.synth.ugen.ReplaceOut" />
+          <title>ReplaceOut - SysSon 0.11.0 API - de.sciss.synth.ugen.ReplaceOut</title>
+          <meta name="description" content="ReplaceOut - SysSon 0.11.0 API - de.sciss.synth.ugen.ReplaceOut" />
+          <meta name="keywords" content="ReplaceOut SysSon 0.11.0 API de.sciss.synth.ugen.ReplaceOut" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="ReplaceOut.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="ReplaceOut.html" title="Go to companion">ReplaceOut</a></h1> <span class="permalink">
+        <h1><a href="ReplaceOut.html" title="Go to companion">ReplaceOut</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="ReplaceOut.html" title="See companion">class ReplaceOut</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.ReplaceOut$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,31 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that replace the contents of a bus with an input signal. Other than
+<code>Out</code> , the signal is not added to the previous contents of the bus but replaces
+it, allowing for a simple way of an &quot;insert&quot; effect.</p><p>Multi-channel input signals, for example a <code>PanAz</code> , are written as such to the
+bus without expansion. That is, the <code>bus</code> index argument is used for the first
+channel, the second channel will appear on <code>bus + 1</code> , etc.</p><p>If you have an expanding multi-channel input, however, you have to be careful.
+For example, if you have
+<code>PanAz.ar(2, SinOsc.ar(Seq(444, 555, 666)) * 0.2, Seq(-1, 0, 1))</code> , this results
+in one output UGen carrying one channel, and another one carrying two channels.
+(The way this works is consistent with SCLang). In order to get the correct
+behaviour (left outputs of the <code>PanAz</code> summed, and right output of the <code>PanAz</code>
+summed), wrap this expression in a <code>Mix(...)</code> before passing it to the output
+UGen.</p><h5>Examples</h5><pre><span class="cmt">// insert-effect</span>
+<span class="kw">val</span> noise = play {
+  Out.ar(<span class="num">0</span>, WhiteNoise.ar(<span class="std">Seq</span>(<span class="num">0.1</span>, <span class="num">0.1</span>)))
+}
+
+<span class="kw">val</span> filter = play(target = noise, addAction = addAfter) {
+  <span class="kw">val</span> in = In.ar(<span class="num">0</span>, <span class="num">2</span>)
+  <span class="kw">val</span> f  = Resonz.ar(in, <span class="num">444</span>, <span class="num">0.1</span>) * <span class="num">20</span>
+  ReplaceOut.ar(<span class="num">0</span>, f)
+}
+
+filter.run(<span class="kw">false</span>)  <span class="cmt">// bypass</span>
+filter.run(<span class="kw">true</span> )  <span class="cmt">// engage</span></pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="XOut$.html" class="extype" name="de.sciss.synth.ugen.XOut">XOut</a>
+</p></span><span class="cmt"><p><a href="Out$.html" class="extype" name="de.sciss.synth.ugen.Out">Out</a></p></span><span class="cmt"><p><a href="In$.html" class="extype" name="de.sciss.synth.ugen.In">In</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +172,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.ReplaceOut#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.ReplaceOut#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(bus:de.sciss.synth.GE,in:de.sciss.synth.GE):de.sciss.synth.ugen.ReplaceOut"></a>
       <a id="ar(GE,GE):ReplaceOut"></a>
       <h4 class="signature">
@@ -160,7 +188,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>bus index to write to. For an audio-rate UGen, this is
+                        an audio-bus, for a control-rate UGen, this is a
+                        control-bus.</p></dd><dt class="param">in</dt><dd class="cmt"><p>signal to write to the bus. If the UGen is audio-rate,
+                        the input must also be audio-rate.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

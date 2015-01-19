@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>AmpCompA - SysSon 0.8.0 API - de.sciss.synth.ugen.AmpCompA</title>
-          <meta name="description" content="AmpCompA - SysSon 0.8.0 API - de.sciss.synth.ugen.AmpCompA" />
-          <meta name="keywords" content="AmpCompA SysSon 0.8.0 API de.sciss.synth.ugen.AmpCompA" />
+          <title>AmpCompA - SysSon 0.11.0 API - de.sciss.synth.ugen.AmpCompA</title>
+          <meta name="description" content="AmpCompA - SysSon 0.11.0 API - de.sciss.synth.ugen.AmpCompA" />
+          <meta name="keywords" content="AmpCompA SysSon 0.11.0 API de.sciss.synth.ugen.AmpCompA" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="AmpCompA$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="AmpCompA$.html" title="Go to companion">AmpCompA</a></h1> <span class="permalink">
+        <h1><a href="AmpCompA$.html" title="Go to companion">AmpCompA</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="AmpCompA$.html" title="See companion">object AmpCompA</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.AmpCompA" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,18 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that produces a psychoacoustic amplitude compensation factor for a given
+frequency. It uses the A-weighting curve that is based on the Fletcher-Munson
+curve for rather low volume sounds (40 phon).</p><p>Only the <code>freq</code> parameter can be modulated, the other parameters are read at
+initialization time only.
+</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>the frequency in Hertz for which to determine the
+                        compensation factor</p></dd><dt class="param">root</dt><dd class="cmt"><p>the root frequency in Hertz, relative to which the
+                        curve is calculated. This is usually lowest expected
+                        frequency.</p></dd><dt class="param">minAmp</dt><dd class="cmt"><p>amplitude at the minimum point of the curve. This is
+                        the factor output when <code>freq</code> is approx. 2512 Hz.</p></dd><dt class="param">rootAmp</dt><dd class="cmt"><p>amplitude at the root frequency of the curve. This is
+                        the factor output when <code>freq == root</code> .
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AmpComp$.html" class="extype" name="de.sciss.synth.ugen.AmpComp">AmpComp</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +102,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.AmpCompA#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.AmpCompA#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,freq:de.sciss.synth.GE,root:de.sciss.synth.GE,minAmp:de.sciss.synth.GE,rootAmp:de.sciss.synth.GE):de.sciss.synth.ugen.AmpCompA"></a>
       <a id="&lt;init&gt;:AmpCompA"></a>
       <h4 class="signature">
@@ -103,7 +118,13 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>the frequency in Hertz for which to determine the
+                        compensation factor</p></dd><dt class="param">root</dt><dd class="cmt"><p>the root frequency in Hertz, relative to which the
+                        curve is calculated. This is usually lowest expected
+                        frequency.</p></dd><dt class="param">minAmp</dt><dd class="cmt"><p>amplitude at the minimum point of the curve. This is
+                        the factor output when <code>freq</code> is approx. 2512 Hz.</p></dd><dt class="param">rootAmp</dt><dd class="cmt"><p>amplitude at the root frequency of the curve. This is
+                        the factor output when <code>freq == root</code> .
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -260,7 +281,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the frequency in Hertz for which to determine the
+                        compensation factor</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -334,7 +356,7 @@ during expansion. This method is at most called once during graph
 expansion
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the expanded object (depending on the type parameter <code>U</code>)
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.ugen.AmpCompA">AmpCompA</a> → <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.AmpCompA#minAmp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.AmpCompA#minAmp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="minAmp:de.sciss.synth.GE"></a>
       <a id="minAmp:GE"></a>
       <h4 class="signature">
@@ -350,7 +372,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">amplitude at the minimum point of the curve.</p><div class="fullcomment"><div class="comment cmt"><p>amplitude at the minimum point of the curve. This is
+                        the factor output when <code>freq</code> is approx. 2512 Hz.</p></div></div>
     </li><li name="de.sciss.synth.UGenSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>
@@ -453,7 +476,7 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.AmpCompA#root" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.AmpCompA#root" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="root:de.sciss.synth.GE"></a>
       <a id="root:GE"></a>
       <h4 class="signature">
@@ -469,8 +492,11 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.synth.ugen.AmpCompA#rootAmp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">the root frequency in Hertz, relative to which the
+                        curve is calculated.</p><div class="fullcomment"><div class="comment cmt"><p>the root frequency in Hertz, relative to which the
+                        curve is calculated. This is usually lowest expected
+                        frequency.</p></div></div>
+    </li><li name="de.sciss.synth.ugen.AmpCompA#rootAmp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rootAmp:de.sciss.synth.GE"></a>
       <a id="rootAmp:GE"></a>
       <h4 class="signature">
@@ -486,7 +512,9 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">amplitude at the root frequency of the curve.</p><div class="fullcomment"><div class="comment cmt"><p>amplitude at the root frequency of the curve. This is
+                        the factor output when <code>freq == root</code> .
+</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

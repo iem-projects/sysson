@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PeakFollower - SysSon 0.8.0 API - de.sciss.synth.ugen.PeakFollower</title>
-          <meta name="description" content="PeakFollower - SysSon 0.8.0 API - de.sciss.synth.ugen.PeakFollower" />
-          <meta name="keywords" content="PeakFollower SysSon 0.8.0 API de.sciss.synth.ugen.PeakFollower" />
+          <title>PeakFollower - SysSon 0.11.0 API - de.sciss.synth.ugen.PeakFollower</title>
+          <meta name="description" content="PeakFollower - SysSon 0.11.0 API - de.sciss.synth.ugen.PeakFollower" />
+          <meta name="keywords" content="PeakFollower SysSon 0.11.0 API de.sciss.synth.ugen.PeakFollower" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PeakFollower.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PeakFollower.html" title="Go to companion">PeakFollower</a></h1> <span class="permalink">
+        <h1><a href="PeakFollower.html" title="Go to companion">PeakFollower</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PeakFollower.html" title="See companion">class PeakFollower</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PeakFollower$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,21 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that continually reports the peak amplitude of the signal received at
+the input. If the absolute input level drops below the observed peak value, this
+value decreases by the factor given as <code>decay</code> parameter (but no more than the
+current absolute input level).</p><h5>Examples</h5><pre><span class="cmt">// mouse-controlled decay</span>
+play {
+  <span class="kw">val</span> in    = Impulse.ar(<span class="num">2</span>)
+  <span class="kw">val</span> decay = MouseX.kr(<span class="num">0.995</span>, <span class="num">1.0001</span>, <span class="num">1</span>).min(<span class="num">1.0</span>)
+  decay.poll(HPZ1.kr(decay).abs, <span class="lit">"decay"</span>)
+  <span class="kw">val</span> p     = PeakFollower.ar(in, decay)
+  <span class="kw">val</span> tr    = Impulse.ar(<span class="num">20</span>)
+  <span class="kw">val</span> pm    = RunningMax.ar(p, tr)
+  pm.roundTo(<span class="num">0.001</span>).poll(<span class="num">20</span>, <span class="lit">"peak"</span>)
+  in
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LagUD$.html" class="extype" name="de.sciss.synth.ugen.LagUD">LagUD</a>
+</p></span><span class="cmt"><p><a href="RunningSum$.html" class="extype" name="de.sciss.synth.ugen.RunningSum">RunningSum</a></p></span><span class="cmt"><p><a href="Amplitude$.html" class="extype" name="de.sciss.synth.ugen.Amplitude">Amplitude</a></p></span><span class="cmt"><p><a href="Peak$.html" class="extype" name="de.sciss.synth.ugen.Peak">Peak</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +162,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PeakFollower#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PeakFollower#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.PeakFollower"></a>
       <a id="ar(GE,GE):PeakFollower"></a>
       <h4 class="signature">
@@ -160,7 +178,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to trace</p></dd><dt class="param">decay</dt><dd class="cmt"><p>feedback coefficient controlling the release rate
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +328,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PeakFollower#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PeakFollower#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.PeakFollower"></a>
       <a id="kr(GE,GE):PeakFollower"></a>
       <h4 class="signature">
@@ -325,7 +344,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to trace</p></dd><dt class="param">decay</dt><dd class="cmt"><p>feedback coefficient controlling the release rate
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

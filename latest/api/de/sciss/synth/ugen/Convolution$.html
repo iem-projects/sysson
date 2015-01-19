@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Convolution - SysSon 0.8.0 API - de.sciss.synth.ugen.Convolution</title>
-          <meta name="description" content="Convolution - SysSon 0.8.0 API - de.sciss.synth.ugen.Convolution" />
-          <meta name="keywords" content="Convolution SysSon 0.8.0 API de.sciss.synth.ugen.Convolution" />
+          <title>Convolution - SysSon 0.11.0 API - de.sciss.synth.ugen.Convolution</title>
+          <meta name="description" content="Convolution - SysSon 0.11.0 API - de.sciss.synth.ugen.Convolution" />
+          <meta name="keywords" content="Convolution SysSon 0.11.0 API de.sciss.synth.ugen.Convolution" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Convolution.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Convolution.html" title="Go to companion">Convolution</a></h1> <span class="permalink">
+        <h1><a href="Convolution.html" title="Go to companion">Convolution</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Convolution.html" title="See companion">class Convolution</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Convolution$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,8 +51,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="StereoConvolution2L$.html" class="extype" name="de.sciss.synth.ugen.StereoConvolution2L">StereoConvolution2L</a>
-</p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="Convolution3$.html" class="extype" name="de.sciss.synth.ugen.Convolution3">Convolution3</a></p></span><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that performs a convolution with an continuously changing kernel. If the
+kernel is static or must only change occasionally, <code>Convolution2</code> will be a more
+CPU friendly alternative. The process introduces a delay of
+<code>frameSize - blockSize</code> .</p><h5>Examples</h5><pre><span class="cmt">// sine filter</span>
+play {
+  <span class="kw">val</span> a = WhiteNoise.ar
+  <span class="kw">val</span> b = SinOsc.ar(MouseY.kr(<span class="num">20</span>, <span class="num">2000</span>, <span class="num">1</span>))
+  Convolution.ar(a, b, <span class="num">512</span>) * <span class="num">0.01</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a>
+</p></span><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -145,7 +157,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Convolution#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Convolution#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,kernel:de.sciss.synth.GE,frameSize:de.sciss.synth.GE):de.sciss.synth.ugen.Convolution"></a>
       <a id="ar(GE,GE,GE):Convolution"></a>
       <h4 class="signature">
@@ -161,7 +173,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>first operand of the convolution</p></dd><dt class="param">kernel</dt><dd class="cmt"><p>second operand of the convolution</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>convolution size in sample frames, which is half of the
+                        FFT size. Must be a power of two. There is maximum
+                        frame-size of 16384 (if exceeded, the server may crash).
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

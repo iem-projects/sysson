@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>EnvGen - SysSon 0.8.0 API - de.sciss.synth.ugen.EnvGen</title>
-          <meta name="description" content="EnvGen - SysSon 0.8.0 API - de.sciss.synth.ugen.EnvGen" />
-          <meta name="keywords" content="EnvGen SysSon 0.8.0 API de.sciss.synth.ugen.EnvGen" />
+          <title>EnvGen - SysSon 0.11.0 API - de.sciss.synth.ugen.EnvGen</title>
+          <meta name="description" content="EnvGen - SysSon 0.11.0 API - de.sciss.synth.ugen.EnvGen" />
+          <meta name="keywords" content="EnvGen SysSon 0.11.0 API de.sciss.synth.ugen.EnvGen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="EnvGen$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="EnvGen$.html" title="Go to companion">EnvGen</a></h1> <span class="permalink">
+        <h1><a href="EnvGen$.html" title="Go to companion">EnvGen</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="EnvGen$.html" title="See companion">object EnvGen</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.EnvGen" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,38 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An envelope generator UGen. It uses a break point description in its <code>envelope</code>
+input, typically coming from an <code>Env</code> object. The envelope may be re-triggered
+using the <code>gate</code> input. Upon start and upon re-triggering, the <code>envelope</code> ,
+<code>levelScale</code> , <code>levelBias</code> and <code>timeScale</code> parameters are polled and remain
+constant for the duration of the envelope.</p><p>To construct a manual envelope without the use of the <code>Env</code> class, the format
+should be as follows:</p><pre><span class="kw">val</span> env = <span class="std">Seq</span>[GE](startLevel, numSegments, releaseNode, loopNode,
+targetLevel1, duration1, curveType1, curvature1,
+targetLevel2, duration2, curveType2, curvature2,
+...)</pre><p>Where the curve-type is one of <code>Curve.step.id</code> , <code>Curve.lin.id</code> ,
+<code>Curve.exp.id</code> , etc. The curvature values are only relevant for the parametric
+curve type. The <code>releaseNode</code> and <code>loopNode</code> parameters are segment indices or
+the special value <code>-99</code> indicating that there are no release or loop segments.</p><p><b>Note</b>: The actual minimum duration of a segment is not zero, but one
+sample step for audio rate and one block for control rate. This may result in
+asynchronicity when in two envelopes of different number of levels, the envelope
+times add up to the same total duration. Similarly, when modulating times, the
+new time is only updated at the end of the current segment; this may lead to
+asynchronicity of two envelopes with modulated times.
+</p></div><dl class="paramcmts block"><dt class="param">envelope</dt><dd class="cmt"><p>the description of the envelope break-points. Typically
+                        you pass an instance of <code>Env</code> which will then
+                        automatically expand to the correct format.</p></dd><dt class="param">gate</dt><dd class="cmt"><p>triggers the envelope and holds it open while greater
+                        than zero. If the envelope is of fixed duration (e.g.
+                        <code>Env.linen</code> , <code>Env.perc</code> ), the <code>gate</code> argument is used
+                        as a simple trigger. If it contains a sustained segment
+                        (e.g. <code>Env.adsr</code> , <code>Env.asr</code> ), the envelope is held
+                        open until the gate becomes 0, at which point is
+                        released. If <code>gate</code> is less than zero, a release is
+                        enforced with duration <code>-1.0 - gate</code> .</p></dd><dt class="param">levelScale</dt><dd class="cmt"><p>amplitude factor with which the nominal envelope is
+                        multiplied.</p></dd><dt class="param">levelBias</dt><dd class="cmt"><p>amplitude offset which is added to the nominal envelope.</p></dd><dt class="param">timeScale</dt><dd class="cmt"><p>time scale factor with which the envelope segment
+                        durations are multiplied.</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>action to be performed when the envelope reaches its
+                        end point.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Decay$.html" class="extype" name="de.sciss.synth.ugen.Decay">Decay</a>
+</p></span><span class="cmt"><p><a href="Linen$.html" class="extype" name="de.sciss.synth.ugen.Linen">Linen</a></p></span><span class="cmt"><p><a href="XLine$.html" class="extype" name="de.sciss.synth.ugen.XLine">XLine</a></p></span><span class="cmt"><p><a href="Line$.html" class="extype" name="de.sciss.synth.ugen.Line">Line</a></p></span><span class="cmt"><p><a href="IEnvGen$.html" class="extype" name="de.sciss.synth.ugen.IEnvGen">IEnvGen</a></p></span><span class="cmt"><p><a href="Env$.html" class="extype" name="de.sciss.synth.ugen.Env">Env</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../HasDoneFlag.html" class="extype" name="de.sciss.synth.HasDoneFlag">HasDoneFlag</a>, <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +122,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.EnvGen#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.EnvGen#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,envelope:de.sciss.synth.GE,gate:de.sciss.synth.GE,levelScale:de.sciss.synth.GE,levelBias:de.sciss.synth.GE,timeScale:de.sciss.synth.GE,doneAction:de.sciss.synth.GE):de.sciss.synth.ugen.EnvGen"></a>
       <a id="&lt;init&gt;:EnvGen"></a>
       <h4 class="signature">
@@ -103,7 +138,20 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">envelope</dt><dd class="cmt"><p>the description of the envelope break-points. Typically
+                        you pass an instance of <code>Env</code> which will then
+                        automatically expand to the correct format.</p></dd><dt class="param">gate</dt><dd class="cmt"><p>triggers the envelope and holds it open while greater
+                        than zero. If the envelope is of fixed duration (e.g.
+                        <code>Env.linen</code> , <code>Env.perc</code> ), the <code>gate</code> argument is used
+                        as a simple trigger. If it contains a sustained segment
+                        (e.g. <code>Env.adsr</code> , <code>Env.asr</code> ), the envelope is held
+                        open until the gate becomes 0, at which point is
+                        released. If <code>gate</code> is less than zero, a release is
+                        enforced with duration <code>-1.0 - gate</code> .</p></dd><dt class="param">levelScale</dt><dd class="cmt"><p>amplitude factor with which the nominal envelope is
+                        multiplied.</p></dd><dt class="param">levelBias</dt><dd class="cmt"><p>amplitude offset which is added to the nominal envelope.</p></dd><dt class="param">timeScale</dt><dd class="cmt"><p>time scale factor with which the envelope segment
+                        durations are multiplied.</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>action to be performed when the envelope reaches its
+                        end point.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -220,8 +268,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.synth.ugen.EnvGen#envelope" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">action to be performed when the envelope reaches its
+                        end point.</p>
+    </li><li name="de.sciss.synth.ugen.EnvGen#envelope" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="envelope:de.sciss.synth.GE"></a>
       <a id="envelope:GE"></a>
       <h4 class="signature">
@@ -237,7 +286,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the description of the envelope break-points.</p><div class="fullcomment"><div class="comment cmt"><p>the description of the envelope break-points. Typically
+                        you pass an instance of <code>Env</code> which will then
+                        automatically expand to the correct format.</p></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -278,7 +329,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.EnvGen#gate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.EnvGen#gate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="gate:de.sciss.synth.GE"></a>
       <a id="gate:GE"></a>
       <h4 class="signature">
@@ -294,7 +345,15 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">triggers the envelope and holds it open while greater
+                        than zero.</p><div class="fullcomment"><div class="comment cmt"><p>triggers the envelope and holds it open while greater
+                        than zero. If the envelope is of fixed duration (e.g.
+                        <code>Env.linen</code> , <code>Env.perc</code> ), the <code>gate</code> argument is used
+                        as a simple trigger. If it contains a sustained segment
+                        (e.g. <code>Env.adsr</code> , <code>Env.asr</code> ), the envelope is held
+                        open until the gate becomes 0, at which point is
+                        released. If <code>gate</code> is less than zero, a release is
+                        enforced with duration <code>-1.0 - gate</code> .</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -345,7 +404,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">amplitude offset which is added to the nominal envelope.</p>
     </li><li name="de.sciss.synth.ugen.EnvGen#levelScale" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="levelScale:de.sciss.synth.GE"></a>
       <a id="levelScale:GE"></a>
@@ -362,7 +421,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">amplitude factor with which the nominal envelope is
+                        multiplied.</p>
     </li><li name="de.sciss.synth.ugen.EnvGen#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>
@@ -537,7 +597,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">time scale factor with which the envelope segment
+                        durations are multiplied.</p>
     </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
       <a id="unwrap(IndexedSeq[UGenInLike]):UGenInLike"></a>

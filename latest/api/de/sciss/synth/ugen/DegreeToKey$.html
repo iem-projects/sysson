@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>DegreeToKey - SysSon 0.8.0 API - de.sciss.synth.ugen.DegreeToKey</title>
-          <meta name="description" content="DegreeToKey - SysSon 0.8.0 API - de.sciss.synth.ugen.DegreeToKey" />
-          <meta name="keywords" content="DegreeToKey SysSon 0.8.0 API de.sciss.synth.ugen.DegreeToKey" />
+          <title>DegreeToKey - SysSon 0.11.0 API - de.sciss.synth.ugen.DegreeToKey</title>
+          <meta name="description" content="DegreeToKey - SysSon 0.11.0 API - de.sciss.synth.ugen.DegreeToKey" />
+          <meta name="keywords" content="DegreeToKey SysSon 0.11.0 API de.sciss.synth.ugen.DegreeToKey" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="DegreeToKey.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="DegreeToKey.html" title="Go to companion">DegreeToKey</a></h1> <span class="permalink">
+        <h1><a href="DegreeToKey.html" title="Go to companion">DegreeToKey</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="DegreeToKey.html" title="See companion">class DegreeToKey</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.DegreeToKey$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,28 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that uses an input signal as an index into an octave repeating table of
+pitch classes. The input is truncated to an integer, and indices wrap around the
+table and shift octaves as they do.</p><h5>Examples</h5><pre><span class="cmt">// modal space where mouse x controls pitch step</span>
+play {
+  <span class="cmt">// initialize the scale buffer (Dorian)</span>
+  <span class="kw">val</span> scale = Vector(<span class="num">0</span>, <span class="num">2</span>, <span class="num">3.2</span>, <span class="num">5</span>, <span class="num">7</span>, <span class="num">9</span>, <span class="num">10</span>)
+  <span class="kw">val</span> buf   = LocalBuf(scale.size)
+  SetBuf(buf, scale)
+
+  <span class="cmt">// base MIDI pitch</span>
+  <span class="kw">val</span> base  = DegreeToKey.kr(buf, in = MouseX.kr(<span class="num">0</span>, <span class="num">15</span>), octave = <span class="num">12</span>) + <span class="num">72</span>
+  <span class="kw">val</span> noise = LFNoise1.kr(<span class="std">Seq</span>(<span class="num">3</span>, <span class="num">3</span>)) * <span class="num">0.04</span>  <span class="cmt">// low freq stereo detuning</span>
+  <span class="cmt">// lead tone</span>
+  <span class="kw">val</span> lead  = SinOsc.ar((base + noise).midicps)
+  <span class="cmt">// drone 5ths</span>
+  <span class="kw">val</span> drone = RLPF.ar(LFPulse.ar(<span class="std">Seq</span>(<span class="num">48.</span>midicps, <span class="num">55.</span>midicps), <span class="num">0.15</span>),
+                      SinOsc.kr(<span class="num">0.1</span>).madd(<span class="num">10</span>, <span class="num">72</span>).midicps, <span class="num">0.1</span>)
+  <span class="kw">val</span> mix = (lead + drone) * <span class="num">0.1</span>
+  <span class="cmt">// add some 70's euro-space-rock echo</span>
+  CombN.ar(mix, <span class="num">0.31</span>, <span class="num">0.31</span>, <span class="num">2</span>) + mix
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="WrapIndex$.html" class="extype" name="de.sciss.synth.ugen.WrapIndex">WrapIndex</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +169,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.DegreeToKey#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.DegreeToKey#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(buf:de.sciss.synth.GE,in:de.sciss.synth.GE,octave:de.sciss.synth.GE):de.sciss.synth.ugen.DegreeToKey"></a>
       <a id="ar(GE,GE,GE):DegreeToKey"></a>
       <h4 class="signature">
@@ -160,7 +185,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>buffer which contains the steps for each scale degree.</p></dd><dt class="param">in</dt><dd class="cmt"><p>input index signal</p></dd><dt class="param">octave</dt><dd class="cmt"><p>number of steps per octave in the scale.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +335,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.DegreeToKey#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.DegreeToKey#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(buf:de.sciss.synth.GE,in:de.sciss.synth.GE,octave:de.sciss.synth.GE):de.sciss.synth.ugen.DegreeToKey"></a>
       <a id="kr(GE,GE,GE):DegreeToKey"></a>
       <h4 class="signature">
@@ -325,7 +351,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>buffer which contains the steps for each scale degree.</p></dd><dt class="param">in</dt><dd class="cmt"><p>input index signal</p></dd><dt class="param">octave</dt><dd class="cmt"><p>number of steps per octave in the scale.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

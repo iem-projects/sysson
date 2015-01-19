@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Phasor - SysSon 0.8.0 API - de.sciss.synth.ugen.Phasor</title>
-          <meta name="description" content="Phasor - SysSon 0.8.0 API - de.sciss.synth.ugen.Phasor" />
-          <meta name="keywords" content="Phasor SysSon 0.8.0 API de.sciss.synth.ugen.Phasor" />
+          <title>Phasor - SysSon 0.11.0 API - de.sciss.synth.ugen.Phasor</title>
+          <meta name="description" content="Phasor - SysSon 0.11.0 API - de.sciss.synth.ugen.Phasor" />
+          <meta name="keywords" content="Phasor SysSon 0.11.0 API de.sciss.synth.ugen.Phasor" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Phasor$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Phasor$.html" title="Go to companion">Phasor</a></h1> <span class="permalink">
+        <h1><a href="Phasor$.html" title="Go to companion">Phasor</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Phasor$.html" title="See companion">object Phasor</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Phasor" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,19 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A linear repeating ramp UGen between start and end values. Using a trigger
+input, it can be reset to a specific position. Upon reaching the end of its
+ramp, <code>Phasor</code> will wrap back to its start value. <b>Note</b>: Since <code>end</code> is
+defined as the wrap point, its value is never actually output.
+</p></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger signal that causes the phasor to jump to the
+                        <code>resetVal</code> position</p></dd><dt class="param">speed</dt><dd class="cmt"><p>amount of increment <i>per sample frame</i>. I.e at a
+                        speed of 1, each sample output by the UGen will be 1
+                        greater than the preceding sample. To achieve a specific
+                        frequency <code>f</code> in Hertz, use a speed value of
+                        <code>f / SampleRate.ir</code> .</p></dd><dt class="param">lo</dt><dd class="cmt"><p>start value of the ramp</p></dd><dt class="param">hi</dt><dd class="cmt"><p>end value of the ramp (exclusive)</p></dd><dt class="param">resetVal</dt><dd class="cmt"><p>value to jump to upon receiving a trigger in the <code>trig</code>
+                        input
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LFSaw$.html" class="extype" name="de.sciss.synth.ugen.LFSaw">LFSaw</a>
+</p></span><span class="cmt"><p><a href="Line$.html" class="extype" name="de.sciss.synth.ugen.Line">Line</a></p></span><span class="cmt"><p><a href="Stepper$.html" class="extype" name="de.sciss.synth.ugen.Stepper">Stepper</a></p></span><span class="cmt"><p><a href="Ramp$.html" class="extype" name="de.sciss.synth.ugen.Ramp">Ramp</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +103,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Phasor#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Phasor#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,trig:de.sciss.synth.GE,speed:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,resetVal:de.sciss.synth.GE):de.sciss.synth.ugen.Phasor"></a>
       <a id="&lt;init&gt;:Phasor"></a>
       <h4 class="signature">
@@ -103,7 +119,14 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger signal that causes the phasor to jump to the
+                        <code>resetVal</code> position</p></dd><dt class="param">speed</dt><dd class="cmt"><p>amount of increment <i>per sample frame</i>. I.e at a
+                        speed of 1, each sample output by the UGen will be 1
+                        greater than the preceding sample. To achieve a specific
+                        frequency <code>f</code> in Hertz, use a speed value of
+                        <code>f / SampleRate.ir</code> .</p></dd><dt class="param">lo</dt><dd class="cmt"><p>start value of the ramp</p></dd><dt class="param">hi</dt><dd class="cmt"><p>end value of the ramp (exclusive)</p></dd><dt class="param">resetVal</dt><dd class="cmt"><p>value to jump to upon receiving a trigger in the <code>trig</code>
+                        input
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -277,7 +300,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">end value of the ramp (exclusive)</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -311,7 +334,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">start value of the ramp</p>
     </li><li name="de.sciss.synth.ugen.Phasor#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>
@@ -452,7 +475,9 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">value to jump to upon receiving a trigger in the <code>trig</code>
+                        input
+</p>
     </li><li name="de.sciss.synth.UGenSource.SomeOut#rewrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):de.sciss.synth.UGenInLike"></a>
       <a id="rewrap(IndexedSeq[UGenInLike],Int):UGenInLike"></a>
@@ -470,7 +495,7 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Phasor#speed" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Phasor#speed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="speed:de.sciss.synth.GE"></a>
       <a id="speed:GE"></a>
       <h4 class="signature">
@@ -486,7 +511,11 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">amount of increment <i>per sample frame</i>.</p><div class="fullcomment"><div class="comment cmt"><p>amount of increment <i>per sample frame</i>. I.e at a
+                        speed of 1, each sample output by the UGen will be 1
+                        greater than the preceding sample. To achieve a specific
+                        frequency <code>f</code> in Hertz, use a speed value of
+                        <code>f / SampleRate.ir</code> .</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -520,7 +549,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">trigger signal that causes the phasor to jump to the
+                        <code>resetVal</code> position</p>
     </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
       <a id="unwrap(IndexedSeq[UGenInLike]):UGenInLike"></a>

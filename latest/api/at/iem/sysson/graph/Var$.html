@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Var - SysSon 0.8.0 API - at.iem.sysson.graph.Var</title>
-          <meta name="description" content="Var - SysSon 0.8.0 API - at.iem.sysson.graph.Var" />
-          <meta name="keywords" content="Var SysSon 0.8.0 API at.iem.sysson.graph.Var" />
+          <title>Var - SysSon 0.11.0 API - at.iem.sysson.graph.Var</title>
+          <meta name="description" content="Var - SysSon 0.11.0 API - at.iem.sysson.graph.Var" />
+          <meta name="keywords" content="Var SysSon 0.11.0 API at.iem.sysson.graph.Var" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,9 +28,13 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="Var.html" title="Go to companion"><img src="../../../../lib/object_to_trait_big.png" /></a>
+        <a href="Var.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a>.<a href="package.html" class="extype" name="at.iem.sysson.graph">graph</a></p>
-        <h1><a href="Var.html" title="Go to companion">Var</a></h1> <span class="permalink">
+        <h1><a href="Var.html" title="Go to companion">Var</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Var.html" title="See companion">class Var</a>
+            | <a href="package.html" class="extype" name="at.iem.sysson.graph">package graph</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.Var$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Var</span>
+        <span class="name">Var</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -67,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="at.iem.sysson.graph.Var"><span>Var</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="at.iem.sysson.graph.Var"><span>Var</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -94,7 +98,7 @@
       <a id="Axis:Axis"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
@@ -106,59 +110,42 @@
       </a>
     </span>
       <p class="shortcomment cmt">A reference to a dimensional axis with respect to a variable section.</p><div class="fullcomment"><div class="comment cmt"><p>A reference to a dimensional axis with respect to a variable section.
-The difference between this and for instance <code>SelectDim</code> is that the
+The difference between this and for instance <code>Dim</code> is that the
 graph element producing methods such as <code>values</code> and <code>indices</code> produce
 multi-channel signals which correctly align with the underlying variable section.
 This allows signal processing which combines each sample value from a
 variable with the corresponding axes elements.
 </p></div></div>
-    </li><li name="at.iem.sysson.graph.Var.GE" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="GEextendsGE.LazywithSonificationElement"></a>
-      <a id="GE:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Var$$GE.html"><span class="name">GE</span></a><span class="result"> extends <a href="../../../../de/sciss/synth/GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">Lazy</a> with <a href="SonificationElement.html" class="extype" name="at.iem.sysson.graph.SonificationElement">SonificationElement</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Var$@GEextendsGE.LazywithSonificationElement" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="at.iem.sysson.graph.Var.Play" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PlayextendsVar.GEwithAudioRatedwithProductwithSerializable"></a>
+      <a id="PlayextendsMatrixPrepare.VarGEwithMatrixPrepare.PlayGEwithUGenGraphBuilder.InputwithProductwithSerializable"></a>
       <a id="Play:Play"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Var$$Play.html"><span class="name">Play</span></a><span class="params">(<span name="variable">variable: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>, <span name="time">time: <a href="Dim$$Play.html" class="extype" name="at.iem.sysson.graph.Dim.Play">Dim.Play</a></span>)</span><span class="result"> extends <a href="Var$$GE.html" class="extype" name="at.iem.sysson.graph.Var.GE">GE</a> with <a href="../../../../de/sciss/synth/AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Var$$Play.html"><span class="name">Play</span></a><span class="params">(<span name="variable">variable: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>, <span name="time">time: <a href="Dim$$Play.html" class="extype" name="at.iem.sysson.graph.Dim.Play">Dim.Play</a></span>, <span name="interp">interp: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="at.iem.sysson.sound.impl.MatrixPrepare.VarGE">VarGE</span> with <span class="extype" name="at.iem.sysson.sound.impl.MatrixPrepare.PlayGE">PlayGE</span> with <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Var$@PlayextendsVar.GEwithAudioRatedwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.Var$@PlayextendsMatrixPrepare.VarGEwithMatrixPrepare.PlayGEwithUGenGraphBuilder.InputwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       
     </li><li name="at.iem.sysson.graph.Var.Values" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ValuesextendsVar.GEwithScalarRatedwithProductwithSerializable"></a>
+      <a id="ValuesextendsMatrixPrepare.VarGEwithMatrixPrepare.ValuesGEwithUGenGraphBuilder.InputwithProductwithSerializable"></a>
       <a id="Values:Values"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Var$$Values.html"><span class="name">Values</span></a><span class="params">(<span name="variable">variable: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>)</span><span class="result"> extends <a href="Var$$GE.html" class="extype" name="at.iem.sysson.graph.Var.GE">GE</a> with <a href="../../../../de/sciss/synth/ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Var$$Values.html"><span class="name">Values</span></a><span class="params">(<span name="variable">variable: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>)</span><span class="result"> extends <span class="extype" name="at.iem.sysson.sound.impl.MatrixPrepare.VarGE">VarGE</span> with <span class="extype" name="at.iem.sysson.sound.impl.MatrixPrepare.ValuesGE">ValuesGE</span> with <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Var$@ValuesextendsVar.GEwithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.Var$@ValuesextendsMatrixPrepare.VarGEwithMatrixPrepare.ValuesGEwithUGenGraphBuilder.InputwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -238,25 +225,6 @@ variable with the corresponding axes elements.
       </a>
     </span>
       
-    </li><li name="at.iem.sysson.graph.Var#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(name:String,higherRank:Boolean):at.iem.sysson.graph.Var"></a>
-      <a id="apply(String,Boolean):Var"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="higherRank">higherRank: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Var$@apply(name:String,higherRank:Boolean):at.iem.sysson.graph.Var" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Declares a new sonification variable (data source).</p><div class="fullcomment"><div class="comment cmt"><p>Declares a new sonification variable (data source).
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>Logical name by which the source is referred to</p></dd><dt class="param">higherRank</dt><dd class="cmt"><p>Whether a matrix rank higher than <code>dimensions.size</code> is permitted
-</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -490,23 +458,6 @@ variable with the corresponding axes elements.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="at.iem.sysson.graph.Var#unapply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unapply(vr:at.iem.sysson.graph.Var):Option[(String,Boolean)]"></a>
-      <a id="unapply(Var):Option[(String,Boolean)]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unapply</span><span class="params">(<span name="vr">vr: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Boolean">Boolean</span>)]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Var$@unapply(vr:at.iem.sysson.graph.Var):Option[(String,Boolean)]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -585,7 +536,11 @@ variable with the corresponding axes elements.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

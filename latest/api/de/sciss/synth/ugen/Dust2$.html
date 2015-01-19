@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Dust2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Dust2</title>
-          <meta name="description" content="Dust2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Dust2" />
-          <meta name="keywords" content="Dust2 SysSon 0.8.0 API de.sciss.synth.ugen.Dust2" />
+          <title>Dust2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Dust2</title>
+          <meta name="description" content="Dust2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Dust2" />
+          <meta name="keywords" content="Dust2 SysSon 0.11.0 API de.sciss.synth.ugen.Dust2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Dust2.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Dust2.html" title="Go to companion">Dust2</a></h1> <span class="permalink">
+        <h1><a href="Dust2.html" title="Go to companion">Dust2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Dust2.html" title="See companion">class Dust2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Dust2$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -49,9 +53,9 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen generating random impulses with values ranging from <code>-1</code> to <code>+1</code> . The
 pulse duration is one sample for audio-rate and one block for control-rate
-operation.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="TRand$.html" class="extype" name="de.sciss.synth.ugen.TRand">TRand</a>
-</p></span><span class="cmt"><p><a href="Dust$.html" class="extype" name="de.sciss.synth.ugen.Dust">Dust</a></p></span></dd></dl><div class="toggleContainer block">
+operation.</p><h5>Examples</h5><pre><span class="cmt">// decreasing density</span>
+play { Dust2.ar(XLine.kr(<span class="num">20000</span>, <span class="num">2</span>, <span class="std">Seq</span>(<span class="num">20</span>, <span class="num">20</span>))) * <span class="num">0.5</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="CoinGate$.html" class="extype" name="de.sciss.synth.ugen.CoinGate">CoinGate</a>
+</p></span><span class="cmt"><p><a href="ClipNoise$.html" class="extype" name="de.sciss.synth.ugen.ClipNoise">ClipNoise</a></p></span><span class="cmt"><p><a href="RandSeed$.html" class="extype" name="de.sciss.synth.ugen.RandSeed">RandSeed</a></p></span><span class="cmt"><p><a href="TRand$.html" class="extype" name="de.sciss.synth.ugen.TRand">TRand</a></p></span><span class="cmt"><p><a href="Dust$.html" class="extype" name="de.sciss.synth.ugen.Dust">Dust</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>

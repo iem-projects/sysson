@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LocalOut - SysSon 0.8.0 API - de.sciss.synth.ugen.LocalOut</title>
-          <meta name="description" content="LocalOut - SysSon 0.8.0 API - de.sciss.synth.ugen.LocalOut" />
-          <meta name="keywords" content="LocalOut SysSon 0.8.0 API de.sciss.synth.ugen.LocalOut" />
+          <title>LocalOut - SysSon 0.11.0 API - de.sciss.synth.ugen.LocalOut</title>
+          <meta name="description" content="LocalOut - SysSon 0.11.0 API - de.sciss.synth.ugen.LocalOut" />
+          <meta name="keywords" content="LocalOut SysSon 0.11.0 API de.sciss.synth.ugen.LocalOut" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LocalOut$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LocalOut$.html" title="Go to companion">LocalOut</a></h1> <span class="permalink">
+        <h1><a href="LocalOut$.html" title="Go to companion">LocalOut</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LocalOut$.html" title="See companion">object LocalOut</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LocalOut" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,19 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that writes to buses that are local to the enclosing synth. These buses
+should have been defined by a <code>LocalIn</code> ugen. These behave like regular buses,
+but are more convenient for the implementation of a self contained effect that
+uses a feedback processing loop.</p><p>In a synth, there can be only each one control-rate and audio-rate <code>LocalIn</code> /
+<code>LocalOut</code> pair. The signal written to a <code>LocalOut</code> will not be read by the
+<code>LocalIn</code> until the next control block cycle, introducing a delay of
+<code>ControlDur</code> .</p><p>For more examples, see <code>LocalIn</code>.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>signal to be written to the synth-local bus. The
+                        signal's number of channels must be the same number of
+                        channels as were declared in the corresponding <code>LocalIn</code>
+                        .
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlDur$.html" class="extype" name="de.sciss.synth.ugen.ControlDur">ControlDur</a>
+</p></span><span class="cmt"><p><a href="Out$.html" class="extype" name="de.sciss.synth.ugen.Out">Out</a></p></span><span class="cmt"><p><a href="LocalIn$.html" class="extype" name="de.sciss.synth.ugen.LocalIn">LocalIn</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +103,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.LocalOut#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.LocalOut#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE):de.sciss.synth.ugen.LocalOut"></a>
       <a id="&lt;init&gt;:LocalOut"></a>
       <h4 class="signature">
@@ -103,7 +119,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>signal to be written to the synth-local bus. The
+                        signal's number of channels must be the same number of
+                        channels as were declared in the corresponding <code>LocalIn</code>
+                        .
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -261,7 +281,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LocalOut#in" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LocalOut#in" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="in:de.sciss.synth.GE"></a>
       <a id="in:GE"></a>
       <h4 class="signature">
@@ -277,7 +297,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">signal to be written to the synth-local bus.</p><div class="fullcomment"><div class="comment cmt"><p>signal to be written to the synth-local bus. The
+                        signal's number of channels must be the same number of
+                        channels as were declared in the corresponding <code>LocalIn</code>
+                        .
+</p></div></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

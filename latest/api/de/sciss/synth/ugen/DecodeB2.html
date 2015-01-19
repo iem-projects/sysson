@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>DecodeB2 - SysSon 0.8.0 API - de.sciss.synth.ugen.DecodeB2</title>
-          <meta name="description" content="DecodeB2 - SysSon 0.8.0 API - de.sciss.synth.ugen.DecodeB2" />
-          <meta name="keywords" content="DecodeB2 SysSon 0.8.0 API de.sciss.synth.ugen.DecodeB2" />
+          <title>DecodeB2 - SysSon 0.11.0 API - de.sciss.synth.ugen.DecodeB2</title>
+          <meta name="description" content="DecodeB2 - SysSon 0.11.0 API - de.sciss.synth.ugen.DecodeB2" />
+          <meta name="keywords" content="DecodeB2 SysSon 0.11.0 API de.sciss.synth.ugen.DecodeB2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="DecodeB2$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="DecodeB2$.html" title="Go to companion">DecodeB2</a></h1> <span class="permalink">
+        <h1><a href="DecodeB2$.html" title="Go to companion">DecodeB2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="DecodeB2$.html" title="See companion">object DecodeB2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.DecodeB2" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A two dimensional Ambisonics B-format decoding UGen. It assumes a set of
+speakers in a regular polygon. The output channels are in clockwise order. The
+position of the first speaker is specified by the <code>orient</code> argument.
+</p></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>the number of output channels to produce</p></dd><dt class="param">w</dt><dd class="cmt"><p>W (first) channel of B-format input signal</p></dd><dt class="param">x</dt><dd class="cmt"><p>X (second) channel of B-format input signal</p></dd><dt class="param">y</dt><dd class="cmt"><p>Y (third) channel of B-format input signal</p></dd><dt class="param">orient</dt><dd class="cmt"><p>orientation of the first channel. If zero, the first
+                        channel corresponds to the front vertex of the polygon.
+                        If the polygon does not have an edge at the front but a
+                        vertex, then an <code>orient</code> of 0.5 indicates that the first
+                        channel corresponds to the speaker left of the center.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PanB2$.html" class="extype" name="de.sciss.synth.ugen.PanB2">PanB2</a>
+</p></span><span class="cmt"><p><a href="PanB$.html" class="extype" name="de.sciss.synth.ugen.PanB">PanB</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +100,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.DecodeB2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.DecodeB2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,numChannels:Int,w:de.sciss.synth.GE,x:de.sciss.synth.GE,y:de.sciss.synth.GE,orient:de.sciss.synth.GE):de.sciss.synth.ugen.DecodeB2"></a>
       <a id="&lt;init&gt;:DecodeB2"></a>
       <h4 class="signature">
@@ -103,7 +116,12 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>the number of output channels to produce</p></dd><dt class="param">w</dt><dd class="cmt"><p>W (first) channel of B-format input signal</p></dd><dt class="param">x</dt><dd class="cmt"><p>X (second) channel of B-format input signal</p></dd><dt class="param">y</dt><dd class="cmt"><p>Y (third) channel of B-format input signal</p></dd><dt class="param">orient</dt><dd class="cmt"><p>orientation of the first channel. If zero, the first
+                        channel corresponds to the front vertex of the polygon.
+                        If the polygon does not have an edge at the front but a
+                        vertex, then an <code>orient</code> of 0.5 indicates that the first
+                        channel corresponds to the speaker left of the center.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -401,8 +419,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.synth.ugen.DecodeB2#orient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">the number of output channels to produce</p>
+    </li><li name="de.sciss.synth.ugen.DecodeB2#orient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="orient:de.sciss.synth.GE"></a>
       <a id="orient:GE"></a>
       <h4 class="signature">
@@ -418,7 +436,12 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">orientation of the first channel.</p><div class="fullcomment"><div class="comment cmt"><p>orientation of the first channel. If zero, the first
+                        channel corresponds to the front vertex of the polygon.
+                        If the polygon does not have an edge at the front but a
+                        vertex, then an <code>orient</code> of 0.5 indicates that the first
+                        channel corresponds to the speaker left of the center.
+</p></div></div>
     </li><li name="de.sciss.synth.ugen.DecodeB2#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rate:de.sciss.synth.Rate"></a>
       <a id="rate:Rate"></a>
@@ -503,7 +526,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">W (first) channel of B-format input signal</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -589,7 +612,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">X (second) channel of B-format input signal</p>
     </li><li name="de.sciss.synth.ugen.DecodeB2#y" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="y:de.sciss.synth.GE"></a>
       <a id="y:GE"></a>
@@ -606,7 +629,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Y (third) channel of B-format input signal</p>
     </li></ol>
             </div>
 

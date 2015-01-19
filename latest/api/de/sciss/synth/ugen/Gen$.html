@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Gen - SysSon 0.8.0 API - de.sciss.synth.ugen.Gen</title>
-          <meta name="description" content="Gen - SysSon 0.8.0 API - de.sciss.synth.ugen.Gen" />
-          <meta name="keywords" content="Gen SysSon 0.8.0 API de.sciss.synth.ugen.Gen" />
+          <title>Gen - SysSon 0.11.0 API - de.sciss.synth.ugen.Gen</title>
+          <meta name="description" content="Gen - SysSon 0.11.0 API - de.sciss.synth.ugen.Gen" />
+          <meta name="keywords" content="Gen SysSon 0.11.0 API de.sciss.synth.ugen.Gen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,9 @@
       <div id="definition">
         <img src="../../../../lib/object_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1>Gen</h1> <span class="permalink">
+        <h1>Gen</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Gen$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -98,10 +100,27 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Gen$$Config.html"><span class="name">Config</span></a><span class="params">(<span name="resources">resources: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="forceOverwrite">forceOverwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="outDir">outDir: <span class="extype" name="de.sciss.file.File">File</span> = <span class="symbol"><span class="name"><a href="../../../package.html">new File(&quot;out&quot;)</a></span></span></span>, <span name="inFiles">inFiles: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="de.sciss.file.File">File</span>] = <span class="symbol">Vec.empty</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Gen$$Config.html"><span class="name">Config</span></a><span class="params">(<span name="input">input: <a href="Gen$$Input.html" class="extype" name="de.sciss.synth.ugen.Gen.Input">Input</a> = <span class="symbol"><span class="name"><a href="Gen$$CustomUGens$.html">CustomUGens</a></span></span></span>, <span name="forceOverwrite">forceOverwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="outDir">outDir: <span class="extype" name="de.sciss.file.File">File</span> = <span class="symbol"><span class="name"><a href="../../../package.html">new File(&quot;out&quot;)</a></span></span></span>, <span name="inFiles">inFiles: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="de.sciss.file.File">File</span>] = <span class="symbol">Vec.empty</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Gen$@ConfigextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ugen.Gen.Input" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="InputextendsAnyRef"></a>
+      <a id="Input:Input"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Gen$$Input.html"><span class="name">Input</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Gen$@InputextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -164,6 +183,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Gen.CustomUGens" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CustomUGens"></a>
+      <a id="CustomUGens:CustomUGens"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Gen$$CustomUGens$.html"><span class="name">CustomUGens</span></a><span class="result"> extends <a href="Gen$$Input.html" class="extype" name="de.sciss.synth.ugen.Gen.Input">Input</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Gen$@CustomUGens" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ugen.Gen.StandardUGens" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StandardUGens"></a>
+      <a id="StandardUGens:StandardUGens"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Gen$$StandardUGens$.html"><span class="name">StandardUGens</span></a><span class="result"> extends <a href="Gen$$Input.html" class="extype" name="de.sciss.synth.ugen.Gen.Input">Input</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Gen$@StandardUGens" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ugen.Gen.ThirdPartyUGens" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ThirdPartyUGens"></a>
+      <a id="ThirdPartyUGens:ThirdPartyUGens"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Gen$$ThirdPartyUGens$.html"><span class="name">ThirdPartyUGens</span></a><span class="result"> extends <a href="Gen$$Input.html" class="extype" name="de.sciss.synth.ugen.Gen.Input">Input</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Gen$@ThirdPartyUGens" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.App#args" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="args:Array[String]"></a>
       <a id="args:Array[String]"></a>

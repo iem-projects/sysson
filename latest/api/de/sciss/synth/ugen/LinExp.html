@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LinExp - SysSon 0.8.0 API - de.sciss.synth.ugen.LinExp</title>
-          <meta name="description" content="LinExp - SysSon 0.8.0 API - de.sciss.synth.ugen.LinExp" />
-          <meta name="keywords" content="LinExp SysSon 0.8.0 API de.sciss.synth.ugen.LinExp" />
+          <title>LinExp - SysSon 0.11.0 API - de.sciss.synth.ugen.LinExp</title>
+          <meta name="description" content="LinExp - SysSon 0.11.0 API - de.sciss.synth.ugen.LinExp" />
+          <meta name="keywords" content="LinExp SysSon 0.11.0 API de.sciss.synth.ugen.LinExp" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LinExp$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LinExp$.html" title="Go to companion">LinExp</a></h1> <span class="permalink">
+        <h1><a href="LinExp$.html" title="Go to companion">LinExp</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LinExp$.html" title="See companion">object LinExp</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LinExp" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -50,7 +54,8 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen which maps a linear range to an exponential range. The equivalent
 formula is <code>(dstHi / dstLo).pow((in - srcLo) / (srcHi - srcLo)) * dstLo</code> .</p><p><b>Note</b>: No clipping is performed. If the input signal exceeds the input
 range, the output will also exceed its range.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Clip$.html" class="extype" name="de.sciss.synth.ugen.Clip">Clip</a>
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to convert</p></dd><dt class="param">srcLo</dt><dd class="cmt"><p>lower limit of input range</p></dd><dt class="param">srcHi</dt><dd class="cmt"><p>upper limit of input range</p></dd><dt class="param">dstLo</dt><dd class="cmt"><p>lower limit of output range</p></dd><dt class="param">dstHi</dt><dd class="cmt"><p>upper limit of output range
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Clip$.html" class="extype" name="de.sciss.synth.ugen.Clip">Clip</a>
 </p></span><span class="cmt"><p><a href="LinExp$.html" class="extype" name="de.sciss.synth.ugen.LinExp">LinExp</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -91,7 +96,7 @@ range, the output will also exceed its range.
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.LinExp#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.LinExp#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.MaybeRate,in:de.sciss.synth.GE,srcLo:de.sciss.synth.GE,srcHi:de.sciss.synth.GE,dstLo:de.sciss.synth.GE,dstHi:de.sciss.synth.GE):de.sciss.synth.ugen.LinExp"></a>
       <a id="&lt;init&gt;:LinExp"></a>
       <h4 class="signature">
@@ -107,7 +112,8 @@ range, the output will also exceed its range.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to convert</p></dd><dt class="param">srcLo</dt><dd class="cmt"><p>lower limit of input range</p></dd><dt class="param">srcHi</dt><dd class="cmt"><p>upper limit of input range</p></dd><dt class="param">dstLo</dt><dd class="cmt"><p>lower limit of output range</p></dd><dt class="param">dstHi</dt><dd class="cmt"><p>upper limit of output range
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -224,7 +230,8 @@ range, the output will also exceed its range.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">upper limit of output range
+</p>
     </li><li name="de.sciss.synth.ugen.LinExp#dstLo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="dstLo:de.sciss.synth.GE"></a>
       <a id="dstLo:GE"></a>
@@ -241,7 +248,7 @@ range, the output will also exceed its range.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">lower limit of output range</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -315,7 +322,7 @@ range, the output will also exceed its range.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">input signal to convert</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -490,7 +497,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">upper limit of input range</p>
     </li><li name="de.sciss.synth.ugen.LinExp#srcLo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="srcLo:de.sciss.synth.GE"></a>
       <a id="srcLo:GE"></a>
@@ -507,7 +514,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">lower limit of input range</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

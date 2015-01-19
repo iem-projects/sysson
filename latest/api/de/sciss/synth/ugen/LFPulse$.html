@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LFPulse - SysSon 0.8.0 API - de.sciss.synth.ugen.LFPulse</title>
-          <meta name="description" content="LFPulse - SysSon 0.8.0 API - de.sciss.synth.ugen.LFPulse" />
-          <meta name="keywords" content="LFPulse SysSon 0.8.0 API de.sciss.synth.ugen.LFPulse" />
+          <title>LFPulse - SysSon 0.11.0 API - de.sciss.synth.ugen.LFPulse</title>
+          <meta name="description" content="LFPulse - SysSon 0.11.0 API - de.sciss.synth.ugen.LFPulse" />
+          <meta name="keywords" content="LFPulse SysSon 0.11.0 API de.sciss.synth.ugen.LFPulse" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LFPulse.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LFPulse.html" title="Go to companion">LFPulse</a></h1> <span class="permalink">
+        <h1><a href="LFPulse.html" title="Go to companion">LFPulse</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LFPulse.html" title="See companion">class LFPulse</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LFPulse$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -48,8 +52,10 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A non-band-limited pulse oscillator UGen. Outputs a high value of one and a low
-value of zero.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Pulse$.html" class="extype" name="de.sciss.synth.ugen.Pulse">Pulse</a>
+value of zero.</p><h5>Examples</h5><pre><span class="cmt">// modulating frequency</span>
+play { LFPulse.ar(XLine.kr(<span class="num">1</span>, <span class="num">200</span>, <span class="num">10</span>), <span class="num">0</span>, <span class="num">0.2</span>) * <span class="num">0.1</span> }</pre><pre><span class="cmt">// modulating amplitude</span>
+play { LFPulse.kr(XLine.kr(<span class="num">1</span>, <span class="num">200</span>, <span class="num">10</span>), <span class="num">0</span>, <span class="num">0.2</span>) * SinOsc.ar(<span class="num">440</span>) * <span class="num">0.1</span> }</pre><pre><span class="cmt">// used as both oscillator and LFO</span>
+play { LFPulse.ar(LFPulse.kr(<span class="num">3</span>, <span class="num">0</span>, <span class="num">0.3</span>).madd(<span class="num">200</span>, <span class="num">200</span>), <span class="num">0</span>, <span class="num">0.2</span>) * <span class="num">0.1</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Pulse$.html" class="extype" name="de.sciss.synth.ugen.Pulse">Pulse</a>
 </p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>

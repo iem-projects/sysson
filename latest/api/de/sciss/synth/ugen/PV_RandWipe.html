@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PV_RandWipe - SysSon 0.8.0 API - de.sciss.synth.ugen.PV_RandWipe</title>
-          <meta name="description" content="PV RandWipe - SysSon 0.8.0 API - de.sciss.synth.ugen.PV RandWipe" />
-          <meta name="keywords" content="PV RandWipe SysSon 0.8.0 API de.sciss.synth.ugen.PV RandWipe" />
+          <title>PV_RandWipe - SysSon 0.11.0 API - de.sciss.synth.ugen.PV_RandWipe</title>
+          <meta name="description" content="PV RandWipe - SysSon 0.11.0 API - de.sciss.synth.ugen.PV RandWipe" />
+          <meta name="keywords" content="PV RandWipe SysSon 0.11.0 API de.sciss.synth.ugen.PV RandWipe" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,9 +28,13 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../lib/class_big.png" />
+        <a href="PV_RandWipe$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1>PV_RandWipe</h1> <span class="permalink">
+        <h1><a href="PV_RandWipe$.html" title="Go to companion">PV_RandWipe</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PV_RandWipe$.html" title="See companion">object PV_RandWipe</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PV_RandWipe" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -59,7 +63,7 @@ randomly from them according to a given probability.
                         determining for each bin whether it will be taken from
                         input A or B. A trigger occurs when passing from
                         non-positive to positive value.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="de.sciss.synth.ugen.PV_BinWipe$">PV_BinWipe</span>
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PV_BinWipe$.html" class="extype" name="de.sciss.synth.ugen.PV_BinWipe">PV_BinWipe</a>
 </p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../ControlRated.html" class="extype" name="de.sciss.synth.ControlRated">ControlRated</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -619,7 +623,9 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">the crossfader position from 0.</p><div class="fullcomment"><div class="comment cmt"><p>the crossfader position from 0.0 (all bins are taken
+      <p class="shortcomment cmt">the crossfader position from 0.0 (all bins are taken
+                        from <code>chainA</code> ) to 1.0 (all bins are taken from <code>chainB</code>
+                        ).</p><div class="fullcomment"><div class="comment cmt"><p>the crossfader position from 0.0 (all bins are taken
                         from <code>chainA</code> ) to 1.0 (all bins are taken from <code>chainB</code>
                         ). For instance, if wipe is 0.5, half of the bins are
                         taken from either input. The decision whether a bin is

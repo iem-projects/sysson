@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>InFeedback - SysSon 0.8.0 API - de.sciss.synth.ugen.InFeedback</title>
-          <meta name="description" content="InFeedback - SysSon 0.8.0 API - de.sciss.synth.ugen.InFeedback" />
-          <meta name="keywords" content="InFeedback SysSon 0.8.0 API de.sciss.synth.ugen.InFeedback" />
+          <title>InFeedback - SysSon 0.11.0 API - de.sciss.synth.ugen.InFeedback</title>
+          <meta name="description" content="InFeedback - SysSon 0.11.0 API - de.sciss.synth.ugen.InFeedback" />
+          <meta name="keywords" content="InFeedback SysSon 0.11.0 API de.sciss.synth.ugen.InFeedback" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="InFeedback.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="InFeedback.html" title="Go to companion">InFeedback</a></h1> <span class="permalink">
+        <h1><a href="InFeedback.html" title="Go to companion">InFeedback</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="InFeedback.html" title="See companion">class InFeedback</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.InFeedback$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -63,8 +67,29 @@ current node order. This can be achieved with <code>InFeedback</code> . It reads
 previous cycle, and hence introduces a <b>delay</b> of one block size, which by
 default is 64 sample frames (equal to about 1.45 ms at 44.1 kHz sample rate).</p><p><b>Note</b> that no delay occurs when the bus contains a signal which has been
 written already in the current cycle. The delay is only introduced when no
-present signal exists.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlDur$.html" class="extype" name="de.sciss.synth.ugen.ControlDur">ControlDur</a>
+present signal exists.</p><h5>Examples</h5><pre><span class="cmt">// feedback frequency modulation</span>
+play {
+  <span class="kw">val</span> in = InFeedback.ar(<span class="num">0</span>) <span class="cmt">// read output</span>
+  SinOsc.ar(in * <span class="num">1300</span> + <span class="num">300</span>) * <span class="num">0.4</span>
+}</pre><pre><span class="cmt">// resonator</span>
+<span class="kw">val</span> bus = Bus.audio(s) <span class="cmt">// internal feedback bus</span>
+
+<span class="kw">val</span> x = play {
+  <span class="kw">val</span> imp  = Impulse.ar(<span class="num">1</span>)
+  <span class="kw">val</span> in   = InFeedback.ar(bus.index)
+  <span class="kw">val</span> feed = imp + in * <span class="num">0.995</span>
+  <span class="cmt">// must subtract block-size for correct tuning</span>
+  <span class="cmt">// (try removing the ControlDur to here the pitch change)</span>
+  <span class="kw">val</span> time = <span class="num">440.</span>reciprocal - ControlDur.ir
+  <span class="kw">val</span> dly  = DelayC.ar(feed, time, time)
+  Out.ar(bus.index, dly)
+
+  <span class="cmt">// alternate between feedback and reference pitch</span>
+  <span class="kw">val</span> comp = <span class="std">Seq</span>(dly, SinOsc.ar(<span class="num">440</span>) * <span class="num">0.2</span>): GE
+  comp * LFPulse.kr(<span class="num">1</span>, <span class="std">Seq</span>(<span class="num">0.0</span>, <span class="num">0.5</span>))
+}
+
+x.free(); bus.free()  <span class="cmt">// do not forget to free the bus eventually</span></pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlDur$.html" class="extype" name="de.sciss.synth.ugen.ControlDur">ControlDur</a>
 </p></span><span class="cmt"><p><a href="LocalIn$.html" class="extype" name="de.sciss.synth.ugen.LocalIn">LocalIn</a></p></span><span class="cmt"><p><a href="In$.html" class="extype" name="de.sciss.synth.ugen.In">In</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>

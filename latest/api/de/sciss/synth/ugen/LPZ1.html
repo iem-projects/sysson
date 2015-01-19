@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LPZ1 - SysSon 0.8.0 API - de.sciss.synth.ugen.LPZ1</title>
-          <meta name="description" content="LPZ1 - SysSon 0.8.0 API - de.sciss.synth.ugen.LPZ1" />
-          <meta name="keywords" content="LPZ1 SysSon 0.8.0 API de.sciss.synth.ugen.LPZ1" />
+          <title>LPZ1 - SysSon 0.11.0 API - de.sciss.synth.ugen.LPZ1</title>
+          <meta name="description" content="LPZ1 - SysSon 0.11.0 API - de.sciss.synth.ugen.LPZ1" />
+          <meta name="keywords" content="LPZ1 SysSon 0.11.0 API de.sciss.synth.ugen.LPZ1" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LPZ1$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LPZ1$.html" title="Go to companion">LPZ1</a></h1> <span class="permalink">
+        <h1><a href="LPZ1$.html" title="Go to companion">LPZ1</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LPZ1$.html" title="See companion">object LPZ1</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LPZ1" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,9 +51,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>two point average filter UGen. Implements the formula :</p><pre>out(i) = <span class="num">0.5</span> * (in(i) + in(i-<span class="num">1</span>))</pre></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be processed
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Integrator$.html" class="extype" name="de.sciss.synth.ugen.Integrator">Integrator</a>
-</p></span><span class="cmt"><p><a href="HPZ1$.html" class="extype" name="de.sciss.synth.ugen.HPZ1">HPZ1</a></p></span><span class="cmt"><p><a href="OnePole$.html" class="extype" name="de.sciss.synth.ugen.OnePole">OnePole</a></p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>two point average filter UGen. Implements the formula :</p><pre>out(i) = <span class="num">0.5</span> * (in(i) + in(i-<span class="num">1</span>))</pre></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Delay1$.html" class="extype" name="de.sciss.synth.ugen.Delay1">Delay1</a>
+</p></span><span class="cmt"><p><a href="Integrator$.html" class="extype" name="de.sciss.synth.ugen.Integrator">Integrator</a></p></span><span class="cmt"><p><a href="LPZ2$.html" class="extype" name="de.sciss.synth.ugen.LPZ2">LPZ2</a></p></span><span class="cmt"><p><a href="HPZ1$.html" class="extype" name="de.sciss.synth.ugen.HPZ1">HPZ1</a></p></span><span class="cmt"><p><a href="OnePole$.html" class="extype" name="de.sciss.synth.ugen.OnePole">OnePole</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -105,7 +109,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be processed
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -280,7 +284,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">input signal to be processed
+      <p class="shortcomment cmt">input signal to be filtered
 </p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>

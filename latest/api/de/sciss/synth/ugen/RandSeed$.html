@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>RandSeed - SysSon 0.8.0 API - de.sciss.synth.ugen.RandSeed</title>
-          <meta name="description" content="RandSeed - SysSon 0.8.0 API - de.sciss.synth.ugen.RandSeed" />
-          <meta name="keywords" content="RandSeed SysSon 0.8.0 API de.sciss.synth.ugen.RandSeed" />
+          <title>RandSeed - SysSon 0.11.0 API - de.sciss.synth.ugen.RandSeed</title>
+          <meta name="description" content="RandSeed - SysSon 0.11.0 API - de.sciss.synth.ugen.RandSeed" />
+          <meta name="keywords" content="RandSeed SysSon 0.11.0 API de.sciss.synth.ugen.RandSeed" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="RandSeed.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="RandSeed.html" title="Go to companion">RandSeed</a></h1> <span class="permalink">
+        <h1><a href="RandSeed.html" title="Go to companion">RandSeed</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="RandSeed.html" title="See companion">class RandSeed</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.RandSeed$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that resets the seed of the synth's random number generator upon
+receiving a trigger. All synths that use the same random number generator
+reproduce the same sequence of numbers again. The generator can be set using the
+<code>RandID</code> UGen.</p><h5>Examples</h5><pre><span class="cmt">// reset seed via mouse button</span>
+play {
+  <span class="kw">val</span> freq = TIRand.kr(<span class="num">40</span>, <span class="num">100</span>, Impulse.kr(<span class="num">4</span>)).midicps
+  RandSeed.kr(MouseButton.kr(lag = <span class="num">0</span>) + Impulse.kr(<span class="num">0</span>), <span class="num">234</span>)
+  SinOsc.ar(freq) * <span class="num">0.2</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="WhiteNoise$.html" class="extype" name="de.sciss.synth.ugen.WhiteNoise">WhiteNoise</a>
+</p></span><span class="cmt"><p><a href="IRand$.html" class="extype" name="de.sciss.synth.ugen.IRand">IRand</a></p></span><span class="cmt"><p><a href="RandID$.html" class="extype" name="de.sciss.synth.ugen.RandID">RandID</a></p></span><span class="cmt"><p><a href="Rand$.html" class="extype" name="de.sciss.synth.ugen.Rand">Rand</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -275,7 +288,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.RandSeed#ir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.RandSeed#ir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ir(trig:de.sciss.synth.GE,seed:de.sciss.synth.GE):de.sciss.synth.ugen.RandSeed"></a>
       <a id="ir(GE,GE):RandSeed"></a>
       <h4 class="signature">
@@ -291,7 +304,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger that causes the seed to be set</p></dd><dt class="param">seed</dt><dd class="cmt"><p>the seed for the random number generator, read at the
+                        moment the trigger arrives.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.RandSeed#ir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ir:de.sciss.synth.ugen.RandSeed"></a>
       <a id="ir:RandSeed"></a>
@@ -326,7 +341,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.RandSeed#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.RandSeed#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(trig:de.sciss.synth.GE,seed:de.sciss.synth.GE):de.sciss.synth.ugen.RandSeed"></a>
       <a id="kr(GE,GE):RandSeed"></a>
       <h4 class="signature">
@@ -342,7 +357,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger that causes the seed to be set</p></dd><dt class="param">seed</dt><dd class="cmt"><p>the seed for the random number generator, read at the
+                        moment the trigger arrives.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.RandSeed#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.RandSeed"></a>
       <a id="kr:RandSeed"></a>

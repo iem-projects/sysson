@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>KeyState - SysSon 0.8.0 API - de.sciss.synth.ugen.KeyState</title>
-          <meta name="description" content="KeyState - SysSon 0.8.0 API - de.sciss.synth.ugen.KeyState" />
-          <meta name="keywords" content="KeyState SysSon 0.8.0 API de.sciss.synth.ugen.KeyState" />
+          <title>KeyState - SysSon 0.11.0 API - de.sciss.synth.ugen.KeyState</title>
+          <meta name="description" content="KeyState - SysSon 0.11.0 API - de.sciss.synth.ugen.KeyState" />
+          <meta name="keywords" content="KeyState SysSon 0.11.0 API de.sciss.synth.ugen.KeyState" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="KeyState.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="KeyState.html" title="Go to companion">KeyState</a></h1> <span class="permalink">
+        <h1><a href="KeyState.html" title="Go to companion">KeyState</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="KeyState.html" title="See companion">class KeyState</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.KeyState$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,24 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that detects a specific keyboard stroke. When the given key is not
+pressed, the <code>lo</code> value is output, while the key is pressed the <code>hi</code> value is
+output. If <code>lag</code> is greater than zero, a <code>Lag</code> -type operation is applied for a
+smoother transition between <code>lo</code> and <code>hi</code> .</p><h5>Examples</h5><pre><span class="cmt">// determine codes</span>
+play {
+  <span class="kw">val</span> code = Phasor.kr(lo = <span class="num">0</span>, hi = <span class="num">127</span>)
+  <span class="kw">val</span> k    = KeyState.kr(code, lag = <span class="num">0</span>)
+  <span class="kw">val</span> x    = Gate.kr(code, k)
+  <span class="kw">val</span> ch   = x sig_!= Delay1.kr(x)
+  <span class="cmt">// when a code change is detected, print it</span>
+  x.poll(ch, <span class="lit">"code"</span>)
+  ()
+}</pre><pre><span class="cmt">// gate sound using the 'A' key</span>
+play {
+  <span class="cmt">// on Linux, key-code 38 denotes the 'A' key</span>
+  SinOsc.ar(<span class="num">800</span>) * KeyState.kr(<span class="num">38</span>, <span class="num">0</span>, <span class="num">0.1</span>)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="MouseButton$.html" class="extype" name="de.sciss.synth.ugen.MouseButton">MouseButton</a>
+</p></span><span class="cmt"><p><a href="MouseY$.html" class="extype" name="de.sciss.synth.ugen.MouseY">MouseY</a></p></span><span class="cmt"><p><a href="MouseX$.html" class="extype" name="de.sciss.synth.ugen.MouseX">MouseX</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -292,7 +313,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.KeyState#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.KeyState#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(keyCode:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,lag:de.sciss.synth.GE):de.sciss.synth.ugen.KeyState"></a>
       <a id="kr(GE,GE,GE,GE):KeyState"></a>
       <h4 class="signature">
@@ -308,7 +329,12 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">keyCode</dt><dd class="cmt"><p>hardware code for the key to monitor. This is likely
+                        platform dependent. For example, on Linux, key-codes 24
+                        to 29 correspond to 'Q', 'W', 'E', 'R', 'T', 'Y'.</p></dd><dt class="param">lo</dt><dd class="cmt"><p>value output when the currently pressed does not match
+                        the code</p></dd><dt class="param">hi</dt><dd class="cmt"><p>value output when the currently pressed does match the
+                        code</p></dd><dt class="param">lag</dt><dd class="cmt"><p>60 dB lag time in seconds.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LFDClipNoise - SysSon 0.8.0 API - de.sciss.synth.ugen.LFDClipNoise</title>
-          <meta name="description" content="LFDClipNoise - SysSon 0.8.0 API - de.sciss.synth.ugen.LFDClipNoise" />
-          <meta name="keywords" content="LFDClipNoise SysSon 0.8.0 API de.sciss.synth.ugen.LFDClipNoise" />
+          <title>LFDClipNoise - SysSon 0.11.0 API - de.sciss.synth.ugen.LFDClipNoise</title>
+          <meta name="description" content="LFDClipNoise - SysSon 0.11.0 API - de.sciss.synth.ugen.LFDClipNoise" />
+          <meta name="keywords" content="LFDClipNoise SysSon 0.11.0 API de.sciss.synth.ugen.LFDClipNoise" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LFDClipNoise.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LFDClipNoise.html" title="Go to companion">LFDClipNoise</a></h1> <span class="permalink">
+        <h1><a href="LFDClipNoise.html" title="Go to companion">LFDClipNoise</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LFDClipNoise.html" title="See companion">class LFDClipNoise</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LFDClipNoise$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,17 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that randomly generates the values -1 or +1 at a rate given by the
+nearest integer division of the sample rate by the frequency argument. The
+difference to <code>LFClipNoise</code> is that this UGen does not quantize time and
+recovers fast from frequency input changes.</p><h5>Examples</h5><pre><span class="cmt">// generator</span>
+play { LFDClipNoise.ar(<span class="num">500</span>) * <span class="num">0.2</span> }</pre><pre><span class="cmt">// random panning</span>
+play {
+  <span class="kw">val</span> pos = LFDClipNoise.ar(<span class="num">4</span>)
+  Pan2.ar(PinkNoise.ar, pos)
+}</pre><pre><span class="cmt">// modulate frequency</span>
+play { LFDClipNoise.ar(XLine.kr(<span class="num">100</span>, <span class="num">10000</span>, <span class="num">20</span>)) * <span class="num">0.2</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GrayNoise$.html" class="extype" name="de.sciss.synth.ugen.GrayNoise">GrayNoise</a>
+</p></span><span class="cmt"><p><a href="Schmidt$.html" class="extype" name="de.sciss.synth.ugen.Schmidt">Schmidt</a></p></span><span class="cmt"><p><a href="CoinGate$.html" class="extype" name="de.sciss.synth.ugen.CoinGate">CoinGate</a></p></span><span class="cmt"><p><a href="LFNoise1$.html" class="extype" name="de.sciss.synth.ugen.LFNoise1">LFNoise1</a></p></span><span class="cmt"><p><a href="LFNoise0$.html" class="extype" name="de.sciss.synth.ugen.LFNoise0">LFNoise0</a></p></span><span class="cmt"><p><a href="LFClipNoise$.html" class="extype" name="de.sciss.synth.ugen.LFClipNoise">LFClipNoise</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +158,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFDClipNoise#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFDClipNoise#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(freq:de.sciss.synth.GE):de.sciss.synth.ugen.LFDClipNoise"></a>
       <a id="ar(GE):LFDClipNoise"></a>
       <h4 class="signature">
@@ -160,7 +174,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>rate at which to generate random values.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFDClipNoise#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.LFDClipNoise"></a>
       <a id="ar:LFDClipNoise"></a>
@@ -326,7 +341,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFDClipNoise#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFDClipNoise#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(freq:de.sciss.synth.GE):de.sciss.synth.ugen.LFDClipNoise"></a>
       <a id="kr(GE):LFDClipNoise"></a>
       <h4 class="signature">
@@ -342,7 +357,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>rate at which to generate random values.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFDClipNoise#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.LFDClipNoise"></a>
       <a id="kr:LFDClipNoise"></a>

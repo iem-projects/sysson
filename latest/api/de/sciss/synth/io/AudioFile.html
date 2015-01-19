@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>AudioFile - SysSon 0.8.0 API - de.sciss.synth.io.AudioFile</title>
-          <meta name="description" content="AudioFile - SysSon 0.8.0 API - de.sciss.synth.io.AudioFile" />
-          <meta name="keywords" content="AudioFile SysSon 0.8.0 API de.sciss.synth.io.AudioFile" />
+          <title>AudioFile - SysSon 0.11.0 API - de.sciss.synth.io.AudioFile</title>
+          <meta name="description" content="AudioFile - SysSon 0.11.0 API - de.sciss.synth.io.AudioFile" />
+          <meta name="keywords" content="AudioFile SysSon 0.11.0 API de.sciss.synth.io.AudioFile" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="AudioFile$.html" title="Go to companion"><img src="../../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.io">io</a></p>
-        <h1><a href="AudioFile$.html" title="Go to companion">AudioFile</a></h1> <span class="permalink">
+        <h1><a href="AudioFile$.html" title="Go to companion">AudioFile</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="AudioFile$.html" title="See companion">object AudioFile</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.io">package io</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -136,7 +140,7 @@ throw any exceptions but simply ignores any errors.
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if an error occurs during buffer flush
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if an error occurs during buffer flush
                     or closing the file.
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#copyTo" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
@@ -172,7 +176,7 @@ Both files must have the same number of channels.
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if a reador writer error occurs
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a read or writer error occurs
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#file" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="file:Option[java.io.File]"></a>
@@ -214,7 +218,7 @@ this will return <code>None</code>.
     </span>
       <p class="shortcomment cmt">Flushes pending buffer content, and
 updates the sound file header information
-(i.</p><div class="fullcomment"><div class="comment cmt"><p>Flushes pending buffer content, and
+(i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Flushes pending buffer content, and
 updates the sound file header information
 (i.e. numFrames fields). Usually you
 will not have to call this method directly,
@@ -295,7 +299,7 @@ in the file.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the number of sample frames
          in the file. includes pending
          buffer content
-</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>this is never thrown
+</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> this is never thrown
                       but declared as of the <code>InterleavedStreamFile</code>
                       interface
 </p></span></dd></dl></div>
@@ -319,7 +323,7 @@ in the file.
 </p><div class="fullcomment"><div class="comment cmt"><p>Returns the current file pointer in sample frames
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the sample frame index which is the off
            for the next reader or writer operation.
-</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>when the position cannot be queried
+</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> when the position cannot be queried
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#read" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="read(data:de.sciss.synth.io.Frames,off:Int,len:Int):de.sciss.synth.io.AudioFile"></a>
@@ -339,8 +343,8 @@ in the file.
     </span>
       <p class="shortcomment cmt">Reads sample frames from the current position
 </p><div class="fullcomment"><div class="comment cmt"><p>Reads sample frames from the current position
-</p></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>buffer to hold the frames reader from harddisc.
-              the samples will be deinterleaved such that
+</p></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>buffer to hold the frames reader from hard-disc.
+              the samples will be de-interleaved such that
               data[0][] holds the first channel, data[1][]
               holds the second channel etc.
               ; it is allowed to have null arrays in the data
@@ -354,7 +358,7 @@ in the file.
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if a reader error or end-of-file occurs.
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a reader error or end-of-file occurs.
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#seek" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="seek(frame:Long):de.sciss.synth.io.AudioFile"></a>
@@ -383,7 +387,7 @@ frame.
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>when a seek error occurs or you try to
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> when a seek error occurs or you try to
                     seek past the file's end.
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#spec" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
@@ -420,8 +424,8 @@ frame.
       </a>
     </span>
       <p class="shortcomment cmt">Writes sample frames to the file starting at the current position.</p><div class="fullcomment"><div class="comment cmt"><p>Writes sample frames to the file starting at the current position.
-</p></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>buffer holding the frames to writer to harddisc.
-              the samples must be deinterleaved such that
+</p></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>buffer holding the frames to writer to hard-disc.
+              the samples must be de-interleaved such that
               data[0][] holds the first channel, data[1][]
               holds the second channel etc.</p></dd><dt class="param">off</dt><dd class="cmt"><p>off in the buffer in sample frames, such
              that he first frame of the first channel will
@@ -432,7 +436,7 @@ frame.
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if a writer error occurs.
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a writer error occurs.
 </p></span></dd></dl></div>
     </li></ol>
             </div>

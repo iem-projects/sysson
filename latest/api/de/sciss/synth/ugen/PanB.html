@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PanB - SysSon 0.8.0 API - de.sciss.synth.ugen.PanB</title>
-          <meta name="description" content="PanB - SysSon 0.8.0 API - de.sciss.synth.ugen.PanB" />
-          <meta name="keywords" content="PanB SysSon 0.8.0 API de.sciss.synth.ugen.PanB" />
+          <title>PanB - SysSon 0.11.0 API - de.sciss.synth.ugen.PanB</title>
+          <meta name="description" content="PanB - SysSon 0.11.0 API - de.sciss.synth.ugen.PanB" />
+          <meta name="keywords" content="PanB SysSon 0.11.0 API de.sciss.synth.ugen.PanB" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PanB$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PanB$.html" title="Go to companion">PanB</a></h1> <span class="permalink">
+        <h1><a href="PanB$.html" title="Go to companion">PanB</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PanB$.html" title="See companion">object PanB</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PanB" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An Ambisonics B-format encoding UGen. B-format is the name for first order
+Ambisonics which has four channels W, X, Y, Z. By omitting the elevation
+control, we get a two dimensional planar encoded signal consisting only of the X
+and Y channels.</p><p>Note that unlike <code>PanB2</code>, azimuth is in radians.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>(monophonic) input signal to be encoded</p></dd><dt class="param">azimuth</dt><dd class="cmt"><p>position around the circle in radians. -Pi/+Pi is
+                        behind, -Pi/2 is left, 0 is front, +Pi/2 is right.</p></dd><dt class="param">elevation</dt><dd class="cmt"><p>elevation in radians, from -Pi/2 (bottom) to +Pi/2 (top)</p></dd><dt class="param">level</dt><dd class="cmt"><p>additional gain control
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DecodeB2$.html" class="extype" name="de.sciss.synth.ugen.DecodeB2">DecodeB2</a>
+</p></span><span class="cmt"><p><a href="PanB2$.html" class="extype" name="de.sciss.synth.ugen.PanB2">PanB2</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +98,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.PanB#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.PanB#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE,azimuth:de.sciss.synth.GE,elevation:de.sciss.synth.GE,level:de.sciss.synth.GE):de.sciss.synth.ugen.PanB"></a>
       <a id="&lt;init&gt;:PanB"></a>
       <h4 class="signature">
@@ -103,7 +114,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>(monophonic) input signal to be encoded</p></dd><dt class="param">azimuth</dt><dd class="cmt"><p>position around the circle in radians. -Pi/+Pi is
+                        behind, -Pi/2 is left, 0 is front, +Pi/2 is right.</p></dd><dt class="param">elevation</dt><dd class="cmt"><p>elevation in radians, from -Pi/2 (bottom) to +Pi/2 (top)</p></dd><dt class="param">level</dt><dd class="cmt"><p>additional gain control
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -181,7 +194,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PanB#azimuth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PanB#azimuth" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="azimuth:de.sciss.synth.GE"></a>
       <a id="azimuth:GE"></a>
       <h4 class="signature">
@@ -197,7 +210,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">position around the circle in radians.</p><div class="fullcomment"><div class="comment cmt"><p>position around the circle in radians. -Pi/+Pi is
+                        behind, -Pi/2 is left, 0 is front, +Pi/2 is right.</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -237,7 +251,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">elevation in radians, from -Pi/2 (bottom) to +Pi/2 (top)</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -311,7 +325,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">(monophonic) input signal to be encoded</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -345,7 +359,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">additional gain control
+</p>
     </li><li name="de.sciss.synth.ugen.PanB#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>

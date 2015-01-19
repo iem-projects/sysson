@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>StereoConvolution2L - SysSon 0.8.0 API - de.sciss.synth.ugen.StereoConvolution2L</title>
-          <meta name="description" content="StereoConvolution2L - SysSon 0.8.0 API - de.sciss.synth.ugen.StereoConvolution2L" />
-          <meta name="keywords" content="StereoConvolution2L SysSon 0.8.0 API de.sciss.synth.ugen.StereoConvolution2L" />
+          <title>StereoConvolution2L - SysSon 0.11.0 API - de.sciss.synth.ugen.StereoConvolution2L</title>
+          <meta name="description" content="StereoConvolution2L - SysSon 0.11.0 API - de.sciss.synth.ugen.StereoConvolution2L" />
+          <meta name="keywords" content="StereoConvolution2L SysSon 0.11.0 API de.sciss.synth.ugen.StereoConvolution2L" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="StereoConvolution2L$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="StereoConvolution2L$.html" title="Go to companion">StereoConvolution2L</a></h1> <span class="permalink">
+        <h1><a href="StereoConvolution2L$.html" title="Go to companion">StereoConvolution2L</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="StereoConvolution2L$.html" title="See companion">object StereoConvolution2L</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.StereoConvolution2L" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -50,21 +54,23 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A frequency domain stereo convolution UGen, capable of performing linear
 cross-fades between kernel updates. When receiving a trigger, there is a linear
 cross-fade between the old kernel the new buffer contents. It operates similar
-to Convolution2L, however uses two buffers and outputs a stereo signal,
-resulting in better CPU usage than two discrete instances of Convolution2L as
-this way one FFT transformation per period is saved.
+to <code>Convolution2L</code> , however uses two buffers and outputs a stereo signal,
+resulting in better CPU usage than two discrete instances of <code>Convolution2L</code> as
+this way one FFT transformation per period is saved.</p><p><b>Warning: This UGen seems currently broken (SC 3.6.3)</b>
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the realtime input to be convolved</p></dd><dt class="param">kernelL</dt><dd class="cmt"><p>buffer identifier for the left channel's fixed kernel,
                         which may be modulated in combination with the trigger</p></dd><dt class="param">kernelR</dt><dd class="cmt"><p>buffer identifier for the right channel's fixed kernel,
                         which may be modulated in combination with the trigger</p></dd><dt class="param">trig</dt><dd class="cmt"><p>updates the kernel on a change from non-positive to
                         positive (&lt;= 0 to &gt;0), and starts a new cross-fade from
                         the previous kernel to the new one over the given amount
-                        of periods.</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of each kernel. this must be a power of two. the
+                        of periods.</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
                         FFT calculated internally by the UGen has a size of
-                        twice this value. The maximum allowed frameSize is
-                        65536(?).</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>The number of periods over which a cross-fade is
-                        performed. This must be an integer
+                        twice this value. The maximum allowed <code>frameSize</code> is
+                        16384.</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
+                        If the desired duration in seconds is <code>dur</code> , then the
+                        number of periods can be calculated as
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
 </p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a>
-</p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution3$.html" class="extype" name="de.sciss.synth.ugen.Convolution3">Convolution3</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span></dd></dl><div class="toggleContainer block">
+</p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -125,11 +131,13 @@ this way one FFT transformation per period is saved.
                         which may be modulated in combination with the trigger</p></dd><dt class="param">trig</dt><dd class="cmt"><p>updates the kernel on a change from non-positive to
                         positive (&lt;= 0 to &gt;0), and starts a new cross-fade from
                         the previous kernel to the new one over the given amount
-                        of periods.</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of each kernel. this must be a power of two. the
+                        of periods.</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
                         FFT calculated internally by the UGen has a size of
-                        twice this value. The maximum allowed frameSize is
-                        65536(?).</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>The number of periods over which a cross-fade is
-                        performed. This must be an integer
+                        twice this value. The maximum allowed <code>frameSize</code> is
+                        16384.</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
+                        If the desired duration in seconds is <code>dur</code> , then the
+                        number of periods can be calculated as
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -264,9 +272,10 @@ this way one FFT transformation per period is saved.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">The number of periods over which a cross-fade is
-                        performed.</p><div class="fullcomment"><div class="comment cmt"><p>The number of periods over which a cross-fade is
-                        performed. This must be an integer
+      <p class="shortcomment cmt">fade duration expressed as number of convolved blocks.</p><div class="fullcomment"><div class="comment cmt"><p>fade duration expressed as number of convolved blocks.
+                        If the desired duration in seconds is <code>dur</code> , then the
+                        number of periods can be calculated as
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
 </p></div></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
@@ -307,10 +316,10 @@ this way one FFT transformation per period is saved.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">size of each kernel.</p><div class="fullcomment"><div class="comment cmt"><p>size of each kernel. this must be a power of two. the
+      <p class="shortcomment cmt">size of the kernel.</p><div class="fullcomment"><div class="comment cmt"><p>size of the kernel. this must be a power of two. the
                         FFT calculated internally by the UGen has a size of
-                        twice this value. The maximum allowed frameSize is
-                        65536(?).</p></div></div>
+                        twice this value. The maximum allowed <code>frameSize</code> is
+                        16384.</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>

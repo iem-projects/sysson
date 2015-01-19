@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>GEOps - SysSon 0.8.0 API - de.sciss.synth.GEOps</title>
-          <meta name="description" content="GEOps - SysSon 0.8.0 API - de.sciss.synth.GEOps" />
-          <meta name="keywords" content="GEOps SysSon 0.8.0 API de.sciss.synth.GEOps" />
+          <title>GEOps - SysSon 0.11.0 API - de.sciss.synth.GEOps</title>
+          <meta name="description" content="GEOps - SysSon 0.11.0 API - de.sciss.synth.GEOps" />
+          <meta name="keywords" content="GEOps SysSon 0.11.0 API de.sciss.synth.GEOps" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,9 @@
       <div id="definition">
         <img src="../../../lib/class_big.png" />
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
-        <h1>GEOps</h1> <span class="permalink">
+        <h1>GEOps</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="de.sciss.synth">package synth</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.GEOps" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
@@ -334,7 +336,7 @@
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.GEOps#\" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.GEOps#\" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="\(index:Int):de.sciss.synth.GE"></a>
       <a id="\(Int):GE"></a>
       <h4 class="signature">
@@ -350,7 +352,11 @@
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Creates a proxy that represents a specific output channel of the element.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a proxy that represents a specific output channel of the element.
+</p></div><dl class="paramcmts block"><dt class="param">index</dt><dd class="cmt"><p>channel-index, zero-based. Indices which are greater than or equal
+              to the number of outputs are wrapped around.
+</p></dd><dt>returns</dt><dd class="cmt"><p>a monophonic element that represents the given channel of the receiver
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.GEOps#^" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="^(b:de.sciss.synth.GE):de.sciss.synth.GE"></a>
       <a id="^(GE):GE"></a>
@@ -1176,7 +1182,7 @@ This is a convenient method for wrapping this graph element in a <code>Poll</cod
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.GEOps#pow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.GEOps#pow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="pow(b:de.sciss.synth.GE):de.sciss.synth.GE"></a>
       <a id="pow(GE):GE"></a>
       <h4 class="signature">
@@ -1192,7 +1198,13 @@ This is a convenient method for wrapping this graph element in a <code>Poll</cod
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"><b>Warning:</b> Unlike a normal power operation, the signum of the
+left operand is always preserved.</p><div class="fullcomment"><div class="comment cmt"><p><b>Warning:</b> Unlike a normal power operation, the signum of the
+left operand is always preserved. I.e. <code>DC.kr(-0.5).pow(2)</code> will
+not output <code>0.25</code> but <code>-0.25</code>. This is to avoid problems with
+floating point noise and negative input numbers, so
+<code>DC.kr(-0.5).pow(2.001)</code> does not result in a <code>NaN</code>, for example.
+</p></div></div>
     </li><li name="de.sciss.synth.GEOps#ramp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ramp:de.sciss.synth.GE"></a>
       <a id="ramp:GE"></a>

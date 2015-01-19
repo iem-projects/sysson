@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>GrainIn - SysSon 0.8.0 API - de.sciss.synth.ugen.GrainIn</title>
-          <meta name="description" content="GrainIn - SysSon 0.8.0 API - de.sciss.synth.ugen.GrainIn" />
-          <meta name="keywords" content="GrainIn SysSon 0.8.0 API de.sciss.synth.ugen.GrainIn" />
+          <title>GrainIn - SysSon 0.11.0 API - de.sciss.synth.ugen.GrainIn</title>
+          <meta name="description" content="GrainIn - SysSon 0.11.0 API - de.sciss.synth.ugen.GrainIn" />
+          <meta name="keywords" content="GrainIn SysSon 0.11.0 API de.sciss.synth.ugen.GrainIn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="GrainIn.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="GrainIn.html" title="Go to companion">GrainIn</a></h1> <span class="permalink">
+        <h1><a href="GrainIn.html" title="Go to companion">GrainIn</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="GrainIn.html" title="See companion">class GrainIn</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.GrainIn$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,8 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The argument order is different from its sclang counterpart.
-</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -146,18 +149,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="de.sciss.synth.ugen.GrainIn#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ar(in:de.sciss.synth.GE,numChannels:Int,trig:de.sciss.synth.GE,dur:de.sciss.synth.GE,pan:de.sciss.synth.GE,envBuf:de.sciss.synth.GE,maxGrains:de.sciss.synth.GE):de.sciss.synth.ugen.GrainIn"></a>
-      <a id="ar(GE,Int,GE,GE,GE,GE,GE):GrainIn"></a>
+      <a id="ar(numChannels:Int,trig:de.sciss.synth.GE,dur:de.sciss.synth.GE,in:de.sciss.synth.GE,pan:de.sciss.synth.GE,envBuf:de.sciss.synth.GE,maxGrains:de.sciss.synth.GE):de.sciss.synth.ugen.GrainIn"></a>
+      <a id="ar(Int,GE,GE,GE,GE,GE,GE):GrainIn"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ar</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512.0f</a></span></span></span>)</span><span class="result">: <a href="GrainIn.html" class="extype" name="de.sciss.synth.ugen.GrainIn">GrainIn</a></span>
+        <span class="name">ar</span><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512.0f</a></span></span></span>)</span><span class="result">: <a href="GrainIn.html" class="extype" name="de.sciss.synth.ugen.GrainIn">GrainIn</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.GrainIn$@ar(in:de.sciss.synth.GE,numChannels:Int,trig:de.sciss.synth.GE,dur:de.sciss.synth.GE,pan:de.sciss.synth.GE,envBuf:de.sciss.synth.GE,maxGrains:de.sciss.synth.GE):de.sciss.synth.ugen.GrainIn" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.GrainIn$@ar(numChannels:Int,trig:de.sciss.synth.GE,dur:de.sciss.synth.GE,in:de.sciss.synth.GE,pan:de.sciss.synth.GE,envBuf:de.sciss.synth.GE,maxGrains:de.sciss.synth.GE):de.sciss.synth.ugen.GrainIn" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>

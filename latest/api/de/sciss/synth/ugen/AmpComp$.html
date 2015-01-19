@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>AmpComp - SysSon 0.8.0 API - de.sciss.synth.ugen.AmpComp</title>
-          <meta name="description" content="AmpComp - SysSon 0.8.0 API - de.sciss.synth.ugen.AmpComp" />
-          <meta name="keywords" content="AmpComp SysSon 0.8.0 API de.sciss.synth.ugen.AmpComp" />
+          <title>AmpComp - SysSon 0.11.0 API - de.sciss.synth.ugen.AmpComp</title>
+          <meta name="description" content="AmpComp - SysSon 0.11.0 API - de.sciss.synth.ugen.AmpComp" />
+          <meta name="keywords" content="AmpComp SysSon 0.11.0 API de.sciss.synth.ugen.AmpComp" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="AmpComp.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="AmpComp.html" title="Go to companion">AmpComp</a></h1> <span class="permalink">
+        <h1><a href="AmpComp.html" title="Go to companion">AmpComp</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="AmpComp.html" title="See companion">class AmpComp</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.AmpComp$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,22 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that produces a psychoacoustic amplitude compensation factor for a given
+frequency.</p><p>Implements the formula: <code>(root / freq).pow(exp)</code></p><p>Higher frequencies are normally perceived as louder, therefore <code>AmpComp</code>
+outputs lower values for them. For example, with default parameters, the pitch
+C4 (frequency 262 Hz) produces the base factor of 1.0, whereas a pitch one
+octave up, C5 (or 523 Hz) produces a factor of 0.793719 (an attenuation of -2
+dB).</p><p>An alternative is <code>AmpCompA</code> that better models the bell-shaped equal loudness
+contours of the hearing system. Especially note that the output of this UGen can
+become very high for frequencies much lower than the <code>root</code> parameter.</p><h5>Examples</h5><pre><span class="cmt">// activate with mouse button</span>
+play {
+  <span class="kw">val</span> freq = MouseX.kr(<span class="num">300</span>, <span class="num">15000</span>, <span class="num">1</span>)
+  <span class="kw">val</span> mod  = freq * SinOsc.ar(MouseY.kr(<span class="num">3</span>, <span class="num">200</span>, <span class="num">1</span>)).madd(<span class="num">0.5</span>, <span class="num">1</span>)
+  <span class="kw">val</span> corr = AmpComp.ar(mod, <span class="num">300</span>) * <span class="num">2</span>
+  <span class="kw">val</span> amp  = Select.ar(MouseButton.kr(lag = <span class="num">0</span>), <span class="std">Seq</span>(DC.ar(<span class="num">1</span>), corr))
+  SinOsc.ar(mod) * <span class="num">0.1</span> * amp
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AmpCompA$.html" class="extype" name="de.sciss.synth.ugen.AmpCompA">AmpCompA</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +163,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.AmpComp#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.AmpComp#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(freq:de.sciss.synth.GE,root:de.sciss.synth.GE,expon:de.sciss.synth.GE):de.sciss.synth.ugen.AmpComp"></a>
       <a id="ar(GE,GE,GE):AmpComp"></a>
       <h4 class="signature">
@@ -160,7 +179,13 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>the frequency in Hertz for which to determine the
+                        compensation factor</p></dd><dt class="param">root</dt><dd class="cmt"><p>the base frequency corresponding to a compensation
+                        factor of 1.0</p></dd><dt class="param">expon</dt><dd class="cmt"><p>the exponent determines how steep the compensation
+                        curve decreases for increasing frequencies. In general,
+                        the louder a signal is played, the shallower the equal
+                        loudness contours become.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.AmpComp#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.AmpComp"></a>
       <a id="ar:AmpComp"></a>
@@ -309,7 +334,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.AmpComp#ir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.AmpComp#ir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ir(freq:de.sciss.synth.GE,root:de.sciss.synth.GE,expon:de.sciss.synth.GE):de.sciss.synth.ugen.AmpComp"></a>
       <a id="ir(GE,GE,GE):AmpComp"></a>
       <h4 class="signature">
@@ -325,7 +350,13 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>the frequency in Hertz for which to determine the
+                        compensation factor</p></dd><dt class="param">root</dt><dd class="cmt"><p>the base frequency corresponding to a compensation
+                        factor of 1.0</p></dd><dt class="param">expon</dt><dd class="cmt"><p>the exponent determines how steep the compensation
+                        curve decreases for increasing frequencies. In general,
+                        the louder a signal is played, the shallower the equal
+                        loudness contours become.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.AmpComp#ir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ir:de.sciss.synth.ugen.AmpComp"></a>
       <a id="ir:AmpComp"></a>
@@ -360,7 +391,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.AmpComp#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.AmpComp#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(freq:de.sciss.synth.GE,root:de.sciss.synth.GE,expon:de.sciss.synth.GE):de.sciss.synth.ugen.AmpComp"></a>
       <a id="kr(GE,GE,GE):AmpComp"></a>
       <h4 class="signature">
@@ -376,7 +407,13 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>the frequency in Hertz for which to determine the
+                        compensation factor</p></dd><dt class="param">root</dt><dd class="cmt"><p>the base frequency corresponding to a compensation
+                        factor of 1.0</p></dd><dt class="param">expon</dt><dd class="cmt"><p>the exponent determines how steep the compensation
+                        curve decreases for increasing frequencies. In general,
+                        the louder a signal is played, the shallower the equal
+                        loudness contours become.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.AmpComp#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.AmpComp"></a>
       <a id="kr:AmpComp"></a>

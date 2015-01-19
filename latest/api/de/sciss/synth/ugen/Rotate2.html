@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Rotate2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Rotate2</title>
-          <meta name="description" content="Rotate2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Rotate2" />
-          <meta name="keywords" content="Rotate2 SysSon 0.8.0 API de.sciss.synth.ugen.Rotate2" />
+          <title>Rotate2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Rotate2</title>
+          <meta name="description" content="Rotate2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Rotate2" />
+          <meta name="keywords" content="Rotate2 SysSon 0.11.0 API de.sciss.synth.ugen.Rotate2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Rotate2$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Rotate2$.html" title="Go to companion">Rotate2</a></h1> <span class="permalink">
+        <h1><a href="Rotate2$.html" title="Go to companion">Rotate2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Rotate2$.html" title="See companion">object Rotate2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Rotate2" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,20 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that can be used for rotating an ambisonic B-format sound field around
+an axis. It uses an equal-power rotation so it also works well on stereo sounds.
+It takes two audio inputs ( <code>x</code> , <code>y</code> ) and an angle control ( <code>pos</code> ). It
+outputs again two channels, using these formulas:</p><pre>xr = cos(angle) * x + sin(angle) * y
+yr = cos(angle) * y - sin(angle) * x</pre><p>where <code>angle = pos * Pi</code> . This allows, for example, the use of <code>LFSaw</code> to
+create a continuous rotation around a circle.
+<b>Note</b>: Be careful when accessing the output channels. <code>xr</code> and <code>yr</code> are
+the X and Y output channels, whereas <code>x</code> and <code>y</code> refers to the X and Y input
+channel.
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>B-format X input channel</p></dd><dt class="param">y</dt><dd class="cmt"><p>B-format Y input channel</p></dd><dt class="param">pos</dt><dd class="cmt"><p>angle to rotate around the circle, normalized between
+                        -1 and +1. -1 and +1 corresponds to -180 and +180
+                        degrees (behind), -0.5 is 90 degrees left, 0 is frontal,
+                        +0.5 is 90 degrees right.
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +104,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Rotate2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Rotate2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,x:de.sciss.synth.GE,y:de.sciss.synth.GE,pos:de.sciss.synth.GE):de.sciss.synth.ugen.Rotate2"></a>
       <a id="&lt;init&gt;:Rotate2"></a>
       <h4 class="signature">
@@ -103,7 +120,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>B-format X input channel</p></dd><dt class="param">y</dt><dd class="cmt"><p>B-format Y input channel</p></dd><dt class="param">pos</dt><dd class="cmt"><p>angle to rotate around the circle, normalized between
+                        -1 and +1. -1 and +1 corresponds to -180 and +180
+                        degrees (behind), -0.5 is 90 degrees left, 0 is frontal,
+                        +0.5 is 90 degrees right.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -385,7 +406,7 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Rotate2#pos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Rotate2#pos" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="pos:de.sciss.synth.GE"></a>
       <a id="pos:GE"></a>
       <h4 class="signature">
@@ -401,7 +422,12 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">angle to rotate around the circle, normalized between
+                        -1 and +1.</p><div class="fullcomment"><div class="comment cmt"><p>angle to rotate around the circle, normalized between
+                        -1 and +1. -1 and +1 corresponds to -180 and +180
+                        degrees (behind), -0.5 is 90 degrees left, 0 is frontal,
+                        +0.5 is 90 degrees right.
+</p></div></div>
     </li><li name="de.sciss.synth.ugen.Rotate2#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rate:de.sciss.synth.Rate"></a>
       <a id="rate:Rate"></a>
@@ -555,7 +581,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">B-format X input channel</p>
     </li><li name="de.sciss.synth.ugen.Rotate2#xr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="xr:de.sciss.synth.GE"></a>
       <a id="xr:GE"></a>
@@ -589,7 +615,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">B-format Y input channel</p>
     </li><li name="de.sciss.synth.ugen.Rotate2#yr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="yr:de.sciss.synth.GE"></a>
       <a id="yr:GE"></a>

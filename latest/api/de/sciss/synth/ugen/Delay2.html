@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Delay2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Delay2</title>
-          <meta name="description" content="Delay2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Delay2" />
-          <meta name="keywords" content="Delay2 SysSon 0.8.0 API de.sciss.synth.ugen.Delay2" />
+          <title>Delay2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Delay2</title>
+          <meta name="description" content="Delay2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Delay2" />
+          <meta name="keywords" content="Delay2 SysSon 0.11.0 API de.sciss.synth.ugen.Delay2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Delay2$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Delay2$.html" title="Go to companion">Delay2</a></h1> <span class="permalink">
+        <h1><a href="Delay2$.html" title="Go to companion">Delay2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Delay2$.html" title="See companion">object Delay2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Delay2" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,11 +47,15 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Delay2</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Delay2</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that delays the input by 2 audio frames or control periods.</p><p>For audio-rate signals the delay is 2 audio frames, and for control-rate
+signals the delay is 2 control periods.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input to be delayed
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayN$.html" class="extype" name="de.sciss.synth.ugen.DelayN">DelayN</a>
+</p></span><span class="cmt"><p><a href="Delay1$.html" class="extype" name="de.sciss.synth.ugen.Delay1">Delay1</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,8 +95,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Delay2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE):de.sciss.synth.ugen.Delay2"></a>
+              <ol><li name="de.sciss.synth.ugen.Delay2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(rate:de.sciss.synth.MaybeRate,in:de.sciss.synth.GE):de.sciss.synth.ugen.Delay2"></a>
       <a id="&lt;init&gt;:Delay2"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -96,14 +104,15 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Delay2</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span>
+        <span class="name">Delay2</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Delay2@&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE):de.sciss.synth.ugen.Delay2" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Delay2@&lt;init&gt;(rate:de.sciss.synth.MaybeRate,in:de.sciss.synth.GE):de.sciss.synth.ugen.Delay2" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input to be delayed
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -277,7 +286,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">input to be delayed
+</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -403,18 +413,18 @@ expansion
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Delay2#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="rate:de.sciss.synth.Rate"></a>
-      <a id="rate:Rate"></a>
+      <a id="rate:de.sciss.synth.MaybeRate"></a>
+      <a id="rate:MaybeRate"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">rate</span><span class="result">: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>
+        <span class="name">rate</span><span class="result">: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Delay2@rate:de.sciss.synth.Rate" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Delay2@rate:de.sciss.synth.MaybeRate" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>

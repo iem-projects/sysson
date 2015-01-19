@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PauseSelf - SysSon 0.8.0 API - de.sciss.synth.ugen.PauseSelf</title>
-          <meta name="description" content="PauseSelf - SysSon 0.8.0 API - de.sciss.synth.ugen.PauseSelf" />
-          <meta name="keywords" content="PauseSelf SysSon 0.8.0 API de.sciss.synth.ugen.PauseSelf" />
+          <title>PauseSelf - SysSon 0.11.0 API - de.sciss.synth.ugen.PauseSelf</title>
+          <meta name="description" content="PauseSelf - SysSon 0.11.0 API - de.sciss.synth.ugen.PauseSelf" />
+          <meta name="keywords" content="PauseSelf SysSon 0.11.0 API de.sciss.synth.ugen.PauseSelf" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PauseSelf.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PauseSelf.html" title="Go to companion">PauseSelf</a></h1> <span class="permalink">
+        <h1><a href="PauseSelf.html" title="Go to companion">PauseSelf</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PauseSelf.html" title="See companion">class PauseSelf</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PauseSelf$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -48,7 +52,10 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that, when triggered, pauses enclosing synth. It pauses the enclosing
-synth when the input signal crosses from non-positive to positive.</p><p>This UGen outputs its input signal for convenience.
+synth when the input signal crosses from non-positive to positive.</p><p><i>Note</i> that if the trigger is initially high the UGen will not react. For
+example, <code>PauseSelf.kr(&quot;foo&quot;.kr)</code> will not work if the control is initially <code>1</code>
+. A work-around is to wrap the input in this case in a <code>Trig</code> object:
+<code>PauseSelf.kr(Trig.kr(&quot;foo&quot;.kr))</code> . This is most likely a bug.</p><p>This UGen outputs its input signal for convenience.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FreeSelf$.html" class="extype" name="de.sciss.synth.ugen.FreeSelf">FreeSelf</a>
 </p></span><span class="cmt"><p><a href="Pause$.html" class="extype" name="de.sciss.synth.ugen.Pause">Pause</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>

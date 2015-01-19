@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PartConv - SysSon 0.8.0 API - de.sciss.synth.ugen.PartConv</title>
-          <meta name="description" content="PartConv - SysSon 0.8.0 API - de.sciss.synth.ugen.PartConv" />
-          <meta name="keywords" content="PartConv SysSon 0.8.0 API de.sciss.synth.ugen.PartConv" />
+          <title>PartConv - SysSon 0.11.0 API - de.sciss.synth.ugen.PartConv</title>
+          <meta name="description" content="PartConv - SysSon 0.11.0 API - de.sciss.synth.ugen.PartConv" />
+          <meta name="keywords" content="PartConv SysSon 0.11.0 API de.sciss.synth.ugen.PartConv" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PartConv$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PartConv$.html" title="Go to companion">PartConv</a></h1> <span class="permalink">
+        <h1><a href="PartConv$.html" title="Go to companion">PartConv</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PartConv$.html" title="See companion">object PartConv</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PartConv" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,17 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen for partitioned convolution. Its advantage over non-partitioning UGens
+such as <code>Convolution2</code> is that the impulse response can be arbitrarily large
+amortization is used to spread processing and avoid CPU spikes.</p><p>The impulse response buffer must be specially prepared, using a <code>/b_gen</code>
+command that transforms an existing regularly formatted buffer to a new
+partitioned convolution ready buffer.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the realtime input to be convolved</p></dd><dt class="param">fftSize</dt><dd class="cmt"><p>FFT size which is twice the input signal partition
+                        size. This must be a multiple of the control-block size,
+                        and there must be at least two blocks per partition (to
+                        allow for amortization)</p></dd><dt class="param">buf</dt><dd class="cmt"><p>buffer identifier for the fixed kernel (init-time only).
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a>
+</p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +101,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.PartConv#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.PartConv#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE,fftSize:de.sciss.synth.GE,buf:de.sciss.synth.GE):de.sciss.synth.ugen.PartConv"></a>
       <a id="&lt;init&gt;:PartConv"></a>
       <h4 class="signature">
@@ -103,7 +117,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the realtime input to be convolved</p></dd><dt class="param">fftSize</dt><dd class="cmt"><p>FFT size which is twice the input signal partition
+                        size. This must be a multiple of the control-block size,
+                        and there must be at least two blocks per partition (to
+                        allow for amortization)</p></dd><dt class="param">buf</dt><dd class="cmt"><p>buffer identifier for the fixed kernel (init-time only).
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -197,7 +215,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">buffer identifier for the fixed kernel (init-time only).</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -238,7 +256,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PartConv#fftSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PartConv#fftSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fftSize:de.sciss.synth.GE"></a>
       <a id="fftSize:GE"></a>
       <h4 class="signature">
@@ -254,7 +272,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">FFT size which is twice the input signal partition
+                        size.</p><div class="fullcomment"><div class="comment cmt"><p>FFT size which is twice the input signal partition
+                        size. This must be a multiple of the control-block size,
+                        and there must be at least two blocks per partition (to
+                        allow for amortization)</p></div></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -311,7 +333,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the realtime input to be convolved</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PV_JensenAndersen - SysSon 0.8.0 API - de.sciss.synth.ugen.PV_JensenAndersen</title>
-          <meta name="description" content="PV JensenAndersen - SysSon 0.8.0 API - de.sciss.synth.ugen.PV JensenAndersen" />
-          <meta name="keywords" content="PV JensenAndersen SysSon 0.8.0 API de.sciss.synth.ugen.PV JensenAndersen" />
+          <title>PV_JensenAndersen - SysSon 0.11.0 API - de.sciss.synth.ugen.PV_JensenAndersen</title>
+          <meta name="description" content="PV JensenAndersen - SysSon 0.11.0 API - de.sciss.synth.ugen.PV JensenAndersen" />
+          <meta name="keywords" content="PV JensenAndersen SysSon 0.11.0 API de.sciss.synth.ugen.PV JensenAndersen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PV_JensenAndersen.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PV_JensenAndersen.html" title="Go to companion">PV_JensenAndersen</a></h1> <span class="permalink">
+        <h1><a href="PV_JensenAndersen.html" title="Go to companion">PV_JensenAndersen</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PV_JensenAndersen.html" title="See companion">class PV_JensenAndersen</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PV_JensenAndersen$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,19 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An FFT based onset detector UGen using a mix of extracted features. It is based
+on work described in Jensen and Andersen (2003), &quot;Real-time Beat Estimation
+Using Feature Extraction,&quot; in: Proceedings of the Computer Music Modeling and
+Retrieval Symposium.</p><p>First order derivatives of the features are taken. The threshold may need to be
+set low to pick up on changes.</p><h5>Examples</h5><pre><span class="cmt">// observe detection</span>
+play {
+  <span class="kw">val</span> sig = Decay.ar(Dust.ar(<span class="num">2</span>), <span class="num">0.1</span>) * WhiteNoise.ar(<span class="num">0.25</span>)
+  <span class="kw">val</span> th  = MouseX.kr(<span class="num">0.1</span>, <span class="num">1.0</span>, lag = <span class="num">0</span>)
+  th.poll(HPZ1.kr(th).abs, <span class="lit">"thresh"</span>)
+  <span class="kw">val</span> tr  = PV_JensenAndersen.ar(FFT(LocalBuf(<span class="num">2048</span>), sig), thresh = th)
+  <span class="std">Seq</span>(sig, SinOsc.ar(<span class="num">440</span>) * Decay.ar(tr * <span class="num">0.01</span>, <span class="num">0.1</span>))
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PV_HainsworthFoote$.html" class="extype" name="de.sciss.synth.ugen.PV_HainsworthFoote">PV_HainsworthFoote</a>
+</p></span><span class="cmt"><p><a href="Onsets$.html" class="extype" name="de.sciss.synth.ugen.Onsets">Onsets</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,8 +160,8 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PV_JensenAndersen#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ar(chain:de.sciss.synth.GE,propSC:de.sciss.synth.GE,propHFE:de.sciss.synth.GE,propHFC:de.sciss.synth.GE,propSF:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_JensenAndersen"></a>
+    </li><li name="de.sciss.synth.ugen.PV_JensenAndersen#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ar(chain:de.sciss.synth.GE,centroid:de.sciss.synth.GE,hfe:de.sciss.synth.GE,hfc:de.sciss.synth.GE,flux:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_JensenAndersen"></a>
       <a id="ar(GE,GE,GE,GE,GE,GE,GE):PV_JensenAndersen"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -153,14 +169,17 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ar</span><span class="params">(<span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="propSC">propSC: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.25f</a></span></span></span>, <span name="propHFE">propHFE: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.25f</a></span></span></span>, <span name="propHFC">propHFC: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.25f</a></span></span></span>, <span name="propSF">propSF: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.25f</a></span></span></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="waitTime">waitTime: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.04f</a></span></span></span>)</span><span class="result">: <a href="PV_JensenAndersen.html" class="extype" name="de.sciss.synth.ugen.PV_JensenAndersen">PV_JensenAndersen</a></span>
+        <span class="name">ar</span><span class="params">(<span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="centroid">centroid: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.25f</a></span></span></span>, <span name="hfe">hfe: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.25f</a></span></span></span>, <span name="hfc">hfc: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.25f</a></span></span></span>, <span name="flux">flux: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.25f</a></span></span></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="waitTime">waitTime: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.04f</a></span></span></span>)</span><span class="result">: <a href="PV_JensenAndersen.html" class="extype" name="de.sciss.synth.ugen.PV_JensenAndersen">PV_JensenAndersen</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.PV_JensenAndersen$@ar(chain:de.sciss.synth.GE,propSC:de.sciss.synth.GE,propHFE:de.sciss.synth.GE,propHFC:de.sciss.synth.GE,propSF:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_JensenAndersen" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.PV_JensenAndersen$@ar(chain:de.sciss.synth.GE,centroid:de.sciss.synth.GE,hfe:de.sciss.synth.GE,hfc:de.sciss.synth.GE,flux:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_JensenAndersen" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>the fft signal (buffer) to analyze</p></dd><dt class="param">centroid</dt><dd class="cmt"><p>proportion (0 to 1) of spectral centroid feature</p></dd><dt class="param">hfe</dt><dd class="cmt"><p>proportion (0 to 1) of high frequency energy feature</p></dd><dt class="param">hfc</dt><dd class="cmt"><p>proportion (0 to 1) of high frequency content feature</p></dd><dt class="param">flux</dt><dd class="cmt"><p>proportion (0 to 1) of spectral flux feature</p></dd><dt class="param">thresh</dt><dd class="cmt"><p>threshold level for detection</p></dd><dt class="param">waitTime</dt><dd class="cmt"><p>after an onset is detected, further detections are
+                        suppressed for this period in seconds, preventing
+                        multiple rapid triggers
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

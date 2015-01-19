@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufAllpassC - SysSon 0.8.0 API - de.sciss.synth.ugen.BufAllpassC</title>
-          <meta name="description" content="BufAllpassC - SysSon 0.8.0 API - de.sciss.synth.ugen.BufAllpassC" />
-          <meta name="keywords" content="BufAllpassC SysSon 0.8.0 API de.sciss.synth.ugen.BufAllpassC" />
+          <title>BufAllpassC - SysSon 0.11.0 API - de.sciss.synth.ugen.BufAllpassC</title>
+          <meta name="description" content="BufAllpassC - SysSon 0.11.0 API - de.sciss.synth.ugen.BufAllpassC" />
+          <meta name="keywords" content="BufAllpassC SysSon 0.11.0 API de.sciss.synth.ugen.BufAllpassC" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BufAllpassC$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BufAllpassC$.html" title="Go to companion">BufAllpassC</a></h1> <span class="permalink">
+        <h1><a href="BufAllpassC$.html" title="Go to companion">BufAllpassC</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BufAllpassC$.html" title="See companion">object BufAllpassC</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BufAllpassC" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -48,7 +52,10 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>All pass delay line with cubic interpolation which uses a buffer for its
-internal memory.
+internal memory.</p><p><b>Warning</b>: For reasons of efficiency, the effective buffer size is the
+allocated size rounded down to the next power of two. For example, if 44100
+samples are allocated, the maximum delay would be 32768 samples. Also note that
+the buffer must be monophonic.
 </p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>Buffer id.</p></dd><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an

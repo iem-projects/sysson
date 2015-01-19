@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>MouseX - SysSon 0.8.0 API - de.sciss.synth.ugen.MouseX</title>
-          <meta name="description" content="MouseX - SysSon 0.8.0 API - de.sciss.synth.ugen.MouseX" />
-          <meta name="keywords" content="MouseX SysSon 0.8.0 API de.sciss.synth.ugen.MouseX" />
+          <title>MouseX - SysSon 0.11.0 API - de.sciss.synth.ugen.MouseX</title>
+          <meta name="description" content="MouseX - SysSon 0.11.0 API - de.sciss.synth.ugen.MouseX" />
+          <meta name="keywords" content="MouseX SysSon 0.11.0 API de.sciss.synth.ugen.MouseX" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="MouseX.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="MouseX.html" title="Go to companion">MouseX</a></h1> <span class="permalink">
+        <h1><a href="MouseX.html" title="Go to companion">MouseX</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="MouseX.html" title="See companion">class MouseX</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.MouseX$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,15 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that maps the horizontal screen location of the mouse to a given linear
+or exponential range. This is useful for testing purposes. Mouse interaction
+with the regular desktop and windowing system is in no way altered by running
+this UGen.</p><h5>Examples</h5><pre><span class="cmt">// control sine frequency</span>
+play {
+  <span class="kw">val</span> freq = MouseX.kr(<span class="num">100</span>, <span class="num">4000</span>, <span class="num">1</span>)
+  SinOsc.ar(freq) * <span class="num">0.1</span> * AmpComp.kr(freq)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="KeyState$.html" class="extype" name="de.sciss.synth.ugen.KeyState">KeyState</a>
+</p></span><span class="cmt"><p><a href="MouseButton$.html" class="extype" name="de.sciss.synth.ugen.MouseButton">MouseButton</a></p></span><span class="cmt"><p><a href="MouseY$.html" class="extype" name="de.sciss.synth.ugen.MouseY">MouseY</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -292,7 +304,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.MouseX#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.MouseX#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,warp:de.sciss.synth.GE,lag:de.sciss.synth.GE):de.sciss.synth.ugen.MouseX"></a>
       <a id="kr(GE,GE,GE,GE):MouseX"></a>
       <h4 class="signature">
@@ -308,7 +320,18 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">lo</dt><dd class="cmt"><p>value when the mouse is on the left side of the screen</p></dd><dt class="param">hi</dt><dd class="cmt"><p>value when the mouse is on the right side of the
+                        screen. <b>Note</b>: this value is never reached, because
+                        the maximum mouse coordinate is one pixel less than the
+                        screen size. For example, if the screen width is 1440,
+                        <code>lo</code> is 0.0 and <code>hi</code> is 1.0, the maximum value output is
+                        <code>1.0 * 1439/1440 = 0.999306</code> .</p></dd><dt class="param">warp</dt><dd class="cmt"><p>curve shape. Either zero (default) for a linear
+                        mapping, or 1 for an exponential mapping. <b>Note</b>:
+                        When using exponential mapping, make sure the <code>lo</code> value
+                        is greater than zero, otherwise NaN values will be
+                        output.</p></dd><dt class="param">lag</dt><dd class="cmt"><p>60 dB decay time of a lag-time smoothing. Use zero to
+                        avoid any smoothing.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.MouseX#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.MouseX"></a>
       <a id="kr:MouseX"></a>

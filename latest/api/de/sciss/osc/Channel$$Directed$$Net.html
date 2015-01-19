@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Net - SysSon 0.8.0 API - de.sciss.osc.Channel.Directed.Net</title>
-          <meta name="description" content="Net - SysSon 0.8.0 API - de.sciss.osc.Channel.Directed.Net" />
-          <meta name="keywords" content="Net SysSon 0.8.0 API de.sciss.osc.Channel.Directed.Net" />
+          <title>Net - SysSon 0.11.0 API - de.sciss.osc.Channel.Directed.Net</title>
+          <meta name="description" content="Net - SysSon 0.11.0 API - de.sciss.osc.Channel.Directed.Net" />
+          <meta name="keywords" content="Net SysSon 0.11.0 API de.sciss.osc.Channel.Directed.Net" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,9 @@
       <div id="definition">
         <img src="../../../lib/trait_big.png" />
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.osc">osc</a>.<a href="Channel$.html" class="extype" name="de.sciss.osc.Channel">Channel</a>.<a href="Channel$$Directed$.html" class="extype" name="de.sciss.osc.Channel.Directed">Directed</a></p>
-        <h1>Net</h1> <span class="permalink">
+        <h1>Net</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="Channel$$Directed$.html" class="extype" name="de.sciss.osc.Channel.Directed">package Directed</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.osc.Channel$$Directed$$Net" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
@@ -189,7 +191,7 @@ This is the maximum size an OSC packet (bundle or message) can grow to.
       </a>
     </span>
       <p class="shortcomment cmt">Establishes connection for transports requiring
-connectivity (e.</p><div class="fullcomment"><div class="comment cmt"><p>Establishes connection for transports requiring
+connectivity (e.g.</p><div class="fullcomment"><div class="comment cmt"><p>Establishes connection for transports requiring
 connectivity (e.g. TCP). For transports that do not require connectivity (e.g. UDP),
 this ensures the communication channel is created and bound.
 &lt;P&gt;
@@ -208,7 +210,7 @@ was already connected, therefore be sure to check <code>isConnected()</code> bef
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if a networking error occurs. Possible reasons: - the underlying
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="IOException"><code>IOException</code></span> if a networking error occurs. Possible reasons: - the underlying
                       network channel had been closed by the server. - the transport
                       is TCP and the server is not available. - the transport is TCP
                       and an <code>Receiver</code> sharing the same socket was stopped before (unable to revive).

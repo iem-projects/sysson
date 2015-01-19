@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Formlet - SysSon 0.8.0 API - de.sciss.synth.ugen.Formlet</title>
-          <meta name="description" content="Formlet - SysSon 0.8.0 API - de.sciss.synth.ugen.Formlet" />
-          <meta name="keywords" content="Formlet SysSon 0.8.0 API de.sciss.synth.ugen.Formlet" />
+          <title>Formlet - SysSon 0.11.0 API - de.sciss.synth.ugen.Formlet</title>
+          <meta name="description" content="Formlet - SysSon 0.11.0 API - de.sciss.synth.ugen.Formlet" />
+          <meta name="keywords" content="Formlet SysSon 0.11.0 API de.sciss.synth.ugen.Formlet" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Formlet$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Formlet$.html" title="Go to companion">Formlet</a></h1> <span class="permalink">
+        <h1><a href="Formlet$.html" title="Go to companion">Formlet</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Formlet$.html" title="See companion">object Formlet</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Formlet" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A FOF-like resonant filter UGen. Its impulse response is like that of a sine
+wave with a <code>Decay2</code> envelope over it. It is possible to control the attack and
+decay times.</p><p><code>Formlet</code> is equivalent to:</p><pre>Ringz(in, freq, decay) - Ringz(in, freq, attack)</pre><p>The great advantage to this filter over FOF (Fonction d'onde formantique) is
+that there is no limit to the number of overlapping grains since the grain is
+just the impulse response of the filter.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>resonant frequency in Hertz</p></dd><dt class="param">attack</dt><dd class="cmt"><p>the 60 dB attack time in seconds</p></dd><dt class="param">decay</dt><dd class="cmt"><p>the 60 dB decay time in seconds
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="RHPF$.html" class="extype" name="de.sciss.synth.ugen.RHPF">RHPF</a>
+</p></span><span class="cmt"><p><a href="RLPF$.html" class="extype" name="de.sciss.synth.ugen.RLPF">RLPF</a></p></span><span class="cmt"><p><a href="Resonz$.html" class="extype" name="de.sciss.synth.ugen.Resonz">Resonz</a></p></span><span class="cmt"><p><a href="Ringz$.html" class="extype" name="de.sciss.synth.ugen.Ringz">Ringz</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +98,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Formlet#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Formlet#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.MaybeRate,in:de.sciss.synth.GE,freq:de.sciss.synth.GE,attack:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Formlet"></a>
       <a id="&lt;init&gt;:Formlet"></a>
       <h4 class="signature">
@@ -103,7 +114,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>resonant frequency in Hertz</p></dd><dt class="param">attack</dt><dd class="cmt"><p>the 60 dB attack time in seconds</p></dd><dt class="param">decay</dt><dd class="cmt"><p>the 60 dB decay time in seconds
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -197,7 +209,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the 60 dB attack time in seconds</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -237,7 +249,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the 60 dB decay time in seconds
+</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -294,7 +307,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">resonant frequency in Hertz</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -328,7 +341,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">input signal to be filtered</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

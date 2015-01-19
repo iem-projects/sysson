@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Trig - SysSon 0.8.0 API - de.sciss.synth.ugen.Trig</title>
-          <meta name="description" content="Trig - SysSon 0.8.0 API - de.sciss.synth.ugen.Trig" />
-          <meta name="keywords" content="Trig SysSon 0.8.0 API de.sciss.synth.ugen.Trig" />
+          <title>Trig - SysSon 0.11.0 API - de.sciss.synth.ugen.Trig</title>
+          <meta name="description" content="Trig - SysSon 0.11.0 API - de.sciss.synth.ugen.Trig" />
+          <meta name="keywords" content="Trig SysSon 0.11.0 API de.sciss.synth.ugen.Trig" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Trig$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Trig$.html" title="Go to companion">Trig</a></h1> <span class="permalink">
+        <h1><a href="Trig$.html" title="Go to companion">Trig</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Trig$.html" title="See companion">object Trig</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Trig" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,15 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen which holds and outputs an input value for a given duration when
+triggered.</p><p>When a trigger occurs at the input, the input value is sampled and output for
+the specified duration, otherwise zero is output. When a new trigger occurs
+while this ugens outputs 1, the hold-time is reset to the duration.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the trigger. This can be any signal. A trigger happens
+                        when the signal changes from non-positive to positive.</p></dd><dt class="param">dur</dt><dd class="cmt"><p>the duration for which the ugens holds the value of the
+                        input signal when triggered
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig1$.html" class="extype" name="de.sciss.synth.ugen.Trig1">Trig1</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +99,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Trig#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Trig#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE,dur:de.sciss.synth.GE):de.sciss.synth.ugen.Trig"></a>
       <a id="&lt;init&gt;:Trig"></a>
       <h4 class="signature">
@@ -103,7 +115,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the trigger. This can be any signal. A trigger happens
+                        when the signal changes from non-positive to positive.</p></dd><dt class="param">dur</dt><dd class="cmt"><p>the duration for which the ugens holds the value of the
+                        input signal when triggered
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -220,7 +235,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the duration for which the ugens holds the value of the
+                        input signal when triggered
+</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -278,7 +295,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Trig#in" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Trig#in" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="in:de.sciss.synth.GE"></a>
       <a id="in:GE"></a>
       <h4 class="signature">
@@ -294,7 +311,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the trigger.</p><div class="fullcomment"><div class="comment cmt"><p>the trigger. This can be any signal. A trigger happens
+                        when the signal changes from non-positive to positive.</p></div></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

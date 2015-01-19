@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Vibrato - SysSon 0.8.0 API - de.sciss.synth.ugen.Vibrato</title>
-          <meta name="description" content="Vibrato - SysSon 0.8.0 API - de.sciss.synth.ugen.Vibrato" />
-          <meta name="keywords" content="Vibrato SysSon 0.8.0 API de.sciss.synth.ugen.Vibrato" />
+          <title>Vibrato - SysSon 0.11.0 API - de.sciss.synth.ugen.Vibrato</title>
+          <meta name="description" content="Vibrato - SysSon 0.11.0 API - de.sciss.synth.ugen.Vibrato" />
+          <meta name="keywords" content="Vibrato SysSon 0.11.0 API de.sciss.synth.ugen.Vibrato" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Vibrato.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Vibrato.html" title="Go to companion">Vibrato</a></h1> <span class="permalink">
+        <h1><a href="Vibrato.html" title="Go to companion">Vibrato</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Vibrato.html" title="See companion">class Vibrato</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Vibrato$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,20 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A low frequency oscillator UGen for modelling vibrato. It produces a modulating
+frequency value in Hertz that can be used as the frequency parameter of another
+UGen.</p><p>By setting more extreme settings, one can get back to the timbres of FM
+synthesis. One can also add in some noise to the vibrato rate and vibrato size
+(modulation depth) to make for a more realistic motor pattern.</p><p>The vibrato output is a waveform based on a squared envelope shape with four
+stages marking out 0.0 to 1.0, 1.0 to 0.0, 0.0 to -1.0, and -1.0 back to 0.0.
+The vibrato rate determines how quickly one moves through these stages.</p><h5>Examples</h5><pre><span class="cmt">// constant setting</span>
+play { SinOsc.ar(Vibrato.ar(DC.ar(<span class="num">400.0</span>), <span class="num">1</span>, <span class="num">0.02</span>)) * <span class="num">0.2</span> }</pre><pre><span class="cmt">// beat and beatVar mouse control</span>
+play {
+  <span class="kw">val</span> beat    = MouseX.kr(<span class="num">2.0</span>, <span class="num">100.0</span>)
+  <span class="kw">val</span> beatVar = MouseY.kr(<span class="num">0.0</span>, <span class="num">1.0</span>)
+  <span class="kw">val</span> freq    = Vibrato.ar(DC.ar(<span class="num">400.0</span>), beat, <span class="num">0.1</span>, <span class="num">1.0</span>, <span class="num">1.0</span>, beatVar, <span class="num">0.1</span>)
+  SinOsc.ar(freq) * <span class="num">0.2</span>
+}</pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +161,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Vibrato#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Vibrato#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(freq:de.sciss.synth.GE,beat:de.sciss.synth.GE,depth:de.sciss.synth.GE,delay:de.sciss.synth.GE,onset:de.sciss.synth.GE,beatVar:de.sciss.synth.GE,depthVar:de.sciss.synth.GE,iphase:de.sciss.synth.GE):de.sciss.synth.ugen.Vibrato"></a>
       <a id="ar(GE,GE,GE,GE,GE,GE,GE,GE):Vibrato"></a>
       <h4 class="signature">
@@ -160,7 +177,22 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>fundamental frequency in Hertz. If the Vibrato UGen is
+                        running at audio rate, this must be an audio-rate input
+                        as well.</p></dd><dt class="param">beat</dt><dd class="cmt"><p>vibrato rate, that is the speed of wobble in Hertz.
+                        Note that if this is set to a too low value, you may
+                        never get vibrato back, since this input is only checked
+                        at the end of a cycle.</p></dd><dt class="param">depth</dt><dd class="cmt"><p>amount of vibrato frequency deviation around the
+                        fundamental, as a proportion of the fundamental.</p></dd><dt class="param">delay</dt><dd class="cmt"><p>delay in seconds before vibrato is established.</p></dd><dt class="param">onset</dt><dd class="cmt"><p>transition time in seconds from no vibrato to full
+                        vibrato after the initial delay time.</p></dd><dt class="param">beatVar</dt><dd class="cmt"><p>random (noise) variation on the beat parameter,
+                        expressed as a proportion of <code>beat</code> . It can change once
+                        per cycle of vibrato.</p></dd><dt class="param">depthVar</dt><dd class="cmt"><p>random (noise) variation on the depth of modulation,
+                        expressed as a proportion of <code>depth</code> . It can change
+                        once per cycle of vibrato. The noise affects
+                        independently the up and the down part of vibrato shape
+                        within a cycle.</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of vibrato modulation, allowing starting
+                        above or below the fundamental rather than on it.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Vibrato#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.Vibrato"></a>
       <a id="ar:Vibrato"></a>
@@ -326,7 +358,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Vibrato#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Vibrato#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(freq:de.sciss.synth.GE,beat:de.sciss.synth.GE,depth:de.sciss.synth.GE,delay:de.sciss.synth.GE,onset:de.sciss.synth.GE,beatVar:de.sciss.synth.GE,depthVar:de.sciss.synth.GE,iphase:de.sciss.synth.GE):de.sciss.synth.ugen.Vibrato"></a>
       <a id="kr(GE,GE,GE,GE,GE,GE,GE,GE):Vibrato"></a>
       <h4 class="signature">
@@ -342,7 +374,22 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>fundamental frequency in Hertz. If the Vibrato UGen is
+                        running at audio rate, this must be an audio-rate input
+                        as well.</p></dd><dt class="param">beat</dt><dd class="cmt"><p>vibrato rate, that is the speed of wobble in Hertz.
+                        Note that if this is set to a too low value, you may
+                        never get vibrato back, since this input is only checked
+                        at the end of a cycle.</p></dd><dt class="param">depth</dt><dd class="cmt"><p>amount of vibrato frequency deviation around the
+                        fundamental, as a proportion of the fundamental.</p></dd><dt class="param">delay</dt><dd class="cmt"><p>delay in seconds before vibrato is established.</p></dd><dt class="param">onset</dt><dd class="cmt"><p>transition time in seconds from no vibrato to full
+                        vibrato after the initial delay time.</p></dd><dt class="param">beatVar</dt><dd class="cmt"><p>random (noise) variation on the beat parameter,
+                        expressed as a proportion of <code>beat</code> . It can change once
+                        per cycle of vibrato.</p></dd><dt class="param">depthVar</dt><dd class="cmt"><p>random (noise) variation on the depth of modulation,
+                        expressed as a proportion of <code>depth</code> . It can change
+                        once per cycle of vibrato. The noise affects
+                        independently the up and the down part of vibrato shape
+                        within a cycle.</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of vibrato modulation, allowing starting
+                        above or below the fundamental rather than on it.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Vibrato#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.Vibrato"></a>
       <a id="kr:Vibrato"></a>

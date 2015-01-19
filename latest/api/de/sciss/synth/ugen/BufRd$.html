@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufRd - SysSon 0.8.0 API - de.sciss.synth.ugen.BufRd</title>
-          <meta name="description" content="BufRd - SysSon 0.8.0 API - de.sciss.synth.ugen.BufRd" />
-          <meta name="keywords" content="BufRd SysSon 0.8.0 API de.sciss.synth.ugen.BufRd" />
+          <title>BufRd - SysSon 0.11.0 API - de.sciss.synth.ugen.BufRd</title>
+          <meta name="description" content="BufRd - SysSon 0.11.0 API - de.sciss.synth.ugen.BufRd" />
+          <meta name="keywords" content="BufRd SysSon 0.11.0 API de.sciss.synth.ugen.BufRd" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BufRd.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BufRd.html" title="Go to companion">BufRd</a></h1> <span class="permalink">
+        <h1><a href="BufRd.html" title="Go to companion">BufRd</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BufRd.html" title="See companion">class BufRd</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BufRd$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -52,8 +56,26 @@ differs from <code>numChannels</code> , the UGen will fail silently.</p><p>An al
 buffer by itself, <code>BufRd</code> only moves its read point by the index input and
 therefore has no pitch input. <code>PlayBuf</code> uses cubic interpolation, while <code>BufRd</code>
 has variable interpolation. <code>PlayBuf</code> can determine the end of the buffer and
-issue a done-action.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufRateScale$.html" class="extype" name="de.sciss.synth.ugen.BufRateScale">BufRateScale</a>
+issue a done-action.</p><h5>Examples</h5><pre><span class="cmt">// Write and read</span>
+<span class="kw">val</span> b = Buffer.alloc(s, numFrames = <span class="num">32768</span>, numChannels = <span class="num">1</span>)
+
+<span class="cmt">// write into the buffer with a BufWr</span>
+<span class="kw">val</span> y = play {
+  <span class="kw">val</span> in = SinOsc.ar(LFNoise1.kr(<span class="num">2</span>).madd(<span class="num">300</span>, <span class="num">400</span>)) * <span class="num">0.1</span>
+  <span class="kw">val</span> rate = <span class="lit">"rate"</span> kr <span class="num">1</span>
+  BufWr.ar(in, b.id, Phasor.ar(<span class="num">0</span>, BufRateScale.kr(b.id) * rate, <span class="num">0</span>, BufFrames.kr(b.id)))
+  <span class="num">0.0</span> <span class="cmt">// quiet</span>
+}
+
+<span class="cmt">// read it with a BufRd</span>
+<span class="kw">val</span> x = play {
+  <span class="kw">val</span> rate = <span class="lit">"rate"</span> kr <span class="num">1</span>
+  BufRd.ar(<span class="num">1</span>, b.id, Phasor.ar(<span class="num">0</span>, BufRateScale.kr(b.id) * rate, <span class="num">0</span>, BufFrames.kr(b.id)))
+}
+
+y.set(<span class="lit">"rate"</span> -&gt; <span class="num">0.5</span>) <span class="cmt">// notice the clicks when the play head overtakes the write head!</span>
+x.set(<span class="lit">"rate"</span> -&gt; <span class="num">0.5</span>)
+y.set(<span class="lit">"rate"</span> -&gt; <span class="num">1.0</span>)</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufRateScale$.html" class="extype" name="de.sciss.synth.ugen.BufRateScale">BufRateScale</a>
 </p></span><span class="cmt"><p><a href="BufFrames$.html" class="extype" name="de.sciss.synth.ugen.BufFrames">BufFrames</a></p></span><span class="cmt"><p><a href="Phasor$.html" class="extype" name="de.sciss.synth.ugen.Phasor">Phasor</a></p></span><span class="cmt"><p><a href="BufWr$.html" class="extype" name="de.sciss.synth.ugen.BufWr">BufWr</a></p></span><span class="cmt"><p><a href="PlayBuf$.html" class="extype" name="de.sciss.synth.ugen.PlayBuf">PlayBuf</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>

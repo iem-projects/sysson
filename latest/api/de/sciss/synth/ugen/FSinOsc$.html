@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>FSinOsc - SysSon 0.8.0 API - de.sciss.synth.ugen.FSinOsc</title>
-          <meta name="description" content="FSinOsc - SysSon 0.8.0 API - de.sciss.synth.ugen.FSinOsc" />
-          <meta name="keywords" content="FSinOsc SysSon 0.8.0 API de.sciss.synth.ugen.FSinOsc" />
+          <title>FSinOsc - SysSon 0.11.0 API - de.sciss.synth.ugen.FSinOsc</title>
+          <meta name="description" content="FSinOsc - SysSon 0.11.0 API - de.sciss.synth.ugen.FSinOsc" />
+          <meta name="keywords" content="FSinOsc SysSon 0.11.0 API de.sciss.synth.ugen.FSinOsc" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="FSinOsc.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="FSinOsc.html" title="Go to companion">FSinOsc</a></h1> <span class="permalink">
+        <h1><a href="FSinOsc.html" title="Go to companion">FSinOsc</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="FSinOsc.html" title="See companion">class FSinOsc</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.FSinOsc$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A sine oscillator UGen using a fast approximation. It uses a ringing filter and
+is less CPU expensive than <code>SinOsc</code> . However, the amplitude of the wave will
+vary with frequency. Generally the amplitude will go down when the frequency
+rises and it will go up as if the frequency is lowered.</p><p><b>Warning</b>: In the current implementation, the amplitude can blow up if the
+frequency is modulated by certain alternating signals (e.g. abruptly by <code>TRand</code>
+).</p><h5>Examples</h5><pre><span class="cmt">// plain oscillator</span>
+play { FSinOsc.ar(<span class="num">441</span>) * <span class="num">0.2</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SinOscFB$.html" class="extype" name="de.sciss.synth.ugen.SinOscFB">SinOscFB</a>
+</p></span><span class="cmt"><p><a href="SinOsc$.html" class="extype" name="de.sciss.synth.ugen.SinOsc">SinOsc</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +155,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.FSinOsc#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.FSinOsc#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(freq:de.sciss.synth.GE,iphase:de.sciss.synth.GE):de.sciss.synth.ugen.FSinOsc"></a>
       <a id="ar(GE,GE):FSinOsc"></a>
       <h4 class="signature">
@@ -160,7 +171,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of the oscillator in radians. This cannot
+                        be modulated. A value of <code>0.5 Pi</code> means the output
+                        starts at +1. A value of <code>1.5 Pi</code> means the output
+                        starts at -1,
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.FSinOsc#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.FSinOsc"></a>
       <a id="ar:FSinOsc"></a>
@@ -326,7 +341,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.FSinOsc#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.FSinOsc#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(freq:de.sciss.synth.GE,iphase:de.sciss.synth.GE):de.sciss.synth.ugen.FSinOsc"></a>
       <a id="kr(GE,GE):FSinOsc"></a>
       <h4 class="signature">
@@ -342,7 +357,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of the oscillator in radians. This cannot
+                        be modulated. A value of <code>0.5 Pi</code> means the output
+                        starts at +1. A value of <code>1.5 Pi</code> means the output
+                        starts at -1,
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.FSinOsc#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.FSinOsc"></a>
       <a id="kr:FSinOsc"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BinaryOpUGen - SysSon 0.8.0 API - de.sciss.synth.ugen.BinaryOpUGen</title>
-          <meta name="description" content="BinaryOpUGen - SysSon 0.8.0 API - de.sciss.synth.ugen.BinaryOpUGen" />
-          <meta name="keywords" content="BinaryOpUGen SysSon 0.8.0 API de.sciss.synth.ugen.BinaryOpUGen" />
+          <title>BinaryOpUGen - SysSon 0.11.0 API - de.sciss.synth.ugen.BinaryOpUGen</title>
+          <meta name="description" content="BinaryOpUGen - SysSon 0.11.0 API - de.sciss.synth.ugen.BinaryOpUGen" />
+          <meta name="keywords" content="BinaryOpUGen SysSon 0.11.0 API de.sciss.synth.ugen.BinaryOpUGen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BinaryOpUGen.html" title="Go to companion"><img src="../../../../lib/object_to_trait_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BinaryOpUGen.html" title="Go to companion">BinaryOpUGen</a></h1> <span class="permalink">
+        <h1><a href="BinaryOpUGen.html" title="Go to companion">BinaryOpUGen</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BinaryOpUGen.html" title="See companion">trait BinaryOpUGen</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BinaryOpUGen$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>   Binary operations are generally constructed by calling one of the methods of <code>GEOps</code>.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Binary operations are generally constructed by calling one of the methods of <code>GEOps</code>.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>UnaryOpUGen
 </p></span><span class="cmt"><p>GEOps</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -608,7 +612,7 @@
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.ugen.BinaryOpUGen.Pow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.BinaryOpUGen.Pow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Pow"></a>
       <a id="Pow:Pow"></a>
       <h4 class="signature">
@@ -624,7 +628,13 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"><b>Warning:</b> Unlike a normal power operation, the signum of the
+left operand is always preserved.</p><div class="fullcomment"><div class="comment cmt"><p><b>Warning:</b> Unlike a normal power operation, the signum of the
+left operand is always preserved. I.e. <code>DC.kr(-0.5).pow(2)</code> will
+not output <code>0.25</code> but <code>-0.25</code>. This is to avoid problems with
+floating point noise and negative input numbers, so
+<code>DC.kr(-0.5).pow(2.001)</code> does not result in a <code>NaN</code>, for example.
+</p></div></div>
     </li><li name="de.sciss.synth.ugen.BinaryOpUGen.Ring1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Ring1"></a>
       <a id="Ring1:Ring1"></a>

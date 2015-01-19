@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Stepper - SysSon 0.8.0 API - de.sciss.synth.ugen.Stepper</title>
-          <meta name="description" content="Stepper - SysSon 0.8.0 API - de.sciss.synth.ugen.Stepper" />
-          <meta name="keywords" content="Stepper SysSon 0.8.0 API de.sciss.synth.ugen.Stepper" />
+          <title>Stepper - SysSon 0.11.0 API - de.sciss.synth.ugen.Stepper</title>
+          <meta name="description" content="Stepper - SysSon 0.11.0 API - de.sciss.synth.ugen.Stepper" />
+          <meta name="keywords" content="Stepper SysSon 0.11.0 API de.sciss.synth.ugen.Stepper" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Stepper$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Stepper$.html" title="Go to companion">Stepper</a></h1> <span class="permalink">
+        <h1><a href="Stepper$.html" title="Go to companion">Stepper</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Stepper$.html" title="See companion">object Stepper</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Stepper" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,7 +47,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Stepper</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">7</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Stepper</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">inf</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -131,7 +135,7 @@ is or whether the <code>reset</code> trigger is high or not.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Stepper</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">7</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span>
+        <span class="name">Stepper</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">inf</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Stepper@&lt;init&gt;(rate:de.sciss.synth.MaybeRate,trig:de.sciss.synth.GE,reset:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,step:de.sciss.synth.GE,resetVal:de.sciss.synth.GE):de.sciss.synth.ugen.Stepper" title="Permalink" target="_top">

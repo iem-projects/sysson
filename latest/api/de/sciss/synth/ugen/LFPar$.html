@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LFPar - SysSon 0.8.0 API - de.sciss.synth.ugen.LFPar</title>
-          <meta name="description" content="LFPar - SysSon 0.8.0 API - de.sciss.synth.ugen.LFPar" />
-          <meta name="keywords" content="LFPar SysSon 0.8.0 API de.sciss.synth.ugen.LFPar" />
+          <title>LFPar - SysSon 0.11.0 API - de.sciss.synth.ugen.LFPar</title>
+          <meta name="description" content="LFPar - SysSon 0.11.0 API - de.sciss.synth.ugen.LFPar" />
+          <meta name="keywords" content="LFPar SysSon 0.11.0 API de.sciss.synth.ugen.LFPar" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LFPar.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LFPar.html" title="Go to companion">LFPar</a></h1> <span class="permalink">
+        <h1><a href="LFPar.html" title="Go to companion">LFPar</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LFPar.html" title="See companion">class LFPar</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LFPar$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A sine-like oscillator UGen with a shape made of two parabolas. It has audible
+odd harmonics and is non-band-limited. Its output ranges from -1 to +1.</p><h5>Examples</h5><pre><span class="cmt">// modulating frequency</span>
+play { LFPar.ar(XLine.kr(<span class="num">100</span>, <span class="num">20000</span>, <span class="num">10</span>)) * <span class="num">0.1</span> }</pre><pre><span class="cmt">// modulating amplitude</span>
+play { LFPar.kr(XLine.kr(<span class="num">1</span>, <span class="num">200</span>, <span class="num">10</span>)) * SinOsc.ar(<span class="num">440</span>) * <span class="num">0.1</span> }</pre><pre><span class="cmt">// used as both oscillator and LFO</span>
+play { LFPar.ar(LFPar.kr(LFPar.kr(<span class="num">0.2</span>).madd(<span class="num">8</span>,<span class="num">10</span>)).madd(<span class="num">400</span>,<span class="num">800</span>)) * <span class="num">0.1</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LFCub$.html" class="extype" name="de.sciss.synth.ugen.LFCub">LFCub</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +153,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFPar#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFPar#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(freq:de.sciss.synth.GE,iphase:de.sciss.synth.GE):de.sciss.synth.ugen.LFPar"></a>
       <a id="ar(GE,GE):LFPar"></a>
       <h4 class="signature">
@@ -160,7 +169,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>oscillator frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase in cycle (0 to 1)
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFPar#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.LFPar"></a>
       <a id="ar:LFPar"></a>
@@ -326,7 +336,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFPar#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFPar#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(freq:de.sciss.synth.GE,iphase:de.sciss.synth.GE):de.sciss.synth.ugen.LFPar"></a>
       <a id="kr(GE,GE):LFPar"></a>
       <h4 class="signature">
@@ -342,7 +352,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>oscillator frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase in cycle (0 to 1)
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFPar#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.LFPar"></a>
       <a id="kr:LFPar"></a>

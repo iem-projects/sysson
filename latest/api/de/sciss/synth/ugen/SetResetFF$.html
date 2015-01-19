@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SetResetFF - SysSon 0.8.0 API - de.sciss.synth.ugen.SetResetFF</title>
-          <meta name="description" content="SetResetFF - SysSon 0.8.0 API - de.sciss.synth.ugen.SetResetFF" />
-          <meta name="keywords" content="SetResetFF SysSon 0.8.0 API de.sciss.synth.ugen.SetResetFF" />
+          <title>SetResetFF - SysSon 0.11.0 API - de.sciss.synth.ugen.SetResetFF</title>
+          <meta name="description" content="SetResetFF - SysSon 0.11.0 API - de.sciss.synth.ugen.SetResetFF" />
+          <meta name="keywords" content="SetResetFF SysSon 0.11.0 API de.sciss.synth.ugen.SetResetFF" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="SetResetFF.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="SetResetFF.html" title="Go to companion">SetResetFF</a></h1> <span class="permalink">
+        <h1><a href="SetResetFF.html" title="Go to companion">SetResetFF</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="SetResetFF.html" title="See companion">class SetResetFF</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.SetResetFF$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,19 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A flip-flop UGen with two inputs, one (set) triggering an output of 1.0, the
+other (reset) triggering an output of 0.0. Subsequent triggers happening within
+the same input slot have no effect. If both inputs receive a trigger at the same
+time, the <i>reset</i> input takes precedence.</p><h5>Examples</h5><pre><span class="cmt">// mouse-button toggle</span>
+play {
+  <span class="cmt">// make sure lag is zero, otherwise the output</span>
+  <span class="cmt">// never falls back exactly to zero!</span>
+  <span class="kw">val</span> set   = MouseButton.kr(lag = <span class="num">0</span>)
+  <span class="kw">val</span> reset = Impulse.kr(<span class="num">1</span>)
+  <span class="kw">val</span> ff    = SetResetFF.kr(set, reset)
+  SinOsc.ar(ff.madd(<span class="num">400</span>, <span class="num">800</span>)) * <span class="num">0.1</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ToggleFF$.html" class="extype" name="de.sciss.synth.ugen.ToggleFF">ToggleFF</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +160,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.SetResetFF#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.SetResetFF#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(trig:de.sciss.synth.GE,reset:de.sciss.synth.GE):de.sciss.synth.ugen.SetResetFF"></a>
       <a id="ar(GE,GE):SetResetFF"></a>
       <h4 class="signature">
@@ -160,7 +176,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger that sets output to 1. A trigger happens when
+                        the signal changes from non-positive to positive.</p></dd><dt class="param">reset</dt><dd class="cmt"><p>trigger that sets output to 0. A trigger happens when
+                        the signal changes from non-positive to positive.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +328,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.SetResetFF#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.SetResetFF#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(trig:de.sciss.synth.GE,reset:de.sciss.synth.GE):de.sciss.synth.ugen.SetResetFF"></a>
       <a id="kr(GE,GE):SetResetFF"></a>
       <h4 class="signature">
@@ -325,7 +344,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger that sets output to 1. A trigger happens when
+                        the signal changes from non-positive to positive.</p></dd><dt class="param">reset</dt><dd class="cmt"><p>trigger that sets output to 0. A trigger happens when
+                        the signal changes from non-positive to positive.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

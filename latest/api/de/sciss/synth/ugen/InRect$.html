@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>InRect - SysSon 0.8.0 API - de.sciss.synth.ugen.InRect</title>
-          <meta name="description" content="InRect - SysSon 0.8.0 API - de.sciss.synth.ugen.InRect" />
-          <meta name="keywords" content="InRect SysSon 0.8.0 API de.sciss.synth.ugen.InRect" />
+          <title>InRect - SysSon 0.11.0 API - de.sciss.synth.ugen.InRect</title>
+          <meta name="description" content="InRect - SysSon 0.11.0 API - de.sciss.synth.ugen.InRect" />
+          <meta name="keywords" content="InRect SysSon 0.11.0 API de.sciss.synth.ugen.InRect" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="InRect.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="InRect.html" title="Go to companion">InRect</a></h1> <span class="permalink">
+        <h1><a href="InRect.html" title="Go to companion">InRect</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="InRect.html" title="See companion">class InRect</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.InRect$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that tests if two signals lie both within a given ranges. The two input
+signals can be understood as horizontal and vertical coordinates, therefore the
+test become one that determines whether the input is within a given &quot;rectangle&quot;.</p><p>If <code>x &gt;= left</code> and <code>x &lt;= right</code> and <code>y &gt; top</code> and <code>y &lt;= bottom</code> , outputs 1.0,
+otherwise outputs 0.0.</p><h5>Examples</h5><pre><span class="cmt">// detect whether mouse is in specific horizontal and vertical range</span>
+play {
+  <span class="kw">val</span> x  = MouseX.kr; <span class="kw">val</span> y = MouseY.kr(<span class="num">1</span>, <span class="num">0</span>)
+  <span class="kw">val</span> in = InRect.kr(x = x, y = y, left = <span class="num">0.4</span>, top = <span class="num">0.2</span>, right = <span class="num">0.6</span>, bottom = <span class="num">0.4</span>)
+  in * PinkNoise.ar(<span class="num">0.3</span>)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Clip$.html" class="extype" name="de.sciss.synth.ugen.Clip">Clip</a>
+</p></span><span class="cmt"><p><a href="InRange$.html" class="extype" name="de.sciss.synth.ugen.InRange">InRange</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +157,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.InRect#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.InRect#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(x:de.sciss.synth.GE,y:de.sciss.synth.GE,left:de.sciss.synth.GE,top:de.sciss.synth.GE,right:de.sciss.synth.GE,bottom:de.sciss.synth.GE):de.sciss.synth.ugen.InRect"></a>
       <a id="ar(GE,GE,GE,GE,GE,GE):InRect"></a>
       <h4 class="signature">
@@ -160,7 +173,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>&quot;horizontal&quot; signal to test</p></dd><dt class="param">y</dt><dd class="cmt"><p>&quot;vertical&quot; signal to test</p></dd><dt class="param">left</dt><dd class="cmt"><p>lower margin of horizontal test range (inclusive)</p></dd><dt class="param">top</dt><dd class="cmt"><p>lower margin of vertical test range (inclusive)</p></dd><dt class="param">right</dt><dd class="cmt"><p>upper margin of horizontal test range (inclusive)</p></dd><dt class="param">bottom</dt><dd class="cmt"><p>upper margin of vertical test range (inclusive)
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -292,7 +306,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.InRect#ir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.InRect#ir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ir(x:de.sciss.synth.GE,y:de.sciss.synth.GE,left:de.sciss.synth.GE,top:de.sciss.synth.GE,right:de.sciss.synth.GE,bottom:de.sciss.synth.GE):de.sciss.synth.ugen.InRect"></a>
       <a id="ir(GE,GE,GE,GE,GE,GE):InRect"></a>
       <h4 class="signature">
@@ -308,7 +322,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>&quot;horizontal&quot; signal to test</p></dd><dt class="param">y</dt><dd class="cmt"><p>&quot;vertical&quot; signal to test</p></dd><dt class="param">left</dt><dd class="cmt"><p>lower margin of horizontal test range (inclusive)</p></dd><dt class="param">top</dt><dd class="cmt"><p>lower margin of vertical test range (inclusive)</p></dd><dt class="param">right</dt><dd class="cmt"><p>upper margin of horizontal test range (inclusive)</p></dd><dt class="param">bottom</dt><dd class="cmt"><p>upper margin of vertical test range (inclusive)
+</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -326,7 +341,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.InRect#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.InRect#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(x:de.sciss.synth.GE,y:de.sciss.synth.GE,left:de.sciss.synth.GE,top:de.sciss.synth.GE,right:de.sciss.synth.GE,bottom:de.sciss.synth.GE):de.sciss.synth.ugen.InRect"></a>
       <a id="kr(GE,GE,GE,GE,GE,GE):InRect"></a>
       <h4 class="signature">
@@ -342,7 +357,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>&quot;horizontal&quot; signal to test</p></dd><dt class="param">y</dt><dd class="cmt"><p>&quot;vertical&quot; signal to test</p></dd><dt class="param">left</dt><dd class="cmt"><p>lower margin of horizontal test range (inclusive)</p></dd><dt class="param">top</dt><dd class="cmt"><p>lower margin of vertical test range (inclusive)</p></dd><dt class="param">right</dt><dd class="cmt"><p>upper margin of horizontal test range (inclusive)</p></dd><dt class="param">bottom</dt><dd class="cmt"><p>upper margin of vertical test range (inclusive)
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

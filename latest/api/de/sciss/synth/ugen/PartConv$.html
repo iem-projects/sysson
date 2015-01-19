@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PartConv - SysSon 0.8.0 API - de.sciss.synth.ugen.PartConv</title>
-          <meta name="description" content="PartConv - SysSon 0.8.0 API - de.sciss.synth.ugen.PartConv" />
-          <meta name="keywords" content="PartConv SysSon 0.8.0 API de.sciss.synth.ugen.PartConv" />
+          <title>PartConv - SysSon 0.11.0 API - de.sciss.synth.ugen.PartConv</title>
+          <meta name="description" content="PartConv - SysSon 0.11.0 API - de.sciss.synth.ugen.PartConv" />
+          <meta name="keywords" content="PartConv SysSon 0.11.0 API de.sciss.synth.ugen.PartConv" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PartConv.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PartConv.html" title="Go to companion">PartConv</a></h1> <span class="permalink">
+        <h1><a href="PartConv.html" title="Go to companion">PartConv</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PartConv.html" title="See companion">class PartConv</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PartConv$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,49 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen for partitioned convolution. Its advantage over non-partitioning UGens
+such as <code>Convolution2</code> is that the impulse response can be arbitrarily large
+amortization is used to spread processing and avoid CPU spikes.</p><p>The impulse response buffer must be specially prepared, using a <code>/b_gen</code>
+command that transforms an existing regularly formatted buffer to a new
+partitioned convolution ready buffer.</p><h5>Examples</h5><pre><span class="cmt">// Dan Stowell's reverb</span>
+<span class="cmt">// synthesize impulse response</span>
+<span class="kw">val</span> ir = (<span class="num">1</span>f +: Vector.fill(<span class="num">100</span>)(<span class="num">0</span>f)) ++ (<span class="num">1</span>f to <span class="num">0</span>f by -<span class="num">0.00002</span>f).map { f <span class="kw">=&gt;</span>
+  <span class="kw">if</span> (math.random &lt; <span class="num">0.5</span>)
+    <span class="num">0</span>f
+  <span class="kw">else</span>
+    f.pow(<span class="num">8</span>) * (math.random - <span class="num">0.5</span>).signum * <span class="num">0.1</span>f
+}
+
+<span class="cmt">// ir.plot()</span>
+
+<span class="cmt">// send the IR to a regular buffer</span>
+<span class="kw">val</span> irBuf = Buffer(s)
+irBuf.alloc(ir.size)
+irBuf.setData(ir)
+
+<span class="cmt">// calculate the partitioning parameters</span>
+<span class="kw">val</span> fftSize  = <span class="num">2048</span>
+<span class="kw">val</span> numPart  = (ir.size * <span class="num">2.0</span> / fftSize).ceil.toInt  <span class="cmt">// 49</span>
+<span class="kw">val</span> partSize = fftSize * numPart  <span class="cmt">// 100352</span>
+
+<span class="cmt">// create the specially formatted partitioned buffer</span>
+<span class="kw">val</span> partBuf  = Buffer(s)
+partBuf.alloc(partSize)
+<span class="cmt">// currently no predefined method for this command!</span>
+s ! osc.Message(<span class="lit">"/b_gen"</span>, partBuf.id, <span class="lit">"PreparePartConv"</span>, irBuf.id, fftSize)
+
+<span class="cmt">// now we can forget about the input buffer</span>
+irBuf.free()
+
+<span class="kw">val</span> x = play {
+  <span class="cmt">// trigger IR every 4 seconds</span>
+  <span class="kw">val</span> in = Impulse.ar(<span class="num">0.25</span>) * <span class="num">0.5</span>
+  PartConv.ar(in, fftSize, partBuf.id)
+}
+
+<span class="cmt">// do not forget to free the buffer eventually</span>
+x.free(); partBuf.free()</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a>
+</p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +190,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PartConv#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PartConv#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,fftSize:de.sciss.synth.GE,buf:de.sciss.synth.GE):de.sciss.synth.ugen.PartConv"></a>
       <a id="ar(GE,GE,GE):PartConv"></a>
       <h4 class="signature">
@@ -160,7 +206,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the realtime input to be convolved</p></dd><dt class="param">fftSize</dt><dd class="cmt"><p>FFT size which is twice the input signal partition
+                        size. This must be a multiple of the control-block size,
+                        and there must be at least two blocks per partition (to
+                        allow for amortization)</p></dd><dt class="param">buf</dt><dd class="cmt"><p>buffer identifier for the fixed kernel (init-time only).
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

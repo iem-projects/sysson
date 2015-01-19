@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LFDClipNoise - SysSon 0.8.0 API - de.sciss.synth.ugen.LFDClipNoise</title>
-          <meta name="description" content="LFDClipNoise - SysSon 0.8.0 API - de.sciss.synth.ugen.LFDClipNoise" />
-          <meta name="keywords" content="LFDClipNoise SysSon 0.8.0 API de.sciss.synth.ugen.LFDClipNoise" />
+          <title>LFDClipNoise - SysSon 0.11.0 API - de.sciss.synth.ugen.LFDClipNoise</title>
+          <meta name="description" content="LFDClipNoise - SysSon 0.11.0 API - de.sciss.synth.ugen.LFDClipNoise" />
+          <meta name="keywords" content="LFDClipNoise SysSon 0.11.0 API de.sciss.synth.ugen.LFDClipNoise" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LFDClipNoise$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LFDClipNoise$.html" title="Go to companion">LFDClipNoise</a></h1> <span class="permalink">
+        <h1><a href="LFDClipNoise$.html" title="Go to companion">LFDClipNoise</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LFDClipNoise$.html" title="See companion">object LFDClipNoise</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LFDClipNoise" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,13 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that randomly generates the values -1 or +1 at a rate given by the
+nearest integer division of the sample rate by the frequency argument. The
+difference to <code>LFClipNoise</code> is that this UGen does not quantize time and
+recovers fast from frequency input changes.
+</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>rate at which to generate random values.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GrayNoise$.html" class="extype" name="de.sciss.synth.ugen.GrayNoise">GrayNoise</a>
+</p></span><span class="cmt"><p><a href="Schmidt$.html" class="extype" name="de.sciss.synth.ugen.Schmidt">Schmidt</a></p></span><span class="cmt"><p><a href="CoinGate$.html" class="extype" name="de.sciss.synth.ugen.CoinGate">CoinGate</a></p></span><span class="cmt"><p><a href="LFNoise1$.html" class="extype" name="de.sciss.synth.ugen.LFNoise1">LFNoise1</a></p></span><span class="cmt"><p><a href="LFNoise0$.html" class="extype" name="de.sciss.synth.ugen.LFNoise0">LFNoise0</a></p></span><span class="cmt"><p><a href="LFClipNoise$.html" class="extype" name="de.sciss.synth.ugen.LFClipNoise">LFClipNoise</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +97,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.LFDClipNoise#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.LFDClipNoise#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,freq:de.sciss.synth.GE):de.sciss.synth.ugen.LFDClipNoise"></a>
       <a id="&lt;init&gt;:LFDClipNoise"></a>
       <h4 class="signature">
@@ -103,7 +113,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>rate at which to generate random values.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -260,7 +271,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">rate at which to generate random values.</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>

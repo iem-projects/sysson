@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>CoinGate - SysSon 0.8.0 API - de.sciss.synth.ugen.CoinGate</title>
-          <meta name="description" content="CoinGate - SysSon 0.8.0 API - de.sciss.synth.ugen.CoinGate" />
-          <meta name="keywords" content="CoinGate SysSon 0.8.0 API de.sciss.synth.ugen.CoinGate" />
+          <title>CoinGate - SysSon 0.11.0 API - de.sciss.synth.ugen.CoinGate</title>
+          <meta name="description" content="CoinGate - SysSon 0.11.0 API - de.sciss.synth.ugen.CoinGate" />
+          <meta name="keywords" content="CoinGate SysSon 0.11.0 API de.sciss.synth.ugen.CoinGate" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="CoinGate.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="CoinGate.html" title="Go to companion">CoinGate</a></h1> <span class="permalink">
+        <h1><a href="CoinGate.html" title="Go to companion">CoinGate</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="CoinGate.html" title="See companion">class CoinGate</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.CoinGate$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,8 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The argument order is different from its sclang counterpart.
-</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that randomly filters an input trigger signal. When a trigger arrives,
+it may pass with a probability given by the <code>prob</code> argument.</p><h5>Examples</h5><pre><span class="cmt">// filter dust, probability controlled by mouse</span>
+play {
+  <span class="kw">val</span> p = MouseX.kr
+  CoinGate.ar(Dust.ar(<span class="num">400</span>), p)
+}</pre></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The argument order is different from its sclang counterpart.
+</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="TRand$.html" class="extype" name="de.sciss.synth.ugen.TRand">TRand</a>
+</p></span><span class="cmt"><p><a href="PulseDivider$.html" class="extype" name="de.sciss.synth.ugen.PulseDivider">PulseDivider</a></p></span><span class="cmt"><p><a href="Gate$.html" class="extype" name="de.sciss.synth.ugen.Gate">Gate</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -145,7 +155,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.CoinGate#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.CoinGate#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,prob:de.sciss.synth.GE):de.sciss.synth.ugen.CoinGate"></a>
       <a id="ar(GE,GE):CoinGate"></a>
       <h4 class="signature">
@@ -161,7 +171,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the input triggers to filter</p></dd><dt class="param">prob</dt><dd class="cmt"><p>the probability between zero (no trigger passed) and 1
+                        (all triggers passed)
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -310,7 +322,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.CoinGate#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.CoinGate#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,prob:de.sciss.synth.GE):de.sciss.synth.ugen.CoinGate"></a>
       <a id="kr(GE,GE):CoinGate"></a>
       <h4 class="signature">
@@ -326,7 +338,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the input triggers to filter</p></dd><dt class="param">prob</dt><dd class="cmt"><p>the probability between zero (no trigger passed) and 1
+                        (all triggers passed)
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

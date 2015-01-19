@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>DC - SysSon 0.8.0 API - de.sciss.synth.ugen.DC</title>
-          <meta name="description" content="DC - SysSon 0.8.0 API - de.sciss.synth.ugen.DC" />
-          <meta name="keywords" content="DC SysSon 0.8.0 API de.sciss.synth.ugen.DC" />
+          <title>DC - SysSon 0.11.0 API - de.sciss.synth.ugen.DC</title>
+          <meta name="description" content="DC - SysSon 0.11.0 API - de.sciss.synth.ugen.DC" />
+          <meta name="keywords" content="DC SysSon 0.11.0 API de.sciss.synth.ugen.DC" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="DC.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="DC.html" title="Go to companion">DC</a></h1> <span class="permalink">
+        <h1><a href="DC.html" title="Go to companion">DC</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="DC.html" title="See companion">class DC</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.DC$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that creates a constant signal at a given calculation rate.</p><h5>Examples</h5><pre><span class="cmt">// create a silent audio signal</span>
+play {
+  <span class="cmt">// Note: Select.ar requires audio-rate input.</span>
+  <span class="cmt">// Therefore, DC can be used to wrap the otherwise</span>
+  <span class="cmt">// incompatible constant zero. In future versions of</span>
+  <span class="cmt">// ScalaCollider, this wrapping will be done</span>
+  <span class="cmt">// automatically, however.</span>
+  Select.ar(MouseButton.kr(lag = <span class="num">0</span>), <span class="std">Seq</span>(DC.ar(<span class="num">0</span>), SinOsc.ar * <span class="num">0.2</span>))
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LeakDC$.html" class="extype" name="de.sciss.synth.ugen.LeakDC">LeakDC</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +157,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.DC#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.DC#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE):de.sciss.synth.ugen.DC"></a>
       <a id="ar(GE):DC"></a>
       <h4 class="signature">
@@ -160,7 +173,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>constant value to output, fixed at initialisation time.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +323,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.DC#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.DC#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE):de.sciss.synth.ugen.DC"></a>
       <a id="kr(GE):DC"></a>
       <h4 class="signature">
@@ -325,7 +339,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>constant value to output, fixed at initialisation time.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Phasor - SysSon 0.8.0 API - de.sciss.synth.ugen.Phasor</title>
-          <meta name="description" content="Phasor - SysSon 0.8.0 API - de.sciss.synth.ugen.Phasor" />
-          <meta name="keywords" content="Phasor SysSon 0.8.0 API de.sciss.synth.ugen.Phasor" />
+          <title>Phasor - SysSon 0.11.0 API - de.sciss.synth.ugen.Phasor</title>
+          <meta name="description" content="Phasor - SysSon 0.11.0 API - de.sciss.synth.ugen.Phasor" />
+          <meta name="keywords" content="Phasor SysSon 0.11.0 API de.sciss.synth.ugen.Phasor" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Phasor.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Phasor.html" title="Go to companion">Phasor</a></h1> <span class="permalink">
+        <h1><a href="Phasor.html" title="Go to companion">Phasor</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Phasor.html" title="See companion">class Phasor</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Phasor$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,19 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A linear repeating ramp UGen between start and end values. Using a trigger
+input, it can be reset to a specific position. Upon reaching the end of its
+ramp, <code>Phasor</code> will wrap back to its start value. <b>Note</b>: Since <code>end</code> is
+defined as the wrap point, its value is never actually output.</p><h5>Examples</h5><pre><span class="cmt">// glissandi</span>
+play {
+  <span class="cmt">// mouse-x controls phasor speed</span>
+  <span class="kw">val</span> freq  = MouseX.kr(<span class="num">0.2</span>, <span class="num">2</span>, <span class="num">1</span>)
+  <span class="cmt">// mouse button can be used to jump back</span>
+  <span class="kw">val</span> reset = MouseButton.kr(lag = <span class="num">0</span>)
+  <span class="kw">val</span> p     = Phasor.ar(reset, freq / SampleRate.ir)
+  SinOsc.ar(p.linlin(<span class="num">0</span>, <span class="num">1</span>, <span class="num">600</span>, <span class="num">1000</span>)) * <span class="num">0.1</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LFSaw$.html" class="extype" name="de.sciss.synth.ugen.LFSaw">LFSaw</a>
+</p></span><span class="cmt"><p><a href="Line$.html" class="extype" name="de.sciss.synth.ugen.Line">Line</a></p></span><span class="cmt"><p><a href="Stepper$.html" class="extype" name="de.sciss.synth.ugen.Stepper">Stepper</a></p></span><span class="cmt"><p><a href="Ramp$.html" class="extype" name="de.sciss.synth.ugen.Ramp">Ramp</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +160,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Phasor#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Phasor#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(trig:de.sciss.synth.GE,speed:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,resetVal:de.sciss.synth.GE):de.sciss.synth.ugen.Phasor"></a>
       <a id="ar(GE,GE,GE,GE,GE):Phasor"></a>
       <h4 class="signature">
@@ -160,7 +176,14 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger signal that causes the phasor to jump to the
+                        <code>resetVal</code> position</p></dd><dt class="param">speed</dt><dd class="cmt"><p>amount of increment <i>per sample frame</i>. I.e at a
+                        speed of 1, each sample output by the UGen will be 1
+                        greater than the preceding sample. To achieve a specific
+                        frequency <code>f</code> in Hertz, use a speed value of
+                        <code>f / SampleRate.ir</code> .</p></dd><dt class="param">lo</dt><dd class="cmt"><p>start value of the ramp</p></dd><dt class="param">hi</dt><dd class="cmt"><p>end value of the ramp (exclusive)</p></dd><dt class="param">resetVal</dt><dd class="cmt"><p>value to jump to upon receiving a trigger in the <code>trig</code>
+                        input
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Phasor#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.Phasor"></a>
       <a id="ar:Phasor"></a>
@@ -326,7 +349,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Phasor#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Phasor#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(trig:de.sciss.synth.GE,speed:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,resetVal:de.sciss.synth.GE):de.sciss.synth.ugen.Phasor"></a>
       <a id="kr(GE,GE,GE,GE,GE):Phasor"></a>
       <h4 class="signature">
@@ -342,7 +365,14 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger signal that causes the phasor to jump to the
+                        <code>resetVal</code> position</p></dd><dt class="param">speed</dt><dd class="cmt"><p>amount of increment <i>per sample frame</i>. I.e at a
+                        speed of 1, each sample output by the UGen will be 1
+                        greater than the preceding sample. To achieve a specific
+                        frequency <code>f</code> in Hertz, use a speed value of
+                        <code>f / SampleRate.ir</code> .</p></dd><dt class="param">lo</dt><dd class="cmt"><p>start value of the ramp</p></dd><dt class="param">hi</dt><dd class="cmt"><p>end value of the ramp (exclusive)</p></dd><dt class="param">resetVal</dt><dd class="cmt"><p>value to jump to upon receiving a trigger in the <code>trig</code>
+                        input
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Phasor#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.Phasor"></a>
       <a id="kr:Phasor"></a>

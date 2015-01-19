@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PV_HainsworthFoote - SysSon 0.8.0 API - de.sciss.synth.ugen.PV_HainsworthFoote</title>
-          <meta name="description" content="PV HainsworthFoote - SysSon 0.8.0 API - de.sciss.synth.ugen.PV HainsworthFoote" />
-          <meta name="keywords" content="PV HainsworthFoote SysSon 0.8.0 API de.sciss.synth.ugen.PV HainsworthFoote" />
+          <title>PV_HainsworthFoote - SysSon 0.11.0 API - de.sciss.synth.ugen.PV_HainsworthFoote</title>
+          <meta name="description" content="PV HainsworthFoote - SysSon 0.11.0 API - de.sciss.synth.ugen.PV HainsworthFoote" />
+          <meta name="keywords" content="PV HainsworthFoote SysSon 0.11.0 API de.sciss.synth.ugen.PV HainsworthFoote" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PV_HainsworthFoote.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PV_HainsworthFoote.html" title="Go to companion">PV_HainsworthFoote</a></h1> <span class="permalink">
+        <h1><a href="PV_HainsworthFoote.html" title="Go to companion">PV_HainsworthFoote</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PV_HainsworthFoote.html" title="See companion">class PV_HainsworthFoote</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,21 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An FFT based onset detector UGen using a balance of two features. It is based
+on work described in Hainsworth (2003), &quot;Techniques for the Automated Analysis
+of Musical Audio,&quot; PhD thesis, University of Cambridge. See especially p. 128.
+The Hainsworth metric is a modification of the Kullback Liebler distance.</p><h5>Examples</h5><pre><span class="cmt">// observe detection</span>
+play {
+  <span class="kw">val</span> sig = Decay.ar(Dust.ar(<span class="num">2</span>), <span class="num">0.1</span>) * WhiteNoise.ar(<span class="num">0.25</span>)
+  <span class="kw">val</span> th  = MouseX.kr(<span class="num">0.3</span>, <span class="num">1.0</span>, lag = <span class="num">0</span>)
+  th.poll(HPZ1.kr(th).abs, <span class="lit">"thresh"</span>)
+  <span class="kw">val</span> h   = MouseY.kr(<span class="num">1.0</span>, <span class="num">0.1</span>, lag = <span class="num">0</span>)
+  <span class="kw">val</span> f   = <span class="num">1</span> - h
+  h.poll(HPZ1.kr(h).abs, <span class="lit">"h-f"</span>)
+  <span class="kw">val</span> tr  = PV_HainsworthFoote.ar(FFT(LocalBuf(<span class="num">2048</span>), sig), h, f, thresh = th)
+  <span class="std">Seq</span>(sig, SinOsc.ar(<span class="num">440</span>) * Decay.ar(tr * <span class="num">0.01</span>, <span class="num">0.1</span>))
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PV_JensenAndersen$.html" class="extype" name="de.sciss.synth.ugen.PV_JensenAndersen">PV_JensenAndersen</a>
+</p></span><span class="cmt"><p><a href="Onsets$.html" class="extype" name="de.sciss.synth.ugen.Onsets">Onsets</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,8 +162,8 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PV_HainsworthFoote#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ar(chain:de.sciss.synth.GE,propH:de.sciss.synth.GE,propF:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_HainsworthFoote"></a>
+    </li><li name="de.sciss.synth.ugen.PV_HainsworthFoote#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ar(chain:de.sciss.synth.GE,hainsworth:de.sciss.synth.GE,foote:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_HainsworthFoote"></a>
       <a id="ar(GE,GE,GE,GE,GE):PV_HainsworthFoote"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -153,14 +171,19 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ar</span><span class="params">(<span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="propH">propH: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="propF">propF: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="waitTime">waitTime: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.04f</a></span></span></span>)</span><span class="result">: <a href="PV_HainsworthFoote.html" class="extype" name="de.sciss.synth.ugen.PV_HainsworthFoote">PV_HainsworthFoote</a></span>
+        <span class="name">ar</span><span class="params">(<span name="chain">chain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="hainsworth">hainsworth: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="foote">foote: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="waitTime">waitTime: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.04f</a></span></span></span>)</span><span class="result">: <a href="PV_HainsworthFoote.html" class="extype" name="de.sciss.synth.ugen.PV_HainsworthFoote">PV_HainsworthFoote</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote$@ar(chain:de.sciss.synth.GE,propH:de.sciss.synth.GE,propF:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_HainsworthFoote" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.PV_HainsworthFoote$@ar(chain:de.sciss.synth.GE,hainsworth:de.sciss.synth.GE,foote:de.sciss.synth.GE,thresh:de.sciss.synth.GE,waitTime:de.sciss.synth.GE):de.sciss.synth.ugen.PV_HainsworthFoote" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>the fft signal (buffer) to analyze</p></dd><dt class="param">hainsworth</dt><dd class="cmt"><p>what strength of detection signal from Hainsworth
+                        metric (0 to 1) to use.</p></dd><dt class="param">foote</dt><dd class="cmt"><p>what strength of detection signal from normalized Foote
+                        metric (0 to 1) to use.</p></dd><dt class="param">thresh</dt><dd class="cmt"><p>threshold level for detection</p></dd><dt class="param">waitTime</dt><dd class="cmt"><p>after an onset is detected, further detections are
+                        suppressed for this period in seconds, preventing
+                        multiple rapid triggers
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

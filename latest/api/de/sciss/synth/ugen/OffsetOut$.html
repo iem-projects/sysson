@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>OffsetOut - SysSon 0.8.0 API - de.sciss.synth.ugen.OffsetOut</title>
-          <meta name="description" content="OffsetOut - SysSon 0.8.0 API - de.sciss.synth.ugen.OffsetOut" />
-          <meta name="keywords" content="OffsetOut SysSon 0.8.0 API de.sciss.synth.ugen.OffsetOut" />
+          <title>OffsetOut - SysSon 0.11.0 API - de.sciss.synth.ugen.OffsetOut</title>
+          <meta name="description" content="OffsetOut - SysSon 0.11.0 API - de.sciss.synth.ugen.OffsetOut" />
+          <meta name="keywords" content="OffsetOut SysSon 0.11.0 API de.sciss.synth.ugen.OffsetOut" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="OffsetOut.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="OffsetOut.html" title="Go to companion">OffsetOut</a></h1> <span class="permalink">
+        <h1><a href="OffsetOut.html" title="Go to companion">OffsetOut</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="OffsetOut.html" title="See companion">class OffsetOut</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.OffsetOut$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,33 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that writes a signal onto a bus, delaying the signal such that the input
+will begin to appear on the bus precisely when the encompassing Synth was
+scheduled according to its OSC bundle. I.e. if the synth is scheduled to be
+started part way through a control cycle, <code>OffsetOut</code> will maintain the correct
+offset by buffering the output and delaying it until the exact time that the
+synth was scheduled for.</p><p>This UGen adds (&quot;mixes&quot;) the input-signal to the existing contents of the bus.</p><p>Multi-channel input signals, for example a <code>PanAz</code> , are written as such to the
+bus without expansion. That is, the <code>bus</code> index argument is used for the first
+channel, the second channel will appear on <code>bus + 1</code> , etc.</p><p>If you have an expanding multi-channel input, however, you have to be careful.
+For example, if you have
+<code>PanAz.ar(2, SinOsc.ar(Seq(444, 555, 666)) * 0.2, Seq(-1, 0, 1))</code> , this results
+in one output UGen carrying one channel, and another one carrying two channels.
+(The way this works is consistent with SCLang). In order to get the correct
+behaviour (left outputs of the <code>PanAz</code> summed, and right output of the <code>PanAz</code>
+summed), wrap this expression in a <code>Mix(...)</code> before passing it to the output
+UGen.</p><p><b>Note</b>: You cannot currently achieve sample accurate scheduling in
+SuperCollider. This UGen is therefore more or less useless.</p><h5>Examples</h5><pre><span class="cmt">// compare left-right</span>
+<span class="kw">val</span> sd = SynthDef.recv(<span class="lit">"offset-out"</span>) {
+  <span class="kw">val</span> x = Impulse.ar(<span class="num">2</span>)
+  <span class="kw">val</span> y = SubsampleOffset.ir
+  y.poll(<span class="num">0</span>, <span class="lit">"offset"</span>)
+  Out      .ar(<span class="num">0</span>, x)
+  OffsetOut.ar(<span class="num">1</span>, x)    <span class="cmt">// right channel will be delayed against left</span>
+}
+
+<span class="kw">val</span> x = Synth(s)
+s ! osc.Bundle.millis(System.currentTimeMillis + <span class="num">1000</span>, x.newMsg(sd.name, s))</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SubsampleOffset$.html" class="extype" name="de.sciss.synth.ugen.SubsampleOffset">SubsampleOffset</a>
+</p></span><span class="cmt"><p><a href="XOut$.html" class="extype" name="de.sciss.synth.ugen.XOut">XOut</a></p></span><span class="cmt"><p><a href="ReplaceOut$.html" class="extype" name="de.sciss.synth.ugen.ReplaceOut">ReplaceOut</a></p></span><span class="cmt"><p><a href="Out$.html" class="extype" name="de.sciss.synth.ugen.Out">Out</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +174,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.OffsetOut#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.OffsetOut#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(bus:de.sciss.synth.GE,in:de.sciss.synth.GE):de.sciss.synth.ugen.OffsetOut"></a>
       <a id="ar(GE,GE):OffsetOut"></a>
       <h4 class="signature">
@@ -160,7 +190,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>bus index to write to. For an audio-rate UGen, this is
+                        an audio-bus, for a control-rate UGen, this is a
+                        control-bus.</p></dd><dt class="param">in</dt><dd class="cmt"><p>signal to write to the bus. If the UGen is audio-rate,
+                        the input must also be audio-rate.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

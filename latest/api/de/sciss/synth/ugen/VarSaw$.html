@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>VarSaw - SysSon 0.8.0 API - de.sciss.synth.ugen.VarSaw</title>
-          <meta name="description" content="VarSaw - SysSon 0.8.0 API - de.sciss.synth.ugen.VarSaw" />
-          <meta name="keywords" content="VarSaw SysSon 0.8.0 API de.sciss.synth.ugen.VarSaw" />
+          <title>VarSaw - SysSon 0.11.0 API - de.sciss.synth.ugen.VarSaw</title>
+          <meta name="description" content="VarSaw - SysSon 0.11.0 API - de.sciss.synth.ugen.VarSaw" />
+          <meta name="keywords" content="VarSaw SysSon 0.11.0 API de.sciss.synth.ugen.VarSaw" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="VarSaw.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="VarSaw.html" title="Go to companion">VarSaw</a></h1> <span class="permalink">
+        <h1><a href="VarSaw.html" title="Go to companion">VarSaw</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="VarSaw.html" title="See companion">class VarSaw</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.VarSaw$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,22 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A sawtooth-triangle oscillator UGen with variable duty. A <code>width</code> of zero
+produces a sawtooth of falling slope, with an initial phase of zero making it
+start at +1. A <code>width</code> of 0.5 produces a triangle wave, starting at -1 then
+raising to +1, then falling again to -1. A <code>width</code> of 1.0 produces a sawtooth of
+rising slope, starting -1.</p><p>Increasing the initial wave will increase the offset into the waveform. For
+example, with a phase of 0.5 and a width of 0.5, the result is a triangle
+waveform that starts at +1.</p><p>There is a strange anomaly for the falling sawtooth (zero width): Instead of
+starting directly at +1, the first sample is -1 and only from the second sample
+at +1 the waveform starts falling. In other words, the waveform has a delay of
+one sample.</p><h5>Examples</h5><pre><span class="cmt">// width modulation</span>
+play {
+  <span class="kw">val</span> freq  = LFPulse.kr(<span class="num">3</span>, <span class="num">0</span>, <span class="num">0.3</span>).madd(<span class="num">200</span>, <span class="num">200</span>)
+  <span class="kw">val</span> width = LFTri.kr(<span class="num">1.0</span>).madd(<span class="num">0.5</span>, <span class="num">0.5</span>)
+  VarSaw.ar(freq, <span class="num">0</span>, width) * <span class="num">0.2</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SyncSaw$.html" class="extype" name="de.sciss.synth.ugen.SyncSaw">SyncSaw</a>
+</p></span><span class="cmt"><p><a href="LFSaw$.html" class="extype" name="de.sciss.synth.ugen.LFSaw">LFSaw</a></p></span><span class="cmt"><p><a href="Saw$.html" class="extype" name="de.sciss.synth.ugen.Saw">Saw</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +163,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.VarSaw#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.VarSaw#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(freq:de.sciss.synth.GE,iphase:de.sciss.synth.GE,width:de.sciss.synth.GE):de.sciss.synth.ugen.VarSaw"></a>
       <a id="ar(GE,GE,GE):VarSaw"></a>
       <h4 class="signature">
@@ -160,7 +179,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase offset in cycle (0 to 1)</p></dd><dt class="param">width</dt><dd class="cmt"><p>duty cycle from zero to one.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.VarSaw#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.VarSaw"></a>
       <a id="ar:VarSaw"></a>
@@ -326,7 +346,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.VarSaw#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.VarSaw#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(freq:de.sciss.synth.GE,iphase:de.sciss.synth.GE,width:de.sciss.synth.GE):de.sciss.synth.ugen.VarSaw"></a>
       <a id="kr(GE,GE,GE):VarSaw"></a>
       <h4 class="signature">
@@ -342,7 +362,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase offset in cycle (0 to 1)</p></dd><dt class="param">width</dt><dd class="cmt"><p>duty cycle from zero to one.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.VarSaw#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.VarSaw"></a>
       <a id="kr:VarSaw"></a>

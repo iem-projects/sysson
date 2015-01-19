@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>XOut - SysSon 0.8.0 API - de.sciss.synth.ugen.XOut</title>
-          <meta name="description" content="XOut - SysSon 0.8.0 API - de.sciss.synth.ugen.XOut" />
-          <meta name="keywords" content="XOut SysSon 0.8.0 API de.sciss.synth.ugen.XOut" />
+          <title>XOut - SysSon 0.11.0 API - de.sciss.synth.ugen.XOut</title>
+          <meta name="description" content="XOut - SysSon 0.11.0 API - de.sciss.synth.ugen.XOut" />
+          <meta name="keywords" content="XOut SysSon 0.11.0 API de.sciss.synth.ugen.XOut" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="XOut.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="XOut.html" title="Go to companion">XOut</a></h1> <span class="permalink">
+        <h1><a href="XOut.html" title="Go to companion">XOut</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="XOut.html" title="See companion">class XOut</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.XOut$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,8 +51,23 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The argument order is different from its sclang counterpart.
-</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that cross-fades the contents of a bus with an input signal. A linear
+cross-fade can go from 0.0 (previous bus contents preserved, no input signal
+added) via 0.5 (previous signal attenuated by -6 dB, input signal attenuated by
+-6 dB and added) to 1.0 (contents completely replaced by input signal).</p><h5>Examples</h5><pre><span class="cmt">// cross-fade two synths</span>
+<span class="kw">val</span> sin = play {
+  Out.ar(<span class="num">0</span>, SinOsc.ar(<span class="num">440</span>) * <span class="num">0.1</span>)
+}
+
+<span class="kw">val</span> noise = play(target = sin, addAction = addAfter) {
+  XOut.ar(<span class="num">0</span>, PinkNoise.ar(<span class="num">0.1</span>), xfade = <span class="lit">"xfade"</span>.kr(<span class="num">0</span>))
+}
+
+noise.set(<span class="lit">"xfade"</span> -&gt; <span class="num">0.5</span>) <span class="cmt">// both signals heard</span>
+noise.set(<span class="lit">"xfade"</span> -&gt; <span class="num">1.0</span>) <span class="cmt">// just noise</span>
+noise.set(<span class="lit">"xfade"</span> -&gt; <span class="num">0.0</span>) <span class="cmt">// just sine</span></pre></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The argument order is different from its sclang counterpart.
+</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="" class="extype" name="de.sciss.synth.ugen.XOut">XOut</a>
+</p></span><span class="cmt"><p><a href="Out$.html" class="extype" name="de.sciss.synth.ugen.Out">Out</a></p></span><span class="cmt"><p><a href="In$.html" class="extype" name="de.sciss.synth.ugen.In">In</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -145,7 +164,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.XOut#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.XOut#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(bus:de.sciss.synth.GE,in:de.sciss.synth.GE,xfade:de.sciss.synth.GE):de.sciss.synth.ugen.XOut"></a>
       <a id="ar(GE,GE,GE):XOut"></a>
       <h4 class="signature">
@@ -161,7 +180,12 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>bus index to write to. For an audio-rate UGen, this is
+                        an audio-bus, for a control-rate UGen, this is a
+                        control-bus.</p></dd><dt class="param">in</dt><dd class="cmt"><p>signal to write to the bus. If the UGen is audio-rate,
+                        the input must also be audio-rate.</p></dd><dt class="param">xfade</dt><dd class="cmt"><p>cross-fade value. The new bus contents will be
+                        <code>old_bus_content * (1 - xfade) + in * xfade</code>
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -310,7 +334,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.XOut#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.XOut#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(bus:de.sciss.synth.GE,in:de.sciss.synth.GE,xfade:de.sciss.synth.GE):de.sciss.synth.ugen.XOut"></a>
       <a id="kr(GE,GE,GE):XOut"></a>
       <h4 class="signature">
@@ -326,7 +350,12 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>bus index to write to. For an audio-rate UGen, this is
+                        an audio-bus, for a control-rate UGen, this is a
+                        control-bus.</p></dd><dt class="param">in</dt><dd class="cmt"><p>signal to write to the bus. If the UGen is audio-rate,
+                        the input must also be audio-rate.</p></dd><dt class="param">xfade</dt><dd class="cmt"><p>cross-fade value. The new bus contents will be
+                        <code>old_bus_content * (1 - xfade) + in * xfade</code>
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Formlet - SysSon 0.8.0 API - de.sciss.synth.ugen.Formlet</title>
-          <meta name="description" content="Formlet - SysSon 0.8.0 API - de.sciss.synth.ugen.Formlet" />
-          <meta name="keywords" content="Formlet SysSon 0.8.0 API de.sciss.synth.ugen.Formlet" />
+          <title>Formlet - SysSon 0.11.0 API - de.sciss.synth.ugen.Formlet</title>
+          <meta name="description" content="Formlet - SysSon 0.11.0 API - de.sciss.synth.ugen.Formlet" />
+          <meta name="keywords" content="Formlet SysSon 0.11.0 API de.sciss.synth.ugen.Formlet" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Formlet.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Formlet.html" title="Go to companion">Formlet</a></h1> <span class="permalink">
+        <h1><a href="Formlet.html" title="Go to companion">Formlet</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Formlet.html" title="See companion">class Formlet</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Formlet$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,22 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A FOF-like resonant filter UGen. Its impulse response is like that of a sine
+wave with a <code>Decay2</code> envelope over it. It is possible to control the attack and
+decay times.</p><p><code>Formlet</code> is equivalent to:</p><pre>Ringz(in, freq, decay) - Ringz(in, freq, attack)</pre><p>The great advantage to this filter over FOF (Fonction d'onde formantique) is
+that there is no limit to the number of overlapping grains since the grain is
+just the impulse response of the filter.</p><h5>Examples</h5><pre><span class="cmt">// modulated formant frequency</span>
+play {
+  <span class="kw">val</span> in = Blip.ar(SinOsc.kr(<span class="num">5</span>,<span class="num">0</span>).madd(<span class="num">20</span>, <span class="num">300</span>), <span class="num">1000</span>) * <span class="num">0.1</span>
+  Formlet.ar(in, XLine.kr(<span class="num">1500</span>, <span class="num">700</span>, <span class="num">8</span>), <span class="num">0.005</span>, <span class="num">0.04</span>)
+}</pre><pre><span class="cmt">// mouse control of frequency and decay time</span>
+play {
+  <span class="kw">val</span> in    = Blip.ar(SinOsc.kr(<span class="num">5</span>,<span class="num">0</span>).madd(<span class="num">20</span>, <span class="num">300</span>), <span class="num">1000</span>) * <span class="num">0.1</span>
+  <span class="kw">val</span> freq  = MouseY.kr(<span class="num">700</span>, <span class="num">2000</span>, <span class="num">1</span>)
+  <span class="kw">val</span> decay = MouseX.kr(<span class="num">0.01</span>, <span class="num">0.2</span>, <span class="num">1</span>)
+  Formlet.ar(in, freq, attack = <span class="num">0.005</span>, decay = decay)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="RHPF$.html" class="extype" name="de.sciss.synth.ugen.RHPF">RHPF</a>
+</p></span><span class="cmt"><p><a href="RLPF$.html" class="extype" name="de.sciss.synth.ugen.RLPF">RLPF</a></p></span><span class="cmt"><p><a href="Resonz$.html" class="extype" name="de.sciss.synth.ugen.Resonz">Resonz</a></p></span><span class="cmt"><p><a href="Ringz$.html" class="extype" name="de.sciss.synth.ugen.Ringz">Ringz</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +163,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Formlet#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Formlet#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,attack:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Formlet"></a>
       <a id="ar(GE,GE,GE,GE):Formlet"></a>
       <h4 class="signature">
@@ -160,7 +179,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>resonant frequency in Hertz</p></dd><dt class="param">attack</dt><dd class="cmt"><p>the 60 dB attack time in seconds</p></dd><dt class="param">decay</dt><dd class="cmt"><p>the 60 dB decay time in seconds
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +329,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Formlet#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Formlet#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,attack:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Formlet"></a>
       <a id="kr(GE,GE,GE,GE):Formlet"></a>
       <h4 class="signature">
@@ -325,7 +345,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>resonant frequency in Hertz</p></dd><dt class="param">attack</dt><dd class="cmt"><p>the 60 dB attack time in seconds</p></dd><dt class="param">decay</dt><dd class="cmt"><p>the 60 dB decay time in seconds
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

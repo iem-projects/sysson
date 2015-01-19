@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Limiter - SysSon 0.8.0 API - de.sciss.synth.ugen.Limiter</title>
-          <meta name="description" content="Limiter - SysSon 0.8.0 API - de.sciss.synth.ugen.Limiter" />
-          <meta name="keywords" content="Limiter SysSon 0.8.0 API de.sciss.synth.ugen.Limiter" />
+          <title>Limiter - SysSon 0.11.0 API - de.sciss.synth.ugen.Limiter</title>
+          <meta name="description" content="Limiter - SysSon 0.11.0 API - de.sciss.synth.ugen.Limiter" />
+          <meta name="keywords" content="Limiter SysSon 0.11.0 API de.sciss.synth.ugen.Limiter" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Limiter.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Limiter.html" title="Go to companion">Limiter</a></h1> <span class="permalink">
+        <h1><a href="Limiter.html" title="Go to companion">Limiter</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Limiter.html" title="See companion">class Limiter</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Limiter$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,18 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Limits the input amplitude to the given level. Unlike <code>Compander</code> , this UGen
+will never overshoot, but it needs to look ahead in the input signal,
+introducing a delay in its output. The delay time is equal to twice the value of
+the <code>dur</code> parameter (the buffer internally used).</p><h5>Examples</h5><pre><span class="cmt">// compare dry and wet</span>
+play {
+  <span class="kw">val</span> in = Decay2.ar(
+    Impulse.ar(<span class="num">8</span>, phase = LFSaw.kr(<span class="num">0.25</span>) * <span class="num">0.7</span>),
+    attack = <span class="num">0.001</span>, release = <span class="num">0.3</span>) * FSinOsc.ar(<span class="num">500</span>)
+  <span class="kw">val</span> flt = Limiter.ar(in, level = <span class="num">0.4</span>)
+  LinXFade2.ar(in, flt, MouseButton.kr(-<span class="num">1</span>, <span class="num">1</span>))
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Compander$.html" class="extype" name="de.sciss.synth.ugen.Compander">Compander</a>
+</p></span><span class="cmt"><p><a href="Normalizer$.html" class="extype" name="de.sciss.synth.ugen.Normalizer">Normalizer</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +159,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Limiter#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Limiter#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,level:de.sciss.synth.GE,dur:de.sciss.synth.GE):de.sciss.synth.ugen.Limiter"></a>
       <a id="ar(GE,GE,GE):Limiter"></a>
       <h4 class="signature">
@@ -160,7 +175,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be limited</p></dd><dt class="param">level</dt><dd class="cmt"><p>maximum amplitude to which the signal is limited. The
+                        limiter will kick in when the input signal exceeds
+                        <code>+level</code> or falls below <code>-level</code> .</p></dd><dt class="param">dur</dt><dd class="cmt"><p>look-ahead time in seconds
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +327,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Limiter#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Limiter#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,level:de.sciss.synth.GE,dur:de.sciss.synth.GE):de.sciss.synth.ugen.Limiter"></a>
       <a id="kr(GE,GE,GE):Limiter"></a>
       <h4 class="signature">
@@ -325,7 +343,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be limited</p></dd><dt class="param">level</dt><dd class="cmt"><p>maximum amplitude to which the signal is limited. The
+                        limiter will kick in when the input signal exceeds
+                        <code>+level</code> or falls below <code>-level</code> .</p></dd><dt class="param">dur</dt><dd class="cmt"><p>look-ahead time in seconds
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

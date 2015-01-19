@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>PulseDivider - SysSon 0.8.0 API - de.sciss.synth.ugen.PulseDivider</title>
-          <meta name="description" content="PulseDivider - SysSon 0.8.0 API - de.sciss.synth.ugen.PulseDivider" />
-          <meta name="keywords" content="PulseDivider SysSon 0.8.0 API de.sciss.synth.ugen.PulseDivider" />
+          <title>PulseDivider - SysSon 0.11.0 API - de.sciss.synth.ugen.PulseDivider</title>
+          <meta name="description" content="PulseDivider - SysSon 0.11.0 API - de.sciss.synth.ugen.PulseDivider" />
+          <meta name="keywords" content="PulseDivider SysSon 0.11.0 API de.sciss.synth.ugen.PulseDivider" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="PulseDivider.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="PulseDivider.html" title="Go to companion">PulseDivider</a></h1> <span class="permalink">
+        <h1><a href="PulseDivider.html" title="Go to companion">PulseDivider</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="PulseDivider.html" title="See companion">class PulseDivider</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.PulseDivider$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,23 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that decimates trigger by outputting one impulse each time a certain
+number of triggers at its input have been received.</p><h5>Examples</h5><pre><span class="cmt">// every two mouse-button clicks</span>
+play {
+  <span class="kw">val</span> in  = MouseButton.kr(lag = <span class="num">0</span>)
+  in.poll(in, <span class="lit">"in"</span>)
+  <span class="kw">val</span> out = PulseDivider.kr(in, <span class="num">2</span>, -<span class="num">1</span>)
+  out.poll(out, <span class="lit">"out"</span>)
+  ()
+}</pre><pre><span class="cmt">// rhythmic 1:4 pattern</span>
+play {
+  <span class="kw">val</span> p = Impulse.ar(<span class="num">8</span>)
+  <span class="kw">val</span> d = PulseDivider.ar(p, <span class="num">4</span>)
+  <span class="kw">val</span> a = SinOsc.ar(<span class="num">1200</span>) * Decay2.ar(p, <span class="num">0.005</span>, <span class="num">0.1</span>) * <span class="num">0.3</span>
+  <span class="kw">val</span> b = SinOsc.ar( <span class="num">600</span>) * Decay2.ar(d, <span class="num">0.005</span>, <span class="num">0.5</span>) * <span class="num">0.3</span>
+  <span class="std">Seq</span>(a, b)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Stepper$.html" class="extype" name="de.sciss.synth.ugen.Stepper">Stepper</a>
+</p></span><span class="cmt"><p><a href="PulseCount$.html" class="extype" name="de.sciss.synth.ugen.PulseCount">PulseCount</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +164,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PulseDivider#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PulseDivider#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(trig:de.sciss.synth.GE,div:de.sciss.synth.GE,start:de.sciss.synth.GE):de.sciss.synth.ugen.PulseDivider"></a>
       <a id="ar(GE,GE,GE):PulseDivider"></a>
       <h4 class="signature">
@@ -160,7 +180,20 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>a trigger occurs when the signal changes from
+                        non-positive to positive.</p></dd><dt class="param">div</dt><dd class="cmt"><p>decimation factor of the UGen. A value of 1 would cause
+                        an output trigger for each input trigger, whereas a
+                        value of 2 would cause an output trigger each time the
+                        internal counter has seen two input triggers.</p></dd><dt class="param">start</dt><dd class="cmt"><p>value of the internal counter. For example, if <code>div</code> is
+                        <code>2</code> , then a <code>start</code> value of <code>0</code> (default) means that
+                        the first output trigger happens after two input
+                        triggers, a <code>start</code> value of <code>1</code> means that the first
+                        output trigger happens after just one input trigger.
+                        Negative values can increase the number of required
+                        input triggers for the first output trigger. For
+                        example, if <code>start</code> is <code>-1</code> , the first output trigger
+                        happens after three input triggers.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +342,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.PulseDivider#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.PulseDivider#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(trig:de.sciss.synth.GE,div:de.sciss.synth.GE,start:de.sciss.synth.GE):de.sciss.synth.ugen.PulseDivider"></a>
       <a id="kr(GE,GE,GE):PulseDivider"></a>
       <h4 class="signature">
@@ -325,7 +358,20 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>a trigger occurs when the signal changes from
+                        non-positive to positive.</p></dd><dt class="param">div</dt><dd class="cmt"><p>decimation factor of the UGen. A value of 1 would cause
+                        an output trigger for each input trigger, whereas a
+                        value of 2 would cause an output trigger each time the
+                        internal counter has seen two input triggers.</p></dd><dt class="param">start</dt><dd class="cmt"><p>value of the internal counter. For example, if <code>div</code> is
+                        <code>2</code> , then a <code>start</code> value of <code>0</code> (default) means that
+                        the first output trigger happens after two input
+                        triggers, a <code>start</code> value of <code>1</code> means that the first
+                        output trigger happens after just one input trigger.
+                        Negative values can increase the number of required
+                        input triggers for the first output trigger. For
+                        example, if <code>start</code> is <code>-1</code> , the first output trigger
+                        happens after three input triggers.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

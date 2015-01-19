@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>T2K - SysSon 0.8.0 API - de.sciss.synth.ugen.T2K</title>
-          <meta name="description" content="T2K - SysSon 0.8.0 API - de.sciss.synth.ugen.T2K" />
-          <meta name="keywords" content="T2K SysSon 0.8.0 API de.sciss.synth.ugen.T2K" />
+          <title>T2K - SysSon 0.11.0 API - de.sciss.synth.ugen.T2K</title>
+          <meta name="description" content="T2K - SysSon 0.11.0 API - de.sciss.synth.ugen.T2K" />
+          <meta name="keywords" content="T2K SysSon 0.11.0 API de.sciss.synth.ugen.T2K" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="T2K.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="T2K.html" title="Go to companion">T2K</a></h1> <span class="permalink">
+        <h1><a href="T2K.html" title="Go to companion">T2K</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="T2K.html" title="See companion">class T2K</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.T2K$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,17 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that converts an audio-rate trigger input into a control-rate trigger
+output. A trigger occurs when a signal changes from less than or equal to zero
+to greater than zero. The UGen behaves strangely in that for a rising slope
+input signal, it will report the maximum value seen within the calculation
+block, but if the slope extends to the next block, it will output that second's
+block maximum value again instead of waiting for a fall to &lt;= 0.</p><h5>Examples</h5><pre><span class="cmt">// down-sample audio-rate dust</span>
+play {
+  <span class="kw">val</span> trig = T2K.kr(Dust.ar(<span class="num">4</span>))
+  Trig.kr(trig, <span class="num">0.1</span>) * SinOsc.ar(<span class="num">800</span>) * <span class="num">0.1</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig$.html" class="extype" name="de.sciss.synth.ugen.Trig">Trig</a>
+</p></span><span class="cmt"><p><a href="" class="extype" name="de.sciss.synth.ugen.T2K">T2K</a></p></span><span class="cmt"><p><a href="K2A$.html" class="extype" name="de.sciss.synth.ugen.K2A">K2A</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -292,7 +306,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.T2K#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.T2K#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE):de.sciss.synth.ugen.T2K"></a>
       <a id="kr(GE):T2K"></a>
       <h4 class="signature">
@@ -308,7 +322,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>audio-rate trigger input
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

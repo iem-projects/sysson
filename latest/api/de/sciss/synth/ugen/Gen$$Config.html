@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Config - SysSon 0.8.0 API - de.sciss.synth.ugen.Gen.Config</title>
-          <meta name="description" content="Config - SysSon 0.8.0 API - de.sciss.synth.ugen.Gen.Config" />
-          <meta name="keywords" content="Config SysSon 0.8.0 API de.sciss.synth.ugen.Gen.Config" />
+          <title>Config - SysSon 0.11.0 API - de.sciss.synth.ugen.Gen.Config</title>
+          <meta name="description" content="Config - SysSon 0.11.0 API - de.sciss.synth.ugen.Gen.Config" />
+          <meta name="keywords" content="Config SysSon 0.11.0 API de.sciss.synth.ugen.Gen.Config" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,9 @@
       <div id="definition">
         <img src="../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a>.<a href="Gen$.html" class="extype" name="de.sciss.synth.ugen.Gen">Gen</a></p>
-        <h1>Config</h1> <span class="permalink">
+        <h1>Config</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="Gen$.html" class="extype" name="de.sciss.synth.ugen.Gen">package Gen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Gen$$Config" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Config</span><span class="params">(<span name="resources">resources: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="forceOverwrite">forceOverwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="outDir">outDir: <span class="extype" name="de.sciss.file.File">File</span> = <span class="symbol"><span class="name"><a href="../../../package.html">new File(&quot;out&quot;)</a></span></span></span>, <span name="inFiles">inFiles: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="de.sciss.file.File">File</span>] = <span class="symbol">Vec.empty</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Config</span><span class="params">(<span name="input">input: <a href="Gen$$Input.html" class="extype" name="de.sciss.synth.ugen.Gen.Input">Input</a> = <span class="symbol"><span class="name"><a href="Gen$$CustomUGens$.html">CustomUGens</a></span></span></span>, <span name="forceOverwrite">forceOverwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="outDir">outDir: <span class="extype" name="de.sciss.file.File">File</span> = <span class="symbol"><span class="name"><a href="../../../package.html">new File(&quot;out&quot;)</a></span></span></span>, <span name="inFiles">inFiles: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="de.sciss.file.File">File</span>] = <span class="symbol">Vec.empty</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -88,7 +90,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="de.sciss.synth.ugen.Gen.Config#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(resources:Boolean,forceOverwrite:Boolean,outDir:de.sciss.file.File,inFiles:scala.collection.immutable.IndexedSeq[de.sciss.file.File],docs:Boolean):de.sciss.synth.ugen.Gen.Config"></a>
+      <a id="&lt;init&gt;(input:de.sciss.synth.ugen.Gen.Input,forceOverwrite:Boolean,outDir:de.sciss.file.File,inFiles:scala.collection.immutable.IndexedSeq[de.sciss.file.File],docs:Boolean):de.sciss.synth.ugen.Gen.Config"></a>
       <a id="&lt;init&gt;:Config"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -96,10 +98,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Config</span><span class="params">(<span name="resources">resources: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="forceOverwrite">forceOverwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="outDir">outDir: <span class="extype" name="de.sciss.file.File">File</span> = <span class="symbol"><span class="name"><a href="../../../package.html">new File(&quot;out&quot;)</a></span></span></span>, <span name="inFiles">inFiles: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="de.sciss.file.File">File</span>] = <span class="symbol">Vec.empty</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span>
+        <span class="name">Config</span><span class="params">(<span name="input">input: <a href="Gen$$Input.html" class="extype" name="de.sciss.synth.ugen.Gen.Input">Input</a> = <span class="symbol"><span class="name"><a href="Gen$$CustomUGens$.html">CustomUGens</a></span></span></span>, <span name="forceOverwrite">forceOverwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="outDir">outDir: <span class="extype" name="de.sciss.file.File">File</span> = <span class="symbol"><span class="name"><a href="../../../package.html">new File(&quot;out&quot;)</a></span></span></span>, <span name="inFiles">inFiles: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="de.sciss.file.File">File</span>] = <span class="symbol">Vec.empty</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Gen$$Config@&lt;init&gt;(resources:Boolean,forceOverwrite:Boolean,outDir:de.sciss.file.File,inFiles:scala.collection.immutable.IndexedSeq[de.sciss.file.File],docs:Boolean):de.sciss.synth.ugen.Gen.Config" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Gen$$Config@&lt;init&gt;(input:de.sciss.synth.ugen.Gen.Input,forceOverwrite:Boolean,outDir:de.sciss.file.File,inFiles:scala.collection.immutable.IndexedSeq[de.sciss.file.File],docs:Boolean):de.sciss.synth.ugen.Gen.Config" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -312,6 +314,23 @@
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.ugen.Gen.Config#input" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="input:de.sciss.synth.ugen.Gen.Input"></a>
+      <a id="input:Input"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">input</span><span class="result">: <a href="Gen$$Input.html" class="extype" name="de.sciss.synth.ugen.Gen.Input">Input</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Gen$$Config@input:de.sciss.synth.ugen.Gen.Input" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -393,23 +412,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Gen$$Config@outDir:de.sciss.file.File" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.ugen.Gen.Config#resources" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resources:Boolean"></a>
-      <a id="resources:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">resources</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Gen$$Config@resources:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>FreeVerb2 - SysSon 0.8.0 API - de.sciss.synth.ugen.FreeVerb2</title>
-          <meta name="description" content="FreeVerb2 - SysSon 0.8.0 API - de.sciss.synth.ugen.FreeVerb2" />
-          <meta name="keywords" content="FreeVerb2 SysSon 0.8.0 API de.sciss.synth.ugen.FreeVerb2" />
+          <title>FreeVerb2 - SysSon 0.11.0 API - de.sciss.synth.ugen.FreeVerb2</title>
+          <meta name="description" content="FreeVerb2 - SysSon 0.11.0 API - de.sciss.synth.ugen.FreeVerb2" />
+          <meta name="keywords" content="FreeVerb2 SysSon 0.11.0 API de.sciss.synth.ugen.FreeVerb2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="FreeVerb2$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="FreeVerb2$.html" title="Go to companion">FreeVerb2</a></h1> <span class="permalink">
+        <h1><a href="FreeVerb2$.html" title="Go to companion">FreeVerb2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="FreeVerb2$.html" title="See companion">object FreeVerb2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.FreeVerb2" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A stereophonic reverb UGen. All parameters are specified in and automatically
+clipped to the range 0 to 1. The UGen is stateless insofar it does not use a
+random number generator. However, if the same input is used for left and right
+channel, the output channels are different and uncorrelated. There is also some
+cross-feed between the two channels.
+</p></div><dl class="paramcmts block"><dt class="param">inL</dt><dd class="cmt"><p>left channel of input signal to reverberate</p></dd><dt class="param">inR</dt><dd class="cmt"><p>right channel of input signal to reverberate</p></dd><dt class="param">mix</dt><dd class="cmt"><p>dry/wet balance from zero (only dry) to one (only wet)</p></dd><dt class="param">room</dt><dd class="cmt"><p>room size</p></dd><dt class="param">damp</dt><dd class="cmt"><p>high frequency attenuation (1 is maximum attenuation)
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GVerb$.html" class="extype" name="de.sciss.synth.ugen.GVerb">GVerb</a>
+</p></span><span class="cmt"><p><a href="FreeVerb$.html" class="extype" name="de.sciss.synth.ugen.FreeVerb">FreeVerb</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a>, <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +98,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.FreeVerb2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.FreeVerb2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(inL:de.sciss.synth.GE,inR:de.sciss.synth.GE,mix:de.sciss.synth.GE,room:de.sciss.synth.GE,damp:de.sciss.synth.GE):de.sciss.synth.ugen.FreeVerb2"></a>
       <a id="&lt;init&gt;:FreeVerb2"></a>
       <h4 class="signature">
@@ -103,7 +114,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">inL</dt><dd class="cmt"><p>left channel of input signal to reverberate</p></dd><dt class="param">inR</dt><dd class="cmt"><p>right channel of input signal to reverberate</p></dd><dt class="param">mix</dt><dd class="cmt"><p>dry/wet balance from zero (only dry) to one (only wet)</p></dd><dt class="param">room</dt><dd class="cmt"><p>room size</p></dd><dt class="param">damp</dt><dd class="cmt"><p>high frequency attenuation (1 is maximum attenuation)
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -220,7 +232,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">high frequency attenuation (1 is maximum attenuation)
+</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -294,7 +307,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">left channel of input signal to reverberate</p>
     </li><li name="de.sciss.synth.ugen.FreeVerb2#inR" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="inR:de.sciss.synth.GE"></a>
       <a id="inR:GE"></a>
@@ -311,7 +324,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">right channel of input signal to reverberate</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -401,7 +414,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">dry/wet balance from zero (only dry) to one (only wet)</p>
     </li><li name="de.sciss.synth.UGenSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>
@@ -537,7 +550,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">room size</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

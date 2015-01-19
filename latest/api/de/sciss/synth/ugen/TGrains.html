@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>TGrains - SysSon 0.8.0 API - de.sciss.synth.ugen.TGrains</title>
-          <meta name="description" content="TGrains - SysSon 0.8.0 API - de.sciss.synth.ugen.TGrains" />
-          <meta name="keywords" content="TGrains SysSon 0.8.0 API de.sciss.synth.ugen.TGrains" />
+          <title>TGrains - SysSon 0.11.0 API - de.sciss.synth.ugen.TGrains</title>
+          <meta name="description" content="TGrains - SysSon 0.11.0 API - de.sciss.synth.ugen.TGrains" />
+          <meta name="keywords" content="TGrains SysSon 0.11.0 API de.sciss.synth.ugen.TGrains" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="TGrains$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="TGrains$.html" title="Go to companion">TGrains</a></h1> <span class="permalink">
+        <h1><a href="TGrains$.html" title="Go to companion">TGrains</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="TGrains$.html" title="See companion">object TGrains</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.TGrains" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Triggers generate grains from a buffer. Each grain has a Hanning envelope</p><pre>(sin2(x) <span class="kw">for</span> x from <span class="num">0</span> to ￏﾀ)</pre><p> and is panned between two channels of multiple outputs.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Triggers generate grains from a buffer. Each grain has a Hanning envelope</p><pre>(sin2(x) <span class="kw">for</span> x from <span class="num">0</span> to pi)</pre><p> and is panned between two channels of multiple outputs.
+<b>Warning</b>: Due to a bug (SC 3.6.6), this UGen does not work with <code>LocalBuf</code>
+but requires a regular buffer.
 </p></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>Number of output channels.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>At each trigger, the following arguments are sampled
                         and used as the arguments of a new grain. A trigger
                         occurs when a signal changes from non-positive to
@@ -60,7 +66,8 @@
                         <a href="PanAz$.html" class="extype" name="de.sciss.synth.ugen.PanAz">PanAz</a>.</p></dd><dt class="param">amp</dt><dd class="cmt"><p>Amplitude of the grain.</p></dd><dt class="param">interp</dt><dd class="cmt"><p>1, 2, or 4. Determines whether the grain uses (1) no
                         interpolation, (2) linear interpolation, or (4) cubic
                         interpolation.
-</p></dd></dl><div class="toggleContainer block">
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GrainBuf$.html" class="extype" name="de.sciss.synth.ugen.GrainBuf">GrainBuf</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a>, <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -570,7 +577,7 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.TGrains#speed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.TGrains#speed" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="speed:de.sciss.synth.GE"></a>
       <a id="speed:GE"></a>
       <h4 class="signature">
@@ -586,8 +593,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">1.</p><div class="fullcomment"><div class="comment cmt"><p>1.0 is normal, 2.0 is one octave up, 0.5 is one octave
-                        down -1.0 is backwards normal rate etc.</p></div></div>
+      <p class="shortcomment cmt">1.0 is normal, 2.0 is one octave up, 0.5 is one octave
+                        down -1.0 is backwards normal rate etc.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

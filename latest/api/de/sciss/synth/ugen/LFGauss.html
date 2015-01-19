@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LFGauss - SysSon 0.8.0 API - de.sciss.synth.ugen.LFGauss</title>
-          <meta name="description" content="LFGauss - SysSon 0.8.0 API - de.sciss.synth.ugen.LFGauss" />
-          <meta name="keywords" content="LFGauss SysSon 0.8.0 API de.sciss.synth.ugen.LFGauss" />
+          <title>LFGauss - SysSon 0.11.0 API - de.sciss.synth.ugen.LFGauss</title>
+          <meta name="description" content="LFGauss - SysSon 0.11.0 API - de.sciss.synth.ugen.LFGauss" />
+          <meta name="keywords" content="LFGauss SysSon 0.11.0 API de.sciss.synth.ugen.LFGauss" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LFGauss$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LFGauss$.html" title="Go to companion">LFGauss</a></h1> <span class="permalink">
+        <h1><a href="LFGauss$.html" title="Go to companion">LFGauss</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LFGauss$.html" title="See companion">object LFGauss</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LFGauss" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,15 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A non-band-limited gaussian function oscillator UGen. Output ranges from
+<code>minVal</code> to 1. It implements the formula:</p><pre>f(x) = exp((x - phase).squared / (-<span class="num">2</span> * width.squared))</pre><p>where <code>x</code> is to vary in the range -1 to 1 over the period <code>dur</code> . <code>minVal</code> is
+the initial value at -1. E.g. for default parameters, it is <code>exp(-50)</code> or
+roughly zero.
+</p></div><dl class="paramcmts block"><dt class="param">dur</dt><dd class="cmt"><p>duration in seconds of a full -1 &lt;= x &lt;= 1 cycle, or
+                        the reciprocal of the frequency</p></dd><dt class="param">width</dt><dd class="cmt"><p>relative width of the bell. Best to keep below 0.25
+                        when used as envelope.</p></dd><dt class="param">phase</dt><dd class="cmt"><p>phase offset</p></dd><dt class="param">loop</dt><dd class="cmt"><p>if greater than zero, the UGen oscillates. Otherwise it
+                        calls <code>doneAction</code> after one cycle.</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>evaluated after cycle completes
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +99,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.LFGauss#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.LFGauss#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,dur:de.sciss.synth.GE,width:de.sciss.synth.GE,phase:de.sciss.synth.GE,loop:de.sciss.synth.GE,doneAction:de.sciss.synth.GE):de.sciss.synth.ugen.LFGauss"></a>
       <a id="&lt;init&gt;:LFGauss"></a>
       <h4 class="signature">
@@ -103,7 +115,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">dur</dt><dd class="cmt"><p>duration in seconds of a full -1 &lt;= x &lt;= 1 cycle, or
+                        the reciprocal of the frequency</p></dd><dt class="param">width</dt><dd class="cmt"><p>relative width of the bell. Best to keep below 0.25
+                        when used as envelope.</p></dd><dt class="param">phase</dt><dd class="cmt"><p>phase offset</p></dd><dt class="param">loop</dt><dd class="cmt"><p>if greater than zero, the UGen oscillates. Otherwise it
+                        calls <code>doneAction</code> after one cycle.</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>evaluated after cycle completes
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -220,7 +236,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">evaluated after cycle completes
+</p>
     </li><li name="de.sciss.synth.ugen.LFGauss#dur" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="dur:de.sciss.synth.GE"></a>
       <a id="dur:GE"></a>
@@ -237,7 +254,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">duration in seconds of a full -1 &lt;= x &lt;= 1 cycle, or
+                        the reciprocal of the frequency</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -312,7 +330,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFGauss#loop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFGauss#loop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loop:de.sciss.synth.GE"></a>
       <a id="loop:GE"></a>
       <h4 class="signature">
@@ -328,7 +346,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">if greater than zero, the UGen oscillates.</p><div class="fullcomment"><div class="comment cmt"><p>if greater than zero, the UGen oscillates. Otherwise it
+                        calls <code>doneAction</code> after one cycle.</p></div></div>
     </li><li name="de.sciss.synth.ugen.LFGauss#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>
@@ -452,7 +471,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">phase offset</p>
     </li><li name="de.sciss.synth.ugen.LFGauss#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rate:de.sciss.synth.Rate"></a>
       <a id="rate:Rate"></a>
@@ -590,7 +609,7 @@ expansion
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFGauss#width" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFGauss#width" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="width:de.sciss.synth.GE"></a>
       <a id="width:GE"></a>
       <h4 class="signature">
@@ -606,7 +625,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">relative width of the bell.</p><div class="fullcomment"><div class="comment cmt"><p>relative width of the bell. Best to keep below 0.25
+                        when used as envelope.</p></div></div>
     </li></ol>
             </div>
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>WhiteNoise - SysSon 0.8.0 API - de.sciss.synth.ugen.WhiteNoise</title>
-          <meta name="description" content="WhiteNoise - SysSon 0.8.0 API - de.sciss.synth.ugen.WhiteNoise" />
-          <meta name="keywords" content="WhiteNoise SysSon 0.8.0 API de.sciss.synth.ugen.WhiteNoise" />
+          <title>WhiteNoise - SysSon 0.11.0 API - de.sciss.synth.ugen.WhiteNoise</title>
+          <meta name="description" content="WhiteNoise - SysSon 0.11.0 API - de.sciss.synth.ugen.WhiteNoise" />
+          <meta name="keywords" content="WhiteNoise SysSon 0.11.0 API de.sciss.synth.ugen.WhiteNoise" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="WhiteNoise$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="WhiteNoise$.html" title="Go to companion">WhiteNoise</a></h1> <span class="permalink">
+        <h1><a href="WhiteNoise$.html" title="Go to companion">WhiteNoise</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="WhiteNoise$.html" title="See companion">object WhiteNoise</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.WhiteNoise" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,15 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A noise generator UGens whose spectrum has equal power at all frequencies.
+Output values range from <code>-1</code> to <code>+1</code> (before being multiplied by <code>mul</code> ). The
+RMS is approx. -4.8 dB.
+</p></div><dl class="paramcmts block"><dt class="param">mul</dt><dd class="cmt"><p>Not actually a UGen input, this argument produces a
+                        multiplication of the output by this factor. A
+                        multi-channel <code>mul</code> argument will cause the generation
+                        of multiple independent noise generators.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Dust$.html" class="extype" name="de.sciss.synth.ugen.Dust">Dust</a>
+</p></span><span class="cmt"><p><a href="LFNoise0$.html" class="extype" name="de.sciss.synth.ugen.LFNoise0">LFNoise0</a></p></span><span class="cmt"><p><a href="RandSeed$.html" class="extype" name="de.sciss.synth.ugen.RandSeed">RandSeed</a></p></span><span class="cmt"><p><a href="ClipNoise$.html" class="extype" name="de.sciss.synth.ugen.ClipNoise">ClipNoise</a></p></span><span class="cmt"><p><a href="GrayNoise$.html" class="extype" name="de.sciss.synth.ugen.GrayNoise">GrayNoise</a></p></span><span class="cmt"><p><a href="BrownNoise$.html" class="extype" name="de.sciss.synth.ugen.BrownNoise">BrownNoise</a></p></span><span class="cmt"><p><a href="PinkNoise$.html" class="extype" name="de.sciss.synth.ugen.PinkNoise">PinkNoise</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +99,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.WhiteNoise#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.WhiteNoise#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,mul:de.sciss.synth.GE):de.sciss.synth.ugen.WhiteNoise"></a>
       <a id="&lt;init&gt;:WhiteNoise"></a>
       <h4 class="signature">
@@ -103,7 +115,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">mul</dt><dd class="cmt"><p>Not actually a UGen input, this argument produces a
+                        multiplication of the output by this factor. A
+                        multi-channel <code>mul</code> argument will cause the generation
+                        of multiple independent noise generators.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -317,7 +333,7 @@ during expansion. This method is at most called once during graph
 expansion
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the expanded object (depending on the type parameter <code>U</code>)
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.ugen.WhiteNoise">WhiteNoise</a> → <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.WhiteNoise#mul" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.WhiteNoise#mul" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="mul:de.sciss.synth.GE"></a>
       <a id="mul:GE"></a>
       <h4 class="signature">
@@ -333,7 +349,12 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Not actually a UGen input, this argument produces a
+                        multiplication of the output by this factor.</p><div class="fullcomment"><div class="comment cmt"><p>Not actually a UGen input, this argument produces a
+                        multiplication of the output by this factor. A
+                        multi-channel <code>mul</code> argument will cause the generation
+                        of multiple independent noise generators.
+</p></div></div>
     </li><li name="de.sciss.synth.UGenSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>

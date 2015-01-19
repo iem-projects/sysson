@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Sweep - SysSon 0.8.0 API - de.sciss.synth.ugen.Sweep</title>
-          <meta name="description" content="Sweep - SysSon 0.8.0 API - de.sciss.synth.ugen.Sweep" />
-          <meta name="keywords" content="Sweep SysSon 0.8.0 API de.sciss.synth.ugen.Sweep" />
+          <title>Sweep - SysSon 0.11.0 API - de.sciss.synth.ugen.Sweep</title>
+          <meta name="description" content="Sweep - SysSon 0.11.0 API - de.sciss.synth.ugen.Sweep" />
+          <meta name="keywords" content="Sweep SysSon 0.11.0 API de.sciss.synth.ugen.Sweep" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Sweep$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Sweep$.html" title="Go to companion">Sweep</a></h1> <span class="permalink">
+        <h1><a href="Sweep$.html" title="Go to companion">Sweep</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Sweep$.html" title="See companion">object Sweep</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Sweep" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,8 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen which starts a linear raise from zero each time it is triggered.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen which starts a linear raise from zero each time it is triggered.</p><p>When speed is one, one gets a continually-updating measurement of the time (in
+seconds) since the last trigger.
 </p></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>the trigger that restarts the ramp, when passing from
                         non-positive to positive</p></dd><dt class="param">speed</dt><dd class="cmt"><p>the amount of increment of the output signal per
                         second. In SCLang this argument is named <code>rate</code> , while

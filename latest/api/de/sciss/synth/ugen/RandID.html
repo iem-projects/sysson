@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>RandID - SysSon 0.8.0 API - de.sciss.synth.ugen.RandID</title>
-          <meta name="description" content="RandID - SysSon 0.8.0 API - de.sciss.synth.ugen.RandID" />
-          <meta name="keywords" content="RandID SysSon 0.8.0 API de.sciss.synth.ugen.RandID" />
+          <title>RandID - SysSon 0.11.0 API - de.sciss.synth.ugen.RandID</title>
+          <meta name="description" content="RandID - SysSon 0.11.0 API - de.sciss.synth.ugen.RandID" />
+          <meta name="keywords" content="RandID SysSon 0.11.0 API de.sciss.synth.ugen.RandID" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="RandID$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="RandID$.html" title="Go to companion">RandID</a></h1> <span class="permalink">
+        <h1><a href="RandID$.html" title="Go to companion">RandID</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="RandID$.html" title="See companion">object RandID</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.RandID" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that determines which random number generator is used for the enclosing
+synth. All synths that use the same generator reproduce the same sequence of
+numbers when the same seed is set again.
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the random number generator identifier from zero until
+                        the maximum number of generators specified with the
+                        server switch <code>-r</code> (default: 64)
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="WhiteNoise$.html" class="extype" name="de.sciss.synth.ugen.WhiteNoise">WhiteNoise</a>
+</p></span><span class="cmt"><p><a href="IRand$.html" class="extype" name="de.sciss.synth.ugen.IRand">IRand</a></p></span><span class="cmt"><p><a href="RandSeed$.html" class="extype" name="de.sciss.synth.ugen.RandSeed">RandSeed</a></p></span><span class="cmt"><p><a href="Rand$.html" class="extype" name="de.sciss.synth.ugen.Rand">Rand</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +98,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.RandID#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.RandID#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,id:de.sciss.synth.GE):de.sciss.synth.ugen.RandID"></a>
       <a id="&lt;init&gt;:RandID"></a>
       <h4 class="signature">
@@ -103,7 +114,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the random number generator identifier from zero until
+                        the maximum number of generators specified with the
+                        server switch <code>-r</code> (default: 64)
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -277,7 +291,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the random number generator identifier from zero until
+                        the maximum number of generators specified with the
+                        server switch <code>-r</code> (default: 64)
+</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Rotate2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Rotate2</title>
-          <meta name="description" content="Rotate2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Rotate2" />
-          <meta name="keywords" content="Rotate2 SysSon 0.8.0 API de.sciss.synth.ugen.Rotate2" />
+          <title>Rotate2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Rotate2</title>
+          <meta name="description" content="Rotate2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Rotate2" />
+          <meta name="keywords" content="Rotate2 SysSon 0.11.0 API de.sciss.synth.ugen.Rotate2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Rotate2.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Rotate2.html" title="Go to companion">Rotate2</a></h1> <span class="permalink">
+        <h1><a href="Rotate2.html" title="Go to companion">Rotate2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Rotate2.html" title="See companion">class Rotate2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Rotate2$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,25 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that can be used for rotating an ambisonic B-format sound field around
+an axis. It uses an equal-power rotation so it also works well on stereo sounds.
+It takes two audio inputs ( <code>x</code> , <code>y</code> ) and an angle control ( <code>pos</code> ). It
+outputs again two channels, using these formulas:</p><pre>xr = cos(angle) * x + sin(angle) * y
+yr = cos(angle) * y - sin(angle) * x</pre><p>where <code>angle = pos * Pi</code> . This allows, for example, the use of <code>LFSaw</code> to
+create a continuous rotation around a circle.
+<b>Note</b>: Be careful when accessing the output channels. <code>xr</code> and <code>yr</code> are
+the X and Y output channels, whereas <code>x</code> and <code>y</code> refers to the X and Y input
+channel.</p><h5>Examples</h5><pre><span class="cmt">// 4-channel rotation of opposite sounds</span>
+play {
+  <span class="kw">val</span> p = WhiteNoise.ar(<span class="num">0.05</span>)                     <span class="cmt">// first source</span>
+  <span class="kw">val</span> q = Mix(LFSaw.ar(<span class="std">Seq</span>(<span class="num">200</span>, <span class="num">200.37</span>))) * <span class="num">0.03</span>  <span class="cmt">// second source</span>
+  <span class="cmt">// B-format encode 2 signals at opposite sides of the circle</span>
+  <span class="kw">val</span> enc = PanB2.ar(p, -<span class="num">0.5</span>) + PanB2.ar(q, +<span class="num">0.5</span>)
+  <span class="kw">val</span> <span class="std">Seq</span>(w, x, y) = (<span class="num">0</span> to <span class="num">2</span>).map(enc \ _)
+  <span class="kw">val</span> rot = Rotate2.ar(x, y, MouseX.kr(-<span class="num">1</span>, +<span class="num">1</span>))
+  <span class="cmt">// B-format decode to quad (front-left, front-right, rear-left, rear-right)</span>
+  DecodeB2.ar(<span class="num">4</span>, w, rot.xr, rot.yr)
+}</pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +166,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Rotate2#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Rotate2#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(x:de.sciss.synth.GE,y:de.sciss.synth.GE,pos:de.sciss.synth.GE):de.sciss.synth.ugen.Rotate2"></a>
       <a id="ar(GE,GE,GE):Rotate2"></a>
       <h4 class="signature">
@@ -160,7 +182,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>B-format X input channel</p></dd><dt class="param">y</dt><dd class="cmt"><p>B-format Y input channel</p></dd><dt class="param">pos</dt><dd class="cmt"><p>angle to rotate around the circle, normalized between
+                        -1 and +1. -1 and +1 corresponds to -180 and +180
+                        degrees (behind), -0.5 is 90 degrees left, 0 is frontal,
+                        +0.5 is 90 degrees right.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +335,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Rotate2#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Rotate2#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(x:de.sciss.synth.GE,y:de.sciss.synth.GE,pos:de.sciss.synth.GE):de.sciss.synth.ugen.Rotate2"></a>
       <a id="kr(GE,GE,GE):Rotate2"></a>
       <h4 class="signature">
@@ -325,7 +351,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>B-format X input channel</p></dd><dt class="param">y</dt><dd class="cmt"><p>B-format Y input channel</p></dd><dt class="param">pos</dt><dd class="cmt"><p>angle to rotate around the circle, normalized between
+                        -1 and +1. -1 and +1 corresponds to -180 and +180
+                        degrees (behind), -0.5 is 90 degrees left, 0 is frontal,
+                        +0.5 is 90 degrees right.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

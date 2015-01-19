@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Wrap - SysSon 0.8.0 API - de.sciss.synth.ugen.Wrap</title>
-          <meta name="description" content="Wrap - SysSon 0.8.0 API - de.sciss.synth.ugen.Wrap" />
-          <meta name="keywords" content="Wrap SysSon 0.8.0 API de.sciss.synth.ugen.Wrap" />
+          <title>Wrap - SysSon 0.11.0 API - de.sciss.synth.ugen.Wrap</title>
+          <meta name="description" content="Wrap - SysSon 0.11.0 API - de.sciss.synth.ugen.Wrap" />
+          <meta name="keywords" content="Wrap SysSon 0.11.0 API de.sciss.synth.ugen.Wrap" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Wrap.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Wrap.html" title="Go to companion">Wrap</a></h1> <span class="permalink">
+        <h1><a href="Wrap.html" title="Go to companion">Wrap</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Wrap.html" title="See companion">class Wrap</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Wrap$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that constrains a signal to a given range, by &quot;wrapping&quot; values outside
+the range. This is similar to the <code>wrap2</code> binary operator but permits both a
+lower range value <code>lo</code> and an upper range value <code>hi</code> .</p><p>An input value greater than or equal to <code>hi</code> will be wrapped back to
+<code>(in - hi) % (hi - lo) + lo</code> . An input value less than <code>lo</code> will be wrapped
+back to <code>hi - (lo - in) % (hi - lo)</code> .</p><h5>Examples</h5><pre><span class="cmt">// wrap pulse wave to modulate timbre</span>
+play {
+  <span class="kw">val</span> hi = SinOsc.ar(<span class="num">0.1</span>).linexp(-<span class="num">1</span>, <span class="num">1</span>, <span class="num">0.01</span>, <span class="num">1.0</span>)
+  Wrap.ar(Pulse.ar(<span class="num">300</span>), <span class="num">0</span>, hi) * <span class="num">0.2</span> / hi
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Clip$.html" class="extype" name="de.sciss.synth.ugen.Clip">Clip</a>
+</p></span><span class="cmt"><p><a href="Fold$.html" class="extype" name="de.sciss.synth.ugen.Fold">Fold</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +157,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Wrap#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Wrap#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE):de.sciss.synth.ugen.Wrap"></a>
       <a id="ar(GE,GE,GE):Wrap"></a>
       <h4 class="signature">
@@ -160,7 +173,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to constrain</p></dd><dt class="param">lo</dt><dd class="cmt"><p>lower margin of wrapping (inclusive)</p></dd><dt class="param">hi</dt><dd class="cmt"><p>upper margin of wrapping (exclusive)
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -292,7 +306,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Wrap#ir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Wrap#ir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ir(in:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE):de.sciss.synth.ugen.Wrap"></a>
       <a id="ir(GE,GE,GE):Wrap"></a>
       <h4 class="signature">
@@ -308,7 +322,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to constrain</p></dd><dt class="param">lo</dt><dd class="cmt"><p>lower margin of wrapping (inclusive)</p></dd><dt class="param">hi</dt><dd class="cmt"><p>upper margin of wrapping (exclusive)
+</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -326,7 +341,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Wrap#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Wrap#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE):de.sciss.synth.ugen.Wrap"></a>
       <a id="kr(GE,GE,GE):Wrap"></a>
       <h4 class="signature">
@@ -342,7 +357,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to constrain</p></dd><dt class="param">lo</dt><dd class="cmt"><p>lower margin of wrapping (inclusive)</p></dd><dt class="param">hi</dt><dd class="cmt"><p>upper margin of wrapping (exclusive)
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>UserValue - SysSon 0.8.0 API - at.iem.sysson.graph.UserValue</title>
-          <meta name="description" content="UserValue - SysSon 0.8.0 API - at.iem.sysson.graph.UserValue" />
-          <meta name="keywords" content="UserValue SysSon 0.8.0 API at.iem.sysson.graph.UserValue" />
+          <title>UserValue - SysSon 0.11.0 API - at.iem.sysson.graph.UserValue</title>
+          <meta name="description" content="UserValue - SysSon 0.11.0 API - at.iem.sysson.graph.UserValue" />
+          <meta name="keywords" content="UserValue SysSon 0.11.0 API at.iem.sysson.graph.UserValue" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="UserValue$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a>.<a href="package.html" class="extype" name="at.iem.sysson.graph">graph</a></p>
-        <h1><a href="UserValue$.html" title="Go to companion">UserValue</a></h1> <span class="permalink">
+        <h1><a href="UserValue$.html" title="Go to companion">UserValue</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="UserValue$.html" title="See companion">object UserValue</a>
+            | <a href="package.html" class="extype" name="at.iem.sysson.graph">package graph</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.UserValue" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -39,17 +43,17 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">UserValue</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">UserValue</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a>, <a href="../../../../de/sciss/synth/HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../../../../de/sciss/synth/Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../../../../de/sciss/synth/Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</span>, <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a>, <a href="../../../../de/sciss/synth/HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../../../../de/sciss/synth/Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../../../../de/sciss/synth/Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -67,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="at.iem.sysson.graph.UserValue"><span>UserValue</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="at.iem.sysson.graph.UserInteraction"><span>UserInteraction</span></li><li class="in" name="de.sciss.synth.HasSideEffect"><span>HasSideEffect</span></li><li class="in" name="de.sciss.synth.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.synth.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="at.iem.sysson.graph.UserValue"><span>UserValue</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="de.sciss.synth.proc.UGenGraphBuilder.Input"><span>Input</span></li><li class="in" name="at.iem.sysson.graph.UserInteraction"><span>UserInteraction</span></li><li class="in" name="de.sciss.synth.HasSideEffect"><span>HasSideEffect</span></li><li class="in" name="de.sciss.synth.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.synth.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,7 +92,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="at.iem.sysson.graph.UserValue#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(key:String,default:Double):at.iem.sysson.graph.UserValue"></a>
+      <a id="&lt;init&gt;(name:String,default:Double):at.iem.sysson.graph.UserValue"></a>
       <a id="&lt;init&gt;:UserValue"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -96,10 +100,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">UserValue</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Double">Double</span></span>)</span>
+        <span class="name">UserValue</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Double">Double</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@&lt;init&gt;(key:String,default:Double):at.iem.sysson.graph.UserValue" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@&lt;init&gt;(name:String,default:Double):at.iem.sysson.graph.UserValue" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -107,7 +111,44 @@
     </li></ol>
             </div>
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="at.iem.sysson.graph.UserValue.Key" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Key=at.iem.sysson.graph.UserValue.Key"></a>
+      <a id="Key:Key"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Key</span><span class="result"> = <a href="UserValue$$Key.html" class="extype" name="at.iem.sysson.graph.UserValue.Key">UserValue.Key</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@Key=at.iem.sysson.graph.UserValue.Key" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="at.iem.sysson.graph.UserValue">UserValue</a> → Input</dd></dl></div>
+    </li><li name="at.iem.sysson.graph.UserValue.Value" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Value=de.sciss.synth.proc.UGenGraphBuilder.Unit"></a>
+      <a id="Value:Value"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Value</span><span class="result"> = <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Unit">Unit</span>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@Value=de.sciss.synth.proc.UGenGraphBuilder.Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="at.iem.sysson.graph.UserValue">UserValue</a> → Input</dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -164,6 +205,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="at.iem.sysson.graph.UserValue#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ar:de.sciss.synth.GE"></a>
+      <a id="ar:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ar</span><span class="result">: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@ar:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -312,19 +370,36 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="at.iem.sysson.graph.UserValue#key" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="key:String"></a>
-      <a id="key:String"></a>
+    </li><li name="at.iem.sysson.graph.UserValue#key" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="key:at.iem.sysson.graph.UserValue.Key"></a>
+      <a id="key:UserValue.Key"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">key</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">key</span><span class="result">: <a href="UserValue$$Key.html" class="extype" name="at.iem.sysson.graph.UserValue.Key">UserValue.Key</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@key:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@key:at.iem.sysson.graph.UserValue.Key" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="at.iem.sysson.graph.UserValue">UserValue</a> → Input</dd></dl></div>
+    </li><li name="at.iem.sysson.graph.UserValue#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="kr:de.sciss.synth.GE"></a>
+      <a id="kr:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kr</span><span class="result">: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@kr:de.sciss.synth.GE" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -351,6 +426,23 @@ during expansion. This method is at most called once during graph
 expansion
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the expanded object (depending on the type parameter <code>U</code>)
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> → <a href="../../../../de/sciss/synth/Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a></dd></dl></div>
+    </li><li name="at.iem.sysson.graph.UserValue#name" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="name:String"></a>
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">name</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@name:String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -419,23 +511,6 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="at.iem.sysson.graph.UserValue#value" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="value:de.sciss.synth.GE"></a>
-      <a id="value:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">value</span><span class="result">: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.UserValue@value:de.sciss.synth.GE" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -518,6 +593,8 @@ expansion
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="de.sciss.synth.proc.UGenGraphBuilder.Input">
+              <h3>Inherited from <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</span></h3>
             </div><div class="parent" name="at.iem.sysson.graph.UserInteraction">
               <h3>Inherited from <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a></h3>
             </div><div class="parent" name="de.sciss.synth.HasSideEffect">

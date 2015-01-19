@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Convolution2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Convolution2</title>
-          <meta name="description" content="Convolution2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Convolution2" />
-          <meta name="keywords" content="Convolution2 SysSon 0.8.0 API de.sciss.synth.ugen.Convolution2" />
+          <title>Convolution2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Convolution2</title>
+          <meta name="description" content="Convolution2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Convolution2" />
+          <meta name="keywords" content="Convolution2 SysSon 0.11.0 API de.sciss.synth.ugen.Convolution2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Convolution2.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Convolution2.html" title="Go to companion">Convolution2</a></h1> <span class="permalink">
+        <h1><a href="Convolution2.html" title="Go to companion">Convolution2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Convolution2.html" title="See companion">class Convolution2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Convolution2$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -49,11 +53,36 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A frequency-domain convolution UGen using a fixed kernel which can be updated
 by a trigger signal. The delay caused by the convolution when the kernel is a
-dirac impulse is equal to <code>frameSize - (controlBlockSize + 1)</code> (measured august
-2010), so for a frameSize of 2048 and a controlBlockSize of 64, this is 1983
-sample frames.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="StereoConvolution2L$.html" class="extype" name="de.sciss.synth.ugen.StereoConvolution2L">StereoConvolution2L</a>
-</p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution3$.html" class="extype" name="de.sciss.synth.ugen.Convolution3">Convolution3</a></p></span><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span></dd></dl><div class="toggleContainer block">
+dirac impulse is equal to <code>frameSize - controlBlockSize</code> , so for a <code>frameSize</code>
+of 2048 and a control-block size of 64, this is 1984 sample frames.</p><h5>Examples</h5><pre><span class="cmt">// three example kernels</span>
+<span class="cmt">// creates a buffer with `n` set values</span>
+<span class="kw">def</span> mkBuf(n: <span class="std">Int</span>, amp: <span class="kw">=&gt;</span> <span class="std">Double</span>): Buffer = {
+  <span class="kw">val</span> v = Vector.tabulate[FillValue](n) { i <span class="kw">=&gt;</span>
+    (i.linlin(<span class="num">0</span>, n, <span class="num">0</span>, <span class="num">2048</span>).toInt, amp)
+  }
+  <span class="kw">val</span> b = Buffer(s)
+  b.alloc(<span class="num">2048</span>, completion = b.zeroMsg(b.setMsg(v: _*)))
+  b
+}
+
+<span class="kw">val</span> b = mkBuf(<span class="num">3</span>, <span class="num">1</span>)
+<span class="kw">val</span> c = mkBuf(<span class="num">50</span>, math.random)
+<span class="kw">val</span> d = mkBuf(<span class="num">20</span>, <span class="num">1</span>)
+
+<span class="kw">val</span> x = play {
+  <span class="kw">val</span> z   = Impulse.ar(<span class="num">1</span>)
+  <span class="kw">val</span> buf = <span class="lit">"kernel"</span>.kr(b.id)
+  <span class="kw">val</span> tr  = <span class="lit">"trig"</span>  .tr
+  Convolution2.ar(z, buf, tr, <span class="num">2048</span>) * <span class="num">0.5</span>
+}
+
+<span class="cmt">// set buffer and trigger kernel actualization</span>
+x.set(<span class="lit">"kernel"</span> -&gt; b.id, <span class="lit">"trig"</span> -&gt; <span class="num">1</span>)
+x.set(<span class="lit">"kernel"</span> -&gt; c.id, <span class="lit">"trig"</span> -&gt; <span class="num">1</span>)
+x.set(<span class="lit">"kernel"</span> -&gt; d.id, <span class="lit">"trig"</span> -&gt; <span class="num">1</span>)
+
+x.free(); b.free(); c.free(); d.free()</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a>
+</p></span><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -167,11 +196,14 @@ sample frames.
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the realtime input to be convolved</p></dd><dt class="param">kernel</dt><dd class="cmt"><p>buffer identifier for the fixed kernel, which may be
-                        modulated in combination with the trigger</p></dd><dt class="param">trig</dt><dd class="cmt"><p>updates the kernel on a change from non-positive to
+                        modulated in combination with the trigger. Even a
+                        trigger input of zero is used, upon UGen initialization
+                        the kernel must point to a valid buffer, otherwise the
+                        UGen aborts.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>updates the kernel on a change from non-positive to
                         positive (&lt;= 0 to &gt;0)</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
                         FFT calculated internally by the UGen has a size of
-                        twice this value. The maximum allowed frameSize is
-                        65536(?).
+                        twice this value. The maximum allowed <code>frameSize</code> is
+                        16384.
 </p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>HPF - SysSon 0.8.0 API - de.sciss.synth.ugen.HPF</title>
-          <meta name="description" content="HPF - SysSon 0.8.0 API - de.sciss.synth.ugen.HPF" />
-          <meta name="keywords" content="HPF SysSon 0.8.0 API de.sciss.synth.ugen.HPF" />
+          <title>HPF - SysSon 0.11.0 API - de.sciss.synth.ugen.HPF</title>
+          <meta name="description" content="HPF - SysSon 0.11.0 API - de.sciss.synth.ugen.HPF" />
+          <meta name="keywords" content="HPF SysSon 0.11.0 API de.sciss.synth.ugen.HPF" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="HPF.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="HPF.html" title="Go to companion">HPF</a></h1> <span class="permalink">
+        <h1><a href="HPF.html" title="Go to companion">HPF</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="HPF.html" title="See companion">class HPF</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.HPF$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,18 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A second order high pass filter UGen.</p><h5>Examples</h5><pre><span class="cmt">// modulated frequency</span>
+play {
+  <span class="kw">val</span> in   = Saw.ar(<span class="num">200</span>) * <span class="num">0.5</span>
+  <span class="kw">val</span> freq = SinOsc.ar(XLine.ar(<span class="num">0.3</span>, <span class="num">100</span>, <span class="num">20</span>)).madd(<span class="num">3600</span>, <span class="num">4000</span>)
+  HPF.ar(in, freq)
+}</pre><pre><span class="cmt">// mouse controlled frequency</span>
+play {
+  <span class="kw">val</span> in   = WhiteNoise.ar(<span class="num">0.5</span>)
+  <span class="kw">val</span> freq = MouseX.kr(<span class="num">200</span>, <span class="num">10000</span>, <span class="num">1</span>)
+  HPF.ar(in, freq)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="HPZ1$.html" class="extype" name="de.sciss.synth.ugen.HPZ1">HPZ1</a>
+</p></span><span class="cmt"><p><a href="RHPF$.html" class="extype" name="de.sciss.synth.ugen.RHPF">RHPF</a></p></span><span class="cmt"><p><a href="BRF$.html" class="extype" name="de.sciss.synth.ugen.BRF">BRF</a></p></span><span class="cmt"><p><a href="BPF$.html" class="extype" name="de.sciss.synth.ugen.BPF">BPF</a></p></span><span class="cmt"><p><a href="LPF$.html" class="extype" name="de.sciss.synth.ugen.LPF">LPF</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +159,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.HPF#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.HPF#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,freq:de.sciss.synth.GE):de.sciss.synth.ugen.HPF"></a>
       <a id="ar(GE,GE):HPF"></a>
       <h4 class="signature">
@@ -160,7 +175,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>cutoff frequency in Hertz
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +325,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.HPF#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.HPF#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,freq:de.sciss.synth.GE):de.sciss.synth.ugen.HPF"></a>
       <a id="kr(GE,GE):HPF"></a>
       <h4 class="signature">
@@ -325,7 +341,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>cutoff frequency in Hertz
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

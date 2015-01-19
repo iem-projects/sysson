@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Peak - SysSon 0.8.0 API - de.sciss.synth.ugen.Peak</title>
-          <meta name="description" content="Peak - SysSon 0.8.0 API - de.sciss.synth.ugen.Peak" />
-          <meta name="keywords" content="Peak SysSon 0.8.0 API de.sciss.synth.ugen.Peak" />
+          <title>Peak - SysSon 0.11.0 API - de.sciss.synth.ugen.Peak</title>
+          <meta name="description" content="Peak - SysSon 0.11.0 API - de.sciss.synth.ugen.Peak" />
+          <meta name="keywords" content="Peak SysSon 0.11.0 API de.sciss.synth.ugen.Peak" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Peak.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Peak.html" title="Go to companion">Peak</a></h1> <span class="permalink">
+        <h1><a href="Peak.html" title="Go to companion">Peak</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Peak.html" title="See companion">class Peak</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Peak$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,31 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen to measure a signal's peak amplitude. Technically, this UGen works like
+<code>RunningMax</code> after the absolute value of the input signal is taken.</p><p>The UGen keeps an internal state that reflects the maximum absolute input value
+observed. When a trigger occurs at the reset input, it first copies the current
+maximum value to its output and then (quasi-simultaneously) resets its internal
+state to the current absolute input value. This way, the peak value seen from
+the outside at trigger time is the correct peak value up to that moment. See the
+'illustrate timing' example to understand this timing.</p><h5>Examples</h5><pre><span class="cmt">// illustrate timing</span>
+play {
+  <span class="kw">val</span> i  = Impulse.ar(<span class="num">0</span>)
+  <span class="cmt">// first impulse after 100ms</span>
+  <span class="kw">val</span> t1 = DelayN.ar(i * <span class="num">1.0</span> , <span class="num">0.100</span>, <span class="num">0.100</span>)
+  <span class="cmt">// one sample later</span>
+  <span class="kw">val</span> t2 = Delay1.ar(t1) * <span class="num">0.5</span>
+  <span class="cmt">// another sample later</span>
+  <span class="kw">val</span> t3 = Delay1.ar(t2)
+  <span class="kw">val</span> p  = Peak.ar(t1 + t2, t2)
+  <span class="cmt">// at t1, peak has already seen t1</span>
+  p.poll(t1, <span class="lit">"t1"</span>)
+  <span class="cmt">// at t2, peak still reports 1.0, while internally resetting</span>
+  p.poll(t2, <span class="lit">"t2"</span>)
+  <span class="cmt">// at t3, we observe 0.5, therefore peak did reset at t2</span>
+  p.poll(t3, <span class="lit">"t3"</span>)
+  ()
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Amplitude$.html" class="extype" name="de.sciss.synth.ugen.Amplitude">Amplitude</a>
+</p></span><span class="cmt"><p><a href="PeakFollower$.html" class="extype" name="de.sciss.synth.ugen.PeakFollower">PeakFollower</a></p></span><span class="cmt"><p><a href="RunningSum$.html" class="extype" name="de.sciss.synth.ugen.RunningSum">RunningSum</a></p></span><span class="cmt"><p><a href="RunningMax$.html" class="extype" name="de.sciss.synth.ugen.RunningMax">RunningMax</a></p></span><span class="cmt"><p><a href="RunningMin$.html" class="extype" name="de.sciss.synth.ugen.RunningMin">RunningMin</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +172,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Peak#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Peak#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,trig:de.sciss.synth.GE):de.sciss.synth.ugen.Peak"></a>
       <a id="ar(GE,GE):Peak"></a>
       <h4 class="signature">
@@ -160,7 +188,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to analyze</p></dd><dt class="param">trig</dt><dd class="cmt"><p>resets the maximum observed value to the current
+                        absolute value of the input signal
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +339,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Peak#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Peak#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,trig:de.sciss.synth.GE):de.sciss.synth.ugen.Peak"></a>
       <a id="kr(GE,GE):Peak"></a>
       <h4 class="signature">
@@ -325,7 +355,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to analyze</p></dd><dt class="param">trig</dt><dd class="cmt"><p>resets the maximum observed value to the current
+                        absolute value of the input signal
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

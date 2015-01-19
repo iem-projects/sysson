@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Ringz - SysSon 0.8.0 API - de.sciss.synth.ugen.Ringz</title>
-          <meta name="description" content="Ringz - SysSon 0.8.0 API - de.sciss.synth.ugen.Ringz" />
-          <meta name="keywords" content="Ringz SysSon 0.8.0 API de.sciss.synth.ugen.Ringz" />
+          <title>Ringz - SysSon 0.11.0 API - de.sciss.synth.ugen.Ringz</title>
+          <meta name="description" content="Ringz - SysSon 0.11.0 API - de.sciss.synth.ugen.Ringz" />
+          <meta name="keywords" content="Ringz SysSon 0.11.0 API de.sciss.synth.ugen.Ringz" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Ringz.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Ringz.html" title="Go to companion">Ringz</a></h1> <span class="permalink">
+        <h1><a href="Ringz.html" title="Go to companion">Ringz</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Ringz.html" title="See companion">class Ringz</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Ringz$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,24 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A resonant or &quot;ringing&quot; filter UGen. This is the same as <code>Resonz</code> , except that
+instead of a Q parameter, the bandwidth is specified as a 60 dB ring decay time.
+One <code>Ringz</code> is equivalent to one component of the <code>Klank</code> UGen.</p><h5>Examples</h5><pre><span class="cmt">// module ring time</span>
+play { Ringz.ar(Impulse.ar(<span class="num">6</span>) * <span class="num">0.3</span>, <span class="num">2000</span>, XLine.kr(<span class="num">4</span>, <span class="num">0.04</span>, <span class="num">8</span>)) }</pre><pre><span class="cmt">// modulated frequency</span>
+play {
+  <span class="kw">val</span> in   = Saw.ar(<span class="num">200</span>) * <span class="num">0.02</span>
+  <span class="kw">val</span> freq = SinOsc.ar(XLine.ar(<span class="num">0.3</span>, <span class="num">100</span>, <span class="num">20</span>)).madd(<span class="num">2800</span>, <span class="num">4800</span>)
+  Ringz.ar(in, freq)
+}</pre><pre><span class="cmt">// multiple glissandi excited by noise</span>
+play {
+  <span class="kw">val</span> ex = WhiteNoise.ar(<span class="num">0.001</span>)
+  Mix.fill(<span class="num">10</span>) {
+    Ringz.ar(ex,
+      XLine.kr(ExpRand(<span class="num">100</span>, <span class="num">5000</span>), ExpRand(<span class="num">100</span>, <span class="num">5000</span>), <span class="num">20</span>),
+    <span class="num">0.5</span>)
+  }
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="MidEQ$.html" class="extype" name="de.sciss.synth.ugen.MidEQ">MidEQ</a>
+</p></span><span class="cmt"><p><a href="Klank$.html" class="extype" name="de.sciss.synth.ugen.Klank">Klank</a></p></span><span class="cmt"><p><a href="BPF$.html" class="extype" name="de.sciss.synth.ugen.BPF">BPF</a></p></span><span class="cmt"><p><a href="Formlet$.html" class="extype" name="de.sciss.synth.ugen.Formlet">Formlet</a></p></span><span class="cmt"><p><a href="Resonz$.html" class="extype" name="de.sciss.synth.ugen.Resonz">Resonz</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,23 +165,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Ringz#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ar(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,attack:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Ringz"></a>
-      <a id="ar(GE,GE,GE,GE):Ringz"></a>
+    </li><li name="de.sciss.synth.ugen.Ringz#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ar(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Ringz"></a>
+      <a id="ar(GE,GE,GE):Ringz"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ar</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="attack">attack: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="decay">decay: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>)</span><span class="result">: <a href="Ringz.html" class="extype" name="de.sciss.synth.ugen.Ringz">Ringz</a></span>
+        <span class="name">ar</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="decay">decay: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>)</span><span class="result">: <a href="Ringz.html" class="extype" name="de.sciss.synth.ugen.Ringz">Ringz</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Ringz$@ar(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,attack:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Ringz" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Ringz$@ar(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Ringz" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>resonant frequency in Hertz</p></dd><dt class="param">decay</dt><dd class="cmt"><p>the 60 dB decay time in seconds
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,23 +331,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Ringz#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="kr(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,attack:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Ringz"></a>
-      <a id="kr(GE,GE,GE,GE):Ringz"></a>
+    </li><li name="de.sciss.synth.ugen.Ringz#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kr(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Ringz"></a>
+      <a id="kr(GE,GE,GE):Ringz"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">kr</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="attack">attack: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="decay">decay: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>)</span><span class="result">: <a href="Ringz.html" class="extype" name="de.sciss.synth.ugen.Ringz">Ringz</a></span>
+        <span class="name">kr</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="decay">decay: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>)</span><span class="result">: <a href="Ringz.html" class="extype" name="de.sciss.synth.ugen.Ringz">Ringz</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Ringz$@kr(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,attack:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Ringz" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.Ringz$@kr(in:de.sciss.synth.GE,freq:de.sciss.synth.GE,decay:de.sciss.synth.GE):de.sciss.synth.ugen.Ringz" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">freq</dt><dd class="cmt"><p>resonant frequency in Hertz</p></dd><dt class="param">decay</dt><dd class="cmt"><p>the 60 dB decay time in seconds
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LocalIn - SysSon 0.8.0 API - de.sciss.synth.ugen.LocalIn</title>
-          <meta name="description" content="LocalIn - SysSon 0.8.0 API - de.sciss.synth.ugen.LocalIn" />
-          <meta name="keywords" content="LocalIn SysSon 0.8.0 API de.sciss.synth.ugen.LocalIn" />
+          <title>LocalIn - SysSon 0.11.0 API - de.sciss.synth.ugen.LocalIn</title>
+          <meta name="description" content="LocalIn - SysSon 0.11.0 API - de.sciss.synth.ugen.LocalIn" />
+          <meta name="keywords" content="LocalIn SysSon 0.11.0 API de.sciss.synth.ugen.LocalIn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LocalIn.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LocalIn.html" title="Go to companion">LocalIn</a></h1> <span class="permalink">
+        <h1><a href="LocalIn.html" title="Go to companion">LocalIn</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LocalIn.html" title="See companion">class LocalIn</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LocalIn$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,64 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that reads buses that are local to the enclosing synth. These buses
+should be written using a <code>LocalOut</code> ugen. They behave like regular buses, but
+are more convenient for the implementation of a self contained effect that uses
+a feedback processing loop.</p><p>In a synth, there can be only each one control-rate and audio-rate <code>LocalIn</code> /
+<code>LocalOut</code> pair. The signal written to a <code>LocalOut</code> will not be read by the
+<code>LocalIn</code> until the next control block cycle, introducing a delay of
+<code>ControlDur</code> .</p><h5>Examples</h5><pre><span class="cmt">// ping-pong delay with feedback</span>
+play {
+  <span class="kw">val</span> src = Decay.ar(Impulse.ar(<span class="num">0.3</span>), <span class="num">0.1</span>) * WhiteNoise.ar(<span class="num">0.2</span>)
+  <span class="kw">val</span> in  = LocalIn.ar(<span class="num">2</span>) + <span class="std">Seq</span>[GE](src, <span class="num">0</span>) <span class="cmt">// read feedback, add source to left chan</span>
+  <span class="kw">val</span> dly = DelayN.ar(in, <span class="num">0.2</span>, <span class="num">0.2</span>)         <span class="cmt">// delay sound</span>
+  <span class="kw">val</span> att = dly * <span class="num">0.8</span>                       <span class="cmt">// apply decay factor</span>
+
+  <span class="cmt">// reverse channels to give ping pong effect</span>
+  LocalOut.ar(<span class="std">Seq</span>(att \ <span class="num">1</span>, dly \ <span class="num">0</span>))
+  dly
+}</pre><pre><span class="cmt">// tank</span>
+play {
+  <span class="kw">val</span> tones = Mix.fill(<span class="num">12</span>) {
+    Pan2.ar(
+      Decay2.ar(Dust.ar(<span class="num">0.05</span>), <span class="num">0.1</span>, <span class="num">0.5</span>) * <span class="num">0.1</span> *
+        FSinOsc.ar(IRand(<span class="num">36</span>,<span class="num">84</span>).midicps).cubed.max(<span class="num">0</span>),
+      Rand(-<span class="num">1</span>,<span class="num">1</span>))
+  }
+  <span class="kw">val</span> gen = tones + Pan2.ar(Decay2.ar(Dust.ar(<span class="num">0.03</span>), <span class="num">0.04</span>, <span class="num">0.3</span>) * BrownNoise.ar, <span class="num">0</span>)
+
+  <span class="kw">val</span> verb = Mix.fold(gen, <span class="num">4</span>) { z <span class="kw">=&gt;</span>
+    AllpassN.ar(z, <span class="num">0.03</span>, <span class="std">Seq</span>.fill(<span class="num">2</span>)(Rand(<span class="num">0.005</span>,<span class="num">0.02</span>)), <span class="num">1</span>)
+  }
+
+  <span class="kw">val</span> in  = LocalIn.ar(<span class="num">2</span>) * <span class="num">0.98</span>
+  <span class="kw">val</span> flt = OnePole.ar(in, <span class="num">0.5</span>)
+
+  <span class="kw">val</span> pan = Rotate2.ar(flt \ <span class="num">0</span>, flt \ <span class="num">1</span>, <span class="num">0.23</span>)
+  <span class="kw">val</span> v1  = AllpassN.ar(pan, <span class="num">0.05</span>, <span class="std">Seq</span>.fill(<span class="num">2</span>)(Rand(<span class="num">0.01</span>,<span class="num">0.05</span>)), <span class="num">2</span>)
+  <span class="kw">val</span> v2  = DelayN.ar(v1, <span class="num">0.3</span>, <span class="std">Seq</span>(<span class="num">0.19</span>,<span class="num">0.26</span>))
+  <span class="kw">val</span> v3  = AllpassN.ar(v2 , <span class="num">0.05</span>, <span class="std">Seq</span>.fill(<span class="num">2</span>)(Rand(<span class="num">0.03</span>,<span class="num">0.15</span>)), <span class="num">2</span>)
+  <span class="kw">val</span> out = LeakDC.ar(v3)
+  <span class="kw">val</span> sig = gen + out
+
+  LocalOut.ar(sig)
+  sig
+}</pre><pre><span class="cmt">// resonator</span>
+play {
+  <span class="kw">val</span> imp  = Impulse.ar(<span class="num">1</span>)
+  <span class="kw">val</span> in   = LocalIn.ar
+  <span class="kw">val</span> feed = imp + in * <span class="num">0.995</span>
+  <span class="cmt">// must subtract block-size for correct tuning</span>
+  <span class="cmt">// (try removing the ControlDur to here the pitch change)</span>
+  <span class="kw">val</span> time = <span class="num">440.</span>reciprocal - ControlDur.ir
+  <span class="kw">val</span> dly  = DelayC.ar(feed, time, time)
+  LocalOut.ar(dly)
+
+  <span class="cmt">// alternate between feedback and reference pitch</span>
+  <span class="kw">val</span> comp = <span class="std">Seq</span>(dly, SinOsc.ar(<span class="num">440</span>) * <span class="num">0.2</span>): GE
+  comp * LFPulse.kr(<span class="num">1</span>, <span class="std">Seq</span>(<span class="num">0.0</span>, <span class="num">0.5</span>))
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlDur$.html" class="extype" name="de.sciss.synth.ugen.ControlDur">ControlDur</a>
+</p></span><span class="cmt"><p><a href="InFeedback$.html" class="extype" name="de.sciss.synth.ugen.InFeedback">InFeedback</a></p></span><span class="cmt"><p><a href="LocalOut$.html" class="extype" name="de.sciss.synth.ugen.LocalOut">LocalOut</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +205,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LocalIn#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LocalIn#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(numChannels:Int):de.sciss.synth.ugen.LocalIn"></a>
       <a id="ar(Int):LocalIn"></a>
       <h4 class="signature">
@@ -160,7 +221,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to be read from synth-local bus.
+                        This should match with the number of channels actually
+                        written via <code>LocalOut</code> .
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LocalIn#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.LocalIn"></a>
       <a id="ar:LocalIn"></a>
@@ -326,7 +390,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LocalIn#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LocalIn#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(numChannels:Int):de.sciss.synth.ugen.LocalIn"></a>
       <a id="kr(Int):LocalIn"></a>
       <h4 class="signature">
@@ -342,7 +406,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to be read from synth-local bus.
+                        This should match with the number of channels actually
+                        written via <code>LocalOut</code> .
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LocalIn#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.LocalIn"></a>
       <a id="kr:LocalIn"></a>

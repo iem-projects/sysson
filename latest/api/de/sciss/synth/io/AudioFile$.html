@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>AudioFile - SysSon 0.8.0 API - de.sciss.synth.io.AudioFile</title>
-          <meta name="description" content="AudioFile - SysSon 0.8.0 API - de.sciss.synth.io.AudioFile" />
-          <meta name="keywords" content="AudioFile SysSon 0.8.0 API de.sciss.synth.io.AudioFile" />
+          <title>AudioFile - SysSon 0.11.0 API - de.sciss.synth.io.AudioFile</title>
+          <meta name="description" content="AudioFile - SysSon 0.11.0 API - de.sciss.synth.io.AudioFile" />
+          <meta name="keywords" content="AudioFile SysSon 0.11.0 API de.sciss.synth.io.AudioFile" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="AudioFile.html" title="Go to companion"><img src="../../../../lib/object_to_trait_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.io">io</a></p>
-        <h1><a href="AudioFile.html" title="Go to companion">AudioFile</a></h1> <span class="permalink">
+        <h1><a href="AudioFile.html" title="Go to companion">AudioFile</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="AudioFile.html" title="See companion">trait AudioFile</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.io">package io</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -63,9 +67,6 @@ which creates a buffer with the appropriate channel number.
 </p></div><dl class="attributes block"> <dt>To do</dt><dd><span class="cmt"><p>the copyTo method uses a user-buffer. it should
         check for the possibility to directly transfer data
         if input and output are compatible.
-</p></span>, <span class="cmt"><p>openWrite is currently missing
-        the goodies of ScissLib are missing, e.g. support for
-        markers, comments, app-code.
 </p></span></dd><dt>See also</dt><dd><span class="cmt"><p>AudioFileType
 </p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -361,7 +362,7 @@ which creates a buffer with the appropriate channel number.
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if the file could not be reader
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if the file could not be reader
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#identify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="identify(path:String):Option[de.sciss.synth.io.AudioFileType]"></a>
@@ -496,14 +497,14 @@ which creates a buffer with the appropriate channel number.
       <p class="shortcomment cmt">Opens an audio file for reading.</p><div class="fullcomment"><div class="comment cmt"><p>Opens an audio file for reading.
 </p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the path name of the file</p></dd><dt>returns</dt><dd class="cmt"><p>a new <code>AudioFile</code> object
         whose header is already parsed and can
-        be obtained through the <code>getDescr</code> method.
+        be obtained through the <code>spec</code> method.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.io.AudioFile">AudioFile</a> → <a href="ReaderFactory.html" class="extype" name="de.sciss.synth.io.ReaderFactory">ReaderFactory</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if the file was not found, could not be reader
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if the file was not found, could not be reader
                     or has an unknown or unsupported format
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.ReaderFactory#openRead" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -548,7 +549,7 @@ which creates a buffer with the appropriate channel number.
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
-      <span class="symbol">classOf[ IOException ]</span>
+      <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
         </dd></dl></div>
@@ -568,24 +569,24 @@ which creates a buffer with the appropriate channel number.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"> Opens an audiofile for reading/writing.</p><div class="fullcomment"><div class="comment cmt"><p> Opens an audiofile for reading/writing. The pathname
- is determined by the <code>file</code> field of the provided <code>AudioFileInfo</code>.
- If a file denoted by this path already exists, it will be
- deleted before opening.</p><p> Note that the initial audio file header is written immediately.
- Special tags for the header thus need to be set in the <code>AudioFileInfo</code>
- before calling this method, including markers and regions. It is not
- possible to writer markers and regions after the file has been opened
- (since the header size has to be constant).
+      <p class="shortcomment cmt">Opens an audio file for reading/writing.</p><div class="fullcomment"><div class="comment cmt"><p>Opens an audio file for reading/writing. The pathname
+is determined by the <code>file</code> field of the provided <code>AudioFileInfo</code>.
+If a file denoted by this path already exists, it will be
+deleted before opening.</p><p>Note that the initial audio file header is written immediately.
+Special tags for the header thus need to be set in the <code>AudioFileInfo</code>
+before calling this method, including markers and regions. It is not
+possible to writer markers and regions after the file has been opened
+(since the header size has to be constant).
 </p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the path name of the file.</p></dd><dt class="param">spec</dt><dd class="cmt"><p>format and resolution of the new audio file.
-			      the header is immediately written to the harddisc
+               the header is immediately written to the hard-disc
 </p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
-      <span class="symbol">classOf[ IOException ]</span>
+      <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if the file could not be created or the
-					      format is unsupported
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if the file could not be created or the
+                    format is unsupported
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#openWrite" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="openWrite(path:String,spec:de.sciss.synth.io.AudioFileSpec):de.sciss.synth.io.AudioFile"></a>
@@ -606,7 +607,7 @@ which creates a buffer with the appropriate channel number.
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
-      <span class="symbol">classOf[ IOException ]</span>
+      <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
         </dd></dl></div>

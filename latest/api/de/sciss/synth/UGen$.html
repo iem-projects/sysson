@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>UGen - SysSon 0.8.0 API - de.sciss.synth.UGen</title>
-          <meta name="description" content="UGen - SysSon 0.8.0 API - de.sciss.synth.UGen" />
-          <meta name="keywords" content="UGen SysSon 0.8.0 API de.sciss.synth.UGen" />
+          <title>UGen - SysSon 0.11.0 API - de.sciss.synth.UGen</title>
+          <meta name="description" content="UGen - SysSon 0.11.0 API - de.sciss.synth.UGen" />
+          <meta name="keywords" content="UGen SysSon 0.11.0 API de.sciss.synth.UGen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="UGen.html" title="Go to companion"><img src="../../../lib/object_to_trait_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
-        <h1><a href="UGen.html" title="Go to companion">UGen</a></h1> <span class="permalink">
+        <h1><a href="UGen.html" title="Go to companion">UGen</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="UGen.html" title="See companion">trait UGen</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth">package synth</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen$" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
@@ -89,30 +93,30 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="de.sciss.synth.UGen.MultiOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MultiOutextendsUGenwithUGenInGroup"></a>
+              <ol><li name="de.sciss.synth.UGen.MultiOut" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MultiOutextendsUGenInGroupwithUGen"></a>
       <a id="MultiOut:MultiOut"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="UGen$$MultiOut.html"><span class="name">MultiOut</span></a><span class="result"> extends <a href="UGen.html" class="extype" name="de.sciss.synth.UGen">UGen</a> with <a href="ugen/UGenInGroup.html" class="extype" name="de.sciss.synth.ugen.UGenInGroup">UGenInGroup</a></span>
+        <a href="UGen$$MultiOut.html"><span class="name">MultiOut</span></a><span class="result"> extends <a href="ugen/UGenInGroup.html" class="extype" name="de.sciss.synth.ugen.UGenInGroup">UGenInGroup</a> with <a href="UGen.html" class="extype" name="de.sciss.synth.UGen">UGen</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.UGen$@MultiOutextendsUGenwithUGenInGroup" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.UGen$@MultiOutextendsUGenInGroupwithUGen" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">A class for UGens with multiple outputs.</p>
-    </li><li name="de.sciss.synth.UGen.SingleOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.UGen.SingleOut" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SingleOutextendsUGenProxywithUGen"></a>
       <a id="SingleOut:SingleOut"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="UGen$$SingleOut.html"><span class="name">SingleOut</span></a><span class="result"> extends <a href="ugen/UGenProxy.html" class="extype" name="de.sciss.synth.ugen.UGenProxy">UGenProxy</a> with <a href="UGen.html" class="extype" name="de.sciss.synth.UGen">UGen</a></span>
@@ -124,13 +128,13 @@
     </span>
       <p class="shortcomment cmt">A SingleOutUGen is a UGen which has exactly one output, and
 hence can directly function as input to another UGen without expansion.</p>
-    </li><li name="de.sciss.synth.UGen.ZeroOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.UGen.ZeroOut" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ZeroOutextendsUGen"></a>
       <a id="ZeroOut:ZeroOut"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
         <a href="UGen$$ZeroOut.html"><span class="name">ZeroOut</span></a><span class="result"> extends <a href="UGen.html" class="extype" name="de.sciss.synth.UGen">UGen</a></span>
@@ -199,6 +203,40 @@ hence can directly function as input to another UGen without expansion.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.UGen.MultiOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MultiOut"></a>
+      <a id="MultiOut:MultiOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGen$$MultiOut$.html"><span class="name">MultiOut</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGen$@MultiOut" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGen.SingleOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SingleOut"></a>
+      <a id="SingleOut:SingleOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGen$$SingleOut$.html"><span class="name">SingleOut</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGen$@SingleOut" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.UGen.ZeroOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ZeroOut"></a>
       <a id="ZeroOut:ZeroOut"></a>

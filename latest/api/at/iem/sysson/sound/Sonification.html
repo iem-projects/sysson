@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Sonification - SysSon 0.8.0 API - at.iem.sysson.sound.Sonification</title>
-          <meta name="description" content="Sonification - SysSon 0.8.0 API - at.iem.sysson.sound.Sonification" />
-          <meta name="keywords" content="Sonification SysSon 0.8.0 API at.iem.sysson.sound.Sonification" />
+          <title>Sonification - SysSon 0.11.0 API - at.iem.sysson.sound.Sonification</title>
+          <meta name="description" content="Sonification - SysSon 0.11.0 API - at.iem.sysson.sound.Sonification" />
+          <meta name="keywords" content="Sonification SysSon 0.11.0 API at.iem.sysson.sound.Sonification" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Sonification$.html" title="Go to companion"><img src="../../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a>.<a href="package.html" class="extype" name="at.iem.sysson.sound">sound</a></p>
-        <h1><a href="Sonification$.html" title="Go to companion">Sonification</a></h1> <span class="permalink">
+        <h1><a href="Sonification$.html" title="Go to companion">Sonification</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Sonification$.html" title="See companion">object Sonification</a>
+            | <a href="package.html" class="extype" name="at.iem.sysson.sound">package sound</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.sound.Sonification" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A sonification pairs a sound process with a map to data sources and user controls.</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="de.sciss.lucre.event.Publisher">Publisher</span>[<span class="extype" name="at.iem.sysson.sound.Sonification.S">S</span>, <a href="Sonification$$Update.html" class="extype" name="at.iem.sysson.sound.Sonification.Update">Update</a>[<span class="extype" name="at.iem.sysson.sound.Sonification.S">S</span>]], <span class="extype" name="de.sciss.lucre.event.Node">Node</span>[<span class="extype" name="at.iem.sysson.sound.Sonification.S">S</span>], <span class="extype" name="de.sciss.lucre.event.VirtualNode">VirtualNode</span>[<span class="extype" name="at.iem.sysson.sound.Sonification.S">S</span>], <span class="extype" name="de.sciss.lucre.event.Reactor">Reactor</span>[<span class="extype" name="at.iem.sysson.sound.Sonification.S">S</span>], <span class="extype" name="de.sciss.lucre.stm.Mutable">Mutable</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span>, <span class="extype" name="de.sciss.lucre.event.Sys.Tx">S.Tx</span>], <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.event.Sys.Tx">S.Tx</span>], <span class="extype" name="de.sciss.serial.Writable">Writable</span>, <span class="extype" name="de.sciss.lucre.stm.Identifiable">Identifiable</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -108,7 +112,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Publisher</dd></dl></div>
-    </li><li name="at.iem.sysson.sound.Sonification#controls" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="at.iem.sysson.sound.Sonification#controls" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="controls:de.sciss.lucre.expr.Map[S,String,de.sciss.lucre.expr.Expr[S,Double],de.sciss.model.Change[Double]]"></a>
       <a id="controls:Map[S,String,Expr[S,Double],Change[Double]]"></a>
       <h4 class="signature">
@@ -124,7 +128,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A map from logical keys to control values.</p><div class="fullcomment"><div class="comment cmt"><p>A map from logical keys to control values.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../graph/UserValue.html" class="extype" name="at.iem.sysson.graph.UserValue">at.iem.sysson.graph.UserValue</a>
+</p></span></dd></dl></div>
     </li><li name="de.sciss.lucre.event.Node#disposeData" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="disposeData()(implicittx:S#Tx):Unit"></a>
       <a id="disposeData()(S.Tx):Unit"></a>
@@ -143,23 +149,23 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Node</dd></dl></div>
     </li><li name="at.iem.sysson.sound.Sonification#proc" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="proc:de.sciss.synth.proc.Obj.T[S,de.sciss.synth.proc.Proc.Elem]"></a>
-      <a id="proc:T[S,Elem]"></a>
+      <a id="proc:de.sciss.synth.proc.Proc.Obj[S]"></a>
+      <a id="proc:Obj[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">proc</span><span class="result">: <span class="extype" name="de.sciss.synth.proc.Obj.T">T</span>[<span class="extype" name="at.iem.sysson.sound.Sonification.S">S</span>, <span class="extype" name="de.sciss.synth.proc.Proc.Elem">Elem</span>]</span>
+        <span class="name">proc</span><span class="result">: <span class="extype" name="de.sciss.synth.proc.Proc.Obj">Obj</span>[<span class="extype" name="at.iem.sysson.sound.Sonification.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.sound.Sonification@proc:de.sciss.synth.proc.Obj.T[S,de.sciss.synth.proc.Proc.Elem]" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.sound.Sonification@proc:de.sciss.synth.proc.Proc.Obj[S]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="at.iem.sysson.sound.Sonification#sources" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">The sound process that implements the sonification</p>
+    </li><li name="at.iem.sysson.sound.Sonification#sources" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="sources:de.sciss.lucre.expr.Map[S,String,at.iem.sysson.sound.Sonification.Source[S],at.iem.sysson.sound.Sonification.Source.Update[S]]"></a>
       <a id="sources:Map[S,String,Source[S],Update[S]]"></a>
       <h4 class="signature">
@@ -175,7 +181,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A map from logical keys to sonification sources.</p><div class="fullcomment"><div class="comment cmt"><p>A map from logical keys to sonification sources. A source is
+a matrix paired with a dimensional map.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../graph/Dim.html" class="extype" name="at.iem.sysson.graph.Dim">at.iem.sysson.graph.Dim</a>
+</p></span><span class="cmt"><p><a href="../graph/Var.html" class="extype" name="at.iem.sysson.graph.Var">at.iem.sysson.graph.Var</a></p></span></dd></dl></div>
     </li><li name="de.sciss.lucre.event.Node#targets" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="targets:de.sciss.lucre.event.Targets[S]"></a>
       <a id="targets:Targets[S]"></a>

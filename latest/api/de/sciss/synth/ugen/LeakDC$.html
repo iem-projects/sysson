@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LeakDC - SysSon 0.8.0 API - de.sciss.synth.ugen.LeakDC</title>
-          <meta name="description" content="LeakDC - SysSon 0.8.0 API - de.sciss.synth.ugen.LeakDC" />
-          <meta name="keywords" content="LeakDC SysSon 0.8.0 API de.sciss.synth.ugen.LeakDC" />
+          <title>LeakDC - SysSon 0.11.0 API - de.sciss.synth.ugen.LeakDC</title>
+          <meta name="description" content="LeakDC - SysSon 0.11.0 API - de.sciss.synth.ugen.LeakDC" />
+          <meta name="keywords" content="LeakDC SysSon 0.11.0 API de.sciss.synth.ugen.LeakDC" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LeakDC.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LeakDC.html" title="Go to companion">LeakDC</a></h1> <span class="permalink">
+        <h1><a href="LeakDC.html" title="Go to companion">LeakDC</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LeakDC.html" title="See companion">class LeakDC</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LeakDC$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,18 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A filter UGen to remove very low frequency content DC offset.</p><h5>Examples</h5><pre><span class="cmt">// show DC with mouse-controlled coefficient</span>
+play {
+  <span class="kw">val</span> freq = <span class="num">800</span>
+  <span class="kw">val</span> in   = LFPulse.ar(freq).madd(<span class="num">0.5</span>, <span class="num">0.5</span>)
+  <span class="kw">val</span> coef = MouseX.kr(<span class="num">0.9</span>, <span class="num">0.999</span>)
+  <span class="kw">val</span> flt  = LeakDC.ar(in, coef)
+  <span class="kw">val</span> dc   = RunningSum.ar(flt, SampleRate.ir/freq)
+  coef.poll(<span class="num">2</span>)
+  dc  .poll(<span class="num">2</span>)
+  <span class="num">0</span>
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DC$.html" class="extype" name="de.sciss.synth.ugen.DC">DC</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +159,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LeakDC#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LeakDC#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,coeff:de.sciss.synth.GE):de.sciss.synth.ugen.LeakDC"></a>
       <a id="ar(GE,GE):LeakDC"></a>
       <h4 class="signature">
@@ -160,7 +175,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">coeff</dt><dd class="cmt"><p>the leak coefficient determines the filter strength.
+                        the value must be between zero and one (exclusive) for
+                        the filter to remain stable. values closer to one
+                        produce less bass attenuation.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +328,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LeakDC#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LeakDC#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,coeff:de.sciss.synth.GE):de.sciss.synth.ugen.LeakDC"></a>
       <a id="kr(GE,GE):LeakDC"></a>
       <h4 class="signature">
@@ -325,7 +344,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd><dt class="param">coeff</dt><dd class="cmt"><p>the leak coefficient determines the filter strength.
+                        the value must be between zero and one (exclusive) for
+                        the filter to remain stable. values closer to one
+                        produce less bass attenuation.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

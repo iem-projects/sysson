@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BrownNoise - SysSon 0.8.0 API - de.sciss.synth.ugen.BrownNoise</title>
-          <meta name="description" content="BrownNoise - SysSon 0.8.0 API - de.sciss.synth.ugen.BrownNoise" />
-          <meta name="keywords" content="BrownNoise SysSon 0.8.0 API de.sciss.synth.ugen.BrownNoise" />
+          <title>BrownNoise - SysSon 0.11.0 API - de.sciss.synth.ugen.BrownNoise</title>
+          <meta name="description" content="BrownNoise - SysSon 0.11.0 API - de.sciss.synth.ugen.BrownNoise" />
+          <meta name="keywords" content="BrownNoise SysSon 0.11.0 API de.sciss.synth.ugen.BrownNoise" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BrownNoise.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BrownNoise.html" title="Go to companion">BrownNoise</a></h1> <span class="permalink">
+        <h1><a href="BrownNoise.html" title="Go to companion">BrownNoise</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BrownNoise.html" title="See companion">class BrownNoise</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BrownNoise$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,11 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A noise generator UGen whose spectrum falls off in power by 6 dB per octave.
+The values produced by this UGen lie between <code>-1</code> and <code>+1</code> , the RMS is approx.
+-4.8 dB (the same as white noise).</p><h5>Examples</h5><pre><span class="cmt">// plain noise</span>
+play { BrownNoise.ar(<span class="std">Seq</span>(<span class="num">0.2</span>, <span class="num">0.2</span>)) }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="RandSeed$.html" class="extype" name="de.sciss.synth.ugen.RandSeed">RandSeed</a>
+</p></span><span class="cmt"><p><a href="ClipNoise$.html" class="extype" name="de.sciss.synth.ugen.ClipNoise">ClipNoise</a></p></span><span class="cmt"><p><a href="GrayNoise$.html" class="extype" name="de.sciss.synth.ugen.GrayNoise">GrayNoise</a></p></span><span class="cmt"><p><a href="PinkNoise$.html" class="extype" name="de.sciss.synth.ugen.PinkNoise">PinkNoise</a></p></span><span class="cmt"><p><a href="WhiteNoise$.html" class="extype" name="de.sciss.synth.ugen.WhiteNoise">WhiteNoise</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +152,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.BrownNoise#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.BrownNoise#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(mul:de.sciss.synth.GE):de.sciss.synth.ugen.BrownNoise"></a>
       <a id="ar(GE):BrownNoise"></a>
       <h4 class="signature">
@@ -160,7 +168,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">mul</dt><dd class="cmt"><p>Not actually a UGen input, this argument produces a
+                        multiplication of the output by this factor. A
+                        multi-channel <code>mul</code> argument will cause the generation
+                        of multiple independent noise generators.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.BrownNoise#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.BrownNoise"></a>
       <a id="ar:BrownNoise"></a>
@@ -326,7 +338,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.BrownNoise#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.BrownNoise#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(mul:de.sciss.synth.GE):de.sciss.synth.ugen.BrownNoise"></a>
       <a id="kr(GE):BrownNoise"></a>
       <h4 class="signature">
@@ -342,7 +354,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">mul</dt><dd class="cmt"><p>Not actually a UGen input, this argument produces a
+                        multiplication of the output by this factor. A
+                        multi-channel <code>mul</code> argument will cause the generation
+                        of multiple independent noise generators.
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.BrownNoise#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.BrownNoise"></a>
       <a id="kr:BrownNoise"></a>

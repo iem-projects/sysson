@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Normalizer - SysSon 0.8.0 API - de.sciss.synth.ugen.Normalizer</title>
-          <meta name="description" content="Normalizer - SysSon 0.8.0 API - de.sciss.synth.ugen.Normalizer" />
-          <meta name="keywords" content="Normalizer SysSon 0.8.0 API de.sciss.synth.ugen.Normalizer" />
+          <title>Normalizer - SysSon 0.11.0 API - de.sciss.synth.ugen.Normalizer</title>
+          <meta name="description" content="Normalizer - SysSon 0.11.0 API - de.sciss.synth.ugen.Normalizer" />
+          <meta name="keywords" content="Normalizer SysSon 0.11.0 API de.sciss.synth.ugen.Normalizer" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Normalizer$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Normalizer$.html" title="Go to companion">Normalizer</a></h1> <span class="permalink">
+        <h1><a href="Normalizer$.html" title="Go to companion">Normalizer</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Normalizer$.html" title="See companion">object Normalizer</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Normalizer" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that normalizes the input amplitude to the given level. Unlike
+<code>Compander</code> , this UGen will not overshoot, but it needs to look ahead in the
+input signal, introducing a delay in its output. The delay time is equal to
+twice the value of the <code>dur</code> parameter (the buffer internally used).
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be normalized</p></dd><dt class="param">level</dt><dd class="cmt"><p>peak output amplitude level to which to normalize the
+                        input</p></dd><dt class="param">dur</dt><dd class="cmt"><p>look-ahead time in seconds. Shorter times will produce
+                        smaller delays and quicker transient response times, but
+                        may introduce amplitude modulation artifacts.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Compander$.html" class="extype" name="de.sciss.synth.ugen.Compander">Compander</a>
+</p></span><span class="cmt"><p><a href="Limiter$.html" class="extype" name="de.sciss.synth.ugen.Limiter">Limiter</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +100,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Normalizer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Normalizer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE,level:de.sciss.synth.GE,dur:de.sciss.synth.GE):de.sciss.synth.ugen.Normalizer"></a>
       <a id="&lt;init&gt;:Normalizer"></a>
       <h4 class="signature">
@@ -103,7 +116,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be normalized</p></dd><dt class="param">level</dt><dd class="cmt"><p>peak output amplitude level to which to normalize the
+                        input</p></dd><dt class="param">dur</dt><dd class="cmt"><p>look-ahead time in seconds. Shorter times will produce
+                        smaller delays and quicker transient response times, but
+                        may introduce amplitude modulation artifacts.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -204,7 +221,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Normalizer#dur" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Normalizer#dur" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dur:de.sciss.synth.GE"></a>
       <a id="dur:GE"></a>
       <h4 class="signature">
@@ -220,7 +237,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">look-ahead time in seconds.</p><div class="fullcomment"><div class="comment cmt"><p>look-ahead time in seconds. Shorter times will produce
+                        smaller delays and quicker transient response times, but
+                        may introduce amplitude modulation artifacts.
+</p></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -294,7 +314,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">input signal to be normalized</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -328,7 +348,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">peak output amplitude level to which to normalize the
+                        input</p>
     </li><li name="de.sciss.synth.ugen.Normalizer#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Pan2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Pan2</title>
-          <meta name="description" content="Pan2 - SysSon 0.8.0 API - de.sciss.synth.ugen.Pan2" />
-          <meta name="keywords" content="Pan2 SysSon 0.8.0 API de.sciss.synth.ugen.Pan2" />
+          <title>Pan2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Pan2</title>
+          <meta name="description" content="Pan2 - SysSon 0.11.0 API - de.sciss.synth.ugen.Pan2" />
+          <meta name="keywords" content="Pan2 SysSon 0.11.0 API de.sciss.synth.ugen.Pan2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Pan2.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Pan2.html" title="Go to companion">Pan2</a></h1> <span class="permalink">
+        <h1><a href="Pan2.html" title="Go to companion">Pan2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Pan2.html" title="See companion">class Pan2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Pan2$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A stereo panorama UGen based on equal-power amplitude control. When in center
+position ( <code>pos = 0</code> ), the signal is attenuated by sqrt(0.5) or approx. -3 dB.</p><h5>Examples</h5><pre><span class="cmt">// periodic left-right oscillation</span>
+play { Pan2.ar(PinkNoise.ar(<span class="num">0.4</span>), SinOsc.kr(<span class="num">0.25</span>), <span class="num">0.3</span>) }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="XFade2$.html" class="extype" name="de.sciss.synth.ugen.XFade2">XFade2</a>
+</p></span><span class="cmt"><p><a href="Balance2$.html" class="extype" name="de.sciss.synth.ugen.Balance2">Balance2</a></p></span><span class="cmt"><p><a href="Pan4$.html" class="extype" name="de.sciss.synth.ugen.Pan4">Pan4</a></p></span><span class="cmt"><p><a href="PanAz$.html" class="extype" name="de.sciss.synth.ugen.PanAz">PanAz</a></p></span><span class="cmt"><p><a href="LinPan2$.html" class="extype" name="de.sciss.synth.ugen.LinPan2">LinPan2</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +151,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Pan2#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Pan2#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE,pos:de.sciss.synth.GE,level:de.sciss.synth.GE):de.sciss.synth.ugen.Pan2"></a>
       <a id="ar(GE,GE,GE):Pan2"></a>
       <h4 class="signature">
@@ -160,7 +167,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>(monophonic) input signal to be panned</p></dd><dt class="param">pos</dt><dd class="cmt"><p>panorama position between -1 (hard left) via 0 (center)
+                        to +1 (hard right)</p></dd><dt class="param">level</dt><dd class="cmt"><p>additional gain control
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +318,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Pan2#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Pan2#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(in:de.sciss.synth.GE,pos:de.sciss.synth.GE,level:de.sciss.synth.GE):de.sciss.synth.ugen.Pan2"></a>
       <a id="kr(GE,GE,GE):Pan2"></a>
       <h4 class="signature">
@@ -325,7 +334,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>(monophonic) input signal to be panned</p></dd><dt class="param">pos</dt><dd class="cmt"><p>panorama position between -1 (hard left) via 0 (center)
+                        to +1 (hard right)</p></dd><dt class="param">level</dt><dd class="cmt"><p>additional gain control
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SetResetFF - SysSon 0.8.0 API - de.sciss.synth.ugen.SetResetFF</title>
-          <meta name="description" content="SetResetFF - SysSon 0.8.0 API - de.sciss.synth.ugen.SetResetFF" />
-          <meta name="keywords" content="SetResetFF SysSon 0.8.0 API de.sciss.synth.ugen.SetResetFF" />
+          <title>SetResetFF - SysSon 0.11.0 API - de.sciss.synth.ugen.SetResetFF</title>
+          <meta name="description" content="SetResetFF - SysSon 0.11.0 API - de.sciss.synth.ugen.SetResetFF" />
+          <meta name="keywords" content="SetResetFF SysSon 0.11.0 API de.sciss.synth.ugen.SetResetFF" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="SetResetFF$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="SetResetFF$.html" title="Go to companion">SetResetFF</a></h1> <span class="permalink">
+        <h1><a href="SetResetFF$.html" title="Go to companion">SetResetFF</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="SetResetFF$.html" title="See companion">object SetResetFF</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.SetResetFF" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,11 +47,19 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">SetResetFF</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">SetResetFF</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A flip-flop UGen with two inputs, one (set) triggering an output of 1.0, the
+other (reset) triggering an output of 0.0. Subsequent triggers happening within
+the same input slot have no effect. If both inputs receive a trigger at the same
+time, the <i>reset</i> input takes precedence.
+</p></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger that sets output to 1. A trigger happens when
+                        the signal changes from non-positive to positive.</p></dd><dt class="param">reset</dt><dd class="cmt"><p>trigger that sets output to 0. A trigger happens when
+                        the signal changes from non-positive to positive.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ToggleFF$.html" class="extype" name="de.sciss.synth.ugen.ToggleFF">ToggleFF</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,8 +99,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.SetResetFF#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,trig:de.sciss.synth.GE,reset:de.sciss.synth.GE):de.sciss.synth.ugen.SetResetFF"></a>
+              <ol><li name="de.sciss.synth.ugen.SetResetFF#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(rate:de.sciss.synth.MaybeRate,trig:de.sciss.synth.GE,reset:de.sciss.synth.GE):de.sciss.synth.ugen.SetResetFF"></a>
       <a id="&lt;init&gt;:SetResetFF"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -96,14 +108,17 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SetResetFF</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span>
+        <span class="name">SetResetFF</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.SetResetFF@&lt;init&gt;(rate:de.sciss.synth.Rate,trig:de.sciss.synth.GE,reset:de.sciss.synth.GE):de.sciss.synth.ugen.SetResetFF" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.SetResetFF@&lt;init&gt;(rate:de.sciss.synth.MaybeRate,trig:de.sciss.synth.GE,reset:de.sciss.synth.GE):de.sciss.synth.ugen.SetResetFF" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>trigger that sets output to 1. A trigger happens when
+                        the signal changes from non-positive to positive.</p></dd><dt class="param">reset</dt><dd class="cmt"><p>trigger that sets output to 0. A trigger happens when
+                        the signal changes from non-positive to positive.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -386,23 +401,23 @@ expansion
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="de.sciss.synth.ugen.SetResetFF#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="rate:de.sciss.synth.Rate"></a>
-      <a id="rate:Rate"></a>
+      <a id="rate:de.sciss.synth.MaybeRate"></a>
+      <a id="rate:MaybeRate"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">rate</span><span class="result">: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>
+        <span class="name">rate</span><span class="result">: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.SetResetFF@rate:de.sciss.synth.Rate" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.SetResetFF@rate:de.sciss.synth.MaybeRate" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.ugen.SetResetFF">SetResetFF</a> → <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.SetResetFF#reset" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.SetResetFF#reset" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reset:de.sciss.synth.GE"></a>
       <a id="reset:GE"></a>
       <h4 class="signature">
@@ -418,7 +433,9 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">trigger that sets output to 0.</p><div class="fullcomment"><div class="comment cmt"><p>trigger that sets output to 0. A trigger happens when
+                        the signal changes from non-positive to positive.
+</p></div></div>
     </li><li name="de.sciss.synth.UGenSource.SomeOut#rewrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):de.sciss.synth.UGenInLike"></a>
       <a id="rewrap(IndexedSeq[UGenInLike],Int):UGenInLike"></a>
@@ -453,7 +470,7 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.SetResetFF#trig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.SetResetFF#trig" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trig:de.sciss.synth.GE"></a>
       <a id="trig:GE"></a>
       <h4 class="signature">
@@ -469,7 +486,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">trigger that sets output to 1.</p><div class="fullcomment"><div class="comment cmt"><p>trigger that sets output to 1. A trigger happens when
+                        the signal changes from non-positive to positive.</p></div></div>
     </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
       <a id="unwrap(IndexedSeq[UGenInLike]):UGenInLike"></a>

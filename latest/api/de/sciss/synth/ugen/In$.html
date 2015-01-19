@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>In - SysSon 0.8.0 API - de.sciss.synth.ugen.In</title>
-          <meta name="description" content="In - SysSon 0.8.0 API - de.sciss.synth.ugen.In" />
-          <meta name="keywords" content="In SysSon 0.8.0 API de.sciss.synth.ugen.In" />
+          <title>In - SysSon 0.11.0 API - de.sciss.synth.ugen.In</title>
+          <meta name="description" content="In - SysSon 0.11.0 API - de.sciss.synth.ugen.In" />
+          <meta name="keywords" content="In SysSon 0.11.0 API de.sciss.synth.ugen.In" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="In.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="In.html" title="Go to companion">In</a></h1> <span class="permalink">
+        <h1><a href="In.html" title="Go to companion">In</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="In.html" title="See companion">class In</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.In$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,36 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that reads a signal from a bus. Whether an audio- or control-bus is used
+depends on the rate of the UGen.</p><p><code>In.ar</code> and <code>In.kr</code> behave differently with respect to signals left on the bus
+in the previous calculation cycle (control block): <code>In.ar</code> can access audio
+signals that were generated in the current calculation cycle by synths appearing
+earlier in the node tree. It does not read signals produced by nodes in the
+previous calculation cycle (i.e. synths appearing later in the node tree), the
+input would instead be zero. To allow such &quot;feedback&quot;, <code>InFeedback</code> can be used.</p><p>In contrast, <code>In.kr</code> does not distinguish between &quot;new&quot; and &quot;old&quot; data: It will
+always read the most recent value found on the bus, whether it was generated
+earlier in this calculation cycle, left over from the last one, or set before by
+the client.</p><p><b>Note</b>: The server uses the first <code>NumOutputBuses</code> channels to write to the
+sound card, followed by another <code>NumInputBuses</code> to read from the sound card. For
+convenience, the pseudo-UGens <code>PhysicalOut</code> and <code>PhysicalIn</code> can be used.</p><h5>Examples</h5><pre><span class="cmt">// cross-synth routing</span>
+<span class="cmt">// allocate an internal stereo audio-bus</span>
+<span class="kw">val</span> bus = Bus.audio(s, <span class="num">2</span>)
+
+<span class="cmt">// writes to internal bus (initially inaudible)</span>
+<span class="kw">val</span> x = play {
+  Out.ar(bus.index, Dust.ar(<span class="std">Seq</span>(<span class="num">345</span>, <span class="num">345</span>)))
+}
+
+<span class="cmt">// reads internal bus and makes it audible.</span>
+<span class="cmt">// must be after `x` to be able to read the bus signal</span>
+<span class="kw">val</span> y = play(target = x, addAction = addAfter) {
+  <span class="kw">val</span> in = In.ar(bus.index, <span class="num">2</span>)
+  Resonz.ar(in, <span class="num">555</span>, <span class="num">0.1</span>) * <span class="num">10</span>
+}
+
+<span class="cmt">// when done, do not forget to free the bus</span>
+y.free(); x.free(); bus.free()</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Bus.html" class="extype" name="de.sciss.synth.Bus">Bus</a>
+</p></span><span class="cmt"><p><a href="LocalIn$.html" class="extype" name="de.sciss.synth.ugen.LocalIn">LocalIn</a></p></span><span class="cmt"><p><a href="InFeedback$.html" class="extype" name="de.sciss.synth.ugen.InFeedback">InFeedback</a></p></span><span class="cmt"><p><a href="PhysicalIn$.html" class="extype" name="de.sciss.synth.ugen.PhysicalIn">PhysicalIn</a></p></span><span class="cmt"><p><a href="Out$.html" class="extype" name="de.sciss.synth.ugen.Out">Out</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +177,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.In#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.In#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(bus:de.sciss.synth.GE,numChannels:Int):de.sciss.synth.ugen.In"></a>
       <a id="ar(GE,Int):In"></a>
       <h4 class="signature">
@@ -160,7 +193,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>index of the bus to read from. When <code>numChannels</code> is
+                        greater than one, the other channels or read from the
+                        adjacent indices.</p></dd><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to read
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -292,7 +328,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.In#ir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.In#ir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ir(bus:de.sciss.synth.GE,numChannels:Int):de.sciss.synth.ugen.In"></a>
       <a id="ir(GE,Int):In"></a>
       <h4 class="signature">
@@ -308,7 +344,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>index of the bus to read from. When <code>numChannels</code> is
+                        greater than one, the other channels or read from the
+                        adjacent indices.</p></dd><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to read
+</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -326,7 +365,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.In#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.In#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(bus:de.sciss.synth.GE,numChannels:Int):de.sciss.synth.ugen.In"></a>
       <a id="kr(GE,Int):In"></a>
       <h4 class="signature">
@@ -342,7 +381,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>index of the bus to read from. When <code>numChannels</code> is
+                        greater than one, the other channels or read from the
+                        adjacent indices.</p></dd><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to read
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

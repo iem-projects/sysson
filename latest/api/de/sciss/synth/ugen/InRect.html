@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>InRect - SysSon 0.8.0 API - de.sciss.synth.ugen.InRect</title>
-          <meta name="description" content="InRect - SysSon 0.8.0 API - de.sciss.synth.ugen.InRect" />
-          <meta name="keywords" content="InRect SysSon 0.8.0 API de.sciss.synth.ugen.InRect" />
+          <title>InRect - SysSon 0.11.0 API - de.sciss.synth.ugen.InRect</title>
+          <meta name="description" content="InRect - SysSon 0.11.0 API - de.sciss.synth.ugen.InRect" />
+          <meta name="keywords" content="InRect SysSon 0.11.0 API de.sciss.synth.ugen.InRect" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="InRect$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="InRect$.html" title="Go to companion">InRect</a></h1> <span class="permalink">
+        <h1><a href="InRect$.html" title="Go to companion">InRect</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="InRect$.html" title="See companion">object InRect</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.InRect" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,13 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that tests if two signals lie both within a given ranges. The two input
+signals can be understood as horizontal and vertical coordinates, therefore the
+test become one that determines whether the input is within a given &quot;rectangle&quot;.</p><p>If <code>x &gt;= left</code> and <code>x &lt;= right</code> and <code>y &gt; top</code> and <code>y &lt;= bottom</code> , outputs 1.0,
+otherwise outputs 0.0.
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>&quot;horizontal&quot; signal to test</p></dd><dt class="param">y</dt><dd class="cmt"><p>&quot;vertical&quot; signal to test</p></dd><dt class="param">left</dt><dd class="cmt"><p>lower margin of horizontal test range (inclusive)</p></dd><dt class="param">top</dt><dd class="cmt"><p>lower margin of vertical test range (inclusive)</p></dd><dt class="param">right</dt><dd class="cmt"><p>upper margin of horizontal test range (inclusive)</p></dd><dt class="param">bottom</dt><dd class="cmt"><p>upper margin of vertical test range (inclusive)
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Clip$.html" class="extype" name="de.sciss.synth.ugen.Clip">Clip</a>
+</p></span><span class="cmt"><p><a href="InRange$.html" class="extype" name="de.sciss.synth.ugen.InRange">InRange</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +97,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.InRect#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.InRect#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,x:de.sciss.synth.GE,y:de.sciss.synth.GE,left:de.sciss.synth.GE,top:de.sciss.synth.GE,right:de.sciss.synth.GE,bottom:de.sciss.synth.GE):de.sciss.synth.ugen.InRect"></a>
       <a id="&lt;init&gt;:InRect"></a>
       <h4 class="signature">
@@ -103,7 +113,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>&quot;horizontal&quot; signal to test</p></dd><dt class="param">y</dt><dd class="cmt"><p>&quot;vertical&quot; signal to test</p></dd><dt class="param">left</dt><dd class="cmt"><p>lower margin of horizontal test range (inclusive)</p></dd><dt class="param">top</dt><dd class="cmt"><p>lower margin of vertical test range (inclusive)</p></dd><dt class="param">right</dt><dd class="cmt"><p>upper margin of horizontal test range (inclusive)</p></dd><dt class="param">bottom</dt><dd class="cmt"><p>upper margin of vertical test range (inclusive)
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -197,7 +208,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">upper margin of vertical test range (inclusive)
+</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -311,7 +323,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">lower margin of horizontal test range (inclusive)</p>
     </li><li name="de.sciss.synth.ugen.InRect#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>
@@ -469,7 +481,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">upper margin of horizontal test range (inclusive)</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -503,7 +515,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">lower margin of vertical test range (inclusive)</p>
     </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
       <a id="unwrap(IndexedSeq[UGenInLike]):UGenInLike"></a>
@@ -606,7 +618,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">&quot;horizontal&quot; signal to test</p>
     </li><li name="de.sciss.synth.ugen.InRect#y" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="y:de.sciss.synth.GE"></a>
       <a id="y:GE"></a>
@@ -623,7 +635,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">&quot;vertical&quot; signal to test</p>
     </li></ol>
             </div>
 

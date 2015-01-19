@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Convolution2L - SysSon 0.8.0 API - de.sciss.synth.ugen.Convolution2L</title>
-          <meta name="description" content="Convolution2L - SysSon 0.8.0 API - de.sciss.synth.ugen.Convolution2L" />
-          <meta name="keywords" content="Convolution2L SysSon 0.8.0 API de.sciss.synth.ugen.Convolution2L" />
+          <title>Convolution2L - SysSon 0.11.0 API - de.sciss.synth.ugen.Convolution2L</title>
+          <meta name="description" content="Convolution2L - SysSon 0.11.0 API - de.sciss.synth.ugen.Convolution2L" />
+          <meta name="keywords" content="Convolution2L SysSon 0.11.0 API de.sciss.synth.ugen.Convolution2L" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Convolution2L$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Convolution2L$.html" title="Go to companion">Convolution2L</a></h1> <span class="permalink">
+        <h1><a href="Convolution2L$.html" title="Go to companion">Convolution2L</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Convolution2L$.html" title="See companion">object Convolution2L</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Convolution2L" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,8 +51,28 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="StereoConvolution2L$.html" class="extype" name="de.sciss.synth.ugen.StereoConvolution2L">StereoConvolution2L</a>
-</p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution3$.html" class="extype" name="de.sciss.synth.ugen.Convolution3">Convolution3</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A frequency-domain convolution UGen using two linearly interpolated fixed
+kernels. When a trigger is received, a linear fade will be performed from the
+previously used kernel (internally stored by the UGen) towards the snapshot of
+the current kernel content upon receiving the trigger.</p><p>The delay caused by the convolution when the kernel is a dirac impulse is equal
+to <code>frameSize - controlBlockSize</code> , so for a <code>frameSize</code> of 2048 and a
+control-block size of 64, this is 1984 sample frames.</p><p><b>Note</b>: If a trigger is received before the previous fade is complete, the
+interpolation is broken and the kernel instead jumps straight to one of the two
+buffers.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the realtime input to be convolved</p></dd><dt class="param">kernel</dt><dd class="cmt"><p>buffer identifier for the fixed kernel, which may be
+                        modulated in combination with the trigger. Even a
+                        trigger input of zero is used, upon UGen initialization
+                        the kernel must point to a valid buffer, otherwise the
+                        UGen aborts.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>begins a fade to update the kernel on a change from
+                        non-positive to positive (&lt;= 0 to &gt;0).</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
+                        FFT calculated internally by the UGen has a size of
+                        twice this value. The maximum allowed <code>frameSize</code> is
+                        16384.</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
+                        If the desired duration in seconds is <code>dur</code> , then the
+                        number of periods can be calculated as
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a>
+</p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -88,7 +112,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Convolution2L#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Convolution2L#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE,kernel:de.sciss.synth.GE,trig:de.sciss.synth.GE,frameSize:de.sciss.synth.GE,fadePeriods:de.sciss.synth.GE):de.sciss.synth.ugen.Convolution2L"></a>
       <a id="&lt;init&gt;:Convolution2L"></a>
       <h4 class="signature">
@@ -104,7 +128,19 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the realtime input to be convolved</p></dd><dt class="param">kernel</dt><dd class="cmt"><p>buffer identifier for the fixed kernel, which may be
+                        modulated in combination with the trigger. Even a
+                        trigger input of zero is used, upon UGen initialization
+                        the kernel must point to a valid buffer, otherwise the
+                        UGen aborts.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>begins a fade to update the kernel on a change from
+                        non-positive to positive (&lt;= 0 to &gt;0).</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
+                        FFT calculated internally by the UGen has a size of
+                        twice this value. The maximum allowed <code>frameSize</code> is
+                        16384.</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
+                        If the desired duration in seconds is <code>dur</code> , then the
+                        number of periods can be calculated as
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -222,7 +258,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Convolution2L#fadePeriods" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Convolution2L#fadePeriods" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fadePeriods:de.sciss.synth.GE"></a>
       <a id="fadePeriods:GE"></a>
       <h4 class="signature">
@@ -238,7 +274,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">fade duration expressed as number of convolved blocks.</p><div class="fullcomment"><div class="comment cmt"><p>fade duration expressed as number of convolved blocks.
+                        If the desired duration in seconds is <code>dur</code> , then the
+                        number of periods can be calculated as
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
+</p></div></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -262,7 +302,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Convolution2L#frameSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Convolution2L#frameSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="frameSize:de.sciss.synth.GE"></a>
       <a id="frameSize:GE"></a>
       <h4 class="signature">
@@ -278,7 +318,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">size of the kernel.</p><div class="fullcomment"><div class="comment cmt"><p>size of the kernel. this must be a power of two. the
+                        FFT calculated internally by the UGen has a size of
+                        twice this value. The maximum allowed <code>frameSize</code> is
+                        16384.</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -312,7 +355,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the realtime input to be convolved</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -330,7 +373,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Convolution2L#kernel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Convolution2L#kernel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kernel:de.sciss.synth.GE"></a>
       <a id="kernel:GE"></a>
       <h4 class="signature">
@@ -346,7 +389,12 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">buffer identifier for the fixed kernel, which may be
+                        modulated in combination with the trigger.</p><div class="fullcomment"><div class="comment cmt"><p>buffer identifier for the fixed kernel, which may be
+                        modulated in combination with the trigger. Even a
+                        trigger input of zero is used, upon UGen initialization
+                        the kernel must point to a valid buffer, otherwise the
+                        UGen aborts.</p></div></div>
     </li><li name="de.sciss.synth.ugen.Convolution2L#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>
@@ -521,7 +569,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">begins a fade to update the kernel on a change from
+                        non-positive to positive (&lt;= 0 to &gt;0).</p>
     </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
       <a id="unwrap(IndexedSeq[UGenInLike]):UGenInLike"></a>

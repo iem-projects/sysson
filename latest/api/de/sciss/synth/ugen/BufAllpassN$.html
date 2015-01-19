@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufAllpassN - SysSon 0.8.0 API - de.sciss.synth.ugen.BufAllpassN</title>
-          <meta name="description" content="BufAllpassN - SysSon 0.8.0 API - de.sciss.synth.ugen.BufAllpassN" />
-          <meta name="keywords" content="BufAllpassN SysSon 0.8.0 API de.sciss.synth.ugen.BufAllpassN" />
+          <title>BufAllpassN - SysSon 0.11.0 API - de.sciss.synth.ugen.BufAllpassN</title>
+          <meta name="description" content="BufAllpassN - SysSon 0.11.0 API - de.sciss.synth.ugen.BufAllpassN" />
+          <meta name="keywords" content="BufAllpassN SysSon 0.11.0 API de.sciss.synth.ugen.BufAllpassN" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BufAllpassN.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BufAllpassN.html" title="Go to companion">BufAllpassN</a></h1> <span class="permalink">
+        <h1><a href="BufAllpassN.html" title="Go to companion">BufAllpassN</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BufAllpassN.html" title="See companion">class BufAllpassN</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BufAllpassN$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -48,8 +52,43 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>All pass delay line with no interpolation which uses a buffer for its internal
-memory.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufAllpassC$.html" class="extype" name="de.sciss.synth.ugen.BufAllpassC">BufAllpassC</a>
+memory.</p><p><b>Warning</b>: For reasons of efficiency, the effective buffer size is the
+allocated size rounded down to the next power of two. For example, if 44100
+samples are allocated, the maximum delay would be 32768 samples. Also note that
+the buffer must be monophonic.</p><h5>Examples</h5><pre><span class="cmt">// Compare interpolation types</span>
+<span class="cmt">// allocate buffer</span>
+<span class="kw">val</span> b = Buffer.alloc(s, (<span class="num">0.2</span> * s.sampleRate).toInt.nextPowerOfTwo)
+
+<span class="cmt">// Since the allpass delay has no audible effect as a resonator on</span>
+<span class="cmt">// steady state sound ...</span>
+play { BufAllpassC.ar(b.id, WhiteNoise.ar(<span class="num">0.1</span>), XLine.kr(<span class="num">0.0001</span>, <span class="num">0.01</span>, <span class="num">20</span>), <span class="num">0.2</span>) }
+
+<span class="cmt">// ...these examples add the input to the effected sound and compare variants so that you can hear</span>
+<span class="cmt">// the effect of the phase comb:</span>
+play {
+  <span class="kw">val</span> z = WhiteNoise.ar(<span class="num">0.2</span>)
+  z + BufAllpassN.ar(b.id, z, XLine.kr(<span class="num">0.0001</span>, <span class="num">0.01</span>, <span class="num">20</span>), <span class="num">0.2</span>)
+}
+
+play {
+  <span class="kw">val</span> z = WhiteNoise.ar(<span class="num">0.2</span>)
+  z + BufAllpassL.ar(b.id, z, XLine.kr(<span class="num">0.0001</span>, <span class="num">0.01</span>, <span class="num">20</span>), <span class="num">0.2</span>)
+}
+
+play {
+  <span class="kw">val</span> z = WhiteNoise.ar(<span class="num">0.2</span>)
+  z + BufAllpassC.ar(b.id, z, XLine.kr(<span class="num">0.0001</span>, <span class="num">0.01</span>, <span class="num">20</span>), <span class="num">0.2</span>)
+}
+
+b.free()  <span class="cmt">// after synths have been stopped</span></pre><pre><span class="cmt">// Used as echo</span>
+<span class="kw">val</span> b = Buffer.alloc(s, (<span class="num">0.2</span> * s.sampleRate).toInt.nextPowerOfTwo)
+
+<span class="cmt">// doesn't really sound different than Comb,</span>
+<span class="cmt">// but it outputs the input signal immediately (inverted) and the echoes</span>
+<span class="cmt">// are lower in amplitude.</span>
+play { BufAllpassN.ar(b.id, Decay.ar(Dust.ar(<span class="num">1</span>) * <span class="num">0.5</span>, <span class="num">0.2</span>) * WhiteNoise.ar, <span class="num">0.2</span>, <span class="num">3</span>) }
+
+b.free()</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufAllpassC$.html" class="extype" name="de.sciss.synth.ugen.BufAllpassC">BufAllpassC</a>
 </p></span><span class="cmt"><p><a href="BufAllpassL$.html" class="extype" name="de.sciss.synth.ugen.BufAllpassL">BufAllpassL</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>

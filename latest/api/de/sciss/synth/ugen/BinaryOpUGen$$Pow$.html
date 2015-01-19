@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Pow - SysSon 0.8.0 API - de.sciss.synth.ugen.BinaryOpUGen.Pow</title>
-          <meta name="description" content="Pow - SysSon 0.8.0 API - de.sciss.synth.ugen.BinaryOpUGen.Pow" />
-          <meta name="keywords" content="Pow SysSon 0.8.0 API de.sciss.synth.ugen.BinaryOpUGen.Pow" />
+          <title>Pow - SysSon 0.11.0 API - de.sciss.synth.ugen.BinaryOpUGen.Pow</title>
+          <meta name="description" content="Pow - SysSon 0.11.0 API - de.sciss.synth.ugen.BinaryOpUGen.Pow" />
+          <meta name="keywords" content="Pow SysSon 0.11.0 API de.sciss.synth.ugen.BinaryOpUGen.Pow" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,9 @@
       <div id="definition">
         <img src="../../../../lib/object_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a>.<a href="BinaryOpUGen$.html" class="extype" name="de.sciss.synth.ugen.BinaryOpUGen">BinaryOpUGen</a></p>
-        <h1>Pow</h1> <span class="permalink">
+        <h1>Pow</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="BinaryOpUGen$.html" class="extype" name="de.sciss.synth.ugen.BinaryOpUGen">package BinaryOpUGen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BinaryOpUGen$$Pow$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +49,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><b>Warning:</b> Unlike a normal power operation, the signum of the
+left operand is always preserved. I.e. <code>DC.kr(-0.5).pow(2)</code> will
+not output <code>0.25</code> but <code>-0.25</code>. This is to avoid problems with
+floating point noise and negative input numbers, so
+<code>DC.kr(-0.5).pow(2.001)</code> does not result in a <code>NaN</code>, for example.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="BinaryOpUGen$$Op.html" class="extype" name="de.sciss.synth.ugen.BinaryOpUGen.Op">Op</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>

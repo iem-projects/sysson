@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Trig1 - SysSon 0.8.0 API - de.sciss.synth.ugen.Trig1</title>
-          <meta name="description" content="Trig1 - SysSon 0.8.0 API - de.sciss.synth.ugen.Trig1" />
-          <meta name="keywords" content="Trig1 SysSon 0.8.0 API de.sciss.synth.ugen.Trig1" />
+          <title>Trig1 - SysSon 0.11.0 API - de.sciss.synth.ugen.Trig1</title>
+          <meta name="description" content="Trig1 - SysSon 0.11.0 API - de.sciss.synth.ugen.Trig1" />
+          <meta name="keywords" content="Trig1 SysSon 0.11.0 API de.sciss.synth.ugen.Trig1" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Trig1.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Trig1.html" title="Go to companion">Trig1</a></h1> <span class="permalink">
+        <h1><a href="Trig1.html" title="Go to companion">Trig1</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Trig1.html" title="See companion">class Trig1</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Trig1$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -49,8 +53,8 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen which outputs a value of 1 for a given duration when triggered.</p><p>When a trigger occurs at the input, a value of 1 is output for the specified
 duration, otherwise zero is output. When a new trigger occurs while this ugens
-outputs 1, the hold-time is reset to the duration.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig$.html" class="extype" name="de.sciss.synth.ugen.Trig">Trig</a>
+outputs 1, the hold-time is reset to the duration.</p><h5>Examples</h5><pre><span class="cmt">// hold dust spikes</span>
+play { Trig1.ar(Dust.ar(<span class="num">1</span>), <span class="num">0.2</span>) * SinOsc.ar(<span class="num">800</span>) * <span class="num">0.2</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig$.html" class="extype" name="de.sciss.synth.ugen.Trig">Trig</a>
 </p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>

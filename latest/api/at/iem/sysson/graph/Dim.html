@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Dim - SysSon 0.8.0 API - at.iem.sysson.graph.Dim</title>
-          <meta name="description" content="Dim - SysSon 0.8.0 API - at.iem.sysson.graph.Dim" />
-          <meta name="keywords" content="Dim SysSon 0.8.0 API at.iem.sysson.graph.Dim" />
+          <title>Dim - SysSon 0.11.0 API - at.iem.sysson.graph.Dim</title>
+          <meta name="description" content="Dim - SysSon 0.11.0 API - at.iem.sysson.graph.Dim" />
+          <meta name="keywords" content="Dim SysSon 0.11.0 API at.iem.sysson.graph.Dim" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Dim$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a>.<a href="package.html" class="extype" name="at.iem.sysson.graph">graph</a></p>
-        <h1><a href="Dim$.html" title="Go to companion">Dim</a></h1> <span class="permalink">
+        <h1><a href="Dim$.html" title="Go to companion">Dim</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Dim$.html" title="See companion">object Dim</a>
+            | <a href="package.html" class="extype" name="at.iem.sysson.graph">package graph</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.Dim" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,7 +47,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Dim</span><span class="params">(<span name="variable">variable: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Dim</span><span class="params">(<span name="variable">variable: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -51,7 +55,7 @@
 </p></div><dl class="paramcmts block"><dt class="param">variable</dt><dd class="cmt"><p>Data source to which this dimension refers</p></dd><dt class="param">name</dt><dd class="cmt"><p>Logical name by which the dimension is referred to
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a>, <a href="../../../../de/sciss/synth/HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../../../../de/sciss/synth/Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../../../../de/sciss/synth/Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</span>, <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a>, <a href="../../../../de/sciss/synth/HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../../../../de/sciss/synth/Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../../../../de/sciss/synth/Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +73,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="at.iem.sysson.graph.Dim"><span>Dim</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="at.iem.sysson.graph.UserInteraction"><span>UserInteraction</span></li><li class="in" name="de.sciss.synth.HasSideEffect"><span>HasSideEffect</span></li><li class="in" name="de.sciss.synth.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.synth.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="at.iem.sysson.graph.Dim"><span>Dim</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="de.sciss.synth.proc.UGenGraphBuilder.Key"><span>Key</span></li><li class="in" name="at.iem.sysson.graph.UserInteraction"><span>UserInteraction</span></li><li class="in" name="de.sciss.synth.HasSideEffect"><span>HasSideEffect</span></li><li class="in" name="de.sciss.synth.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.synth.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -207,25 +211,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="at.iem.sysson.graph.Dim#endIndex" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="endIndex:de.sciss.synth.GE"></a>
-      <a id="endIndex:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">endIndex</span><span class="result">: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Dim@endIndex:de.sciss.synth.GE" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Produces a graph element reflecting the high end of the range as index into the dimension vector.</p><div class="fullcomment"><div class="comment cmt"><p>Produces a graph element reflecting the high end of the range as index into the dimension vector.
-This index is &quot;inclusive&quot;, i.e. denotes the index corresponding to <code>endValue</code>.
-</p></div></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -392,79 +377,24 @@ expansion
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="at.iem.sysson.graph.Dim#play" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="play(freq:de.sciss.synth.GE,maxFreq:Double):at.iem.sysson.graph.Dim.Play"></a>
-      <a id="play(GE,Double):Play"></a>
+      <a id="play(freq:de.sciss.synth.GE,maxFreq:Double,interp:Int):at.iem.sysson.graph.Dim.Play"></a>
+      <a id="play(GE,Double,Int):Play"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">play</span><span class="params">(<span name="freq">freq: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="maxFreq">maxFreq: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.0</span></span>)</span><span class="result">: <a href="Dim$$Play.html" class="extype" name="at.iem.sysson.graph.Dim.Play">Play</a></span>
+        <span class="name">play</span><span class="params">(<span name="freq">freq: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="maxFreq">maxFreq: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.0</span></span>, <span name="interp">interp: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span><span class="result">: <a href="Dim$$Play.html" class="extype" name="at.iem.sysson.graph.Dim.Play">Play</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Dim@play(freq:de.sciss.synth.GE,maxFreq:Double):at.iem.sysson.graph.Dim.Play" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.Dim@play(freq:de.sciss.synth.GE,maxFreq:Double,interp:Int):at.iem.sysson.graph.Dim.Play" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Produces a graph element which unrolls the selected range in time, using the dimension's domain value.</p><div class="fullcomment"><div class="comment cmt"><p>Produces a graph element which unrolls the selected range in time, using the dimension's domain value.
-</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>a graph element specifying the frequency in samples per second with which to unroll.
+</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>a graph element specifying the frequency in samples per second with which to unroll.</p></dd><dt class="param">maxFreq</dt><dd class="cmt"><p>estimated maximum value that <code>freq</code> may have at any point. <code>0.0</code> if unknown</p></dd><dt class="param">interp</dt><dd class="cmt"><p>value interpolation: 1 none, 2 linear, 4 cubic
 </p></dd></dl></div>
-    </li><li name="at.iem.sysson.graph.Dim#size" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="size:de.sciss.synth.GE"></a>
-      <a id="size:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">size</span><span class="result">: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Dim@size:de.sciss.synth.GE" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Produces a graph element reflecting the number of samples (<code>stopIndex - startIndex</code>) covered by
-this selection.</p>
-    </li><li name="at.iem.sysson.graph.Dim#startIndex" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="startIndex:de.sciss.synth.GE"></a>
-      <a id="startIndex:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">startIndex</span><span class="result">: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Dim@startIndex:de.sciss.synth.GE" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Produces a graph element reflecting the low end of the range as index into the dimension vector.</p>
-    </li><li name="at.iem.sysson.graph.Dim#stopIndex" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="stopIndex:de.sciss.synth.GE"></a>
-      <a id="stopIndex:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">stopIndex</span><span class="result">: <a href="../../../../de/sciss/synth/GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.Dim@stopIndex:de.sciss.synth.GE" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Produces a graph element reflecting the high end of the range as index into the dimension vector.</p><div class="fullcomment"><div class="comment cmt"><p>Produces a graph element reflecting the high end of the range as index into the dimension vector.
-This index is &quot;exclusive&quot;, i.e. denotes the index after the last included element. The index
-corresponding to <code>endValue</code> is <code>endIndex</code> which equals <code>stopIndex - 1</code>
-</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -598,6 +528,8 @@ corresponding to <code>endValue</code> is <code>endIndex</code> which equals <co
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="de.sciss.synth.proc.UGenGraphBuilder.Key">
+              <h3>Inherited from <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</span></h3>
             </div><div class="parent" name="at.iem.sysson.graph.UserInteraction">
               <h3>Inherited from <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a></h3>
             </div><div class="parent" name="de.sciss.synth.HasSideEffect">

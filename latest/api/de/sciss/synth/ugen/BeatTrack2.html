@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BeatTrack2 - SysSon 0.8.0 API - de.sciss.synth.ugen.BeatTrack2</title>
-          <meta name="description" content="BeatTrack2 - SysSon 0.8.0 API - de.sciss.synth.ugen.BeatTrack2" />
-          <meta name="keywords" content="BeatTrack2 SysSon 0.8.0 API de.sciss.synth.ugen.BeatTrack2" />
+          <title>BeatTrack2 - SysSon 0.11.0 API - de.sciss.synth.ugen.BeatTrack2</title>
+          <meta name="description" content="BeatTrack2 - SysSon 0.11.0 API - de.sciss.synth.ugen.BeatTrack2" />
+          <meta name="keywords" content="BeatTrack2 SysSon 0.11.0 API de.sciss.synth.ugen.BeatTrack2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BeatTrack2$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BeatTrack2$.html" title="Go to companion">BeatTrack2</a></h1> <span class="permalink">
+        <h1><a href="BeatTrack2$.html" title="Go to companion">BeatTrack2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BeatTrack2$.html" title="See companion">object BeatTrack2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BeatTrack2" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -457,7 +461,9 @@ argument!
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">If this argument is greater than 0.</p><div class="fullcomment"><div class="comment cmt"><p>If this argument is greater than 0.5, the tracker will
+      <p class="shortcomment cmt">If this argument is greater than 0.5, the tracker will
+                        lock at its current periodicity and continue from the
+                        current phase.</p><div class="fullcomment"><div class="comment cmt"><p>If this argument is greater than 0.5, the tracker will
                         lock at its current periodicity and continue from the
                         current phase. Whilst it updates the model's phase and
                         period, this is not reflected in the output until lock
@@ -795,7 +801,10 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">(scalar) Use (-2.</p><div class="fullcomment"><div class="comment cmt"><p>(scalar) Use (-2.5) for flat weighting of tempi, (-1.5)
+      <p class="shortcomment cmt">(scalar) Use (-2.5) for flat weighting of tempi, (-1.5)
+                        for compensation weighting based on the number of events
+                        tested (because different periods allow different
+                        numbers of events within the temporal window).</p><div class="fullcomment"><div class="comment cmt"><p>(scalar) Use (-2.5) for flat weighting of tempi, (-1.5)
                         for compensation weighting based on the number of events
                         tested (because different periods allow different
                         numbers of events within the temporal window). If an
@@ -821,7 +830,8 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">(scalar) Size of the temporal window desired (2.</p><div class="fullcomment"><div class="comment cmt"><p>(scalar) Size of the temporal window desired (2.0 to
+      <p class="shortcomment cmt">(scalar) Size of the temporal window desired (2.0 to
+                        3.0 seconds models the human temporal window).</p><div class="fullcomment"><div class="comment cmt"><p>(scalar) Size of the temporal window desired (2.0 to
                         3.0 seconds models the human temporal window). You might
                         use longer values for stability of estimate at the
                         expense of reactiveness.</p></div></div>

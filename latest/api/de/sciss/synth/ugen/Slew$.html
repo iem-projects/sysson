@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Slew - SysSon 0.8.0 API - de.sciss.synth.ugen.Slew</title>
-          <meta name="description" content="Slew - SysSon 0.8.0 API - de.sciss.synth.ugen.Slew" />
-          <meta name="keywords" content="Slew SysSon 0.8.0 API de.sciss.synth.ugen.Slew" />
+          <title>Slew - SysSon 0.11.0 API - de.sciss.synth.ugen.Slew</title>
+          <meta name="description" content="Slew - SysSon 0.11.0 API - de.sciss.synth.ugen.Slew" />
+          <meta name="keywords" content="Slew SysSon 0.11.0 API de.sciss.synth.ugen.Slew" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Slew.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Slew.html" title="Go to companion">Slew</a></h1> <span class="permalink">
+        <h1><a href="Slew.html" title="Go to companion">Slew</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Slew.html" title="See companion">class Slew</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Slew$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -48,8 +52,9 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A slew rate limiter UGen. Limits the slope of an input signal. The slope is
-expressed in units per second.
-</p></div><div class="toggleContainer block">
+expressed in units per second.</p><p>Since the UGen is initialized with the initial value of the input signal, some
+tricks must be applied to set it to an alternative start value. For example:</p><pre><span class="kw">val</span> in = Select.kr(ToggleFF.kr(<span class="num">1</span>), <span class="std">Seq</span>(<span class="lit">"start"</span>.ir, <span class="lit">"target"</span>.kr))
+Slew.kr(in)  <span class="cmt">// begins at "start" and moves towards "target"</span></pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>

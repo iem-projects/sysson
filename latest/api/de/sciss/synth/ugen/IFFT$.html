@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>IFFT - SysSon 0.8.0 API - de.sciss.synth.ugen.IFFT</title>
-          <meta name="description" content="IFFT - SysSon 0.8.0 API - de.sciss.synth.ugen.IFFT" />
-          <meta name="keywords" content="IFFT SysSon 0.8.0 API de.sciss.synth.ugen.IFFT" />
+          <title>IFFT - SysSon 0.11.0 API - de.sciss.synth.ugen.IFFT</title>
+          <meta name="description" content="IFFT - SysSon 0.11.0 API - de.sciss.synth.ugen.IFFT" />
+          <meta name="keywords" content="IFFT SysSon 0.11.0 API de.sciss.synth.ugen.IFFT" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="IFFT.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="IFFT.html" title="Go to companion">IFFT</a></h1> <span class="permalink">
+        <h1><a href="IFFT.html" title="Go to companion">IFFT</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="IFFT.html" title="See companion">class IFFT</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.IFFT$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,25 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen performing an inverse FFT, transforming a buffer containing a spectral
+domain signal back into the time domain.</p><h5>Examples</h5><pre><span class="cmt">// perfect reconstruction</span>
+play {
+  <span class="cmt">// with a hop of 0.5 and forward Hann window,</span>
+  <span class="cmt">// we get a perfect reconstruction delayed</span>
+  <span class="cmt">// by the fftSize minus one control-block.</span>
+  <span class="cmt">// (alternatively, you can use a hop of 1.0,</span>
+  <span class="cmt">//  and winType of 1 for both FFT and IFFT)</span>
+  <span class="kw">val</span> n     = <span class="num">1024</span>
+  <span class="kw">val</span> hop   = <span class="num">0.5</span>
+  <span class="kw">val</span> buf   = LocalBuf(n)
+  <span class="kw">val</span> in    = PinkNoise.ar(<span class="num">0.5</span>)
+  <span class="kw">val</span> fft   = FFT(buf, in, hop = hop, winType = <span class="num">1</span>)
+  <span class="kw">val</span> out   = IFFT.ar(fft, winType = -<span class="num">1</span>)
+  <span class="kw">val</span> dur   = (<span class="num">2</span> * n * hop) / SampleRate.ir - ControlDur.ir
+  <span class="kw">val</span> dly   = DelayN.ar(in, dur, dur)
+  out - dly
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FFT$.html" class="extype" name="de.sciss.synth.ugen.FFT">FFT</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +166,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.IFFT#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.IFFT#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(chain:de.sciss.synth.GE,winType:de.sciss.synth.GE,winSize:de.sciss.synth.GE):de.sciss.synth.ugen.IFFT"></a>
       <a id="ar(GE,GE,GE):IFFT"></a>
       <h4 class="signature">
@@ -160,7 +182,13 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>reference to the spectral signal, returned as a
+                        buffer-identifier from <code>FFT</code> or the <code>PV_...</code> UGens.</p></dd><dt class="param">winType</dt><dd class="cmt"><p>The window function applied after each IFFT is taken.
+                        The default of <code>0</code> is a sine window, <code>-1</code> is a rectangle
+                        window, and <code>1</code> is a Hann window.</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
+                        the fft size. If you wish to perform zero padding, an
+                        explicit window size can be specified.
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -309,7 +337,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.IFFT#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.IFFT#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(chain:de.sciss.synth.GE,winType:de.sciss.synth.GE,winSize:de.sciss.synth.GE):de.sciss.synth.ugen.IFFT"></a>
       <a id="kr(GE,GE,GE):IFFT"></a>
       <h4 class="signature">
@@ -325,7 +353,13 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>reference to the spectral signal, returned as a
+                        buffer-identifier from <code>FFT</code> or the <code>PV_...</code> UGens.</p></dd><dt class="param">winType</dt><dd class="cmt"><p>The window function applied after each IFFT is taken.
+                        The default of <code>0</code> is a sine window, <code>-1</code> is a rectangle
+                        window, and <code>1</code> is a Hann window.</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
+                        the fft size. If you wish to perform zero padding, an
+                        explicit window size can be specified.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

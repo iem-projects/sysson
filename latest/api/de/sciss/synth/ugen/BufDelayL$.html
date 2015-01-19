@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufDelayL - SysSon 0.8.0 API - de.sciss.synth.ugen.BufDelayL</title>
-          <meta name="description" content="BufDelayL - SysSon 0.8.0 API - de.sciss.synth.ugen.BufDelayL" />
-          <meta name="keywords" content="BufDelayL SysSon 0.8.0 API de.sciss.synth.ugen.BufDelayL" />
+          <title>BufDelayL - SysSon 0.11.0 API - de.sciss.synth.ugen.BufDelayL</title>
+          <meta name="description" content="BufDelayL - SysSon 0.11.0 API - de.sciss.synth.ugen.BufDelayL" />
+          <meta name="keywords" content="BufDelayL SysSon 0.11.0 API de.sciss.synth.ugen.BufDelayL" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BufDelayL.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BufDelayL.html" title="Go to companion">BufDelayL</a></h1> <span class="permalink">
+        <h1><a href="BufDelayL.html" title="Go to companion">BufDelayL</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BufDelayL.html" title="See companion">class BufDelayL</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BufDelayL$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -48,7 +52,10 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Simple delay line with linear interpolation which uses a buffer for its
-internal memory.
+internal memory.</p><p><b>Warning</b>: For reasons of efficiency, the effective buffer size is the
+allocated size rounded down to the next power of two. For example, if 44100
+samples are allocated, the maximum delay would be 32768 samples. Also note that
+the buffer must be monophonic.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufDelayC$.html" class="extype" name="de.sciss.synth.ugen.BufDelayC">BufDelayC</a>
 </p></span><span class="cmt"><p><a href="BufDelayN$.html" class="extype" name="de.sciss.synth.ugen.BufDelayN">BufDelayN</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>

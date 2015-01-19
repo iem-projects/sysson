@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Linen - SysSon 0.8.0 API - de.sciss.synth.ugen.Linen</title>
-          <meta name="description" content="Linen - SysSon 0.8.0 API - de.sciss.synth.ugen.Linen" />
-          <meta name="keywords" content="Linen SysSon 0.8.0 API de.sciss.synth.ugen.Linen" />
+          <title>Linen - SysSon 0.11.0 API - de.sciss.synth.ugen.Linen</title>
+          <meta name="description" content="Linen - SysSon 0.11.0 API - de.sciss.synth.ugen.Linen" />
+          <meta name="keywords" content="Linen SysSon 0.11.0 API de.sciss.synth.ugen.Linen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Linen$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="Linen$.html" title="Go to companion">Linen</a></h1> <span class="permalink">
+        <h1><a href="Linen$.html" title="Go to companion">Linen</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Linen$.html" title="See companion">object Linen</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Linen" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,13 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A linear ASR-type envelope generator UGen.
+</p></div><dl class="paramcmts block"><dt class="param">gate</dt><dd class="cmt"><p>triggers the envelope and holds it open while greater
+                        than zero. A value of less than zero enforces a release
+                        with duration <code>-1.0 - gate</code> .</p></dd><dt class="param">attack</dt><dd class="cmt"><p>duration (seconds) of the attack segment</p></dd><dt class="param">sustain</dt><dd class="cmt"><p>level of the sustain segment</p></dd><dt class="param">release</dt><dd class="cmt"><p>duration (seconds) of the release segment</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>action to be performed when the envelope reaches its
+                        end point.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="EnvGen$.html" class="extype" name="de.sciss.synth.ugen.EnvGen">EnvGen</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../HasDoneFlag.html" class="extype" name="de.sciss.synth.HasDoneFlag">HasDoneFlag</a>, <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +97,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.Linen#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.Linen#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,gate:de.sciss.synth.GE,attack:de.sciss.synth.GE,sustain:de.sciss.synth.GE,release:de.sciss.synth.GE,doneAction:de.sciss.synth.GE):de.sciss.synth.ugen.Linen"></a>
       <a id="&lt;init&gt;:Linen"></a>
       <h4 class="signature">
@@ -103,7 +113,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">gate</dt><dd class="cmt"><p>triggers the envelope and holds it open while greater
+                        than zero. A value of less than zero enforces a release
+                        with duration <code>-1.0 - gate</code> .</p></dd><dt class="param">attack</dt><dd class="cmt"><p>duration (seconds) of the attack segment</p></dd><dt class="param">sustain</dt><dd class="cmt"><p>level of the sustain segment</p></dd><dt class="param">release</dt><dd class="cmt"><p>duration (seconds) of the release segment</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>action to be performed when the envelope reaches its
+                        end point.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -197,7 +211,7 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">duration (seconds) of the attack segment</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -237,7 +251,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">action to be performed when the envelope reaches its
+                        end point.</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -278,7 +293,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Linen#gate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Linen#gate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="gate:de.sciss.synth.GE"></a>
       <a id="gate:GE"></a>
       <h4 class="signature">
@@ -294,7 +309,10 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">triggers the envelope and holds it open while greater
+                        than zero.</p><div class="fullcomment"><div class="comment cmt"><p>triggers the envelope and holds it open while greater
+                        than zero. A value of less than zero enforces a release
+                        with duration <code>-1.0 - gate</code> .</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -469,7 +487,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">duration (seconds) of the release segment</p>
     </li><li name="de.sciss.synth.UGenSource.SomeOut#rewrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):de.sciss.synth.UGenInLike"></a>
       <a id="rewrap(IndexedSeq[UGenInLike],Int):UGenInLike"></a>
@@ -503,7 +521,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">level of the sustain segment</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

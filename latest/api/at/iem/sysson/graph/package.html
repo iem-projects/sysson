@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>graph - SysSon 0.8.0 API - at.iem.sysson.graph</title>
-          <meta name="description" content="graph - SysSon 0.8.0 API - at.iem.sysson.graph" />
-          <meta name="keywords" content="graph SysSon 0.8.0 API at.iem.sysson.graph" />
+          <title>graph - SysSon 0.11.0 API - at.iem.sysson.graph</title>
+          <meta name="description" content="graph - SysSon 0.11.0 API - at.iem.sysson.graph" />
+          <meta name="keywords" content="graph SysSon 0.11.0 API at.iem.sysson.graph" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,7 @@
       <div id="definition">
         <img src="../../../../lib/package_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a></p>
-        <h1>graph</h1> <span class="permalink">
+        <h1>graph</h1><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -67,7 +67,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="at.iem.sysson.graph.Dim" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="DimextendsUserInteractionwithProductwithSerializable"></a>
+      <a id="DimextendsUserInteractionwithUGenGraphBuilder.KeywithProductwithSerializable"></a>
       <a id="Dim:Dim"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -75,10 +75,10 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Dim.html"><span class="name">Dim</span></a><span class="params">(<span name="variable">variable: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Dim.html"><span class="name">Dim</span></a><span class="params">(<span name="variable">variable: <a href="Var.html" class="extype" name="at.iem.sysson.graph.Var">Var</a></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.package@DimextendsUserInteractionwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.package@DimextendsUserInteractionwithUGenGraphBuilder.KeywithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -87,7 +87,7 @@
 </p></div><dl class="paramcmts block"><dt class="param">variable</dt><dd class="cmt"><p>Data source to which this dimension refers</p></dd><dt class="param">name</dt><dd class="cmt"><p>Logical name by which the dimension is referred to
 </p></dd></dl></div>
     </li><li name="at.iem.sysson.graph.Elapsed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ElapsedextendsGE.LazywithSonificationElementwithHasSideEffectwithProductwithSerializable"></a>
+      <a id="ElapsedextendsGE.LazywithHasSideEffectwithProductwithSerializable"></a>
       <a id="Elapsed:Elapsed"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -95,10 +95,10 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Elapsed.html"><span class="name">Elapsed</span></a><span class="params">(<span name="rate">rate: <a href="../../../../de/sciss/synth/Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="Dim$$Play.html" class="extype" name="at.iem.sysson.graph.Dim.Play">Play</a></span>, <span name="terminate">terminate: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../../../de/sciss/synth/GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">Lazy</a> with <a href="SonificationElement.html" class="extype" name="at.iem.sysson.graph.SonificationElement">SonificationElement</a> with <a href="../../../../de/sciss/synth/HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Elapsed.html"><span class="name">Elapsed</span></a><span class="params">(<span name="rate">rate: <a href="../../../../de/sciss/synth/Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="Dim$$Play.html" class="extype" name="at.iem.sysson.graph.Dim.Play">Play</a></span>, <span name="terminate">terminate: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../../../de/sciss/synth/GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">Lazy</a> with <a href="../../../../de/sciss/synth/HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.package@ElapsedextendsGE.LazywithSonificationElementwithHasSideEffectwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.package@ElapsedextendsGE.LazywithHasSideEffectwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -106,40 +106,6 @@
 Additionally it can stop the playing synth when that progress has reached 100%.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the playing dimension</p></dd><dt class="param">terminate</dt><dd class="cmt"><p>if <code>true</code>, stops the synth when 100% is reached
 </p></dd></dl></div>
-    </li><li name="at.iem.sysson.graph.LoadBuffer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LoadBufferextendsGE.LazywithScalarRatedwithProductwithSerializable"></a>
-      <a id="LoadBuffer:LoadBuffer"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="LoadBuffer.html"><span class="name">LoadBuffer</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../../../de/sciss/synth/GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">Lazy</a> with <a href="../../../../de/sciss/synth/ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.package@LoadBufferextendsGE.LazywithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="at.iem.sysson.graph.SonificationElement" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="SonificationElementextendsAnyRef"></a>
-      <a id="SonificationElement:SonificationElement"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="SonificationElement.html"><span class="name">SonificationElement</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.package@SonificationElementextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A pure marker trait</p>
     </li><li name="at.iem.sysson.graph.UserInteraction" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="UserInteractionextendsLazy.Expander[Unit]withHasSideEffect"></a>
       <a id="UserInteraction:UserInteraction"></a>
@@ -156,37 +122,37 @@ Additionally it can stop the playing synth when that progress has reached 100%.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Indicates a graph element that provides a user interface element.</p>
     </li><li name="at.iem.sysson.graph.UserValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="UserValueextendsUserInteractionwithProductwithSerializable"></a>
+      <a id="UserValueextendsUserInteractionwithUGenGraphBuilder.InputwithProductwithSerializable"></a>
       <a id="UserValue:UserValue"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="UserValue.html"><span class="name">UserValue</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="UserValue.html"><span class="name">UserValue</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.package@UserValueextendsUserInteractionwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.package@UserValueextendsUserInteractionwithUGenGraphBuilder.InputwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       
-    </li><li name="at.iem.sysson.graph.Var" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="VarextendsUserInteraction"></a>
+    </li><li name="at.iem.sysson.graph.Var" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VarextendsUserInteractionwithUGenGraphBuilder.KeywithProductwithSerializable"></a>
       <a id="Var:Var"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Var.html"><span class="name">Var</span></a><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a></span>
+        <a href="Var.html"><span class="name">Var</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="higherRank">higherRank: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.package@VarextendsUserInteraction" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.graph.package@VarextendsUserInteractionwithUGenGraphBuilder.KeywithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -260,7 +226,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Var$.html"><span class="name">Var</span></a>
+        <a href="Var$.html"><span class="name">Var</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@Var" title="Permalink" target="_top">

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>DiskOut - SysSon 0.8.0 API - de.sciss.synth.ugen.DiskOut</title>
-          <meta name="description" content="DiskOut - SysSon 0.8.0 API - de.sciss.synth.ugen.DiskOut" />
-          <meta name="keywords" content="DiskOut SysSon 0.8.0 API de.sciss.synth.ugen.DiskOut" />
+          <title>DiskOut - SysSon 0.11.0 API - de.sciss.synth.ugen.DiskOut</title>
+          <meta name="description" content="DiskOut - SysSon 0.11.0 API - de.sciss.synth.ugen.DiskOut" />
+          <meta name="keywords" content="DiskOut SysSon 0.11.0 API de.sciss.synth.ugen.DiskOut" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="DiskOut$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="DiskOut$.html" title="Go to companion">DiskOut</a></h1> <span class="permalink">
+        <h1><a href="DiskOut$.html" title="Go to companion">DiskOut</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="DiskOut$.html" title="See companion">object DiskOut</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.DiskOut" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -59,7 +63,8 @@ should make sure this property is met.</p><p>The signal output by the UGen repre
                         argument is true. Note that the number of channels of
                         the buffer and of the input signal must be the same,
                         otherwise <code>DiskOut</code> will fail silently (and not write
-                        anything to the file).</p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to be recorded
+                        anything to the file). <b>Warning</b>: Crashes the server
+                        if the number of channels exceeds 32.</p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to be recorded
 </p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="RecordBuf$.html" class="extype" name="de.sciss.synth.ugen.RecordBuf">RecordBuf</a>
 </p></span><span class="cmt"><p><a href="DiskIn$.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a></p></span><span class="cmt"><p><span class="extype" name="de.sciss.synth.Buffer#write">Buffer#write</span></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -124,7 +129,8 @@ should make sure this property is met.</p><p>The signal output by the UGen repre
                         argument is true. Note that the number of channels of
                         the buffer and of the input signal must be the same,
                         otherwise <code>DiskOut</code> will fail silently (and not write
-                        anything to the file).</p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to be recorded
+                        anything to the file). <b>Warning</b>: Crashes the server
+                        if the number of channels exceeds 32.</p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to be recorded
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -226,7 +232,8 @@ should make sure this property is met.</p><p>The signal output by the UGen repre
                         argument is true. Note that the number of channels of
                         the buffer and of the input signal must be the same,
                         otherwise <code>DiskOut</code> will fail silently (and not write
-                        anything to the file).</p></div></div>
+                        anything to the file). <b>Warning</b>: Crashes the server
+                        if the number of channels exceeds 32.</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>

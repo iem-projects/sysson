@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufWr - SysSon 0.8.0 API - de.sciss.synth.ugen.BufWr</title>
-          <meta name="description" content="BufWr - SysSon 0.8.0 API - de.sciss.synth.ugen.BufWr" />
-          <meta name="keywords" content="BufWr SysSon 0.8.0 API de.sciss.synth.ugen.BufWr" />
+          <title>BufWr - SysSon 0.11.0 API - de.sciss.synth.ugen.BufWr</title>
+          <meta name="description" content="BufWr - SysSon 0.11.0 API - de.sciss.synth.ugen.BufWr" />
+          <meta name="keywords" content="BufWr SysSon 0.11.0 API de.sciss.synth.ugen.BufWr" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="BufWr$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="BufWr$.html" title="Go to companion">BufWr</a></h1> <span class="permalink">
+        <h1><a href="BufWr$.html" title="Go to companion">BufWr</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BufWr$.html" title="See companion">object BufWr</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.BufWr" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -53,7 +57,7 @@ into the buffer by itself, <code>BufWr</code> only moves its write point by the 
 input, making it possible to adjust the writing speed or to access the buffer in
 a non-linear way. <code>RecordBuf</code> can determine the end of the buffer and issue a
 done-action.
-</p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use</p></dd><dt class="param">index</dt><dd class="cmt"><p>audio rate frame-index into the buffer.</p></dd><dt class="param">loop</dt><dd class="cmt"><p>1 to enable looping, 0 to disable looping. this can be
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to record</p></dd><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use</p></dd><dt class="param">index</dt><dd class="cmt"><p>audio rate frame-index into the buffer.</p></dd><dt class="param">loop</dt><dd class="cmt"><p>1 to enable looping, 0 to disable looping. this can be
                         modulated.
 </p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufRateScale$.html" class="extype" name="de.sciss.synth.ugen.BufRateScale">BufRateScale</a>
 </p></span><span class="cmt"><p><a href="BufFrames$.html" class="extype" name="de.sciss.synth.ugen.BufFrames">BufFrames</a></p></span><span class="cmt"><p><a href="Phasor$.html" class="extype" name="de.sciss.synth.ugen.Phasor">Phasor</a></p></span><span class="cmt"><p><a href="BufRd$.html" class="extype" name="de.sciss.synth.ugen.BufRd">BufRd</a></p></span><span class="cmt"><p><a href="RecordBuf$.html" class="extype" name="de.sciss.synth.ugen.RecordBuf">RecordBuf</a></p></span></dd></dl><div class="toggleContainer block">
@@ -112,7 +116,7 @@ done-action.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use</p></dd><dt class="param">index</dt><dd class="cmt"><p>audio rate frame-index into the buffer.</p></dd><dt class="param">loop</dt><dd class="cmt"><p>1 to enable looping, 0 to disable looping. this can be
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to record</p></dd><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use</p></dd><dt class="param">index</dt><dd class="cmt"><p>audio rate frame-index into the buffer.</p></dd><dt class="param">loop</dt><dd class="cmt"><p>1 to enable looping, 0 to disable looping. this can be
                         modulated.
 </p></dd></dl></div>
     </li></ol>
@@ -305,7 +309,7 @@ done-action.
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">input signal to record</p>
     </li><li name="de.sciss.synth.ugen.BufWr#index" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="index:de.sciss.synth.GE"></a>
       <a id="index:GE"></a>

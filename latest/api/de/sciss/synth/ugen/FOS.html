@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>FOS - SysSon 0.8.0 API - de.sciss.synth.ugen.FOS</title>
-          <meta name="description" content="FOS - SysSon 0.8.0 API - de.sciss.synth.ugen.FOS" />
-          <meta name="keywords" content="FOS SysSon 0.8.0 API de.sciss.synth.ugen.FOS" />
+          <title>FOS - SysSon 0.11.0 API - de.sciss.synth.ugen.FOS</title>
+          <meta name="description" content="FOS - SysSon 0.11.0 API - de.sciss.synth.ugen.FOS" />
+          <meta name="keywords" content="FOS SysSon 0.11.0 API de.sciss.synth.ugen.FOS" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="FOS$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="FOS$.html" title="Go to companion">FOS</a></h1> <span class="permalink">
+        <h1><a href="FOS$.html" title="Go to companion">FOS</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="FOS$.html" title="See companion">object FOS</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.FOS" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A first order filter section UGen. Filter coefficients are given directly
+rather than calculated for you. The formula is equivalent to:</p><pre>out(i) = a0 * in(i) + a1 * in(i-<span class="num">1</span>) + b1 * out(i-<span class="num">1</span>)</pre></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="OneZero$.html" class="extype" name="de.sciss.synth.ugen.OneZero">OneZero</a>
+</p></span><span class="cmt"><p><a href="OnePole$.html" class="extype" name="de.sciss.synth.ugen.OnePole">OnePole</a></p></span><span class="cmt"><p><a href="SOS$.html" class="extype" name="de.sciss.synth.ugen.SOS">SOS</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +94,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.FOS#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.ugen.FOS#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.MaybeRate,in:de.sciss.synth.GE,a0:de.sciss.synth.GE,a1:de.sciss.synth.GE,b1:de.sciss.synth.GE):de.sciss.synth.ugen.FOS"></a>
       <a id="&lt;init&gt;:FOS"></a>
       <h4 class="signature">
@@ -103,7 +110,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -328,7 +336,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">input signal to be filtered
+</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

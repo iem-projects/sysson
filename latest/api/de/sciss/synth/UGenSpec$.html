@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>UGenSpec - SysSon 0.8.0 API - de.sciss.synth.UGenSpec</title>
-          <meta name="description" content="UGenSpec - SysSon 0.8.0 API - de.sciss.synth.UGenSpec" />
-          <meta name="keywords" content="UGenSpec SysSon 0.8.0 API de.sciss.synth.UGenSpec" />
+          <title>UGenSpec - SysSon 0.11.0 API - de.sciss.synth.UGenSpec</title>
+          <meta name="description" content="UGenSpec - SysSon 0.11.0 API - de.sciss.synth.UGenSpec" />
+          <meta name="keywords" content="UGenSpec SysSon 0.11.0 API de.sciss.synth.UGenSpec" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="UGenSpec.html" title="Go to companion"><img src="../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
-        <h1><a href="UGenSpec.html" title="Go to companion">UGenSpec</a></h1> <span class="permalink">
+        <h1><a href="UGenSpec.html" title="Go to companion">UGenSpec</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="UGenSpec.html" title="See companion">class UGenSpec</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth">package synth</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGenSpec$" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
@@ -214,7 +218,7 @@ for example <code>Constant</code>.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="UGenSpec$$Input.html"><span class="name">Input</span></a><span class="params">(<span name="arg">arg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="variadic">variadic: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="UGenSpec$$Input.html"><span class="name">Input</span></a><span class="params">(<span name="arg">arg: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tpe">tpe: <a href="UGenSpec$$Input$$Type.html" class="extype" name="de.sciss.synth.UGenSpec.Input.Type">Type</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGenSpec$@InputextendsProductwithSerializable" title="Permalink" target="_top">
@@ -222,9 +226,9 @@ for example <code>Constant</code>.
       </a>
     </span>
       <p class="shortcomment cmt">A UGen (server-side) input corresponds with a particular argument in the client-side interface.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen (server-side) input corresponds with a particular argument in the client-side interface.
-</p></div><dl class="paramcmts block"><dt class="param">arg</dt><dd class="cmt"><p>the name of the argument (in the spec's <code>args</code> sequence) corresponding to the UGen input.</p></dd><dt class="param">variadic</dt><dd class="cmt"><p>if <code>true</code>, the signal is treated as a multi-channel input with variable number of channels.
-                only the last input of a UGen can be variadic. An example is the second input of
-                the <code>Out</code> UGen.
+</p></div><dl class="paramcmts block"><dt class="param">arg</dt><dd class="cmt"><p>the name of the argument (in the spec's <code>args</code> sequence) corresponding to the UGen input.</p></dd><dt class="param">tpe</dt><dd class="cmt"><p>if variadic, the signal is treated as a multi-channel input with variable number of channels.
+              only the last input of a UGen can be variadic. An example is the second input of
+              the <code>Out</code> UGen.
 </p></dd></dl></div>
     </li><li name="de.sciss.synth.UGenSpec.Output" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="OutputextendsProductwithSerializable"></a>
@@ -446,6 +450,23 @@ For example, it may be one of the standard namings like <code>ar</code> for audi
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGenSpec$@Example" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSpec.Input" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Input"></a>
+      <a id="Input:Input"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenSpec$$Input$.html"><span class="name">Input</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@Input" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
@@ -718,18 +739,18 @@ For example, it may be one of the standard namings like <code>ar</code> for audi
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="de.sciss.synth.UGenSpec#parse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parse(node:scala.xml.Node,docs:Boolean):de.sciss.synth.UGenSpec"></a>
-      <a id="parse(scala.xml.Node,Boolean):UGenSpec"></a>
+      <a id="parse(node:scala.xml.Node,docs:Boolean,verify:Boolean):de.sciss.synth.UGenSpec"></a>
+      <a id="parse(scala.xml.Node,Boolean,Boolean):UGenSpec"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parse</span><span class="params">(<span name="node">node: <span class="extype" name="scala.xml.Node">scala.xml.Node</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="UGenSpec.html" class="extype" name="de.sciss.synth.UGenSpec">UGenSpec</a></span>
+        <span class="name">parse</span><span class="params">(<span name="node">node: <span class="extype" name="scala.xml.Node">scala.xml.Node</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verify">verify: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="UGenSpec.html" class="extype" name="de.sciss.synth.UGenSpec">UGenSpec</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.UGenSpec$@parse(node:scala.xml.Node,docs:Boolean):de.sciss.synth.UGenSpec" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@parse(node:scala.xml.Node,docs:Boolean,verify:Boolean):de.sciss.synth.UGenSpec" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
@@ -738,18 +759,18 @@ For example, it may be one of the standard namings like <code>ar</code> for audi
             <code>spec.doc</code> will be <code>None</code>.
 </p></dd></dl></div>
     </li><li name="de.sciss.synth.UGenSpec#parseAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parseAll(source:xml.InputSource,docs:Boolean):Map[String,de.sciss.synth.UGenSpec]"></a>
-      <a id="parseAll(InputSource,Boolean):Map[String,UGenSpec]"></a>
+      <a id="parseAll(source:xml.InputSource,docs:Boolean,verify:Boolean):Map[String,de.sciss.synth.UGenSpec]"></a>
+      <a id="parseAll(InputSource,Boolean,Boolean):Map[String,UGenSpec]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseAll</span><span class="params">(<span name="source">source: <span class="extype" name="scala.xml.InputSource">InputSource</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="UGenSpec.html" class="extype" name="de.sciss.synth.UGenSpec">UGenSpec</a>]</span>
+        <span class="name">parseAll</span><span class="params">(<span name="source">source: <span class="extype" name="scala.xml.InputSource">InputSource</span></span>, <span name="docs">docs: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verify">verify: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="UGenSpec.html" class="extype" name="de.sciss.synth.UGenSpec">UGenSpec</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.UGenSpec$@parseAll(source:xml.InputSource,docs:Boolean):Map[String,de.sciss.synth.UGenSpec]" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@parseAll(source:xml.InputSource,docs:Boolean,verify:Boolean):Map[String,de.sciss.synth.UGenSpec]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
     </span>
@@ -791,8 +812,7 @@ For example, it may be one of the standard namings like <code>ar</code> for audi
       </a>
     </span>
       <p class="shortcomment cmt">Lazily computes the specs of the UGens bundled with the standard SuperCollider distribution.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily computes the specs of the UGens bundled with the standard SuperCollider distribution.
-This reads and parses the <code>standard-ugens.xml</code> resource. The result maps from UGen names
-to their specifications.
+The result maps from UGen names to their specifications.
 </p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -811,6 +831,43 @@ to their specifications.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSpec#thirdPartyPlugins" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="thirdPartyPlugins:List[String]"></a>
+      <a id="thirdPartyPlugins:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thirdPartyPlugins</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="java.lang.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@thirdPartyPlugins:List[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">List of third-party UGens as per https://github.com/supercollider/sc3-plugins,
+This is currently incomplete.</p>
+    </li><li name="de.sciss.synth.UGenSpec#thirdPartyUGens" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="thirdPartyUGens:Map[String,de.sciss.synth.UGenSpec]"></a>
+      <a id="thirdPartyUGens:Map[String,UGenSpec]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thirdPartyUGens</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="UGenSpec.html" class="extype" name="de.sciss.synth.UGenSpec">UGenSpec</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSpec$@thirdPartyUGens:Map[String,de.sciss.synth.UGenSpec]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily computes the specs of the UGens found in the sc3-plugins project.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily computes the specs of the UGens found in the sc3-plugins project.
+The result maps from UGen names to their specifications.
+</p></div></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

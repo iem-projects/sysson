@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>InTrig - SysSon 0.8.0 API - de.sciss.synth.ugen.InTrig</title>
-          <meta name="description" content="InTrig - SysSon 0.8.0 API - de.sciss.synth.ugen.InTrig" />
-          <meta name="keywords" content="InTrig SysSon 0.8.0 API de.sciss.synth.ugen.InTrig" />
+          <title>InTrig - SysSon 0.11.0 API - de.sciss.synth.ugen.InTrig</title>
+          <meta name="description" content="InTrig - SysSon 0.11.0 API - de.sciss.synth.ugen.InTrig" />
+          <meta name="keywords" content="InTrig SysSon 0.11.0 API de.sciss.synth.ugen.InTrig" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="InTrig.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="InTrig.html" title="Go to companion">InTrig</a></h1> <span class="permalink">
+        <h1><a href="InTrig.html" title="Go to companion">InTrig</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="InTrig.html" title="See companion">class InTrig</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.InTrig$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -51,9 +55,20 @@
 single impulse trigger will be generated. Its amplitude is the value that the
 bus was set to. Note that if a signal is continuously written to that bus, for
 instance using <code>Out.kr</code> , only one initial trigger is generated once that ugen
-starts writing, but no successive triggers are generated.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="In$.html" class="extype" name="de.sciss.synth.ugen.In">In</a>
-</p></span></dd></dl><div class="toggleContainer block">
+starts writing, but no successive triggers are generated.</p><h5>Examples</h5><pre><span class="cmt">// envelope trigger</span>
+<span class="kw">val</span> c = Bus.control(s)
+
+<span class="kw">val</span> x = play {
+  <span class="kw">val</span> tr = InTrig.kr(c.index)
+  SinOsc.ar * EnvGen.kr(Env.perc, gate = tr, levelScale = tr)
+}
+
+c.set(<span class="num">1.0</span>)
+c.set(<span class="num">0.2</span>)
+c.set(<span class="num">0.1</span>)
+
+x.free(); c.free()</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="TrigControl$.html" class="extype" name="de.sciss.synth.ugen.TrigControl">TrigControl</a>
+</p></span><span class="cmt"><p><a href="In$.html" class="extype" name="de.sciss.synth.ugen.In">In</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>

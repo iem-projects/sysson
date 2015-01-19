@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LFGauss - SysSon 0.8.0 API - de.sciss.synth.ugen.LFGauss</title>
-          <meta name="description" content="LFGauss - SysSon 0.8.0 API - de.sciss.synth.ugen.LFGauss" />
-          <meta name="keywords" content="LFGauss SysSon 0.8.0 API de.sciss.synth.ugen.LFGauss" />
+          <title>LFGauss - SysSon 0.11.0 API - de.sciss.synth.ugen.LFGauss</title>
+          <meta name="description" content="LFGauss - SysSon 0.11.0 API - de.sciss.synth.ugen.LFGauss" />
+          <meta name="keywords" content="LFGauss SysSon 0.11.0 API de.sciss.synth.ugen.LFGauss" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LFGauss.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LFGauss.html" title="Go to companion">LFGauss</a></h1> <span class="permalink">
+        <h1><a href="LFGauss.html" title="Go to companion">LFGauss</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LFGauss.html" title="See companion">class LFGauss</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LFGauss$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,26 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A non-band-limited gaussian function oscillator UGen. Output ranges from
+<code>minVal</code> to 1. It implements the formula:</p><pre>f(x) = exp((x - phase).squared / (-<span class="num">2</span> * width.squared))</pre><p>where <code>x</code> is to vary in the range -1 to 1 over the period <code>dur</code> . <code>minVal</code> is
+the initial value at -1. E.g. for default parameters, it is <code>exp(-50)</code> or
+roughly zero.</p><h5>Examples</h5><pre><span class="cmt">// dur and width can be modulated at audio rate</span>
+play {
+  <span class="kw">val</span> dur = SinOsc.ar(MouseX.kr(<span class="num">2</span>, <span class="num">1000</span>, <span class="num">1</span>) * <span class="std">Seq</span>(<span class="num">1.0</span>, <span class="num">1.1</span>)).linlin(-<span class="num">1</span>, <span class="num">1</span>, <span class="num">0.0006</span>, <span class="num">0.01</span>)
+  <span class="kw">val</span> width = SinOsc.ar(<span class="std">Seq</span>(<span class="num">0.5</span>, <span class="num">0.55</span>)).linlin(-<span class="num">1</span>, <span class="num">1</span>, <span class="num">0.01</span>, <span class="num">0.3</span>)
+  LFGauss.ar(dur, width) * <span class="num">0.2</span>
+}</pre><pre><span class="cmt">// several frequencies and widths combined</span>
+play {
+  <span class="kw">val</span> x    = MouseX.kr(<span class="num">1</span>, <span class="num">0.07</span>, <span class="num">1</span>)
+  <span class="kw">val</span> y    = MouseY.kr(<span class="num">1</span>, <span class="num">3</span>)
+  <span class="kw">val</span> mod  = LFGauss.ar(x, (-<span class="num">1</span> to -<span class="num">6</span> by -<span class="num">1</span>).map(i <span class="kw">=&gt;</span> y.pow(i)))
+  <span class="kw">val</span> carr = SinOsc.ar((<span class="num">0</span> to <span class="num">5</span>).map(i <span class="kw">=&gt;</span> <span class="num">200</span> * <span class="num">1.3</span>.pow(i)))
+  Mix(carr * mod) * <span class="num">0.1</span>
+}</pre><pre><span class="cmt">// test spectrum</span>
+play {
+  <span class="kw">val</span> son = LeakDC.ar(LFGauss.ar(<span class="num">0.005</span>, <span class="num">0.2</span>))
+  BPF.ar(son * <span class="num">3</span>, MouseX.kr(<span class="num">60</span>, <span class="num">2000</span>, <span class="num">1</span>), <span class="num">0.05</span>)
+}</pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +167,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFGauss#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFGauss#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(dur:de.sciss.synth.GE,width:de.sciss.synth.GE,phase:de.sciss.synth.GE,loop:de.sciss.synth.GE,doneAction:de.sciss.synth.GE):de.sciss.synth.ugen.LFGauss"></a>
       <a id="ar(GE,GE,GE,GE,GE):LFGauss"></a>
       <h4 class="signature">
@@ -160,7 +183,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">dur</dt><dd class="cmt"><p>duration in seconds of a full -1 &lt;= x &lt;= 1 cycle, or
+                        the reciprocal of the frequency</p></dd><dt class="param">width</dt><dd class="cmt"><p>relative width of the bell. Best to keep below 0.25
+                        when used as envelope.</p></dd><dt class="param">phase</dt><dd class="cmt"><p>phase offset</p></dd><dt class="param">loop</dt><dd class="cmt"><p>if greater than zero, the UGen oscillates. Otherwise it
+                        calls <code>doneAction</code> after one cycle.</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>evaluated after cycle completes
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFGauss#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.LFGauss"></a>
       <a id="ar:LFGauss"></a>
@@ -326,7 +353,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LFGauss#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LFGauss#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="kr(dur:de.sciss.synth.GE,width:de.sciss.synth.GE,phase:de.sciss.synth.GE,loop:de.sciss.synth.GE,doneAction:de.sciss.synth.GE):de.sciss.synth.ugen.LFGauss"></a>
       <a id="kr(GE,GE,GE,GE,GE):LFGauss"></a>
       <h4 class="signature">
@@ -342,7 +369,11 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">dur</dt><dd class="cmt"><p>duration in seconds of a full -1 &lt;= x &lt;= 1 cycle, or
+                        the reciprocal of the frequency</p></dd><dt class="param">width</dt><dd class="cmt"><p>relative width of the bell. Best to keep below 0.25
+                        when used as envelope.</p></dd><dt class="param">phase</dt><dd class="cmt"><p>phase offset</p></dd><dt class="param">loop</dt><dd class="cmt"><p>if greater than zero, the UGen oscillates. Otherwise it
+                        calls <code>doneAction</code> after one cycle.</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>evaluated after cycle completes
+</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFGauss#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.LFGauss"></a>
       <a id="kr:LFGauss"></a>

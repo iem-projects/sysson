@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>TBall - SysSon 0.8.0 API - de.sciss.synth.ugen.TBall</title>
-          <meta name="description" content="TBall - SysSon 0.8.0 API - de.sciss.synth.ugen.TBall" />
-          <meta name="keywords" content="TBall SysSon 0.8.0 API de.sciss.synth.ugen.TBall" />
+          <title>TBall - SysSon 0.11.0 API - de.sciss.synth.ugen.TBall</title>
+          <meta name="description" content="TBall - SysSon 0.11.0 API - de.sciss.synth.ugen.TBall" />
+          <meta name="keywords" content="TBall SysSon 0.11.0 API de.sciss.synth.ugen.TBall" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="TBall$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="TBall$.html" title="Go to companion">TBall</a></h1> <span class="permalink">
+        <h1><a href="TBall$.html" title="Go to companion">TBall</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="TBall$.html" title="See companion">object TBall</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.TBall" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,7 +47,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">TBall</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="g">g: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">10.0f</a></span></span></span>, <span name="damp">damp: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="friction">friction: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.01f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">TBall</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="g">g: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">10.0f</a></span></span></span>, <span name="damp">damp: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="friction">friction: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.01f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -88,7 +92,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="de.sciss.synth.ugen.TBall#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE,g:de.sciss.synth.GE,damp:de.sciss.synth.GE,friction:de.sciss.synth.GE):de.sciss.synth.ugen.TBall"></a>
+      <a id="&lt;init&gt;(rate:de.sciss.synth.MaybeRate,in:de.sciss.synth.GE,g:de.sciss.synth.GE,damp:de.sciss.synth.GE,friction:de.sciss.synth.GE):de.sciss.synth.ugen.TBall"></a>
       <a id="&lt;init&gt;:TBall"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -96,10 +100,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">TBall</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="g">g: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">10.0f</a></span></span></span>, <span name="damp">damp: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="friction">friction: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.01f</a></span></span></span>)</span>
+        <span class="name">TBall</span><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="g">g: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">10.0f</a></span></span></span>, <span name="damp">damp: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="friction">friction: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.01f</a></span></span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.TBall@&lt;init&gt;(rate:de.sciss.synth.Rate,in:de.sciss.synth.GE,g:de.sciss.synth.GE,damp:de.sciss.synth.GE,friction:de.sciss.synth.GE):de.sciss.synth.ugen.TBall" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.TBall@&lt;init&gt;(rate:de.sciss.synth.MaybeRate,in:de.sciss.synth.GE,g:de.sciss.synth.GE,damp:de.sciss.synth.GE,friction:de.sciss.synth.GE):de.sciss.synth.ugen.TBall" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -454,18 +458,18 @@ expansion
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="de.sciss.synth.ugen.TBall#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="rate:de.sciss.synth.Rate"></a>
-      <a id="rate:Rate"></a>
+      <a id="rate:de.sciss.synth.MaybeRate"></a>
+      <a id="rate:MaybeRate"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">rate</span><span class="result">: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>
+        <span class="name">rate</span><span class="result">: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.TBall@rate:de.sciss.synth.Rate" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.TBall@rate:de.sciss.synth.MaybeRate" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>

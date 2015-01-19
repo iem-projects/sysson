@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Server - SysSon 0.8.0 API - de.sciss.osc.Server</title>
-          <meta name="description" content="Server - SysSon 0.8.0 API - de.sciss.osc.Server" />
-          <meta name="keywords" content="Server SysSon 0.8.0 API de.sciss.osc.Server" />
+          <title>Server - SysSon 0.11.0 API - de.sciss.osc.Server</title>
+          <meta name="description" content="Server - SysSon 0.11.0 API - de.sciss.osc.Server" />
+          <meta name="keywords" content="Server SysSon 0.11.0 API de.sciss.osc.Server" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="Server$.html" title="Go to companion"><img src="../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.osc">osc</a></p>
-        <h1><a href="Server$.html" title="Go to companion">Server</a></h1> <span class="permalink">
+        <h1><a href="Server$.html" title="Go to companion">Server</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Server$.html" title="See companion">object Server</a>
+            | <a href="package.html" class="extype" name="de.sciss.osc">package osc</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.osc.Server" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" />
       </a>
@@ -257,7 +261,7 @@ This is the maximum size an OSC packet (bundle or message) can grow to.
       </a>
     </span>
       <p class="shortcomment cmt">Establishes connection for transports requiring
-connectivity (e.</p><div class="fullcomment"><div class="comment cmt"><p>Establishes connection for transports requiring
+connectivity (e.g.</p><div class="fullcomment"><div class="comment cmt"><p>Establishes connection for transports requiring
 connectivity (e.g. TCP). For transports that do not require connectivity (e.g. UDP),
 this ensures the communication channel is created and bound.
 &lt;P&gt;
@@ -276,7 +280,7 @@ was already connected, therefore be sure to check <code>isConnected()</code> bef
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt">IOException<p>if a networking error occurs. Possible reasons: - the underlying
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="IOException"><code>IOException</code></span> if a networking error occurs. Possible reasons: - the underlying
                       network channel had been closed by the server. - the transport
                       is TCP and the server is not available. - the transport is TCP
                       and an <code>Receiver</code> sharing the same socket was stopped before (unable to revive).

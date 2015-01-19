@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>FreeVerb2 - SysSon 0.8.0 API - de.sciss.synth.ugen.FreeVerb2</title>
-          <meta name="description" content="FreeVerb2 - SysSon 0.8.0 API - de.sciss.synth.ugen.FreeVerb2" />
-          <meta name="keywords" content="FreeVerb2 SysSon 0.8.0 API de.sciss.synth.ugen.FreeVerb2" />
+          <title>FreeVerb2 - SysSon 0.11.0 API - de.sciss.synth.ugen.FreeVerb2</title>
+          <meta name="description" content="FreeVerb2 - SysSon 0.11.0 API - de.sciss.synth.ugen.FreeVerb2" />
+          <meta name="keywords" content="FreeVerb2 SysSon 0.11.0 API de.sciss.synth.ugen.FreeVerb2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="FreeVerb2.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="FreeVerb2.html" title="Go to companion">FreeVerb2</a></h1> <span class="permalink">
+        <h1><a href="FreeVerb2.html" title="Go to companion">FreeVerb2</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="FreeVerb2.html" title="See companion">class FreeVerb2</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.FreeVerb2$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,20 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A stereophonic reverb UGen. All parameters are specified in and automatically
+clipped to the range 0 to 1. The UGen is stateless insofar it does not use a
+random number generator. However, if the same input is used for left and right
+channel, the output channels are different and uncorrelated. There is also some
+cross-feed between the two channels.</p><h5>Examples</h5><pre><span class="cmt">// mouse control for mix and room, random input pan</span>
+play {
+  <span class="kw">val</span> tr   = Impulse.ar(<span class="num">1</span>)
+  <span class="kw">val</span> in   = Decay.ar(tr, <span class="num">0.25</span>) * LFCub.ar(<span class="num">1200</span>) * <span class="num">0.1</span>
+  <span class="kw">val</span> in2  = Pan2.ar(in, TRand.ar(-<span class="num">1</span>, <span class="num">1</span>, tr))
+  <span class="kw">val</span> mix  = MouseX.kr
+  <span class="kw">val</span> room = MouseY.kr
+  FreeVerb2.ar(in2 \ <span class="num">0</span>, in2 \ <span class="num">1</span>, mix, room, <span class="lit">"damp"</span>.kr(<span class="num">0.5</span>))
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GVerb$.html" class="extype" name="de.sciss.synth.ugen.GVerb">GVerb</a>
+</p></span><span class="cmt"><p><a href="FreeVerb$.html" class="extype" name="de.sciss.synth.ugen.FreeVerb">FreeVerb</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +161,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.FreeVerb2#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.FreeVerb2#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(inL:de.sciss.synth.GE,inR:de.sciss.synth.GE,mix:de.sciss.synth.GE,room:de.sciss.synth.GE,damp:de.sciss.synth.GE):de.sciss.synth.ugen.FreeVerb2"></a>
       <a id="ar(GE,GE,GE,GE,GE):FreeVerb2"></a>
       <h4 class="signature">
@@ -160,7 +177,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">inL</dt><dd class="cmt"><p>left channel of input signal to reverberate</p></dd><dt class="param">inR</dt><dd class="cmt"><p>right channel of input signal to reverberate</p></dd><dt class="param">mix</dt><dd class="cmt"><p>dry/wet balance from zero (only dry) to one (only wet)</p></dd><dt class="param">room</dt><dd class="cmt"><p>room size</p></dd><dt class="param">damp</dt><dd class="cmt"><p>high frequency attenuation (1 is maximum attenuation)
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

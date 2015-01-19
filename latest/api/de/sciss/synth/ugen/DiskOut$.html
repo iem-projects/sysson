@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>DiskOut - SysSon 0.8.0 API - de.sciss.synth.ugen.DiskOut</title>
-          <meta name="description" content="DiskOut - SysSon 0.8.0 API - de.sciss.synth.ugen.DiskOut" />
-          <meta name="keywords" content="DiskOut SysSon 0.8.0 API de.sciss.synth.ugen.DiskOut" />
+          <title>DiskOut - SysSon 0.11.0 API - de.sciss.synth.ugen.DiskOut</title>
+          <meta name="description" content="DiskOut - SysSon 0.11.0 API - de.sciss.synth.ugen.DiskOut" />
+          <meta name="keywords" content="DiskOut SysSon 0.11.0 API de.sciss.synth.ugen.DiskOut" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="DiskOut.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="DiskOut.html" title="Go to companion">DiskOut</a></h1> <span class="permalink">
+        <h1><a href="DiskOut.html" title="Go to companion">DiskOut</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="DiskOut.html" title="See companion">class DiskOut</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.DiskOut$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -173,7 +177,8 @@ should make sure this property is met.</p><p>The signal output by the UGen repre
                         argument is true. Note that the number of channels of
                         the buffer and of the input signal must be the same,
                         otherwise <code>DiskOut</code> will fail silently (and not write
-                        anything to the file).</p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to be recorded
+                        anything to the file). <b>Warning</b>: Crashes the server
+                        if the number of channels exceeds 32.</p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to be recorded
 </p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>message - SysSon 0.8.0 API - de.sciss.synth.message</title>
-          <meta name="description" content="message - SysSon 0.8.0 API - de.sciss.synth.message" />
-          <meta name="keywords" content="message SysSon 0.8.0 API de.sciss.synth.message" />
+          <title>message - SysSon 0.11.0 API - de.sciss.synth.message</title>
+          <meta name="description" content="message - SysSon 0.11.0 API - de.sciss.synth.message" />
+          <meta name="keywords" content="message SysSon 0.11.0 API de.sciss.synth.message" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,7 @@
       <div id="definition">
         <img src="../../../../lib/package_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a></p>
-        <h1>message</h1> <span class="permalink">
+        <h1>message</h1><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -659,10 +659,10 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_head</code> message pair-wise places nodes at the head of groups.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/g_head</code> message pair-wise places nodes at the head of groups.</p><pre>/g_head
-[
-  <span class="std">Int</span> - the ID of the group at which head a node is to be placed (B)
-  int - the ID of the node to place (A)
-] * N</pre><p>So that for each pair, node A is moved to the head of group B.
+  [
+    <span class="std">Int</span> - the ID of the group at which head a node is to be placed (B)
+    int - the ID of the node to place (A)
+  ] * N</pre><p>So that for each pair, node A is moved to the head of group B.
 </p></div></div>
     </li><li name="de.sciss.synth.message.GroupNew" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GroupNewextendsMessagewithSyncCmdwithProductwithSerializable"></a>
@@ -715,10 +715,10 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_tail</code> message pair-wise places nodes at the tail of groups.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/g_tail</code> message pair-wise places nodes at the tail of groups.</p><pre>/g_tail
-[
-  <span class="std">Int</span> - the ID of the group at which tail a node is to be placed (B)
-  int - the ID of the node to place (A)
-] * N</pre><p>So that for each pair, node A is moved to the tail of group B.
+  [
+    <span class="std">Int</span> - the ID of the group at which tail a node is to be placed (B)
+    int - the ID of the node to place (A)
+  ] * N</pre><p>So that for each pair, node A is moved to the tail of group B.
 </p></div></div>
     </li><li name="de.sciss.synth.message.Handler" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="HandlerextendsAnyRef"></a>
@@ -771,10 +771,10 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_after</code> message pair-wise places nodes after other nodes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_after</code> message pair-wise places nodes after other nodes.</p><pre>/n_after
-[
-  <span class="std">Int</span> - the ID of the node to place (A)
-  int - the ID of the node after which the above is placed (B)
-] * N</pre><p>So that for each pair, node A in the same group as node B, to execute immediately after node B.
+  [
+    <span class="std">Int</span> - the ID of the node to place (A)
+    int - the ID of the node after which the above is placed (B)
+  ] * N</pre><p>So that for each pair, node A in the same group as node B, to execute immediately after node B.
 </p></div></div>
     </li><li name="de.sciss.synth.message.NodeBefore" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NodeBeforeextendsMessagewithSyncCmdwithProductwithSerializable"></a>
@@ -793,10 +793,10 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_before</code> message pair-wise places nodes before other nodes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_before</code> message pair-wise places nodes before other nodes.</p><pre>/n_before
-[
-  <span class="std">Int</span> - the ID of the node to place (A)
-  int - the ID of the node before which the above is placed (B)
-] * N</pre><p>So that for each pair, node A in the same group as node B, to execute immediately before node B.
+  [
+    <span class="std">Int</span> - the ID of the node to place (A)
+    int - the ID of the node before which the above is placed (B)
+  ] * N</pre><p>So that for each pair, node A in the same group as node B, to execute immediately before node B.
 </p></div></div>
     </li><li name="de.sciss.synth.message.NodeChange" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="NodeChangeextendsReceive"></a>
@@ -1283,7 +1283,7 @@ not require the explicit use of this message.
     </span>
       <p class="shortcomment cmt">Represents a <code>/sync</code> message, which is queued with the asynchronous messages
 on the server, and which, when executed, triggers a corresponding <code>/synced</code> reply
-message (i.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a <code>/sync</code> message, which is queued with the asynchronous messages
+message (i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a <code>/sync</code> message, which is queued with the asynchronous messages
 on the server, and which, when executed, triggers a corresponding <code>/synced</code> reply
 message (i.e. with the same id)
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>an arbitrary identifier which can be used to match the corresponding
@@ -1358,7 +1358,7 @@ message (i.e. with the same id)
       </a>
     </span>
       <p class="shortcomment cmt">Represents a <code>/synced</code> message, a reply from the server acknowledging that
-all asynchronous operations up to the corresponding <code>/sync</code> message (i.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a <code>/synced</code> message, a reply from the server acknowledging that
+all asynchronous operations up to the corresponding <code>/sync</code> message (i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Represents a <code>/synced</code> message, a reply from the server acknowledging that
 all asynchronous operations up to the corresponding <code>/sync</code> message (i.e. with
 the same id) have been completed
 </p></div></div>
@@ -1398,7 +1398,7 @@ the same id) have been completed
       <p class="shortcomment cmt">The <code>/d_load</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/d_load</code> message.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the path to the file that stores the definition. This can be a pattern
               like <code>&quot;synthdefs/perc-*&quot;</code>
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SynthDef$.html#loadMsg(path:String,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.SynthDefLoad" class="extmbr" name="de.sciss.synth.SynthDef#loadMsg">SynthDef$.loadMsg</a>
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SynthDef$.html#loadMsg(path:String,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.SynthDefLoad" class="extmbr" name="de.sciss.synth.SynthDef#loadMsg">SynthDef.loadMsg</a>
 </p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.SynthDefLoadDir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SynthDefLoadDirextendsMessagewithHasCompletionwithProductwithSerializable"></a>

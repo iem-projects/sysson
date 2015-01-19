@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LagIn - SysSon 0.8.0 API - de.sciss.synth.ugen.LagIn</title>
-          <meta name="description" content="LagIn - SysSon 0.8.0 API - de.sciss.synth.ugen.LagIn" />
-          <meta name="keywords" content="LagIn SysSon 0.8.0 API de.sciss.synth.ugen.LagIn" />
+          <title>LagIn - SysSon 0.11.0 API - de.sciss.synth.ugen.LagIn</title>
+          <meta name="description" content="LagIn - SysSon 0.11.0 API - de.sciss.synth.ugen.LagIn" />
+          <meta name="keywords" content="LagIn SysSon 0.11.0 API de.sciss.synth.ugen.LagIn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="LagIn$.html" title="Go to companion"><img src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="LagIn$.html" title="Go to companion">LagIn</a></h1> <span class="permalink">
+        <h1><a href="LagIn$.html" title="Go to companion">LagIn</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="LagIn$.html" title="See companion">object LagIn</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.LagIn" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -43,11 +47,17 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">LagIn</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="bus">bus: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="lag">lag: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">LagIn</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="bus">bus: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="time">time: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that reads a signal from a control bus and applies a lag filter to it.
+This is essentially the same as <code>Lag.kr(In.kr(...), time)</code> .
+</p></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>index of the bus to read from. When <code>numChannels</code> is
+                        greater than one, the other channels or read from the
+                        adjacent indices.</p></dd><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to read</p></dd><dt class="param">time</dt><dd class="cmt"><p>60 dB lag time in seconds.
+</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Lag$.html" class="extype" name="de.sciss.synth.ugen.Lag">Lag</a>
+</p></span><span class="cmt"><p><a href="Out$.html" class="extype" name="de.sciss.synth.ugen.Out">Out</a></p></span><span class="cmt"><p><a href="In$.html" class="extype" name="de.sciss.synth.ugen.In">In</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,8 +97,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.LagIn#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,bus:de.sciss.synth.GE,numChannels:Int,lag:de.sciss.synth.GE):de.sciss.synth.ugen.LagIn"></a>
+              <ol><li name="de.sciss.synth.ugen.LagIn#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,bus:de.sciss.synth.GE,numChannels:Int,time:de.sciss.synth.GE):de.sciss.synth.ugen.LagIn"></a>
       <a id="&lt;init&gt;:LagIn"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -96,14 +106,17 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">LagIn</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="bus">bus: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="lag">lag: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>)</span>
+        <span class="name">LagIn</span><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="bus">bus: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="time">time: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.LagIn@&lt;init&gt;(rate:de.sciss.synth.Rate,bus:de.sciss.synth.GE,numChannels:Int,lag:de.sciss.synth.GE):de.sciss.synth.ugen.LagIn" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.LagIn@&lt;init&gt;(rate:de.sciss.synth.Rate,bus:de.sciss.synth.GE,numChannels:Int,time:de.sciss.synth.GE):de.sciss.synth.ugen.LagIn" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>index of the bus to read from. When <code>numChannels</code> is
+                        greater than one, the other channels or read from the
+                        adjacent indices.</p></dd><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to read</p></dd><dt class="param">time</dt><dd class="cmt"><p>60 dB lag time in seconds.
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -181,7 +194,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LagIn#bus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.LagIn#bus" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bus:de.sciss.synth.GE"></a>
       <a id="bus:GE"></a>
       <h4 class="signature">
@@ -197,7 +210,9 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">index of the bus to read from.</p><div class="fullcomment"><div class="comment cmt"><p>index of the bus to read from. When <code>numChannels</code> is
+                        greater than one, the other channels or read from the
+                        adjacent indices.</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -295,23 +310,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.LagIn#lag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="lag:de.sciss.synth.GE"></a>
-      <a id="lag:GE"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">lag</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.LagIn@lag:de.sciss.synth.GE" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="de.sciss.synth.ugen.LagIn#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>
@@ -435,7 +433,7 @@ expansion
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">number of channels to read</p>
     </li><li name="de.sciss.synth.ugen.LagIn#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rate:de.sciss.synth.Rate"></a>
       <a id="rate:Rate"></a>
@@ -487,6 +485,23 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.LagIn#time" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="time:de.sciss.synth.GE"></a>
+      <a id="time:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">time</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.LagIn@time:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">60 dB lag time in seconds.</p>
     </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
       <a id="unwrap(IndexedSeq[UGenInLike]):UGenInLike"></a>

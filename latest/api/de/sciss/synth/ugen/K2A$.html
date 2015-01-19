@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>K2A - SysSon 0.8.0 API - de.sciss.synth.ugen.K2A</title>
-          <meta name="description" content="K2A - SysSon 0.8.0 API - de.sciss.synth.ugen.K2A" />
-          <meta name="keywords" content="K2A SysSon 0.8.0 API de.sciss.synth.ugen.K2A" />
+          <title>K2A - SysSon 0.11.0 API - de.sciss.synth.ugen.K2A</title>
+          <meta name="description" content="K2A - SysSon 0.11.0 API - de.sciss.synth.ugen.K2A" />
+          <meta name="keywords" content="K2A SysSon 0.11.0 API de.sciss.synth.ugen.K2A" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -30,7 +30,11 @@
       <div id="definition">
         <a href="K2A.html" title="Go to companion"><img src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.ugen">ugen</a></p>
-        <h1><a href="K2A.html" title="Go to companion">K2A</a></h1> <span class="permalink">
+        <h1><a href="K2A.html" title="Go to companion">K2A</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="K2A.html" title="See companion">class K2A</a>
+            | <a href="package.html" class="extype" name="de.sciss.synth.ugen">package ugen</a>
+          </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.K2A$" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
@@ -47,7 +51,22 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A converter UGen that takes a control-rate input and produces an audio-rate
+output by means of linear interpolation. The current control input value is
+always reached in at the beginning of the subsequent control block. A special
+case is the initialization which begins directly at the first control input
+value (therefore, the first control block of the audio-rate output is is always
+constant.)</p><p>For example, if the block size is 64, and the first three input values are
+-0.5, 0.6, 0.3, then the output signal will be 65 samples of value -0.5,
+followed by a linear ramp of 64 samples towards 0.6, followed by a linear ramp
+of 64 samples to towards 0.3.</p><h5>Examples</h5><pre><span class="cmt">// compare control and audio rate</span>
+play {
+  <span class="kw">val</span> a = K2A.ar(WhiteNoise.kr(<span class="num">0.3</span>))
+  <span class="kw">val</span> b =        WhiteNoise.ar(<span class="num">0.3</span>)
+  <span class="kw">val</span> c = LFPulse.ar(<span class="num">1</span>, <span class="std">Seq</span>(<span class="num">0</span>, <span class="num">0.5</span>))
+  c * <span class="std">Seq</span>(a, b)
+}</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DC$.html" class="extype" name="de.sciss.synth.ugen.DC">DC</a>
+</p></span><span class="cmt"><p><a href="T2A$.html" class="extype" name="de.sciss.synth.ugen.T2A">T2A</a></p></span><span class="cmt"><p><a href="A2K$.html" class="extype" name="de.sciss.synth.ugen.A2K">A2K</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -144,7 +163,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.K2A#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.K2A#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ar(in:de.sciss.synth.GE):de.sciss.synth.ugen.K2A"></a>
       <a id="ar(GE):K2A"></a>
       <h4 class="signature">
@@ -160,7 +179,8 @@
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>control-rate signal to convert
+</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
