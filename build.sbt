@@ -30,17 +30,17 @@ fork in run := true
 
 lazy val wolkenpumpeVersion         = "1.0.0-SNAPSHOT"
 
-lazy val melliteVersion             = "0.14.0"
+lazy val melliteVersion             = "1.1.0-SNAPSHOT"
 
-// lazy val soundProcessesVersion      = "2.9.0"
+// lazy val soundProcessesVersion      = "2.10.0"
 
 lazy val lucreMatrixVersion         = "0.5.0"
 
 // lazy val scalaColliderVersion       = "1.14.1"
 
-lazy val scalaColliderSwingVersion  = "1.20.2"
+lazy val scalaColliderSwingVersion  = "1.21.0"
 
-lazy val ugensVersion               = "1.11.2"
+lazy val ugensVersion               = "1.12.0"
 
 lazy val fileCacheVersion           = "0.3.2"
 
