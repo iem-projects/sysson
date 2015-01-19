@@ -1,22 +1,22 @@
-def SYSSON_VERSION = "0.8.0"
+lazy val SYSSON_VERSION = "0.11.0"
 
 val commonSettings = Seq(
-  organization := "de.sciss"  // ghpages push only works with this, not "at.iem.sysson"...
+  organization := "de.sciss",  // ghpages push only works with this, not "at.iem.sysson"...
   version      := SYSSON_VERSION,
-  scalaVersion := "2.11.1"
+  scalaVersion := "2.11.5"
 )
 
 // retrieveManaged in ThisBuild := true
 
 val scalaOSC           = RootProject(uri("git://github.com/Sciss/ScalaOSC.git#v1.1.3"))
 
-val scalaAudioFile     = RootProject(uri("git://github.com/Sciss/ScalaAudioFile.git#v1.4.2"))
+val scalaAudioFile     = RootProject(uri("git://github.com/Sciss/ScalaAudioFile.git#v1.4.4"))
 
-val scalaColliderUGens = RootProject(uri("git://github.com/Sciss/ScalaColliderUGens.git#v1.9.0"))
+val scalaColliderUGens = RootProject(uri("git://github.com/Sciss/ScalaColliderUGens.git#v1.13.1"))
 
-val scalaCollider      = RootProject(uri("git://github.com/Sciss/ScalaCollider.git#v1.12.0"))
+val scalaCollider      = RootProject(uri("git://github.com/Sciss/ScalaCollider.git#v1.17.1"))
 
-val sysson             = RootProject(uri("git://github.com/iem-projects/sysson.git#v0.8.0"))
+val sysson             = RootProject(uri("git://github.com/iem-projects/sysson.git#v" + SYSSON_VERSION))
 
 git.gitCurrentBranch in ThisBuild := "master"
 
