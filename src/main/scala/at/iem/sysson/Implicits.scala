@@ -119,9 +119,9 @@ object Implicits {
     def isDouble   : Boolean            = dataType == ma2.DataType.DOUBLE
     def isInt      : Boolean            = dataType == ma2.DataType.INT
 
-    def fillValue  : Float = {
-      require(isFloat, s"fillValue only defined for floating point variables ($dataType)")
-      attributeMap.get("_FillValue").map(_.getNumericValue.floatValue()).getOrElse(Float.NaN)
+    def fillValue  : Double = {
+      if (!isFloat && !isDouble) sys.error(s"fillValue only defined for floating point variables ($dataType)")
+      attributeMap.get("_FillValue").map(_.getNumericValue.doubleValue()).getOrElse(Double.NaN)
     }
 
     // it would be good to shadow peer.read(), but because it takes precedence over
@@ -142,6 +142,11 @@ object Implicits {
 
   private def checkNaNFun(fillValue: Float): Float => Boolean = if (java.lang.Float.isNaN(fillValue))
     java.lang.Float.isNaN
+  else
+    _ == fillValue
+
+  private def checkNaNFun(fillValue: Double): Double => Boolean = if (java.lang.Double.isNaN(fillValue))
+    java.lang.Double.isNaN
   else
     _ == fillValue
 
@@ -174,15 +179,17 @@ object Implicits {
     }
 
     def float1D: Vec[Float] = {
-      val it = float1DIter
-      val sz = peer.getSize
-      Vector.fill(sz.toInt)(it.getFloatNext)
+      // val it = float1DIter
+      // val sz = peer.getSize
+      // Vector.fill(sz.toInt)(it.getFloatNext)
+      float1Diterator.toVector
     }
 
     def double1D: Vec[Double] = {
-      val it = double1DIter
-      val sz = peer.getSize
-      Vector.fill(sz.toInt)(it.getDoubleNext)
+      // val it = double1DIter
+      // val sz = peer.getSize
+      // Vector.fill(sz.toInt)(it.getDoubleNext)
+      double1Diterator.toVector
     }
 
     def int1D: Vec[Int] = {
@@ -321,6 +328,56 @@ object Implicits {
         Env.Segment(segDur, mag, shape)) :+ Env.Segment(segDur, peer.last, Curve.step)
       )
       EnvGen.ar(env, doneAction = freeSelf)
+    }
+  }
+
+  implicit class SyRichDoubleSeq(val peer: Vec[Double]) extends AnyVal {
+    def replaceNaNs(value: Double, fillValue: Double = Double.NaN): Vec[Double] = {
+      val checkNaN = checkNaNFun(fillValue)
+      peer.map { f =>
+        if (checkNaN(f)) value else f
+      }
+    }
+
+    def dropNaNs: Vec[Double] = dropNaNs(Double.NaN)
+    def dropNaNs(fillValue: Double): Vec[Double] = {
+      val checkNaN = checkNaNFun(fillValue)
+      peer.filterNot(checkNaN)
+    }
+
+    def normalize: Vec[Double] = normalize(Double.NaN)
+    def normalize(fillValue: Double): Vec[Double] = {
+      val sz   = peer.size
+      if( sz == 0 ) return peer
+      var min  = Double.MaxValue
+      var max  = Double.MinValue
+
+      val checkNaN = checkNaNFun(fillValue)
+
+      var i = 0; while (i < sz) {
+        val f = peer(i)
+        if(java.lang.Double.isInfinite(f)) sys.error("Unbounded value: " + f)
+
+        if (!checkNaN(f)) {
+          if (f < min) min = f
+          if (f > max) max = f
+        }
+        i += 1 }
+      val div = max - min
+      if (div <= 0.0) return Vector.fill(sz)(0.0)
+      // assert(div > 0f, s"max = $max, min = $min, div = $div")
+      val mul = 1.0 / div
+      peer.map(f => if (checkNaN(f)) f else (f - min) * mul)
+    }
+
+    def linlin(srcLo: Double = 0.0, srcHi: Double = 1.0, fillValue: Double = Double.NaN)(tgtLo: Double, tgtHi: Double): Vec[Double] = {
+      require(srcLo != srcHi, "Source range is zero (lo = " + srcLo + ", hi = " + srcHi + ")")
+      require(tgtLo != tgtHi, "Target range is zero (lo = " + tgtLo + ", hi = " + tgtHi + ")")
+      val checkNaN = checkNaNFun(fillValue)
+      val add1 = -srcLo
+      val mul  = (tgtHi - tgtLo) / (srcHi - srcLo)
+      val add2 = tgtLo
+      peer.map(f => if (checkNaN(f)) f else (f + add1) * mul + add2)
     }
   }
 

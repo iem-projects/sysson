@@ -17,7 +17,8 @@ package gui
 package impl
 
 import java.awt
-import java.awt.{Graphics2D, BasicStroke, Color}
+import java.awt.image.BufferedImage
+import java.awt.{TexturePaint, Graphics2D, BasicStroke, Color}
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import javax.swing.table.{AbstractTableModel, DefaultTableCellRenderer}
 import javax.swing.{JSpinner, JTable, SpinnerNumberModel, SwingConstants}
@@ -48,7 +49,7 @@ import scala.concurrent.{ExecutionContext, blocking}
 import scala.concurrent.stm.atomic
 import scala.swing.Swing._
 import scala.swing.event.{ButtonClicked, ValueChanged}
-import scala.swing.{ToggleButton, FlowPanel, BoxPanel, Orientation, Alignment, BorderPanel, CheckBox, Component, Label, Table}
+import scala.swing.{Rectangle, ToggleButton, FlowPanel, BoxPanel, Orientation, Alignment, BorderPanel, CheckBox, Component, Label, Table}
 
 object ClimateViewImpl {
   private class Reduction(val name: String, val dim: Int, val norm: CheckBox, val nameLabel: Label,
@@ -56,7 +57,14 @@ object ClimateViewImpl {
                           val index: Component, val valueLabel: Label)
 
   private lazy val intensityScale: PaintScale = {
-    val res = new LookupPaintScale(0.0, 1.0, Color.red)
+    val nanImg = new BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB)
+    nanImg.setRGB(0, 0, 0xFF000000)
+    nanImg.setRGB(0, 1, 0xFFFFFFFF)
+    nanImg.setRGB(1, 1, 0xFF000000)
+    nanImg.setRGB(1, 1, 0xFFFFFFFF)
+    val nanPaint = new TexturePaint(nanImg, new Rectangle(0, 0, 2, 2))
+
+    val res = new LookupPaintScale(0.0, 1.0, nanPaint /* Color.red */)
     val numM = IntensityPalette.numColors - 1
     for(i <- 0 to numM) {
       val d   = i.toDouble / numM
@@ -67,7 +75,7 @@ object ClimateViewImpl {
   }
 
   private final class MyMatrix(width: Int, height: Int) extends MatrixSeries("Climate", height, width) {
-    def put(x: Int, y: Int, value: Float): Unit = data(y)(x) = value
+    def put(x: Int, y: Int, value: Double): Unit = data(y)(x) = value
   }
 
   private var _currentSection = Option.empty[VariableSection]
@@ -311,7 +319,7 @@ object ClimateViewImpl {
       _currentSection = Some(sec)
 
       // read the raw data
-      val arr0 = sec.readSafe().float1D
+      val arr0 = sec.readSafe()
 
       // if the statistics are available, normalize according to checkboxes,
       // otherwise normalize across the current frame.
@@ -333,10 +341,10 @@ object ClimateViewImpl {
             }
           }
           // println(s"min = $min, max = $max")
-          arr0.linlin(min, max, sec.variable.fillValue)(0.0, 1.0)
+          arr0.double1D.linlin(min, max, sec.variable.fillValue)(0.0, 1.0)
 
         case _ => // no stats available yet, normalize current frame
-          arr0.normalize(sec.variable.fillValue)
+          arr0.double1D.normalize(sec.variable.fillValue)
       }
 
       // fill the JFreeChart data matrix
@@ -473,7 +481,7 @@ object ClimateViewImpl {
         private def readDim(dim: nc2.Dimension): Vec[Double] = blocking {
           val v   = vm(dim.name)    // NoSuchElement will fail the future, ok
           val arr = v.readSafe()
-          if (v.isDouble) arr.double1D else arr.float1D.map(_.toDouble)
+          arr.double1D
         }
 
         private val shapeFut = WorldMapOverlay()

@@ -146,7 +146,7 @@ object Session130326 extends SessionLike {
     val sel = (v in "time" select timeIdx) in "plev" select plevIdx
     val nan = v.fillValue
 //    val in  = sel.read().float1D.normalize(nan).replaceNaNs(value = nanRplc, fillValue = nan)
-    val in  = sel.read().float1D.replaceNaNs(value = nanRplc, fillValue = nan).linlin(min, max)(0.0f, 1.0f)
+    val in  = sel.read().double1D.replaceNaNs(value = nanRplc, fillValue = nan).linlin(min, max)(0.0f, 1.0f)
 
 //    val tmp   = File.createTempFile("sysson", ".aif")
 //    val af    = AudioFile.openWrite(tmp, AudioFileSpec(numChannels = 1, sampleRate = 44100))
@@ -187,7 +187,7 @@ object Session130326 extends SessionLike {
         } else {
           sys.error(s"Unknown scanning direction $scan")
         }
-        out(idx) = z
+        out(idx) = z.toFloat
 
       ilon += 1 }
     ilat += 1 }

@@ -84,7 +84,7 @@ object Stats {
     atomic { implicit tx => filecache.TxnProducer(config) }
   }
 
-  implicit def executionContext = cache.executionContext
+  implicit def executionContext: ExecutionContext = cache.executionContext
 
   private val busy  = TMap.empty[File, Future[Stats]]
 
@@ -108,11 +108,11 @@ object Stats {
           // then build the Map[String, Vec[Counts]] by iteratively reducing all dimensions but one, over which
           // the stats are generated
 
-          val accept = if (vr.isFloat) {
+          val accept = /* if (vr.isFloat) */ {
             val f = vr.fillValue
             if (f.isNaN) !(_: Double).isNaN else (_: Double).toFloat != f
-          } else {
-            (_: Double) => true  // no fill values for non-float vars, accept all
+          // } else {
+          //  (_: Double) => true  // no fill values for non-float vars, accept all
           }
 
           def sectionCounts(sel: VariableSection): Counts = {

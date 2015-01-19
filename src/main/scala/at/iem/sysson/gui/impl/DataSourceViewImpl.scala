@@ -220,7 +220,7 @@ object DataSourceViewImpl {
           // val vm          = in.variableMap
           val dim         = v.dimensions // .filter(d => vm.get(d.name.getOrElse("?")).map(_.isFloat).getOrElse(false))
           val red         = v.reducedDimensions
-          if (!v.isFloat) {
+          if (!v.isFloat && !v.isDouble) {
             // abort if variable is not in floating point format
             val opt = OptionPane.message(
               message = s"Variable '${v.name}' is not in floating point format.",
