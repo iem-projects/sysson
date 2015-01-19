@@ -16,7 +16,7 @@ package at.iem.sysson.turbulence
 
 import at.iem.sysson.turbulence.Dymaxion.{Pt3, Polar, DymPt, MetersPerPixel}
 import at.iem.sysson.turbulence.Turbulence.{LatLon, Spk, Radians}
-import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Escape, Buffer, Synth, Txn}
+import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Buffer, Synth, Txn}
 import de.sciss.mellite.Prefs
 import de.sciss.{synth, numbers}
 import de.sciss.synth.{addBefore, ControlSet, addToTail, addToHead, AddAction, SynthGraph, message}
@@ -137,16 +137,16 @@ object Binaural {
     fullBufL.read((audioWork / "ForumVerb-L.aif").absolutePath)
     fullBufR.read((audioWork / "ForumVerb-R.aif").absolutePath)
     // currently no predefined method for this command!
-    Escape.addMessage(partBufL, message.BufferGen(partBufL.id, PreparePartConv(fullBufL, fftSize)),
-      audible = false, dependencies = fullBufL :: Nil)
-    Escape.addMessage(partBufR, message.BufferGen(partBufR.id, PreparePartConv(fullBufR, fftSize)),
-      audible = false, dependencies = fullBufL :: Nil)
+    tx.addMessage(partBufL, message.BufferGen(partBufL.id, PreparePartConv(fullBufL, fftSize)),
+       dependencies = fullBufL :: Nil)
+    tx.addMessage(partBufR, message.BufferGen(partBufR.id, PreparePartConv(fullBufR, fftSize)),
+      dependencies = fullBufL :: Nil)
     // fullBufL.dispose()
     // fullBufR.dispose()
 
     val tailGraph = SynthGraph {
       import synth._
-      import ugen.{ChannelIndices => _, _}
+      import ugen._ // {ChannelIndices => _, _}
       val in    = In.ar(ChannelIndices)
       val inF   = Flatten(in)
       val dlyT  = "delay".ir(Vec.fill(N)(0f))

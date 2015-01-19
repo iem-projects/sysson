@@ -280,7 +280,8 @@ object MatrixPrepare {
 
         val trig  = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
           path = path, fileFrames = numFrames, interp = 1, startFrame = startFrame, loop = true, resetFrame = 0L)
-        trig.install()
+        b.addUser(trig)
+        // trig.install()
       } else {
         buf.read(path)
       }

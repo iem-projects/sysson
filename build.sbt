@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name          := "SysSon"
 
-version       := "0.11.0-SNAPSHOT"
+version       := "0.11.0"
 
 organization  := "at.iem.sysson"
 
@@ -14,9 +14,9 @@ licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.11.4"
+scalaVersion  := "2.11.5"
 
-crossScalaVersions := Seq("2.11.4", "2.10.4")
+crossScalaVersions := Seq("2.11.5", "2.10.4")
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
@@ -28,25 +28,19 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val wolkenpumpeVersion         = "1.0.0-SNAPSHOT"
+lazy val melliteVersion             = "1.1.0"
 
-lazy val melliteVersion             = "1.1.0-SNAPSHOT"
+lazy val soundProcessesVersion      = "2.14.1"
 
-// lazy val soundProcessesVersion      = "2.10.0"
+lazy val lucreMatrixVersion         = "0.6.0"
 
-lazy val lucreMatrixVersion         = "0.5.0"
+lazy val scalaColliderSwingVersion  = "1.24.0"
 
-// lazy val scalaColliderVersion       = "1.14.1"
-
-lazy val scalaColliderSwingVersion  = "1.21.0"
-
-lazy val ugensVersion               = "1.12.0"
+lazy val ugensVersion               = "1.13.1"
 
 lazy val fileCacheVersion           = "0.3.2"
 
 lazy val swingTreeVersion           = "0.1.1"
-
-//lazy val jfreechartVersion          = "1.0.19"
 
 lazy val kollFlitzVersion           = "0.2.0"
 
@@ -54,16 +48,11 @@ lazy val fscapeJobsVersion          = "1.5.0"
 
 lazy val slfVersion                 = "1.7.7"
 
-lazy val scalaTestVersion           = "2.2.2"
-
-// lazy val lucreSwingVersion          = "0.6.2"
+lazy val scalaTestVersion           = "2.2.3"
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "wolkenpumpe"                 % wolkenpumpeVersion,         // live interface
-//  "de.sciss" %% "lucreswing"                  % lucreSwingVersion,
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
-//  "de.sciss" %% "soundprocesses"              % soundProcessesVersion,
-//  "de.sciss" %% "scalacollider"               % scalaColliderVersion,
+  "de.sciss" %% "soundprocesses-core"         % soundProcessesVersion,      // computer music environment
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
   "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
   "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
@@ -71,13 +60,10 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
   "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
   "de.sciss" %% "fscapejobs"                  % fscapeJobsVersion,
-//  "org.jfree" % "jfreechart"                % jfreechartVersion,          // plotting
   "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
 )
 
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
-
-// retrieveManaged := true
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
 

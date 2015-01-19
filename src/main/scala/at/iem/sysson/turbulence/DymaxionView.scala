@@ -385,7 +385,7 @@ class DymaxionView extends Component {
         val g2b   = if (c2Opt.isEmpty) 0f else g2
         val g3b   = if (c3Opt.isEmpty) 0f else g3
         // println(s"""set("c1" -> $c1, "g1" -> $g1b, "c2" -> $c2, "g2" -> $g2b, "c3" -> $c3, "g3" -> $g3b)""")
-        synth.set(true, "c1" -> c1, "g1" -> g1b, "c2" -> c2, "g2" -> g2b, "c3" -> c3, "g3" -> g3b)
+        synth.set("c1" -> c1, "g1" -> g1b, "c2" -> c2, "g2" -> g2b, "c3" -> c3, "g3" -> g3b)
       }
     }
 

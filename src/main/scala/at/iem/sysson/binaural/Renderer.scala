@@ -155,10 +155,10 @@ object Renderer {
     fullBufL.readChannel(verbFile.absolutePath, channels = 0 :: Nil)
     fullBufR.readChannel(verbFile.absolutePath, channels = 1 :: Nil)
     // currently no predefined method for this command!
-    Escape.addMessage(partBufL, message.BufferGen(partBufL.id, PreparePartConv(fullBufL, fftSize)),
-      audible = false, dependencies = fullBufL :: Nil)
-    Escape.addMessage(partBufR, message.BufferGen(partBufR.id, PreparePartConv(fullBufR, fftSize)),
-      audible = false, dependencies = fullBufL :: Nil)
+    tx.addMessage(partBufL, message.BufferGen(partBufL.id, PreparePartConv(fullBufL, fftSize)),
+      dependencies = fullBufL :: Nil)
+    tx.addMessage(partBufR, message.BufferGen(partBufR.id, PreparePartConv(fullBufR, fftSize)),
+      dependencies = fullBufL :: Nil)
     // fullBufL.dispose()
     // fullBufR.dispose()
 
