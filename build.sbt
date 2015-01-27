@@ -1,5 +1,3 @@
-import AssemblyKeys._
-
 name          := "SysSon"
 
 version       := "1.0.0-SNAPSHOT"
@@ -28,7 +26,7 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "1.1.0"
+lazy val melliteVersion             = "1.1.1-SNAPSHOT"
 
 lazy val soundProcessesVersion      = "2.14.1"
 
@@ -127,8 +125,6 @@ pomExtra := { val n = name.value
 lazy val mainClazz = Some("at.iem.sysson.Main")
 
 // windows/linux
-
-seq(assemblySettings: _*)
 
 test      in assembly := ()
 

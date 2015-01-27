@@ -15,15 +15,16 @@
 package at.iem.sysson
 package gui
 
-import de.sciss.lucre.synth.Sys
+import at.iem.sysson.gui.impl.{SonificationViewImpl => Impl}
 import at.iem.sysson.sound.Sonification
-import impl.{SonificationViewImpl => Impl}
-import de.sciss.lucre.swing.View
-import de.sciss.synth.proc.Obj
-import de.sciss.model.Model
-import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
+import de.sciss.lucre.swing.View
+import de.sciss.lucre.synth.Sys
+import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
+import de.sciss.model.Model
+
+import scala.swing.Action
 
 object SonificationView {
   def apply[S <: Sys[S]](sonification: Sonification.Obj[S])
@@ -39,4 +40,6 @@ trait SonificationView[S <: Sys[S]]
   with Model[SonificationView.Update] {
 
   def sonification(implicit tx: S#Tx): Sonification.Obj[S]
+
+  def actionBounce: Action
 }

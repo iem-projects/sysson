@@ -18,28 +18,32 @@ package impl
 
 import java.awt.Color
 
-import de.sciss.lucre.synth.Sys
 import at.iem.sysson.sound.Sonification
-import de.sciss.lucre.stm
-import de.sciss.mellite.gui.edit.EditAttrMap
-import de.sciss.synth.proc.{StringElem, Obj, BooleanElem, ObjKeys, ExprImplicits, Transport}
+import de.sciss.audiowidgets.{TimelineModel, Transport => GUITransport}
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{OptionPane, UndoManager}
-import de.sciss.swingplus.{GroupPanel, Separator}
-import de.sciss.audiowidgets.{Transport => GUITransport}
-import de.sciss.synth.SynthGraph
+import de.sciss.file._
+import de.sciss.icons.raphael
+import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
+import de.sciss.lucre.matrix.gui.MatrixView
+import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView, deferTx}
-import de.sciss.icons.raphael
+import de.sciss.lucre.synth.Sys
+import de.sciss.mellite.gui.edit.EditAttrMap
+import de.sciss.mellite.gui.{ActionBounceTimeline, AttrMapFrame, CodeFrame, GUI}
+import de.sciss.mellite.{Mellite, Workspace}
+import de.sciss.model.impl.ModelImpl
+import de.sciss.span.Span
+import de.sciss.swingplus.{GroupPanel, Separator}
+import de.sciss.synth.SynthGraph
+import de.sciss.synth.proc.{BooleanElem, ExprImplicits, Obj, ObjKeys, StringElem, Timeline, Transport}
+
 import scala.concurrent.stm.Ref
 import scala.swing.event.ButtonClicked
-import scala.swing.{ScrollPane, Action, Orientation, BoxPanel, ToggleButton, Swing, Alignment, Label, FlowPanel, Component}
+import scala.swing.{Action, Alignment, BoxPanel, Component, FlowPanel, Label, Orientation, ScrollPane, Swing, ToggleButton}
 import scala.util.control.NonFatal
-import de.sciss.model.impl.ModelImpl
-import de.sciss.lucre.matrix.gui.MatrixView
-import de.sciss.mellite.{Mellite, Workspace}
-import de.sciss.mellite.gui.{AttrMapFrame, CodeFrame, GUI}
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Sonification.Obj[S])
@@ -51,14 +55,9 @@ object SonificationViewImpl {
       StringFieldView(expr, "Name")
     }
 
-    // TTT
-    // val transport = mkTransport(sonification)
     val p         = sonification.elem.peer.proc
 
     val res = new Impl[S, workspace.I](sonifH, /* TTT transport, */ nameView)(workspace, undoMgr, cursor) {
-      // TTT
-      // val auralObserver = mkAuralObserver(transport)
-
       val graphObserver = p.elem.peer.graph.changed.react { implicit tx => upd =>
         updateGraph(upd.now)
       }
@@ -90,8 +89,6 @@ object SonificationViewImpl {
 
     impl =>
 
-    // TTT
-    // protected def auralObserver: Disposable[S#Tx]
     protected def graphObserver: Disposable[S#Tx]
 
     def sonification(implicit tx: S#Tx): Sonification.Obj[S] = sonifH()
@@ -177,7 +174,7 @@ object SonificationViewImpl {
         }
 
         val pMap = new GroupPanel {
-          import GroupPanel.Element
+          import de.sciss.swingplus.GroupPanel.Element
           horizontal = Seq(
             Par(ggMap.map(tup => Element(tup._1)): _*),
             Par(ggMap.map(tup => Element(tup._2)): _*)
@@ -201,7 +198,7 @@ object SonificationViewImpl {
         }
 
         val pCtl = new GroupPanel {
-          import GroupPanel.Element
+          import de.sciss.swingplus.GroupPanel.Element
           horizontal = Seq(
             Par(ggCtl.map(tup => Element(tup._1)): _*),
             Par(ggCtl.map(tup => Element(tup._2)): _*)
@@ -234,7 +231,7 @@ object SonificationViewImpl {
         def apply(): Unit = cursor.step { implicit tx =>
           val sonif = sonifH()
           // PatchCodeWindow(sonif.elem.peer.proc)
-          import Mellite.compiler
+          import de.sciss.mellite.Mellite.compiler
           CodeFrame.proc(sonif.elem.peer.proc)
         }
       }
@@ -259,7 +256,7 @@ object SonificationViewImpl {
       // ---- Transport ----
 
       transportButtons = GUITransport.makeButtonStrip {
-        import GUITransport._
+        import de.sciss.audiowidgets.Transport._
         Seq(/* GoToBegin(tGotToBegin()), */ Stop(tStop()), Pause(tPause()), Play(tPlay()) /*, Loop(tLoop()) */)
       }
       timerPrepare = new javax.swing.Timer(100, Swing.ActionListener { _ =>
@@ -392,6 +389,45 @@ object SonificationViewImpl {
       nameView.foreach(_.dispose())
       deferTx {
         timerPrepare.stop()
+      }
+    }
+
+    object actionBounce extends Action("Bounce") {
+      import ActionBounceTimeline.{DurationSelection, QuerySettings, query1, performGUI}
+
+      private var settings = QuerySettings[S](
+        span = Span(0L, (Timeline.SampleRate * 10).toLong), channels = Vector(0 to 1)
+      )
+
+      def apply(): Unit = {
+        val window  = GUI.findWindow(component)
+        val setUpd  = if (settings.file.isDefined) settings else {
+          settings.copy(file = nameView.map { v =>
+            val name  = v.component.text
+            val ext   = settings.spec.fileType.extension
+            val child = s"$name.$ext"
+            val parentOption = workspace.folder.flatMap(_.parentOption)
+            parentOption.fold(file(child))(_ / child)
+          })
+        }
+        val timelineModel = TimelineModel(Span(0L, (Timeline.SampleRate * 10000).toLong), Timeline.SampleRate)
+        val (_settings, ok) = query1(setUpd, workspace, timelineModel, window = window,
+          showImport = false, showTransform = false, showSelection = DurationSelection)
+        settings = _settings
+        _settings.file match {
+          case Some(file) if ok =>
+            // XXX TODO -- not cool having to create a throw away object (perhaps persistent)
+            val groupEH = cursor.step { implicit tx =>
+              val tl    = Timeline[S]
+              val span  = _settings.span
+              tl.add(SpanLikeEx.newConst(span), sonifH())
+              val tlObj = Obj(Timeline.Elem(tl))
+              tx.newHandle(tlObj)
+            }
+            import Mellite.compiler
+            performGUI(workspace, _settings, groupEH, file, window = window)
+          case _ =>
+        }
       }
     }
   }

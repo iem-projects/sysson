@@ -43,6 +43,7 @@ object SonificationFrameImpl {
     extends WindowImpl[S](name /* .map(n => s"$n : Sonification") */)
     with SonificationFrame[S] {
 
-    // override protected def style = desktop.Window.Auxiliary
+    override protected def initGUI(): Unit =
+      bindMenus("file.bounce" -> view.actionBounce)
   }
 }
