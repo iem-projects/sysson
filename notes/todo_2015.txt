@@ -15,6 +15,7 @@
         - Installer angucken
         - Plot: synchronize with sonification playback: 1
 [OK]    - Parameter GUI: bounce: 1
+        - Bounce: umbenennen
 [OK]    - What does Actions/DumpOSC do? - move in Debugging: 0.1
 [OK]    - Remove New Library: 0.0
 [OK]    - normalization button in plot window: label checkbox: 0.1
