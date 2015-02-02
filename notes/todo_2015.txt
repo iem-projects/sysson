@@ -1,5 +1,3 @@
-        - [Mellite]     Objekt duplizieren und Parameter übertragen (damit kann man leicht 2 regionen oder datensets vergleichen): 1
-        - [Mellite]     move attribute button to end or rename to "Attributes": 0.1
         - [Mellite]     im Workspace: "under-tree" die variablen und "Auge" wird plot button; trotzdem metadaten fenster (wenn header ausgewaehlt): 1
         - [Mellite]     im Workspace: limit menu (ev. hierarchisch, die die man nicht braucht scheinen nicht gleich auf): 0.5
         - Workshop + Kathi fuer KlimaAnlage und AmbiSonics: 0.5
@@ -14,17 +12,21 @@
         - consistency between plot and parameter gui: time and selections...: 2
         - Installer angucken
         - Plot: synchronize with sonification playback: 1
+[OK]    - Bounce: umbenennen
 [OK]    - Parameter GUI: bounce: 1
-        - Bounce: umbenennen
 [OK]    - What does Actions/DumpOSC do? - move in Debugging: 0.1
 [OK]    - Remove New Library: 0.0
 [OK]    - normalization button in plot window: label checkbox: 0.1
 [OK]    - Plot: show min max etc statistical values within the plot window: 0.1
 [OK]    - Plot: Kontinente overlappen: 0.5
 [OK]    - Plot: Farbcoding: NaNs weiß oder schwarz: 0.2
+[OK]    - [Mellite]     move attribute button to end or rename to "Attributes": 0.1
+[OK]    - Objekt duplizieren und Parameter übertragen (damit kann man leicht 2 regionen oder datensets vergleichen): 1
+[OK]    - Plot: Icon fuer Map Overlay
+[OK]    - Plot: "Overall Statistics" benennen
+        - Plot: make proper proc.Obj: 0.5
         - Plot: Farbcoding: 0.5; cf. http://gmt.soest.hawaii.edu/doc/latest/makecpt.html
-        - Plot: "Overall Statistics" benennen
-        - Plot: Icon fuer Map Overlay; ausblenden, wenn kein Lon/Lat format
+        - Plot: ausblenden, wenn kein Lon/Lat format
         - Plot: 1D strategy
         - Plot: bug: Achsenanordnung/ Matrixtransposition: 0.75
 

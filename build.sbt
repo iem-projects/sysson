@@ -26,13 +26,13 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "1.1.1-SNAPSHOT"
+lazy val melliteVersion             = "1.2.0-SNAPSHOT"
 
-lazy val soundProcessesVersion      = "2.14.1"
+lazy val soundProcessesVersion      = "2.15.1-SNAPSHOT"
 
-lazy val lucreMatrixVersion         = "0.6.0"
+lazy val lucreMatrixVersion         = "0.8.0-SNAPSHOT"
 
-lazy val scalaColliderSwingVersion  = "1.24.0"
+lazy val scalaColliderSwingVersion  = "1.25.0"
 
 lazy val ugensVersion               = "1.13.1"
 
@@ -46,7 +46,7 @@ lazy val fscapeJobsVersion          = "1.5.0"
 
 lazy val slfVersion                 = "1.7.7"
 
-lazy val scalaTestVersion           = "2.2.3"
+lazy val scalaTestVersion           = "2.2.4"
 
 libraryDependencies ++= Seq(
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment

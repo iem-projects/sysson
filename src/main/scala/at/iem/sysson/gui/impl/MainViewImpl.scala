@@ -16,7 +16,8 @@ package at.iem.sysson
 package gui
 package impl
 
-import javax.swing.{BorderFactory, ImageIcon}
+import javax.imageio.ImageIO
+import javax.swing.{Icon, BorderFactory, ImageIcon}
 import de.sciss.mellite.{Mellite, Prefs}
 import de.sciss.synth.proc.AuralSystem
 
@@ -24,7 +25,7 @@ import scala.concurrent.stm.TxnExecutor
 import swing.{Swing, Alignment, Label, Orientation, BoxPanel}
 import de.sciss.synth.swing.ServerStatusPanel
 import de.sciss.audiowidgets.PeakMeter
-import java.awt.Color
+import java.awt.{Font, Graphics, Color}
 import Swing._
 import de.sciss.desktop.impl.DynamicComponentImpl
 import de.sciss.lucre.synth.{Txn, Server}
@@ -41,7 +42,23 @@ private[gui] object MainViewImpl {
 
   private def AUTO_BOOT = Prefs.audioAutoBoot.getOrElse(false)
 
-  private lazy val logo = new ImageIcon(Main.getClass.getResource("SysSon-Logo_web_noshadow.png"))
+  private lazy val logo: Icon = {
+    val is = Main.getClass.getResourceAsStream("SysSon-Logo_web_noshadow.png")
+    if (is == null) new Icon {
+      val getIconHeight = 109
+      val getIconWidth  = 283
+      def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = {
+        g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 64))
+        g.setColor(Color.white)
+        g.drawString("SysSon", 32, 80)
+      }
+    } else try {
+      val img = ImageIO.read(is)
+      new ImageIcon(img)
+    } finally {
+      is.close()
+    }
+  }
 
   private final class Impl(bg: Option[Color]) extends MainView {
     def boot(): Unit = Mellite.startAuralSystem() // atomic { implicit tx => Mellite.auralSystem.start() }

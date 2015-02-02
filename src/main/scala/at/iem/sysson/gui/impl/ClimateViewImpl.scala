@@ -25,6 +25,7 @@ import javax.swing.{JSpinner, JTable, SpinnerNumberModel, SwingConstants}
 
 import at.iem.sysson.Implicits._
 import de.sciss.audiowidgets.{DualRangeModel, DualRangeSlider}
+import de.sciss.icons.raphael
 import de.sciss.intensitypalette.IntensityPalette
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.DataSource
@@ -32,6 +33,7 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx, requireEDT}
 import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.GUI
 import de.sciss.numbers
 import de.sciss.swingplus.GroupPanel
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
@@ -546,6 +548,9 @@ object ClimateViewImpl {
         reactions += {
           case ButtonClicked(_) => if (selected) main.addOverlay(mapOverlay) else main.removeOverlay(mapOverlay)
         }
+        private val icnFun = raphael.Shapes.GlobeEuropeAfrica _
+        icon          = GUI.iconNormal  (icnFun)
+        disabledIcon  = GUI.iconDisabled(icnFun)
       }
       val viewPanel     = new FlowPanel(butMapOverlay)
 

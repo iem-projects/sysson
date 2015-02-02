@@ -16,6 +16,7 @@ package at.iem.sysson
 package gui
 package impl
 
+import de.sciss.desktop.Menu
 import de.sciss.lucre.synth.Sys
 import at.iem.sysson.sound.Sonification
 import de.sciss.synth.proc.Obj
@@ -43,7 +44,9 @@ object SonificationFrameImpl {
     extends WindowImpl[S](name /* .map(n => s"$n : Sonification") */)
     with SonificationFrame[S] {
 
-    override protected def initGUI(): Unit =
-      bindMenus("file.bounce" -> view.actionBounce)
+    override protected def initGUI(): Unit = {
+      val Some(Menu.Item(it)) = window.handler.menuFactory.get("file.bounce")
+      it.bind(window, view.actionBounce)
+    }
   }
 }

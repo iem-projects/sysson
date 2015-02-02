@@ -16,16 +16,15 @@ package at.iem.sysson
 package sound
 package impl
 
-import de.sciss.lucre.{event => evt, expr}
-import de.sciss.lucre.event.{Pull, EventLike, InMemory, Event, Sys}
 import at.iem.sysson.sound.Sonification.Source
-import de.sciss.synth.proc.{Proc, Obj, Elem}
-import scala.annotation.switch
-import de.sciss.serial.{DataInput, DataOutput}
-import de.sciss.lucre.expr.{Expr, Double => DoubleEx, String => StringEx}
-import de.sciss.model
+import de.sciss.lucre.event.{Event, EventLike, InMemory, Pull, Sys}
+import de.sciss.lucre.expr.{Double => DoubleEx, Expr, String => StringEx}
 import de.sciss.lucre.matrix.Matrix
+import de.sciss.lucre.{event => evt, expr}
+import de.sciss.model
+import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.synth.proc.impl.{ActiveElemImpl, ElemCompanionImpl}
+import de.sciss.synth.proc.{Elem, Obj, Proc}
 
 object SonificationImpl {
   private final val SER_VERSION = 0x53726300  // "Src\0"
@@ -38,7 +37,6 @@ object SonificationImpl {
     val dims    = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
     new SourceImpl(targets, matrix, dims)
   }
-
 
   // ---- elem ----
 
@@ -81,7 +79,21 @@ object SonificationImpl {
 
       override def toString() = s"$prefix$id"
 
-      def mkCopy()(implicit tx: S#Tx): Sonification.Elem[S] = Sonification.Elem(peer) // XXX TODO
+      def mkCopy()(implicit tx: S#Tx): Sonification.Elem[S] = {
+        val Proc.Obj(proc) = Obj.copy(peer.proc)
+        val sources = expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
+        peer.sources.iterator.foreach { case (key, value) =>
+          sources.put(key, value.mkCopy())
+        }
+        import DoubleEx.{serializer => doubleSer, varSerializer => doubleVarSer}
+        val controls = expr.Map.Modifiable[S, String, Expr[S, Double], model.Change[Double]]
+        peer.controls.iterator.foreach {
+          case (key, Expr.Var(vr))  => controls.put(key, DoubleEx.newVar(vr()))
+          case (key, value)         => controls.put(key, value)
+        }
+        val sonif = SonificationImpl.copy[S](proc, sources, controls)
+        Sonification.Elem(sonif)
+      }
     }
   }
 
@@ -109,6 +121,21 @@ object SonificationImpl {
     with evt.impl.StandaloneLike[S, Source.Update[S], Source[S]] {
     source =>
 
+    def mkCopy()(implicit tx: S#Tx): Source[S] = {
+      val tgt       = evt.Targets[S]
+      val matrixCpy = matrix.mkCopy()
+      import StringEx.{varSerializer => stringVarSer, serializer => stringSer}
+      val dimsCpy   = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
+      dims.iterator.foreach { case (key, value) =>
+        val valueCpy = value match {
+          case Expr.Var(vr) => StringEx.newVar(vr())
+          case other => other
+        }
+        dimsCpy.put(key, valueCpy)
+      }
+      new SourceImpl[S](tgt, matrixCpy, dimsCpy)
+    }
+
     def disconnect()(implicit tx: S#Tx): Unit = dims.changed ---> this
     def connect   ()(implicit tx: S#Tx): Unit = dims.changed -/-> this
 
@@ -131,6 +158,14 @@ object SonificationImpl {
   }
 
   def apply[S <: Sys[S]](implicit tx: S#Tx): Sonification[S] = new New[S]
+
+  /** NOTE: does not copy the arguments but assumes they have been! */
+  def copy[S <: Sys[S]](proc: Proc.Obj[S], sources: expr.Map.Modifiable[S, String, Source[S], Source.Update[S]],
+                        controls: expr.Map.Modifiable[S, String, Expr[S, Double], model.Change[Double]])
+                       (implicit tx: S#Tx): Sonification[S] = {
+    val targets = evt.Targets[S]
+    new Copy(targets, proc, sources, controls)
+  }
 
   def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Sonification[S] =
     serializer[S].read(in, access)
@@ -228,6 +263,12 @@ object SonificationImpl {
   }
 
   // import HasAttributes.attributeEntryInfo
+
+  private final class Copy[S <: Sys[S]](protected val targets: evt.Targets[S],
+                                        val proc: Proc.Obj[S],
+                                        val sources: expr.Map.Modifiable[S, String, Source[S], Source.Update[S]],
+                                        val controls: expr.Map.Modifiable[S, String, Expr[S, Double], model.Change[Double]])
+    extends Impl[S]
 
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
     protected val targets       = evt.Targets[S](tx0)

@@ -21,7 +21,7 @@ import java.awt.Color
 import at.iem.sysson.sound.Sonification
 import de.sciss.audiowidgets.{TimelineModel, Transport => GUITransport}
 import de.sciss.desktop.impl.UndoManagerImpl
-import de.sciss.desktop.{OptionPane, UndoManager}
+import de.sciss.desktop.{KeyStrokes, Window, OptionPane, UndoManager}
 import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
@@ -41,7 +41,7 @@ import de.sciss.synth.SynthGraph
 import de.sciss.synth.proc.{BooleanElem, ExprImplicits, Obj, ObjKeys, StringElem, Timeline, Transport}
 
 import scala.concurrent.stm.Ref
-import scala.swing.event.ButtonClicked
+import scala.swing.event.{Key, ButtonClicked}
 import scala.swing.{Action, Alignment, BoxPanel, Component, FlowPanel, Label, Orientation, ScrollPane, Swing, ToggleButton}
 import scala.util.control.NonFatal
 
@@ -370,7 +370,7 @@ object SonificationViewImpl {
           val options = Seq("Ok", "Show Stack Trace")
           val opt = OptionPane(message = message, messageType = OptionPane.Message.Error,
             optionType = OptionPane.Options.YesNo, entries = options, initial = Some(options(0)))
-          if (opt.show(GUI.findWindow(component)).id == 1) e.printStackTrace()
+          if (opt.show(Window.find(component)).id == 1) e.printStackTrace()
       }
     }
 
@@ -392,15 +392,17 @@ object SonificationViewImpl {
       }
     }
 
-    object actionBounce extends Action("Bounce") {
+    object actionBounce extends Action("Export as Audio File...") {
       import ActionBounceTimeline.{DurationSelection, QuerySettings, query1, performGUI}
 
       private var settings = QuerySettings[S](
         span = Span(0L, (Timeline.SampleRate * 10).toLong), channels = Vector(0 to 1)
       )
 
+      accelerator = Some(KeyStrokes.menu1 + Key.B)
+
       def apply(): Unit = {
-        val window  = GUI.findWindow(component)
+        val window  = Window.find(component)
         val setUpd  = if (settings.file.isDefined) settings else {
           settings.copy(file = nameView.map { v =>
             val name  = v.component.text
