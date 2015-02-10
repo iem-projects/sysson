@@ -2,8 +2,8 @@
  *  SonificationTimelineView.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -32,7 +32,9 @@ object SonificationTimelineView extends TimelineObjView.Factory {
 
   type E[S <: Sys[S]] = Sonification.Elem[S]
 
-  TimelineObjView.addFactory(this)
+  private lazy val _init: Unit = TimelineObjView.addFactory(this)
+
+  def init(): Unit = _init
 
   def apply[S <: Sys[S]](id: S#ID, span: Expr[S, SpanLike], obj: Sonification.Obj[S], context: Context[S])
                         (implicit tx: S#Tx): TimelineObjView[S] = {

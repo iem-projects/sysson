@@ -2,8 +2,8 @@
  *  Sonification.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -65,8 +65,8 @@ object Sonification {
   }
   /** A sonification source is a matrix paired with a dimensional map.
     *
-    * @see [[at.iem.sysson.graph.Var]]
-    * @see [[at.iem.sysson.graph.Dim]]
+    * @see [[graph.Var]]
+    * @see [[graph.Dim]]
     */
   trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
     def matrix: Matrix[S]
@@ -108,14 +108,14 @@ trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonificati
   /** A map from logical keys to sonification sources. A source is
     * a matrix paired with a dimensional map.
     *
-    * @see [[at.iem.sysson.graph.Var]]
-    * @see [[at.iem.sysson.graph.Dim]]
+    * @see [[graph.Var]]
+    * @see [[graph.Dim]]
     */
   def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
 
   /** A map from logical keys to control values.
     *
-    * @see [[at.iem.sysson.graph.UserValue]]
+    * @see [[graph.UserValue]]
     */
   def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
 }

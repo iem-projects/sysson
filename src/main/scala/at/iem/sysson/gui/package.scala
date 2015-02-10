@@ -2,8 +2,8 @@
  *  package.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -14,12 +14,14 @@
 
 package at.iem.sysson
 
-import at.iem.sysson.gui.impl.{SonificationTimelineView, SonificationObjView, DataSourceObjView}
+import at.iem.sysson.gui.impl.{PlotObjView, SonificationTimelineView, SonificationObjView, DataSourceObjView}
 
 package object gui {
   def registerViews(): Unit = {
-    DataSourceObjView
-    SonificationObjView
-    SonificationTimelineView
+    DataSourceObjView         .init()
+    SonificationObjView       .init()
+    PlotObjView               .init()
+
+    SonificationTimelineView  .init()
   }
 }

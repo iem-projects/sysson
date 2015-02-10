@@ -2,8 +2,8 @@
  *  SonificationImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -43,8 +43,9 @@ object SonificationImpl {
   object SonificationElemImpl extends ElemCompanionImpl[Sonification.Elem] {
     final val typeID = Sonification.typeID
 
-    // println("register sonification")
-    Elem.registerExtension(this)
+    private lazy val _init: Unit = Elem.registerExtension(this)
+
+    def init(): Unit = _init
 
     def apply[S <: Sys[S]](peer: Sonification[S])(implicit tx: S#Tx): Sonification.Elem[S] = {
       val targets = evt.Targets[S]

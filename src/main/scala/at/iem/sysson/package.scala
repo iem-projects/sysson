@@ -2,8 +2,8 @@
  *  package.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -15,6 +15,7 @@
 package at.iem
 
 import at.iem.sysson.gui.impl.DataSourceElem
+import at.iem.sysson.impl.PlotImpl
 import at.iem.sysson.sound.impl.AuralSonificationImpl
 import de.sciss.synth.proc.Code
 import ucar.nc2
@@ -95,11 +96,11 @@ package object sysson {
     Code.registerImports(Code.SynthGraph.id, Seq("at.iem.sysson.graph._"))
 
   def initTypes(): Unit = {
-    mellite.initTypes()
-    // PatchElemImpl
-    SonificationElemImpl
-    DataSourceElem
-    AuralSonificationImpl
+    mellite               .initTypes()
+    SonificationElemImpl  .init()
+    DataSourceElem        .init()
+    AuralSonificationImpl .init()
+    PlotImpl              .init()
     importExtensions
   }
 }

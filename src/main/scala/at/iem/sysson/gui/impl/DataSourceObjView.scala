@@ -2,8 +2,8 @@
  *  DataSourceObjView.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2014 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -39,7 +39,9 @@ import proc.Implicits._
 import scala.swing.{Label, Component}
 
 object DataSourceObjView extends ObjView.Factory {
-  ObjView.addFactory(this)
+  private lazy val _init: Unit = ObjView.addFactory(this)
+
+  def init(): Unit = _init
 
   type E[S <: Sys[S]] = DataSourceElem[S]
   final val prefix  = "DataSource"
@@ -128,7 +130,9 @@ object DataSourceObjView extends ObjView.Factory {
 object DataSourceElem extends ElemCompanionImpl[DataSourceElem] {
   final val typeID = 0x30005  // DataSource.typeID
 
-  Elem.registerExtension(this)
+  private lazy val _init: Unit = Elem.registerExtension(this)
+
+  def init(): Unit = _init
 
   def apply[S <: Sys[S]](peer: DataSource[S])(implicit tx: S#Tx): DataSourceElem[S] = {
     val targets = evt.Targets[S]

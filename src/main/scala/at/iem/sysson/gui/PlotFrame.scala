@@ -1,5 +1,5 @@
 /*
- *  SonificationFrame.scala
+ *  PlotFrame.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
@@ -14,19 +14,18 @@
 
 package at.iem.sysson.gui
 
+import at.iem.sysson.Plot
 import de.sciss.lucre.synth.Sys
-import impl.{SonificationFrameImpl => Impl}
-import at.iem.sysson.sound.Sonification
+import impl.{PlotFrameImpl => Impl}
 import de.sciss.lucre.swing.Window
-import de.sciss.synth.proc.Obj
 import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
 
-object SonificationFrame {
-  def apply[S <: Sys[S]](sonification: Sonification.Obj[S])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationFrame[S] =
-    Impl(sonification)
+object PlotFrame {
+  def apply[S <: Sys[S]](plot: Plot.Obj[S])
+                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotFrame[S] =
+    Impl(plot)
 }
-trait SonificationFrame[S <: Sys[S]] extends Window[S] {
-  def view: SonificationView[S]
+trait PlotFrame[S <: Sys[S]] extends Window[S] {
+  def view: PlotView[S]
 }
