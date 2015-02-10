@@ -23,46 +23,76 @@ import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.Expr
-import de.sciss.lucre.stm.Disposable
-import de.sciss.lucre.swing.deferTx
+import de.sciss.lucre.expr.{Expr, String => StringEx}
+import de.sciss.lucre.swing.{View, deferTx}
+import de.sciss.lucre.swing.edit.EditExprMap
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.Workspace
 import de.sciss.model.Change
 
 import scala.concurrent.stm.Ref
+import scala.language.higherKinds
 import scala.swing.{Alignment, Label}
 
+/** Building block for dropping dimension keys. E.g. used as column headers in the sonification source view */
 abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
                                           (implicit workspace: Workspace[S], undo: UndoManager, cursor: stm.Cursor[S])
-    extends SonificationAssocView[S] with ComponentHolder[Label] {
+    extends View[S] with ComponentHolder[Label] { me =>
 
-  protected def observer: Disposable[S#Tx]
+  // ---- abstract ----
+
+  type Source[S1 <: Sys[S1]]
+
+  protected def sourceH: stm.Source[S#Tx, Source[S]]
+
+  protected def flavor: DragAndDrop.Flavor[MappingDrag]
+
+  // ---- impl ----
+
+  protected type MappingDrag  = DragAndDrop.MappingDrag { type Source[S1 <: Sys[S1]] = me.Source[S1] }
+  protected type MappingDragS = MappingDrag { type S1 = S }
 
   private var bindings: Ref[Set[String]] = _
-  
+  private var dimsH: stm.Source[S#Tx, expr.Map[S, String, Expr[S, String], Change[String]]] = _
+  private var observer: stm.Disposable[S#Tx] = _
+
+  /** Sub-classes must call `super` if they override this. */
+  def dispose()(implicit tx: S#Tx): Unit = observer.dispose()
+
   def init(dims: expr.Map[S, String, Expr[S, String], Change[String]])(implicit tx: S#Tx): Unit = {
+    import StringEx.{serializer => stringSerializer}
+    dimsH = tx.newHandle(dims)
+
     val b0 = dims.iterator.collect {
       case (key, valueEx) if valueEx.value == keyName => key
     } .toSet
     bindings = Ref(b0)
 
+    observer = dims.changed.react { implicit tx => upd => upd.changes.foreach {
+        case expr.Map.Added  (key, valueEx) if valueEx.value == keyName => addBinding   (key)
+        case expr.Map.Removed(key, valueEx) if valueEx.value == keyName => removeBinding(key)
+        case expr.Map.Element(key, _, change) =>
+          change match {
+            case Change(_, `keyName`) => addBinding   (key)
+            case Change(`keyName`, _) => removeBinding(key)
+            case _ =>
+          }
+        case _ =>
+      }
+    }
+
     update(b0.headOption)
 
     deferTx(guiInit())
   }
-  
-  final def dispose()(implicit tx: S#Tx): Unit = {
-    observer.dispose()
-  }
 
-  final protected def addBinding(key: String)(implicit tx: S#Tx): Unit = {
+  private def addBinding(key: String)(implicit tx: S#Tx): Unit = {
     val b = bindings.transformAndGet(_ + key)(tx.peer)
     update(b.headOption)
   }
 
-  final protected def removeBinding(key: String)(implicit tx: S#Tx): Unit = {
+  private def removeBinding(key: String)(implicit tx: S#Tx): Unit = {
     val b = bindings.transformAndGet(_ - key)(tx.peer)
     update(b.headOption)
   }
@@ -72,10 +102,21 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
       component.text = key.orNull
     }
 
-  protected def importMapping(drag: DragAndDrop.MappingDrag { type S1 = S })(implicit tx: S#Tx): Option[UndoableEdit]
-  
-  protected def guiInit(): Unit = {
-    val flavor  = DragAndDrop.MappingFlavor
+  private def importMapping(drag: MappingDragS)(implicit tx: S#Tx): Option[UndoableEdit] = {
+    val thisSource  = sourceH()
+    val thatSource  = drag.source()
+    if (thisSource != thatSource) None else {
+      dimsH().modifiableOption.map { map =>
+        import StringEx.newConst
+        implicit val s = StringEx
+        // import workspace.cursor
+        val exprOpt: Option[Expr[S, String]] = Some(newConst(keyName))
+        EditExprMap("Map Dimension", map, key = drag.key, value = exprOpt)
+      }
+    }
+  }
+
+  private def guiInit(): Unit = {
     type A      = DragAndDrop.MappingDrag
     val lb      = new Label("nnnnn")
     lb.icon = raphael.Icon(extent = 24)(raphael.Shapes.Clip) // .Disconnect)
@@ -102,11 +143,10 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
 
       override def importData(support: TransferSupport): Boolean = {
         val t     = support.getTransferable
-        val drag  = t.getTransferData(flavor).asInstanceOf[A]
+        val drag  = t.getTransferData(flavor).asInstanceOf[MappingDragS]
         val editOpt = if (drag.workspace != workspace) None else {
-          val drag1 = drag.asInstanceOf[DragAndDrop.MappingDrag { type S1 = S }]
           cursor.step { implicit tx =>
-            importMapping(drag1)
+            importMapping(drag)
           }
         }
         editOpt.foreach(undo.add)

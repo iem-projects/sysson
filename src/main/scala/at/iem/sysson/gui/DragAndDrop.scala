@@ -15,15 +15,18 @@
 package at.iem.sysson
 package gui
 
-import java.awt.datatransfer.{UnsupportedFlavorException, Transferable, DataFlavor}
-import collection.breakOut
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.stm
-import de.sciss.lucre.matrix.{Matrix, DataSource}
-import at.iem.sysson.sound.Sonification
+import java.awt.datatransfer.{DataFlavor, Transferable, UnsupportedFlavorException}
+import java.awt.event.{MouseAdapter, MouseEvent}
 import javax.swing.{JComponent, TransferHandler}
-import java.awt.event.{MouseEvent, MouseAdapter}
+
+import at.iem.sysson.sound.Sonification
+import de.sciss.lucre.event.Sys
+import de.sciss.lucre.matrix.{DataSource, Matrix}
+import de.sciss.lucre.stm
 import de.sciss.mellite.Workspace
+
+import scala.collection.breakOut
+import scala.language.higherKinds
 
 object DragAndDrop {
   sealed trait Flavor[+A] extends DataFlavor
@@ -57,13 +60,23 @@ object DragAndDrop {
     def matrix: stm.Source[S1#Tx, Matrix[S1]]
   }
 
-  val MappingFlavor = internalFlavor[MappingDrag]
+  val SonificationSourceMappingFlavor = internalFlavor[SonificationSourceMappingDrag]
+  val PlotMappingFlavor               = internalFlavor[PlotMappingDrag]
 
   trait MappingDrag {
     type S1 <: Sys[S1]
     def workspace: Workspace[S1]
-    def source: stm.Source[S1#Tx, Sonification.Source[S1]]
+    type Source[S <: Sys[S]]
+    def source: stm.Source[S1#Tx, Source[S1]]
     def key: String
+  }
+
+  trait SonificationSourceMappingDrag extends MappingDrag {
+    type Source[S <: Sys[S]] = Sonification.Source[S]
+  }
+
+  trait PlotMappingDrag extends MappingDrag {
+    type Source[S <: Sys[S]] = Plot[S]
   }
 
   // ----

@@ -19,7 +19,7 @@ package impl
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm.Disposable
 import scala.swing._
-import at.iem.sysson.gui.DragAndDrop.{MappingDrag, MatrixDrag}
+import at.iem.sysson.gui.DragAndDrop.{SonificationSourceMappingDrag, MatrixDrag}
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.{stm, expr}
@@ -211,7 +211,7 @@ object SonificationSourceViewImpl {
           text = key0
 
           protected def export(): Option[Transferable] = sourceOptRef.single.get.map { src =>
-            DragAndDrop.Transferable(DragAndDrop.MappingFlavor)(new MappingDrag {
+            DragAndDrop.Transferable(DragAndDrop.SonificationSourceMappingFlavor)(new SonificationSourceMappingDrag {
               type S1 = S
               def source: stm.Source[S#Tx, Sonification.Source[S]] = src
               def key: String = key0
@@ -228,7 +228,7 @@ object SonificationSourceViewImpl {
       if (keyDimButs.nonEmpty) {
         val d = new Dimension(0, 0)
         keyDimButs.foreach { but =>
-          val pd = but.preferredSize
+          val pd  = but.preferredSize
           d.width = math.max(d.width, pd.width)
           d.height= math.max(d.height, pd.height)
         }
