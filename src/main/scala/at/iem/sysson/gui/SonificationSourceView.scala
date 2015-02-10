@@ -12,17 +12,16 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson.gui
+package at.iem.sysson
+package gui
 
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.stm.Disposable
-import scala.swing.Component
 import at.iem.sysson.gui.impl.{SonificationSourceViewImpl => Impl}
-import at.iem.sysson._
-import de.sciss.lucre.{stm, expr}
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
+import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.gui.MatrixView
+import de.sciss.lucre.swing.View
+import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.Workspace
 
 object SonificationSourceView {
@@ -40,8 +39,6 @@ object SonificationSourceView {
                          undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] =
     Impl(map, key, dimKeys)
 }
-trait SonificationSourceView[S <: Sys[S]] extends Disposable[S#Tx] {
-  def component: Component
-
+trait SonificationSourceView[S <: Sys[S]] extends View[S] {
   def matrixView: MatrixView[S]
 }
