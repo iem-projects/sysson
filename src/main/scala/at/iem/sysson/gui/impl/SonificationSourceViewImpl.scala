@@ -36,8 +36,7 @@ object SonificationSourceViewImpl {
                          key: String, keyDimNames: Vec[String])
                         (implicit tx: S#Tx, workspace: Workspace[S],
                          undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] = {
-    val res = new Impl[S](key = key, _keys = keyDimNames)
-    res.init()
+    val res = new Impl[S](key = key, _keys = keyDimNames).init(map)
     res
   }
 
@@ -51,8 +50,7 @@ object SonificationSourceViewImpl {
 
     type Source[S1 <: Sys[S1]] = Sonification.Source[S1]
 
-    def init(map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]])(implicit tx: S#Tx): Unit = {
-      init()
+    def init(map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]])(implicit tx: S#Tx): this.type = {
       mapHOpt = map.modifiableOption.map(tx.newHandle(_))
       sourceObserver = map.changed.react { implicit tx => upd =>
         // println(s"OBSERVE CHANGES $upd")
@@ -68,7 +66,9 @@ object SonificationSourceViewImpl {
           // println(s"OBSERVED OTHER $other (MY KEY $key")
         }
       }
+      init()
       updateSource(map.get(key))
+      this
     }
 
     override def dispose()(implicit tx: S#Tx): Unit = {

@@ -60,7 +60,7 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
   /** Sub-classes must call `super` if they override this. */
   def dispose()(implicit tx: S#Tx): Unit = observer.dispose()
 
-  def init(dims: expr.Map[S, String, Expr[S, String], Change[String]])(implicit tx: S#Tx): Unit = {
+  def init(dims: expr.Map[S, String, Expr[S, String], Change[String]])(implicit tx: S#Tx): this.type = {
     import StringEx.{serializer => stringSerializer}
     dimsH = tx.newHandle(dims)
 
@@ -82,9 +82,9 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
       }
     }
 
-    update(b0.headOption)
-
     deferTx(guiInit())
+    update(b0.headOption)
+    this
   }
 
   private def addBinding(key: String)(implicit tx: S#Tx): Unit = {

@@ -38,7 +38,7 @@ object PlotViewImpl {
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] = {
     implicit val undoMgr    = new UndoManagerImpl
     val isEditable          = Matrix.Var.unapply(plot.elem.peer.matrix).isDefined
-    val plotMatrixView      = new PlotMatrixView(tx.newHandle(plot), canSetMatrix = isEditable).init()
+    val plotMatrixView      = new PlotMatrixView(canSetMatrix = isEditable).init(plot)
     val res                 = new Impl(plotMatrixView).init()
     res
   }
@@ -77,8 +77,7 @@ object PlotViewImpl {
     protected def flavor: DragAndDrop.Flavor[MappingDrag] = DragAndDrop.PlotMappingFlavor
   }
 
-  private final class PlotMatrixView[S <: Sys[S]](val plotH: stm.Source[S#Tx, Plot.Obj[S]],
-                                                  protected val canSetMatrix: Boolean)
+  private final class PlotMatrixView[S <: Sys[S]](protected val canSetMatrix: Boolean)
                                                  (implicit val workspace: Workspace[S], val undoManager: UndoManager,
                                                   val cursor: stm.Cursor[S])
     extends MatrixAssocViewImpl[S](Vec(Plot.HKey, Plot.VKey)) { impl =>
@@ -98,6 +97,17 @@ object PlotViewImpl {
       val res       = new PlotAssocView[S](tx.newHandle(source), key)
       res.init(dims)
       res
+    }
+
+    private var _plotH: stm.Source[S#Tx, Plot.Obj[S]] = _
+
+    def plotH: stm.Source[S#Tx, Plot.Obj[S]] = _plotH
+
+    def init(plot: Plot.Obj[S])(implicit tx: S#Tx): this.type = {
+      _plotH = tx.newHandle(plot)
+      init()
+      updateSource(Some(plot.elem.peer))
+      this
     }
 
     protected def mkDimAssocTransferable(src: stm.Source[S#Tx, Source[S]], key0: String): Transferable =
