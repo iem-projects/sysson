@@ -1,5 +1,5 @@
 /*
- *  SonificationSourceViewImpl.scala
+ *  MatrixAssocViewImpl.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
@@ -39,7 +39,7 @@ import scala.language.higherKinds
 import scala.swing.{Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
 import scala.swing.event.MouseButtonEvent
 
-abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], keyDimNames: Vec[String])
+abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], keys: Vec[String])
                                                 (implicit workspace: Workspace[S], undoManager: UndoManager,
                                                  cursor: stm.Cursor[S])
   extends View[S] with ComponentHolder[Component] {
@@ -55,7 +55,7 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], 
 
   protected def canRemoveMatrix: Boolean
 
-  protected def removeMatrix(): Unit
+  protected def editRemoveMatrix()(implicit tx: S#Tx): Option[UndoableEdit]
 
   protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit]
 
@@ -117,7 +117,10 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], 
       ggDataName.reactions += {
         case e: MouseButtonEvent if e.triggersPopup =>
           new PopupMenu {
-            contents += new MenuItem(Action("Remove Matrix")(removeMatrix()))
+            contents += new MenuItem(Action("Remove Matrix") {
+              val editOpt = impl.cursor.step { implicit tx => editRemoveMatrix() }
+              editOpt.foreach(undoManager.add)
+            })
             show(ggDataName, e.point.x, e.point.y)
           }
       }
@@ -132,7 +135,6 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], 
           val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
           val editOpt = cursor.step { implicit tx =>
               val v       = drag.matrix()
-              val name    = "Assign Matrix"
               val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
               val vrOpt   = sourceOpt.flatMap(src => Matrix.Var.unapply(matrix(src)))
               // println(s"DROP. vrOpt = $vrOpt; map = $map")
@@ -140,7 +142,7 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], 
                 val vr = Matrix.Var(v) // so that the matrix becomes editable in its view
                 editDropMatrix(vr)
               } { vr =>
-                val _edit = EditVar(name, vr, v)
+                val _edit = EditVar("Assign Matrix", vr, v)
                 updateSource(sourceOpt)  // XXX TODO - stupid work-around
                 Some(_edit)
               }
@@ -159,7 +161,7 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], 
       }
     }
 
-    val keyDimButs = keyDimNames.map { key0 =>
+    val keyDimButs = keys.map { key0 =>
       new DragAndDrop.Button {
         text = key0
 
