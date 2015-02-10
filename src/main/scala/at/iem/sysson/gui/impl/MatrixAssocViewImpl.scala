@@ -39,7 +39,7 @@ import scala.language.higherKinds
 import scala.swing.{Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
 import scala.swing.event.MouseButtonEvent
 
-abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], keys: Vec[String])
+abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
                                                 (implicit workspace: Workspace[S], undoManager: UndoManager,
                                                  cursor: stm.Cursor[S])
   extends View[S] with ComponentHolder[Component] {
@@ -73,8 +73,17 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](val matrixView: MatrixView[S], 
 
   private val sourceOptRef = Ref(Option.empty[stm.Source[S#Tx, Source[S]]])
 
-  def init()(implicit tx: S#Tx): Unit = {
+  private var _matrixView: MatrixView[S] = _
+
+  final def matrixView: MatrixView[S] = _matrixView
+
+  def init()(implicit tx: S#Tx): this.type = {
+    implicit val resolver = WorkspaceResolver[S]
+    import at.iem.sysson.Stats.executionContext
+    _matrixView = MatrixView[S]
+    _matrixView.nameVisible = false
     deferTx(guiInit())
+    this
   }
 
   def dispose()(implicit tx: S#Tx): Unit = {

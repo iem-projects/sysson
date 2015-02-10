@@ -39,8 +39,8 @@ object Plot {
                                             update: expr.Map.Update[S, String, Expr[S, String], model.Change[String]])
     extends Update[S]
 
-  final val HKey = "h"
-  final val VKey = "v"
+  final val HKey = "X-Axis"
+  final val VKey = "Y-Axis"
 
   // ---- element ----
 

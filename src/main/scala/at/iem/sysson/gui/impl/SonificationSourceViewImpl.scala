@@ -24,7 +24,6 @@ import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.Matrix
-import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.View
 import de.sciss.lucre.swing.edit.EditMutableMap
@@ -37,18 +36,14 @@ object SonificationSourceViewImpl {
                          key: String, keyDimNames: Vec[String])
                         (implicit tx: S#Tx, workspace: Workspace[S],
                          undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] = {
-    implicit val resolver = WorkspaceResolver[S]
-    import at.iem.sysson.Stats.executionContext
-    val matView     = MatrixView[S]
-    matView.nameVisible = false
-    val res         = new Impl[S](matView, key = key, _keys = keyDimNames)
+    val res = new Impl[S](key = key, _keys = keyDimNames)
     res.init()
     res
   }
 
-  private final class Impl[S <: Sys[S]](_matrixView: MatrixView[S], key: String, _keys: Vec[String])
+  private final class Impl[S <: Sys[S]](key: String, _keys: Vec[String])
                                        (implicit workspace: Workspace[S], undoManager: UndoManager, cursor: stm.Cursor[S])
-    extends MatrixAssocViewImpl[S](_matrixView, _keys) with SonificationSourceView[S] {
+    extends MatrixAssocViewImpl[S](_keys) with SonificationSourceView[S] {
     impl =>
 
     private var sourceObserver: Disposable[S#Tx] = _
