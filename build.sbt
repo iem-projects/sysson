@@ -26,9 +26,9 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "1.2.0-SNAPSHOT"
+lazy val melliteVersion             = "1.2.0"
 
-lazy val soundProcessesVersion      = "2.15.1-SNAPSHOT"
+lazy val soundProcessesVersion      = "2.16.0"
 
 lazy val lucreMatrixVersion         = "0.8.0-SNAPSHOT"
 

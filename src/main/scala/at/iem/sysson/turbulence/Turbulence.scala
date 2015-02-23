@@ -286,7 +286,7 @@ object Turbulence {
       Prefs.useSensorMeters = false
       Prefs.useLogFrame     = false
     }
-    Prefs.initialMasterVolume = MasterVolume
+    // Prefs.initialMasterVolume = MasterVolume
 
     Main.main(args :+ "--mellite-frame")
     val pkg = "at.iem.sysson.turbulence._" :: Nil

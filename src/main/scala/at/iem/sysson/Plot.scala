@@ -54,8 +54,7 @@ object Plot {
   trait Elem[S <: Sys[S]] extends proc.Elem[S] {
     type Peer       = Plot[S]
     type PeerUpdate = Plot.Update[S]
-
-    def mkCopy()(implicit tx: S#Tx): Elem[S]
+    type This       = Elem[S]
   }
 
   object Obj {

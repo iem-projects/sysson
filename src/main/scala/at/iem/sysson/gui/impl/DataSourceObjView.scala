@@ -183,4 +183,5 @@ object DataSourceElem extends ElemCompanionImpl[DataSourceElem] {
 trait DataSourceElem[S <: Sys[S]] extends Elem[S] {
   type Peer       = DataSource[S] // Expr[S, DataSource]
   type PeerUpdate = Unit // model.Change[String]
+  type This       = DataSourceElem[S]
 }

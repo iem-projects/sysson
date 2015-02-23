@@ -146,7 +146,7 @@ object Binaural {
 
     val tailGraph = SynthGraph {
       import synth._
-      import ugen._ // {ChannelIndices => _, _}
+      import ugen.{ChannelIndices => _, _}
       val in    = In.ar(ChannelIndices)
       val inF   = Flatten(in)
       val dlyT  = "delay".ir(Vec.fill(N)(0f))

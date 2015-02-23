@@ -88,8 +88,7 @@ object Sonification {
   trait Elem[S <: Sys[S]] extends proc.Elem[S] {
     type Peer       = Sonification[S]
     type PeerUpdate = Sonification.Update[S]
-
-    def mkCopy()(implicit tx: S#Tx): Elem[S]
+    type This       = Elem[S]
   }
 
   object Obj {
