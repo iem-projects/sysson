@@ -47,7 +47,7 @@ object PlotChartImpl {
     new Impl[S].init(plot)
   }
 
-  private final val DEBUG = true
+  private final val DEBUG = false
 
   private final class PlotData(val hName: String, val hData: Array[Float],
                                val vName: String, val vData: Array[Float],
@@ -214,6 +214,11 @@ object PlotChartImpl {
       deferTx(guiInit())
       val plot = plotObj.elem.peer
       updateData(plot)
+
+      //      plot.matrix.changed.react { implicit tx => u =>
+      //        println(s"matrix changed: $u")
+      //      }
+
       observer = plot.changed.react { implicit tx => u =>
         if (DEBUG) println("plot changed")
         updateData(u.plot)

@@ -83,12 +83,12 @@ object PlotImpl {
       new Impl[S](tgt, matrixCpy, dimsCpy)
     }
 
-    def disconnect()(implicit tx: S#Tx): Unit = {
+    def connect   ()(implicit tx: S#Tx): Unit = {
       matrix.changed ---> this
       dims  .changed ---> this
     }
 
-    def connect   ()(implicit tx: S#Tx): Unit = {
+    def disconnect()(implicit tx: S#Tx): Unit = {
       matrix.changed -/-> this
       dims  .changed -/-> this
     }
@@ -98,7 +98,7 @@ object PlotImpl {
     protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
       matrix.write(out)
-      dims.write(out)
+      dims  .write(out)
     }
 
     def changed: EventLike[S, Plot.Update[S]] = this

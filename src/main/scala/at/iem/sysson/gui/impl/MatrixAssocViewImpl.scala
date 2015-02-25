@@ -22,6 +22,7 @@ import javax.swing.TransferHandler
 import javax.swing.undo.UndoableEdit
 
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
+import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
@@ -36,7 +37,7 @@ import de.sciss.serial.Serializer
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
-import scala.swing.{Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
+import scala.swing.{Alignment, Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
 import scala.swing.event.MouseButtonEvent
 
 abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
@@ -120,7 +121,7 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
   }
 
   private def guiInit(): Unit = {
-    ggDataName = new TextField(16)
+    ggDataName = new TextField(12)
     if (canRemoveMatrix) {
       ggDataName.listenTo(ggDataName.mouse.clicks)
       ggDataName.reactions += {
@@ -136,10 +137,15 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
     }
     // dataName0.foreach(ggDataName.text = _)
     ggDataName.editable = false
-    ggDataName.border   = Swing.CompoundBorder(outside = ggDataName.border,
-      inside = IconBorder(Icons.Target(DropButton.IconSize)))
+    ggDataName.focusable= false
+    // val icnBorder       = IconBorder(Icons.Target(DropButton.IconSize))
+    val lbDataName      = new Label(null, Icons.Target(DropButton.IconSize), Alignment.Leading)
+    // ggDataName.border   = icnBorder //
+    // Swing.CompoundBorder(outside = ggDataName.border, inside = icnBorder)
+    desktop.Util.fixSize(ggDataName)
+
     if (canSetMatrix) {
-      DropButton.installTransferHandler[MatrixDrag](ggDataName, DragAndDrop.MatrixFlavor) { drag0 =>
+      DropButton.installTransferHandler[MatrixDrag](lbDataName, DragAndDrop.MatrixFlavor) { drag0 =>
         if (drag0.workspace == workspace) {
           val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
           val editOpt = cursor.step { implicit tx =>
@@ -220,7 +226,13 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
         p
       }
 
-      contents += ggDataName
+      contents += new BoxPanel(Orientation.Horizontal) {
+        contents += Swing.HStrut(2)
+        contents += lbDataName
+        contents += Swing.HStrut(2)
+        contents += ggDataName
+        contents += Swing.HGlue
+      }
       contents += matrixView.component
       contents += ggMap
     }
