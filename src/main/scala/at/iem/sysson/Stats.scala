@@ -88,6 +88,7 @@ object Stats {
 
   private val busy  = TMap.empty[File, Future[Stats]]
 
+  // XXX TODO -- should return a processor so we can abort
   def get(doc: nc2.NetcdfFile)(implicit tx: InTxn): Future[Stats] = {
     val key = file(doc.path)
     busy.get(key)(tx).getOrElse(create(doc, key, tx))

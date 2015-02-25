@@ -31,7 +31,7 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.mellite.Workspace
 import de.sciss.serial.Serializer
 
-import scala.swing.{Swing, Orientation, BoxPanel, Component}
+import scala.swing.{Orientation, BoxPanel, Component}
 
 object PlotViewImpl {
   def apply[S <: Sys[S]](plot: Plot.Obj[S])
@@ -40,11 +40,12 @@ object PlotViewImpl {
     val isEditable          = Matrix.Var.unapply(plot.elem.peer.matrix).isDefined
     val plotMatrixView      = new PlotMatrixView(canSetMatrix = isEditable).init(plot)
     val chartView           = PlotChartImpl(plot)
-    val res                 = new Impl(chartView, plotMatrixView).init()
+    val statsView           = PlotStatsView(plot)
+    val res                 = new Impl(chartView, plotMatrixView, statsView).init()
     res
   }
 
-  private final class Impl[S <: Sys[S]](chartView: View[S], matrixView: PlotMatrixView[S])
+  private final class Impl[S <: Sys[S]](chartView: View[S], matrixView: PlotMatrixView[S], statsView: PlotStatsView[S])
     extends PlotView[S] with ComponentHolder[Component] {
 
     def workspace   : Workspace[S]  = matrixView.workspace
@@ -61,11 +62,18 @@ object PlotViewImpl {
     private def guiInit(): Unit = {
       component = new BoxPanel(Orientation.Vertical) {
         contents += chartView .component
-        contents += matrixView.component
+        contents += new BoxPanel(Orientation.Horizontal) {
+          contents += matrixView.component
+          contents += statsView .component
+        }
       }
     }
 
-    def dispose()(implicit tx: S#Tx): Unit = ()
+    def dispose()(implicit tx: S#Tx): Unit = {
+      chartView .dispose()
+      matrixView.dispose()
+      statsView .dispose()
+    }
   }
 
   private final class PlotAssocView[S <: Sys[S]](protected val sourceH: stm.Source[S#Tx, Plot[S]], keyName: String)

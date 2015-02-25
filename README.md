@@ -20,17 +20,11 @@ First, open a terminal (bash), and go (`cd`) into the main project directory.
 
 All libraries are automatically installed by sbt. 
 
-Then to build the project on __Windows and Linux__:
+Then to build the project:
 
     $ ./sbt assembly
 
-The resulting file is `SysSon.jar` which can either be launched via `java -Xmx1024m -jar SysSon.jar`.
-
-Or to build the project on __Mac OS X__:
-
-    $ /.sbt appbundle
-
-The resulting file is `SysSon.app` which can either be launched through double-click or via `open SysSon.app`.
+The resulting file is `SysSon.jar`. The launcher script `SysSon.command` should be used to start the application. On OS X, you can open it with the `Terminal.app`.
 
 ### Developing
 
