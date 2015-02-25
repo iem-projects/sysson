@@ -34,10 +34,11 @@ object Plot {
 
   implicit def serializer[S <: Sys[S]]: evt.NodeSerializer[S, Plot[S]] = Impl.serializer[S]
 
-  sealed trait Update[S <: Sys[S]] { def plot: Plot[S] }
-  final case class DimsChanged[S <: Sys[S]](plot: Plot[S],
-                                            update: expr.Map.Update[S, String, Expr[S, String], model.Change[String]])
-    extends Update[S]
+  final case class Update[S <: Sys[S]](plot: Plot[S], changes: Vec[Change[S]])
+  sealed trait Change[S <: Sys[S]]
+  final case class MatrixChange[S <: Sys[S]](peer: Matrix.Update[S]) extends Change[S]
+  final case class DimsChange  [S <: Sys[S]](peer: expr.Map.Update[S, String, Expr[S, String], model.Change[String]])
+    extends Change[S]
 
   final val HKey = "X-Axis"
   final val VKey = "Y-Axis"

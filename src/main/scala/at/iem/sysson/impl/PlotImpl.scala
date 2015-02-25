@@ -83,8 +83,15 @@ object PlotImpl {
       new Impl[S](tgt, matrixCpy, dimsCpy)
     }
 
-    def disconnect()(implicit tx: S#Tx): Unit = dims.changed ---> this
-    def connect   ()(implicit tx: S#Tx): Unit = dims.changed -/-> this
+    def disconnect()(implicit tx: S#Tx): Unit = {
+      matrix.changed ---> this
+      dims  .changed ---> this
+    }
+
+    def connect   ()(implicit tx: S#Tx): Unit = {
+      matrix.changed -/-> this
+      dims  .changed -/-> this
+    }
 
     protected def disposeData()(implicit tx: S#Tx): Unit = dims.dispose()
 
@@ -98,10 +105,14 @@ object PlotImpl {
 
     protected def reader: evt.Reader[S, Plot[S]] = PlotImpl.serializer
 
-    def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Plot.Update[S]] =
-      pull(dims.changed).map { u =>
-        Plot.DimsChanged(source, u)
-      }
+    def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Plot.Update[S]] = {
+      val mch = matrix.changed
+      var ch = Vector.empty[Plot.Change[S]]
+      if (pull.contains(mch)) pull(mch).foreach(u => ch :+= Plot.MatrixChange(u))
+      val dch = dims.changed
+      if (pull.contains(dch)) pull(dch).foreach(u => ch :+= Plot.DimsChange  (u))
+      if (ch.isEmpty) None else Some(Plot.Update(source, ch))
+    }
   }
 
   // ---- elem ----

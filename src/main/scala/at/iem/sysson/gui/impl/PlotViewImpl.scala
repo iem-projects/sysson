@@ -39,11 +39,12 @@ object PlotViewImpl {
     implicit val undoMgr    = new UndoManagerImpl
     val isEditable          = Matrix.Var.unapply(plot.elem.peer.matrix).isDefined
     val plotMatrixView      = new PlotMatrixView(canSetMatrix = isEditable).init(plot)
-    val res                 = new Impl(plotMatrixView).init()
+    val chartView           = PlotChartImpl(plot)
+    val res                 = new Impl(chartView, plotMatrixView).init()
     res
   }
 
-  private final class Impl[S <: Sys[S]](matrixView: PlotMatrixView[S])
+  private final class Impl[S <: Sys[S]](chartView: View[S], matrixView: PlotMatrixView[S])
     extends PlotView[S] with ComponentHolder[Component] {
 
     def workspace   : Workspace[S]  = matrixView.workspace
@@ -59,7 +60,7 @@ object PlotViewImpl {
 
     private def guiInit(): Unit = {
       component = new BoxPanel(Orientation.Vertical) {
-        contents += Swing.VGlue // XXX TODO -- JFreeChart component
+        contents += chartView .component
         contents += matrixView.component
       }
     }
@@ -74,7 +75,7 @@ object PlotViewImpl {
 
     type Source[S1 <: Sys[S1]] = Plot[S1]
 
-    protected def flavor: DragAndDrop.Flavor[MappingDrag] = DragAndDrop.PlotMappingFlavor
+    protected def flavor: DragAndDrop.Flavor[PlotMappingDrag] = DragAndDrop.PlotMappingFlavor
   }
 
   private final class PlotMatrixView[S <: Sys[S]](protected val canSetMatrix: Boolean)
