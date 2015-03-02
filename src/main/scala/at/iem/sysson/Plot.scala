@@ -40,8 +40,12 @@ object Plot {
   final case class DimsChange  [S <: Sys[S]](peer: expr.Map.Update[S, String, Expr[S, String], model.Change[String]])
     extends Change[S]
 
+  /** Conventional key for dimensions map. Value is string denoting horizontal axis dimension name. */
   final val HKey = "X-Axis"
+  /** Conventional key for dimensions map. Value is string denoting vertical axis dimension name. */
   final val VKey = "Y-Axis"
+
+  final val attrShowOverlay = "show-overlay"
 
   // ---- element ----
 

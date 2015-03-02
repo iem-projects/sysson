@@ -24,7 +24,7 @@ import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{View, defer, deferTx}
+import de.sciss.lucre.swing.{BooleanCheckBoxView, View, defer, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.processor.impl.ProcessorImpl
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
@@ -37,7 +37,7 @@ import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
 
 import scala.concurrent.Future
 import scala.concurrent.stm.Ref
-import scala.swing.{Component, Graphics2D}
+import scala.swing.{Label, FlowPanel, BorderPanel, Component, Graphics2D}
 
 object PlotChartImpl {
   def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S]): View[S] = {
@@ -234,8 +234,11 @@ object PlotChartImpl {
     }
 
     private var observer: Disposable[S#Tx] = _
+    private var viewOverlay: View[S] = _
 
     def init(plotObj: Plot.Obj[S])(implicit tx: S#Tx): this.type = {
+      val plotMap = plotObj.attr
+      viewOverlay = View.wrap(new Label("TODO")) // BooleanCheckBoxView.fromMap(plotMap, Plot.attrShowOverlay, default = false, name = "Show Map Overlay")
       deferTx(guiInit())
       val plot = plotObj.elem.peer
       updateData(plot)
@@ -391,8 +394,13 @@ object PlotChartImpl {
       chart.removeLegend()
       chart.setBackgroundPaint(Color.white)
 
+      val settings = new FlowPanel(viewOverlay.component)
+
       _main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
-      component = Component.wrap(_main)
+      component = new BorderPanel {
+        add(Component.wrap(_main), BorderPanel.Position.Center)
+        add(settings             , BorderPanel.Position.South)
+      }
     }
   }
 }
