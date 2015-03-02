@@ -16,30 +16,28 @@ package at.iem.sysson
 package gui
 package impl
 
-import java.awt.{Rectangle, TexturePaint, Color}
 import java.awt.image.BufferedImage
+import java.awt.{Color, Rectangle, Shape, TexturePaint}
 
 import de.sciss.intensitypalette.IntensityPalette
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.matrix.{Matrix, DataSource}
+import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm.Disposable
-import de.sciss.lucre.swing.{defer, deferTx}
-import de.sciss.lucre.swing.View
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing.{View, defer, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.processor.impl.ProcessorImpl
-import org.jfree.chart.axis.{SymbolAxis, NumberAxis}
-import org.jfree.chart.renderer.{LookupPaintScale, PaintScale}
-import org.jfree.chart.{ChartPanel, JFreeChart}
+import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
+import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot
 import org.jfree.chart.renderer.xy.XYBlockRenderer
+import org.jfree.chart.renderer.{LookupPaintScale, PaintScale}
+import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
 
-import Implicits._
-
-import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.stm.Ref
-import scala.swing.Component
+import scala.swing.{Component, Graphics2D}
 
 object PlotChartImpl {
   def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S]): View[S] = {
@@ -114,7 +112,7 @@ object PlotChartImpl {
         val oldProc = readerRef.swap(proc)(tx.peer)
         tx.afterCommit {
           oldProc.abort()
-          import ExecutionContext.Implicits.global
+          import scala.concurrent.ExecutionContext.Implicits.global
           if (!proc.aborted) {
             proc.start()
             proc.foreach { plotData =>
@@ -179,14 +177,34 @@ object PlotChartImpl {
       res
     }
 
+    private var _lastXName: String       = _
+    private var _lastYName: String       = _
+    private var _lastXVals: Array[Float] = new Array[Float](0)  // we use `sameElements`, so ensure it's not null
+    private var _lastYVals: Array[Float] = _lastXVals           // dito
+
     // called on EDT
     private def updatePlot(data: PlotData): Unit = {
-      val xAxis = createAxis(data.hName, data.hData)
-      val yAxis = createAxis(data.vName, data.vData)
       dataset.removeAllSeries()
-      _plot.setDomainAxis(xAxis)
-      _plot.setRangeAxis (yAxis)
+      val xName     = data.hName
+      val xVals     = data.hData
+      val xChanged  = xName != _lastXName || !(xVals sameElements _lastXVals)
+      if (xChanged) {
+        _lastXName  = xName
+        _lastXVals  = xVals
+        val xAxis   = createAxis(xName, xVals)
+        _plot.setDomainAxis(xAxis)
+      }
+      val yName     = data.vName
+      val yVals     = data.vData
+      val yChanged  = yName != _lastYName || !(yVals sameElements _lastYVals)
+      if (yChanged) {
+        _lastYName  = yName
+        _lastYVals  = yVals
+        val yAxis   = createAxis(yName, yVals)
+        _plot.setRangeAxis(yAxis)
+      }
 
+      // XXX TODO -- look for stats
       val mData = normalize(data.mData, Float.NaN)  // XXX TODO -- find fill value
       val mRows = mData.length
       val mCols = if (mRows == 0) 0 else mData(0).length
@@ -206,6 +224,13 @@ object PlotChartImpl {
       dataset.addSeries(ms)
       // _plot.setDataset(dataset)
 
+      if (xChanged || yChanged) {
+        val xNameL  = xName.toLowerCase
+        val yNameL  = yName.toLowerCase
+        val isMap   = (xNameL == "lon" || xName == "Longitude") && (yNameL == "lat" || yNameL == "Latitude")
+        // XXX TODO -- and toggle
+        mapOverlay.enabled = isMap
+      }
     }
 
     private var observer: Disposable[S#Tx] = _
@@ -250,6 +275,83 @@ object PlotChartImpl {
       res
     }
 
+    private object mapOverlay extends AbstractOverlay with Overlay {
+      import scala.concurrent.ExecutionContext.Implicits.global
+
+      private var _enabled = false
+
+      def enabled: Boolean = _enabled
+      def enabled_=(value: Boolean): Unit = if (_enabled != value) {
+        _enabled = value
+        if (value) _main.addOverlay(mapOverlay) else _main.removeOverlay(mapOverlay)
+      }
+
+      private lazy val shapeFut: Future[Shape] = {
+        val res = WorldMapOverlay()
+        res.onSuccess {
+          case _ => defer(fireOverlayChanged())
+        }
+        res.onFailure {
+          case ex => ex.printStackTrace()
+        }
+        res
+      }
+
+      def paintOverlay(g2: Graphics2D, chartPanel: ChartPanel): Unit =
+        for {
+          opt   <- shapeFut.value
+          shape <- opt
+          xAxis <- Option(_plot.getDomainAxis)
+          yAxis <- Option(_plot.getRangeAxis )
+        } {
+          val xRange  = xAxis.getRange
+          val yRange  = yAxis.getRange
+          val xMin    = xRange.getLowerBound
+          val xMax    = xRange.getUpperBound
+          val yMin    = yRange.getLowerBound
+          val yMax    = yRange.getUpperBound
+          // println(f"x = [$xMin%1.1f, $xMax%1.1f], y = [$yMin%1.1f, $yMax%1.1f]; x-size ${xDim.size}; y-size ${yDim.size}")
+          import de.sciss.numbers.Implicits._
+          val xVals   = _lastXVals
+          val xSzM    = xVals.length - 1
+          val yVals   = _lastYVals
+          val ySzM    = yVals.length - 1
+          if (xSzM >= 0 && ySzM >= 0) {
+            val x0      = xVals(0)
+            val xN      = xVals(xSzM)
+            val y0      = yVals(0)
+            val yN      = yVals(ySzM)
+            val xMinD   = xMin.linlin(0, xSzM, x0, xN)
+            val xMaxD   = xMax.linlin(0, xSzM, x0, xN)
+            val yMinD   = yMin.linlin(0, ySzM, y0, yN)
+            val yMaxD   = yMax.linlin(0, ySzM, y0, yN)
+
+            // println(f"x = [$xMinD%1.1f, $xMaxD%1.1f], y = [$yMinD%1.1f, $yMaxD%1.1f]")
+
+            val r         = chartPanel.getScreenDataArea
+            val rw        = r.getWidth
+            val rh        = r.getHeight
+            val sxD       = xMaxD - xMinD
+            val syD       = yMaxD - yMinD
+            val ox        = -xMinD -180.0
+            val oy        = yMaxD  - 90.0
+
+            if (rw > 0 && rh > 0 && sxD > 0 && syD > 0) {
+              val atOrig    = g2.getTransform
+              val clipOrig  = g2.getClip
+              g2.clip(r)
+              g2.setColor(Color.gray)
+              g2.translate(r.getMinX, r.getMinY)
+              g2.scale(rw / sxD, rh / syD)
+              g2.translate(ox, oy)
+              g2.draw(shape)
+              g2.setTransform(atOrig)
+              g2.setClip(clipOrig)
+            }
+          }
+        }
+    }
+
     private def createAxis(name: String, data: Array[Float]): NumberAxis = {
       val nameC   = name.capitalize
       val labels  = data.map(_.toString)
@@ -261,14 +363,12 @@ object PlotChartImpl {
     }
 
     private var _plot: XYPlot = _
+    private var _main: ChartPanel = _
 
     private def guiInit(): Unit = {
       val renderer  = new XYBlockRenderer()
       renderer.setPaintScale(intensityScale)
 
-      // val xAxis     = createAxis(xDim)
-      // val yAxis     = createAxis(yDim)
-      // val coll      = new MatrixSeriesCollection // (data)
       _plot = new XYPlot // (coll, xAxis, yAxis, renderer)
       _plot.setDataset(dataset)
       _plot.setRenderer(renderer)
@@ -291,8 +391,8 @@ object PlotChartImpl {
       chart.removeLegend()
       chart.setBackgroundPaint(Color.white)
 
-      val main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
-      component = Component.wrap(main)
+      _main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
+      component = Component.wrap(_main)
     }
   }
 }
