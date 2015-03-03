@@ -154,7 +154,10 @@ object SonificationViewImpl {
       val controls    = sonif.elem.peer.controls
       val userValues  = g.sources.collect {
         case graph.UserValue(key, default) =>
-          val view = DoubleSpinnerView.fromMap(controls, key, default, key.capitalize)
+          // val view = DoubleSpinnerView.fromMap(controls, key, default, key.capitalize)
+          implicit val doubleEx = de.sciss.lucre.expr.Double
+          val cell = ExprMapCellView(controls, key)
+          val view = DoubleSpinnerView.optional(cell, name = key.capitalize)
           (key, view)
       }
 

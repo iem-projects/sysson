@@ -12,9 +12,9 @@ licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.11.5"
+scalaVersion  := "2.11.6"
 
-crossScalaVersions := Seq("2.11.5", "2.10.4")
+crossScalaVersions := Seq("2.11.6", "2.10.4")
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
@@ -26,13 +26,13 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "1.2.0"
+lazy val melliteVersion             = "1.3.0-SNAPSHOT"
 
-lazy val soundProcessesVersion      = "2.16.0"
+lazy val soundProcessesVersion      = "2.17.0-SNAPSHOT"
 
-lazy val lucreMatrixVersion         = "0.8.0"
+lazy val lucreMatrixVersion         = "0.9.0-SNAPSHOT"
 
-lazy val lucreSwingVersion          = "0.8.1-SNAPSHOT"
+lazy val lucreSwingVersion          = "0.9.0-SNAPSHOT"
 
 lazy val scalaColliderSwingVersion  = "1.25.0"
 
