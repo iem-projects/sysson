@@ -26,6 +26,7 @@ import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{BooleanCheckBoxView, View, defer, deferTx}
 import de.sciss.mellite.Workspace
+import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
@@ -123,6 +124,7 @@ object PlotChartImpl {
               }
             }
             proc.onFailure {
+              case Processor.Aborted() =>
               case ex =>
                 Console.err.println("Matrix reader failed:")
                 ex.printStackTrace()
@@ -399,7 +401,7 @@ object PlotChartImpl {
       _main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
       component = new BorderPanel {
         add(Component.wrap(_main), BorderPanel.Position.Center)
-        add(settings             , BorderPanel.Position.South)
+        // add(settings             , BorderPanel.Position.South) XXX TODO
       }
     }
   }

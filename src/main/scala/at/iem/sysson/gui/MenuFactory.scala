@@ -141,6 +141,8 @@ object MenuFactory {
 
     gActions
       .add(Item("stop-all-sound",     proxy("Stop All Sound",           menu1 + Key.Period)))
+      .add(Item("debug-print",        proxy("Debug Print",              menu2 + Key.P)))
+      .add(Item("window-shot",        proxy("Export Window as PDF...")))
 
     // if (itPrefs.visible && !Desktop.isLinux) gTools.addLine().add(itPrefs)
 
