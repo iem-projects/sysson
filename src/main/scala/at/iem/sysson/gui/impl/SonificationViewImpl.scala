@@ -29,7 +29,7 @@ import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView, deferTx}
+import de.sciss.lucre.swing.{CellView, DoubleSpinnerView, StringFieldView, deferTx}
 import de.sciss.lucre.synth.Sys
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.mellite.gui.{ActionBounceTimeline, AttrMapFrame, CodeFrame, GUI}
@@ -156,8 +156,8 @@ object SonificationViewImpl {
         case graph.UserValue(key, default) =>
           // val view = DoubleSpinnerView.fromMap(controls, key, default, key.capitalize)
           implicit val doubleEx = de.sciss.lucre.expr.Double
-          val cell = ExprMapCellView(controls, key)
-          val view = DoubleSpinnerView.optional(cell, name = key.capitalize)
+          val cell      = CellView.exprMap(controls, key)
+          val view      = DoubleSpinnerView.optional[S](cell, name = key.capitalize, default = Some(default))
           (key, view)
       }
 

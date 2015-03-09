@@ -16,9 +16,11 @@ package at.iem.sysson
 package gui
 package impl
 
+import de.sciss.lucre.swing.CellView
 import de.sciss.lucre.synth.Sys
 import de.sciss.synth.proc.Obj
-import de.sciss.mellite.{ExprView, Workspace}
+import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.AttrCellView
 import de.sciss.lucre.stm
 import de.sciss.mellite.gui.impl.WindowImpl
 
@@ -26,13 +28,13 @@ object PlotFrameImpl {
   def apply[S <: Sys[S]](obj: Obj.T[S, Plot.Elem])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotFrame[S] = {
     val view  = PlotView(obj)
-    val name  = ExprView.name(obj)
+    val name  = AttrCellView.name(obj)
     val res   = new Impl(view, name)
     res.init()
     res
   }
 
-  private final class Impl[S <: Sys[S]](val view: PlotView[S], name: ExprView[S#Tx, String])
+  private final class Impl[S <: Sys[S]](val view: PlotView[S], name: CellView[S#Tx, String])
     extends WindowImpl[S](name /* .map(n => s"$n : Plot") */)
     with PlotFrame[S]
 }

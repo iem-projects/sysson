@@ -20,8 +20,9 @@ import de.sciss.desktop.Menu
 import de.sciss.lucre.synth.Sys
 import at.iem.sysson.sound.Sonification
 import de.sciss.synth.proc.Obj
-import de.sciss.lucre.swing.deferTx
-import de.sciss.mellite.{ExprView, Workspace}
+import de.sciss.lucre.swing.{CellView, deferTx}
+import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.AttrCellView
 import de.sciss.lucre.stm
 import de.sciss.mellite.gui.impl.WindowImpl
 
@@ -29,7 +30,7 @@ object SonificationFrameImpl {
   def apply[S <: Sys[S]](obj: Obj.T[S, Sonification.Elem])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationFrame[S] = {
     val view  = SonificationView(obj)
-    val name  = ExprView.name(obj)
+    val name  = AttrCellView.name(obj)
     val res   = new Impl(view, name)
     res.init()
     deferTx {
@@ -40,7 +41,7 @@ object SonificationFrameImpl {
     res
   }
 
-  private final class Impl[S <: Sys[S]](val view: SonificationView[S], name: ExprView[S#Tx, String])
+  private final class Impl[S <: Sys[S]](val view: SonificationView[S], name: CellView[S#Tx, String])
     extends WindowImpl[S](name /* .map(n => s"$n : Sonification") */)
     with SonificationFrame[S] {
 
