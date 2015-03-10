@@ -1,0 +1,409 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>expr - SysSon 1.1.0 API - de.sciss.lucre.synth.expr</title>
+          <meta name="description" content="expr - SysSon 1.1.0 API - de.sciss.lucre.synth.expr" />
+          <meta name="keywords" content="expr SysSon 1.1.0 API de.sciss.lucre.synth.expr" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'de.sciss.lucre.synth.expr.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="de">de</a>.<a href="../../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../../package.html" class="extype" name="de.sciss.lucre">lucre</a>.<a href="../package.html" class="extype" name="de.sciss.lucre.synth">synth</a></p>
+        <h1>expr</h1><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">expr</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="de.sciss.lucre.synth.expr"><span>expr</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.lucre.synth.expr.ExprImplicits" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ExprImplicits[S&lt;:de.sciss.lucre.event.Sys[S]]extendsAnyRef"></a>
+      <a id="ExprImplicits[S&lt;:event.Sys[S]]:ExprImplicits[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ExprImplicits.html"><span class="name">ExprImplicits</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">event.Sys</span>[<span class="extype" name="de.sciss.lucre.synth.expr.ExprImplicits.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@ExprImplicits[S&lt;:de.sciss.lucre.event.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class helps overcome the limitation of Scala's implicit resolution -- by resolving an expression
+system's type parameter <code>S</code>.</p><div class="fullcomment"><div class="comment cmt"><p>This class helps overcome the limitation of Scala's implicit resolution -- by resolving an expression
+system's type parameter <code>S</code>. There are two types of conversions, those that can be run from the underlying
+expression type (e.g. <code>longOps1</code> provides operations which can be invoked with a plain <code>Long</code>), and those
+that require an existing expression (e.g. <code>longOps2</code>). This is so that primitive standard operations remain
+outside the implicit scope (e.g. addition on longs).
+</p></div></div>
+    </li><li name="de.sciss.lucre.synth.expr.VecLikeType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="VecLikeType[A]extendsExprTypeImplA[scala.collection.immutable.IndexedSeq[A]]"></a>
+      <a id="VecLikeType[A]:VecLikeType[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="VecLikeType.html"><span class="name">VecLikeType</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.expr.impl.ExprTypeImplA">ExprTypeImplA</span>[<span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="de.sciss.lucre.synth.expr.VecLikeType.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@VecLikeType[A]extendsExprTypeImplA[scala.collection.immutable.IndexedSeq[A]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="de.sciss.lucre.synth.expr.BooleanExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BooleanExtensions"></a>
+      <a id="BooleanExtensions:BooleanExtensions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BooleanExtensions$.html"><span class="name">BooleanExtensions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@BooleanExtensions" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr#Curve" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Curve:de.sciss.lucre.synth.expr.package.ExprTypeA[de.sciss.synth.Curve]"></a>
+      <a id="Curve:ExprTypeA[Curve]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Curve</span><span class="result">: <span class="extype" name="de.sciss.lucre.synth.expr.ExprTypeA">ExprTypeA</span>[<a href="../../../synth/Curve.html" class="extype" name="de.sciss.synth.Curve">Curve</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@Curve:de.sciss.lucre.synth.expr.package.ExprTypeA[de.sciss.synth.Curve]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.DoubleExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DoubleExtensions"></a>
+      <a id="DoubleExtensions:DoubleExtensions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DoubleExtensions$.html"><span class="name">DoubleExtensions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@DoubleExtensions" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.DoubleVec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DoubleVec"></a>
+      <a id="DoubleVec:DoubleVec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DoubleVec$.html"><span class="name">DoubleVec</span></a><span class="result"> extends <a href="VecLikeType.html" class="extype" name="de.sciss.lucre.synth.expr.VecLikeType">VecLikeType</a>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@DoubleVec" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.ExprImplicits" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExprImplicits"></a>
+      <a id="ExprImplicits:ExprImplicits"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ExprImplicits$.html"><span class="name">ExprImplicits</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@ExprImplicits" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr#IdentifierSerializer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IdentifierSerializer[S&lt;:de.sciss.lucre.stm.Sys[S]]:de.sciss.serial.Serializer[S#Tx,S#Acc,S#ID]"></a>
+      <a id="IdentifierSerializer[S&lt;:stm.Sys[S]]:Serializer[expr.IdentifierSerializer.S.Tx,expr.IdentifierSerializer.S.Acc,expr.IdentifierSerializer.S.ID]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IdentifierSerializer</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">stm.Sys</span>[<span class="extype" name="de.sciss.lucre.synth.expr.IdentifierSerializer.S">S</span>]</span>]</span><span class="result">: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">expr.IdentifierSerializer.S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">expr.IdentifierSerializer.S.Acc</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.ID">expr.IdentifierSerializer.S.ID</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@IdentifierSerializer[S&lt;:de.sciss.lucre.stm.Sys[S]]:de.sciss.serial.Serializer[S#Tx,S#Acc,S#ID]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.IntExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntExtensions"></a>
+      <a id="IntExtensions:IntExtensions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntExtensions$.html"><span class="name">IntExtensions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@IntExtensions" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.IntVec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntVec"></a>
+      <a id="IntVec:IntVec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntVec$.html"><span class="name">IntVec</span></a><span class="result"> extends <a href="VecLikeType.html" class="extype" name="de.sciss.lucre.synth.expr.VecLikeType">VecLikeType</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@IntVec" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.LongExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongExtensions"></a>
+      <a id="LongExtensions:LongExtensions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LongExtensions$.html"><span class="name">LongExtensions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@LongExtensions" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.LongVec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongVec"></a>
+      <a id="LongVec:LongVec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LongVec$.html"><span class="name">LongVec</span></a><span class="result"> extends <a href="VecLikeType.html" class="extype" name="de.sciss.lucre.synth.expr.VecLikeType">VecLikeType</a>[<span class="extype" name="scala.Long">Long</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@LongVec" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.SpanExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SpanExtensions"></a>
+      <a id="SpanExtensions:SpanExtensions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SpanExtensions$.html"><span class="name">SpanExtensions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@SpanExtensions" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.SpanLikeExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SpanLikeExtensions"></a>
+      <a id="SpanLikeExtensions:SpanLikeExtensions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SpanLikeExtensions$.html"><span class="name">SpanLikeExtensions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@SpanLikeExtensions" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr.StringExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StringExtensions"></a>
+      <a id="StringExtensions:StringExtensions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StringExtensions$.html"><span class="name">StringExtensions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@StringExtensions" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.expr#initTypes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="initTypes():Unit"></a>
+      <a id="initTypes():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initTypes</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.synth.expr.package@initTypes():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Initializes types and thus installs some type extensions.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

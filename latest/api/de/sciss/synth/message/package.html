@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>message - SysSon 0.11.0 API - de.sciss.synth.message</title>
-          <meta name="description" content="message - SysSon 0.11.0 API - de.sciss.synth.message" />
-          <meta name="keywords" content="message SysSon 0.11.0 API de.sciss.synth.message" />
+          <title>message - SysSon 1.1.0 API - de.sciss.synth.message</title>
+          <meta name="description" content="message - SysSon 1.1.0 API - de.sciss.synth.message" />
+          <meta name="keywords" content="message SysSon 1.1.0 API de.sciss.synth.message" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -141,7 +141,7 @@ and the sample-rate of the buffer are determined by that audio-file.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="BufferAllocReadChannel.html"><span class="name">BufferAllocReadChannel</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="channels">channels: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="BufferAllocReadChannel.html"><span class="name">BufferAllocReadChannel</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="channels">channels: <a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferAllocReadChannelextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
@@ -273,7 +273,7 @@ free a buffer.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="BufferGetn.html"><span class="name">BufferGetn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="ranges">ranges: <span class="extype" name="scala.Range">Range</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="BufferGetn.html"><span class="name">BufferGetn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="ranges">ranges: <a href="../../../../scala/package.html#Range=scala.collection.immutable.Range" class="extmbr" name="scala.Range">Range</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferGetnextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
@@ -356,7 +356,7 @@ information about the size and sample-rate of the specified buffers.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="BufferReadChannel.html"><span class="name">BufferReadChannel</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="channels">channels: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="BufferReadChannel.html"><span class="name">BufferReadChannel</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="channels">channels: <a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <span class="extype" name="scala.Option">Option</span>[<a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>]</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferReadChannelextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
@@ -403,7 +403,7 @@ selecting a subset of the file's channels.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="BufferSetn.html"><span class="name">BufferSetn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="indicesAndValues">indicesAndValues: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>])*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="BufferSetn.html"><span class="name">BufferSetn</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>, <span name="indicesAndValues">indicesAndValues: (<span class="extype" name="scala.Int">Int</span>, <a href="../../../../scala/package.html#IndexedSeq[+A]=IndexedSeq[A]" class="extmbr" name="scala.IndexedSeq">IndexedSeq</a>[<span class="extype" name="scala.Float">Float</span>])*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferSetnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
@@ -506,7 +506,7 @@ selecting a subset of the file's channels.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ControlBusGetn.html"><span class="name">ControlBusGetn</span></a><span class="params">(<span name="ranges">ranges: <span class="extype" name="scala.Range">Range</span>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ControlBusGetn.html"><span class="name">ControlBusGetn</span></a><span class="params">(<span name="ranges">ranges: <a href="../../../../scala/package.html#Range=scala.collection.immutable.Range" class="extmbr" name="scala.Range">Range</a>*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncQuery.html" class="extype" name="de.sciss.synth.message.SyncQuery">SyncQuery</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusGetnextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
@@ -544,7 +544,7 @@ selecting a subset of the file's channels.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ControlBusSetn.html"><span class="name">ControlBusSetn</span></a><span class="params">(<span name="indicesAndValues">indicesAndValues: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>])*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ControlBusSetn.html"><span class="name">ControlBusSetn</span></a><span class="params">(<span name="indicesAndValues">indicesAndValues: (<span class="extype" name="scala.Int">Int</span>, <a href="../../../../scala/package.html#IndexedSeq[+A]=IndexedSeq[A]" class="extmbr" name="scala.IndexedSeq">IndexedSeq</a>[<span class="extype" name="scala.Float">Float</span>])*</span>)</span><span class="result"> extends <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> with <a href="SyncCmd.html" class="extype" name="de.sciss.synth.message.SyncCmd">SyncCmd</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusSetnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
@@ -729,7 +729,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Handler.html"><span class="name">Handler</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Handler.html"><span class="name">Handler</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@HandlerextendsAnyRef" title="Permalink" target="_top">
@@ -1218,7 +1218,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ServerMessage.html"><span class="name">ServerMessage</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ServerMessage.html"><span class="name">ServerMessage</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ServerMessageextendsAnyRef" title="Permalink" target="_top">
@@ -1496,7 +1496,7 @@ the same id) have been completed
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Timeout.html"><span class="name">Timeout</span></a><span class="params">()</span><span class="result"> extends <span class="extype" name="scala.RuntimeException">RuntimeException</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Timeout.html"><span class="name">Timeout</span></a><span class="params">()</span><span class="result"> extends <a href="../../../../scala/package.html#RuntimeException=RuntimeException" class="extmbr" name="scala.RuntimeException">RuntimeException</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@TimeoutextendsRuntimeExceptionwithProductwithSerializable" title="Permalink" target="_top">

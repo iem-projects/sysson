@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Buffer - SysSon 0.11.0 API - de.sciss.synth.Buffer</title>
-          <meta name="description" content="Buffer - SysSon 0.11.0 API - de.sciss.synth.Buffer" />
-          <meta name="keywords" content="Buffer SysSon 0.11.0 API de.sciss.synth.Buffer" />
+          <title>Buffer - SysSon 1.1.0 API - de.sciss.synth.Buffer</title>
+          <meta name="description" content="Buffer - SysSon 1.1.0 API - de.sciss.synth.Buffer" />
+          <meta name="keywords" content="Buffer SysSon 1.1.0 API de.sciss.synth.Buffer" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,11 +28,11 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="Buffer$.html" title="Go to companion"><img src="../../../lib/class_to_object_big.png" /></a>
+        <a href="Buffer$.html" title="See companion object"><img src="../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
-        <h1><a href="Buffer$.html" title="Go to companion">Buffer</a></h1><h3><span class="morelinks"><div>
+        <h1><a href="Buffer$.html" title="See companion object">Buffer</a></h1><h3><span class="morelinks"><div>
             Related Docs:
-            <a href="Buffer$.html" title="See companion">object Buffer</a>
+            <a href="Buffer$.html" title="See companion object">object Buffer</a>
             | <a href="package.html" class="extype" name="de.sciss.synth">package synth</a>
           </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer" title="Permalink" target="_top">
@@ -53,7 +53,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="de.sciss.model.impl.ModelImpl">ModelImpl</span>[<a href="BufferManager$$BufferInfo.html" class="extype" name="de.sciss.synth.BufferManager.BufferInfo">BufferInfo</a>], <span class="extype" name="de.sciss.model.Model">Model</span>[<a href="BufferManager$$BufferInfo.html" class="extype" name="de.sciss.synth.BufferManager.BufferInfo">BufferInfo</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="de.sciss.model.impl.ModelImpl">ModelImpl</span>[<a href="BufferManager$$BufferInfo.html" class="extype" name="de.sciss.synth.BufferManager.BufferInfo">BufferInfo</a>], <span class="extype" name="de.sciss.model.Model">Model</span>[<a href="BufferManager$$BufferInfo.html" class="extype" name="de.sciss.synth.BufferManager.BufferInfo">BufferInfo</a>], <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -194,7 +194,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">allocMsg</span><span class="params">(<span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></span>
+        <span class="name">allocMsg</span><span class="params">(<span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@allocMsg(numFrames:Int,numChannels:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAlloc" title="Permalink" target="_top">
@@ -211,7 +211,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">allocReadChannelMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="channels">channels: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></span>
+        <span class="name">allocReadChannelMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="channels">channels: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@allocReadChannelMsg(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocReadChannel" title="Permalink" target="_top">
@@ -228,7 +228,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">allocReadMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></span>
+        <span class="name">allocReadMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@allocReadMsg(path:String,startFrame:Int,numFrames:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocRead" title="Permalink" target="_top">
@@ -262,7 +262,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@clone():Object" title="Permalink" target="_top">
@@ -285,7 +285,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">closeMsg</span><span class="params">(<span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferClose.html" class="extype" name="de.sciss.synth.message.BufferClose">BufferClose</a></span>
+        <span class="name">closeMsg</span><span class="params">(<span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferClose.html" class="extype" name="de.sciss.synth.message.BufferClose">BufferClose</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@closeMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferClose" title="Permalink" target="_top">
@@ -319,7 +319,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">cueMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a></span>
+        <span class="name">cueMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@cueMsg(path:String,startFrame:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" title="Permalink" target="_top">
@@ -353,7 +353,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -427,7 +427,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">freeMsg</span><span class="params">(<span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>, <span name="release">release: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <a href="message/BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></span>
+        <span class="name">freeMsg</span><span class="params">(<span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>, <span name="release">release: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <a href="message/BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@freeMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet],release:Boolean):de.sciss.synth.message.BufferFree" title="Permalink" target="_top">
@@ -517,7 +517,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getnMsg</span><span class="params">(<span name="ranges">ranges: <span class="extype" name="scala.Range">Range</span>*</span>)</span><span class="result">: <a href="message/BufferGetn.html" class="extype" name="de.sciss.synth.message.BufferGetn">BufferGetn</a></span>
+        <span class="name">getnMsg</span><span class="params">(<span name="ranges">ranges: <a href="../../../scala/package.html#Range=scala.collection.immutable.Range" class="extmbr" name="scala.Range">Range</a>*</span>)</span><span class="result">: <a href="message/BufferGetn.html" class="extype" name="de.sciss.synth.message.BufferGetn">BufferGetn</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@getnMsg(ranges:Range*):de.sciss.synth.message.BufferGetn" title="Permalink" target="_top">
@@ -568,7 +568,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -674,7 +674,7 @@ not yet known.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">readChannelMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="channels">channels: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a></span>
+        <span class="name">readChannelMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="channels">channels: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@readChannelMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferReadChannel" title="Permalink" target="_top">
@@ -691,7 +691,7 @@ not yet known.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">readMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a></span>
+        <span class="name">readMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@readMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" title="Permalink" target="_top">
@@ -835,7 +835,7 @@ not yet known.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setnMsg</span><span class="params">(<span name="pairs">pairs: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>])*</span>)</span><span class="result">: <a href="message/BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></span>
+        <span class="name">setnMsg</span><span class="params">(<span name="pairs">pairs: (<span class="extype" name="scala.Int">Int</span>, <a href="../../../scala/package.html#IndexedSeq[+A]=IndexedSeq[A]" class="extmbr" name="scala.IndexedSeq">IndexedSeq</a>[<span class="extype" name="scala.Float">Float</span>])*</span>)</span><span class="result">: <a href="message/BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@setnMsg(pairs:(Int,IndexedSeq[Float])*):de.sciss.synth.message.BufferSetn" title="Permalink" target="_top">
@@ -852,7 +852,7 @@ not yet known.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setnMsg</span><span class="params">(<span name="values">values: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>]</span>)</span><span class="result">: <a href="message/BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></span>
+        <span class="name">setnMsg</span><span class="params">(<span name="values">values: <a href="../../../scala/package.html#IndexedSeq[+A]=IndexedSeq[A]" class="extmbr" name="scala.IndexedSeq">IndexedSeq</a>[<span class="extype" name="scala.Float">Float</span>]</span>)</span><span class="result">: <a href="message/BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@setnMsg(values:IndexedSeq[Float]):de.sciss.synth.message.BufferSetn" title="Permalink" target="_top">
@@ -1006,7 +1006,7 @@ not yet known.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileType">fileType: <a href="io/AudioFileType.html" class="extype" name="de.sciss.synth.io.AudioFileType">AudioFileType</a> = <span class="symbol"><span class="name"><a href="io/package.html">io.AudioFileType.AIFF</a></span></span></span>, <span name="sampleFormat">sampleFormat: <a href="io/SampleFormat.html" class="extype" name="de.sciss.synth.io.SampleFormat">SampleFormat</a> = <span class="symbol"><span class="name"><a href="io/package.html">io.SampleFormat.Float</a></span></span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="Optional$.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferWrite.html" class="extype" name="de.sciss.synth.message.BufferWrite">BufferWrite</a></span>
+        <span class="name">writeMsg</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileType">fileType: <a href="io/AudioFileType.html" class="extype" name="de.sciss.synth.io.AudioFileType">AudioFileType</a> = <span class="symbol"><span class="name"><a href="io/package.html">io.AudioFileType.AIFF</a></span></span></span>, <span name="sampleFormat">sampleFormat: <a href="io/SampleFormat.html" class="extype" name="de.sciss.synth.io.SampleFormat">SampleFormat</a> = <span class="symbol"><span class="name"><a href="io/package.html">io.SampleFormat.Float</a></span></span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <a href="message/BufferWrite.html" class="extype" name="de.sciss.synth.message.BufferWrite">BufferWrite</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Buffer@writeMsg(path:String,fileType:de.sciss.synth.io.AudioFileType,sampleFormat:de.sciss.synth.io.SampleFormat,numFrames:Int,startFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferWrite" title="Permalink" target="_top">
@@ -1070,7 +1070,7 @@ not yet known.</p>
             </div><div class="parent" name="de.sciss.model.Model">
               <h3>Inherited from <span class="extype" name="de.sciss.model.Model">Model</span>[<a href="BufferManager$$BufferInfo.html" class="extype" name="de.sciss.synth.BufferManager.BufferInfo">BufferInfo</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>

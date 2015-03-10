@@ -1,0 +1,742 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>graph - SysSon 1.1.0 API - de.sciss.synth.proc.graph</title>
+          <meta name="description" content="graph - SysSon 1.1.0 API - de.sciss.synth.proc.graph" />
+          <meta name="keywords" content="graph SysSon 1.1.0 API de.sciss.synth.proc.graph" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'de.sciss.synth.proc.graph.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="de">de</a>.<a href="../../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="../package.html" class="extype" name="de.sciss.synth.proc">proc</a></p>
+        <h1>graph</h1><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">graph</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.synth.proc.graph.Action" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ActionextendsLazy.Expander[Unit]withHasSideEffectwithProductwithSerializable"></a>
+      <a id="Action:Action"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Action.html"><span class="name">Action</span></a><span class="params">(<span name="trig">trig: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>] with <a href="../../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ActionextendsLazy.Expander[Unit]withHasSideEffectwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that executes an action upon receiving a trigger.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that executes an action upon receiving a trigger.
+</p></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>the trigger input signal</p></dd><dt class="param">key</dt><dd class="cmt"><p>a key into the process' attribute map. the value peer stored
+              at that location should be of type <code>proc.Action</code>
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.graph.Attribute" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AttributeextendsGE.LazywithProductwithSerializable"></a>
+      <a id="Attribute:Attribute"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Attribute.html"><span class="name">Attribute</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@AttributeextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.BufChannels" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufChannelsextendsStream.InfowithProductwithSerializable"></a>
+      <a id="BufChannels:BufChannels"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufChannels.html"><span class="name">BufChannels</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.graph.impl.Stream.Info">Info</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufChannelsextendsStream.InfowithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.BufRateScale" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufRateScaleextendsStream.InfowithProductwithSerializable"></a>
+      <a id="BufRateScale:BufRateScale"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufRateScale.html"><span class="name">BufRateScale</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.graph.impl.Stream.Info">Info</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufRateScaleextendsStream.InfowithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.BufSampleRate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufSampleRateextendsStream.InfowithProductwithSerializable"></a>
+      <a id="BufSampleRate:BufSampleRate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufSampleRate.html"><span class="name">BufSampleRate</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.graph.impl.Stream.Info">Info</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufSampleRateextendsStream.InfowithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.Buffer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferextendsGE.LazywithProductwithSerializable"></a>
+      <a id="Buffer:Buffer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Buffer.html"><span class="name">Buffer</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufferextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An element referring to a random access buffer provided through an attribute.</p><div class="fullcomment"><div class="comment cmt"><p>An element referring to a random access buffer provided through an attribute.
+The attribute will typically be an audio grapheme.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>the attribute key.
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.graph.DiskIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DiskInextendsStreamwithIsIndividualwithProductwithSerializable"></a>
+      <a id="DiskIn:DiskIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DiskIn.html"><span class="name">DiskIn</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loop">loop: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.graph.impl.Stream">Stream</span> with <a href="../../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@DiskInextendsStreamwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.DiskOut" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DiskOutextendsGE.LazywithWritesBufferwithProductwithSerializable"></a>
+      <a id="DiskOut:DiskOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DiskOut.html"><span class="name">DiskOut</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="in">in: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <a href="../../WritesBuffer.html" class="extype" name="de.sciss.synth.WritesBuffer">WritesBuffer</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@DiskOutextendsGE.LazywithWritesBufferwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that creates a <code>DiskOut</code> writing to a file
+designated by an object attribute with a given <code>key</code> and the
+value being an <code>Artifact</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that creates a <code>DiskOut</code> writing to a file
+designated by an object attribute with a given <code>key</code> and the
+value being an <code>Artifact</code>.</p><p>The file-type is determined by this artifact. For example, if the
+artifact's path ends in <code>&quot;.aif&quot;</code>, the AIFF format will used, if
+the path ends in <code>&quot;.w64&quot;</code>, then Wave64 will be used. The default is AIFF.
+The sample format is currently always Float-32.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>the key into the enclosing object's attribute map, pointing to an <code>Artifact</code></p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to write
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.graph.Duration" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DurationextendsGE.LazywithScalarRatedwithProductwithSerializable"></a>
+      <a id="Duration:Duration"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Duration.html"><span class="name">Duration</span></a><span class="params">()</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <a href="../../ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@DurationextendsGE.LazywithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Total duration of proc in seconds.</p><div class="fullcomment"><div class="comment cmt"><p>Total duration of proc in seconds. If proc was started midway through, this is still its total
+ length. To gather for how long it's going to play, use <code>Duration() - Offset()</code>.
+</p></div></div>
+    </li><li name="de.sciss.synth.proc.graph.FadeIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FadeInextendsfade.SingleBasewithProductwithSerializable"></a>
+      <a id="FadeIn:FadeIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FadeIn.html"><span class="name">FadeIn</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.graph.fade.SingleBase">SingleBase</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@FadeInextendsfade.SingleBasewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.FadeInOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FadeInOutextendsfade.BasewithProductwithSerializable"></a>
+      <a id="FadeInOut:FadeInOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FadeInOut.html"><span class="name">FadeInOut</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="inKey">inKey: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="outKey">outKey: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.graph.fade.Base">Base</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@FadeInOutextendsfade.BasewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.FadeOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FadeOutextendsfade.SingleBasewithProductwithSerializable"></a>
+      <a id="FadeOut:FadeOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FadeOut.html"><span class="name">FadeOut</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.graph.fade.SingleBase">SingleBase</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@FadeOutextendsfade.SingleBasewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.Offset" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OffsetextendsGE.LazywithScalarRatedwithProductwithSerializable"></a>
+      <a id="Offset:Offset"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Offset.html"><span class="name">Offset</span></a><span class="params">()</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <a href="../../ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@OffsetextendsGE.LazywithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Start time offset within the proc, in seconds.</p><div class="fullcomment"><div class="comment cmt"><p>Start time offset within the proc, in seconds. Will be zero if proc is started from the beginning.</p></div></div>
+    </li><li name="de.sciss.synth.proc.graph.Reaction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ReactionextendsLazy.Expander[Unit]withHasSideEffectwithProductwithSerializable"></a>
+      <a id="Reaction:Reaction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reaction.html"><span class="name">Reaction</span></a><span class="params">(<span name="trig">trig: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="in">in: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>] with <a href="../../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ReactionextendsLazy.Expander[Unit]withHasSideEffectwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that executes an action upon receiving a trigger,
+sampling the values at that moment and making them available
+in the action through the <code>values</code> method.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that executes an action upon receiving a trigger,
+sampling the values at that moment and making them available
+in the action through the <code>values</code> method.
+</p></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>the trigger input signal</p></dd><dt class="param">in</dt><dd class="cmt"><p>the input signal to sample and pass on to the action</p></dd><dt class="param">key</dt><dd class="cmt"><p>a key into the process' attribute map. the value peer stored
+              at that location should be of type <code>proc.Action</code>
+</p></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.graph.ScanIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScanInextendsScanIn.LikewithProductwithSerializable"></a>
+      <a id="ScanIn:ScanIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScanIn.html"><span class="name">ScanIn</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="ScanIn$$Like.html" class="extype" name="de.sciss.synth.proc.graph.ScanIn.Like">Like</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ScanInextendsScanIn.LikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.ScanInFix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScanInFixextendsScanIn.LikewithProductwithSerializable"></a>
+      <a id="ScanInFix:ScanInFix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScanInFix.html"><span class="name">ScanInFix</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="ScanIn$$Like.html" class="extype" name="de.sciss.synth.proc.graph.ScanIn.Like">Like</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ScanInFixextendsScanIn.LikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Like <code>ScanIn</code> but with a predetermined number of channels.</p>
+    </li><li name="de.sciss.synth.proc.graph.ScanOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScanOutextendsUGenSource.ZeroOutwithWritesBuswithProductwithSerializable"></a>
+      <a id="ScanOut:ScanOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScanOut.html"><span class="name">ScanOut</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="in">in: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a> with <a href="../../WritesBus.html" class="extype" name="de.sciss.synth.WritesBus">WritesBus</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ScanOutextendsUGenSource.ZeroOutwithWritesBuswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.Time" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TimeextendsGE.LazywithScalarRatedwithProductwithSerializable"></a>
+      <a id="Time:Time"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Time.html"><span class="name">Time</span></a><span class="params">()</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <a href="../../ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@TimeextendsGE.LazywithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Absolute time on the canvas, in seconds.</p>
+    </li><li name="de.sciss.synth.proc.graph.VDiskIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VDiskInextendsStreamwithIsIndividualwithProductwithSerializable"></a>
+      <a id="VDiskIn:VDiskIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="VDiskIn.html"><span class="name">VDiskIn</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="speed">speed: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="loop">loop: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="interp">interp: <span class="extype" name="scala.Int">Int</span></span>, <span name="maxSpeed">maxSpeed: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <span class="extype" name="de.sciss.synth.proc.graph.impl.Stream">Stream</span> with <a href="../../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@VDiskInextendsStreamwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="de.sciss.synth.proc.graph.Attribute" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Attribute"></a>
+      <a id="Attribute:Attribute"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Attribute$.html"><span class="name">Attribute</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@Attribute" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.BufChannels" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufChannels"></a>
+      <a id="BufChannels:BufChannels"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BufChannels$.html"><span class="name">BufChannels</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufChannels" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.BufRateScale" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufRateScale"></a>
+      <a id="BufRateScale:BufRateScale"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BufRateScale$.html"><span class="name">BufRateScale</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufRateScale" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.BufSampleRate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufSampleRate"></a>
+      <a id="BufSampleRate:BufSampleRate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BufSampleRate$.html"><span class="name">BufSampleRate</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufSampleRate" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.Buffer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Buffer"></a>
+      <a id="Buffer:Buffer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Buffer$.html"><span class="name">Buffer</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@Buffer" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An element referring to a random access buffer provided through an attribute.</p><div class="fullcomment"><div class="comment cmt"><p>An element referring to a random access buffer provided through an attribute.
+The attribute will typically be an audio grapheme.
+</p></div></div>
+    </li><li name="de.sciss.synth.proc.graph.DiskIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DiskIn"></a>
+      <a id="DiskIn:DiskIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DiskIn$.html"><span class="name">DiskIn</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@DiskIn" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.DiskOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DiskOut"></a>
+      <a id="DiskOut:DiskOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DiskOut$.html"><span class="name">DiskOut</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@DiskOut" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.Duration" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Duration"></a>
+      <a id="Duration:Duration"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Duration$.html"><span class="name">Duration</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@Duration" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.FadeIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FadeIn"></a>
+      <a id="FadeIn:FadeIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FadeIn$.html"><span class="name">FadeIn</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@FadeIn" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.FadeInOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FadeInOut"></a>
+      <a id="FadeInOut:FadeInOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FadeInOut$.html"><span class="name">FadeInOut</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@FadeInOut" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.FadeOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FadeOut"></a>
+      <a id="FadeOut:FadeOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FadeOut$.html"><span class="name">FadeOut</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@FadeOut" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.Offset" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Offset"></a>
+      <a id="Offset:Offset"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Offset$.html"><span class="name">Offset</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@Offset" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.ScanIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScanIn"></a>
+      <a id="ScanIn:ScanIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ScanIn$.html"><span class="name">ScanIn</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ScanIn" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.ScanInFix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScanInFix"></a>
+      <a id="ScanInFix:ScanInFix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ScanInFix$.html"><span class="name">ScanInFix</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ScanInFix" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.ScanOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScanOut"></a>
+      <a id="ScanOut:ScanOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ScanOut$.html"><span class="name">ScanOut</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ScanOut" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.Time" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Time"></a>
+      <a id="Time:Time"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Time$.html"><span class="name">Time</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@Time" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.VDiskIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VDiskIn"></a>
+      <a id="VDiskIn:VDiskIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="VDiskIn$.html"><span class="name">VDiskIn</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@VDiskIn" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
