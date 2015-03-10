@@ -1,9 +1,9 @@
-lazy val SYSSON_VERSION = "0.11.0"
+lazy val SYSSON_VERSION = "1.1.0"
 
 val commonSettings = Seq(
   organization := "de.sciss",  // ghpages push only works with this, not "at.iem.sysson"...
   version      := SYSSON_VERSION,
-  scalaVersion := "2.11.5"
+  scalaVersion := "2.11.6"
 )
 
 // retrieveManaged in ThisBuild := true
@@ -15,6 +15,10 @@ val scalaAudioFile     = RootProject(uri("git://github.com/Sciss/ScalaAudioFile.
 val scalaColliderUGens = RootProject(uri("git://github.com/Sciss/ScalaColliderUGens.git#v1.13.1"))
 
 val scalaCollider      = RootProject(uri("git://github.com/Sciss/ScalaCollider.git#v1.17.1"))
+
+val lucreMatrix        = RootProject(uri("git://github.com/iem-projects/LucreMatrix.git#v0.9.0"))
+
+val soundProcesses     = RootProject(uri("git://github.com/Sciss/SoundProcesses.git#v2.17.0doc"))
 
 val sysson             = RootProject(uri("git://github.com/iem-projects/sysson.git#v" + SYSSON_VERSION))
 
@@ -36,10 +40,18 @@ val root = (project in file("."))
         "at.iem.sysson.legacy",
         "at.iem.sysson.sound.impl",
         "at.iem.sysson.util",
-        "de.sciss.synth.impl"
+        "de.sciss.synth.impl",
+        "de.sciss.synth.proc.impl",
+        "de.sciss.synth.proc.graph.impl",
+        "de.sciss.synth.proc.gui.impl",
+        "de.sciss.lucre.bitemp.impl",
+        "de.sciss.lucre.synth.impl",
+        "de.sciss.lucre.synth.expr.impl",
+        "de.sciss.lucre.matrix.impl",
+        "de.sciss.lucre.matrix.gui.impl"
       ).mkString(":"),
       "-doc-title", "SysSon " + SYSSON_VERSION + " API"
     )
   )
-  .aggregate(scalaOSC, scalaAudioFile, scalaColliderUGens, scalaCollider, sysson)
+  .aggregate(scalaOSC, scalaAudioFile, scalaColliderUGens, scalaCollider, soundProcesses, lucreMatrix, sysson)
 
