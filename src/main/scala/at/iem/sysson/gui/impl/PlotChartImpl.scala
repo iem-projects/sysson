@@ -17,7 +17,7 @@ package gui
 package impl
 
 import java.awt.image.BufferedImage
-import java.awt.{Color, Rectangle, Shape, TexturePaint}
+import java.awt.{Paint, Color, Rectangle, Shape, TexturePaint}
 
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
@@ -278,14 +278,30 @@ object PlotChartImpl {
       deferTx(p.abort())
     }
 
-    private lazy val intensityScale: PaintScale = {
+    private lazy val nanPaint: Paint = {
       val nanImg = new BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB)
       nanImg.setRGB(0, 0, 0xFF000000)
       nanImg.setRGB(0, 1, 0xFFFFFFFF)
       nanImg.setRGB(1, 1, 0xFF000000)
       nanImg.setRGB(1, 1, 0xFFFFFFFF)
-      val nanPaint = new TexturePaint(nanImg, new Rectangle(0, 0, 2, 2))
+      new TexturePaint(nanImg, new Rectangle(0, 0, 2, 2))
+    }
 
+    private lazy val testScale: PaintScale = new PaintScale {
+      def getLowerBound: Double = 0.0
+      def getUpperBound: Double = 1.0
+
+      private val cpt  = ColorPaletteTable.builtIn("panoply")
+      private val fill = nanPaint
+
+      def getPaint(value: Double): Paint = if (value.isNaN) fill else {
+        val x   = value * (cpt.maxValue - cpt.minValue) + cpt.minValue
+        val rgb = cpt.get(x)
+        new Color(rgb)
+      }
+    }
+
+    private lazy val intensityScale: PaintScale = {
       val res = new LookupPaintScale(0.0, 1.0, nanPaint /* Color.red */)
       val numM = IntensityPalette.numColors - 1
       for(i <- 0 to numM) {
@@ -388,7 +404,7 @@ object PlotChartImpl {
 
     private def guiInit(): Unit = {
       val renderer  = new XYBlockRenderer()
-      renderer.setPaintScale(intensityScale)
+      renderer.setPaintScale(testScale /* intensityScale */)
 
       _plot = new XYPlot // (coll, xAxis, yAxis, renderer)
       _plot.setDataset(dataset)
