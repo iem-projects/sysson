@@ -23,7 +23,7 @@ object MakeColorTables extends App {
     val palettes: Map[String, ColorPaletteTable] = inputFiles.map { inF =>
       println(s"Reading '${inF.name}'...")
       val pal = ColorPaletteTable.read(inF)
-      // println(pal)
+      println(pal)
       pal.name -> pal
     } (breakOut)
 

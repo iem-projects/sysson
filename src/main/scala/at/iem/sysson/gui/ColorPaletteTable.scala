@@ -79,16 +79,20 @@ object ColorPaletteTable {
     }
 
     val values0 = Array.fill(256)(nextRGB())
-    val values = if (source.available() >= 4) {
-      source.read(buf, 0, 4)
-      val num = ((buf(0) & 0xFF) << 24) | ((buf(1) & 0xFF) << 16) | ((buf(2) & 0xFF) << 8) | (buf(3) & 0xFF)
+    val values = if (source.available() >= 2) {
+      source.read(buf, 0, 2)
+      val num = ((buf(0) & 0xFF) << 8) | (buf(1) & 0xFF)
+      require (num >= 0 && num <= 256, s"number of entries is $num")
       if (num == 0) values0 else values0.take(num)  // idiotic convention
     } else values0
 
-    val background = if (source.available() >= 3) nextRGB() else values(0)
-    val foreground = if (source.available() >= 3) nextRGB() else values(0)
+    if (source.available() >= 2) source.read(buf, 0, 2) // XXX TODO -- what is this?
 
-    Impl.seq(name = name, values = values, background = background, foreground = foreground)
+    val background  = if (source.available() >= 3) nextRGB() else values(0)
+    val foreground  = if (source.available() >= 3) nextRGB() else values(values.length - 1)
+    val fill        = 0x7F7F7F
+
+    Impl.seq(name = name, values = values, background = background, foreground = foreground, fill = fill)
 
   } finally {
     source.close()
@@ -106,7 +110,8 @@ object ColorPaletteTable {
       val rgb = (to256(r.toDouble) << 16) | (to256(g.toDouble) << 8) | to256(b.toDouble)
       rgb
     } .toArray
-    Impl.seq(name = name, values = values, background = values(0), foreground = values(values.length - 1))
+    val fill = 0x7F7F7F
+    Impl.seq(name = name, values = values, background = values(0), foreground = values(values.length - 1), fill = fill)
 
   } finally {
     source.close()
@@ -122,15 +127,6 @@ object ColorPaletteTable {
     text.getLines().map(_.trim).filterNot(ln => ln.isEmpty || ln.startsWith("#"))
   }
 
-  object Segment {
-    def read(in: DataInput): Segment = {
-      val lowValue  = in.readDouble()
-      val lowColor  = in.readInt   ()
-      val highValue = in.readDouble()
-      val highColor = in.readInt   ()
-      new Segment(lowValue = lowValue, lowColor = lowColor, highValue = highValue, highColor = highColor)
-    }
-  }
   /** A color table interval.
     *
     * @param lowValue   interval scale lower bound (inclusive)
@@ -138,8 +134,7 @@ object ColorPaletteTable {
     * @param highValue  interval scale upper bound (exclusive)
     * @param highColor  RGB-Int color corresponding to upper bound
     */
-  final case class Segment(lowValue: Double, lowColor: Int, highValue: Double, highColor: Int)
-    extends Writable {
+  final case class Segment(lowValue: Double, lowColor: Int, highValue: Double, highColor: Int) {
 
     override def toString = {
       val lowHex  = (lowColor  + 0x1000000).toHexString.substring(1)
@@ -165,13 +160,6 @@ object ColorPaletteTable {
         val b  = (b1 * w1 + b2 * w2 + 0.5).toInt
         (r << 16) | (g << 8) | b
       }
-
-    def write(out: DataOutput): Unit = {
-      out.writeDouble(lowValue )
-      out.writeInt   (lowColor )
-      out.writeDouble(highValue)
-      out.writeInt   (highColor)
-    }
   }
 
   implicit object serializer extends ImmutableSerializer[ColorPaletteTable] {
@@ -207,4 +195,8 @@ trait ColorPaletteTable extends Writable {
 
   /** Calculates and interpolates the color for a given value */
   def get(value: Double): Int
+
+  def indexOf(value: Double): Int
+
+  def isDiscrete: Boolean
 }

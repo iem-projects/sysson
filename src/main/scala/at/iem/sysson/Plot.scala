@@ -46,6 +46,7 @@ object Plot {
   final val VKey = "Y-Axis"
 
   final val attrShowOverlay = "show-overlay"
+  final val attrPalette     = "palette"
 
   // ---- element ----
 

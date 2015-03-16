@@ -23,17 +23,19 @@ import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.intensitypalette.IntensityPalette
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.expr.{String => StringEx, Boolean => BooleanEx}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{BooleanCheckBoxView, View, defer, deferTx}
+import de.sciss.lucre.swing.{CellView, BooleanCheckBoxView, View, defer, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView
+import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
-import de.sciss.swingplus.OverlayPanel
-import de.sciss.synth.proc.BooleanElem
+import de.sciss.swingplus.{ComboBox, OverlayPanel}
+import de.sciss.synth.proc.{StringElem, BooleanElem}
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot
@@ -245,22 +247,38 @@ object PlotChartImpl {
     private var isMap = false
     private var observerPlot    : Disposable[S#Tx] = _
     private var observerOverlay : Disposable[S#Tx] = _
+    private var observerPalette : Disposable[S#Tx] = _
+
     private var viewOverlay     : BooleanCheckBoxView[S] = _
-    private var panelOverlay    : Component = _
+    private var overlayEmpty    : Component = _
+    private var cellPalette     : CellView.Var[S, Option[String]] = _
+
+    private var plotH: stm.Source[S#Tx, Plot.Obj[S]] = _
 
     // called on the EDT
     private def updateOverlay(): Unit = {
-      panelOverlay.visible  = isMap
+      overlayEmpty.visible  = isMap
       mapOverlay.enabled    = isMap && viewOverlay.component.selected
     }
 
     def init(plotObj: Plot.Obj[S])(implicit tx: S#Tx): this.type = {
-      implicit val booleanEx = de.sciss.lucre.expr.Boolean
+      plotH = tx.newHandle(plotObj)
+
+      implicit val booleanEx  = BooleanEx
+      implicit val stringEx   = StringEx
+
       val cellOverlay = AttrCellView[S, Boolean, BooleanElem](plotObj, Plot.attrShowOverlay)
       viewOverlay     = BooleanCheckBoxView.optional(cellOverlay, name = "Map Overlay", default = false)
       observerOverlay = cellOverlay.react { implicit tx => _ => deferTx(updateOverlay()) }
+      cellPalette     = AttrCellView[S, String, StringElem](plotObj, Plot.attrPalette)
+      observerPalette = cellPalette.react { implicit tx => nameOpt =>
+        deferTx {
+          setPalette(nameOpt)
+        }
+      }
 
-      deferTx(guiInit())
+      val paletteValue0 = cellPalette()
+      deferTx(guiInit(paletteValue0 = paletteValue0))
       val plot = plotObj.elem.peer
       updateData(plot)
 
@@ -274,6 +292,7 @@ object PlotChartImpl {
     def dispose()(implicit tx: S#Tx): Unit = {
       observerPlot    .dispose()
       observerOverlay .dispose()
+      observerPalette .dispose()
       val p = readerRef.get(tx.peer)
       deferTx(p.abort())
     }
@@ -287,17 +306,25 @@ object PlotChartImpl {
       new TexturePaint(nanImg, new Rectangle(0, 0, 2, 2))
     }
 
-    private lazy val testScale: PaintScale = new PaintScale {
+    private def mkScale(name: String): PaintScale = new PaintScale {
       def getLowerBound: Double = 0.0
       def getUpperBound: Double = 1.0
 
-      private val cpt  = ColorPaletteTable.builtIn("panoply")
-      private val fill = nanPaint
+      private val cpt   = ColorPaletteTable.builtIn(name)
+      private val fill  = nanPaint
+      private val pre   = if (cpt.isDiscrete) Array.tabulate(cpt.num)(s => new Color(cpt(s).lowColor)) else null
+      private val bg    = new Color(cpt.background)
+      private val fg    = new Color(cpt.foreground)
 
       def getPaint(value: Double): Paint = if (value.isNaN) fill else {
-        val x   = value * (cpt.maxValue - cpt.minValue) + cpt.minValue
-        val rgb = cpt.get(x)
-        new Color(rgb)
+        val x = value * (cpt.maxValue - cpt.minValue) + cpt.minValue  // XXX TODO --- should no be normalized eventually
+        if (pre == null) {
+          val rgb = cpt.get(x)
+          new Color(rgb)
+        } else {
+          val idx = cpt.indexOf(x)
+          if (idx < 0) bg else if (idx >= pre.length) fg else pre(idx)
+        }
       }
     }
 
@@ -401,14 +428,18 @@ object PlotChartImpl {
 
     private var _plot: XYPlot = _
     private var _main: ChartPanel = _
+    private var blockRenderer: XYBlockRenderer = _
 
-    private def guiInit(): Unit = {
-      val renderer  = new XYBlockRenderer()
-      renderer.setPaintScale(testScale /* intensityScale */)
+    private def setPalette(name: Option[String]): Unit =
+      blockRenderer.setPaintScale(mkScale(name.getOrElse("panoply")))
+
+    private def guiInit(paletteValue0: Option[String]): Unit = {
+      blockRenderer = new XYBlockRenderer()
+      setPalette(paletteValue0)
 
       _plot = new XYPlot // (coll, xAxis, yAxis, renderer)
       _plot.setDataset(dataset)
-      _plot.setRenderer(renderer)
+      _plot.setRenderer(blockRenderer)
 
       //    val xmValue = mkValueMarker(xDimRed)
       //    val ymValue = mkValueMarker(yDimRed)
@@ -428,19 +459,36 @@ object PlotChartImpl {
       chart.removeLegend()
       chart.setBackgroundPaint(Color.white)
 
-      panelOverlay = new FlowPanel(
+      overlayEmpty = new FlowPanel(
         new Label(null, raphael.Icon()(raphael.Shapes.GlobeEuropeAfrica), Alignment.Leading),
         viewOverlay.component
       )
-      val settings = new OverlayPanel {
-        contents += Swing.RigidBox(panelOverlay.preferredSize)
-        contents += panelOverlay
+      val panelOverlay = new OverlayPanel {
+        contents += Swing.RigidBox(overlayEmpty.preferredSize)
+        contents += overlayEmpty
       }
+
+      val mColorTable = ComboBox.Model.wrap(ColorPaletteTable.builtIn.keys.toSeq.sortBy(_.toUpperCase))
+      mColorTable.selectedItem = paletteValue0
+      mColorTable.reactions += {
+        case ComboBox.Model.SelectionChanged(_) =>
+          val value = mColorTable.selectedItem
+          val edit = cursor.step { implicit tx =>
+            import StringEx.serializer
+            val valueEx = value.map(StringEx.newConst[S])
+            EditAttrMap.expr[S, String, StringElem](name = "Palette", obj = plotH(), key = Plot.attrPalette,
+              value = valueEx)(StringElem.apply[S])
+          }
+          undoManager.add(edit)
+      }
+      val ggColorTable  = new ComboBox(mColorTable)
+
+      val topPanel = new FlowPanel(panelOverlay, Swing.HStrut(8), new Label("Palette:"), ggColorTable)
 
       _main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
       component = new BorderPanel {
         add(Component.wrap(_main), BorderPanel.Position.Center)
-        add(settings             , BorderPanel.Position.South )
+        add(topPanel             , BorderPanel.Position.South )
       }
     }
   }
