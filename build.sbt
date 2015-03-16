@@ -1,6 +1,6 @@
 name          := "SysSon"
 
-version       := "1.1.0"
+version       := "1.2.0-SNAPSHOT"
 
 organization  := "at.iem.sysson"
 
@@ -26,13 +26,13 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "1.3.0"
+lazy val melliteVersion             = "1.3.1-SNAPSHOT"
 
 lazy val soundProcessesVersion      = "2.17.0"
 
 lazy val lucreMatrixVersion         = "0.9.0"
 
-lazy val lucreSwingVersion          = "0.9.0"
+lazy val lucreSwingVersion          = "0.9.1-SNAPSHOT"
 
 lazy val scalaColliderSwingVersion  = "1.25.0"
 

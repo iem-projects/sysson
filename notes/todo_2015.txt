@@ -25,10 +25,10 @@
 [OK]    - Plot: Icon fuer Map Overlay
 [OK]    - Plot: "Overall Statistics" benennen
 [OK]    - Plot: make proper proc.Obj: 0.5
+[OK]    - Plot: overlay-option ausblenden, wenn kein Lon/Lat format
+[OK]    - Plot: bug: Achsenanordnung/ Matrixtransposition: 0.75
         - Plot: Farbcoding: 0.5; cf. http://gmt.soest.hawaii.edu/doc/latest/makecpt.html
-        - Plot: ausblenden, wenn kein Lon/Lat format
         - Plot: 1D strategy
-        - Plot: bug: Achsenanordnung/ Matrixtransposition: 0.75
 
 ---
 15 -> 20??

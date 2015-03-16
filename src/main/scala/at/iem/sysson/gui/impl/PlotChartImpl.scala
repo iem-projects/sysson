@@ -19,15 +19,21 @@ package impl
 import java.awt.image.BufferedImage
 import java.awt.{Color, Rectangle, Shape, TexturePaint}
 
+import de.sciss.desktop.UndoManager
+import de.sciss.icons.raphael
 import de.sciss.intensitypalette.IntensityPalette
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.{DataSource, Matrix}
+import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{BooleanCheckBoxView, View, defer, deferTx}
 import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.AttrCellView
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
+import de.sciss.swingplus.OverlayPanel
+import de.sciss.synth.proc.BooleanElem
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot
@@ -38,10 +44,11 @@ import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
 
 import scala.concurrent.Future
 import scala.concurrent.stm.Ref
-import scala.swing.{Label, FlowPanel, BorderPanel, Component, Graphics2D}
+import scala.swing.{Alignment, Label, FlowPanel, Swing, BorderPanel, Component, Graphics2D}
 
 object PlotChartImpl {
-  def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S]): View[S] = {
+  def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager,
+                                            workspace: Workspace[S]): View.Editable[S] = {
     implicit val resolver = WorkspaceResolver[S]
     new Impl[S].init(plot)
   }
@@ -80,8 +87,9 @@ object PlotChartImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](implicit resolver: DataSource.Resolver[S])
-    extends View[S] with ComponentHolder[Component] {
+  private final class Impl[S <: Sys[S]](implicit val cursor: stm.Cursor[S], val undoManager: UndoManager,
+                                        resolver: DataSource.Resolver[S])
+    extends View.Editable[S] with ComponentHolder[Component] {
 
     // checks if the shape is reducible in all but the provided dimensions
     private def checkShape1D(shape: Vec[Int], hIdx: Int, vIdx: Int): Boolean =
@@ -227,29 +235,36 @@ object PlotChartImpl {
       // _plot.setDataset(dataset)
 
       if (xChanged || yChanged) {
-        val xNameL  = xName.toLowerCase
-        val yNameL  = yName.toLowerCase
-        val isMap   = (xNameL == "lon" || xName == "Longitude") && (yNameL == "lat" || yNameL == "Latitude")
-        // XXX TODO -- and toggle
-        mapOverlay.enabled = isMap
+        val xNameL    = xName.toLowerCase
+        val yNameL    = yName.toLowerCase
+        isMap         = (xNameL == "lon" || xName == "Longitude") && (yNameL == "lat" || yNameL == "Latitude")
+        updateOverlay()
       }
     }
 
-    private var observer: Disposable[S#Tx] = _
-    private var viewOverlay: View[S] = _
+    private var isMap = false
+    private var observerPlot    : Disposable[S#Tx] = _
+    private var observerOverlay : Disposable[S#Tx] = _
+    private var viewOverlay     : BooleanCheckBoxView[S] = _
+    private var panelOverlay    : Component = _
+
+    // called on the EDT
+    private def updateOverlay(): Unit = {
+      panelOverlay.visible  = isMap
+      mapOverlay.enabled    = isMap && viewOverlay.component.selected
+    }
 
     def init(plotObj: Plot.Obj[S])(implicit tx: S#Tx): this.type = {
-      val plotMap = plotObj.attr
-      viewOverlay = View.wrap(new Label("TODO")) // BooleanCheckBoxView.fromMap(plotMap, Plot.attrShowOverlay, default = false, name = "Show Map Overlay")
+      implicit val booleanEx = de.sciss.lucre.expr.Boolean
+      val cellOverlay = AttrCellView[S, Boolean, BooleanElem](plotObj, Plot.attrShowOverlay)
+      viewOverlay     = BooleanCheckBoxView.optional(cellOverlay, name = "Map Overlay", default = false)
+      observerOverlay = cellOverlay.react { implicit tx => _ => deferTx(updateOverlay()) }
+
       deferTx(guiInit())
       val plot = plotObj.elem.peer
       updateData(plot)
 
-      //      plot.matrix.changed.react { implicit tx => u =>
-      //        println(s"matrix changed: $u")
-      //      }
-
-      observer = plot.changed.react { implicit tx => u =>
+      observerPlot = plot.changed.react { implicit tx => u =>
         if (DEBUG) println("plot changed")
         updateData(u.plot)
       }
@@ -257,7 +272,8 @@ object PlotChartImpl {
     }
 
     def dispose()(implicit tx: S#Tx): Unit = {
-      observer.dispose()
+      observerPlot    .dispose()
+      observerOverlay .dispose()
       val p = readerRef.get(tx.peer)
       deferTx(p.abort())
     }
@@ -396,12 +412,19 @@ object PlotChartImpl {
       chart.removeLegend()
       chart.setBackgroundPaint(Color.white)
 
-      val settings = new FlowPanel(viewOverlay.component)
+      panelOverlay = new FlowPanel(
+        new Label(null, raphael.Icon()(raphael.Shapes.GlobeEuropeAfrica), Alignment.Leading),
+        viewOverlay.component
+      )
+      val settings = new OverlayPanel {
+        contents += Swing.RigidBox(panelOverlay.preferredSize)
+        contents += panelOverlay
+      }
 
       _main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
       component = new BorderPanel {
         add(Component.wrap(_main), BorderPanel.Position.Center)
-        // add(settings             , BorderPanel.Position.South) XXX TODO
+        add(settings             , BorderPanel.Position.South )
       }
     }
   }
