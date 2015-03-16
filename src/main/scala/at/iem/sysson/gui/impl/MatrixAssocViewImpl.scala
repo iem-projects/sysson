@@ -18,7 +18,9 @@ package impl
 
 import java.awt.Color
 import java.awt.datatransfer.Transferable
-import javax.swing.TransferHandler
+import java.awt.event.{MouseEvent, MouseAdapter}
+import javax.swing.{JComponent, TransferHandler}
+import javax.swing.TransferHandler.TransferSupport
 import javax.swing.undo.UndoableEdit
 
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
@@ -37,7 +39,7 @@ import de.sciss.serial.Serializer
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
-import scala.swing.{Alignment, Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
+import scala.swing.{Button, Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
 import scala.swing.event.MouseButtonEvent
 
 abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
@@ -139,42 +141,114 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
     ggDataName.editable = false
     ggDataName.focusable= false
     // val icnBorder       = IconBorder(Icons.Target(DropButton.IconSize))
-    val lbDataName      = new Label(null, Icons.Target(DropButton.IconSize), Alignment.Leading)
+    // val lbDataName      = new Label(null, Icons.Target(DropButton.IconSize), Alignment.Leading)
+    val lbDataName = new Label(null: String) {
+      icon      = Icons.Target(DropButton.IconSize)
+      // border    = null
+      focusable = false
+      // borderPainted = false
+      tooltip   = "Drag or Drop Matrix"
+
+      private object Transfer extends TransferHandler(null) {
+        override def getSourceActions(c: JComponent): Int = TransferHandler.LINK | TransferHandler.COPY
+
+        override def createTransferable(c: JComponent): Transferable = {
+          val opt = impl.cursor.step { implicit tx =>
+            val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
+            sourceOpt.map { source =>
+              val m0  = impl.matrix(source)
+              val m   = Matrix.Var.unapply(m0).getOrElse(m0)
+              val drag = new MatrixDrag {
+                type S1       = S
+                val workspace = impl.workspace
+                val matrix    = tx.newHandle(m)
+              }
+              DragAndDrop.Transferable(DragAndDrop.MatrixFlavor)(drag)
+            }
+          }
+          println(s"createTransferable -> ${opt.isDefined}")
+          opt.orNull
+        }
+
+        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
+        override def canImport(support: TransferSupport): Boolean = canSetMatrix && {
+          val res =
+            if (support.isDataFlavorSupported(DragAndDrop.MatrixFlavor) &&
+              ((support.getSourceDropActions & (TransferHandler.LINK | TransferHandler.COPY)) != 0)) {
+              if (support.getDropAction != TransferHandler.COPY)
+                support.setDropAction(TransferHandler.LINK)
+              true
+            } else
+              false
+
+          res
+        }
+
+        override def importData(support: TransferSupport): Boolean = {
+          val t         = support.getTransferable
+          val drag0     = t.getTransferData(DragAndDrop.MatrixFlavor).asInstanceOf[MatrixDrag]
+          if (drag0.workspace == workspace) {
+            val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
+            val editOpt = impl.cursor.step { implicit tx =>
+                val v0        = drag.matrix()
+                val v         = if (support.getDropAction == TransferHandler.COPY) v0.mkCopy() else v0
+                val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
+                val vrOpt     = sourceOpt.flatMap(src => Matrix.Var.unapply(matrix(src)))
+                val res = vrOpt.fold {
+                  val vr = Matrix.Var(v) // so that the matrix becomes editable in its view
+                  editDropMatrix(vr)
+                } { vr =>
+                  implicit val csr = impl.cursor
+                  val _edit = EditVar("Assign Matrix", vr, v)
+                  updateSource(sourceOpt)  // XXX TODO - stupid work-around
+                  Some(_edit)
+                }
+                res
+              }
+            editOpt.foreach(undoManager.add)
+            true
+
+          } else {
+            println("ERROR: Cannot drag data sources across workspaces")
+            false
+          }
+        }
+      }
+
+      peer.setTransferHandler(Transfer)
+
+      private object Mouse extends MouseAdapter {
+        private var dndInitX    = 0
+        private var dndInitY    = 0
+        private var dndPressed  = false
+        private var dndStarted  = false
+
+        override def mousePressed(e: MouseEvent): Unit = {
+          dndInitX	  = e.getX
+          dndInitY    = e.getY
+          dndPressed  = true
+          dndStarted	= false
+        }
+
+        override def mouseReleased(e: MouseEvent): Unit = {
+          dndPressed  = false
+          dndStarted	= false
+        }
+
+        override def mouseDragged(e: MouseEvent): Unit =
+          if (dndPressed && !dndStarted && ((math.abs(e.getX - dndInitX) > 5) || (math.abs(e.getY - dndInitY) > 5))) {
+            Transfer.exportAsDrag(peer, e, TransferHandler.LINK)
+            dndStarted = true
+          }
+      }
+
+      peer.addMouseListener      (Mouse)
+      peer.addMouseMotionListener(Mouse)
+    }
+
     // ggDataName.border   = icnBorder //
     // Swing.CompoundBorder(outside = ggDataName.border, inside = icnBorder)
     desktop.Util.fixSize(ggDataName)
-
-    if (canSetMatrix) {
-      DropButton.installTransferHandler[MatrixDrag](lbDataName, DragAndDrop.MatrixFlavor) { drag0 =>
-        if (drag0.workspace == workspace) {
-          val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
-          val editOpt = cursor.step { implicit tx =>
-              val v       = drag.matrix()
-              val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
-              val vrOpt   = sourceOpt.flatMap(src => Matrix.Var.unapply(matrix(src)))
-              // println(s"DROP. vrOpt = $vrOpt; map = $map")
-              val res = vrOpt.fold {
-                val vr = Matrix.Var(v) // so that the matrix becomes editable in its view
-                editDropMatrix(vr)
-              } { vr =>
-                val _edit = EditVar("Assign Matrix", vr, v)
-                updateSource(sourceOpt)  // XXX TODO - stupid work-around
-                Some(_edit)
-              }
-
-              // refreshName.foreach(ggDataName.text = _)
-
-              res
-            }
-          editOpt.foreach(undoManager.add)
-          true
-
-        } else {
-          println("ERROR: Cannot drag data sources across workspaces")
-          false
-        }
-      }
-    }
 
     val keyDimButs = keys.map { key0 =>
       new DragAndDrop.Button {

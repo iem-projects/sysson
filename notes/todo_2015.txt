@@ -9,9 +9,9 @@
         - Parameter GUI: parameters as sliders within a given Range, "UserRange": 0.75 (-format of typing numbers … (anzeige > 3 kommastellen)
         - Parameter GUI: verknuepfung matrix datenquelle (ueberpruefen welche daten reingeladen sind): 0.5
         - Parameter GUI: parameter automatisch zuweisen; wenn "fehler" deutlich sichtbar, dass dimension nicht zugeordnet: 0.5
-        - consistency between plot and parameter gui: time and selections...: 2
         - Installer angucken
         - Plot: synchronize with sonification playback: 1
+[OK]    - consistency between plot and parameter gui: time and selections...: 2
 [OK]    - Bounce: umbenennen
 [OK]    - Parameter GUI: bounce: 1
 [OK]    - What does Actions/DumpOSC do? - move in Debugging: 0.1
