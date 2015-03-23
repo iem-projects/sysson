@@ -31,6 +31,7 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.mellite.Workspace
 import de.sciss.serial.Serializer
 
+import scala.annotation.tailrec
 import scala.swing.{Orientation, BoxPanel, Component}
 
 object PlotViewImpl {
@@ -128,8 +129,13 @@ object PlotViewImpl {
       })
 
     protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] =
-      Matrix.Var.unapply(plotH().elem.peer.matrix).map { vr =>
-        EditVar("Set Matrix", vr, m)
+      Matrix.Var.unapply(plotH().elem.peer.matrix).flatMap { vr =>
+        @tailrec def isRecursive(m0: Matrix[S]): Boolean = m0 match {
+          case Matrix.Var(vr0) => if (vr0 == vr) true else isRecursive(vr0())
+          case _ => false
+        }
+
+        if (isRecursive(m)) None else Some(EditVar("Set Matrix", vr, m))
       }
   }
 }

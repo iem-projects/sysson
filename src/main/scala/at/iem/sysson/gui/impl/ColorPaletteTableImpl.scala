@@ -55,9 +55,22 @@ object ColorPaletteTableImpl {
     val mapSer  = implicitly[ImmutableSerializer[Map[String, ColorPaletteTable]]]
     val is      = Main.getClass.getResourceAsStream("color-tables.bin")
     val bytes   = new Array[Byte](is.available())
-    is.read(bytes)
+
+    // NOTE: this shit doesn't work, apparently `read(array)` doesn't return the full amount
+    // if the file is too large (> 20 KB).
+    //
+    //    val bytes   = new Array[Byte](is.available())
+    //    is.read(bytes)
+    var off = 0
+    do {
+      val read = is.read(bytes, off, bytes.length - off)
+      off += read
+    } while (off < bytes.length)
     is.close()
-    val in      = DataInput(bytes)
+    // val bb = java.nio.ByteBuffer.wrap(bytes)
+    // de.sciss.osc.Packet.printHexOn(bb, System.out)
+
+    val in = DataInput(bytes)
     mapSer.read(in)
   }
 

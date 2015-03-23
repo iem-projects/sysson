@@ -223,12 +223,13 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
 
         override def importData(support: TransferSupport): Boolean = {
           val t         = support.getTransferable
+          val isCopy    = support.getDropAction == TransferHandler.COPY
           val drag0     = t.getTransferData(DragAndDrop.MatrixFlavor).asInstanceOf[MatrixDrag]
           if (drag0.workspace == workspace) {
             val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
             val editOpt = impl.cursor.step { implicit tx =>
                 val v0        = drag.matrix()
-                val v         = if (support.getDropAction == TransferHandler.COPY) v0.mkCopy() else v0
+                val v         = if (isCopy) Matrix.Var.unapply(v0).fold(v0)(_.apply()).mkCopy() else v0
                 val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
                 val vrOpt     = sourceOpt.flatMap(src => Matrix.Var.unapply(matrix(src)))
                 val res = vrOpt.fold {

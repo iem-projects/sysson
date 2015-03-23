@@ -1,6 +1,6 @@
 name          := "SysSon"
 
-version       := "1.2.0-SNAPSHOT"
+version       := "1.2.0"
 
 organization  := "at.iem.sysson"
 
@@ -30,7 +30,7 @@ lazy val melliteVersion             = "1.3.1"
 
 lazy val soundProcessesVersion      = "2.17.0"
 
-lazy val lucreMatrixVersion         = "0.10.0-SNAPSHOT"
+lazy val lucreMatrixVersion         = "0.10.0"
 
 lazy val lucreSwingVersion          = "0.9.1"
 
