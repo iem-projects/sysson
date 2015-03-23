@@ -28,6 +28,7 @@ import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
+import de.sciss.lucre.expr.{Expr, Int => IntEx}
 import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.swing.{View, deferTx}
@@ -39,14 +40,25 @@ import de.sciss.serial.Serializer
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
-import scala.swing.{Button, Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
+import scala.swing.{Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
 import scala.swing.event.MouseButtonEvent
 
+object MatrixAssocViewImpl {
+  private trait IntDrag {
+    type S1 <: Sys[S1]
+    def workspace: Workspace[S1]
+    def source: stm.Source[S1#Tx, Expr[S1, Int]]
+    def value: Int
+  }
+  private val IntFlavor = DragAndDrop.internalFlavor[IntDrag]
+}
 abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
                                                 (implicit workspace: Workspace[S], undoManager: UndoManager,
                                                  cursor: stm.Cursor[S])
   extends View[S] with ComponentHolder[Component] {
   impl =>
+
+  import MatrixAssocViewImpl.{IntDrag, IntFlavor}
 
   // ---- abstract ----
 
@@ -80,10 +92,35 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
 
   final def matrixView: MatrixView[S] = _matrixView
 
+  private object TH extends MatrixView.TransferHandler[S] {
+    def canImportInt(t: TransferSupport): Boolean = t.isDataFlavorSupported(IntFlavor)
+
+    def exportInt(x: Expr[S, Int])(implicit tx: S#Tx): Option[Transferable] = {
+      val drag = new IntDrag {
+        type S1 = S
+        val workspace = impl.workspace
+        val source    = tx.newHandle(x)(IntEx.serializer)
+        val value     = x.value
+      }
+      val t = DragAndDrop.Transferable(IntFlavor)(drag)
+      Some(t)
+    }
+
+    def importInt(t: TransferSupport)(implicit tx: S#Tx): Option[Expr[S, Int]] = {
+      val drag = t.getTransferable.getTransferData(IntFlavor).asInstanceOf[IntDrag]
+      val x: Expr[S, Int] = if (drag.workspace == impl.workspace) {
+        drag.asInstanceOf[IntDrag { type S1 = S }].source()
+      } else {
+        IntEx.newConst[S](drag.value)
+      }
+      Some(x)
+    }
+  }
+
   def init()(implicit tx: S#Tx): this.type = {
     implicit val resolver = WorkspaceResolver[S]
     import at.iem.sysson.Stats.executionContext
-    _matrixView = MatrixView[S]
+    _matrixView = MatrixView[S](Some(TH))
     _matrixView.nameVisible = false
     deferTx(guiInit())
     this
@@ -166,7 +203,7 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
               DragAndDrop.Transferable(DragAndDrop.MatrixFlavor)(drag)
             }
           }
-          println(s"createTransferable -> ${opt.isDefined}")
+          // println(s"createTransferable -> ${opt.isDefined}")
           opt.orNull
         }
 

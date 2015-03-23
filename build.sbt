@@ -30,7 +30,7 @@ lazy val melliteVersion             = "1.3.1"
 
 lazy val soundProcessesVersion      = "2.17.0"
 
-lazy val lucreMatrixVersion         = "0.9.0"
+lazy val lucreMatrixVersion         = "0.10.0-SNAPSHOT"
 
 lazy val lucreSwingVersion          = "0.9.1"
 
