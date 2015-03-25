@@ -97,6 +97,7 @@ package object sysson {
 
   def initTypes(): Unit = {
     mellite               .initTypes()
+    de.sciss.nuages       .initTypes()
     SonificationElemImpl  .init()
     DataSourceElem        .init()
     AuralSonificationImpl .init()
