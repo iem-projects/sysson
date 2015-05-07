@@ -31,6 +31,7 @@ import scala.concurrent.stm.TxnExecutor
 import scala.language.existentials
 import scala.swing.event.{Key, MouseClicked}
 import scala.swing.{Action, Label}
+import scala.util.Try
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -59,7 +60,7 @@ object MenuFactory {
         checkCloseAll()
     }
 
-    val itAbout = Item.About(App) {
+    def funAbout(): Unit = {
       val addr    = "sysson.kug.ac.at"
       val url     = s"http://$addr/"
       val version = Main.version
@@ -92,9 +93,11 @@ object MenuFactory {
 
       OptionPane.message(message = lb.peer).show(None /* Some(frame) */)
     }
+    val itAbout = Try(Item.About(App)(funAbout())).toOption.getOrElse(Item("about")("About")(funAbout()))
 
-    val itPrefs = Item.Preferences(App)(ActionPreferences())
-    val itQuit  = Item.Quit(App)
+    val itPrefs = Try(Item.Preferences(App)(ActionPreferences())).toOption
+      .getOrElse(Item("preferences")("Preferences")(ActionPreferences()))
+    val itQuit  = Try(Item.Quit(App)).toOption.getOrElse(Item("quit")("Quit")(App.quit()))
 
     val gFile = Group("file", "File")
       .add(Group("new", "New")
