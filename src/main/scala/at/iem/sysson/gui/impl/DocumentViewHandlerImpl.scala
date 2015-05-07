@@ -44,12 +44,16 @@ private[gui] object DocumentViewHandlerImpl {
     private val map     = TMap  .empty[Document, WorkspaceWindow[_]]
     private var _active = Option.empty[Document]
 
-    Desktop.addListener {
-      case Desktop.OpenFiles(_, files) =>
-        // println(s"TODO: $open; EDT? ${java.awt.EventQueue.isDispatchThread}")
-        files.foreach { f =>
-          ActionOpenWorkspace.perform(f)
-        }
+    try {
+      Desktop.addListener {
+        case Desktop.OpenFiles(_, files) =>
+          // println(s"TODO: $open; EDT? ${java.awt.EventQueue.isDispatchThread}")
+          files.foreach { f =>
+            ActionOpenWorkspace.perform(f)
+          }
+      }
+    } catch {
+      case _: Throwable =>  // yes, not cool
     }
 
     def activeDocument = _active
