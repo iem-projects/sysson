@@ -93,11 +93,22 @@ object MenuFactory {
 
       OptionPane.message(message = lb.peer).show(None /* Some(frame) */)
     }
-    val itAbout = Try(Item.About(App)(funAbout())).toOption.getOrElse(Item("about")("About")(funAbout()))
+    val itAbout = try {
+      Item.About(App)(funAbout())
+    } catch {
+      case _: Throwable => Item("about")("About")(funAbout())  // yes, not cool
+    }
 
-    val itPrefs = Try(Item.Preferences(App)(ActionPreferences())).toOption
-      .getOrElse(Item("preferences")("Preferences")(ActionPreferences()))
-    val itQuit  = Try(Item.Quit(App)).toOption.getOrElse(Item("quit")("Quit")(App.quit()))
+    val itPrefs = try {
+      Item.Preferences(App)(ActionPreferences())
+    } catch {
+      case _: Throwable => Item("preferences")("Preferences")(ActionPreferences()) // yes, not cool
+    }
+    val itQuit = try {
+      Item.Quit(App)
+    } catch {
+      case _: Throwable => Item("quit")("Quit")(App.quit())
+    }
 
     val gFile = Group("file", "File")
       .add(Group("new", "New")
