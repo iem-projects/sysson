@@ -210,6 +210,20 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
     desktop.Util.fixSize(ggDataName)
 
     component = new BoxPanel(Orientation.Horizontal) {
+      override lazy val peer = {
+        val p = new javax.swing.JPanel with SuperMixin {
+          // cf. http://stackoverflow.com/questions/11726739/use-getbaselineint-w-int-h-of-a-child-component-in-the-parent-container
+          override def getBaseline(w: Int, h: Int): Int = {
+            val gg   = ggDataName
+            val size = gg.preferredSize
+            gg.location.y + gg.peer.getBaseline(size.width, size.height)
+          }
+        }
+        val l = new javax.swing.BoxLayout(p, Orientation.Horizontal.id)
+        p.setLayout(l)
+        p
+      }
+
       contents += Swing.HStrut(2)
       contents += lbDataName
       contents += Swing.HStrut(2)

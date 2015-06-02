@@ -94,6 +94,12 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
       disposeAssocViews()
       super.updateSource(sourceOpt)
       matrixView.matrix = sourceOpt.map(matrix)
+      sourceOpt.foreach { source =>
+        val v = matrix(source)
+        val as = v.dimensions.map { dim => mkAssocView(source, dim.name) }
+        assocViews.set(as)(tx.peer)
+        matrixView.rowHeaders = as
+      }
     }
   }
 
