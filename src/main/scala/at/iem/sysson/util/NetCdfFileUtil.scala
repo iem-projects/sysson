@@ -24,7 +24,8 @@ import ucar.{ma2, nc2}
 import scala.collection.JavaConverters._
 import scala.collection.breakOut
 import scala.collection.immutable.{IndexedSeq => Vec}
-import scala.concurrent.blocking
+import scala.concurrent.{ExecutionContext, Await, blocking}
+import scala.concurrent.duration.Duration
 import scala.language.implicitConversions
 
 object NetCdfFileUtil {
@@ -193,6 +194,13 @@ object NetCdfFileUtil {
     writer.close()
   }
 
+  def concatAndWait(in1: nc2.NetcdfFile, in2: nc2.NetcdfFile, out: File, varName: String, dimName: String = "time"): Unit = {
+    val proc = concat(in1 = in1, in2 = in2, out = out, varName = varName, dimName = dimName)
+    import ExecutionContext.Implicits.global
+    proc.start()
+    Await.result(proc, Duration.Inf)
+  }
+
   /** Creates a new NetCDF file that contains one variable resulting from the concatenation
     * of that variable present in two input files.
     *
@@ -202,7 +210,18 @@ object NetCdfFileUtil {
     * @param varName  the name of the variable to take from the inputs and concatenate
     * @param dimName  the dimension along which to the variable is split across the two inputs
     */
-  def concat(in1: nc2.NetcdfFile, in2: nc2.NetcdfFile, out: File, varName: String, dimName: String = "time"): Unit = {
+  def concat(in1: nc2.NetcdfFile, in2: nc2.NetcdfFile, out: File, varName: String,
+             dimName: String = "time"): Processor[Unit] with Processor.Prepared =
+    new ProcessorImpl[Unit, Processor[Unit]] with Processor[Unit] {
+      protected def body(): Unit = blocking {
+        concatBody(this, in1 = in1, in2 = in2, out = out, varName = varName, dimName = dimName)
+      }
+
+      override def toString = s"$varName-concat"
+    }
+
+  private def concatBody(self: ProcessorImpl[Unit, Processor[Unit]], in1: nc2.NetcdfFile, in2: nc2.NetcdfFile,
+                         out: File, varName: String, dimName: String): Unit = {
     val location  = out.path
     val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
 
@@ -244,22 +263,32 @@ object NetCdfFileUtil {
     val dim1    = inVar1.dimensionMap(dimName)
     val dim2    = inVar2.dimensionMap(dimName)
     val dimIdx  = inVar1.dimensions.indexWhere(_.name == dimName)
+    val dim1Sz  = dim1.size
+    val dim2Sz  = dim2.size
 
-    for (i <- 0 until dim1.size) {
+    val totalSz = dim1Sz + dim2Sz
+
+    for (i <- 0 until dim1Sz) {
       val sec     = (inVar1 in dimName) select i
       val d       = sec.read()
       val origin  = new Array[Int](inVar1.rank)
       origin(dimIdx) = i
       writer.write(outVar, origin, d)
+
+      self.progress = (i + 1).toDouble / totalSz
+      self.checkAborted()
     }
 
-    for (i <- 0 until dim2.size) {
+    for (i <- 0 until dim2Sz) {
       val sec     = (inVar2 in dimName) select i
       val d0      = sec.read()
       val d       = d0.copy()
       val origin  = new Array[Int](inVar2.rank)
       origin(dimIdx) = i + dim1.size
       writer.write(outVar, origin, d)
+
+      self.progress = (i + 1 + dim1Sz).toDouble / totalSz
+      self.checkAborted()
     }
 
     writer.close()

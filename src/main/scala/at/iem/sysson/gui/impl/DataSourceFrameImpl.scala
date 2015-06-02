@@ -21,12 +21,12 @@ import javax.swing.undo.UndoableEdit
 
 import at.iem.sysson.util.NetCdfFileUtil
 import de.sciss.desktop.impl.UndoManagerImpl
-import de.sciss.desktop.{FileDialog, Menu, OptionPane, UndoManager}
+import de.sciss.desktop.{Window, FileDialog, Menu, OptionPane, UndoManager}
 import de.sciss.file._
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
-import de.sciss.lucre.swing.{CellView, View, deferTx}
+import de.sciss.lucre.swing.{CellView, View, defer, deferTx, requireEDT}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.impl.WindowImpl
 import de.sciss.serial.Serializer
@@ -52,7 +52,10 @@ object DataSourceFrameImpl {
 
     private var _varOpt = Option.empty[nc2.Variable]
 
-    def variableOption: Option[nc2.Variable] = _varOpt
+    def variableOption: Option[nc2.Variable] = {
+      requireEDT()
+      _varOpt
+    }
 
     protected def matrix(m: Matrix[S])(implicit tx: S#Tx): Matrix[S] = m
 
@@ -84,13 +87,54 @@ object DataSourceFrameImpl {
     }
   }
 
-  private def mkConcatWindow[S <: Sys[S]](init1: stm.Source[S#Tx, Matrix[S]])(implicit cursor: stm.Cursor[S],
+  private def mkConcatWindow[S <: Sys[S]](w: Window, init1: stm.Source[S#Tx, Matrix[S]])(implicit cursor: stm.Cursor[S],
                                                                workspace: Workspace[S]): Unit = {
     implicit val undo = new UndoManagerImpl   // not used
 
+    def bail(message: String): Unit =
+      OptionPane.message(message = s"Cannot concatenate these matrices:\n$message",
+        messageType = OptionPane.Message.Error).show(Some(w))
+
     lazy val ggProcess: Button = {
       val res = Button("Concatenate...") {
-        println("TODO")
+        for {
+          v1 <- but1.variableOption
+          v2 <- but2.variableOption
+        } {
+          import Implicits._
+          val dim1 = v1.dimensions
+          val dim2 = v2.dimensions
+          val sameDimNames = (dim1 zip dim2).forall { case (d1, d2) => d1.name == d2.name }
+          val diffDimSizes = (dim1 zip dim2).count  { case (d1, d2) => d1.size != d2.size }
+          if (sameDimNames && diffDimSizes <= 1) {
+            val (_, diff) = (dim1 zip dim2).partition { case (d1, d2) =>
+              val arr1 = v1.file.variableMap(d1.name).readSafe()
+              val arr2 = v2.file.variableMap(d2.name).readSafe()
+              arr1.size == arr2.size && {
+                val sz = arr1.size.toInt
+                (0 until sz).forall { idx =>
+                  arr1.getObject(idx) == arr2.getObject(idx)
+                }
+              }
+            }
+            if (diff.size == 1) {
+              val dimName = diff.head._1.name
+              withSaveFile(w, "Concatenated Output File") { out =>
+                val proc = NetCdfFileUtil.concat(in1 = v1.file, in2 = v2.file, out = out, varName = v1.name, dimName = dimName)
+                import ExecutionContext.Implicits.global
+                proc.monitor(printResult = false)
+                proc.onSuccess {
+                  case _ => defer {
+                    cursor.step { implicit tx => win.dispose() }
+                  }
+                }
+                proc.start()
+              }
+
+            } else bail(s"All dimensions but one must be equal (found ${diff.size} dimensions that are different)")
+
+          } else bail("Dimensions do not match")
+        }
       }
       res.enabled = false
       res
@@ -115,13 +159,13 @@ object DataSourceFrameImpl {
       add(ggProcess, BorderPanel.Position.South)
     }
 
-    cursor.step { implicit tx =>
+    lazy val win = cursor.step { implicit tx =>
       but1.init()
       but2.init()
 
       but1.updateSource(Some(init1()))
 
-      val win = new WindowImpl[S](CellView.const("Concatenate Matrix")) {
+      val _win = new WindowImpl[S](CellView.const("Concatenate Matrix")) {
         val view: View[S] = View.wrap[S](p)
 
         override def dispose()(implicit tx: S#Tx): Unit = {
@@ -129,10 +173,22 @@ object DataSourceFrameImpl {
           but1 .dispose()
           but2 .dispose()
         }
+
+        override protected def performClose(): Unit =
+          cursor.step { implicit tx => dispose() }  // yes, ugly. because we don't give a `View.Cursor
       }
-      win .init()
+      _win .init()
+      _win
     }
+
+    win
   }
+
+  private def withSaveFile(w: Window, title: String)(fun: File => Unit): Unit =
+    FileDialog.save(title = title).show(Some(w)).foreach { out0 =>
+      val out = out0.replaceExt("nc")
+      fun(out)
+    }
 
   private final class Impl[S <: Sys[S]](val view: DataSourceView[S])
     extends WindowImpl[S] with DataSourceFrame[S] {
@@ -142,12 +198,6 @@ object DataSourceFrameImpl {
         OptionPane.message("Select a variable to process first.", OptionPane.Message.Error)
           .show(Some(window), title)
       } (fun)
-
-    private def withSaveFile(title: String)(fun: File => Unit): Unit =
-      FileDialog.save(title = "Anomalies Output File").show(Some(window)).foreach { out0 =>
-        val out = out0.replaceExt("nc")
-        fun(out)
-      }
 
     private def createAnomalies(): Unit = {
       val sw    = Some(window)
@@ -164,7 +214,7 @@ object DataSourceFrameImpl {
           val message = new FlowPanel(new Label("Average Years:"), ggYears)
           val res = OptionPane(message = message, optionType = OptionPane.Options.OkCancel).show(sw, title)
           if (res == OptionPane.Result.Ok) {
-            withSaveFile(title) { out =>
+            withSaveFile(window, "Anomalies Output File") { out =>
               val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = "time",
                 windowYears = mYears.getNumber.intValue())
               import ExecutionContext.Implicits.global
@@ -176,14 +226,11 @@ object DataSourceFrameImpl {
       }
     }
 
-    private def concat(): Unit = {
-      val sw    = Some(window)
-      val title = "Concatenate Matrix"
+    private def concat(): Unit =
       view.mkSelectedMatrix().foreach { varH =>
         import view.{cursor, workspace}
-        mkConcatWindow[S](varH)
+        mkConcatWindow[S](window, varH)
       }
-    }
 
     override protected def initGUI(): Unit = {
       val root  = window.handler.menuFactory

@@ -43,7 +43,7 @@ object DataSets {
     val in2F  = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_rcp45_r1i1p1_200601-230012.nc"
     val in1   = openFile(in1F)
     val in2   = openFile(in2F)
-    NetCdfFileUtil.concat(in1, in2, outF, vr)
+    NetCdfFileUtil.concatAndWait(in1, in2, outF, vr)
     in1.close(); in2.close()
   }
 
@@ -78,7 +78,7 @@ object DataSets {
     val outF  = dataOutDir / s"ZON_200hPa_${vrName}_amon_join.nc"
     val in1   = openFile(in1F)
     val in2   = openFile(in2F)
-    NetCdfFileUtil.concat(in1, in2, outF, vrName)
+    NetCdfFileUtil.concatAndWait(in1, in2, outF, vrName)
   }
 
   // ----------- createGluedFiles -----------
@@ -94,7 +94,7 @@ object DataSets {
       val outF  = dataOutDir / s"avg_${name}_amon_join.nc"
       val in1   = openFile(in1F)
       val in2   = openFile(in2F)
-      NetCdfFileUtil.concat(in1, in2, outF, name)
+      NetCdfFileUtil.concatAndWait(in1, in2, outF, name)
       val in3   = openFile(outF)
       val stats = TxnExecutor.defaultAtomic { implicit tx => Stats.get(in3) }
       stats.onComplete { tr =>
