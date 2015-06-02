@@ -33,6 +33,7 @@ import de.sciss.serial.Serializer
 import de.sciss.swingplus.Spinner
 import ucar.nc2
 
+import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext
 import scala.swing.{Alignment, BorderPanel, Button, FlowPanel, GridPanel, Label}
 
@@ -59,16 +60,23 @@ object DataSourceFrameImpl {
 
     protected def sourceSerializer: Serializer[S#Tx, S#Acc, Matrix[S]] = Matrix.serializer[S]
 
-    protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] = None
+    protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] = {
+      updateSource(Some(m)) // XXX TODO --- sure this was not meant this way
+      None
+    }
 
     override def updateSource(mOpt: Option[Matrix[S]])(implicit tx: S#Tx): Unit = {
       super.updateSource(mOpt)
-      val vOpt = mOpt.flatMap {
-        case v: DataSource.Variable[S] =>
-          implicit val ws = WorkspaceResolver[S]
-          Some(v.data())
+
+      implicit val wr = WorkspaceResolver[S]
+
+      @tailrec def findVar(x: Matrix[S]): Option[nc2.Variable] = x match {
+        case v: DataSource.Variable[S] => Some(v.data())
+        case Matrix.Var(vr) => findVar(vr())
         case _ => None
       }
+
+      val vOpt = mOpt.flatMap(findVar)
       deferTx {
         _varOpt = vOpt
         set
