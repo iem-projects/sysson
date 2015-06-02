@@ -1,6 +1,6 @@
 name          := "SysSon"
 
-version       := "1.2.2-SNAPSHOT"
+version       := "1.3.0-SNAPSHOT"
 
 organization  := "at.iem.sysson"
 
@@ -26,15 +26,17 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "1.3.1"
+lazy val melliteVersion             = "1.4.0"
 
-lazy val soundProcessesVersion      = "2.17.0"
+lazy val soundProcessesVersion      = "2.18.1"
 
 lazy val lucreMatrixVersion         = "0.10.0"
 
 lazy val lucreSwingVersion          = "0.9.1"
 
-lazy val scalaColliderSwingVersion  = "1.25.0"
+lazy val scalaColliderVersion       = "1.17.2"
+
+lazy val scalaColliderSwingVersion  = "1.25.1"
 
 lazy val ugensVersion               = "1.13.1"
 
@@ -46,13 +48,14 @@ lazy val kollFlitzVersion           = "0.2.0"
 
 lazy val fscapeJobsVersion          = "1.5.0"
 
-lazy val slfVersion                 = "1.7.10"
+lazy val slfVersion                 = "1.7.12"
 
-lazy val scalaTestVersion           = "2.2.4"
+lazy val scalaTestVersion           = "2.2.5"
 
 libraryDependencies ++= Seq(
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
   "de.sciss" %% "soundprocesses-core"         % soundProcessesVersion,      // computer music environment
+  "de.sciss" %% "scalacollider"               % scalaColliderVersion,       // sound synthesis
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
   "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
   "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
@@ -129,11 +132,9 @@ lazy val mainClazz = Some("at.iem.sysson.Main")
 
 // windows/linux
 
-test      in assembly := ()
-
-target    in assembly := baseDirectory.value    // make .jar file in the main directory
-
-jarName   in assembly := s"${name.value}.jar"
+test            in assembly := ()
+target          in assembly := baseDirectory.value    // make .jar file in the main directory
+assemblyJarName in assembly := s"${name.value}.jar"
 
 mainClass in assembly := mainClazz
 
@@ -144,35 +145,33 @@ mainClass in assembly := mainClazz
 //  }
 //}
 
-// mac os x
-
-seq(appbundle.settings: _*)
-
-appbundle.icon := {
-  // XXX TODO: DRY
-  val base  = (resourceDirectory in Compile).value
-  val sub   = organization.value.split('.')
-  val icn   = (base /: sub)(_ / _) / "application512.png"
-  Some(icn)
-}
-
-appbundle.mainClass   := mainClazz
-
-// appbundle.javaOptions ++= Seq("-Xmx2048m", "-XX:MaxPermSize=512m")
-
-appbundle.javaOptions ++= Seq("-Xms2048m", "-Xmx2048m", "-XX:PermSize=256m", "-XX:MaxPermSize=512m", "-server")
-
-appbundle.target      := baseDirectory.value      // make .app bundle in the main directory
-
-appbundle.documents   += {
-  // XXX TODO: DRY
-  val base  = (resourceDirectory in Compile).value
-  val sub   = organization.value.split('.')
-  appbundle.Document(
-    name       = "SysSon Workspace Document",
-    role       = appbundle.Document.Editor,
-    icon       = Some((base /: sub)(_ / _) / "workspace256.png"),
-    extensions = Seq("sysson"),
-    isPackage  = true
-  )
-}
+//// mac os x
+//
+//appbundle.icon := {
+//  // XXX TODO: DRY
+//  val base  = (resourceDirectory in Compile).value
+//  val sub   = organization.value.split('.')
+//  val icn   = (base /: sub)(_ / _) / "application512.png"
+//  Some(icn)
+//}
+//
+//appbundle.mainClass   := mainClazz
+//
+//// appbundle.javaOptions ++= Seq("-Xmx2048m", "-XX:MaxPermSize=512m")
+//
+//appbundle.javaOptions ++= Seq("-Xms2048m", "-Xmx2048m", "-XX:PermSize=256m", "-XX:MaxPermSize=512m", "-server")
+//
+//appbundle.target      := baseDirectory.value      // make .app bundle in the main directory
+//
+//appbundle.documents   += {
+//  // XXX TODO: DRY
+//  val base  = (resourceDirectory in Compile).value
+//  val sub   = organization.value.split('.')
+//  appbundle.Document(
+//    name       = "SysSon Workspace Document",
+//    role       = appbundle.Document.Editor,
+//    icon       = Some((base /: sub)(_ / _) / "workspace256.png"),
+//    extensions = Seq("sysson"),
+//    isPackage  = true
+//  )
+//}
