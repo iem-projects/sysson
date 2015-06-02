@@ -18,7 +18,7 @@ package gui
 import ucar.nc2
 import de.sciss.lucre.event.Sys
 import impl.{DataSourceViewImpl => Impl}
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{Matrix, DataSource}
 import de.sciss.lucre.swing.View
 import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
@@ -32,4 +32,7 @@ object DataSourceView {
 trait DataSourceView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.File {
   def source(implicit tx: S#Tx): DataSource[S]
   var selectedVariable: Option[nc2.Variable]
+
+  /** Note: Must be called on EDT! */
+  def mkSelectedMatrix(): Option[stm.Source[S#Tx, Matrix[S]]]
 }

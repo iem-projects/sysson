@@ -152,21 +152,21 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
           if (drag0.workspace == workspace) {
             val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
             val editOpt = impl.cursor.step { implicit tx =>
-                val v0        = drag.matrix()
-                val v         = if (isCopy) Matrix.Var.unapply(v0).fold(v0)(_.apply()).mkCopy() else v0
-                val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
-                val vrOpt     = sourceOpt.flatMap(src => Matrix.Var.unapply(matrix(src)))
-                val res = vrOpt.fold {
-                  val vr = Matrix.Var(v) // so that the matrix becomes editable in its view
-                  editDropMatrix(vr)
-                } { vr =>
-                  implicit val csr = impl.cursor
-                  val _edit = EditVar("Assign Matrix", vr, v)
-                  updateSource(sourceOpt)  // XXX TODO - stupid work-around
-                  Some(_edit)
-                }
-                res
+              val v0        = drag.matrix()
+              val v         = if (isCopy) Matrix.Var.unapply(v0).fold(v0)(_.apply()).mkCopy() else v0
+              val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
+              val vrOpt     = sourceOpt.flatMap(src => Matrix.Var.unapply(matrix(src)))
+              val res = vrOpt.fold {
+                val vr = Matrix.Var(v) // so that the matrix becomes editable in its view
+                editDropMatrix(vr)
+              } { vr =>
+                implicit val csr = impl.cursor
+                val _edit = EditVar("Assign Matrix", vr, v)
+                updateSource(sourceOpt)  // XXX TODO - stupid work-around
+                Some(_edit)
               }
+              res
+            }
             editOpt.foreach(undoManager.add)
             true
 

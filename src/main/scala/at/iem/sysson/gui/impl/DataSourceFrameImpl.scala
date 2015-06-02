@@ -17,20 +17,24 @@ package gui
 package impl
 
 import javax.swing.SpinnerNumberModel
+import javax.swing.undo.UndoableEdit
 
 import at.iem.sysson.util.NetCdfFileUtil
-import de.sciss.desktop.{FileDialog, Menu, OptionPane}
+import de.sciss.desktop.impl.UndoManagerImpl
+import de.sciss.desktop.{FileDialog, Menu, OptionPane, UndoManager}
 import de.sciss.file._
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
+import de.sciss.lucre.swing.{CellView, View, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.impl.WindowImpl
+import de.sciss.serial.Serializer
 import de.sciss.swingplus.Spinner
 import ucar.nc2
 
 import scala.concurrent.ExecutionContext
-import scala.swing.{FlowPanel, Label}
+import scala.swing.{Alignment, BorderPanel, Button, FlowPanel, GridPanel, Label}
 
 object DataSourceFrameImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
@@ -41,8 +45,85 @@ object DataSourceFrameImpl {
     res
   }
 
-  private def mkConcatWindow(init1: nc2.Variable): Unit = {
-    ???
+  private class ConcatButtonImpl[S <: Sys[S]](set: => Unit)(implicit cursor: stm.Cursor[S],
+                                                                    workspace: Workspace[S], undoManager: UndoManager)
+    extends MatrixDnDViewImpl[S, Matrix](canSetMatrix = true, canRemoveMatrix = false) {
+
+    private var _varOpt = Option.empty[nc2.Variable]
+
+    def variableOption: Option[nc2.Variable] = _varOpt
+
+    protected def matrix(m: Matrix[S])(implicit tx: S#Tx): Matrix[S] = m
+
+    protected def editRemoveMatrix()(implicit tx: S#Tx): Option[UndoableEdit] = None
+
+    protected def sourceSerializer: Serializer[S#Tx, S#Acc, Matrix[S]] = Matrix.serializer[S]
+
+    protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] = None
+
+    override def updateSource(mOpt: Option[Matrix[S]])(implicit tx: S#Tx): Unit = {
+      super.updateSource(mOpt)
+      val vOpt = mOpt.flatMap {
+        case v: DataSource.Variable[S] =>
+          implicit val ws = WorkspaceResolver[S]
+          Some(v.data())
+        case _ => None
+      }
+      deferTx {
+        _varOpt = vOpt
+        set
+      }
+    }
+  }
+
+  private def mkConcatWindow[S <: Sys[S]](init1: stm.Source[S#Tx, Matrix[S]])(implicit cursor: stm.Cursor[S],
+                                                               workspace: Workspace[S]): Unit = {
+    implicit val undo = new UndoManagerImpl   // not used
+
+    lazy val ggProcess: Button = {
+      val res = Button("Concatenate...") {
+        println("TODO")
+      }
+      res.enabled = false
+      res
+    }
+
+    def updateState(): Unit = {
+      val ok = but1.variableOption.isDefined && but2.variableOption.isDefined
+      ggProcess.enabled = ok
+    }
+
+    lazy val but1  = new ConcatButtonImpl[S](updateState())
+    lazy val but2  = new ConcatButtonImpl[S](updateState())
+
+    lazy val p = new BorderPanel {
+      add(new GridPanel(2, 2) {
+        contents += new Label("First Matrix:" , null, Alignment.Trailing)
+        contents += but1.component
+        contents += new Label("Second Matrix:", null, Alignment.Trailing)
+        contents += but2.component
+      }, BorderPanel.Position.North)
+
+      add(ggProcess, BorderPanel.Position.South)
+    }
+
+    cursor.step { implicit tx =>
+      but1.init()
+      but2.init()
+
+      but1.updateSource(Some(init1()))
+
+      val win = new WindowImpl[S](CellView.const("Concatenate Matrix")) {
+        val view: View[S] = View.wrap[S](p)
+
+        override def dispose()(implicit tx: S#Tx): Unit = {
+          super.dispose()
+          but1 .dispose()
+          but2 .dispose()
+        }
+      }
+      win .init()
+    }
   }
 
   private final class Impl[S <: Sys[S]](val view: DataSourceView[S])
@@ -90,8 +171,9 @@ object DataSourceFrameImpl {
     private def concat(): Unit = {
       val sw    = Some(window)
       val title = "Concatenate Matrix"
-      withSelectedVariable(title) { vr =>
-        mkConcatWindow(vr)
+      view.mkSelectedMatrix().foreach { varH =>
+        import view.{cursor, workspace}
+        mkConcatWindow[S](varH)
       }
     }
 

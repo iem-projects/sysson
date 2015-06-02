@@ -195,21 +195,14 @@ object DataSourceViewImpl {
             TransferHandler.LINK | TransferHandler.COPY | TransferHandler.MOVE
 
           override def createTransferable(c: JComponent): Transferable = {
-            selectedVariable.flatMap { vr =>
-              val varHOpt= impl.cursor.step { implicit tx =>
-                val ds      = sourceH()
-                val p       = vr.parents
-                val n       = vr.name
-                val dsvOpt  = ds.variables.find(dsv => dsv.name == n && dsv.parents == p)
-                dsvOpt.map(tx.newHandle[Matrix[S]])
-              }
-              varHOpt.map(varH => DragAndDrop.Transferable(DragAndDrop.MatrixFlavor) {
+            mkSelectedMatrix().map { varH =>
+              DragAndDrop.Transferable(DragAndDrop.MatrixFlavor) {
                 new MatrixDrag {
                   type S1 = S
                   val workspace = impl.workspace
                   val matrix  = varH
                 }
-              })
+              }
             } .orNull
           }
         })
@@ -309,6 +302,18 @@ object DataSourceViewImpl {
         }, BorderPanel.Position.South)
       }
     }
+
+    def mkSelectedMatrix(): Option[stm.Source[S#Tx, Matrix[S]]] =
+      selectedVariable.flatMap { vr =>
+        val varHOpt = impl.cursor.step { implicit tx =>
+          val ds      = sourceH()
+          val p       = vr.parents
+          val n       = vr.name
+          val dsvOpt  = ds.variables.find(dsv => dsv.name == n && dsv.parents == p)
+          dsvOpt.map(tx.newHandle[Matrix[S]])
+        }
+        varHOpt
+      }
 
     def dispose()(implicit tx: S#Tx) = () // : Unit = GUI.fromTx(disposeGUI())
 
