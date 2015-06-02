@@ -1,5 +1,5 @@
 /*
- *  TransformNetcdfFile.scala
+ *  NetCdfFileUtil.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
@@ -13,44 +13,21 @@
  */
 
 package at.iem.sysson
-package turbulence
+package util
 
 import de.sciss.file._
+import de.sciss.processor.Processor
+import de.sciss.processor.impl.ProcessorImpl
 import ucar.nc2.constants.CDM
 import ucar.{ma2, nc2}
-import Implicits._
 
-import scala.collection.immutable.{IndexedSeq => Vec}
 import scala.collection.JavaConverters._
 import scala.collection.breakOut
+import scala.collection.immutable.{IndexedSeq => Vec}
+import scala.concurrent.blocking
 import scala.language.implicitConversions
 
-object TransformNetcdfFile {
-  def main(args: Array[String]): Unit = {
-    testOutput()
-  }
-
-  def testOutput(): Unit = {
-    val inF = userHome / "IEM" / "SysSon" / "Data" / "201211" / "gcm" / "New_Deutschlandradio_MPI_M" /
-      "tas" / "ZON_tas_Amon_MPI-ESM-LR_historical_r1i1p1_185001-200512.nc"
-    val in = openFile(inF)
-    try {
-      val out = userHome / "Documents" / "temp" / "test.nc"
-      val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
-      apply(in, out, "tas", Vec("lat", "lon"), Vec(Keep("time"), Create("spk", units = None, spkData))) {
-        case (origin, arr) =>
-          val dIn0  = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
-          val dIn   = dIn0.flatten
-          val dOut = Array.tabulate(Turbulence.Channels.size) { i =>
-            (i + origin(0)).toFloat * dIn(i % dIn.length)
-          }
-          ma2.Array.factory(dOut)
-      }
-    } finally {
-      in.close()
-    }
-  }
-
+object NetCdfFileUtil {
   object OutDim {
     implicit def byName(name: String): OutDim = Keep(name)
   }
@@ -63,10 +40,9 @@ object TransformNetcdfFile {
   final class Create(val name: String, val units: Option[String], val values: ma2.Array)
     extends OutDim { def isCopy = false }
 
-  // def deinterleave[A](flat: Vec[A], shape: Vec[Int]): Vec[Vec[A]] = ...
-
   // cf. http://www.unidata.ucar.edu/software/thredds/current/netcdf-java/tutorial/NetcdfWriting.html
-  /** Transform an input NetCDF file into an output NetCDF file, by copying a given
+
+  /** Transforms an input NetCDF file into an output NetCDF file, by copying a given
     * variable and applying an optional transform to the data.
     *
     * '''Note:''' This is not optimized for speed, yet.
@@ -86,10 +62,12 @@ object TransformNetcdfFile {
     *                   correspond with `inDims`. The function is called repeatedly, iterating
     *                   over all other input dimensions except those in `inDims`.
     */
-  def apply(in: nc2.NetcdfFile, out: File, varName: String,
-            inDims: Vec[String], outDimsSpec: Vec[OutDim])(fun: (Vec[Int], ma2.Array) => ma2.Array): Unit = {
+  def transform(in: nc2.NetcdfFile, out: File, varName: String,
+                inDims: Vec[String], outDimsSpec: Vec[OutDim])(fun: (Vec[Int], ma2.Array) => ma2.Array): Unit = {
     val location  = out.path
     val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
+
+    import Implicits._
 
     val inVar     = in.variableMap(varName)
     val allInDims = inVar.dimensions
@@ -215,9 +193,20 @@ object TransformNetcdfFile {
     writer.close()
   }
 
+  /** Creates a new NetCDF file that contains one variable resulting from the concatenation
+    * of that variable present in two input files.
+    *
+    * @param in1      the first input file (data will appear first)
+    * @param in2      the second input file (data will appear second)
+    * @param out      the output file to write to
+    * @param varName  the name of the variable to take from the inputs and concatenate
+    * @param dimName  the dimension along which to the variable is split across the two inputs
+    */
   def concat(in1: nc2.NetcdfFile, in2: nc2.NetcdfFile, out: File, varName: String, dimName: String = "time"): Unit = {
     val location  = out.path
     val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
+
+    import Implicits._
 
     val inVar1    = in1.variableMap(varName)
     val inVar2    = in2.variableMap(varName)
@@ -233,7 +222,8 @@ object TransformNetcdfFile {
       (outDim, outVarD)
     } .unzip
 
-    val outVar  = writer.addVariable(null, inVar1.getShortName, inVar1.getDataType, outDims.asJava)
+    val outVar = writer.addVariable(null, inVar1.getShortName, inVar1.getDataType, outDims.asJava)
+    inVar1.units.foreach(units => outVar.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
 
     // create the file; ends "define mode"
     writer.create()
@@ -270,6 +260,121 @@ object TransformNetcdfFile {
       val origin  = new Array[Int](inVar2.rank)
       origin(dimIdx) = i + dim1.size
       writer.write(outVar, origin, d)
+    }
+
+    writer.close()
+  }
+
+  private def checkNaNFun(fillValue: Float): Float => Boolean = if (java.lang.Float.isNaN(fillValue))
+    java.lang.Float.isNaN
+  else
+    _ == fillValue
+
+  /** Calculates anomalies of a time series. It assumes that the time resolution
+    * in the input is months!
+    * The output will have a matrix of the same size as the input, where each
+    * cell is the difference between the input cell and the normal value for that
+    * cell at that time.
+    *
+    * @param in         the input  file to process
+    * @param out        the output file to create
+    * @param varName    the variable to process
+    * @param timeName   the time dimension in the variable
+    * @param windowYears the number of years to average across
+    */
+  def anomalies(in: nc2.NetcdfFile, out: File, varName: String, timeName: String = "time",
+                windowYears: Int = 30): Processor[Unit] with Processor.Prepared =
+    new ProcessorImpl[Unit, Processor[Unit]] with Processor[Unit] {
+      protected def body(): Unit = blocking {
+        anomaliesBody(this, in = in, out = out, varName = varName, timeName = timeName,
+          windowYears = windowYears)
+      }
+
+      override def toString = s"$varName-anomalies"
+    }
+
+  private def anomaliesBody(self: ProcessorImpl[Unit, Processor[Unit]], in: nc2.NetcdfFile, out: File, varName: String,
+                            timeName: String, windowYears: Int): Unit = {
+    import Implicits._
+
+    val inVar         = in.variableMap(varName)
+    val inDims        = inVar.dimensions
+    val timeIdx       = inDims  .indexWhere(_.name == timeName)
+    // val otherDims     = inDims  .patch(timeIdx, Nil, 1)
+    // val otherShape    = inVar.shape.patch(timeIdx, Nil, 1)
+    val numTime       = inDims(timeIdx).size
+    val otherSize     = (inVar.size / numTime).toInt
+    val windowYearsH  = windowYears/2
+    val windowMonthsH = windowYearsH * 12
+
+    val isNaN = checkNaNFun(inVar.fillValue.toFloat)
+
+    def calcNorm(data: ma2.Array, timeOff: Int): ma2.Array = {
+      val month   = timeOff % 12
+      val timeLo  = math.max(      0, timeOff - windowMonthsH + month)
+      val timeHi  = math.min(numTime, timeOff + windowMonthsH + month)
+
+      val mean  = new Array[Double](otherSize)
+      val count = new Array[Int   ](otherSize)
+
+      (timeLo until timeHi by 12).foreach { time =>
+        val sel       = inVar in timeName select time
+        val arrMonth  = sel.readSafe().float1D
+        arrMonth.zipWithIndex.foreach { case (v, i) =>
+          if (!isNaN(v)) {
+            mean(i) += v
+            count(i) += 1
+          }
+        }
+      }
+      for (i <- 0 until otherSize) {
+        if (count(i) > 0) mean(i) /= count(i)
+      }
+
+      assert(data.size == otherSize)
+      val dataDif = data.copy()
+
+      for (i <- 0 until otherSize) {
+        dataDif.setFloat(i, dataDif.getFloat(i) - mean(i).toFloat)
+      }
+
+      dataDif
+    }
+
+    val location  = out.path
+    val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
+    val (outDims, outDimsV) = inDims.map { inDim =>
+      val size    = inDim.size
+      val outDim  = writer.addDimension(null, inDim.name, size)
+      val inVar   = in.variableMap(inDim.name)
+      val outVarD = writer.addVariable(null, inVar.getShortName, inVar.dataType, Seq(outDim).asJava)
+      inVar.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+      (outDim, outVarD)
+    } .unzip
+
+    val outVar = writer.addVariable(null, inVar.getShortName, inVar.getDataType, outDims.asJava)
+    inVar.units.foreach(units => outVar.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+
+    // create the file; ends "define mode"
+    writer.create()
+
+    // copy dimension data
+    (inDims zip outDimsV).zipWithIndex.foreach { case ((inDim, outDimV), dimIdx0) =>
+      val inVar1    = in.variableMap(inDim.name)
+      val dimData1  = inVar1.read()
+      writer.write(outDimV, dimData1)
+    }
+
+    for (time <- 0 until numTime) {
+      val sec     = (inVar in timeName) select time
+      val dataIn  = sec.readSafe()
+      val origin  = new Array[Int](inVar.rank)
+      origin(timeIdx) = time
+      val dataOut = calcNorm(data = dataIn, timeOff = time)
+      writer.write(outVar, origin, dataOut)
+
+      self.progress = (time + 1).toDouble / numTime
+      self.checkAborted()
     }
 
     writer.close()

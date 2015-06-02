@@ -16,12 +16,20 @@ package at.iem.sysson
 package gui
 package impl
 
+import javax.swing.SpinnerNumberModel
+
+import at.iem.sysson.util.NetCdfFileUtil
+import de.sciss.desktop.{FileDialog, OptionPane, Menu}
+import de.sciss.file._
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.DataSource
-import de.sciss.desktop
-import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
+import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.impl.WindowImpl
+import de.sciss.swingplus.Spinner
+
+import scala.concurrent.ExecutionContext
+import scala.swing.{FlowPanel, Label}
 
 object DataSourceFrameImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
@@ -35,6 +43,45 @@ object DataSourceFrameImpl {
   private final class Impl[S <: Sys[S]](val view: DataSourceView[S])
     extends WindowImpl[S] with DataSourceFrame[S] {
 
-    // override protected def style = desktop.Window.Auxiliary
+    private def createAnomalies(): Unit = {
+      val sw    = Some(window)
+      val title = "Create Anomalies"
+      view.selectedVariable.fold[Unit] {
+        OptionPane.message("Select a variable to process first.", OptionPane.Message.Error).show(sw, title)
+      } { vr =>
+        import Implicits._
+
+        if (!vr.dimensionMap.contains("time")) {
+          OptionPane.message("Selected variable must have a dimension named 'time'", OptionPane.Message.Error)
+            .show(sw, title)
+        } else {
+          val mYears  = new SpinnerNumberModel(30, 1, 10000, 1)
+          val ggYears = new Spinner(mYears)
+          val message = new FlowPanel(new Label("Average Years:"), ggYears)
+          val res = OptionPane(message = message, optionType = OptionPane.Options.OkCancel).show(sw, title)
+          if (res == OptionPane.Result.Ok) {
+            FileDialog.save(title = "Anomalies Output File").show(sw).foreach { out0 =>
+              val out  = out0.replaceExt("nc")
+              val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = "time",
+                windowYears = mYears.getNumber.intValue())
+              import ExecutionContext.Implicits.global
+              proc.monitor(printResult = false)
+              proc.start()
+            }
+          }
+        }
+      }
+    }
+
+    override protected def initGUI(): Unit = {
+      val root  = window.handler.menuFactory
+      val path  = "actions"
+      root.get(path) match {
+        case Some(g: Menu.Group) =>
+          g.add(Some(window), Menu.Item("create-anomalies")("Calculate Anomalies...")(createAnomalies()))
+
+        case _ => sys.error(s"No menu group for path '$path'")
+      }
+    }
   }
 }

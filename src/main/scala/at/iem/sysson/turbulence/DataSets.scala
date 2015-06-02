@@ -17,7 +17,8 @@ package turbulence
 
 import at.iem.sysson
 import at.iem.sysson.turbulence.Dymaxion.DymPt
-import at.iem.sysson.turbulence.TransformNetcdfFile.{Create, Keep}
+import at.iem.sysson.util.NetCdfFileUtil
+import NetCdfFileUtil.{Create, Keep}
 import at.iem.sysson.turbulence.Turbulence.{DymGrid, LatLonIdx, LatLon}
 import de.sciss.file._
 import de.sciss.lucre.geom.IntRectangle
@@ -42,7 +43,7 @@ object DataSets {
     val in2F  = dlrDir / vr / s"25_${vr}_Amon_MPI-ESM-LR_rcp45_r1i1p1_200601-230012.nc"
     val in1   = openFile(in1F)
     val in2   = openFile(in2F)
-    TransformNetcdfFile.concat(in1, in2, outF, vr)
+    NetCdfFileUtil.concat(in1, in2, outF, vr)
     in1.close(); in2.close()
   }
 
@@ -77,7 +78,7 @@ object DataSets {
     val outF  = dataOutDir / s"ZON_200hPa_${vrName}_amon_join.nc"
     val in1   = openFile(in1F)
     val in2   = openFile(in2F)
-    TransformNetcdfFile.concat(in1, in2, outF, vrName)
+    NetCdfFileUtil.concat(in1, in2, outF, vrName)
   }
 
   // ----------- createGluedFiles -----------
@@ -93,7 +94,7 @@ object DataSets {
       val outF  = dataOutDir / s"avg_${name}_amon_join.nc"
       val in1   = openFile(in1F)
       val in2   = openFile(in2F)
-      TransformNetcdfFile.concat(in1, in2, outF, name)
+      NetCdfFileUtil.concat(in1, in2, outF, name)
       val in3   = openFile(outF)
       val stats = TxnExecutor.defaultAtomic { implicit tx => Stats.get(in3) }
       stats.onComplete { tr =>
@@ -352,7 +353,7 @@ object DataSets {
 
     // [state, cx, cy, sum, max] x maxBlobs
 
-    TransformNetcdfFile(in, outF, vrName, Vec("lat", "lon"), Vec(Keep("time"), Create("blob", None, blobData))) {
+    NetCdfFileUtil.transform(in, outF, vrName, Vec("lat", "lon"), Vec(Keep("time"), Create("blob", None, blobData))) {
       case (origin, arr) =>
         val nextFrame = analyze(prevFrame, arr)
 
@@ -444,14 +445,14 @@ object DataSets {
 
     val outF = dataOutDir / s"ta_anom_spk${if (version == 1) "" else version.toString}.nc"
 
-    import TransformNetcdfFile.{Keep, Create}
+    import NetCdfFileUtil.{Keep, Create}
     val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
-    TransformNetcdfFile(in, outF, varName, Vec(latName, presName), Vec(Keep(timeName), Create("spk", None, spkData))) {
+    NetCdfFileUtil.transform(in, outF, varName, Vec(latName, presName), Vec(Keep(timeName), Create("spk", None, spkData))) {
       case (origin, arr) =>
         val dIn = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Double]]]
         val dOut: Array[Float] = grid.zipWithIndex.map { case ((latIdx, presIdx), gi) =>
           val ta    = dIn(latIdx)(presIdx).toFloat
-          val month = origin(0) % 12
+          val month = origin.head % 12
           val isNaN = ta >= 1.0e10
           val anom  = ta - norm(month)(gi)
           if (isNaN) Float.NaN else anom
@@ -466,12 +467,12 @@ object DataSets {
 
   def convertViaVoronoi(inF: File, varName: String, outF: File): Unit = {
     import Implicits._
-    import TransformNetcdfFile.{Keep, Create}
+    import NetCdfFileUtil.{Keep, Create}
     val in = openFile(inF)
     println(in.variableMap(varName).dimensions.map(_.name))
     try {
       val spkData = ma2.Array.factory(Turbulence.Channels.map(_.num)(breakOut): Array[Int])
-      TransformNetcdfFile(in, outF, varName, Vec("lat", "lon"), Vec(Keep("time"), Create("spk", None, spkData))) {
+      NetCdfFileUtil.transform(in, outF, varName, Vec("lat", "lon"), Vec(Keep("time"), Create("spk", None, spkData))) {
         case (origin, arr) =>
           val dIn = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
           val dOut: Array[Float] = Turbulence.Channels.map { spk =>

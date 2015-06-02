@@ -1,7 +1,7 @@
 package at.iem.sysson
 
-import at.iem.sysson.turbulence.TransformNetcdfFile.{Create, Keep}
-import at.iem.sysson.turbulence.{TransformNetcdfFile, Turbulence}
+import at.iem.sysson.turbulence.Turbulence
+import at.iem.sysson.util.NetCdfFileUtil
 import de.sciss.file._
 import ucar.ma2
 
@@ -10,8 +10,8 @@ object PrepareSessionDec2014 extends App {
   calcTemperatureAnomalies(varName = "tas")
 
   def calcTemperatureAnomalies(varName: String): Unit = {
-    import Turbulence.{dataDir => _, _}
     import Implicits._
+    import Turbulence.{dataDir => _}
 
     val dataOutDir = dataDir
     val outF = dataOutDir / s"${varName}_fut_anom.nc"
@@ -57,9 +57,7 @@ object PrepareSessionDec2014 extends App {
         if (valid.size == 0) {
           println(s"No valid values for pres ${longitudes(lonIdx)} / lat ${latitudes(latIdx)}!")
           0f
-        } else {
-          (valid.sum / valid.size).toFloat
-        }
+        } else valid.sum / valid.size
       }
 
       (0 until numLat).map { latIdx =>
@@ -74,15 +72,15 @@ object PrepareSessionDec2014 extends App {
 
     // val norm: Vec[Vec[Vec[Float]]] = Vec.tabulate(12)(calcNorm)
 
-    import TransformNetcdfFile.{Keep, Create}
+    import NetCdfFileUtil.{Create, Keep}
 
     println(s"Heavily crunching data for ${outF.name}...")
 
-    TransformNetcdfFile.apply(in = in, out = outF, varName = varName, inDims = Vec(latName, lonName),
+    NetCdfFileUtil.transform(in = in, out = outF, varName = varName, inDims = Vec(latName, lonName),
       outDimsSpec = Vec(Keep(timeName), Create(latName, latVar.units, latData), Create(lonName, lonVar.units, lonData))) {
       case (origin, arr) =>
         val dIn     = arr.copyToNDJavaArray().asInstanceOf[Array[Array[Float]]]
-        val time    = origin(0)
+        val time    = origin.head
         println(s"Time = $time / $numTime")
         val month   = time % 12
         val year    = time / 12
@@ -92,7 +90,7 @@ object PrepareSessionDec2014 extends App {
 
         val dOut = Array.tabulate[Array[Float]](dIn.length) { latIdx =>
           Array.tabulate[Float](dIn(0).length) { lonIdx =>
-            val ta    = dIn(latIdx)(lonIdx).toFloat
+            val ta    = dIn(latIdx)(lonIdx)
             val anom  = ta - norm(latIdx)(lonIdx)
             anom
           }
