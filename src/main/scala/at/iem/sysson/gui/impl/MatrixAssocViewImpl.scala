@@ -18,30 +18,26 @@ package impl
 
 import java.awt.Color
 import java.awt.datatransfer.Transferable
-import java.awt.event.{MouseEvent, MouseAdapter}
-import javax.swing.{JComponent, TransferHandler}
+import javax.swing.TransferHandler
 import javax.swing.TransferHandler.TransferSupport
 import javax.swing.undo.UndoableEdit
 
-import at.iem.sysson.gui.DragAndDrop.MatrixDrag
-import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.expr.{Expr, Int => IntEx}
 import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.matrix.gui.MatrixView
-import de.sciss.lucre.swing.{View, deferTx}
-import de.sciss.lucre.swing.edit.EditVar
-import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.TxnLike
+import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.serial.Serializer
 
-import scala.concurrent.stm.Ref
+import scala.concurrent.stm.{TxnExecutor, Ref}
 import scala.language.higherKinds
-import scala.swing.{Label, BoxPanel, Orientation, Dimension, Swing, Action, MenuItem, PopupMenu, TextField, Component}
-import scala.swing.event.MouseButtonEvent
+import scala.swing.{BoxPanel, Component, Dimension, Label, Orientation, Swing}
 
 object MatrixAssocViewImpl {
   private trait IntDrag {
@@ -82,15 +78,27 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
 
   // ---- impl ----
 
-  private var ggDataName: TextField = _
-
   private val assocViews = Ref(Vec.empty[View[S]])
-
-  private val sourceOptRef = Ref(Option.empty[stm.Source[S#Tx, Source[S]]])
 
   private var _matrixView: MatrixView[S] = _
 
   final def matrixView: MatrixView[S] = _matrixView
+
+  private object ButtonImpl extends MatrixDnDViewImpl[S, Source](canSetMatrix = canSetMatrix, canRemoveMatrix = canRemoveMatrix) {
+    protected def matrix(source: Source[S])(implicit tx: S#Tx): Matrix[S] = impl.matrix(source)
+    protected def editRemoveMatrix()(implicit tx: S#Tx): Option[UndoableEdit] = impl.editRemoveMatrix()
+    protected def sourceSerializer: Serializer[S#Tx, S#Acc, Source[S]] = impl.sourceSerializer
+    protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] = impl.editDropMatrix(m)
+
+    override def updateSource(sourceOpt: Option[Source[S]])(implicit tx: S#Tx): Unit = {
+      disposeAssocViews()
+      super.updateSource(sourceOpt)
+      matrixView.matrix = sourceOpt.map(matrix)
+    }
+  }
+
+  protected def updateSource(sourceOpt: Option[Source[S]])(implicit tx: S#Tx): Unit =
+    ButtonImpl.updateSource(sourceOpt)
 
   private object TH extends MatrixView.TransferHandler[S] {
     def canImportInt(t: TransferSupport): Boolean = t.isDataFlavorSupported(IntFlavor)
@@ -122,6 +130,7 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
     import at.iem.sysson.Stats.executionContext
     _matrixView = MatrixView[S](Some(TH))
     _matrixView.nameVisible = false
+    ButtonImpl.init()
     deferTx(guiInit())
     this
   }
@@ -139,162 +148,18 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
     }
   }
 
-  protected def updateSource(sourceOpt: Option[Source[S]])(implicit tx: S#Tx): Unit = {
-    disposeAssocViews()
-
-    sourceOptRef.set(sourceOpt.map(tx.newHandle(_)))(tx.peer)
-    matrixView.matrix = sourceOpt.map(matrix)
-
-    val nameOpt = sourceOpt.map { source =>
-      val v         = matrix(source)
-      val _dataName = v.name
-      val as        = v.dimensions.map { dim => mkAssocView(source, dim.name) }
-      assocViews.set(as)(tx.peer)
-      matrixView.rowHeaders = as
-      _dataName
-    }
-
-    deferTx {
-      ggDataName.text = nameOpt.getOrElse("")
-    }
-  }
-
   private def guiInit(): Unit = {
-    ggDataName = new TextField(12)
-    if (canRemoveMatrix) {
-      ggDataName.listenTo(ggDataName.mouse.clicks)
-      ggDataName.reactions += {
-        case e: MouseButtonEvent if e.triggersPopup =>
-          new PopupMenu {
-            contents += new MenuItem(Action("Remove Matrix") {
-              val editOpt = impl.cursor.step { implicit tx => editRemoveMatrix() }
-              editOpt.foreach(undoManager.add)
-            })
-            show(ggDataName, e.point.x, e.point.y)
-          }
-      }
-    }
-    // dataName0.foreach(ggDataName.text = _)
-    ggDataName.editable = false
-    ggDataName.focusable= false
-    // val icnBorder       = IconBorder(Icons.Target(DropButton.IconSize))
-    // val lbDataName      = new Label(null, Icons.Target(DropButton.IconSize), Alignment.Leading)
-    val lbDataName = new Label(null: String) {
-      icon      = Icons.Target(DropButton.IconSize)
-      // border    = null
-      focusable = false
-      // borderPainted = false
-      tooltip   = "Drag or Drop Matrix"
-
-      private object Transfer extends TransferHandler(null) {
-        override def getSourceActions(c: JComponent): Int = TransferHandler.LINK | TransferHandler.COPY
-
-        override def createTransferable(c: JComponent): Transferable = {
-          val opt = impl.cursor.step { implicit tx =>
-            val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
-            sourceOpt.map { source =>
-              val m0  = impl.matrix(source)
-              val m   = Matrix.Var.unapply(m0).getOrElse(m0)
-              val drag = new MatrixDrag {
-                type S1       = S
-                val workspace = impl.workspace
-                val matrix    = tx.newHandle(m)
-              }
-              DragAndDrop.Transferable(DragAndDrop.MatrixFlavor)(drag)
-            }
-          }
-          // println(s"createTransferable -> ${opt.isDefined}")
-          opt.orNull
-        }
-
-        // how to enforce a drop action: https://weblogs.java.net/blog/shan_man/archive/2006/02/choosing_the_dr.html
-        override def canImport(support: TransferSupport): Boolean = canSetMatrix && {
-          val res =
-            if (support.isDataFlavorSupported(DragAndDrop.MatrixFlavor) &&
-              ((support.getSourceDropActions & (TransferHandler.LINK | TransferHandler.COPY)) != 0)) {
-              if (support.getDropAction != TransferHandler.COPY)
-                support.setDropAction(TransferHandler.LINK)
-              true
-            } else
-              false
-
-          res
-        }
-
-        override def importData(support: TransferSupport): Boolean = {
-          val t         = support.getTransferable
-          val isCopy    = support.getDropAction == TransferHandler.COPY
-          val drag0     = t.getTransferData(DragAndDrop.MatrixFlavor).asInstanceOf[MatrixDrag]
-          if (drag0.workspace == workspace) {
-            val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
-            val editOpt = impl.cursor.step { implicit tx =>
-                val v0        = drag.matrix()
-                val v         = if (isCopy) Matrix.Var.unapply(v0).fold(v0)(_.apply()).mkCopy() else v0
-                val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
-                val vrOpt     = sourceOpt.flatMap(src => Matrix.Var.unapply(matrix(src)))
-                val res = vrOpt.fold {
-                  val vr = Matrix.Var(v) // so that the matrix becomes editable in its view
-                  editDropMatrix(vr)
-                } { vr =>
-                  implicit val csr = impl.cursor
-                  val _edit = EditVar("Assign Matrix", vr, v)
-                  updateSource(sourceOpt)  // XXX TODO - stupid work-around
-                  Some(_edit)
-                }
-                res
-              }
-            editOpt.foreach(undoManager.add)
-            true
-
-          } else {
-            println("ERROR: Cannot drag data sources across workspaces")
-            false
-          }
-        }
-      }
-
-      peer.setTransferHandler(Transfer)
-
-      private object Mouse extends MouseAdapter {
-        private var dndInitX    = 0
-        private var dndInitY    = 0
-        private var dndPressed  = false
-        private var dndStarted  = false
-
-        override def mousePressed(e: MouseEvent): Unit = {
-          dndInitX	  = e.getX
-          dndInitY    = e.getY
-          dndPressed  = true
-          dndStarted	= false
-        }
-
-        override def mouseReleased(e: MouseEvent): Unit = {
-          dndPressed  = false
-          dndStarted	= false
-        }
-
-        override def mouseDragged(e: MouseEvent): Unit =
-          if (dndPressed && !dndStarted && ((math.abs(e.getX - dndInitX) > 5) || (math.abs(e.getY - dndInitY) > 5))) {
-            Transfer.exportAsDrag(peer, e, TransferHandler.LINK)
-            dndStarted = true
-          }
-      }
-
-      peer.addMouseListener      (Mouse)
-      peer.addMouseMotionListener(Mouse)
-    }
-
-    // ggDataName.border   = icnBorder //
-    // Swing.CompoundBorder(outside = ggDataName.border, inside = icnBorder)
-    desktop.Util.fixSize(ggDataName)
-
     val keyDimButs = keys.map { key0 =>
       new DragAndDrop.Button {
         text = key0
 
-        protected def export(): Option[Transferable] = sourceOptRef.single.get.map { src =>
-          mkDimAssocTransferable(src, key0)
-        }
+        protected def export(): Option[Transferable] =
+          TxnExecutor.defaultAtomic.apply { implicit itx =>
+            implicit val tx = TxnLike.wrap(itx)
+            ButtonImpl.sourceOpt.map { src =>
+              mkDimAssocTransferable(src, key0)
+            }
+          }
 
         protected def sourceAction(mod: Int) = TransferHandler.LINK
 
@@ -329,8 +194,9 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
         val p = new javax.swing.JPanel with SuperMixin {
           // cf. http://stackoverflow.com/questions/11726739/use-getbaselineint-w-int-h-of-a-child-component-in-the-parent-container
           override def getBaseline(w: Int, h: Int): Int = {
-            val size = ggDataName.preferredSize
-            ggDataName.location.y + ggDataName.peer.getBaseline(size.width, size.height)
+            val gg   = ButtonImpl.component
+            val size = gg.preferredSize
+            gg.location.y + gg.peer.getBaseline(size.width, size.height)
           }
         }
         val l = new javax.swing.BoxLayout(p, Orientation.Vertical.id)
@@ -338,13 +204,7 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
         p
       }
 
-      contents += new BoxPanel(Orientation.Horizontal) {
-        contents += Swing.HStrut(2)
-        contents += lbDataName
-        contents += Swing.HStrut(2)
-        contents += ggDataName
-        contents += Swing.HGlue
-      }
+      contents += ButtonImpl.component
       contents += matrixView.component
       contents += ggMap
     }

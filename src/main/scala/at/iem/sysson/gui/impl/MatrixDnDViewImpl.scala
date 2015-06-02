@@ -27,6 +27,7 @@ import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.matrix.{Matrix, Sys}
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.TxnLike
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.lucre.swing.edit.EditVar
@@ -41,9 +42,9 @@ import scala.swing.{Component, Swing, Orientation, BoxPanel, Action, Label, Menu
 
 abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatrix: Boolean,
                                                                      canRemoveMatrix: Boolean)
-                                                                    (implicit cursor: stm.Cursor[S],
-                                                                     workspace: Workspace[S],
-                                                                     undoManager: UndoManager)
+                                                                    (implicit val cursor: stm.Cursor[S],
+                                                                     val workspace: Workspace[S],
+                                                                     val undoManager: UndoManager)
   extends View.Editable[S] with ViewHasWorkspace[S] with ComponentHolder[Component]
 {
   impl =>
@@ -62,7 +63,9 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
   private var ggDataName: TextField = _
   private val sourceOptRef = Ref(Option.empty[stm.Source[S#Tx, Source[S]]])
 
-  protected def updateSource(sourceOpt: Option[Source[S]])(implicit tx: S#Tx): Unit = {
+  def sourceOpt(implicit tx: TxnLike): Option[stm.Source[S#Tx, Source[S]]] = sourceOptRef.get(tx.peer)
+
+  def updateSource(sourceOpt: Option[Source[S]])(implicit tx: S#Tx): Unit = {
     sourceOptRef.set(sourceOpt.map(tx.newHandle(_)))(tx.peer)
 
     val nameOpt = sourceOpt.map { source =>
@@ -214,4 +217,6 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
       contents += Swing.HGlue
     }
   }
+
+  def dispose()(implicit tx: S#Tx): Unit = ()
 }
