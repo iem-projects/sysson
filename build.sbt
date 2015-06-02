@@ -86,9 +86,7 @@ initialCommands in console :=
 
 // ---- build info source generator ----
 
-buildInfoSettings
-
-sourceGenerators in Compile <+= buildInfo
+enablePlugins(BuildInfoPlugin)
 
 buildInfoKeys := Seq(name, organization, version, scalaVersion, description,
   BuildInfoKey.map(homepage) { case (k, opt) => k -> opt.get },
