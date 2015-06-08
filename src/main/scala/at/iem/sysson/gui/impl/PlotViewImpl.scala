@@ -32,7 +32,7 @@ import de.sciss.mellite.Workspace
 import de.sciss.serial.Serializer
 
 import scala.annotation.tailrec
-import scala.swing.{Orientation, BoxPanel, Component}
+import scala.swing.{SplitPane, Orientation, BoxPanel, Component}
 
 object PlotViewImpl {
   def apply[S <: Sys[S]](plot: Plot.Obj[S])
@@ -60,15 +60,14 @@ object PlotViewImpl {
       this
     }
 
-    private def guiInit(): Unit = {
-      component = new BoxPanel(Orientation.Vertical) {
-        contents += chartView .component
-        contents += new BoxPanel(Orientation.Horizontal) {
+    private def guiInit(): Unit =
+      component = new SplitPane(Orientation.Horizontal,
+        left = chartView.component,
+        right = new BoxPanel(Orientation.Horizontal) {
           contents += matrixView.component
           contents += statsView .component
         }
-      }
-    }
+      )
 
     def dispose()(implicit tx: S#Tx): Unit = {
       chartView .dispose()

@@ -209,10 +209,26 @@ object DataSourceFrameImpl {
           OptionPane.message("Selected variable must have a dimension named 'time'", OptionPane.Message.Error)
             .show(sw, title)
         } else {
-          val mYears  = new SpinnerNumberModel(30, 1, 10000, 1)
-          val ggYears = new Spinner(mYears)
-          val message = new FlowPanel(new Label("Average Years:"), ggYears)
-          val res = OptionPane(message = message, optionType = OptionPane.Options.OkCancel).show(sw, title)
+          val mYears    = new SpinnerNumberModel(30, 1, 10000, 1)
+          val ggYears   = new Spinner(mYears)
+          val pYears    = new FlowPanel(new Label("Average Years:"), ggYears)
+          val lbInfo    = new Label(
+            """<html><body>This process assumes that the time
+              |dimension of the selected variable has a
+              |<b>monthly resolution (12 values per year)</b>
+              |with the first index corresponding to January.
+              |
+              |<b>A sliding window</b> of the size specified below
+              |is used to to calculate the average values
+              |per month and matrix cell. These sliding means
+              |will be subtracted from the input matrix and
+              |yield the "anomalies" output matrix.
+              |</body>""".stripMargin.replace("\n", "<br>"))
+          val pMessage  = new BorderPanel {
+            add(lbInfo, BorderPanel.Position.Center)
+            add(pYears, BorderPanel.Position.South )
+          }
+          val res = OptionPane(message = pMessage, optionType = OptionPane.Options.OkCancel).show(sw, title)
           if (res == OptionPane.Result.Ok) {
             withSaveFile(window, "Anomalies Output File") { out =>
               val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = "time",

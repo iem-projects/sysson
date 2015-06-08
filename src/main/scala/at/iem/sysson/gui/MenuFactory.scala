@@ -17,6 +17,7 @@ package gui
 
 import java.net.URL
 
+import at.iem.sysson.gui.impl.ActionConvertSpreadsheet
 import at.iem.sysson.gui.{SwingApplication => App}
 import de.sciss.desktop.{Desktop, KeyStrokes, Menu, OptionPane}
 import de.sciss.file._
@@ -31,7 +32,6 @@ import scala.concurrent.stm.TxnExecutor
 import scala.language.existentials
 import scala.swing.event.{Key, MouseClicked}
 import scala.swing.{Action, Label}
-import scala.util.Try
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -119,6 +119,11 @@ object MenuFactory {
         .add(Item("new-interpreter")("Interpreter..." -> (menu1 + Key.R)) {
             openInterpreter()
           }
+        )
+      )
+      .add(Group("convert", "Convert")
+        .add(
+          Item("convert-spreadsheet", ActionConvertSpreadsheet)
         )
       )
       .add(Item("open", ActionOpenWorkspace))

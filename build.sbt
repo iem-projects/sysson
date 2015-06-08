@@ -27,28 +27,20 @@ fork in run := true
 // ---- library versions ----
 
 lazy val melliteVersion             = "1.4.0"
-
 lazy val soundProcessesVersion      = "2.18.1"
-
 lazy val lucreMatrixVersion         = "0.10.0"
-
 lazy val lucreSwingVersion          = "0.9.1"
-
 lazy val scalaColliderVersion       = "1.17.2"
-
 lazy val scalaColliderSwingVersion  = "1.25.1"
-
 lazy val ugensVersion               = "1.13.1"
-
 lazy val fileCacheVersion           = "0.3.2"
-
 lazy val swingTreeVersion           = "0.1.1"
-
 lazy val kollFlitzVersion           = "0.2.0"
-
 lazy val fscapeJobsVersion          = "1.5.0"
-
+lazy val sheetVersion               = "0.1.0"
 lazy val slfVersion                 = "1.7.12"
+
+// ---- test libraries ----
 
 lazy val scalaTestVersion           = "2.2.5"
 
@@ -64,6 +56,7 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
   "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
   "de.sciss" %% "fscapejobs"                  % fscapeJobsVersion,
+  "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
   "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
 )
 

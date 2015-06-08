@@ -37,6 +37,7 @@ import de.sciss.serial.Serializer
 import de.sciss.swingplus.PopupMenu
 
 import scala.concurrent.stm.Ref
+import scala.language.higherKinds
 import scala.swing.event.MouseButtonEvent
 import scala.swing.{Component, Swing, Orientation, BoxPanel, Action, Label, MenuItem, TextField}
 

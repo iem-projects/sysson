@@ -77,8 +77,7 @@ object NetCdfFileUtil {
     val (keepOutDims, keepOutDimsV) = keepInDims.map { inDim =>
       val outDim  = writer.addDimension(null, inDim.name, inDim.size)
       val inVar   = in.variableMap(inDim.name)
-      val outVarD = writer.addVariable(null, inVar.getShortName, inVar.dataType, Seq(outDim).asJava)
-      inVar.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+      val outVarD = dupVar(writer, inVar, Seq(outDim))
       (outDim, outVarD)
     } .unzip
 
@@ -322,6 +321,19 @@ object NetCdfFileUtil {
       override def toString = s"$varName-anomalies"
     }
 
+  private def copyAttr(in: nc2.Variable, out: nc2.Variable): Unit = {
+    import Implicits._
+    in.units      .foreach(units => out.addAttribute(new nc2.Attribute(CDM.UNITS      , units)))
+    in.description.foreach(desc  => out.addAttribute(new nc2.Attribute(CDM.DESCRIPTION, desc )))
+  }
+
+  private def dupVar(writer: nc2.NetcdfFileWriter, in: nc2.Variable, dims: Seq[nc2.Dimension]): nc2.Variable = {
+    import Implicits._
+    val out = writer.addVariable(null, in.getShortName, in.dataType, dims.asJava)
+    copyAttr(in = in, out = out)
+    out
+  }
+
   private def anomaliesBody(self: ProcessorImpl[Unit, Processor[Unit]], in: nc2.NetcdfFile, out: File, varName: String,
                             timeName: String, windowYears: Int): Unit = {
     import Implicits._
@@ -376,13 +388,11 @@ object NetCdfFileUtil {
       val size    = inDim.size
       val outDim  = writer.addDimension(null, inDim.name, size)
       val inVar   = in.variableMap(inDim.name)
-      val outVarD = writer.addVariable(null, inVar.getShortName, inVar.dataType, Seq(outDim).asJava)
-      inVar.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+      val outVarD = dupVar(writer, inVar, Seq(outDim))
       (outDim, outVarD)
     } .unzip
 
-    val outVar = writer.addVariable(null, inVar.getShortName, inVar.getDataType, outDims.asJava)
-    inVar.units.foreach(units => outVar.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+    val outVar = dupVar(writer, inVar, outDims)
 
     // create the file; ends "define mode"
     writer.create()
