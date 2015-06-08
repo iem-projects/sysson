@@ -137,9 +137,35 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
       def rank: Int
     }
 
+    def selectionToShape(rows: Range, cols: Range): String =
+      s"[${colToName(cols.head)}${rows.head + 1}:${colToName(cols.last)}${rows.last + 1}]"
+
+    val ShapeReg = """\[([A-Z]+)(\d+)\:([A-Z]+)(\d+)\]""".r
+
+    def shapeToSelection(shape: String): Option[(Range, Range)] =
+      shape.trim match {
+        case ShapeReg(firstColS, firstRowS, lastColS, lastRowS) =>
+          val firstCol = nameToCol(firstColS)
+          val lastCol  = nameToCol(lastColS )
+          for {
+            firstRow <- Try(firstRowS.toInt).toOption
+            lastRow  <- Try(lastRowS .toInt).toOption
+          }
+            yield (firstRow to lastRow, firstCol to lastCol)
+
+        case _ => None
+      }
+
     case class TableVarDef(name: String, rows: Range, cols: Range, description: Option[String], unit: Option[String],
                            dim0: Option[VarDef], dim1: Option[VarDef]) extends VarDef {
       def rank = if (rows.isEmpty || cols.isEmpty) 0 else if (rows.size == 1 || cols.size == 1) 1 else 2
+
+      override def toString = {
+        val shape = selectionToShape(rows, cols)
+        val dim0N = dim0.map(_.name)
+        val dim1N = dim1.map(_.name)
+        s"$productPrefix($name, $shape, description = $description, unit = $unit, dim0 = $dim0N, dim1 = $dim1N)"
+      }
 
       def flat: Array[Double] = rows.flatMap { ri =>
         sheet.rowMap.get(ri).fold(Vec.fill(cols.size)(Double.NaN)) { row =>
@@ -169,25 +195,6 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
     }
 
     val ggScrollOut = new ScrollPane(ggTableOut)
-
-    def selectionToShape(rows: Range, cols: Range): String =
-      s"[${colToName(cols.head)}${rows.head + 1}:${colToName(cols.last)}${rows.last + 1}]"
-
-    val ShapeReg = """\[([A-Z]+)(\d+)\:([A-Z]+)(\d+)\]""".r
-
-    def shapeToSelection(shape: String): Option[(Range, Range)] =
-      shape.trim match {
-        case ShapeReg(firstColS, firstRowS, lastColS, lastRowS) =>
-          val firstCol = nameToCol(firstColS)
-          val lastCol  = nameToCol(lastColS )
-          for {
-            firstRow <- Try(firstRowS.toInt).toOption
-            lastRow  <- Try(lastRowS .toInt).toOption
-          }
-          yield (firstRow to lastRow, firstCol to lastCol)
-
-        case _ => None
-      }
 
     val aAddVar = Action(null) {
       val rows    = ggTableIn.selection.rows
@@ -236,18 +243,19 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
         shapeToSelection(shapeS).fold[Either[String, TableVarDef]](
           Left(s"Shape in row ${row + 1} is invalid $shapeS")
         ) { case (rows, cols) =>
-          val rDimSO  = getCol(4)
-          val rank    = if (rows.size == 1 || cols.size == 1) 1 else 2
-          val rSize   = if (rows.size == 1) cols.size else rows.size
-          val rDimOpt = rDimSO.fold[Option[VarDef]](
-            Some(SyntheticDim(s"${varName}_dim0", Array.tabulate(rSize)(_.toDouble)))
+          val rDimSO    = getCol(4)
+          val cDimSO    = getCol(5)
+          val isVector  = rows.size == 1 || cols.size == 1
+          val rSize     = if (rows.size == 1) cols.size else rows.size
+          val rDimOptE  = rDimSO.fold[Either[String, Option[VarDef]]](
+            Right(if (isVector) None else Some(SyntheticDim(s"${varName}_dim0", Array.tabulate(rSize)(_.toDouble))))
           ) { rDimName =>
-            in.find(_.name == rDimName)
+            in.find(_.name == rDimName).fold[Either[String, Option[VarDef]]](
+              Left(s"Cannot find dimension $rDimSO"))(rDim => Right(Some(rDim)))
           }
-          rDimOpt.fold[Either[String, TableVarDef]](Left(s"Cannot find dimension $rDimSO")) { rDim =>
-            val cDimOptE: Either[String, Option[VarDef]] = if (rank == 1) Right(None) else {
+          rDimOptE.right.flatMap { rDimOpt =>
+            val cDimOptE: Either[String, Option[VarDef]] = if (isVector) Right(None) else {
               val cSize   = cols.size
-              val cDimSO  = getCol(5)
               val cDimOpt = cDimSO.fold[Option[VarDef]](
                 Some(SyntheticDim(s"${varName}_dim1", Array.tabulate(cSize)(_.toDouble)))
               ) { cDimName =>
@@ -259,7 +267,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
             }
             cDimOptE.right.map { cDimOpt =>
               TableVarDef(name = varName, rows = rows, cols = cols, description = desc, unit = unit,
-                dim0 = Some(rDim), dim1 = cDimOpt)
+                dim0 = rDimOpt, dim1 = cDimOpt)
             }
           }
         }
@@ -297,6 +305,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
     val vars = showPane()
     if (vars.isEmpty) return
 
+    println("------ TODO : CREATE NETCDF FILE ------")
     vars.foreach(println)
   }
 }
