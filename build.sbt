@@ -129,14 +129,14 @@ assemblyJarName in assembly := s"${name.value}.jar"
 
 mainClass in assembly := mainClazz
 
-//mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
-//  {
-//    case "META-INF/MANIFEST.MF" => MergeStrategy.last
-//    case x => old(x)
-//  }
-//}
+assemblyMergeStrategy in assembly := {
+//  case "META-INF/MANIFEST.MF" => MergeStrategy.last
+  case PathList("javax", "xml", xs @ _*) => MergeStrategy.first  // conflict xml-apis vs. stax-api
+  case x =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(x)
+}
 
-//// mac os x
 //
 //appbundle.icon := {
 //  // XXX TODO: DRY
