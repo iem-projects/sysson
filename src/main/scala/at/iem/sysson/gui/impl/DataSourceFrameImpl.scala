@@ -16,12 +16,13 @@ package at.iem.sysson
 package gui
 package impl
 
+import java.awt.Color
 import javax.swing.SpinnerNumberModel
 import javax.swing.undo.UndoableEdit
 
 import at.iem.sysson.util.NetCdfFileUtil
 import de.sciss.desktop.impl.UndoManagerImpl
-import de.sciss.desktop.{Window, FileDialog, Menu, OptionPane, UndoManager}
+import de.sciss.desktop.{DialogSource, FileDialog, Menu, OptionPane, UndoManager, Window}
 import de.sciss.file._
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.{DataSource, Matrix}
@@ -29,13 +30,20 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.swing.{CellView, View, defer, deferTx, requireEDT}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.impl.WindowImpl
+import de.sciss.numbers
 import de.sciss.serial.Serializer
 import de.sciss.swingplus.Spinner
+import org.jfree.chart.axis.{NumberTickUnit, NumberAxis}
+import org.jfree.chart.renderer.xy.XYBarRenderer
 import ucar.nc2
 
 import scala.annotation.tailrec
+import scala.collection.breakOut
 import scala.concurrent.ExecutionContext
+import scala.concurrent.stm._
 import scala.swing.{Alignment, BorderPanel, Button, FlowPanel, GridPanel, Label}
+import scala.util.{Failure, Success}
+import scalax.chart.XYChart
 
 object DataSourceFrameImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
@@ -199,6 +207,83 @@ object DataSourceFrameImpl {
           .show(Some(window), title)
       } (fun)
 
+    private def plotDist(): Unit = {
+      import Implicits._
+      withSelectedVariable(title) { vr =>
+        val title0 = s"Distribution of ${vr.name}"
+
+        import at.iem.sysson.Stats.executionContext
+        val futStats = atomic { implicit tx =>
+          Stats.get(vr.file)
+        }
+        val futHistoStats = futStats.map { case Stats(map) =>
+          val total   = map(vr.name).total
+          val numBins = 400 // XXX TODO -- could be configurable
+          // val bins    = (0 until numBins).linlin(0, numBins - 1, total.min, total.max)
+          val histo   = new Array[Int](numBins)
+
+          def loop(rem: Vec[nc2.Dimension], red: VariableSection): Unit = rem match {
+            case head +: (tail @ (_ +: _)) if red.size > 16384 =>   // try to make smart chunks
+              for (i <- 0 until head.size) loop(tail, red.in(head.name).select(i))
+            case _ =>
+              val chunk = red.readSafe().float1D
+              chunk.foreach { d =>
+                import numbers.Implicits._
+                val bin = d.linlin(total.min, total.max, 0, numBins).toInt.min(numBins - 1)
+                histo(bin) += 1
+              }
+          }
+          loop(vr.reducedDimensions, vr.selectAll)
+          (histo, total)
+        }
+        println("Calculating... Please wait...")
+
+        futHistoStats.onComplete {
+          case Success((histo, total)) => defer {
+            val size      = (0L /: histo)((sum, count) => sum + count)
+            val relative  = histo.map(count => (count * 100.0)/ size)
+            // val accum     = relative.
+
+            //            println("----- HISTO -----")
+            //            histo.zipWithIndex.foreach { case (d, i) =>
+            //                println(f"$i%3d: $d%1.4f")
+            //            }
+
+            val chart = mkHistoChart(relative, total, title = title0)
+            val frame = chart.toFrame(title = "Histogram Plot")
+            frame.pack().centerOnScreen()
+            frame.open()
+          }
+
+          case Failure(ex) => defer {
+            DialogSource.Exception(ex -> s"Distribution of ${vr.name}").show(Some(window))
+          }
+        }
+      }
+    }
+
+    private def mkHistoChart(histo: Array[Double], stats: Stats.Counts, title: String): XYChart = {
+      import scalax.chart.api._
+      import numbers.Implicits._
+      val data: Vec[(Double, Double)] = histo.zipWithIndex.map { case (num, i) =>
+        (i + 0.5).linlin(0, histo.length, stats.min, stats.max) -> num
+      } (breakOut)
+      val dataCol = data.toXYSeriesCollection(title)
+      // val chart   = XYBarChart(dataCol, title = title, legend = false)
+      val chart   = XYLineChart(dataCol, title = title, legend = false)
+      ChartUtils.printableLook(chart)
+      val plot    = chart.plot
+      // val rangeX  = plot.getDomainAxis.asInstanceOf[NumberAxis]
+      plot.getRenderer.setSeriesPaint(0, Color.darkGray)
+      // rangeX.setTickUnit(new NumberTickUnit(1))
+      val rangeY  = plot.getRangeAxis.asInstanceOf[NumberAxis]
+      rangeY.setTickUnit(new NumberTickUnit(1))
+      // plot.getRenderer.asInstanceOf[BarRenderer].setMaximumBarWidth(0.1)
+      // val renderer = plot.getRenderer.asInstanceOf[XYBarRenderer]
+      // renderer.setMargin(1.0 - 1.0/histo.length) // (0.0)
+      chart
+    }
+
     private def createAnomalies(): Unit = {
       val sw    = Some(window)
       val title = "Calculate Anomalies"
@@ -254,8 +339,9 @@ object DataSourceFrameImpl {
       root.get(path) match {
         case Some(g: Menu.Group) =>
           val sw = Some(window)
-          g.add(sw, Menu.Item("create-anomalies")("Calculate Anomalies...")(createAnomalies()))
-          g.add(sw, Menu.Item("create-concat"   )("Concatenate Matrix..." )(concat()))
+          g.add(sw, Menu.Item("plot-distribution")("Plot Distribution..."  )(plotDist()))
+          g.add(sw, Menu.Item("create-anomalies" )("Calculate Anomalies...")(createAnomalies()))
+          g.add(sw, Menu.Item("create-concat"    )("Concatenate Matrix..." )(concat()))
 
         case _ => sys.error(s"No menu group for path '$path'")
       }
