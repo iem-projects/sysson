@@ -22,28 +22,28 @@ import javax.swing.undo.UndoableEdit
 
 import at.iem.sysson.util.NetCdfFileUtil
 import de.sciss.desktop.impl.UndoManagerImpl
-import de.sciss.desktop.{DialogSource, FileDialog, Menu, OptionPane, UndoManager, Window}
+import de.sciss.desktop.{DialogSource, FileDialog, Menu, OptionPane, UndoManager, Window, WindowHandler}
 import de.sciss.file._
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.swing.{CellView, View, defer, deferTx, requireEDT}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.impl.WindowImpl
-import de.sciss.numbers
+import de.sciss.mellite.{Application, Workspace}
 import de.sciss.serial.Serializer
 import de.sciss.swingplus.Spinner
-import org.jfree.chart.axis.{NumberTickUnit, NumberAxis}
-import org.jfree.chart.renderer.xy.XYBarRenderer
+import de.sciss.{desktop, kollflitz, numbers}
+import org.jfree.chart.ChartPanel
+import org.jfree.chart.renderer.xy.XYStepAreaRenderer
 import ucar.nc2
 
 import scala.annotation.tailrec
 import scala.collection.breakOut
-import scala.concurrent.ExecutionContext
-import scala.concurrent.stm._
-import scala.swing.{Alignment, BorderPanel, Button, FlowPanel, GridPanel, Label}
+import scala.concurrent.stm.atomic
+import scala.concurrent.{ExecutionContext, Future, blocking}
+import scala.swing.{Orientation, SplitPane, Alignment, BorderPanel, Button, Component, FlowPanel, GridPanel, Label}
 import scala.util.{Failure, Success}
-import scalax.chart.XYChart
+import scalax.chart.{Chart, XYChart}
 
 object DataSourceFrameImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
@@ -207,6 +207,43 @@ object DataSourceFrameImpl {
           .show(Some(window), title)
       } (fun)
 
+    private def plot1D(): Unit = {
+      import Implicits._
+      withSelectedVariable(title) { vr =>
+        if (vr.reducedRank != 1) {
+          OptionPane.message(s"Variable ${vr.name} has ${vr.reducedRank} dimensions. Must have one.",
+            OptionPane.Message.Error).show(Some(window), title = "Plot 1D")
+        } else {
+          import at.iem.sysson.Stats.executionContext
+          val futData = Future {
+            blocking {
+              val dataV   = vr.readSafe().float1D
+              val dimName = vr.reducedDimensions.head.name
+              val vd      = vr.file.variableMap(dimName)
+              val dataD   = vd.readSafe().float1D
+              (dataV, dataD)
+            }
+          }
+          futData.onComplete {
+            case Success((dataV, dataD)) => defer {
+              import scalax.chart.api._
+              val data: Vec[(Float, Float)] = dataD zip dataV
+              val dataCol = data.toXYSeriesCollection(title)
+              val chart   = XYLineChart(dataCol, title = title, legend = false)
+              ChartUtils.printableLook(chart)
+              val plot    = chart.plot
+              val renderer = plot.getRenderer
+              renderer.setSeriesPaint(0, Color.darkGray)
+              mkPlotWindow(mkChartPanel(chart), vr.name)
+            }
+            case Failure(ex) => defer {
+              DialogSource.Exception(ex -> s"Plot of ${vr.name}").show(Some(window))
+            }
+          }
+        }
+      }
+    }
+
     private def plotDist(): Unit = {
       import Implicits._
       withSelectedVariable(title) { vr =>
@@ -241,18 +278,19 @@ object DataSourceFrameImpl {
         futHistoStats.onComplete {
           case Success((histo, total)) => defer {
             val size      = (0L /: histo)((sum, count) => sum + count)
-            val relative  = histo.map(count => (count * 100.0)/ size)
-            // val accum     = relative.
+            val relative: Vec[Double] = histo.map(count => (count * 100.0)/ size)(breakOut)
+            import kollflitz.Ops._
+            val accum     = relative.integrate
 
             //            println("----- HISTO -----")
             //            histo.zipWithIndex.foreach { case (d, i) =>
             //                println(f"$i%3d: $d%1.4f")
             //            }
 
-            val chart = mkHistoChart(relative, total, title = title0)
-            val frame = chart.toFrame(title = "Histogram Plot")
-            frame.pack().centerOnScreen()
-            frame.open()
+            val chartRel    = mkHistoChart(relative , total, title = s"Histogram for ${vr.name}")
+            val chartAccum  = mkHistoChart(accum    , total, title = s"Accumulative Histogram for ${vr.name}")
+            mkPlotWindow(new SplitPane(Orientation.Vertical, mkChartPanel(chartRel  ), mkChartPanel(chartAccum)),
+              title0)
           }
 
           case Failure(ex) => defer {
@@ -262,9 +300,22 @@ object DataSourceFrameImpl {
       }
     }
 
-    private def mkHistoChart(histo: Array[Double], stats: Stats.Counts, title: String): XYChart = {
-      import scalax.chart.api._
+    private def mkChartPanel(chart: Chart): Component = Component.wrap(new ChartPanel(chart.peer))
+
+    private def mkPlotWindow(chartPanel: Component, title0: String): Window =
+      new desktop.impl.WindowImpl { win =>
+        def handler: WindowHandler = Application.windowHandler
+        contents = chartPanel
+        title = title0
+        pack()
+        desktop.Util.centerOnScreen(this)
+        front()
+      }
+
+    private def mkHistoChart(histo: Vec[Double], stats: Stats.Counts, title: String): XYChart = {
       import numbers.Implicits._
+
+      import scalax.chart.api._
       val data: Vec[(Double, Double)] = histo.zipWithIndex.map { case (num, i) =>
         (i + 0.5).linlin(0, histo.length, stats.min, stats.max) -> num
       } (breakOut)
@@ -274,13 +325,17 @@ object DataSourceFrameImpl {
       ChartUtils.printableLook(chart)
       val plot    = chart.plot
       // val rangeX  = plot.getDomainAxis.asInstanceOf[NumberAxis]
-      plot.getRenderer.setSeriesPaint(0, Color.darkGray)
+      // val renderer = plot.getRenderer // .asInstanceOf[XYBarRenderer]
+      val renderer = new XYStepAreaRenderer()
+      plot.setRenderer(renderer)
+      renderer.setSeriesPaint(0, Color.darkGray)
       // rangeX.setTickUnit(new NumberTickUnit(1))
-      val rangeY  = plot.getRangeAxis.asInstanceOf[NumberAxis]
-      rangeY.setTickUnit(new NumberTickUnit(1))
+      // val rangeY  = plot.getRangeAxis.asInstanceOf[NumberAxis]
+      // rangeY.setTickUnit(new NumberTickUnit(1))
       // plot.getRenderer.asInstanceOf[BarRenderer].setMaximumBarWidth(0.1)
-      // val renderer = plot.getRenderer.asInstanceOf[XYBarRenderer]
       // renderer.setMargin(1.0 - 1.0/histo.length) // (0.0)
+      // val bp = new StandardXYBarPainter
+      // renderer.setBarPainter(bp)
       chart
     }
 
@@ -339,6 +394,7 @@ object DataSourceFrameImpl {
       root.get(path) match {
         case Some(g: Menu.Group) =>
           val sw = Some(window)
+          g.add(sw, Menu.Item("plot-1d"          )("Plot 1D..."            )(plot1D()))
           g.add(sw, Menu.Item("plot-distribution")("Plot Distribution..."  )(plotDist()))
           g.add(sw, Menu.Item("create-anomalies" )("Calculate Anomalies...")(createAnomalies()))
           g.add(sw, Menu.Item("create-concat"    )("Concatenate Matrix..." )(concat()))
