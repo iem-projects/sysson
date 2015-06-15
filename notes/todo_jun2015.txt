@@ -1,5 +1,5 @@
 blocker
-        - DnD -- matrix als auch matrix editor slider, scheint nicht unter OS X 10.10, Java 8.
+[OK]    - DnD -- matrix als auch matrix editor slider, scheint nicht unter OS X 10.10, Java 8.
 
 other
         - [Mellite]     im Workspace: "under-tree" die variablen und "Auge" wird plot button; trotzdem metadaten fenster (wenn header ausgewaehlt): 1

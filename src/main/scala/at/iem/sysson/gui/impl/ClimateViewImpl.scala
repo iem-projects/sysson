@@ -343,7 +343,8 @@ object ClimateViewImpl {
             }
           }
           // println(s"min = $min, max = $max")
-          arr0.double1D.linlin(min, max, sec.variable.fillValue)(0.0, 1.0)
+          val arr0d = arr0.double1D
+          if (min == max) Vector.fill(arr0d.size)(0.0) else arr0d.linlin(min, max, sec.variable.fillValue)(0.0, 1.0)
 
         case _ => // no stats available yet, normalize current frame
           arr0.double1D.normalize(sec.variable.fillValue)

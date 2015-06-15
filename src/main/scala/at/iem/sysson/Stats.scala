@@ -14,14 +14,17 @@
 
 package at.iem.sysson
 
-import ucar.nc2
-import de.sciss.filecache
 import java.io.File
-import de.sciss.serial.{DataOutput, DataInput, ImmutableSerializer}
-import collection.breakOut
-import concurrent._
-import Implicits._
+
+import at.iem.sysson.Implicits._
 import de.sciss.file._
+import de.sciss.filecache
+import de.sciss.filecache.TxnProducer
+import de.sciss.serial.{DataInput, DataOutput, ImmutableSerializer}
+import ucar.nc2
+
+import scala.collection.breakOut
+import scala.concurrent._
 import scala.concurrent.stm.{InTxn, TMap, atomic}
 
 object Stats {
@@ -51,7 +54,7 @@ object Stats {
       }
     }
   }
-  private case class CacheValue(size: Long, lastModified: Long, data: File) {
+  private final case class CacheValue(size: Long, lastModified: Long, data: File) {
     override def toString =
       s"$productPrefix(size = $size, lastModified = ${new java.util.Date(lastModified)}, data = ${data.getName})"
   }
@@ -67,7 +70,7 @@ object Stats {
 
    */
 
-  private lazy val cache = {
+  private lazy val cache: TxnProducer[File, CacheValue] = {
     val config        = filecache.Config[File, CacheValue]()
     config.capacity   = filecache.Limit(count = 100, space = 1L * 1024 * 1024)  // 1 MB... whatever, these files are incredibly small
     config.accept     = (key, value) => {
@@ -247,7 +250,7 @@ object Stats {
     * @param pool   the number of counts which have been combined in this count (1 for a single count).
     *               this is needed for the pooled standard deviation
     */
-  case class Counts(min: Double, max: Double, sum: Double, sqrdif: Double, num: Long, pool: Int) {
+  final case class Counts(min: Double, max: Double, sum: Double, sqrdif: Double, num: Long, pool: Int) {
     // def complete = Counts(min = min, max = max, mean = sum/num, stddev = math.sqrt(sqrdif/num))
 
     def combineWith(that: Counts) = Counts(
@@ -261,7 +264,7 @@ object Stats {
 
     def isPooled = pool > 1
     
-    def mean = sum/num
+    def mean = sum / num
 
     // sum of each sample variance multiplied by its sample size -1, then divided by sum of each sample size -1
     // so we should track the number of samples, because that way it becomes:
@@ -272,7 +275,7 @@ object Stats {
       *
       * See http://en.wikipedia.org/wiki/Pooled_variance
       */
-    def stddev  = math.sqrt(sqrdif/(num - pool))
+    def stddev  = math.sqrt(sqrdif / (num - pool))
 
     override def toString = s"$productPrefix(num = $num, min = ${min.toFloat}, max = ${max.toFloat}, " +
       s"mean = ${mean.toFloat}, ${if (isPooled) "pooled " else ""}stddev = ${stddev.toFloat})"
@@ -295,7 +298,7 @@ object Stats {
       }
     }
   }
-  case class Variable(name: String, total: Counts, slices: Map[String, Vec[Counts]]) {
+  final case class Variable(name: String, total: Counts, slices: Map[String, Vec[Counts]]) {
     override def toString = raw""""$name", total = $total${if (slices.isEmpty) "" else slices.keys.mkString(", slices = <", ",", ">")})"""
   }
 
@@ -324,10 +327,10 @@ object Stats {
   * overall minimum temperature will be found through `stats("ta").total.min`. That maximum temperature
   * at pressure level 0 will be found through `stats("ta").slices("plev")(0).max`.
   */
-case class Stats(map: Map[String, Stats.Variable]) {
-  def apply(name: String) = map(name)
+final case class Stats(map: Map[String, Stats.Variable]) {
+  def apply(name: String): Stats.Variable = map(name)
 
-  override def toString = {
+  override def toString: String = {
     val sb = new java.lang.StringBuilder(128)
     sb.append(productPrefix)
     sb.append('(')

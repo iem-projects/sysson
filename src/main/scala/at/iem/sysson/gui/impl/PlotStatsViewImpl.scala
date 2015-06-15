@@ -35,6 +35,7 @@ import scala.annotation.tailrec
 import scala.concurrent.stm.Ref
 import scala.swing.Swing._
 import scala.swing.{BoxPanel, Component, Label, Orientation, Table}
+import scala.util.{Success, Failure}
 
 object PlotStatsViewImpl {
   def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S]): PlotStatsView[S] = {
@@ -142,8 +143,8 @@ object PlotStatsViewImpl {
 
       import at.iem.sysson.Stats.executionContext
       val fut = Stats.get(nf)(tx.peer)
-      tx.afterCommit(fut.onSuccess {
-        case Stats(map) =>
+      tx.afterCommit(fut.onComplete {
+        case Success(Stats(map)) =>
           if (fileRef.single.get == fOpt) defer {
             // see if stats are available for the plotted variable
             val s = map.get(in.name)
@@ -153,6 +154,10 @@ object PlotStatsViewImpl {
               dispatch(sv)
             }
           }
+
+        case Failure(ex) =>
+          Console.err.println("Statistics could not be calculated:")
+          ex.printStackTrace()
       })
     }
 

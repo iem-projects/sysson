@@ -224,17 +224,17 @@ object DataSourceViewImpl {
           } else if (dim.size < 2) {
             // abort if there is less than two dimensions
             val opt = OptionPane.message(
-              message = s"Variable '${v.name}' has ${if (dim.size == 0) "no dimensions" else "only one dimension"}.\nNeed at least two for a plot.",
+              message = s"Variable '${v.name}' has ${if (dim.isEmpty) "no dimensions" else "only one dimension"}.\nNeed at least two for a plot.",
               messageType = OptionPane.Message.Info)
             opt.show(Window.find(component))
           } else {
             // identify latitude and longitude by their unit names, and time by its dimension name
             // (that seems to be working with the files we have)
             val latOpt = red.find { d =>
-              in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_north")
+              in.variableMap.get(d.name).flatMap(_.units).contains("degrees_north")
             }
             val lonOpt = red.find { d =>
-              in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_east")
+              in.variableMap.get(d.name).flatMap(_.units).contains("degrees_east")
             }
             val timeOpt = red.find { d => d.name == "time" }
 
