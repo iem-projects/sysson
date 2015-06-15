@@ -1,6 +1,6 @@
 name          := "SysSon"
 
-version       := "1.3.0"
+version       := "1.3.1"
 
 organization  := "at.iem.sysson"
 
@@ -28,7 +28,7 @@ fork in run := true
 
 lazy val melliteVersion             = "1.4.0"
 lazy val soundProcessesVersion      = "2.18.1"
-lazy val lucreMatrixVersion         = "0.10.0"
+lazy val lucreMatrixVersion         = "0.10.1"
 lazy val lucreSwingVersion          = "0.9.1"
 lazy val scalaColliderVersion       = "1.17.2"
 lazy val scalaColliderSwingVersion  = "1.25.1"
@@ -39,6 +39,7 @@ lazy val kollFlitzVersion           = "0.2.0"
 lazy val fscapeJobsVersion          = "1.5.0"
 lazy val sheetVersion               = "0.1.0"
 lazy val slfVersion                 = "1.7.12"
+lazy val xstreamVersion             = "1.4.8"   // Maven Central sha1 of previous version corrupt
 
 // ---- test libraries ----
 
@@ -57,7 +58,8 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
   "de.sciss" %% "fscapejobs"                  % fscapeJobsVersion,
   "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
-  "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
+  "org.slf4j" % "slf4j-simple"                % slfVersion,                 // logging (used by netcdf)
+  "com.thoughtworks.xstream" % "xstream" % xstreamVersion
 )
 
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
@@ -131,7 +133,8 @@ mainClass in assembly := mainClazz
 
 assemblyMergeStrategy in assembly := {
 //  case "META-INF/MANIFEST.MF" => MergeStrategy.last
-  case PathList("javax", "xml", xs @ _*) => MergeStrategy.first  // conflict xml-apis vs. stax-api
+  case PathList("javax", "xml", xs @ _*)   => MergeStrategy.first  // conflict xml-apis vs. stax-api
+  case PathList("org", "xmlpull", xs @ _*) => MergeStrategy.first  // from xstream I think
   case x =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)
