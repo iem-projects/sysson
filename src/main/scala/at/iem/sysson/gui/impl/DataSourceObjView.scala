@@ -48,6 +48,8 @@ object DataSourceObjView extends ObjView.Factory {
   final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.Database)
   final val typeID  = DataSourceElem.typeID
 
+  def hasDialog: Boolean = true
+
   def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
     val name      = obj.name
     val ds        = obj.elem.peer

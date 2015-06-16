@@ -17,12 +17,13 @@ package sound
 package impl
 
 import at.iem.sysson.graph.UserValue
+import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.synth.Sys
 import de.sciss.numbers
 import de.sciss.synth.proc.AuralObj.State
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB, TimeRef, AuralContext, AuralObj}
-import de.sciss.synth.proc.impl.{AsyncProcBuilder, SynthBuilder, AuralProcImpl, AuralProcDataImpl, ObservableImpl}
+import de.sciss.synth.proc.impl.{AsyncProcBuilder, SynthBuilder, AuralProcImpl, AuralProcDataImpl}
 import de.sciss.lucre.{event => evt, stm}
 
 import scala.concurrent.stm.TxnLocal

@@ -399,7 +399,7 @@ object SonificationViewImpl {
       import ActionBounceTimeline.{DurationSelection, QuerySettings, query1, performGUI}
 
       private var settings = QuerySettings[S](
-        span = Span(0L, (Timeline.SampleRate * 10).toLong), channels = Vector(0 to 1)
+        realtime = true, span = Span(0L, (Timeline.SampleRate * 10).toLong), channels = Vector(0 to 1)
       )
 
       accelerator = Some(KeyStrokes.menu1 + Key.B)

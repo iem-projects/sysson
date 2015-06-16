@@ -195,7 +195,7 @@ object Dymaxion {
 
     val pos = triPos(faceIdx)
 
-    val ang  = pos.rot.toRadians
+    val ang  = pos.rot.toDouble.toRadians
     val xr   = x * cos(ang) - y * sin(ang)
     val yr   = x * sin(ang) + y * cos(ang)
     val vy   = pos.yi * 2 + (pos.x % 2)

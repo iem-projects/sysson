@@ -39,6 +39,8 @@ object SonificationObjView extends ObjView.Factory {
   final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.Feed)
   final val typeID  = SonificationElemImpl.typeID
 
+  def hasDialog: Boolean = true
+
   private lazy val _init: Unit = ObjView.addFactory(this)
 
   def init(): Unit = _init

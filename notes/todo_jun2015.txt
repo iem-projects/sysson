@@ -1,14 +1,15 @@
 blocker
 [OK]    - DnD -- matrix als auch matrix editor slider, scheint nicht unter OS X 10.10, Java 8.
+[OK]    - bounce has to be performed in RT until we can support stream-buffer in NRT
 
 other
         - [Mellite]     im Workspace: "under-tree" die variablen und "Auge" wird plot button; trotzdem metadaten fenster (wenn header ausgewaehlt): 1
         - [Mellite]     im Workspace: limit menu (ev. hierarchisch, die die man nicht braucht scheinen nicht gleich auf): 0.5
         -           nicht erzeugbare objekte aus der liste nehmen (e.g. Artifact)
         -           AudioGrapheme umbenennen
-        - KlimaAnlage
+[OK]    - KlimaAnlage
 E       - relative ArtifactLocation (zu Workspace Ordner)
-        - DnD -- sonif.editor matrix reduction numbers cannot be dragged to/from attributes (Int)
+[won't] - DnD -- sonif.editor matrix reduction numbers cannot be dragged to/from attributes (Int)
         - Stride: GUI -- numbers should be at least 1; kann automatisch nach oben begrenzt werden?
         - [LucreMatrix] drag and drop a new data set: keep settings of matrix reductions as long as dimensions are the same: 2
 E       - Parameter GUI: "elapsed"... feedback on where in time: 0.5 (gibt alte Version): player functionality (re-hear, e.g., last 10 seconds...)
@@ -26,9 +27,9 @@ E       - Plot: min/max/normalize scale
         - Installer/Release
         - Disallow trying to open workspace twice -- instead bring existing workspace to front
         - Online help system
-        - Plot: 1D strategy
+[OK]    - Plot: 1D strategy
         - Save As workspace
-        - Data source window -- actions: add explanatory text
+[OK]    - Data source window -- actions: add explanatory text
         - Data source window: alten plot gegen neuen tauschen
         - dummy data - no real data playing...: fill matrix globally... not efficient; perhaps replace values! (switch in GUI -> UserSwitch); problem: needs pretty, interactive GUI: 1
         - matrix reductions: averages: 3

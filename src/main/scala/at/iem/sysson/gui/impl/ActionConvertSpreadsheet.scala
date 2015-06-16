@@ -311,7 +311,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
     }
 
     @tailrec def showPane(): List[TableVarDef] = {
-      val res = OptionPane(message = pane, OptionPane.Options.OkCancel, OptionPane.Message.Plain).show(None, title0)
+      val res = OptionPane(pane, OptionPane.Options.OkCancel, OptionPane.Message.Plain).show(None, title0)
       if (res == OptionPane.Result.Yes) {
         val numVars = mTableOut.getRowCount
 

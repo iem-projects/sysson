@@ -501,11 +501,8 @@ object ClimateViewImpl {
           case ex => ex.printStackTrace()
         }
 
-        def paintOverlay(g2: Graphics2D, chartPanel: ChartPanel): Unit =
-          for {
-            opt <- shapeFut.value
-            (shape, xDat, yDat) <- opt
-          } {
+        def paintOverlay(g2: Graphics2D, chartPanel: ChartPanel): Unit = shapeFut.value.foreach { opt =>
+          opt.foreach { case (shape, xDat, yDat) =>
             val xRange  = plot.getDomainAxis.getRange
             val yRange  = plot.getRangeAxis .getRange
             val xMin    = xRange.getLowerBound
@@ -542,6 +539,7 @@ object ClimateViewImpl {
               g2.setClip(clipOrig)
             }
           }
+        }
       }
 
       val butMapOverlay = new ToggleButton("Map Overlay") {

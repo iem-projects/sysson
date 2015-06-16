@@ -126,7 +126,7 @@ object DataSets {
       y <- 0 until  5
     } yield {
       val idx = Turbulence.MatrixToChannelMap.get(DymGrid(vx = x, vyi = y))
-        .map(Turbulence.Channels.indexOf).getOrElse(-1)
+        .map(Turbulence.Channels.indexOf(_)).getOrElse(-1)
       idx.toFloat
     }
     out.write(Array(buf.toArray))

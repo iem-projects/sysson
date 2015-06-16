@@ -15,6 +15,8 @@
 package at.iem.sysson
 package gui
 
+import java.util.Locale
+
 import de.sciss.desktop.impl.{WindowHandlerImpl, SwingApplicationImpl}
 import de.sciss.desktop.{WindowHandler, Menu}
 import de.sciss.mellite
@@ -45,12 +47,14 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
   }
 
   override def init(): Unit = {
+    Locale.setDefault(Locale.US)    // (untested) make sure number formatting is consistent, while we do not have i18
     Application.init(this)
 
     //    showLog = true
     //    de.sciss.synth.proc.showLog           = true
     //    de.sciss.synth.proc.showAuralLog      = true
     //    de.sciss.synth.proc.showTransportLog  = true
+    // de.sciss.synth.proc.impl.BounceImpl.DEBUG = true
 
     // ---- type extensions ----
 
