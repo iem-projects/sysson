@@ -21,10 +21,11 @@ import de.sciss.desktop.impl.{WindowHandlerImpl, SwingApplicationImpl}
 import de.sciss.desktop.{WindowHandler, Menu}
 import de.sciss.mellite
 import de.sciss.mellite.gui.LogFrame
+import de.sciss.mellite.gui.impl.document.DocumentHandlerImpl
 import language.existentials
 import javax.swing.UIManager
 import scala.util.control.NonFatal
-import de.sciss.mellite.{Prefs, Application}
+import de.sciss.mellite.{DocumentHandler, Prefs, Application}
 import com.alee.laf.checkbox.WebCheckBoxStyle
 import com.alee.laf.progressbar.WebProgressBarStyle
 import java.awt.Color
@@ -81,8 +82,6 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
     WebProgressBarStyle.highlightDarkWhite  = new Color(255, 255, 255, 0)
 
     LogFrame           .instance    // init
-    DocumentHandler    .instance    // init
-    DocumentViewHandler.instance    // init
 
     val mlltFrame = args.contains("--mellite-frame")
 
@@ -93,4 +92,6 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
   }
 
   protected def menuFactory: Menu.Root = MenuFactory.root
+
+  override lazy val documentHandler: DocumentHandler = new DocumentHandlerImpl
 }

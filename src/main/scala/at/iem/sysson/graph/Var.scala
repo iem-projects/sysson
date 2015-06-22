@@ -20,6 +20,7 @@ import at.iem.sysson.sound.impl.MatrixPrepare.ShapeAndIndex
 import de.sciss.synth
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
 import de.sciss.synth.{ScalarRated, UGenInLike}
+import org.scalautils.TypeCheckedTripleEquals
 
 object Var {
   final case class Play(variable: Var, time: Dim.Play, interp: Int)
@@ -41,7 +42,8 @@ object Var {
     //        freq = time.freq, interp = interp)
 
     def axis(dim: Dim): Var.Axis = {
-      require (dim.variable == variable, s"Dimension ${dim.name} does not belong to variable $variable")
+      import TypeCheckedTripleEquals._
+      require (dim.variable === variable, s"Dimension ${dim.name} does not belong to variable $variable")
       Var.Axis(this, dim.name)
     }
   }

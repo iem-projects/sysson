@@ -25,6 +25,7 @@ import de.sciss.synth.proc.AuralObj.State
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB, TimeRef, AuralContext, AuralObj}
 import de.sciss.synth.proc.impl.{AsyncProcBuilder, SynthBuilder, AuralProcImpl, AuralProcDataImpl}
 import de.sciss.lucre.{event => evt, stm}
+import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.TxnLocal
 
@@ -59,7 +60,8 @@ object AuralSonificationImpl extends AuralObj.Factory {
     val dimKey  = dimElem.name
     val dimName = source.dims  .get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key $dimKey")).value
     val full    = source.matrix
-    val dimIdx  = full.dimensions.indexWhere(_.name == dimName)
+    import TypeCheckedTripleEquals._
+    val dimIdx  = full.dimensions.indexWhere(_.name === dimName)
     if (dimIdx < 0) sys.error(s"Dimension $dimName not in matrix")
     dimIdx
   }

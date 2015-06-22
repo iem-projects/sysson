@@ -35,6 +35,7 @@ import de.sciss.swingplus.Spinner
 import de.sciss.{desktop, kollflitz, numbers}
 import org.jfree.chart.ChartPanel
 import org.jfree.chart.renderer.xy.XYStepAreaRenderer
+import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
 import scala.annotation.tailrec
@@ -112,8 +113,9 @@ object DataSourceFrameImpl {
           import Implicits._
           val dim1 = v1.dimensions
           val dim2 = v2.dimensions
-          val sameDimNames = (dim1 zip dim2).forall { case (d1, d2) => d1.name == d2.name }
-          val diffDimSizes = (dim1 zip dim2).count  { case (d1, d2) => d1.size != d2.size }
+          import TypeCheckedTripleEquals._
+          val sameDimNames = (dim1 zip dim2).forall { case (d1, d2) => d1.name === d2.name }
+          val diffDimSizes = (dim1 zip dim2).count  { case (d1, d2) => d1.size !== d2.size }
           if (sameDimNames && diffDimSizes <= 1) {
             val (_, diff) = (dim1 zip dim2).partition { case (d1, d2) =>
               val arr1 = v1.file.variableMap(d1.name).readSafe()
@@ -369,7 +371,8 @@ object DataSourceFrameImpl {
             add(pYears, BorderPanel.Position.South )
           }
           val res = OptionPane(message = pMessage, optionType = OptionPane.Options.OkCancel).show(sw, title)
-          if (res == OptionPane.Result.Ok) {
+          import TypeCheckedTripleEquals._
+          if (res === OptionPane.Result.Ok) {
             withSaveFile(window, "Anomalies Output File") { out =>
               val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = "time",
                 windowYears = mYears.getNumber.intValue())

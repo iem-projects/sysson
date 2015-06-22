@@ -18,6 +18,7 @@ package util
 import de.sciss.file._
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
+import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2.constants.CDM
 import ucar.{ma2, nc2}
 
@@ -90,9 +91,10 @@ object NetCdfFileUtil {
         (outDim, c.values, outVarD)
     } .unzip3
 
+    import TypeCheckedTripleEquals._
     val outDims = outDimsSpec.map {
-      case Keep(name) => keepOutDims .find(_.name ==   name).getOrElse(sys.error(s"No dimension '$name'"))
-      case c: Create  => alterOutDims.find(_.name == c.name).getOrElse(sys.error(s"No dimension '${c.name}'"))
+      case Keep(name) => keepOutDims .find(_.name ===   name).getOrElse(sys.error(s"No dimension '$name'"))
+      case c: Create  => alterOutDims.find(_.name === c.name).getOrElse(sys.error(s"No dimension '${c.name}'"))
     }
 
     val outVar = writer.addVariable(null, inVar.getShortName, inVar.getDataType, outDims.asJava)
@@ -140,7 +142,7 @@ object NetCdfFileUtil {
     }
 
     // val transformShape: Vec[Int] = inDims.map(name => in.dimensionMap(name).size)
-    val permutations: Array[Int] = inDims.map(name => alterInDims.indexWhere(_.name == name))(breakOut)
+    val permutations: Array[Int] = inDims.map(name => alterInDims.indexWhere(_.name === name))(breakOut)
 
     val expectedRank  = alterOutDimsD.size
     val expectedSize  = alterOutDimsD.map(_.size).product
@@ -153,7 +155,7 @@ object NetCdfFileUtil {
       case head +: tail =>
         head match {
           case Keep(name) =>
-            val dim = keepInDims.find(_.name == name).get
+            val dim = keepInDims.find(_.name === name).get
             for (i <- 0 until dim.size) {
               val sec1 = (sec in name).select(i)
               iter(sec1, origin :+ i, tail)
@@ -231,8 +233,9 @@ object NetCdfFileUtil {
 
     val allInDims = inVar1.dimensions
 
+    import TypeCheckedTripleEquals._
     val (outDims, keepOutDimsV) = allInDims.map { inDim =>
-      val size    = if (inDim.name == dimName) inDim.size + inVar2.dimensionMap(inDim.name).size else inDim.size
+      val size    = if (inDim.name === dimName) inDim.size + inVar2.dimensionMap(inDim.name).size else inDim.size
       val outDim  = writer.addDimension(null, inDim.name, size)
       val inVar   = in1.variableMap(inDim.name)
       val outVarD = writer.addVariable(null, inVar.getShortName, inVar.dataType, Seq(outDim).asJava)
@@ -250,7 +253,7 @@ object NetCdfFileUtil {
       val inVar1    = in1.variableMap(inDim.name)
       val dimData1  = inVar1.read()
       writer.write(outDimV, dimData1)
-      if (inDim.name == dimName) {
+      if (inDim.name === dimName) {
         val inVar2      = in2.variableMap(inDim.name)
         val dimData2    = inVar2.read()
         val origin      = new Array[Int](dimData2.rank)
@@ -261,7 +264,7 @@ object NetCdfFileUtil {
 
     val dim1    = inVar1.dimensionMap(dimName)
     val dim2    = inVar2.dimensionMap(dimName)
-    val dimIdx  = inVar1.dimensions.indexWhere(_.name == dimName)
+    val dimIdx  = inVar1.dimensions.indexWhere(_.name === dimName)
     val dim1Sz  = dim1.size
     val dim2Sz  = dim2.size
 
@@ -340,7 +343,8 @@ object NetCdfFileUtil {
 
     val inVar         = in.variableMap(varName)
     val inDims        = inVar.dimensions
-    val timeIdx       = inDims  .indexWhere(_.name == timeName)
+    import TypeCheckedTripleEquals._
+    val timeIdx       = inDims  .indexWhere(_.name === timeName)
     // val otherDims     = inDims  .patch(timeIdx, Nil, 1)
     // val otherShape    = inVar.shape.patch(timeIdx, Nil, 1)
     val numTime       = inDims(timeIdx).size

@@ -43,6 +43,7 @@ import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.renderer.{LookupPaintScale, PaintScale}
 import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
+import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 import ucar.nc2.time.{CalendarDateFormatter, CalendarPeriod}
 
@@ -164,7 +165,10 @@ object ClimateViewImpl {
                            xDim: nc2.Dimension, yDim: nc2.Dimension)(implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
     extends ClimateView[S] with ComponentHolder[Component] {
 
-    private val red     = section.reducedDimensions.filterNot(d => d == yDim || d == xDim)
+    private val red     = {
+      import TypeCheckedTripleEquals._
+      section.reducedDimensions.filterNot(d => d === yDim || d === xDim)
+    }
     private val width   = xDim.size
     private val height  = yDim.size
 

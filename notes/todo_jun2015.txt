@@ -1,35 +1,23 @@
-blocker
-[OK]    - DnD -- matrix als auch matrix editor slider, scheint nicht unter OS X 10.10, Java 8.
-[OK]    - bounce has to be performed in RT until we can support stream-buffer in NRT
-
 other
         - [Mellite]     im Workspace: "under-tree" die variablen und "Auge" wird plot button; trotzdem metadaten fenster (wenn header ausgewaehlt): 1
         - [Mellite]     im Workspace: limit menu (ev. hierarchisch, die die man nicht braucht scheinen nicht gleich auf): 0.5
-        -           nicht erzeugbare objekte aus der liste nehmen (e.g. Artifact)
         -           AudioGrapheme umbenennen
-[OK]    - KlimaAnlage
 E       - relative ArtifactLocation (zu Workspace Ordner)
-[won't] - DnD -- sonif.editor matrix reduction numbers cannot be dragged to/from attributes (Int)
         - Stride: GUI -- numbers should be at least 1; kann automatisch nach oben begrenzt werden?
         - [LucreMatrix] drag and drop a new data set: keep settings of matrix reductions as long as dimensions are the same: 2
 E       - Parameter GUI: "elapsed"... feedback on where in time: 0.5 (gibt alte Version): player functionality (re-hear, e.g., last 10 seconds...)
 E       - Plot: synchronize with sonification playback: 1
 E       - Plot: min/max/normalize scale
-[OK]    - Plot: vertical divider fuer plot versus matrix editor
         - Plot: label matrix-DnD button; und datenquelle sichtbar machen koennen (siehe unten)
         - Matrix Association View: indicate object ID
         - Sonification: embedded Proc object should inherit sonification's name attribute
-        - File > New > Workspace: Default to "Durable", move selection dialog to more specific item
         - Statt Exception zu werfen, wenn SynthDef zu gross wird, in der GUI abfangen bei "Play"
         - Parameter GUI: parameters as sliders within a given Range, "UserRange": 0.75 (-format of typing numbers … (anzeige > 3 kommastellen)
         - Parameter GUI: verknuepfung matrix datenquelle (ueberpruefen welche daten reingeladen sind): 0.5
         - Parameter GUI: parameter automatisch zuweisen; wenn "fehler" deutlich sichtbar, dass dimension nicht zugeordnet: 0.5
         - Installer/Release
-        - Disallow trying to open workspace twice -- instead bring existing workspace to front
         - Online help system
-[OK]    - Plot: 1D strategy
         - Save As workspace
-[OK]    - Data source window -- actions: add explanatory text
         - Data source window: alten plot gegen neuen tauschen
         - dummy data - no real data playing...: fill matrix globally... not efficient; perhaps replace values! (switch in GUI -> UserSwitch); problem: needs pretty, interactive GUI: 1
         - matrix reductions: averages: 3
@@ -37,3 +25,14 @@ E       - Plot: min/max/normalize scale
         -- in the tool: when trying to choose a file, the tool doesn't remember the previous paths … must go through all steps again each time … change default local: remember last path? (key...)
         -- when trying to open a file in the tool, the interface doesn't let you see the whole data name, which is not optimal for nc files that usually have very long names and are similar in the first half of their names …
         - docking system (one window): 2-3
+[won't] - DnD -- sonif.editor matrix reduction numbers cannot be dragged to/from attributes (Int)
+
+[OK]    - DnD -- matrix als auch matrix editor slider, scheint nicht unter OS X 10.10, Java 8.
+[OK]    - bounce has to be performed in RT until we can support stream-buffer in NRT
+[OK]    - Mellite: nicht erzeugbare objekte aus der liste nehmen (e.g. Artifact)
+[OK]    - KlimaAnlage
+[OK]    - Plot: vertical divider fuer plot versus matrix editor
+[OK]    - File > New > Workspace: Default to "Durable", move selection dialog to more specific item
+[OK]    - Disallow trying to open workspace twice -- instead bring existing workspace to front
+[OK]    - Plot: 1D strategy
+[OK]    - Data source window -- actions: add explanatory text

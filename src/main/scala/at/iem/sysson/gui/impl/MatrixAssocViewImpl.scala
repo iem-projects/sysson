@@ -34,6 +34,7 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.serial.Serializer
+import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.{TxnExecutor, Ref}
 import scala.language.higherKinds
@@ -122,7 +123,7 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
 
     def importInt(t: TransferSupport)(implicit tx: S#Tx): Option[Expr[S, Int]] = {
       val drag = t.getTransferable.getTransferData(IntFlavor).asInstanceOf[IntDrag]
-      val x: Expr[S, Int] = if (drag.workspace == impl.workspace) {
+      val x: Expr[S, Int] = if (drag.workspace == /* === */ impl.workspace) {
         drag.asInstanceOf[IntDrag { type S1 = S }].source()
       } else {
         IntEx.newConst[S](drag.value)

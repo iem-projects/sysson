@@ -23,6 +23,7 @@ import de.sciss.file._
 import de.sciss.mellite
 import de.sciss.sheet.{BooleanCell, StringCell, Cell, StyledCell, NumericCell, Sheet, Workbook}
 import de.sciss.swingplus.ListView
+import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2.constants.CDM
 import ucar.{ma2, nc2}
 
@@ -38,8 +39,9 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
   def apply(): Unit = {
     val fDlg = FileDialog.open(title = "Select .xls/.xlsx Spreadsheet")
     fDlg.setFilter { f =>
+      import TypeCheckedTripleEquals._
       val ext = f.ext.toLowerCase
-      ext == "xls" || ext == "xlsx"
+      ext === "xls" || ext === "xlsx"
     }
     fDlg.show(None).foreach { fIn =>
       val fInName = fIn.name
@@ -273,7 +275,8 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
       val desc    = getCol(2)
       val unit    = getCol(3)
 
-      if (varName == "untitled") Left(s"Variable in row ${row + 1} must be named")
+      import TypeCheckedTripleEquals._
+      if (varName === "untitled") Left(s"Variable in row ${row + 1} must be named")
       else {
         val shapeS  = mTableOut.getValueAt(row, 1).toString
         shapeToSelection(shapeS).fold[Either[String, TableVarDef]](
@@ -286,7 +289,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
           val rDimOptE  = rDimSO.fold[Either[String, Option[VarDef]]](
             Right(if (isVector) None else Some(SyntheticDim(s"${varName}_dim0", Array.tabulate(rSize)(_.toFloat))))
           ) { rDimName =>
-            in.find(_.name == rDimName).fold[Either[String, Option[VarDef]]](
+            in.find(_.name === rDimName).fold[Either[String, Option[VarDef]]](
               Left(s"Cannot find dimension $rDimSO"))(rDim => Right(Some(rDim)))
           }
           rDimOptE.right.flatMap { rDimOpt =>
@@ -295,7 +298,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
               val cDimOpt = cDimSO.fold[Option[VarDef]](
                 Some(SyntheticDim(s"${varName}_dim1", Array.tabulate(cSize)(_.toFloat)))
               ) { cDimName =>
-                in.find(_.name == cDimName)
+                in.find(_.name === cDimName)
               }
               cDimOpt.fold[Either[String, Option[VarDef]]](Left(s"Cannot find dimension $cDimSO")) { cDim =>
                 Right(Some(cDim))
@@ -312,7 +315,8 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
 
     @tailrec def showPane(): List[TableVarDef] = {
       val res = OptionPane(pane, OptionPane.Options.OkCancel, OptionPane.Message.Plain).show(None, title0)
-      if (res == OptionPane.Result.Yes) {
+      import TypeCheckedTripleEquals._
+      if (res === OptionPane.Result.Yes) {
         val numVars = mTableOut.getRowCount
 
         @tailrec def loop(ri: Int, res: List[TableVarDef]): Either[String, List[TableVarDef]] =

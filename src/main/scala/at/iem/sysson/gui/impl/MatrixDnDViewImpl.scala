@@ -35,6 +35,7 @@ import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.serial.Serializer
 import de.sciss.swingplus.PopupMenu
+import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
@@ -148,9 +149,10 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
 
         override def importData(support: TransferSupport): Boolean = {
           val t         = support.getTransferable
-          val isCopy    = support.getDropAction == TransferHandler.COPY
+          import TypeCheckedTripleEquals._
+          val isCopy    = support.getDropAction === TransferHandler.COPY
           val drag0     = t.getTransferData(DragAndDrop.MatrixFlavor).asInstanceOf[MatrixDrag]
-          if (drag0.workspace == workspace) {
+          if (drag0.workspace == /* === */ workspace) {
             val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
             val editOpt = impl.cursor.step { implicit tx =>
               val v0        = drag.matrix()

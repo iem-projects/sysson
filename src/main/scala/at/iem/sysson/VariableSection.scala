@@ -14,6 +14,7 @@
 
 package at.iem.sysson
 
+import org.scalautils.TypeCheckedTripleEquals
 import ucar.{nc2, ma2}
 
 import Implicits._
@@ -132,7 +133,8 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
   def stats(implicit tx: InTxn): Future[Stats.Counts] = {
     import Stats.executionContext
     Stats.get(variable.file).map { s =>
-      require(scale == Scale.Identity, "Scaled sections are not yet supported")
+      import TypeCheckedTripleEquals._
+      require(scale === Scale.Identity, "Scaled sections are not yet supported")
       val sv  = s.map.getOrElse(variable.name, sys.error(s"Statistics does not include variable ${variable.name}"))
       val red = section.zipWithIndex.filterNot(_._1.isAll)
       if (red.isEmpty) sv.total else {
@@ -167,6 +169,7 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
       val relT      = relevant.map { case (r, idx) => s"${variable.getDimension(idx).nameOption.getOrElse(idx)}: $r" }
       s"${variable.name} @ ${relT.mkString("[", ", ", "]")}"
     }
-    if (scale == Scale.Identity) selected else s"$selected ; scale = $scale"
+    import TypeCheckedTripleEquals._
+    if (scale === Scale.Identity) selected else s"$selected ; scale = $scale"
   }
 }

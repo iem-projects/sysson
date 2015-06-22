@@ -30,6 +30,7 @@ import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.mellite.Workspace
 import de.sciss.serial.Serializer
+import org.scalautils.TypeCheckedTripleEquals
 
 import scala.annotation.tailrec
 import scala.swing.{SplitPane, Orientation, BoxPanel, Component}
@@ -129,8 +130,9 @@ object PlotViewImpl {
 
     protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] =
       Matrix.Var.unapply(plotH().elem.peer.matrix).flatMap { vr =>
+        import TypeCheckedTripleEquals._
         @tailrec def isRecursive(m0: Matrix[S]): Boolean = m0 match {
-          case Matrix.Var(vr0) => if (vr0 == vr) true else isRecursive(vr0())
+          case Matrix.Var(vr0) => if (vr0 === vr) true else isRecursive(vr0())
           case _ => false
         }
 

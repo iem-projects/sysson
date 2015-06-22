@@ -30,6 +30,7 @@ import de.sciss.mellite.gui.ObjView
 import de.sciss.mellite.gui.impl.ObjViewImpl
 import de.sciss.synth.proc.Implicits._
 import de.sciss.synth.proc.Obj
+import org.scalautils.TypeCheckedTripleEquals
 
 import scala.swing.{Component, Label}
 
@@ -74,7 +75,10 @@ object PlotObjView extends ObjView.Factory {
   }
 
   private final class Value(matrixName: String) {
-    override def toString = if (matrixName == "zeros[0]") "" else s"matrix: $matrixName"
+    override def toString: String = {
+      import TypeCheckedTripleEquals._
+      if (matrixName === "zeros[0]") "" else s"matrix: $matrixName"
+    }
   }
 
   private final class Impl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, Plot.Elem]],

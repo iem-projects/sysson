@@ -30,6 +30,7 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.Workspace
 import de.sciss.model.Change
+import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
@@ -64,14 +65,15 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
     import StringEx.{serializer => stringSerializer}
     dimsH = tx.newHandle(dims)
 
+    import TypeCheckedTripleEquals._
     val b0 = dims.iterator.collect {
-      case (key, valueEx) if valueEx.value == keyName => key
+      case (key, valueEx) if valueEx.value === keyName => key
     } .toSet
     bindings = Ref(b0)
 
     observer = dims.changed.react { implicit tx => upd => upd.changes.foreach {
-        case expr.Map.Added  (key, valueEx) if valueEx.value == keyName => addBinding   (key)
-        case expr.Map.Removed(key, valueEx) if valueEx.value == keyName => removeBinding(key)
+        case expr.Map.Added  (key, valueEx) if valueEx.value === keyName => addBinding   (key)
+        case expr.Map.Removed(key, valueEx) if valueEx.value === keyName => removeBinding(key)
         case expr.Map.Element(key, _, change) =>
           change match {
             case Change(_, `keyName`) => addBinding   (key)

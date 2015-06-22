@@ -21,17 +21,17 @@ import at.iem.sysson.gui.impl.ActionConvertSpreadsheet
 import at.iem.sysson.gui.{SwingApplication => App}
 import de.sciss.desktop.{Desktop, KeyStrokes, Menu, OptionPane}
 import de.sciss.file._
-import de.sciss.lucre.event.{Durable, Sys}
+import de.sciss.lucre.event.Durable
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.lucre.synth.Txn
-import de.sciss.mellite.gui.{ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
-import de.sciss.mellite.{Mellite, Workspace}
+import de.sciss.mellite.Mellite
+import de.sciss.mellite.gui.{ActionCloseAllWorkspaces, ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
 import de.sciss.osc
 
 import scala.concurrent.stm.TxnExecutor
 import scala.language.existentials
+import scala.swing.Label
 import scala.swing.event.{Key, MouseClicked}
-import scala.swing.{Action, Label}
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -39,26 +39,6 @@ object MenuFactory {
   private lazy val _root = {
     import KeyStrokes._
     import de.sciss.desktop.Menu._
-
-    val dh = DocumentHandler.instance
-
-    val actionCloseAll = new Action("Close All") {
-      accelerator = Some(menu1 + shift + Key.W)
-      def apply(): Unit = closeAll()
-    }
-
-    def checkCloseAll(): Unit = actionCloseAll.enabled = !dh.isEmpty
-
-    checkCloseAll()
-
-    dh.addListener {
-      case DocumentHandler.Opened(doc) =>
-        // recent.add(doc.dir)Main
-        checkCloseAll()
-
-      case DocumentHandler.Closed(doc) =>
-        checkCloseAll()
-    }
 
     def funAbout(): Unit = {
       val addr    = "sysson.kug.ac.at"
@@ -112,9 +92,10 @@ object MenuFactory {
 
     val gFile = Group("file", "File")
       .add(Group("new", "New")
-        .add(
-          Item("new-workspace", ActionNewWorkspace) // ("Workspace..." -> (menu1 + VK_N)) {
-        )
+        .add(Item("new-basic-workspace")("Workspace..." -> (menu1 + shift + Key.N)) {
+          ActionNewWorkspace.performDurable()
+        })
+        .add(Item("new-workspace")("Extended Workspace...")(ActionNewWorkspace()))
         .addLine()
         .add(Item("new-interpreter")("Interpreter..." -> (menu1 + Key.R)) {
             openInterpreter()
@@ -129,9 +110,9 @@ object MenuFactory {
       .add(Item("open", ActionOpenWorkspace))
       .add(ActionOpenWorkspace.recentMenu)
       .addLine()
-      .add(Item("close", proxy("Close" -> (menu1 + Key.W))))
-      .add(Item("close-all", actionCloseAll))
-      .add(Item("save", proxy("Save" -> (menu1 + Key.S))))
+      .add(Item("close" , proxy("Close" -> (menu1 + Key.W))))
+      .add(Item("close-all", ActionCloseAllWorkspaces))
+      .add(Item("save"  , proxy("Save" -> (menu1 + Key.S))))
       .add(Item("bounce", proxy("Bounce...", menu1 + Key.B)))
 
     if (itQuit.visible) gFile.addLine().add(itQuit)
@@ -175,17 +156,7 @@ object MenuFactory {
     r
   }
 
-  def closeAll(): Unit = {
-    val docs = DocumentHandler.instance.allDocuments
-
-    // cf. http://stackoverflow.com/questions/20982681/existential-type-or-type-parameter-bound-failure
-    def screwYou[S <: Sys[S]](doc: Workspace[S]): Unit = {
-      // doc.cursor.step { implicit tx => doc.dispose() }
-      println("TODO: close workspace")  // MMM
-    }
-
-    docs.foreach(doc => screwYou(doc.asInstanceOf[Workspace[~] forSome { type ~ <: Sys[~] }]))
-  }
+  def closeAll(): Unit = ActionCloseAllWorkspaces()
 
   def openInterpreter(): Unit = InterpreterView()
 

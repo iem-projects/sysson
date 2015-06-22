@@ -35,6 +35,7 @@ import de.sciss.mellite.gui.GUI
 import de.sciss.mellite.gui.impl.WindowImpl
 import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.swingtree.{ExternalTreeModel, Tree}
+import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
 import scala.annotation.{switch, tailrec}
@@ -65,7 +66,8 @@ object DataSourceViewImpl {
       val v2 = value match {
         case g: nc2.Group =>
           val n = g.name
-          if (n == "") "<untitled group>" else n
+          import TypeCheckedTripleEquals._
+          if (n === "") "<untitled group>" else n
         case _ => value
       }
       super.getTreeCellRendererComponent(tree, v2, isSelected, isExpanded, isLeaf, row, hasFocus)
@@ -230,13 +232,14 @@ object DataSourceViewImpl {
           } else {
             // identify latitude and longitude by their unit names, and time by its dimension name
             // (that seems to be working with the files we have)
+            import TypeCheckedTripleEquals._
             val latOpt = red.find { d =>
-              in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_north")
+              in.variableMap.get(d.name).flatMap(_.units) === Some("degrees_north")
             }
             val lonOpt = red.find { d =>
-              in.variableMap.get(d.name).flatMap(_.units) == Some("degrees_east")
+              in.variableMap.get(d.name).flatMap(_.units) === Some("degrees_east")
             }
-            val timeOpt = red.find { d => d.name == "time" }
+            val timeOpt = red.find { d => d.name === "time" }
 
             // first see if there are useful dimensions such as lon/lat
             val xyOpt0: Option[(nc2.Dimension, nc2.Dimension)] = (latOpt, lonOpt, timeOpt) match {
@@ -309,7 +312,8 @@ object DataSourceViewImpl {
           val ds      = sourceH()
           val p       = vr.parents
           val n       = vr.name
-          val dsvOpt  = ds.variables.find(dsv => dsv.name == n && dsv.parents == p)
+          import TypeCheckedTripleEquals._
+          val dsvOpt  = ds.variables.find(dsv => dsv.name === n && dsv.parents === p)
           dsvOpt.map(tx.newHandle[Matrix[S]])
         }
         varHOpt

@@ -43,6 +43,7 @@ import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.renderer.{LookupPaintScale, PaintScale}
 import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
+import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.Future
 import scala.concurrent.stm.Ref
@@ -105,8 +106,9 @@ object PlotChartImpl {
       val dims    = m.dimensions
       val hName   = dimMap.get(Plot.HKey).map(_.value).getOrElse("?")
       val vName   = dimMap.get(Plot.VKey).map(_.value).getOrElse("?")
-      val hIdx    = dims.indexWhere(_.name == hName)
-      val vIdx    = dims.indexWhere(_.name == vName)
+      import TypeCheckedTripleEquals._
+      val hIdx    = dims.indexWhere(_.name === hName)
+      val vIdx    = dims.indexWhere(_.name === vName)
       val mShape  = m.shape
       val shapeOk = checkShape1D(mShape, hIdx, vIdx)
 
@@ -239,7 +241,8 @@ object PlotChartImpl {
       if (xChanged || yChanged) {
         val xNameL    = xName.toLowerCase
         val yNameL    = yName.toLowerCase
-        isMap         = (xNameL == "lon" || xName == "Longitude") && (yNameL == "lat" || yNameL == "Latitude")
+        import TypeCheckedTripleEquals._
+        isMap         = (xNameL === "lon" || xName === "Longitude") && (yNameL === "lat" || yNameL === "Latitude")
         updateOverlay()
       }
     }

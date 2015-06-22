@@ -29,6 +29,7 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.model.impl.ModelImpl
+import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
 import scala.annotation.tailrec
@@ -139,13 +140,14 @@ object PlotStatsViewImpl {
       val f   = nf.file
       val fOpt= Some(f)
       val of  = fileRef.swap(fOpt)(tx.peer)
-      if (of == fOpt) return  // same file as before
+      import TypeCheckedTripleEquals._
+      if (of === fOpt) return  // same file as before
 
       import at.iem.sysson.Stats.executionContext
       val fut = Stats.get(nf)(tx.peer)
       tx.afterCommit(fut.onComplete {
         case Success(Stats(map)) =>
-          if (fileRef.single.get == fOpt) defer {
+          if (fileRef.single.get === fOpt) defer {
             // see if stats are available for the plotted variable
             val s = map.get(in.name)
             s.foreach { sv =>
