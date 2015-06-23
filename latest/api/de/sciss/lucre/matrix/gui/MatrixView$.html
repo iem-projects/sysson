@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>MatrixView - SysSon 1.1.0 API - de.sciss.lucre.matrix.gui.MatrixView</title>
-          <meta name="description" content="MatrixView - SysSon 1.1.0 API - de.sciss.lucre.matrix.gui.MatrixView" />
-          <meta name="keywords" content="MatrixView SysSon 1.1.0 API de.sciss.lucre.matrix.gui.MatrixView" />
+          <title>MatrixView - SysSon 1.4.0 API - de.sciss.lucre.matrix.gui.MatrixView</title>
+          <meta name="description" content="MatrixView - SysSon 1.4.0 API - de.sciss.lucre.matrix.gui.MatrixView" />
+          <meta name="keywords" content="MatrixView SysSon 1.4.0 API de.sciss.lucre.matrix.gui.MatrixView" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -93,7 +93,24 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="de.sciss.lucre.matrix.gui.MatrixView.Update" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.lucre.matrix.gui.MatrixView.TransferHandler" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TransferHandler[S&lt;:de.sciss.lucre.matrix.Sys[S]]extendsAnyRef"></a>
+      <a id="TransferHandler[S&lt;:Sys[S]]:TransferHandler[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MatrixView$$TransferHandler.html"><span class="name">TransferHandler</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../package.html#Sys[S&lt;:de.sciss.lucre.matrix.package.Sys[S]]=de.sciss.lucre.event.Sys[S]" class="extmbr" name="de.sciss.lucre.matrix.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.TransferHandler.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.lucre.matrix.gui.MatrixView$@TransferHandler[S&lt;:de.sciss.lucre.matrix.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.matrix.gui.MatrixView.Update" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="UpdateextendsAnyRef"></a>
       <a id="Update:Update"></a>
       <h4 class="signature">
@@ -186,18 +203,18 @@
     </span>
       
     </li><li name="de.sciss.lucre.matrix.gui.MatrixView#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[S&lt;:de.sciss.lucre.matrix.Sys[S]](implicittx:S#Tx,implicitcursor:de.sciss.lucre.stm.Cursor[S],implicitresolver:de.sciss.lucre.matrix.DataSource.Resolver[S],implicitexec:scala.concurrent.ExecutionContext,implicitundoManager:de.sciss.desktop.UndoManager):de.sciss.lucre.matrix.gui.MatrixView[S]"></a>
-      <a id="apply[S&lt;:Sys[S]](MatrixView.apply.S.Tx,Cursor[S],Resolver[S],ExecutionContext,UndoManager):MatrixView[S]"></a>
+      <a id="apply[S&lt;:de.sciss.lucre.matrix.Sys[S]](transferHandler:Option[de.sciss.lucre.matrix.gui.MatrixView.TransferHandler[S]])(implicittx:S#Tx,implicitcursor:de.sciss.lucre.stm.Cursor[S],implicitresolver:de.sciss.lucre.matrix.DataSource.Resolver[S],implicitexec:scala.concurrent.ExecutionContext,implicitundoManager:de.sciss.desktop.UndoManager):de.sciss.lucre.matrix.gui.MatrixView[S]"></a>
+      <a id="apply[S&lt;:Sys[S]](Option[TransferHandler[S]])(MatrixView.apply.S.Tx,Cursor[S],Resolver[S],ExecutionContext,UndoManager):MatrixView[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="S">S &lt;: <a href="../package.html#Sys[S&lt;:de.sciss.lucre.matrix.package.Sys[S]]=de.sciss.lucre.event.Sys[S]" class="extmbr" name="de.sciss.lucre.matrix.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.event.Sys.Tx">MatrixView.apply.S.Tx</span></span>, <span name="cursor">cursor: <span class="extype" name="de.sciss.lucre.stm.Cursor">Cursor</span>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]</span>, <span name="resolver">resolver: <a href="../DataSource$$Resolver.html" class="extype" name="de.sciss.lucre.matrix.DataSource.Resolver">Resolver</a>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]</span>, <span name="exec">exec: <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span></span>, <span name="undoManager">undoManager: <span class="extype" name="de.sciss.desktop.UndoManager">UndoManager</span></span>)</span><span class="result">: <a href="MatrixView.html" class="extype" name="de.sciss.lucre.matrix.gui.MatrixView">MatrixView</a>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="S">S &lt;: <a href="../package.html#Sys[S&lt;:de.sciss.lucre.matrix.package.Sys[S]]=de.sciss.lucre.event.Sys[S]" class="extmbr" name="de.sciss.lucre.matrix.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]</span>]</span><span class="params">(<span name="transferHandler">transferHandler: <span class="extype" name="scala.Option">Option</span>[<a href="MatrixView$$TransferHandler.html" class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.TransferHandler">TransferHandler</a>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]] = <span class="symbol"><span class="name"><a href="../../../../../scala/package.html">None</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.event.Sys.Tx">MatrixView.apply.S.Tx</span></span>, <span name="cursor">cursor: <span class="extype" name="de.sciss.lucre.stm.Cursor">Cursor</span>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]</span>, <span name="resolver">resolver: <a href="../DataSource$$Resolver.html" class="extype" name="de.sciss.lucre.matrix.DataSource.Resolver">Resolver</a>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]</span>, <span name="exec">exec: <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span></span>, <span name="undoManager">undoManager: <span class="extype" name="de.sciss.desktop.UndoManager">UndoManager</span></span>)</span><span class="result">: <a href="MatrixView.html" class="extype" name="de.sciss.lucre.matrix.gui.MatrixView">MatrixView</a>[<span class="extype" name="de.sciss.lucre.matrix.gui.MatrixView.apply.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#de.sciss.lucre.matrix.gui.MatrixView$@apply[S&lt;:de.sciss.lucre.matrix.Sys[S]](implicittx:S#Tx,implicitcursor:de.sciss.lucre.stm.Cursor[S],implicitresolver:de.sciss.lucre.matrix.DataSource.Resolver[S],implicitexec:scala.concurrent.ExecutionContext,implicitundoManager:de.sciss.desktop.UndoManager):de.sciss.lucre.matrix.gui.MatrixView[S]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#de.sciss.lucre.matrix.gui.MatrixView$@apply[S&lt;:de.sciss.lucre.matrix.Sys[S]](transferHandler:Option[de.sciss.lucre.matrix.gui.MatrixView.TransferHandler[S]])(implicittx:S#Tx,implicitcursor:de.sciss.lucre.stm.Cursor[S],implicitresolver:de.sciss.lucre.matrix.DataSource.Resolver[S],implicitexec:scala.concurrent.ExecutionContext,implicitundoManager:de.sciss.desktop.UndoManager):de.sciss.lucre.matrix.gui.MatrixView[S]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" />
       </a>
     </span>

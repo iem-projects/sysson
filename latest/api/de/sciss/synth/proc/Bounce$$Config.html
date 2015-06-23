@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Config - SysSon 1.1.0 API - de.sciss.synth.proc.Bounce.Config</title>
-          <meta name="description" content="Config - SysSon 1.1.0 API - de.sciss.synth.proc.Bounce.Config" />
-          <meta name="keywords" content="Config SysSon 1.1.0 API de.sciss.synth.proc.Bounce.Config" />
+          <title>Config - SysSon 1.4.0 API - de.sciss.synth.proc.Bounce.Config</title>
+          <meta name="description" content="Config - SysSon 1.4.0 API - de.sciss.synth.proc.Bounce.Config" />
+          <meta name="keywords" content="Config SysSon 1.4.0 API de.sciss.synth.proc.Bounce.Config" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -95,7 +95,43 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="de.sciss.synth.proc.Bounce.ConfigLike#group" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="de.sciss.synth.proc.Bounce.ConfigLike#beforePlay" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="beforePlay:(S#Tx,de.sciss.lucre.synth.Server)=&gt;Unit"></a>
+      <a id="beforePlay:(S.Tx,lucre.synth.Server)⇒Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beforePlay</span><span class="result">: (<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <a href="../../lucre/synth/Server.html" class="extype" name="de.sciss.lucre.synth.Server">lucre.synth.Server</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.Bounce$$Config@beforePlay:(S#Tx,de.sciss.lucre.synth.Server)=&gt;Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bounce$$ConfigLike.html" class="extype" name="de.sciss.synth.proc.Bounce.ConfigLike">ConfigLike</a></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.Bounce.ConfigLike#beforePrepare" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="beforePrepare:(S#Tx,de.sciss.lucre.synth.Server)=&gt;Unit"></a>
+      <a id="beforePrepare:(S.Tx,lucre.synth.Server)⇒Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beforePrepare</span><span class="result">: (<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <a href="../../lucre/synth/Server.html" class="extype" name="de.sciss.lucre.synth.Server">lucre.synth.Server</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.Bounce$$Config@beforePrepare:(S#Tx,de.sciss.lucre.synth.Server)=&gt;Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An arbitrary function may be provided which is called when the server is initialized (logical time zero).</p><div class="fullcomment"><div class="comment cmt"><p>An arbitrary function may be provided which is called when the server is initialized (logical time zero).
+This entry is typically used to set up extra routing synths, master volume, etc.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bounce$$ConfigLike.html" class="extype" name="de.sciss.synth.proc.Bounce.ConfigLike">ConfigLike</a></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.Bounce.ConfigLike#group" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="group:de.sciss.synth.proc.Bounce.GroupH[S]"></a>
       <a id="group:GroupH[S]"></a>
       <h4 class="signature">
@@ -115,25 +151,23 @@
 This parameter is initially unspecified in the builder, and calling the getter will throw an error.
 This parameter must be specified before generating a <code>Config</code> instance.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bounce$$ConfigLike.html" class="extype" name="de.sciss.synth.proc.Bounce.ConfigLike">ConfigLike</a></dd></dl></div>
-    </li><li name="de.sciss.synth.proc.Bounce.ConfigLike#init" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="init:(S#Tx,de.sciss.lucre.synth.Server)=&gt;Unit"></a>
-      <a id="init:(S.Tx,lucre.synth.Server)⇒Unit"></a>
+    </li><li name="de.sciss.synth.proc.Bounce.ConfigLike#realtime" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="realtime:Boolean"></a>
+      <a id="realtime:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">init</span><span class="result">: (<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <a href="../../lucre/synth/Server.html" class="extype" name="de.sciss.lucre.synth.Server">lucre.synth.Server</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">realtime</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.Bounce$$Config@init:(S#Tx,de.sciss.lucre.synth.Server)=&gt;Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.Bounce$$Config@realtime:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">An arbitrary function may be provided which is called when the server is initialized (logical time zero).</p><div class="fullcomment"><div class="comment cmt"><p>An arbitrary function may be provided which is called when the server is initialized (logical time zero).
-This entry is typically used to set up extra routing synths, master volume, etc.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bounce$$ConfigLike.html" class="extype" name="de.sciss.synth.proc.Bounce.ConfigLike">ConfigLike</a></dd></dl></div>
+      <p class="shortcomment cmt">Whether to run the server in real-time or offline.</p><div class="fullcomment"><div class="comment cmt"><p>Whether to run the server in real-time or offline.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Bounce$$ConfigLike.html" class="extype" name="de.sciss.synth.proc.Bounce.ConfigLike">ConfigLike</a></dd></dl></div>
     </li><li name="de.sciss.synth.proc.Bounce.Config#server" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="server:de.sciss.lucre.synth.Server.Config"></a>
       <a id="server:lucre.synth.Server.Config"></a>

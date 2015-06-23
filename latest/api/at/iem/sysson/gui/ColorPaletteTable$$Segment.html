@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>OutDim - SysSon 1.1.0 API - at.iem.sysson.turbulence.TransformNetcdfFile.OutDim</title>
-          <meta name="description" content="OutDim - SysSon 1.1.0 API - at.iem.sysson.turbulence.TransformNetcdfFile.OutDim" />
-          <meta name="keywords" content="OutDim SysSon 1.1.0 API at.iem.sysson.turbulence.TransformNetcdfFile.OutDim" />
+          <title>Segment - SysSon 1.4.0 API - at.iem.sysson.gui.ColorPaletteTable.Segment</title>
+          <meta name="description" content="Segment - SysSon 1.4.0 API - at.iem.sysson.gui.ColorPaletteTable.Segment" />
+          <meta name="keywords" content="Segment SysSon 1.4.0 API at.iem.sysson.gui.ColorPaletteTable.Segment" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../index.html';
-            var hash = 'at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$';
+            var hash = 'at.iem.sysson.gui.ColorPaletteTable$$Segment';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,16 +26,14 @@
    	  </script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <a href="TransformNetcdfFile$$OutDim.html" title="See companion trait"><img src="../../../../lib/object_to_trait_big.png" /></a>
-        <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a>.<a href="package.html" class="extype" name="at.iem.sysson.turbulence">turbulence</a>.<a href="TransformNetcdfFile$.html" class="extype" name="at.iem.sysson.turbulence.TransformNetcdfFile">TransformNetcdfFile</a></p>
-        <h1><a href="TransformNetcdfFile$$OutDim.html" title="See companion trait">OutDim</a></h1><h3><span class="morelinks"><div>
-            Related Docs:
-            <a href="TransformNetcdfFile$$OutDim.html" title="See companion trait">trait OutDim</a>
-            | <a href="TransformNetcdfFile$.html" class="extype" name="at.iem.sysson.turbulence.TransformNetcdfFile">package TransformNetcdfFile</a>
+        <img src="../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a>.<a href="package.html" class="extype" name="at.iem.sysson.gui">gui</a>.<a href="ColorPaletteTable$.html" class="extype" name="at.iem.sysson.gui.ColorPaletteTable">ColorPaletteTable</a></p>
+        <h1>Segment</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="ColorPaletteTable$.html" class="extype" name="at.iem.sysson.gui.ColorPaletteTable">package ColorPaletteTable</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -43,17 +41,19 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">OutDim</span>
+        <span class="name">Segment</span><span class="params">(<span name="lowValue">lowValue: <span class="extype" name="scala.Double">Double</span></span>, <span name="lowColor">lowColor: <span class="extype" name="scala.Int">Int</span></span>, <span name="highValue">highValue: <span class="extype" name="scala.Double">Double</span></span>, <span name="highColor">highColor: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A color table interval.
+</p></div><dl class="paramcmts block"><dt class="param">lowValue</dt><dd class="cmt"><p>interval scale lower bound (inclusive)</p></dd><dt class="param">lowColor</dt><dd class="cmt"><p>RGB-Int color corresponding to lower bound</p></dd><dt class="param">highValue</dt><dd class="cmt"><p>interval scale upper bound (exclusive)</p></dd><dt class="param">highColor</dt><dd class="cmt"><p>RGB-Int color corresponding to upper bound
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="at.iem.sysson.turbulence.TransformNetcdfFile.OutDim"><span>OutDim</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="at.iem.sysson.gui.ColorPaletteTable.Segment"><span>Segment</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,7 +89,28 @@
 
       <div id="template">
         <div id="allMembers">
-        
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="at.iem.sysson.gui.ColorPaletteTable.Segment#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(lowValue:Double,lowColor:Int,highValue:Double,highColor:Int):at.iem.sysson.gui.ColorPaletteTable.Segment"></a>
+      <a id="&lt;init&gt;:Segment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Segment</span><span class="params">(<span name="lowValue">lowValue: <span class="extype" name="scala.Double">Double</span></span>, <span name="lowColor">lowColor: <span class="extype" name="scala.Int">Int</span></span>, <span name="highValue">highValue: <span class="extype" name="scala.Double">Double</span></span>, <span name="highColor">highColor: <span class="extype" name="scala.Int">Int</span></span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@&lt;init&gt;(lowValue:Double,lowColor:Int,highValue:Double,highColor:Int):at.iem.sysson.gui.ColorPaletteTable.Segment" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">lowValue</dt><dd class="cmt"><p>interval scale lower bound (inclusive)</p></dd><dt class="param">lowColor</dt><dd class="cmt"><p>RGB-Int color corresponding to lower bound</p></dd><dt class="param">highValue</dt><dd class="cmt"><p>interval scale upper bound (exclusive)</p></dd><dt class="param">highColor</dt><dd class="cmt"><p>RGB-Int color corresponding to upper bound
+</p></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -109,7 +130,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -126,7 +147,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@##():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@##():Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -143,11 +164,28 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="at.iem.sysson.gui.ColorPaletteTable.Segment#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply(value:Double):Int"></a>
+      <a id="apply(Double):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@apply(value:Double):Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Interpolates a value that lies inside the interval of this segment.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -160,28 +198,11 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="at.iem.sysson.turbulence.TransformNetcdfFile.OutDim#byName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="byName(name:String):at.iem.sysson.turbulence.TransformNetcdfFile.OutDim"></a>
-      <a id="byName(String):OutDim"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">byName</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="TransformNetcdfFile$$OutDim.html" class="extype" name="at.iem.sysson.turbulence.TransformNetcdfFile.OutDim">OutDim</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@byName(name:String):at.iem.sysson.turbulence.TransformNetcdfFile.OutDim" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -194,7 +215,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@clone():Object" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -217,28 +238,11 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -251,7 +255,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -274,28 +278,46 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
+    </li><li name="at.iem.sysson.gui.ColorPaletteTable.Segment#highColor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="highColor:Int"></a>
+      <a id="highColor:Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">highColor</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@highColor:Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <p class="shortcomment cmt">RGB-Int color corresponding to upper bound
+</p>
+    </li><li name="at.iem.sysson.gui.ColorPaletteTable.Segment#highValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="highValue:Double"></a>
+      <a id="highValue:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">highValue</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@highValue:Double" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">interval scale upper bound (exclusive)</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -308,11 +330,45 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="at.iem.sysson.gui.ColorPaletteTable.Segment#lowColor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lowColor:Int"></a>
+      <a id="lowColor:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lowColor</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@lowColor:Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">RGB-Int color corresponding to lower bound</p>
+    </li><li name="at.iem.sysson.gui.ColorPaletteTable.Segment#lowValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lowValue:Double"></a>
+      <a id="lowValue:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lowValue</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@lowValue:Double" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">interval scale lower bound (inclusive)</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -325,7 +381,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -342,7 +398,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -359,7 +415,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -376,12 +432,12 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="at.iem.sysson.gui.ColorPaletteTable.Segment#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -390,14 +446,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@toString():String" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@toString():String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="at.iem.sysson.gui.ColorPaletteTable.Segment">Segment</a> → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -410,7 +466,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -433,7 +489,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -456,7 +512,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.turbulence.TransformNetcdfFile$$OutDim$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#at.iem.sysson.gui.ColorPaletteTable$$Segment@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" />
       </a>
     </span>
@@ -476,7 +532,15 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
