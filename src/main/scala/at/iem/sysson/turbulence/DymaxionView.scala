@@ -20,7 +20,7 @@ import java.awt.{RenderingHints, BasicStroke, Cursor, Color}
 import javax.swing.ImageIcon
 
 import at.iem.sysson.turbulence.Turbulence.{Radians, DymGrid}
-import de.sciss.lucre.synth.{Escape, Txn, Synth}
+import de.sciss.lucre.synth.{SynthDef, Txn, Synth}
 import de.sciss.mellite.Mellite
 import de.sciss.synth.{addToTail, SynthGraph}
 import at.iem.sysson.turbulence.Dymaxion.DymPt
@@ -326,7 +326,7 @@ class DymaxionView extends Component {
           Out.ar(bus, sig * gain)
         }
       }
-      val df    = Escape.getSynthDef(s, graph, None)
+      val df    = ??? : SynthDef // Escape.getSynthDef(s, graph, None)
       val synth = Synth.expanded(s, df.peer.graph)
       synth.play(s.defaultGroup, Nil, addToTail, Nil)
       synth

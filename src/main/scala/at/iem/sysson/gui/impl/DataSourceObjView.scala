@@ -19,13 +19,13 @@ package impl
 import de.sciss.file._
 import de.sciss.lucre.swing.Window
 import de.sciss.mellite.Workspace
-import de.sciss.mellite.gui.{ActionArtifactLocation, ObjView}
+import de.sciss.mellite.gui.{ListObjView, ActionArtifactLocation, ObjView}
 import de.sciss.lucre.stm.{Cursor, Source}
 import de.sciss.synth.proc.{Elem, Obj, Folder}
 import de.sciss.desktop
 import desktop.FileDialog
 import javax.swing.undo.UndoableEdit
-import de.sciss.mellite.gui.impl.ObjViewImpl
+import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.icons.raphael
 import de.sciss.lucre.{event => evt, stm}
 import de.sciss.synth.proc
@@ -38,20 +38,21 @@ import proc.Implicits._
 
 import scala.swing.{Label, Component}
 
-object DataSourceObjView extends ObjView.Factory {
-  private lazy val _init: Unit = ObjView.addFactory(this)
+object DataSourceObjView extends ListObjView.Factory {
+  private lazy val _init: Unit = ListObjView.addFactory(this)
 
   def init(): Unit = _init
 
   type E[S <: Sys[S]] = DataSourceElem[S]
-  final val prefix  = "DataSource"
-  final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.Database)
-  final val typeID  = DataSourceElem.typeID
+  final val prefix    = "DataSource"
+  final val humanName = "Data Source"
+  final val icon      = ObjViewImpl.raphaelIcon(raphael.Shapes.Database)
+  final val typeID    = DataSourceElem.typeID
+  def category        = SwingApplication.categSonification
 
-  def hasDialog: Boolean = true
+  def hasMakeDialog: Boolean = true
 
-  def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
-    val name      = obj.name
+  def mkListView[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ListObjView[S] = {
     val ds        = obj.elem.peer
     val f         = ds.artifact.value
     val vr        = ds.variables
@@ -59,13 +60,13 @@ object DataSourceObjView extends ObjView.Factory {
     val multiDim  = vr.collect {
       case v if v.reducedRank == rank => v.name -> v.reducedShape
     }
-    new DataSourceObjView.Impl(tx.newHandle(obj), name = name, value = new Value(file = f, multiDim = multiDim))
+    new DataSourceObjView.Impl(tx.newHandle(obj), value = new Value(file = f, multiDim = multiDim)).initAttrs(obj)
   }
 
   final case class Config[S <: Sys[S]](file: File, location: ActionArtifactLocation.QueryResult[S],
                                        workspace: Workspace[S])
 
-  def initDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
+  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
                              (implicit cursor: Cursor[S]): Option[Config[S]] = {
     val dlg = FileDialog.open(title = "Add Data Source")
     dlg.setFilter(util.NetCdfFileFilter)
@@ -78,7 +79,7 @@ object DataSourceObjView extends ObjView.Factory {
     }
   }
 
-  def make[S <: Sys[S]](config: Config[S])(implicit tx: S#Tx): List[Obj[S]] = {
+  def makeObj[S <: Sys[S]](config: Config[S])(implicit tx: S#Tx): List[Obj[S]] = {
     val (list0: List[Obj[S]], loc) = config.location match {
       case Left(source) => (Nil, source())
       case Right((name, directory)) =>
@@ -104,19 +105,18 @@ object DataSourceObjView extends ObjView.Factory {
     override def toString = multiS // s"$multiS - ${file.base}"
   }
 
-  private final class Impl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, DataSourceElem]],
-                                var name: String, val value: Value)
-    extends /* ObjView.AudioGrapheme[S] with */ ObjViewImpl.Impl[S] with ObjViewImpl.NonEditable[S] {
+  private final class Impl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, DataSourceElem]], val value: Value)
+    extends ObjViewImpl.Impl[S] with ListObjViewImpl.NonEditable[S] with ListObjView[S] {
 
+    def factory = DataSourceObjView
     def prefix  = DataSourceObjView.prefix
-    def icon    = DataSourceObjView.icon
-    def typeID  = DataSourceObjView.typeID
 
     def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = false
 
     def isViewable = true
 
-    def openView()(implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
+    def openView(parent: Option[Window[S]])
+                (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
       val frame = DataSourceFrame(obj())
       Some(frame)
     }

@@ -12,9 +12,9 @@ licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")
 
 // ---- scala compiler settings and libraries ----
 
-scalaVersion  := "2.11.6"
+scalaVersion  := "2.11.7"
 
-crossScalaVersions := Seq("2.11.6", "2.10.5")
+crossScalaVersions := Seq("2.11.7", "2.10.5")
 
 // maven repository for NetCDF library
 resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
@@ -26,20 +26,19 @@ fork in run := true
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "1.5.1-SNAPSHOT"
-lazy val soundProcessesVersion      = "2.19.0"
+lazy val melliteVersion             = "1.6.0"
+lazy val soundProcessesVersion      = "2.20.0"
 lazy val lucreMatrixVersion         = "0.10.1"
 lazy val lucreSwingVersion          = "0.9.1"
-lazy val scalaColliderVersion       = "1.17.2"
-lazy val scalaColliderSwingVersion  = "1.25.1"
-lazy val ugensVersion               = "1.13.1"
-lazy val fileCacheVersion           = "0.3.2"
+lazy val scalaColliderVersion       = "1.17.3"
+lazy val scalaColliderSwingVersion  = "1.25.2"
+lazy val ugensVersion               = "1.13.3"
+lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"
 lazy val fscapeJobsVersion          = "1.5.0"
 lazy val sheetVersion               = "0.1.0"
 lazy val slfVersion                 = "1.7.12"
-lazy val xstreamVersion             = "1.4.8"   // Maven Central sha1 of previous version corrupt
 
 // ---- test libraries ----
 
@@ -58,8 +57,7 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
   "de.sciss" %% "fscapejobs"                  % fscapeJobsVersion,
   "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
-  "org.slf4j" % "slf4j-simple"                % slfVersion,                 // logging (used by netcdf)
-  "com.thoughtworks.xstream" % "xstream" % xstreamVersion
+  "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
 )
 
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"

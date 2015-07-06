@@ -22,40 +22,41 @@ import de.sciss.desktop.OptionPane
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.Matrix
-import de.sciss.lucre.{matrix, stm}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
+import de.sciss.lucre.{matrix, stm}
 import de.sciss.mellite.Workspace
-import de.sciss.mellite.gui.ObjView
-import de.sciss.mellite.gui.impl.ObjViewImpl
+import de.sciss.mellite.gui.ListObjView
+import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.synth.proc.Implicits._
 import de.sciss.synth.proc.Obj
 import org.scalautils.TypeCheckedTripleEquals
 
 import scala.swing.{Component, Label}
 
-object PlotObjView extends ObjView.Factory {
+object PlotObjView extends ListObjView.Factory {
   type E[S <: Sys[S]] = Plot.Elem[S]
   final val prefix  = "Plot"
+  def humanName     = prefix
   final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.LineChart)
   final val typeID  = PlotImpl.ElemImpl.typeID
+  def category      = SwingApplication.categSonification
 
-  def hasDialog: Boolean = true
+  def hasMakeDialog: Boolean = true
 
-  private lazy val _init: Unit = ObjView.addFactory(this)
+  private lazy val _init: Unit = ListObjView.addFactory(this)
 
   def init(): Unit = _init
 
-  def apply[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ObjView[S] = {
-    val name      = obj.name
+  def mkListView[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ListObjView[S] = {
     val plot      = obj.elem.peer
     val matrixName= plot.matrix.name
-    new PlotObjView.Impl(tx.newHandle(obj), name = name, value = new Value(matrixName))
+    new PlotObjView.Impl(tx.newHandle(obj), value = new Value(matrixName)).initAttrs(obj)
   }
 
-  type Config[S <: SSys[S]] = String
+  type Config[S <: Sys[S]] = String
 
-  def initDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
+  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
                               (implicit cursor: stm.Cursor[S]): Option[Config[S]] = {
     val opt = OptionPane.textInput(message = "Enter Plot Name:",
       messageType = OptionPane.Message.Question, initial = "Plot")
@@ -64,7 +65,7 @@ object PlotObjView extends ObjView.Factory {
     res
   }
 
-  def make[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {
+  def makeObj[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {
     import matrix.Implicits._
     val m0      = Matrix.zeros[S](0)
     val mVar    = Matrix.Var(m0)
@@ -81,19 +82,18 @@ object PlotObjView extends ObjView.Factory {
     }
   }
 
-  private final class Impl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, Plot.Elem]],
-                                         var name: String, var value: Value)
-    extends ObjViewImpl.Impl[S] with ObjViewImpl.NonEditable[S] {
+  private final class Impl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, Plot.Elem]], var value: Value)
+    extends ObjViewImpl.Impl[S] with ListObjViewImpl.NonEditable[S] with ListObjView[S] {
 
+    def factory = PlotObjView
     def prefix  = PlotObjView.prefix
-    def icon    = PlotObjView.icon
-    def typeID  = PlotObjView.typeID
 
     def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = false   // XXX TODO -- track matrix name
 
     def isViewable = true
 
-    def openView()(implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
+    def openView(parent: Option[Window[S]])
+                (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
       val frame = PlotFrame(obj())
       Some(frame)
     }

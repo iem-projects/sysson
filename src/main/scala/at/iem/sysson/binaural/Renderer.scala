@@ -14,7 +14,7 @@
 
 package at.iem.sysson.binaural
 
-import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Escape, Buffer, Synth, Txn}
+import de.sciss.lucre.synth.{Bus, Group, BusNodeSetter, AudioBus, Node, Buffer, Synth, Txn}
 import de.sciss.mellite.Prefs
 import de.sciss.synth.io.AudioFile
 import de.sciss.{synth, numbers}

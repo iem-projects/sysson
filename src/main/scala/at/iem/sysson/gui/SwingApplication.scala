@@ -15,30 +15,30 @@
 package at.iem.sysson
 package gui
 
+import java.awt.Color
 import java.util.Locale
+import javax.swing.UIManager
 
-import de.sciss.desktop.impl.{WindowHandlerImpl, SwingApplicationImpl}
-import de.sciss.desktop.{WindowHandler, Menu}
+import at.iem.sysson
+import com.alee.laf.checkbox.WebCheckBoxStyle
+import com.alee.laf.progressbar.WebProgressBarStyle
+import de.sciss.desktop.impl.{SwingApplicationImpl, WindowHandlerImpl}
+import de.sciss.desktop.{Menu, WindowHandler}
 import de.sciss.mellite
 import de.sciss.mellite.gui.LogFrame
 import de.sciss.mellite.gui.impl.document.DocumentHandlerImpl
-import language.existentials
-import javax.swing.UIManager
+import de.sciss.mellite.{Application, Prefs}
+
+import scala.collection.immutable.{Seq => ISeq}
+import scala.language.existentials
 import scala.util.control.NonFatal
-import de.sciss.mellite.{DocumentHandler, Prefs, Application}
-import com.alee.laf.checkbox.WebCheckBoxStyle
-import com.alee.laf.progressbar.WebProgressBarStyle
-import java.awt.Color
-import at.iem.sysson
 
 /** The main entry point for the desktop Swing application.
   * Please note that this should _not_ be the main class of the project,
   * but you should always invoke `at.iem.sysson.Main`, because it first
   * initializes some type extensions that would be missing otherwise.
   */
-object SwingApplication extends SwingApplicationImpl("SysSon") {
-  type Document = DocumentHandler.Document  // sysson.DataSourceLike
-
+object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Application {
   override lazy val windowHandler: WindowHandler = new WindowHandlerImpl(this, menuFactory) {
     override lazy val usesInternalFrames = {
       false // XXX TODO: eventually a preferences entry
@@ -94,4 +94,17 @@ object SwingApplication extends SwingApplicationImpl("SysSon") {
   protected def menuFactory: Menu.Root = MenuFactory.root
 
   override lazy val documentHandler: DocumentHandler = new DocumentHandlerImpl
+
+  // ---- Application trait ----
+
+  def topLevelObjects: ISeq[String] =
+    List("Folder", "DataSource", "Sonification", "Plot")
+
+  // XXX TODO --- can remove elements through preferences "novice user" switch
+  lazy val objectFilter: String => Boolean = {
+    case "Nuages" | "Recursion" => false
+    case _ => true
+  }
+
+  lazy val categSonification = "Sonification"
 }
