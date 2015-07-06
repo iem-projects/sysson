@@ -23,7 +23,7 @@ import de.sciss.desktop.OptionPane
 import de.sciss.icons.raphael
 import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.Expr
+import de.sciss.lucre.expr.{Expr, String => StringEx}
 import de.sciss.lucre.stm
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
@@ -33,7 +33,7 @@ import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.mellite.gui.{ListObjView, TimelineObjView}
 import de.sciss.span.SpanLike
 import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.{FadeSpec, Obj}
+import de.sciss.synth.proc.{StringElem, ObjKeys, FadeSpec, Obj}
 import org.scalautils.TypeCheckedTripleEquals
 
 import scala.swing.{Component, Label}
@@ -89,7 +89,10 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
   def makeObj[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {
     val elem  = Sonification.Elem(Sonification[S])
     val obj   = Obj(elem)
-    obj.name  = name
+    val nameObj = Obj(StringElem(StringEx.newVar(StringEx.newConst[S](name))))
+    // share the name, so it appears in the proc editor as well
+    obj               .attr.put(ObjKeys.attrName, nameObj)
+    obj.elem.peer.proc.attr.put(ObjKeys.attrName, nameObj)
     obj :: Nil
   }
 

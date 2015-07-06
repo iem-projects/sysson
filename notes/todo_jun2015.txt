@@ -7,7 +7,6 @@ E       - Plot: synchronize with sonification playback: 1
 E       - Plot: min/max/normalize scale
         - Plot: label matrix-DnD button; und datenquelle sichtbar machen koennen (siehe unten)
         - Matrix Association View: indicate object ID
-        - Sonification: embedded Proc object should inherit sonification's name attribute
         - Statt Exception zu werfen, wenn SynthDef zu gross wird, in der GUI abfangen bei "Play"
         - Parameter GUI: parameters as sliders within a given Range, "UserRange": 0.75 (-format of typing numbers … (anzeige > 3 kommastellen)
         - Parameter GUI: verknuepfung matrix datenquelle (ueberpruefen welche daten reingeladen sind): 0.5
@@ -24,6 +23,7 @@ E       - Plot: min/max/normalize scale
         - docking system (one window): 2-3
 [won't] - DnD -- sonif.editor matrix reduction numbers cannot be dragged to/from attributes (Int)
 
+[OK]    - Sonification: embedded Proc object should inherit sonification's name attribute
 [OK]    - [Mellite]     im Workspace: limit menu (ev. hierarchisch, die die man nicht braucht scheinen nicht gleich auf): 0.5
 [OK]    -           AudioGrapheme umbenennen
 [OK]    - DnD -- matrix als auch matrix editor slider, scheint nicht unter OS X 10.10, Java 8.
