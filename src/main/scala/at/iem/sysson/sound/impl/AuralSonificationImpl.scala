@@ -29,15 +29,8 @@ import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.TxnLocal
 
-object AuralSonificationImpl extends AuralObj.Factory {
-  private lazy val _init: Unit = AuralObj.addFactory(this)
-
-  def init(): Unit = _init
-
-  def typeID = Sonification.typeID
-  type E[S <: evt.Sys[S]] = Sonification.Elem[S]
-
-  def apply[S <: Sys[S]](obj: Sonification.Obj[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralObj[S] = {
+object AuralSonificationImpl {
+  def apply[S <: Sys[S]](obj: Sonification.Obj[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralSonification[S] = {
     logDebugTx(s"AuralSonification($obj)")
     val objH      = tx.newHandle(obj)
     val proc      = obj.elem.peer.proc
@@ -101,7 +94,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
 
     override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.Incomplete[S])
                                   (implicit tx: S#Tx): Res = req match {
-      case _: graph.UserValue | _: graph.Dim.Size | _: graph.Var.Size => UGB.Unit
+      case _: graph.UserValue | _: graph.Dim.Size | _: graph.Var.Size | _: graph.Elapsed => UGB.Unit
 
       case dp: graph.Dim.Play  =>
         val numCh     = 1 // a streaming dimension is always monophonic
@@ -177,6 +170,11 @@ object AuralSonificationImpl extends AuralObj.Factory {
         val ctlName   = sz.ctlName
         b.setMap += ctlName -> value.toFloat
 
+      case el: graph.Elapsed =>
+        val resp = new graph.Elapsed.Responder(sonifData.status, synth = b.node)
+        // println("ADD ELAPSED RESPONDER USER")
+        b.users ::= resp
+
       case _: graph.Var.Axis.Key =>   // nothing to be done
 
       case _ => super.buildSyncInput(b, keyW, value)
@@ -242,7 +240,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
   }
 
   private final class Impl[S <: Sys[S]]
-    extends AuralObj[S] with ObservableImpl[S, AuralObj.State] {
+    extends AuralSonification[S] with ObservableImpl[S, AuralObj.State] {
 
     def typeID = Sonification.typeID
 
@@ -254,6 +252,13 @@ object AuralSonificationImpl extends AuralObj.Factory {
     private var _procView: AuralObj[S] = _
 
     def obj: stm.Source[S#Tx, Sonification.Obj[S]] = _obj
+
+    object status
+      extends ObservableImpl[S, AuralSonification.Update /* [S] */]
+      with stm.Sink[S#Tx, AuralSonification.Update /* [S] */] {
+
+      def update(u: AuralSonification.Update /* [S] */)(implicit tx: S#Tx): Unit = fire(u)
+    }
 
     def init(obj: stm.Source[S#Tx, Sonification.Obj[S]], procView: AuralObj[S])(implicit tx: S#Tx): this.type = {
       _obj      = obj
@@ -296,6 +301,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
     def dispose()(implicit tx: S#Tx): Unit = {
       procViewL.dispose()
       _procView.dispose()
+      // status   .dispose()
     }
   }
 }

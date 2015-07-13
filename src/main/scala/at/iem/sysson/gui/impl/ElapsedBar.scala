@@ -40,6 +40,7 @@ class ElapsedBar extends Label {
   text = null
   horizontalAlignment = Alignment.Center
 
+  /** Value between zero and one. */
   def value: Float = _value
   def value_=(x: Float): Unit = {
     val c         = math.max(0f, math.min(1f, x))

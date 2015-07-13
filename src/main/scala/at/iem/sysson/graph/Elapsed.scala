@@ -15,12 +15,12 @@
 package at.iem.sysson
 package graph
 
+import at.iem.sysson.sound.AuralSonification
 import de.sciss.lucre.stm
-import de.sciss.lucre.synth.{Txn, DynamicUser, Node, Sys}
+import de.sciss.lucre.synth.{DynamicUser, Node, Sys, Txn}
+import de.sciss.synth.proc.{UGenGraphBuilder => UGB, SoundProcesses, AuralContext}
+import de.sciss.synth.{HasSideEffect, Rate, UGenInLike, audio, control, message}
 import de.sciss.{osc, synth}
-import de.sciss.synth.message
-import de.sciss.synth.proc.{SoundProcesses, Obj, AuralContext, UGenGraphBuilder}
-import de.sciss.synth.{proc, HasSideEffect, UGenInLike, GE, Rate, control, audio}
 
 import scala.concurrent.stm.Ref
 
@@ -44,7 +44,7 @@ object Elapsed {
     */
   def kr(in: Dim.Play, terminate: Boolean = true): synth.GE = Elapsed(in).kr(terminate = terminate)
 
-  private def replyName(key: String): String = s"/$$act_$key"
+  private def replyName /* (key: String) */: String = "/$elpsd" // s"/$$act_$key"
 
   /** Graph element that actually reports the progress
     *
@@ -53,27 +53,28 @@ object Elapsed {
   case class GE(rate: Rate, peer: Elapsed, terminate: Boolean) extends synth.GE.Lazy with HasSideEffect {
     import peer.in
 
-//    /* Important: in order for `Dim.IndexRange` to be found in the aural
-//     * sonification, the "expansion" should happen immediately, not late.
-//     * Thus it must be created now.
-//     */
-//    private val numFrames = ... : Int // in.dim.size
+    override def productPrefix  = "Elapsed$GE"
+    override def toString       = {
+      val suffix = if (terminate) "(terminate = true)" else ""
+      s"Elapsed($in).${rate.methodName}$suffix"
+    }
 
     protected def makeUGens: UGenInLike = {
-      val b         = UGenGraphBuilder.get
-      val key: String = ??? //       = AuralSonificationOLD.current().attributeKey(this)
-      val reportID  = proc.graph.Attribute.ir(key)
+      val b         = UGB.get
+      b.requestInput(peer)
+      val reportID  = 0 // proc.graph.Attribute.ir(key)
       import synth._
       import synth.ugen._
       val frame     = Sweep(rate, 0, in.freq) // speed = increment _per second_
-      val numFrames = peer.in.dim.values
+      val numFrames = peer.in.dim.size
       val ratio     = frame / numFrames
       //        in.freq      .poll(0, "freq")
       //        frame        .poll(2, "frame")
       //        numFrames    .poll(0, "numFrames")
-      val report    = Impulse(rate, 20)
+
+      val report    = Impulse(rate, 20)   // XXX TODO --- rate could be configurable
       val reportSig = Seq(ratio, in): synth.GE
-      SendReply(rate, report, reportSig, "/$elpsd", id = reportID)
+      SendReply(rate, report, reportSig, replyName, id = reportID)
       if (terminate) {
         val done    = ratio >= 1
         // because the `report` pulse might not fire exactly at 100%,
@@ -92,22 +93,28 @@ object Elapsed {
     }
   }
 
-  case object Key extends UGenGraphBuilder.Key
+  // case object Key extends UGB.Key
 
-  private[sysson] class ActionResponder[S <: Sys[S]](objH: stm.Source[S#Tx, Obj[S]], key: String, synth: Node)
-                                                    (implicit cursor: stm.Cursor[S], context: AuralContext[S])
+  private[sysson] class Responder[S <: Sys[S]](status: stm.Sink[S#Tx, AuralSonification.Update /* [S] */],
+                                               synth: Node)
+                                              (implicit context: AuralContext[S])
     extends DynamicUser {
 
-    private val Name    = replyName(key)
+    private val Name    = replyName // (key)
     private val NodeID  = synth.peer.id
     private val trigResp = message.Responder(synth.server.peer) {
       case m @ osc.Message(Name, NodeID, 0, ratio: Float, dimValue: Float) =>
-        println(s"TODO - elapsed - $ratio - $dimValue")
+        import context.scheduler.cursor
+        SoundProcesses.atomic { implicit tx: S#Tx =>
+          // println(f"elapsed - ${ratio * 100}%1.1f - $dimValue%1.3f")
+          status() = AuralSonification.Elapsed(ratio = ratio, dimValue = dimValue)
+        }
     }
 
     private val added = Ref(initialValue = false)
 
     def add()(implicit tx: Txn): Unit = if (!added.swap(true)(tx.peer)) {
+      // println("ADD ELAPSED RESPONDER")
       trigResp.add()
       // Responder.add is non-transactional. Thus, if the transaction fails, we need to remove it.
       scala.concurrent.stm.Txn.afterRollback { _ =>
@@ -116,6 +123,7 @@ object Elapsed {
     }
 
     def remove()(implicit tx: Txn): Unit = if (added.swap(false)(tx.peer)) {
+      // println("REMOVE ELAPSED RESPONDER")
       trigResp.remove()
       scala.concurrent.stm.Txn.afterRollback { _ =>
         trigResp.add()
@@ -129,12 +137,12 @@ object Elapsed {
   * @param in   the playing dimension
   */
 final case class Elapsed(in: Dim.Play)
-  extends UserInteraction with UGenGraphBuilder.Input {
+  extends UserInteraction with UGB.Input with UGB.Key {
 
-  type Key      = Elapsed.Key.type
-  type Value    = UGenGraphBuilder.Unit
+  type Key      = Elapsed // .Key.type
+  type Value    = UGB.Unit
 
-  def key: Key  = Elapsed.Key
+  def key: Key  = this // Elapsed.Key
 
   def ar: synth.GE = ar(terminate = true)
   def ar(terminate: Boolean): synth.GE = Elapsed.GE(audio  , this, terminate = terminate)

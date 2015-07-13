@@ -14,19 +14,21 @@
 
 package at.iem
 
+import java.text.SimpleDateFormat
+import java.util.{Date, Locale}
+
 import at.iem.sysson.gui.impl.DataSourceElem
 import at.iem.sysson.impl.PlotImpl
-import at.iem.sysson.sound.impl.AuralSonificationImpl
-import de.sciss.synth.proc.Code
-import ucar.nc2
-import de.sciss.{mellite, synth}
+import at.iem.sysson.sound.AuralSonification
 import de.sciss.file._
-import scala.concurrent.stm.Txn
-import java.util.{Date, Locale}
-import java.text.SimpleDateFormat
-import scala.annotation.elidable
-import scala.annotation.elidable._
 import de.sciss.lucre.stm.TxnLike
+import de.sciss.synth.proc.Code
+import de.sciss.{mellite, synth}
+import ucar.nc2
+
+import scala.annotation.elidable
+import scala.annotation.elidable.{CONFIG, INFO, WARNING}
+import scala.concurrent.stm.Txn
 //import at.iem.sysson.sound.impl.PatchImpl.PatchElemImpl
 import at.iem.sysson.sound.impl.SonificationImpl.SonificationElemImpl
 
@@ -100,7 +102,7 @@ package object sysson {
     de.sciss.nuages       .initTypes()
     SonificationElemImpl  .init()
     DataSourceElem        .init()
-    AuralSonificationImpl .init()
+    AuralSonification     .init()
     PlotImpl              .init()
     importExtensions
   }

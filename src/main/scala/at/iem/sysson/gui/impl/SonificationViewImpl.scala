@@ -18,7 +18,7 @@ package impl
 
 import java.awt.Color
 
-import at.iem.sysson.sound.Sonification
+import at.iem.sysson.sound.{AuralSonification, Sonification}
 import de.sciss.audiowidgets.{TimelineModel, Transport => GUITransport}
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{KeyStrokes, Window, OptionPane, UndoManager}
@@ -73,11 +73,17 @@ object SonificationViewImpl {
     res
   }
 
-  private def mkTransport[S <: Sys[S]](sonif: Sonification.Obj[S])
-                                      (implicit tx: S#Tx, cursor: stm.Cursor[S], workspace: Workspace[S]): Transport[S] = {
-    val res = Transport[S](Mellite.auralSystem)
-    res.addObject(sonif)
-    res
+  private final class TransportRef[S <: Sys[S]](val transport: Transport[S],
+                                                val transportObserver: Disposable[S#Tx],
+                                                val viewObserver: Option[Disposable[S#Tx]])
+    extends Disposable[S#Tx] {
+
+    def dispose()(implicit tx: S#Tx): Unit = {
+      transport.stop()
+      transport.dispose()
+      transportObserver.dispose()
+      viewObserver.foreach(_.dispose())
+    }
   }
 
   private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Sonification.Obj[S]],
@@ -104,10 +110,24 @@ object SonificationViewImpl {
 
     private var ggElapsed: ElapsedBar = _
 
-    final protected def mkAuralObserver(transport: Transport[S])(implicit tx: S#Tx): Disposable[S#Tx] =
-      transport.react { implicit tx => upd =>
+    private def mkTransport()(implicit tx: S#Tx, cursor: stm.Cursor[S], workspace: Workspace[S]): TransportRef[S] = {
+      val t     = Transport[S](Mellite.auralSystem)
+      val sonif = sonification
+      t.addObject(sonif)
+      val observer = t.react { implicit tx => upd =>
         deferTx(auralChange(upd))
       }
+      val elapsedOpt = t.getView(sonif).collect {
+        case as: AuralSonification[S] =>
+          as.status.react { implicit tx => {
+            case AuralSonification.Elapsed(ratio, dimValue) =>
+              deferTx {
+                ggElapsed.value = ratio
+              }
+          }}
+      }
+      new TransportRef(t, observer, elapsedOpt)
+    }
 
     final protected def auralChange(upd: Transport.Update[S] /* AuralSonificationOLD.Update */): Unit = upd match {
       //      case AuralSonificationOLD.Elapsed(dim, ratio, value) =>
@@ -326,7 +346,7 @@ object SonificationViewImpl {
       //      }
     }
 
-    private val transportRef = Ref(Option.empty[(Transport[S], Disposable[S#Tx])])
+    private val transportRef = Ref(Option.empty[TransportRef[S]])
 
     private def tStop(): Unit = {
       val ggPause   = transportButtons.button(GUITransport.Pause).get
@@ -340,18 +360,14 @@ object SonificationViewImpl {
     }
 
     private def stopAndDisposeTransport()(implicit tx: S#Tx): Unit =
-      transportRef.swap(None)(tx.peer).foreach { case (transport, auralObserver) =>
-        transport.stop()
-        transport.dispose()
-        auralObserver.dispose()
-      }
+      transportRef.swap(None)(tx.peer).foreach(_.dispose())
 
     private def tPause(): Unit = {
       val ggPause   = transportButtons.button(GUITransport.Pause).get
       val isPausing = !ggPause.selected
       val isPlaying = cursor.step { implicit tx =>
         // val p = sonifView.state == AuralSonificationOLD.Playing
-        val p = transportRef.get(tx.peer).exists(_._1.isPlaying) // transport.isPlaying
+        val p = transportRef.get(tx.peer).exists(_.transport.isPlaying) // transport.isPlaying
         if (p) runGroup(state = !isPausing)
         p
       }
@@ -362,10 +378,9 @@ object SonificationViewImpl {
       try {
         // TTT
         stopAndDisposeTransport()   // make sure that old object is disposed
-        val transport     = mkTransport(sonification)
-        val auralObserver = mkAuralObserver(transport)
-        transportRef.set(Some((transport, auralObserver)))(tx.peer)
-        transport.play()
+        val ref = mkTransport()
+        transportRef.set(Some(ref))(tx.peer)
+        ref.transport.play()
 
       } catch {
         case NonFatal(e) =>
