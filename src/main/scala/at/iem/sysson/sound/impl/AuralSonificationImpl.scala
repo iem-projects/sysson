@@ -47,10 +47,10 @@ object AuralSonificationImpl extends AuralObj.Factory {
     res.init(objH, procView)
   }
 
-  private def findSource[S <: Sys[S]](obj: Sonification.Obj[S], elem: MatrixPrepare.GE)
+  private def findSource[S <: Sys[S]](obj: Sonification.Obj[S], variable: graph.Var)
                                      (implicit tx: S#Tx): Sonification.Source[S] = {
     val sonif   = obj.elem.peer
-    val varKey  = elem.variable.name
+    val varKey  = variable.name
     val source  = sonif.sources.get(varKey).getOrElse(sys.error(s"Missing source for key $varKey"))
     source
   }
@@ -101,7 +101,8 @@ object AuralSonificationImpl extends AuralObj.Factory {
 
     override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.Incomplete[S])
                                   (implicit tx: S#Tx): Res = req match {
-      case uv: graph.UserValue => UGB.Unit
+      case _: graph.UserValue | _: graph.Dim.Size | _: graph.Var.Size => UGB.Unit
+
       case dp: graph.Dim.Play  =>
         val numCh     = 1 // a streaming dimension is always monophonic
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = dp, streamDim = 0)
@@ -110,7 +111,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
       case dv: graph.Dim.Values =>
         val sonif     = sonifCached()
         val dimElem   = dv.dim
-        val source    = findSource  (sonif , dv)
+        val source    = findSource  (sonif , dv.variable)
         val dimIdx    = findDimIndex(source, dimElem)
         val numCh     = source.matrix.shape.apply(dimIdx)
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = dv, streamDim = -1)
@@ -119,7 +120,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
       case vp: graph.Var.Play =>
         val sonif     = sonifCached()
         val dimElem   = vp.time.dim
-        val source    = findSource  (sonif , vp)
+        val source    = findSource  (sonif , vp.variable)
         val dimIdx    = findDimIndex(source, dimElem)
         val shape     = source.matrix.shape
         val numCh     = ((1L /: shape)(_ * _) / shape(dimIdx)).toInt
@@ -129,7 +130,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
 
       case vv: graph.Var.Values =>
         val sonif     = sonifCached()
-        val source    = findSource(sonif, vv)
+        val source    = findSource(sonif, vv.variable)
         val numChL    = source.matrix.size
         if (numChL > 0xFFFF) sys.error(s"$vv - matrix too large ($numChL cells)")
         val numCh     = numChL.toInt
@@ -138,7 +139,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
 
       case av: graph.Var.Axis.Values =>
         val sonif     = sonifCached()
-        val source    = findSource(sonif, av)
+        val source    = findSource(sonif, av.variable)
         val streamIdx = findDimIndex(source, av.axis.variable.time.dim)
         val axisIdx   = findDimIndex(source, av.axis.asDim)
         val m         = source.matrix
@@ -159,6 +160,22 @@ object AuralSonificationImpl extends AuralObj.Factory {
           val ctlName = UserValue.controlName(key)
           b.setMap += ctlName -> expr.value
         }
+
+      case sz: graph.Dim.Size =>
+        val sonif     = sonifData.sonifCached()
+        val dimElem   = sz.dim
+        val source    = findSource  (sonif , sz.dim.variable)
+        val dimIdx    = findDimIndex(source, dimElem)
+        val value     = source.matrix.shape.apply(dimIdx)
+        val ctlName   = sz.ctlName
+        b.setMap += ctlName -> value
+
+      case sz: graph.Var.Size =>
+        val sonif     = sonifData.sonifCached()
+        val source    = findSource  (sonif , sz.variable)
+        val value     = source.matrix.size
+        val ctlName   = sz.ctlName
+        b.setMap += ctlName -> value.toFloat
 
       case _: graph.Var.Axis.Key =>   // nothing to be done
 
@@ -183,7 +200,7 @@ object AuralSonificationImpl extends AuralObj.Factory {
       import spec.{streamDim, elem}
       implicit val resolver = WorkspaceResolver[S]
 
-      val source  = findSource(sonifData.obj(), elem)
+      val source  = findSource(sonifData.obj(), elem.variable)
       val full    = source.matrix
       //      val matrix  = if (isDim) {
       //        val dimIdx  = findDimIndex(source, elem)

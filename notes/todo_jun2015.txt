@@ -13,7 +13,7 @@ E       - Plot: min/max/normalize scale
         - Parameter GUI: parameter automatisch zuweisen; wenn "fehler" deutlich sichtbar, dass dimension nicht zugeordnet: 0.5
         - Installer/Release
         - Online help system
-        - Save As workspace
+        - [Mellite] Save As workspace
         - Data source window: alten plot gegen neuen tauschen
         - dummy data - no real data playing...: fill matrix globally... not efficient; perhaps replace values! (switch in GUI -> UserSwitch); problem: needs pretty, interactive GUI: 1
         - matrix reductions: averages: 3

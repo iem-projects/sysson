@@ -60,19 +60,25 @@ object Var {
     private[sysson] def dimOption: Option[Dim] = None
   }
 
-  //  /** Declares a new sonification variable (data source).
-  //    *
-  //    * @param name         Logical name by which the source is referred to
-  //    * @param higherRank   Whether a matrix rank higher than `dimensions.size` is permitted
-  //    */
-  //  def apply(name: String, /* dims: Vec[Dim], */ higherRank: Boolean = false): Var =
-  //    Impl(name, higherRank)
-  //
-  //  def unapply(vr: Var): Option[(String, /* Vec[Dim], */ Boolean /*, Vec[Var.Op] */)] = Some(
-  //    vr.name, vr.higherRank
-  //  )
+  final case class Size(variable: Var)
+    extends synth.GE.Lazy with UGB.Input with ScalarRated with UGB.Key {
 
-  // implicit def serializer: ImmutableSerializer[Var] = impl.VarImpl.serializer
+    override def productPrefix  = "Var$Size"
+    override def toString       = s"Var.Size($variable)"
+
+    type Key      = Size
+    type Value    = UGB.Unit
+    def key: Key  = this
+
+    private[sysson] def ctlName: String = s"$$sz_var_$variable.name}"
+
+    protected def makeUGens: UGenInLike = {
+      import synth._
+      val b = UGB.get
+      b.requestInput(this)
+      ctlName.ir(0f)
+    }
+  }
 
   // ---- axis -----
 
@@ -174,4 +180,6 @@ final case class Var(name: String, higherRank: Boolean = true) extends UserInter
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
   def play(time: Dim.Play, interp: Int = 1): Var.Play = Var.Play(this, time, interp)
+
+  def size: Var.Size = Var.Size(this)
 }

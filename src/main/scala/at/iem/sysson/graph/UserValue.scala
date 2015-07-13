@@ -31,11 +31,18 @@ object UserValue {
     }
   }
 
+  /** Same as `UserValue(name, default).ir` */
+  def ir(name: String, default: Double): synth.GE = UserValue(name, default).ir
+  /** Same as `UserValue(name, default).kr` */
+  def kr(name: String, default: Double): synth.GE = UserValue(name, default).kr
+  /** Same as `UserValue(name, default).ar` */
+  def ar(name: String, default: Double): synth.GE = UserValue(name, default).ar
+
   case class Key(name: String) extends UGenGraphBuilder.Key {
     override def productPrefix = "UserValue.Key"
   }
 
-  private[sysson] def controlName(key: String): String = "$user_"  + key
+  private[sysson] def controlName(key: String): String = s"$$user_$key"
 }
 final case class UserValue(name: String, default: Double)
   extends UserInteraction with UGenGraphBuilder.Input {

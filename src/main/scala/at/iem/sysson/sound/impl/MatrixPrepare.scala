@@ -96,11 +96,9 @@ object MatrixPrepare {
     def async: Boolean = false
   }
 
-  /**
-   *
-   * @param numChannels  the number of channels in the audio file
-   * @param streamDim    the stream dimension (or `-1` for scalar)
-   */
+  /** @param numChannels  the number of channels in the audio file
+    * @param streamDim    the stream dimension (or `-1` for scalar)
+    */
   final case class Spec(numChannels: Int, elem: InputGE, streamDim: Int) {
     //    /** Empty indicates that the stream is solely used for information
     //      * purposes such as `BufChannels`.

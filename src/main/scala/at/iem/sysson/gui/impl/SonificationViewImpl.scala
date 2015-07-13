@@ -55,7 +55,7 @@ object SonificationViewImpl {
       StringFieldView(expr, "Name")
     }
 
-    val p         = sonification.elem.peer.proc
+    val p = sonification.elem.peer.proc
 
     val res = new Impl[S, workspace.I](sonifH, /* TTT transport, */ nameView)(workspace, undoMgr, cursor) {
       val graphObserver = p.elem.peer.graph.changed.react { implicit tx => upd =>
@@ -372,7 +372,7 @@ object SonificationViewImpl {
           val message = s"<html><b>Sonification failed:</b> <i>(${e.getClass.getSimpleName})</i><p>${e.getMessage}"
           val options = Seq("Ok", "Show Stack Trace")
           val opt = OptionPane(message = message, messageType = OptionPane.Message.Error,
-            optionType = OptionPane.Options.YesNo, entries = options, initial = Some(options(0)))
+            optionType = OptionPane.Options.YesNo, entries = options, initial = options.headOption)
           if (opt.show(Window.find(component)).id == 1) e.printStackTrace()
       }
     }

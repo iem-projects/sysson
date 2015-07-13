@@ -12,67 +12,49 @@
  *	contact@sciss.de
  */
 
-package at.iem.sysson.graph
+package at.iem.sysson
+package graph
 
 import at.iem.sysson.sound.impl.MatrixPrepare
+import de.sciss.synth
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
 import de.sciss.synth.ugen.Constant
-import de.sciss.synth.{ScalarRated, GE, UGenInLike, AudioRated}
-import de.sciss.synth
+import de.sciss.synth.{GE, ScalarRated, UGenInLike}
 
 object Dim {
-  //  sealed trait GE extends synth.GE.Lazy /* with UGB.Input */ {
-  //    def dim: Dim
-  //
-  //    // type Key = Dim
-  //    // def  key = dim
-  //  }
-
-  // private[sysson] def controlName(key: String, idx: Int): String = s"$$str${idx}_$key"
-
-  // private[sysson] def key(dim: Dim): String = s"$$dim_${dim.variable.name}_${dim.name}"
-
-  //  object Play {
-  //    // private[sysson] case class Key(dim: Dim)
-  //  }
   final case class Play(dim: Dim, freq: synth.GE, maxFreq: Double, interp: Int)
     extends MatrixPrepare.DimGE with MatrixPrepare.PlayGE {
 
     override def productPrefix  = "Dim$Play"
     override def toString       = s"$dim.play($freq)"
-
-    // def key    = dim
-
-    //    protected def makeUGens: UGenInLike =
-    //      MatrixPrepare.makeUGenOLD(this, key = MatrixPrepare.mkKeyOLD(dim, isDim = true) /* Dim.key(dim) */,
-    //        freq = freq, interp = interp)
   }
 
-  //  object Values {
-  //    private[sysson] def controlName(key: String): String = s"$$val_$key"
-  //  }
   final case class Values(dim: Dim)
     extends MatrixPrepare.DimGE with MatrixPrepare.ValuesGE {
 
     override def productPrefix  = "Dim$Values"
     override def toString       = s"$dim.values"
-
-    //    protected def makeUGens: UGenInLike =
-    //      MatrixPrepare.makeUGenOLD(this, key = MatrixPrepare.mkKeyOLD(dim, isDim = true) /* Dim.key(dim) */,
-    //        freq = 0f, interp = 0)
   }
 
-  //  final case class IndexRange(dim: Dim) extends GE with ScalarRated {
-  //    override def productPrefix  = "Dim$IndexRange"
-  //    override def toString       = s"Dim.IndexRange($dim)"
-  //
-  //    protected def makeUGens: UGenInLike = {
-  //      val b     = UGB.get
-  //      // val aural = AuralSonificationOLD.current()
-  //      val key: String = ... //   = aural.attributeKey(this)
-  //      proc.graph.Attribute.kr(key)
-  //    }
-  //  }
+  final case class Size(dim: Dim)
+    extends synth.GE.Lazy with UGB.Input with ScalarRated with UGB.Key {
+
+    override def productPrefix  = "Dim$Size"
+    override def toString       = s"Dim.Size($dim)"
+
+    type Key      = Size
+    type Value    = UGB.Unit
+    def key: Key  = this
+
+    private[sysson] def ctlName: String = s"$$sz_dim_${dim.variable.name}_${dim.name}"
+
+    protected def makeUGens: UGenInLike = {
+      import synth._
+      val b = UGB.get
+      b.requestInput(this)
+      ctlName.ir(0f)
+    }
+  }
 }
 /** Specification of a data source dimension
   *
@@ -107,7 +89,7 @@ final case class Dim(variable: Var, name: String)
   //  def endValue: GE = ...
 
   //  /** Produces a graph element reflecting the low end of the range as index into the dimension vector. */
-  //  def startIndex: GE = Dim.IndexRange(this) \ 0
+  //  def startIndex: GE = Dim.Size(this) \ 0
   //
   //  /** Produces a graph element reflecting the high end of the range as index into the dimension vector.
   //    * This index is "inclusive", i.e. denotes the index corresponding to `endValue`.
@@ -118,15 +100,15 @@ final case class Dim(variable: Var, name: String)
   //    * This index is "exclusive", i.e. denotes the index after the last included element. The index
   //    * corresponding to `endValue` is `endIndex` which equals `stopIndex - 1`
   //    */
-  //  def stopIndex: GE = Dim.IndexRange(this) \ 1
+  //  def stopIndex: GE = Dim.Size(this) \ 1
 
   //  /** Produces a graph element reflecting the extent of this selection in the dimension's domain.
   //    * That is `endValue - startValue`.
   //    */
   //  def extent: GE = endValue - startValue
 
-  //  /** Produces a graph element reflecting the number of samples (`stopIndex - startIndex`) covered by
-  //    * this selection.
-  //    */
-  //  def size: GE = ... // stopIndex - startIndex
+  /** Produces a graph element reflecting the number of samples (`stopIndex - startIndex`) covered by
+    * this selection.
+    */
+  def size: Dim.Size = Dim.Size(this) // stopIndex - startIndex
 }
