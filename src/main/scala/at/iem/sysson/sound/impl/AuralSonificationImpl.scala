@@ -171,7 +171,7 @@ object AuralSonificationImpl {
         b.setMap += ctlName -> value.toFloat
 
       case el: graph.Elapsed =>
-        val resp = new graph.Elapsed.Responder(sonifData.status, synth = b.node)
+        val resp = new graph.Elapsed.Responder(key = el.in.dim, status = sonifData.status, synth = b.node)
         // println("ADD ELAPSED RESPONDER USER")
         b.users ::= resp
 

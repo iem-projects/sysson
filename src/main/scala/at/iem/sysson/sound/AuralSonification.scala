@@ -21,7 +21,7 @@ object AuralSonification extends AuralObj.Factory {
   sealed trait Update /* [S <: Sys[S]] */ {
     // def view: AuralSonification[S]
   }
-  case class Elapsed /* [S <: Sys[S]] */ (/* view: AuralSonification[S], */ ratio: Float, dimValue: Float)
+  case class Elapsed(key: graph.Dim, ratio: Float, dimValue: Float)
     extends Update /* [S] */
 }
 trait AuralSonification[S <: Sys[S]] extends AuralObj[S] {

@@ -16,7 +16,6 @@ package at.iem.sysson
 package gui
 
 import at.iem.sysson.gui.impl.{SonificationSourceViewImpl => Impl}
-import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.gui.MatrixView
@@ -27,17 +26,16 @@ import de.sciss.mellite.Workspace
 object SonificationSourceView {
   /** Creates a new view for editing the mapping between a sonification data source matrix and model dimensions.
     *
-    * @param sonif        the sonification
     * @param key          the key in `map`
     * @param dimKeys      the sonification model/patch dimension keys with which data source matrix dimensions
     *                     will be associated
     * @param workspace    the workspace within which the source resides
     */
-  def apply[S <: Sys[S]](sonif: Sonification.Obj[S],
+  def apply[S <: Sys[S]](parent: SonificationView[S],
                          key: String, dimKeys: Vec[String])
                         (implicit tx: S#Tx, workspace: Workspace[S],
                          undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] =
-    Impl(sonif, key, dimKeys)
+    Impl(parent, key, dimKeys)
 }
 trait SonificationSourceView[S <: Sys[S]] extends View[S] {
   def matrixView: MatrixView[S]

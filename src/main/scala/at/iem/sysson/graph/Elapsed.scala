@@ -95,7 +95,7 @@ object Elapsed {
 
   // case object Key extends UGB.Key
 
-  private[sysson] class Responder[S <: Sys[S]](status: stm.Sink[S#Tx, AuralSonification.Update /* [S] */],
+  private[sysson] class Responder[S <: Sys[S]](key: graph.Dim, status: stm.Sink[S#Tx, AuralSonification.Update /* [S] */],
                                                synth: Node)
                                               (implicit context: AuralContext[S])
     extends DynamicUser {
@@ -107,7 +107,7 @@ object Elapsed {
         import context.scheduler.cursor
         SoundProcesses.atomic { implicit tx: S#Tx =>
           // println(f"elapsed - ${ratio * 100}%1.1f - $dimValue%1.3f")
-          status() = AuralSonification.Elapsed(ratio = ratio, dimValue = dimValue)
+          status() = AuralSonification.Elapsed(key = key, ratio = ratio, dimValue = dimValue)
         }
     }
 

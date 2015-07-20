@@ -38,29 +38,28 @@ import scala.annotation.tailrec
 import scala.swing.{Action, Component, FlowPanel}
 
 object SonificationSourceViewImpl {
-  def apply[S <: Sys[S]](sonif: Sonification.Obj[S],
+  def apply[S <: Sys[S]](parent: SonificationView[S],
                          key: String, keyDimNames: Vec[String])
                         (implicit tx: S#Tx, workspace: Workspace[S],
                          undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] = {
-    val res = new Impl[S](key = key, _keys = keyDimNames).init(sonif)
+    val res = new Impl[S](parent = parent, key = key, _keys = keyDimNames).init1()
     res
   }
 
-  private final class Impl[S <: Sys[S]](key: String, _keys: Vec[String])
+  private final class Impl[S <: Sys[S]](parent: SonificationView[S], key: String, _keys: Vec[String])
                                        (implicit workspace: Workspace[S], undoManager: UndoManager, cursor: stm.Cursor[S])
     extends MatrixAssocViewImpl[S](_keys) with SonificationSourceView[S] {
     impl =>
 
     private var sourceObserver: Disposable[S#Tx] = _
-    private var sonifH : stm.Source[S#Tx, Sonification.Obj[S]] = _
     private var mapHOpt: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]]] = _
 
     type Source[S1 <: Sys[S1]] = Sonification.Source[S1]
 
-    def init(sonif: Sonification.Obj[S])(implicit tx: S#Tx): this.type = {
-      sonifH  = tx.newHandle(sonif)
-      val map = sonif.elem.peer.sources
-      mapHOpt = map.modifiableOption.map(tx.newHandle(_))
+    def init1()(implicit tx: S#Tx): this.type = {
+      val sonif = parent.sonification
+      val map   = sonif.elem.peer.sources
+      mapHOpt   = map.modifiableOption.map(tx.newHandle(_))
       sourceObserver = map.changed.react { implicit tx => upd =>
         // println(s"OBSERVE CHANGES $upd")
         upd.changes.foreach {
@@ -126,7 +125,7 @@ object SonificationSourceViewImpl {
       def apply(): Unit = {
         cursor.step { implicit tx =>
           matrixView.matrix.foreach { m =>
-            val sonif   = sonifH()
+            val sonif   = parent.sonification
             val attrKey = s"plot-$key"
             val plotOpt = sonif.attr.get(attrKey).flatMap(Plot.Obj.unapply)
             val mr      = findRoot(m)
@@ -143,14 +142,14 @@ object SonificationSourceViewImpl {
                 vr() = mr
               }
             }
-            PlotFrame(plot)
+            PlotFrame(plot, parent)
           }
         }
       }
     }
 
     override protected def mkTopComponent(c: Component): Component = {
-      val ggPlot  = GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
+      val ggPlot = GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
       new FlowPanel(FlowPanel.Alignment.Leading)(c, ggPlot)
     }
   }

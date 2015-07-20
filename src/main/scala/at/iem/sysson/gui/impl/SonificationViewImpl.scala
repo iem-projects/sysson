@@ -21,10 +21,11 @@ import java.awt.Color
 import at.iem.sysson.sound.{AuralSonification, Sonification}
 import de.sciss.audiowidgets.{TimelineModel, Transport => GUITransport}
 import de.sciss.desktop.impl.UndoManagerImpl
-import de.sciss.desktop.{KeyStrokes, Window, OptionPane, UndoManager}
+import de.sciss.desktop.{KeyStrokes, OptionPane, UndoManager, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
+import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
@@ -41,7 +42,7 @@ import de.sciss.synth.SynthGraph
 import de.sciss.synth.proc.{BooleanElem, ExprImplicits, Obj, ObjKeys, StringElem, Timeline, Transport}
 
 import scala.concurrent.stm.Ref
-import scala.swing.event.{Key, ButtonClicked}
+import scala.swing.event.{ButtonClicked, Key}
 import scala.swing.{Action, Alignment, BoxPanel, Component, FlowPanel, Label, Orientation, ScrollPane, Swing, ToggleButton}
 import scala.util.control.NonFatal
 
@@ -120,13 +121,18 @@ object SonificationViewImpl {
       val elapsedOpt = t.getView(sonif).collect {
         case as: AuralSonification[S] =>
           as.status.react { implicit tx => {
-            case AuralSonification.Elapsed(ratio, dimValue) =>
+            case e @ AuralSonification.Elapsed(_, ratio, dimValue) =>
+              status() = e
               deferTx {
                 ggElapsed.value = ratio
               }
           }}
       }
       new TransportRef(t, observer, elapsedOpt)
+    }
+
+    object status extends ObservableImpl[S, AuralSonification.Update] {
+      def update(u: AuralSonification.Update)(implicit tx: S#Tx): Unit = fire(u)
     }
 
     final protected def auralChange(upd: Transport.Update[S] /* AuralSonificationOLD.Update */): Unit = upd match {
@@ -164,7 +170,7 @@ object SonificationViewImpl {
             case graph.Dim(`vr`, dimKey) => dimKey
           }
 
-          val view = SonificationSourceView(sonif, key, dimKeys)
+          val view = SonificationSourceView(impl, key, dimKeys)
 
           (key, view)
       }
@@ -412,7 +418,7 @@ object SonificationViewImpl {
     }
 
     object actionBounce extends Action("Export as Audio File...") {
-      import ActionBounceTimeline.{DurationSelection, QuerySettings, query1, performGUI}
+      import ActionBounceTimeline.{DurationSelection, QuerySettings, performGUI, query1}
 
       private var settings = QuerySettings[S](
         realtime = true, span = Span(0L, (Timeline.SampleRate * 10).toLong), channels = Vector(0 to 1)
