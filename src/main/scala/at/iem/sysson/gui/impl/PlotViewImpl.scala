@@ -25,7 +25,8 @@ import de.sciss.desktop.UndoManager
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.matrix.Matrix
+import de.sciss.lucre.expr.{Expr, Int => IntEx}
+import de.sciss.lucre.matrix.{Dimension, Matrix, Reduce}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.edit.EditVar
@@ -38,10 +39,14 @@ import org.scalautils.TypeCheckedTripleEquals
 
 import scala.annotation.tailrec
 import scala.concurrent.stm.Ref
+import scala.concurrent.{Future, Promise}
 import scala.swing.event.ButtonClicked
 import scala.swing.{BoxPanel, Component, FlowPanel, Orientation, SplitPane, ToggleButton}
+import scala.util.{Failure, Success}
 
 object PlotViewImpl {
+  private val DEBUG = false
+
   def apply[S <: Sys[S]](plot: Plot.Obj[S], parent: SonificationView[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                             cursor: stm.Cursor[S]): PlotView[S] = mk(plot, Some(parent))
 
@@ -127,25 +132,105 @@ object PlotViewImpl {
 
     def plotH: stm.Source[S#Tx, Plot.Obj[S]] = _plotH
 
-    private val synced = Ref(false)
+    private val synced  = Ref(false)
+    // private var syncFut = Future.successful[Unit]
+
+    @tailrec private def findReduce(m: Matrix[S], name: String)(implicit tx: S#Tx): Option[Reduce[S]] = m match {
+      case Matrix.Var(vr) => findReduce(vr(), name)
+      case r: Reduce[S] =>
+        r.dim match {
+          case ds: Dimension.Selection.Name[S] if ds.expr.value == name => Some(r)
+          case _ => findReduce(r.in, name)
+        }
+      case _ => None
+    }
 
     def init(plot: Plot.Obj[S])(implicit tx: S#Tx): this.type = {
       _plotH = tx.newHandle(plot)
       init()
       updateSource(Some(plot.elem.peer))
 
-      _obsStatus = parentOpt.map { sonifView =>
-        sonifView.status.react { implicit tx =>
-          upd => if (synced.get(tx.peer)) upd match {
-            case AuralSonification.Elapsed(dim, ratio, dimValue) =>
-              println(ratio)
-            case _ =>
-          }
-        }
-      }
+      _obsStatus = parentOpt.map(mkElapsedObservation)
       this
     }
 
+    private type ElapsedReduce = (stm.Source[S#Tx, Reduce[S]], Future[Array[Float]])
+
+    private val elapsedReduce = Ref(Option.empty[ElapsedReduce])
+
+    private def readElapsedData(r: Reduce[S], mDim: String)(implicit tx: S#Tx): Option[ElapsedReduce] = {
+      val dimIdx = r.in.dimensions.indexWhere(_.name == mDim)
+      if (DEBUG) println(s"readElapsedData ${r.id}, $mDim, dimIdx = $dimIdx")
+      if (dimIdx >= 0) {
+        val dimKey  = r.in.getDimensionKey(dimIdx, useChannels = false)
+        implicit val resolver = WorkspaceResolver[S]
+        val reader  = dimKey.reader[S]()
+        val len     = reader.numFrames.toInt
+        val buf     = Array.ofDim[Float](1, len)
+        val p       = Promise[Array[Float]]()
+        tx.afterCommit {
+          import at.iem.sysson.Stats.executionContext
+          val fut = Future {
+            reader.read(buf, 0, len)
+            buf(0)
+          }
+          p.completeWith(fut)
+          if (DEBUG) fut.onComplete {
+            case Success(arr) => println(s"readElapsedData result: ${arr.toVector}")
+            case Failure(ex)  => println(s"readElapsedData result: $ex")
+          }
+        }
+        Some(tx.newHandle(r) -> p.future)
+
+      } else None
+    }
+
+    private def mkElapsedObservation(sonifView: SonificationView[S])(implicit tx: S#Tx): Disposable[S#Tx] =
+      sonifView.status.react { implicit tx =>
+        upd => if (synced.get(tx.peer)) upd match {
+          case AuralSonification.Elapsed(dim, ratio, dimValue) =>
+            matrixView.matrix.foreach { m =>
+              val sonif = sonifView.sonification.elem.peer
+              sonif.sources.get(dim.variable.name).foreach { source =>
+                source.dims.get(dim.name).foreach { mDimExpr =>
+                  val mDim = mDimExpr.value
+                  findReduce(m, mDim).foreach { r =>
+                    r.op match {
+                      case idxApp: Reduce.Op.Apply[S] =>
+                        idxApp.index match {
+                          case Expr.Var(idxVr) =>
+                            elapsedReduce.get(tx.peer) match {
+                              case None /* | Some((src, _)) if src() != r */ =>
+                                val e = readElapsedData(r, mDim)
+                                elapsedReduce.set(e)(tx.peer)
+                              case Some((src, _)) if src() != r =>
+                                val e = readElapsedData(r, mDim)
+                                elapsedReduce.set(e)(tx.peer)
+                              case Some((_, data)) =>
+                                data.value.foreach {
+                                  case Success(buf) =>
+                                    val idx0  = math.abs(java.util.Arrays.binarySearch(buf, dimValue))
+                                    val idx   = if (idx0 >= 0) idx0 else -(idx0 + 1)
+                                    if (DEBUG) println(s"Elapsed index for $dimValue is $idx")
+                                    val idxOld = idxVr.value
+                                    if (idx != idxOld) idxVr() = IntEx.newConst(idx)
+
+                                  case _ =>
+                                }
+                            }
+
+                          case _ =>
+                        }
+                      case _ =>
+                    }
+                  }
+                }
+              }
+            }
+
+          case _ =>
+        }
+      }
 
     override def dispose()(implicit tx: S#Tx): Unit = {
       super.dispose()

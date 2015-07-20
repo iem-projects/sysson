@@ -1,8 +1,7 @@
 E       - Automatisch Bounce beschneiden (Stille weg)
-E       - Plot: synchronize with sonification playback: 1
 E       - Plot: min/max/normalize scale
 E       - Installer angucken
-E       - #14 Patch requires `output :=` to be present bug
+E       - #14 Patch requires `output :=` to be present bug (otherwise time play is zero)
         - [Mellite]     im Workspace: "under-tree" die variablen und "Auge" wird plot button; trotzdem metadaten
                         fenster (wenn header ausgewaehlt): 1
         - [LucreMatrix] drag and drop a new data set: keep settings of matrix reductions as long as dimensions are the same: 2
@@ -12,6 +11,7 @@ E       - #14 Patch requires `output :=` to be present bug
         - Parameter GUI: verknuepfung matrix datenquelle (ueberpruefen welche daten reingeladen sind): 0.5
         - Parameter GUI: parameter automatisch zuweisen; wenn "fehler" deutlich sichtbar, dass dimension nicht zugeordnet: 0.5
         - Plot: 1D strategy
+[OK]    - Plot: synchronize with sonification playback: 1
 [OK]    - [LucreMatrix] after Indexing the plus should be disappeared: 0.5
 [OK]    - [LucreMatrix] Parameter GUI: sliders mit number box: 0.5 ||| oder dauerhaft tool-tip sichtbar
 [OK]    - [Mellite]     im Workspace: limit menu (ev. hierarchisch, die die man nicht braucht scheinen nicht gleich auf): 0.5
