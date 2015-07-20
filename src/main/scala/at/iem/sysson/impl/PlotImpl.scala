@@ -15,21 +15,53 @@
 package at.iem.sysson
 package impl
 
-import de.sciss.lucre.expr.{Expr, String => StringEx}
-import de.sciss.lucre.matrix.Matrix
-import de.sciss.lucre.{event => evt, expr}
 import de.sciss.lucre.event.{EventLike, Sys}
+import de.sciss.lucre.expr.{Expr, String => StringEx, Int => IntEx}
+import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix}
+import de.sciss.lucre.{event => evt, expr}
 import de.sciss.model
-import de.sciss.serial.{DataOutput, DataInput}
+import de.sciss.serial.{DataInput, DataOutput}
 import de.sciss.synth.proc.Elem
 import de.sciss.synth.proc.impl.{ActiveElemImpl, ElemCompanionImpl}
 
+import scala.annotation.tailrec
+
 object PlotImpl {
+  private def findDim[S <: Sys[S]](matrix: Matrix[S], names: List[String])(implicit tx: S#Tx): Option[Matrix[S]] =
+    matrix.dimensions.find { d =>
+      val n = d.name.toLowerCase
+      names.contains(n)
+    }
+
+  private def tryAddDim[S <: Sys[S]](matrix: Matrix[S],
+                                     dims: expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]],
+                                     key: String, names: List[String])(implicit tx: S#Tx): Unit =
+    findDim(matrix, names).foreach(dim => dims.put(key, StringEx.newVar(StringEx.newConst[S](dim.name))))
+
+  @tailrec private def dropVar[S <: Sys[S]](m: Matrix[S])(implicit tx: S#Tx): Matrix[S] = m match {
+    case Matrix.Var(vr) => dropVar(vr())
+    case _ => m
+  }
+
+  private def mkVar[S <: Sys[S]](m: Matrix[S])(implicit tx: S#Tx): Matrix[S] = m match {
+    case Matrix.Var(vr) => vr
+    case _ => Matrix.Var(m)
+  }
+
   def apply[S <: Sys[S]](matrix: Matrix[S])(implicit tx: S#Tx): Plot[S] = {
     val targets = evt.Targets[S]
     import StringEx.{serializer => stringSer, varSerializer => stringVarSer}
     val dims    = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
-    new Impl(targets, matrix, dims)
+    tryAddDim(matrix, dims, Plot.VKey, "lat" :: "latitude"  :: Nil)
+    tryAddDim(matrix, dims, Plot.HKey, "lon" :: "longitude" :: Nil)
+    val m1 = if (matrix.reducedRank <= 2) matrix else
+      findDim(matrix, "time" :: Nil).fold(matrix) { dimTime =>
+        Reduce(dropVar(matrix), Dimension.Selection.Name(StringEx.newConst[S](dimTime.name)),
+          Reduce.Op.Apply(IntEx.newVar(IntEx.newConst[S](0))))
+      }
+
+    val m2 = mkVar(m1)
+    new Impl(targets, m2, dims)
   }
 
   /** NOTE: does not copy the arguments but assumes they have been! */
@@ -71,7 +103,7 @@ object PlotImpl {
     def mkCopy()(implicit tx: S#Tx): Plot[S] = {
       val tgt       = evt.Targets[S]
       val matrixCpy = matrix.mkCopy()
-      import StringEx.{varSerializer => stringVarSer, serializer => stringSer}
+      import StringEx.{serializer => stringSer, varSerializer => stringVarSer}
       val dimsCpy   = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
       dims.iterator.foreach { case (key, value) =>
         val valueCpy = value match {

@@ -64,7 +64,7 @@ object Plot {
   }
 
   object Obj {
-    def unapply[S <: Sys[S]](obj: Obj[S]): Option[Plot.Obj[S]] =
+    def unapply[S <: Sys[S]](obj: proc.Obj[S]): Option[Plot.Obj[S]] =
       if (obj.elem.isInstanceOf[Plot.Elem[S]]) Some(obj.asInstanceOf[Plot.Obj[S]])
       else None
   }

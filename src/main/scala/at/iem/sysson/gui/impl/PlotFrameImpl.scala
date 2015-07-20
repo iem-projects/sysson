@@ -16,8 +16,8 @@ package at.iem.sysson
 package gui
 package impl
 
+import de.sciss.lucre.event.Sys
 import de.sciss.lucre.swing.CellView
-import de.sciss.lucre.synth.Sys
 import de.sciss.synth.proc.Obj
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView

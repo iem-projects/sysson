@@ -33,7 +33,7 @@ import de.sciss.serial.Serializer
 import org.scalautils.TypeCheckedTripleEquals
 
 import scala.annotation.tailrec
-import scala.swing.{SplitPane, Orientation, BoxPanel, Component}
+import scala.swing.{Swing, FlowPanel, SplitPane, Orientation, BoxPanel, Component}
 
 object PlotViewImpl {
   def apply[S <: Sys[S]](plot: Plot.Obj[S])
@@ -138,5 +138,8 @@ object PlotViewImpl {
 
         if (isRecursive(m)) None else Some(EditVar("Set Matrix", vr, m))
       }
+
+    //    override protected def mkTopComponent(c: Component): Component =
+    //      new FlowPanel(c, Swing.HGlue)
   }
 }

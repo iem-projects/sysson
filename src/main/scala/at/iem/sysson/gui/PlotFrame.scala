@@ -15,7 +15,7 @@
 package at.iem.sysson.gui
 
 import at.iem.sysson.Plot
-import de.sciss.lucre.synth.Sys
+import de.sciss.lucre.event.Sys
 import impl.{PlotFrameImpl => Impl}
 import de.sciss.lucre.swing.Window
 import de.sciss.mellite.Workspace

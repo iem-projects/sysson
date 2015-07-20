@@ -236,7 +236,7 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
       contents += lbDataName
       // contents += Swing.HStrut(2)
       contents += ggDataName
-      // contents += Swing.HGlue
+      contents += Swing.HGlue
     }
   }
 

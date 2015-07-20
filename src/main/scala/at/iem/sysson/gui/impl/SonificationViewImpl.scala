@@ -154,7 +154,7 @@ object SonificationViewImpl {
 
       // ---- sources/mapping tx ----
 
-      val mapping = sonif.elem.peer.sources
+      // val mapping = sonif.elem.peer.sources
       val sources = g.sources.collect {
         case vr: graph.Var =>
           val key   = vr.name
@@ -164,7 +164,7 @@ object SonificationViewImpl {
             case graph.Dim(`vr`, dimKey) => dimKey
           }
 
-          val view = SonificationSourceView(mapping, key, dimKeys)
+          val view = SonificationSourceView(sonif, key, dimKeys)
 
           (key, view)
       }

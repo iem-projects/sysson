@@ -24,7 +24,7 @@ import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.matrix.Matrix
+import de.sciss.lucre.matrix.{Reduce, Matrix}
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.View
 import de.sciss.lucre.swing.edit.EditMutableMap
@@ -32,15 +32,17 @@ import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
+import de.sciss.synth.proc.Obj
 
+import scala.annotation.tailrec
 import scala.swing.{Action, Component, FlowPanel}
 
 object SonificationSourceViewImpl {
-  def apply[S <: Sys[S]](map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
+  def apply[S <: Sys[S]](sonif: Sonification.Obj[S],
                          key: String, keyDimNames: Vec[String])
                         (implicit tx: S#Tx, workspace: Workspace[S],
                          undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] = {
-    val res = new Impl[S](key = key, _keys = keyDimNames).init(map)
+    val res = new Impl[S](key = key, _keys = keyDimNames).init(sonif)
     res
   }
 
@@ -50,11 +52,14 @@ object SonificationSourceViewImpl {
     impl =>
 
     private var sourceObserver: Disposable[S#Tx] = _
+    private var sonifH : stm.Source[S#Tx, Sonification.Obj[S]] = _
     private var mapHOpt: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]]] = _
 
     type Source[S1 <: Sys[S1]] = Sonification.Source[S1]
 
-    def init(map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]])(implicit tx: S#Tx): this.type = {
+    def init(sonif: Sonification.Obj[S])(implicit tx: S#Tx): this.type = {
+      sonifH  = tx.newHandle(sonif)
+      val map = sonif.elem.peer.sources
       mapHOpt = map.modifiableOption.map(tx.newHandle(_))
       sourceObserver = map.changed.react { implicit tx => upd =>
         // println(s"OBSERVE CHANGES $upd")
@@ -111,10 +116,36 @@ object SonificationSourceViewImpl {
         def workspace: Workspace[S] = impl.workspace
       })
 
+    @tailrec private def findRoot(m: Matrix[S])(implicit tx: S#Tx): Matrix[S] = m match {
+      case Matrix.Var(vr)   => findRoot(vr())
+      case Reduce(in, _, _) => findRoot(in)
+      case _ => m
+    }
 
     private object actionPlot extends Action(null) {
       def apply(): Unit = {
-        println("TODO")
+        cursor.step { implicit tx =>
+          matrixView.matrix.foreach { m =>
+            val sonif   = sonifH()
+            val attrKey = s"plot-$key"
+            val plotOpt = sonif.attr.get(attrKey).flatMap(Plot.Obj.unapply)
+            val mr      = findRoot(m)
+            val plot    = plotOpt.getOrElse {
+              val p   = Plot[S](mr)
+              val po  = Obj(Plot.Elem(p))
+              sonif.attr.put(attrKey, po)
+              po
+            }
+            val m1  = plot.elem.peer.matrix
+            val m1r = findRoot(m1)
+            if (mr != m1r) {  // sonif editor matrix was replaced
+              Matrix.Var.unapply(m1).foreach { vr =>
+                vr() = mr
+              }
+            }
+            PlotFrame(plot)
+          }
+        }
       }
     }
 
