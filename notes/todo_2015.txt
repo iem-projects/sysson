@@ -1,7 +1,5 @@
-        - [Mellite]     im Workspace: "under-tree" die variablen und "Auge" wird plot button; trotzdem metadaten fenster (wenn header ausgewaehlt): 1
-        - [Mellite]     im Workspace: limit menu (ev. hierarchisch, die die man nicht braucht scheinen nicht gleich auf): 0.5
-        - [LucreMatrix] Parameter GUI: sliders mit number box: 0.5 ||| oder dauerhaft tool-tip sichtbar
-        - [LucreMatrix] after Indexing the plus should be disappeared: 0.5
+        - [Mellite]     im Workspace: "under-tree" die variablen und "Auge" wird plot button; trotzdem metadaten
+                        fenster (wenn header ausgewaehlt): 1
         - [LucreMatrix] drag and drop a new data set: keep settings of matrix reductions as long as dimensions are the same: 2
         - Parameter GUI: elapsed - player functionality (re-hear, e.g., last 10 seconds...)
 E       - Plot: synchronize with sonification playback: 1
@@ -10,7 +8,12 @@ E       - Plot: min/max/normalize scale
         - Parameter GUI: parameters as sliders within a given Range, "UserRange": 0.75 (-format of typing numbers … (anzeige > 3 kommastellen)
         - Parameter GUI: verknuepfung matrix datenquelle (ueberpruefen welche daten reingeladen sind): 0.5
         - Parameter GUI: parameter automatisch zuweisen; wenn "fehler" deutlich sichtbar, dass dimension nicht zugeordnet: 0.5
-        - Installer angucken
+E       - Installer angucken
+        - Plot: 1D strategy
+        - #14 Patch requires `output :=` to be present bug
+[OK]    - [LucreMatrix] after Indexing the plus should be disappeared: 0.5
+[OK]    - [LucreMatrix] Parameter GUI: sliders mit number box: 0.5 ||| oder dauerhaft tool-tip sichtbar
+[OK]    - [Mellite]     im Workspace: limit menu (ev. hierarchisch, die die man nicht braucht scheinen nicht gleich auf): 0.5
 [OK]    - [LucreMatrix] matrix reductions add stride as separate reduction possibility
 [OK]    - Matrix : after DnD, cannot edit matrix reductions
 [OK]    - Parameter GUI: sliders koppeln (im patch ev "Vars"?): 1
@@ -33,7 +36,6 @@ E       - Plot: min/max/normalize scale
 [OK]    - Plot: make proper proc.Obj: 0.5
 [OK]    - Plot: overlay-option ausblenden, wenn kein Lon/Lat format
 [OK]    - Plot: bug: Achsenanordnung/ Matrixtransposition: 0.75
-        - Plot: 1D strategy
 
 ---
 15 -> 20??
@@ -46,7 +48,3 @@ E       - Plot: min/max/normalize scale
 [won't] - parameter gui does not need header "file, "edit", ... : problem shortcuts would vanish as well
 [???]   - icons/ window functionality - tooltip: 10 sec
         - docking system (one window): 2-3
-
-?
-back to default setting
-what happens to nans

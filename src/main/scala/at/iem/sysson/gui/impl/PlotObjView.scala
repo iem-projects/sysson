@@ -82,8 +82,10 @@ object PlotObjView extends ListObjView.Factory {
     }
   }
 
-  private final class Impl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, Plot.Elem]], var value: Value)
-    extends ObjViewImpl.Impl[S] with ListObjViewImpl.NonEditable[S] with ListObjView[S] {
+  private final class Impl[S <: SSys[S]](val objH: stm.Source[S#Tx, Obj.T[S, Plot.Elem]], var value: Value)
+    extends ObjViewImpl.Impl[S]
+    with ListObjViewImpl.NonEditable[S]
+    with ListObjView[S] {
 
     def factory = PlotObjView
     def prefix  = PlotObjView.prefix
@@ -92,9 +94,11 @@ object PlotObjView extends ListObjView.Factory {
 
     def isViewable = true
 
+    override def obj(implicit tx: S#Tx): Plot.Obj[S] = objH()
+
     def openView(parent: Option[Window[S]])
                 (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
-      val frame = PlotFrame(obj())
+      val frame = PlotFrame(obj)
       Some(frame)
     }
 

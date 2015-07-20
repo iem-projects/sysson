@@ -62,7 +62,7 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
 
   // ----
 
-  private var ggDataName: TextField = _
+  private var ggDataName: Label = _
   private val sourceOptRef = Ref(Option.empty[stm.Source[S#Tx, Source[S]]])
 
   def sourceOpt(implicit tx: TxnLike): Option[stm.Source[S#Tx, Source[S]]] = sourceOptRef.get(tx.peer)
@@ -87,7 +87,12 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
   }
 
   private def guiInit(): Unit = {
-    ggDataName = new TextField(12)
+    ggDataName = new Label("") // Precipitation")
+    // desktop.Util.fixWidth(ggDataName)
+    // ggDataName.preferredSize = ggDataName.maximumSize // XXX TODO -- desktop.Util should do this
+    // ggDataName.text = ""
+    ggDataName.border = Swing.EmptyBorder(0, 8, 0, 8)
+
     if (canRemoveMatrix) {
       ggDataName.listenTo(ggDataName.mouse.clicks)
       ggDataName.reactions += {
@@ -102,8 +107,8 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
       }
     }
     // dataName0.foreach(ggDataName.text = _)
-    ggDataName.editable = false
-    ggDataName.focusable= false
+    // ggDataName.editable = false
+    // ggDataName.focusable= false
 
     val lbDataName = new Label(null: String) {
       icon      = Icons.Target(DropButton.IconSize)
@@ -210,7 +215,7 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
       peer.addMouseListener      (Mouse)
       peer.addMouseMotionListener(Mouse)
     }
-    desktop.Util.fixSize(ggDataName)
+    // desktop.Util.fixSize(ggDataName)
 
     component = new BoxPanel(Orientation.Horizontal) {
       override lazy val peer = {
@@ -229,9 +234,9 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
 
       contents += Swing.HStrut(2)
       contents += lbDataName
-      contents += Swing.HStrut(2)
+      // contents += Swing.HStrut(2)
       contents += ggDataName
-      contents += Swing.HGlue
+      // contents += Swing.HGlue
     }
   }
 

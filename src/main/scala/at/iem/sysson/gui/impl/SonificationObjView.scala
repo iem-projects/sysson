@@ -56,19 +56,19 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
   def init(): Unit = _init
 
   def mkListView[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ListObjView[S] = {
-    val son       = obj.elem.peer
-    val procName  = son.proc.name
-    new SonificationObjView.ListImpl(tx.newHandle(obj), value = new Value(procName)).initAttrs(obj)
+    // val son       = obj.elem.peer
+    // val procName  = son.proc.name
+    new SonificationObjView.ListImpl(tx.newHandle(obj) /* , value = new Value(procName) */).initAttrs(obj)
   }
 
   def mkTimelineView[S <: SSys[S]](id: S#ID, span: Expr[S, SpanLike], obj: Sonification.Obj[S],
                                   context: TimelineObjView.Context[S])
                         (implicit tx: S#Tx): TimelineObjView[S] = {
     import SpanLikeEx.serializer
-    val son       = obj.elem.peer
-    val procName  = son.proc.name
-    val res = new TimelineImpl(span = tx.newHandle(span), obj = tx.newHandle(obj),
-      value = new Value(procName)).initAttrs(span, obj)
+    // val son       = obj.elem.peer
+    // val procName  = son.proc.name
+    val res = new TimelineImpl(objH = tx.newHandle(obj) /*,
+      value = new Value(procName) */).initAttrs(id, span, obj)
     TimelineObjViewImpl.initGainAttrs(span, obj, res)
     TimelineObjViewImpl.initMuteAttrs(span, obj, res)
     TimelineObjViewImpl.initFadeAttrs(span, obj, res)
@@ -96,49 +96,53 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
     obj :: Nil
   }
 
-  private final class Value(procName: String) {
-    override def toString: String = {
-      import TypeCheckedTripleEquals._
-      if (procName === "<unnamed>") "" else s"proc: $procName"
-    }
-  }
+//  private final class Value(procName: String) {
+//    override def toString: String = {
+//      import TypeCheckedTripleEquals._
+//      if (procName === "<unnamed>") "" else s"proc: $procName"
+//    }
+//  }
 
   private trait Impl[S <: SSys[S]]
-    extends ObjViewImpl.Impl[S] with ListObjViewImpl.NonEditable[S] with ListObjView[S] {
+    extends ObjViewImpl.Impl[S]
+    with ListObjViewImpl.NonEditable[S]
+    with ListObjViewImpl.EmptyRenderer[S]
+    with ListObjView[S] {
 
-    override def obj: stm.Source[S#Tx, Sonification.Obj[S]]
+    override def objH: stm.Source[S#Tx, Sonification.Obj[S]]
+
+    override def obj(implicit tx: S#Tx): Sonification.Obj[S] = objH()
 
     def factory = SonificationObjView
     def prefix  = SonificationObjView.prefix
 
-    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = update match {
-      case Sonification.Update(_, ch) => false
-        // XXX TODO - I don't see how the patch obj's name changes are propagated
-        //        ch.exists {
-        //          case Sonification.PatchChange(Change())
-        //        }
-    }
+    //    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = update match {
+    //      case Sonification.Update(_, ch) => false
+    //        // XXX TODO - I don't see how the patch obj's name changes are propagated
+    //        //        ch.exists {
+    //        //          case Sonification.PatchChange(Change())
+    //        //        }
+    //    }
 
     def isViewable = true
 
     def openView(parent: Option[Window[S]])
                 (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
-      val frame = SonificationFrame(obj())
+      val frame = SonificationFrame(obj)
       Some(frame)
     }
 
-    def configureRenderer(label: Label): Component = {
-      val txt    = value.toString
-      label.text = txt
-      label
-    }
+//    def configureRenderer(label: Label): Component = {
+//      val txt    = value.toString
+//      label.text = txt
+//      label
+//    }
   }
 
-  private final class ListImpl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]], var value: Value)
+  private final class ListImpl[S <: SSys[S]](val objH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]] /*, var value: Value */)
     extends Impl[S]
 
-  private final class TimelineImpl[S <: SSys[S]](val span: stm.Source[S#Tx, Expr[S, SpanLike]],
-                                        val obj : stm.Source[S#Tx, Sonification.Obj[S]], val value: Value)
+  private final class TimelineImpl[S <: SSys[S]](val objH: stm.Source[S#Tx, Sonification.Obj[S]] /* , val value: Value */)
     extends Impl[S] with TimelineObjViewImpl.BasicImpl[S]
     with TimelineObjView.HasMute
     with TimelineObjView.HasGain

@@ -187,8 +187,9 @@ object SonificationViewImpl {
       deferTx {
         // ---- sources/mapping gui ----
 
-        val ggMap = sources.map { case (key, view) =>
+        val ggMap = sources.zipWithIndex.map { case ((key, view), idx) =>
           val lb    = new Label(s"$key:")
+          if (idx > 0) lb.border = Swing.EmptyBorder(32, 0, 0, 0)
           val drop  = view.component
           view.matrixView.addListener {
             case MatrixView.Resized => dispatch(SonificationView.Resized)

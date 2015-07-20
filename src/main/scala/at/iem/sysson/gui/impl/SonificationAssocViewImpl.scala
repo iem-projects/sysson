@@ -17,9 +17,13 @@ package impl
 
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
+import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
 import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.GUI
+
+import scala.swing.{FlowPanel, Action, Component, Label}
 
 object SonificationAssocViewImpl {
   def apply[S <: Sys[S]](source: Sonification.Source[S], keyName: String)
@@ -33,8 +37,8 @@ object SonificationAssocViewImpl {
   }
 
   private final class Impl[S <: Sys[S]](protected val sourceH: stm.Source[S#Tx, Sonification.Source[S]],
-                                           keyName: String)
-                                          (implicit workspace: Workspace[S], undo: UndoManager, cursor: stm.Cursor[S])
+                                        keyName: String)
+                                       (implicit workspace: Workspace[S], undo: UndoManager, cursor: stm.Cursor[S])
     extends DimAssocViewImpl[S](keyName) with SonificationAssocView[S] {
 
     type Source[S1 <: Sys[S1]] = Sonification.Source[S1]

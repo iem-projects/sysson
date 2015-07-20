@@ -22,14 +22,18 @@ import javax.swing.undo.UndoableEdit
 import at.iem.sysson.gui.DragAndDrop.SonificationSourceMappingDrag
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
+import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.View
 import de.sciss.lucre.swing.edit.EditMutableMap
-import de.sciss.lucre.{stm, expr}
+import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.Workspace
+import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
+
+import scala.swing.{Action, Component, FlowPanel}
 
 object SonificationSourceViewImpl {
   def apply[S <: Sys[S]](map: expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]],
@@ -106,5 +110,17 @@ object SonificationSourceViewImpl {
         def key: String = key0
         def workspace: Workspace[S] = impl.workspace
       })
+
+
+    private object actionPlot extends Action(null) {
+      def apply(): Unit = {
+        println("TODO")
+      }
+    }
+
+    override protected def mkTopComponent(c: Component): Component = {
+      val ggPlot  = GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
+      new FlowPanel(FlowPanel.Alignment.Leading)(c, ggPlot)
+    }
   }
 }

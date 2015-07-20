@@ -79,8 +79,8 @@ object DataSourceObjView extends ListObjView.Factory {
     }
   }
 
-  def makeObj[S <: Sys[S]](config: Config[S])(implicit tx: S#Tx): List[Obj[S]] = {
-    val (list0: List[Obj[S]], loc) = config.location match {
+  def makeObj[S <: Sys[S]](config: Config[S])(implicit tx: S#Tx): List[proc.Obj[S]] = {
+    val (list0: List[proc.Obj[S]], loc) = config.location match {
       case Left(source) => (Nil, source())
       case Right((name, directory)) =>
         val objLoc  = ActionArtifactLocation.create(name = name, directory = directory)
@@ -105,7 +105,7 @@ object DataSourceObjView extends ListObjView.Factory {
     override def toString = multiS // s"$multiS - ${file.base}"
   }
 
-  private final class Impl[S <: SSys[S]](val obj: stm.Source[S#Tx, Obj.T[S, DataSourceElem]], val value: Value)
+  private final class Impl[S <: SSys[S]](val objH: stm.Source[S#Tx, Obj.T[S, DataSourceElem]], val value: Value)
     extends ObjViewImpl.Impl[S] with ListObjViewImpl.NonEditable[S] with ListObjView[S] {
 
     def factory = DataSourceObjView
@@ -115,9 +115,11 @@ object DataSourceObjView extends ListObjView.Factory {
 
     def isViewable = true
 
+    override def obj(implicit tx: S#Tx): DataSourceElem.Obj[S] = objH()
+
     def openView(parent: Option[Window[S]])
                 (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
-      val frame = DataSourceFrame(obj())
+      val frame = DataSourceFrame(obj)
       Some(frame)
     }
 
@@ -177,10 +179,12 @@ object DataSourceElem extends ElemCompanionImpl[DataSourceElem] {
   }
 
   object Obj {
-    def unapply[S <: Sys[S]](obj: Obj[S]): Option[proc.Obj.T[S, DataSourceElem]] =
-      if (obj.elem.isInstanceOf[DataSourceElem[S]]) Some(obj.asInstanceOf[proc.Obj.T[S, DataSourceElem]])
+    def unapply[S <: Sys[S]](obj: proc.Obj[S]): Option[Obj[S]] =
+      if (obj.elem.isInstanceOf[DataSourceElem[S]]) Some(obj.asInstanceOf[Obj[S]])
       else None
   }
+
+  type Obj[S <: Sys[S]] = proc.Obj.T[S, DataSourceElem]
 }
 trait DataSourceElem[S <: Sys[S]] extends Elem[S] {
   type Peer       = DataSource[S] // Expr[S, DataSource]

@@ -34,12 +34,12 @@ import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
-import scala.swing.{Alignment, Label}
+import scala.swing.{Component, Alignment, Label}
 
 /** Building block for dropping dimension keys. E.g. used as column headers in the sonification source view */
 abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
                                           (implicit workspace: Workspace[S], undo: UndoManager, cursor: stm.Cursor[S])
-    extends View[S] with ComponentHolder[Label] { me =>
+    extends View[S] with ComponentHolder[Component] { me =>
 
   // ---- abstract ----
 
@@ -57,6 +57,7 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
   private var bindings: Ref[Set[String]] = _
   private var dimsH: stm.Source[S#Tx, expr.Map[S, String, Expr[S, String], Change[String]]] = _
   private var observer: stm.Disposable[S#Tx] = _
+  private var label: Label = _
 
   /** Sub-classes must call `super` if they override this. */
   def dispose()(implicit tx: S#Tx): Unit = observer.dispose()
@@ -101,7 +102,7 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
 
   private def update(key: Option[String])(implicit tx: S#Tx): Unit =
     deferTx {
-      component.text = key.orNull
+      label.text = key.orNull
     }
 
   private def importMapping(drag: MappingDragS)(implicit tx: S#Tx): Option[UndoableEdit] = {
@@ -155,6 +156,9 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
         editOpt.isDefined
       }
     })
-    component = lb
+    label     = lb
+    component = mkComponent(lb)
   }
+
+  protected def mkComponent(label: Label): Component = label
 }

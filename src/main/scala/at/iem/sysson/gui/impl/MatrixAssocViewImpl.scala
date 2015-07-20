@@ -38,7 +38,7 @@ import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.{TxnExecutor, Ref}
 import scala.language.higherKinds
-import scala.swing.{BoxPanel, Component, Dimension, Label, Orientation, Swing}
+import scala.swing.{Button, BoxPanel, Component, Dimension, Label, Orientation, Swing}
 
 object MatrixAssocViewImpl {
   private trait IntDrag {
@@ -211,9 +211,11 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
         p
       }
 
-      contents += ButtonImpl.component
+      contents += mkTopComponent(ButtonImpl.component)
       contents += matrixView.component
       contents += ggMap
     }
   }
+
+  protected def mkTopComponent(c: Component): Component = c
 }
