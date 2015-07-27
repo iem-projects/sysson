@@ -22,19 +22,18 @@ import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.{JComponent, JTree, TransferHandler}
 
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
-import de.sciss.desktop.{OptionPane, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.Sys
-import de.sciss.lucre.matrix.{DataSource, Matrix}
+import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.stm
 import de.sciss.lucre.swing._
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
-import de.sciss.mellite.gui.impl.WindowImpl
 import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.swingtree.{ExternalTreeModel, Tree}
+import de.sciss.synth.proc.Obj
 import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
@@ -46,11 +45,12 @@ import scala.swing.{Action, BorderPanel, BoxPanel, Component, Orientation, Scrol
 object DataSourceViewImpl {
   import at.iem.sysson.Implicits._
 
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx,
+  def apply[S <: Sys[S]](sourceObj: DataSourceElem.Obj[S])(implicit workspace: Workspace[S], tx: S#Tx,
                                                 cursor: stm.Cursor[S]): DataSourceView[S] = {
     implicit val resolver = WorkspaceResolver[S]
+    val source= sourceObj.elem.peer
     val data  = source.data()
-    val docH  = tx.newHandle(source)
+    val docH  = tx.newHandle(sourceObj)
     val res   = new Impl[S](docH, source.artifact.value, data)
     deferTx(res.guiInit())
     res
@@ -130,7 +130,8 @@ object DataSourceViewImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](sourceH: stm.Source[S#Tx, DataSource[S]], val file: File, data: nc2.NetcdfFile)
+  private final class Impl[S <: Sys[S]](sourceH: stm.Source[S#Tx, DataSourceElem.Obj[S]],
+                                        val file: File, data: nc2.NetcdfFile)
                                        (implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
     extends DataSourceView[S] with ComponentHolder[Component] {
     impl =>
@@ -145,7 +146,7 @@ object DataSourceViewImpl {
 
     private var tGroups    : Tree[nc2.Group]  = _
 
-    def source(implicit tx: S#Tx) = sourceH()
+    def source(implicit tx: S#Tx): DataSourceElem.Obj[S] = sourceH()
 
     def guiInit(): Unit = {
       requireEDT()
@@ -211,76 +212,22 @@ object DataSourceViewImpl {
       }
 
       val actionPlot = Action("Plot") {
-        selectedVariable.foreach { v =>
-          val in          = v.file
-          // val vm          = in.variableMap
-          val dim         = v.dimensions // .filter(d => vm.get(d.name.getOrElse("?")).map(_.isFloat).getOrElse(false))
-          val red         = v.reducedDimensions
-          if (!v.isFloat && !v.isDouble) {
-            // abort if variable is not in floating point format
-            val opt = OptionPane.message(
-              message = s"Variable '${v.name}' is not in floating point format.",
-              messageType = OptionPane.Message.Info)
-            opt.show(Window.find(component))
-
-          } else if (dim.size < 2) {
-            // abort if there is less than two dimensions
-            val opt = OptionPane.message(
-              message = s"Variable '${v.name}' has ${if (dim.isEmpty) "no dimensions" else "only one dimension"}.\nNeed at least two for a plot.",
-              messageType = OptionPane.Message.Info)
-            opt.show(Window.find(component))
-          } else {
-            // identify latitude and longitude by their unit names, and time by its dimension name
-            // (that seems to be working with the files we have)
-            import TypeCheckedTripleEquals._
-            val latOpt = red.find { d =>
-              in.variableMap.get(d.name).flatMap(_.units) === Some("degrees_north")
-            }
-            val lonOpt = red.find { d =>
-              in.variableMap.get(d.name).flatMap(_.units) === Some("degrees_east")
-            }
-            val timeOpt = red.find { d => d.name === "time" }
-
-            // first see if there are useful dimensions such as lon/lat
-            val xyOpt0: Option[(nc2.Dimension, nc2.Dimension)] = (latOpt, lonOpt, timeOpt) match {
-              case (Some(lat), Some(lon), _)  => Some(lat -> lon)
-              // case (Some(lat), _, Some(tim))  => Some(lat -> tim)
-              // case (_, Some(lon), Some(tim))  => Some(lon -> tim) // does this make sense?
-              case _                          => None
-            }
-
-            // if not, ask the user which dims she wants to plot
-            val xyOpt = xyOpt0.orElse {
-              val infos = dim.map { d => s"${d.name} [${d.size}]" } .mkString(", ")
-              val pairs: Vec[(nc2.Dimension, nc2.Dimension)] = dim.flatMap { dx =>
-                dim.collect {
-                  case dy if dy != dx => (dx, dy)
-                }
-              }
-
-              val names = pairs.map { case (dx, dy) => s"x = ${dx.name}, y = ${dy.name}" }
-
-              val opt = OptionPane(message = s"Select the dimensions of '${v.name}' to plot.\n$infos",
-                messageType = OptionPane.Message.Question,
-                optionType  = OptionPane.Options.OkCancel, entries = names)
-              val res = opt.show(Window.find(component)).id
-              if (res >= 0) {
-                Some(pairs(res))
-              } else None: Option[(nc2.Dimension, nc2.Dimension)]
-            }
-
-            // open the actual plot if we got the dimensions
-            xyOpt.foreach { case (yDim, xDim) =>
-              cursor.step { implicit tx =>
-                val frame = new WindowImpl[S]() {
-                  val view: View[S] = ClimateView(source, v.selectAll, xDim = xDim, yDim = yDim)
-                  // size = (600, 600)
-                  override protected def initGUI(): Unit =
-                    title = s"Plot : ${v.name}"
-                }
-                frame.init()
+        selectedVariable.foreach { vr =>
+          cursor.step { implicit tx =>
+            val key     = vr.name
+            val attrKey = s"plot-$key"
+            val src     = source
+            val plotOpt = src.attr.get(attrKey).flatMap(Plot.Obj.unapply)
+            // val mr      = findRoot(m)
+            val plot    = plotOpt.orElse {
+              mkMatrix(vr).map { mr =>
+                val p   = Plot[S](mr)
+                val po  = Obj(Plot.Elem(p))
+                src.attr.put(attrKey, po)
+                po
               }
             }
+            plot.foreach(PlotFrame(_))
           }
         }
       }
@@ -309,15 +256,19 @@ object DataSourceViewImpl {
     def mkSelectedMatrix(): Option[stm.Source[S#Tx, Matrix[S]]] =
       selectedVariable.flatMap { vr =>
         val varHOpt = impl.cursor.step { implicit tx =>
-          val ds      = sourceH()
-          val p       = vr.parents
-          val n       = vr.name
-          import TypeCheckedTripleEquals._
-          val dsvOpt  = ds.variables.find(dsv => dsv.name === n && dsv.parents === p)
-          dsvOpt.map(tx.newHandle[Matrix[S]])
+          mkMatrix(vr).map(tx.newHandle(_))
         }
         varHOpt
       }
+
+    private def mkMatrix(vr: nc2.Variable)(implicit tx: S#Tx): Option[Matrix[S]] = {
+      val ds      = source.elem.peer
+      val p       = vr.parents
+      val n       = vr.name
+      import TypeCheckedTripleEquals._
+      val dsvOpt  = ds.variables.find(dsv => dsv.name === n && dsv.parents === p)
+      dsvOpt
+    }
 
     def dispose()(implicit tx: S#Tx) = () // : Unit = GUI.fromTx(disposeGUI())
 

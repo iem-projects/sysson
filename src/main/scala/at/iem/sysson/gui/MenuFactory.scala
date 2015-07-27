@@ -15,7 +15,7 @@
 package at.iem.sysson
 package gui
 
-import java.net.URL
+import java.net.{URI, URL}
 
 import at.iem.sysson.gui.impl.ActionConvertSpreadsheet
 import at.iem.sysson.gui.{SwingApplication => App}
@@ -151,8 +151,16 @@ object MenuFactory {
       .add(Item("clear-log")("Clear Log Window" -> (menu1 + shift + Key.P))(clearLog  ()))
     val gWindow = Group("window", "Window")
 
-    val r = Root().add(gFile).add(gEdit).add(gActions).add(gView).add(gWindow).add(gDebug)
-    if (itAbout.visible) r.add(Group("help", "Help").add(itAbout))
+    val gHelp = Group("help", "Help")
+    if (itAbout.visible) gHelp.add(itAbout)
+    gHelp
+      .add(Item("index")("Online Documentation")(
+        Desktop.browseURI(new URI("https://github.com/iem-projects/sysson/wiki/Table-of-Contents"))))
+      .add(Item("issues")("Report a Bug")(
+        Desktop.browseURI(new URI("https://github.com/iem-projects/sysson/issues"))))
+
+    val r = Root().add(gFile).add(gEdit).add(gActions).add(gView).add(gWindow).add(gDebug).add(gHelp)
+
     r
   }
 

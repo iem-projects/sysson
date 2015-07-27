@@ -15,18 +15,16 @@
 package at.iem.sysson
 package gui
 
+import at.iem.sysson.gui.impl.{DataSourceElem, DataSourceFrameImpl => Impl}
 import de.sciss.lucre.event.Sys
-import de.sciss.synth.proc.Obj
-import at.iem.sysson.gui.impl.{DataSourceFrameImpl => Impl, DataSourceElem}
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.stm
 import de.sciss.lucre.swing.Window
 import de.sciss.mellite.Workspace
-import de.sciss.lucre.stm
 
 object DataSourceFrame {
-  def apply[S <: Sys[S]](source: Obj.T[S, DataSourceElem])(implicit tx: S#Tx, workspace: Workspace[S],
+  def apply[S <: Sys[S]](source: DataSourceElem.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                                 cursor: stm.Cursor[S]): DataSourceFrame[S] =
-    Impl(source.elem.peer)  // XXX TODO - retain object with attributes
+    Impl(source)
 }
 trait DataSourceFrame[S <: Sys[S]] extends Window[S] {
   def view: DataSourceView[S]

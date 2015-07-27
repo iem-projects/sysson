@@ -17,7 +17,7 @@ package gui
 
 import ucar.nc2
 import de.sciss.lucre.event.Sys
-import impl.{DataSourceViewImpl => Impl}
+import at.iem.sysson.gui.impl.{DataSourceViewImpl => Impl, DataSourceElem}
 import de.sciss.lucre.matrix.{Matrix, DataSource}
 import de.sciss.lucre.swing.View
 import de.sciss.mellite.Workspace
@@ -25,12 +25,12 @@ import de.sciss.lucre.stm
 import de.sciss.mellite.gui.ViewHasWorkspace
 
 object DataSourceView {
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
+  def apply[S <: Sys[S]](source: DataSourceElem.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                                 cursor: stm.Cursor[S]): DataSourceView[S] =
     Impl(source)
 }
 trait DataSourceView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.File {
-  def source(implicit tx: S#Tx): DataSource[S]
+  def source(implicit tx: S#Tx): DataSourceElem.Obj[S]
   var selectedVariable: Option[nc2.Variable]
 
   /** Note: Must be called on EDT! */

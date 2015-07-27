@@ -47,7 +47,7 @@ import scala.util.{Failure, Success}
 import scalax.chart.{Chart, XYChart}
 
 object DataSourceFrameImpl {
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
+  def apply[S <: Sys[S]](source: DataSourceElem.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                                 cursor: stm.Cursor[S]): DataSourceFrame[S] = {
     val view  = DataSourceView(source)
     val res   = new Impl(view)

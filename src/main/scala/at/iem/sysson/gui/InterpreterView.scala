@@ -42,7 +42,7 @@ object InterpreterView {
 //      DocumentViewHandler.instance.getView(document).getOrElse(sys.error("No document view")).selectedVariable
 //        .getOrElse(sys.error("No variable selected"))
 
-    def plotSection = ClimateView.currentSection.getOrElse(sys.error("No variable section plotted"))
+    // def plotSection = ClimateView.currentSection.getOrElse(sys.error("No variable section plotted"))
   }
 }
 trait InterpreterView {
