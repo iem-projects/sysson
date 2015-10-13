@@ -30,9 +30,9 @@ lazy val melliteVersion             = "1.7.0"
 lazy val soundProcessesVersion      = "2.21.1"
 lazy val lucreMatrixVersion         = "0.10.1"
 lazy val lucreSwingVersion          = "0.9.1"
-lazy val scalaColliderVersion       = "1.17.3"
-lazy val scalaColliderSwingVersion  = "1.25.2"
-lazy val ugensVersion               = "1.13.3"
+lazy val scalaColliderVersion       = "1.17.4"
+lazy val scalaColliderSwingVersion  = "1.25.3"
+lazy val ugensVersion               = "1.13.4"
 lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"
@@ -48,6 +48,7 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
   "de.sciss" %% "soundprocesses-core"         % soundProcessesVersion,      // computer music environment
   "de.sciss" %% "scalacollider"               % scalaColliderVersion,       // sound synthesis
+  "de.sciss" %% "scalacolliderswing-core"     % scalaColliderSwingVersion,
   "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
   "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
   "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
