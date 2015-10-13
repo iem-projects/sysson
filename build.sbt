@@ -190,7 +190,8 @@ writeAntBuild in JDKPackager := {
   val n    = (name          in JDKPackager).value
   val wm   = main.replace('.', '-')
   val desktop = 
-    s"""Name=APPLICATION_NAME
+    s"""[Desktop Entry]
+       |Name=APPLICATION_NAME
        |Comment=APPLICATION_SUMMARY
        |Exec=/opt/APPLICATION_FS_NAME/APPLICATION_LAUNCHER_FILENAME
        |Icon=/opt/APPLICATION_FS_NAME/APPLICATION_LAUNCHER_FILENAME.png
