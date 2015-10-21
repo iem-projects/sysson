@@ -21,7 +21,9 @@ import at.iem.sysson.gui.impl.DataSourceElem
 import at.iem.sysson.impl.PlotImpl
 import at.iem.sysson.sound.AuralSonification
 import de.sciss.file._
+import de.sciss.lucre.matrix
 import de.sciss.lucre.stm.TxnLike
+import de.sciss.nuages.Wolkenpumpe
 import de.sciss.synth.proc.Code
 import de.sciss.{mellite, synth}
 import ucar.nc2
@@ -99,7 +101,8 @@ package object sysson {
 
   def initTypes(): Unit = {
     mellite               .initTypes()
-    de.sciss.nuages       .initTypes()
+    matrix                .initTypes()
+    Wolkenpumpe           .init()
     SonificationElemImpl  .init()
     DataSourceElem        .init()
     AuralSonification     .init()
