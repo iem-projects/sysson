@@ -22,9 +22,8 @@ import javax.swing.{JTable, SwingConstants}
 
 import at.iem.sysson.Implicits._
 import de.sciss.file.File
-import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.{DataSource, Matrix, Reduce}
-import de.sciss.lucre.stm.Disposable
+import de.sciss.lucre.stm.{Sys, Disposable}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx}
 import de.sciss.mellite.Workspace
@@ -36,12 +35,12 @@ import scala.annotation.tailrec
 import scala.concurrent.stm.Ref
 import scala.swing.Swing._
 import scala.swing.{BoxPanel, Component, Label, Orientation, Table}
-import scala.util.{Success, Failure}
+import scala.util.{Failure, Success}
 
 object PlotStatsViewImpl {
-  def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S]): PlotStatsView[S] = {
+  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, workspace: Workspace[S]): PlotStatsView[S] = {
     implicit val resolver = WorkspaceResolver[S]
-    new Impl[S].init(plot.elem.peer)
+    new Impl[S].init(plot)
   }
 
   private final class Impl[S <: Sys[S]](implicit resolver: DataSource.Resolver[S])

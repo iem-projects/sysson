@@ -23,16 +23,15 @@ import at.iem.sysson.gui.DragAndDrop.SonificationSourceMappingDrag
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.matrix.{Reduce, Matrix}
-import de.sciss.lucre.stm.Disposable
+import de.sciss.lucre.matrix.{Matrix, Reduce}
+import de.sciss.lucre.{event => evt}
+import de.sciss.lucre.stm.{Sys, Disposable}
 import de.sciss.lucre.swing.View
 import de.sciss.lucre.swing.edit.EditMutableMap
 import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
-import de.sciss.synth.proc.Obj
 
 import scala.annotation.tailrec
 import scala.swing.{Action, Component, FlowPanel}
@@ -52,20 +51,20 @@ object SonificationSourceViewImpl {
     impl =>
 
     private var sourceObserver: Disposable[S#Tx] = _
-    private var mapHOpt: Option[stm.Source[S#Tx, expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]]] = _
+    private var mapHOpt: Option[stm.Source[S#Tx, evt.Map.Modifiable[S, String, Sonification.Source]]] = _
 
     type Source[S1 <: Sys[S1]] = Sonification.Source[S1]
 
     def init1()(implicit tx: S#Tx): this.type = {
       val sonif = parent.sonification
-      val map   = sonif.elem.peer.sources
+      val map   = sonif.sources
       mapHOpt   = map.modifiableOption.map(tx.newHandle(_))
       sourceObserver = map.changed.react { implicit tx => upd =>
         // println(s"OBSERVE CHANGES $upd")
         upd.changes.foreach {
-          case expr.Map.Added  (`key`, source) => updateSource(Some(source)) // .data.file.base))
-          case expr.Map.Removed(`key`, source) => updateSource(None)
-          case expr.Map.Element(`key`, source, sourceUpdate) =>
+          case evt.Map.Added  (`key`, source) => updateSource(Some(source)) // .data.file.base))
+          case evt.Map.Removed(`key`, source) => updateSource(None)
+          // case evt.Map.Element(`key`, source, sourceUpdate) =>
           // XXX TODO -- this is not seen yet somehow
 
           // println(s"MAP.ELEMENT $sourceUpdate")
@@ -97,7 +96,7 @@ object SonificationSourceViewImpl {
 
     protected def editRemoveMatrix()(implicit tx: S#Tx): Option[UndoableEdit] = mapHOpt.map { mapH =>
       val map = mapH()
-      EditMutableMap("Remove Matrix", map, key, None)
+      EditMutableMap[S, String, Sonification.Source]("Remove Matrix", map, key, None)
     }
 
     protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] = mapHOpt.map { mapH =>
@@ -127,15 +126,15 @@ object SonificationSourceViewImpl {
           matrixView.matrix.foreach { m =>
             val sonif   = parent.sonification
             val attrKey = s"plot-$key"
-            val plotOpt = sonif.attr.get(attrKey).flatMap(Plot.Obj.unapply)
+            val plotOpt = sonif.attr.$[Plot](attrKey)
             val mr      = findRoot(m)
             val plot    = plotOpt.getOrElse {
               val p   = Plot[S](mr)
-              val po  = Obj(Plot.Elem(p))
+              val po  = p // Obj(Plot.Elem(p))
               sonif.attr.put(attrKey, po)
               po
             }
-            val m1  = plot.elem.peer.matrix
+            val m1  = plot.matrix
             val m1r = findRoot(m1)
             if (mr != m1r) {  // sonif editor matrix was replaced
               Matrix.Var.unapply(m1).foreach { vr =>

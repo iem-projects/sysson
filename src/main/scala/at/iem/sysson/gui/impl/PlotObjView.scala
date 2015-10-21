@@ -16,12 +16,11 @@ package at.iem.sysson.gui
 package impl
 
 import at.iem.sysson.Plot
-import at.iem.sysson.impl.PlotImpl
 import de.sciss.desktop
 import de.sciss.desktop.OptionPane
 import de.sciss.icons.raphael
-import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.Matrix
+import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.lucre.{matrix, stm}
@@ -29,17 +28,16 @@ import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ListObjView
 import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.Obj
 import org.scalautils.TypeCheckedTripleEquals
 
 import scala.swing.{Component, Label}
 
 object PlotObjView extends ListObjView.Factory {
-  type E[S <: Sys[S]] = Plot.Elem[S]
+  type E[S <: Sys[S]] = Plot[S]
   final val prefix  = "Plot"
   def humanName     = prefix
   final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.LineChart)
-  final val typeID  = PlotImpl.ElemImpl.typeID
+  final val typeID  = Plot.typeID
   def category      = SwingApplication.categSonification
 
   def hasMakeDialog: Boolean = true
@@ -48,8 +46,10 @@ object PlotObjView extends ListObjView.Factory {
 
   def init(): Unit = _init
 
-  def mkListView[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ListObjView[S] = {
-    val plot      = obj.elem.peer
+  def tpe: Obj.Type = ???
+
+  def mkListView[S <: SSys[S]](obj: E[S])(implicit tx: S#Tx): ListObjView[S] = {
+    val plot      = obj // .elem.peer
     val matrixName= plot.matrix.name
     new PlotObjView.Impl(tx.newHandle(obj), value = new Value(matrixName)).initAttrs(obj)
   }
@@ -69,8 +69,8 @@ object PlotObjView extends ListObjView.Factory {
     import matrix.Implicits._
     val m0      = Matrix.zeros[S](0)
     val mVar    = Matrix.Var(m0)
-    val elem    = Plot.Elem(Plot[S](mVar))
-    val obj     = Obj(elem)
+    val elem    = Plot[S](mVar)
+    val obj     = elem // Obj(elem)
     obj.name    = name
     obj :: Nil
   }
@@ -82,7 +82,7 @@ object PlotObjView extends ListObjView.Factory {
     }
   }
 
-  private final class Impl[S <: SSys[S]](val objH: stm.Source[S#Tx, Obj.T[S, Plot.Elem]], var value: Value)
+  private final class Impl[S <: SSys[S]](val objH: stm.Source[S#Tx, Plot[S]], var value: Value)
     extends ObjViewImpl.Impl[S]
     with ListObjViewImpl.NonEditable[S]
     with ListObjView[S] {
@@ -94,7 +94,7 @@ object PlotObjView extends ListObjView.Factory {
 
     def isViewable = true
 
-    override def obj(implicit tx: S#Tx): Plot.Obj[S] = objH()
+    override def obj(implicit tx: S#Tx): Plot[S] = objH()
 
     def openView(parent: Option[Window[S]])
                 (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {

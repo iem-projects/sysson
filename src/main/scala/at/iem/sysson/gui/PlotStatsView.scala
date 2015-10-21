@@ -14,15 +14,15 @@
 
 package at.iem.sysson.gui
 
+import at.iem.sysson.gui.impl.{PlotStatsViewImpl => Impl}
 import at.iem.sysson.{Plot, Stats}
-import de.sciss.lucre.event.Sys
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
 import de.sciss.mellite.Workspace
 import de.sciss.model.Model
-import impl.{PlotStatsViewImpl => Impl}
 
 object PlotStatsView {
-  def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S]): PlotStatsView[S] = Impl(plot)
+  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, workspace: Workspace[S]): PlotStatsView[S] = Impl(plot)
 }
 trait PlotStatsView[S <: Sys[S]] extends View[S] with Model[Stats.Variable] {
   def stats: Option[Stats.Variable]

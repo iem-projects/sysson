@@ -22,19 +22,17 @@ import javax.swing.undo.UndoableEdit
 import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.{Expr, String => StringEx}
-import de.sciss.lucre.swing.{View, deferTx}
+import de.sciss.lucre.expr.StringObj
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.edit.EditExprMap
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.{expr, stm}
+import de.sciss.lucre.swing.{View, deferTx}
+import de.sciss.lucre.{event => evt, stm}
 import de.sciss.mellite.Workspace
-import de.sciss.model.Change
-import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
-import scala.swing.{Component, Alignment, Label}
+import scala.swing.{Alignment, Component, Label}
 
 /** Building block for dropping dimension keys. E.g. used as column headers in the sonification source view */
 abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
@@ -55,32 +53,30 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
   protected type MappingDragS = MappingDrag { type S1 = S }
 
   private var bindings: Ref[Set[String]] = _
-  private var dimsH: stm.Source[S#Tx, expr.Map[S, String, Expr[S, String], Change[String]]] = _
+  private var dimsH: stm.Source[S#Tx, evt.Map[S, String, StringObj]] = _
   private var observer: stm.Disposable[S#Tx] = _
   private var label: Label = _
 
   /** Sub-classes must call `super` if they override this. */
   def dispose()(implicit tx: S#Tx): Unit = observer.dispose()
 
-  def init(dims: expr.Map[S, String, Expr[S, String], Change[String]])(implicit tx: S#Tx): this.type = {
-    import StringEx.{serializer => stringSerializer}
+  def init(dims: evt.Map[S, String, StringObj])(implicit tx: S#Tx): this.type = {
     dimsH = tx.newHandle(dims)
-
-    import TypeCheckedTripleEquals._
-    val b0 = dims.iterator.collect {
-      case (key, valueEx) if valueEx.value === keyName => key
+    val b0: Set[String] = dims.iterator.collect {
+      case (key, valueEx) if valueEx.value == keyName => key
     } .toSet
     bindings = Ref(b0)
 
     observer = dims.changed.react { implicit tx => upd => upd.changes.foreach {
-        case expr.Map.Added  (key, valueEx) if valueEx.value === keyName => addBinding   (key)
-        case expr.Map.Removed(key, valueEx) if valueEx.value === keyName => removeBinding(key)
-        case expr.Map.Element(key, _, change) =>
-          change match {
-            case Change(_, `keyName`) => addBinding   (key)
-            case Change(`keyName`, _) => removeBinding(key)
-            case _ =>
-          }
+        case evt.Map.Added  (key, valueEx) if valueEx.value == keyName => addBinding   (key)
+        case evt.Map.Removed(key, valueEx) if valueEx.value == keyName => removeBinding(key)
+// ELEM XXX TODO
+//        case evt.Map.Element(key, _, change) =>
+//          change match {
+//            case Change(_, `keyName`) => addBinding   (key)
+//            case Change(`keyName`, _) => removeBinding(key)
+//            case _ =>
+//          }
         case _ =>
       }
     }
@@ -110,11 +106,10 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
     val thatSource  = drag.source()
     if (thisSource != thatSource) None else {
       dimsH().modifiableOption.map { map =>
-        import StringEx.newConst
-        implicit val s = StringEx
+        implicit val s = StringObj
         // import workspace.cursor
-        val exprOpt: Option[Expr[S, String]] = Some(newConst(keyName))
-        EditExprMap("Map Dimension", map, key = drag.key, value = exprOpt)
+        val exprOpt: Option[StringObj[S]] = Some(StringObj.newConst(keyName))
+        EditExprMap[S, String, String, StringObj]("Map Dimension", map, key = drag.key, value = exprOpt)
       }
     }
   }

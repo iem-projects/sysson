@@ -15,14 +15,12 @@
 package at.iem.sysson
 package impl
 
-import de.sciss.lucre.event.{EventLike, Sys}
-import de.sciss.lucre.expr.{Expr, String => StringEx, Int => IntEx}
-import de.sciss.lucre.matrix.{Dimension, Reduce, Matrix}
-import de.sciss.lucre.{event => evt, expr}
-import de.sciss.model
-import de.sciss.serial.{DataInput, DataOutput}
-import de.sciss.synth.proc.Elem
-import de.sciss.synth.proc.impl.{ActiveElemImpl, ElemCompanionImpl}
+import de.sciss.lucre.expr.{IntObj, StringObj}
+import de.sciss.lucre.matrix.{Dimension, Matrix, Reduce}
+import de.sciss.lucre.stm.impl.ObjSerializer
+import de.sciss.lucre.stm.{Elem, Copy, NoSys, Obj, Sys}
+import de.sciss.lucre.{event => evt}
+import de.sciss.serial.{DataInput, DataOutput, Serializer}
 
 import scala.annotation.tailrec
 
@@ -34,9 +32,9 @@ object PlotImpl {
     }
 
   private def tryAddDim[S <: Sys[S]](matrix: Matrix[S],
-                                     dims: expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]],
+                                     dims: evt.Map.Modifiable[S, String, StringObj],
                                      key: String, names: List[String])(implicit tx: S#Tx): Unit =
-    findDim(matrix, names).foreach(dim => dims.put(key, StringEx.newVar(StringEx.newConst[S](dim.name))))
+    findDim(matrix, names).foreach(dim => dims.put(key, StringObj.newVar(StringObj.newConst[S](dim.name))))
 
   @tailrec private def dropVar[S <: Sys[S]](m: Matrix[S])(implicit tx: S#Tx): Matrix[S] = m match {
     case Matrix.Var(vr) => dropVar(vr())
@@ -50,14 +48,13 @@ object PlotImpl {
 
   def apply[S <: Sys[S]](matrix: Matrix[S])(implicit tx: S#Tx): Plot[S] = {
     val targets = evt.Targets[S]
-    import StringEx.{serializer => stringSer, varSerializer => stringVarSer}
-    val dims    = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
+    val dims    = evt.Map.Modifiable[S, String, StringObj]
     tryAddDim(matrix, dims, Plot.VKey, "lat" :: "latitude"  :: Nil)
     tryAddDim(matrix, dims, Plot.HKey, "lon" :: "longitude" :: Nil)
     val m1 = if (matrix.reducedRank <= 2) matrix else
       findDim(matrix, "time" :: Nil).fold(matrix) { dimTime =>
-        Reduce(dropVar(matrix), Dimension.Selection.Name(StringEx.newConst[S](dimTime.name)),
-          Reduce.Op.Apply(IntEx.newVar(IntEx.newConst[S](0))))
+        Reduce(dropVar(matrix), Dimension.Selection.Name(StringObj.newConst[S](dimTime.name)),
+          Reduce.Op.Apply(IntObj.newVar(IntObj.newConst[S](0))))
       }
 
     val m2 = mkVar(m1)
@@ -65,7 +62,7 @@ object PlotImpl {
   }
 
   /** NOTE: does not copy the arguments but assumes they have been! */
-  def copy[S <: Sys[S]](matrix: Matrix[S], dims: expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]])
+  def copy[S <: Sys[S]](matrix: Matrix[S], dims: evt.Map.Modifiable[S, String, StringObj])
                        (implicit tx: S#Tx): Plot[S] = {
     val targets = evt.Targets[S]
     new Impl(targets, matrix, dims)
@@ -74,58 +71,65 @@ object PlotImpl {
   def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Plot[S] =
     serializer[S].read(in, access)
 
-  implicit def serializer[S <: Sys[S]]: evt.NodeSerializer[S, Plot[S]] = anySer.asInstanceOf[Ser[S]]
+  implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Plot[S]] = anySer.asInstanceOf[Ser[S]]
 
   private final val SER_VERSION = 0x506C7400  // "Plt\0"
 
-  private val anySer = new Ser[evt.InMemory]
+  private val anySer = new Ser[NoSys]
 
-  private final class Ser[S <: Sys[S]] extends evt.NodeSerializer[S, Plot[S]] {
-    def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Plot[S] = {
-      implicit val str = StringEx.serializer[S]
-      val cookie = in.readInt()
-      require(cookie == SER_VERSION,
-        s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
-      val matrix    = Matrix.read(in, access)
-      val dims      = expr.Map.read[S, String, Expr[S, String], model.Change[String]](in, access)
-      new Impl(targets, matrix, dims)
-    }
+  private final class Ser[S <: Sys[S]] extends ObjSerializer[S, Plot[S]] {
+    def tpe: Obj.Type = Plot
+//    def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Plot[S] = {
+//      implicit val str = StringObj.serializer[S]
+//      val cookie = in.readInt()
+//      require(cookie == SER_VERSION,
+//        s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
+//      val matrix    = Matrix.read(in, access)
+//      val dims      = expr.Map.read[S, String, Expr[S, String], model.Change[String]](in, access)
+//      new Impl(targets, matrix, dims)
+//    }
   }
 
   // XXX TODO: listen to matrix
   private final class Impl[S <: Sys[S]](protected val targets: evt.Targets[S],
                                         val matrix: Matrix[S],
-                                        val dims: expr.Map[S, String, Expr[S, String], model.Change[String]])
+                                        val dims: evt.Map[S, String, StringObj])
     extends Plot[S]
-    with evt.impl.StandaloneLike[S, Plot.Update[S], Plot[S]] {
+    with evt.impl.SingleNode[S, Plot.Update[S]] {
     source =>
 
-    def mkCopy()(implicit tx: S#Tx): Plot[S] = {
-      val tgt       = evt.Targets[S]
-      val matrixCpy = matrix.mkCopy()
-      import StringEx.{serializer => stringSer, varSerializer => stringVarSer}
-      val dimsCpy   = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
-      dims.iterator.foreach { case (key, value) =>
-        val valueCpy = value match {
-          case Expr.Var(vr) => StringEx.newVar(vr())
-          case other => other
-        }
-        dimsCpy.put(key, valueCpy)
-      }
-      new Impl[S](tgt, matrixCpy, dimsCpy)
+//    def mkCopy()(implicit tx: S#Tx): Plot[S] = {
+//      val tgt       = evt.Targets[S]
+//      val matrixCpy = matrix.mkCopy()
+//      import StringObj.{serializer => stringSer, varSerializer => stringVarSer}
+//      val dimsCpy   = evt.Map.Modifiable[S, String, StringObj]
+//      dims.iterator.foreach { case (key, value) =>
+//        val valueCpy = value match {
+//          case Expr.Var(vr) => StringObj.newVar(vr())
+//          case other => other
+//        }
+//        dimsCpy.put(key, valueCpy)
+//      }
+//      new Impl[S](tgt, matrixCpy, dimsCpy)
+//    }
+
+    def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: Copy[S, Out]): Elem[Out] = ???
+
+    def connect   ()(implicit tx: S#Tx): this.type = {
+      matrix.changed ---> changed
+      dims  .changed ---> changed
+      this
     }
 
-    def connect   ()(implicit tx: S#Tx): Unit = {
-      matrix.changed ---> this
-      dims  .changed ---> this
+    private def disconnect()(implicit tx: S#Tx): Unit = {
+      matrix.changed -/-> changed
+      dims  .changed -/-> changed
     }
 
-    def disconnect()(implicit tx: S#Tx): Unit = {
-      matrix.changed -/-> this
-      dims  .changed -/-> this
+    protected def disposeData()(implicit tx: S#Tx): Unit = {
+      disconnect()
+      dims.dispose()
     }
-
-    protected def disposeData()(implicit tx: S#Tx): Unit = dims.dispose()
 
     protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
@@ -133,74 +137,38 @@ object PlotImpl {
       dims  .write(out)
     }
 
-    def changed: EventLike[S, Plot.Update[S]] = this
+    // def changed: EventLike[S, Plot.Update[S]] = this
 
-    protected def reader: evt.Reader[S, Plot[S]] = PlotImpl.serializer
+    // protected def reader: evt.Reader[S, Plot[S]] = PlotImpl.serializer
 
-    def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Plot.Update[S]] = {
-      val mch = matrix.changed
-      var ch = Vector.empty[Plot.Change[S]]
-      if (pull.contains(mch)) pull(mch).foreach(u => ch :+= Plot.MatrixChange(u))
-      val dch = dims.changed
-      if (pull.contains(dch)) pull(dch).foreach(u => ch :+= Plot.DimsChange  (u))
-      if (ch.isEmpty) None else Some(Plot.Update(source, ch))
+    object changed extends Changed {
+      def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Plot.Update[S]] = {
+        val mch = matrix.changed
+        var ch = Vector.empty[Plot.Change[S]]
+        if (pull.contains(mch)) pull(mch).foreach(u => ch :+= Plot.MatrixChange(u))
+        val dch = dims.changed
+        if (pull.contains(dch)) pull(dch).foreach(u => ch :+= Plot.DimsChange  (u))
+        if (ch.isEmpty) None else Some(Plot.Update(source, ch))
+      }
     }
   }
 
   // ---- elem ----
 
-  // println("register sonification")
-  private lazy val _init: Unit = Elem.registerExtension(ElemImpl)
+  //  // println("register sonification")
+  //  private lazy val _init: Unit = Elem.registerExtension(ElemImpl)
+  //
+  //  def init(): Unit = _init
 
-  def init(): Unit = _init
-
-  object ElemImpl extends ElemCompanionImpl[Plot.Elem] {
-    final val typeID = Plot.typeID
-
-    def apply[S <: Sys[S]](peer: Plot[S])(implicit tx: S#Tx): Plot.Elem[S] = {
-      val targets = evt.Targets[S]
-      new Impl[S](targets, peer)
-    }
-
-    def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Plot.Elem[S] =
-      serializer[S].read(in, access)
-
-    // ---- Elem.Extension ----
-
-    /** Read identified active element */
-    def readIdentified[S <: Sys[S]](in: DataInput, access: S#Acc, targets: evt.Targets[S])
-                                   (implicit tx: S#Tx): Plot.Elem[S] with evt.Node[S] = {
-      val peer = Plot.read(in, access)
-      new Impl[S](targets, peer)
-    }
-
-    /** Read identified constant element */
-    def readIdentifiedConstant[S <: Sys[S]](in: DataInput)(implicit tx: S#Tx): Plot.Elem[S] =
-      sys.error("Constant Plot not supported")
-
-    // ---- implementation ----
-
-    private final class Impl[S <: Sys[S]](protected val targets: evt.Targets[S],
-                                          val peer: Plot[S])
-      extends Plot.Elem[S]
-      with ActiveElemImpl[S] {
-
-      def typeID = ElemImpl.typeID
-      def prefix = "Plot"
-
-      override def toString() = s"$prefix$id"
-
-      def mkCopy()(implicit tx: S#Tx): Plot.Elem[S] = {
-        val matrixCpy = peer.matrix.mkCopy()
-        import StringEx.{serializer => stringSer, varSerializer => stringVarSer}
-        val dimsCpy = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
-        peer.dims.iterator.foreach {
-          case (key, Expr.Var(vr))  => dimsCpy.put(key, StringEx.newVar(vr()))
-          case (key, value)         => dimsCpy.put(key, value)
-        }
-        val plotCpy = PlotImpl.copy(matrixCpy, dimsCpy)
-        Plot.Elem(plotCpy)
-      }
-    }
-  }
+//  def mkCopy()(implicit tx: S#Tx): Plot.Elem[S] = {
+//    val matrixCpy = peer.matrix.mkCopy()
+//    import StringObj.{serializer => stringSer, varSerializer => stringVarSer}
+//    val dimsCpy = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
+//    peer.dims.iterator.foreach {
+//      case (key, Expr.Var(vr))  => dimsCpy.put(key, StringObj.newVar(vr()))
+//      case (key, value)         => dimsCpy.put(key, value)
+//    }
+//    val plotCpy = PlotImpl.copy(matrixCpy, dimsCpy)
+//    Plot.Elem(plotCpy)
+//  }
 }

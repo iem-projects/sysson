@@ -14,15 +14,14 @@
 
 package at.iem.sysson
 
-import de.sciss.lucre.event.Sys
+import de.sciss.file._
 import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.stm.{Sys, Disposable}
 import de.sciss.synth.proc.WorkspaceHandle
 import ucar.nc2.NetcdfFile
-import scala.concurrent.stm.{Txn, InTxn, TMap}
-import de.sciss.file._
-import de.sciss.lucre.stm.Disposable
+
+import scala.concurrent.stm.{InTxn, TMap, Txn}
 import scala.util.control.NonFatal
-import de.sciss.mellite.Workspace
 
 /** Associates a workspace with a file cache for NetCDF resources. */
 object WorkspaceResolver {

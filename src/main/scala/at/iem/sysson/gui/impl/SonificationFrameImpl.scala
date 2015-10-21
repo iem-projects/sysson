@@ -16,18 +16,17 @@ package at.iem.sysson
 package gui
 package impl
 
-import de.sciss.desktop.Menu
-import de.sciss.lucre.synth.Sys
 import at.iem.sysson.sound.Sonification
-import de.sciss.synth.proc.Obj
+import de.sciss.desktop.Menu
+import de.sciss.lucre.stm
 import de.sciss.lucre.swing.{CellView, deferTx}
+import de.sciss.lucre.synth.Sys
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView
-import de.sciss.lucre.stm
 import de.sciss.mellite.gui.impl.WindowImpl
 
 object SonificationFrameImpl {
-  def apply[S <: Sys[S]](obj: Obj.T[S, Sonification.Elem])
+  def apply[S <: Sys[S]](obj: Sonification[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationFrame[S] = {
     val view  = SonificationView(obj)
     val name  = AttrCellView.name(obj)

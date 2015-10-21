@@ -16,11 +16,11 @@ package at.iem.sysson
 package sound
 
 import de.sciss.file._
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.matrix.{Matrix, DataSource}
-import de.sciss.lucre.stm.TxnLike
-import scala.concurrent.Future
+import de.sciss.lucre.matrix.{DataSource, Matrix}
+import de.sciss.lucre.stm.{Sys, TxnLike}
 import de.sciss.lucre.{matrix, stm}
+
+import scala.concurrent.Future
 
 /** The application wide cache for graphemes. */
 object AudioFileCache {

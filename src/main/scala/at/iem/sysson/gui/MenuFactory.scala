@@ -21,7 +21,7 @@ import at.iem.sysson.gui.impl.ActionConvertSpreadsheet
 import at.iem.sysson.gui.{SwingApplication => App}
 import de.sciss.desktop.{Desktop, KeyStrokes, Menu, OptionPane}
 import de.sciss.file._
-import de.sciss.lucre.event.Durable
+import de.sciss.lucre.stm.Durable
 import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.lucre.synth.Txn
 import de.sciss.mellite.Mellite

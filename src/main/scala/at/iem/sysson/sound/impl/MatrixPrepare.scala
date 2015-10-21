@@ -16,20 +16,19 @@ package at.iem.sysson
 package sound
 package impl
 
-import at.iem.sysson.turbulence.VoiceStructure
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
-import de.sciss.lucre.synth.{Server, Sys, Buffer}
+import de.sciss.lucre.synth.{Buffer, Server, Sys}
 import de.sciss.model.impl.ModelImpl
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.{FutureProxy, ProcessorImpl}
 import de.sciss.synth
-import de.sciss.synth.{ScalarRated, AudioRated, UGenInLike, proc}
-import de.sciss.synth.proc.{UGenGraphBuilder => UGB, SoundProcesses}
-import de.sciss.synth.proc.impl.{StreamBuffer, SynthBuilder, AsyncResource}
+import de.sciss.synth.proc.impl.{AsyncResource, StreamBuffer, SynthBuilder}
+import de.sciss.synth.proc.{SoundProcesses, UGenGraphBuilder => UGB}
+import de.sciss.synth.{AudioRated, ScalarRated, UGenInLike, proc}
 
-import scala.concurrent.{Future, blocking, Await, duration}
-import duration.Duration
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future, blocking}
 
 object MatrixPrepare {
   //  type Spec = UGB.Input.Stream.Spec
@@ -252,7 +251,7 @@ object MatrixPrepare {
       val value         = cache.value.get.get
       val numFrames     = value.spec.numFrames
       val numChannels   = value.spec.numChannels
-      import config.{key, index, server, bufSize, matrix}
+      import config.{bufSize, index, key, matrix, server}
       val isStreaming   = matrix.isStreaming
       val bufSize1      = if (isStreaming) bufSize else numFrames.toInt
       val buf           = Buffer(server)(numFrames = bufSize1, numChannels = numChannels)
@@ -260,21 +259,22 @@ object MatrixPrepare {
       val ctlName       = mkCtlName(key = key, idx = index, isStreaming = isStreaming)
       if (isStreaming) {
         // XXX TODO - dirty workaround for Turbulence. Generally enable loop. Read start frame
-        val startFrame = if (key.contains("!1850")) {
-          val res = VoiceStructure.currentFrame1850 % numFrames
-          // println(s"MatrixPrepare : install $key - startFrame = $res")
-          res
-        } else if (key.contains("!2001")) {
-          val res = VoiceStructure.currentFrame2001 % numFrames
-          res
-        } else if (key.contains("!rad")) {
-          // one frame is one year
-          val res = (VoiceStructure.currentFrame1850 / 12) % numFrames
-          res
-        } else {
-          // println(s"MatrixPrepare : install $key - no startFrame")
-          0L
-        }
+        val startFrame = 0L
+//          if (key.contains("!1850")) {
+//          val res = VoiceStructure.currentFrame1850 % numFrames
+//          // println(s"MatrixPrepare : install $key - startFrame = $res")
+//          res
+//        } else if (key.contains("!2001")) {
+//          val res = VoiceStructure.currentFrame2001 % numFrames
+//          res
+//        } else if (key.contains("!rad")) {
+//          // one frame is one year
+//          val res = (VoiceStructure.currentFrame1850 / 12) % numFrames
+//          res
+//        } else {
+//          // println(s"MatrixPrepare : install $key - no startFrame")
+//          0L
+//        }
 
         val trig  = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
           path = path, fileFrames = numFrames, interp = 1, startFrame = startFrame, loop = true, resetFrame = 0L)

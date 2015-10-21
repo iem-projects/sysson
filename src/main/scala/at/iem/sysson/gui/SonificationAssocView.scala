@@ -14,13 +14,13 @@
 
 package at.iem.sysson.gui
 
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.swing.View
-import impl.{SonificationAssocViewImpl => Impl}
+import at.iem.sysson.gui.impl.{SonificationAssocViewImpl => Impl}
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
-import de.sciss.mellite.Workspace
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Sys
+import de.sciss.lucre.swing.View
+import de.sciss.mellite.Workspace
 
 object SonificationAssocView {
   def apply[S <: Sys[S]](source: Sonification.Source[S], dimName: String)

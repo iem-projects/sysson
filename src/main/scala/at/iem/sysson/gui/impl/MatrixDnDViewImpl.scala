@@ -23,14 +23,13 @@ import javax.swing.undo.UndoableEdit
 import javax.swing.{JComponent, TransferHandler}
 
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
-import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.matrix.{Matrix, Sys}
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.TxnLike
+import de.sciss.lucre.stm.{Obj, TxnLike}
+import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
-import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.serial.Serializer
@@ -40,7 +39,7 @@ import org.scalautils.TypeCheckedTripleEquals
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
 import scala.swing.event.MouseButtonEvent
-import scala.swing.{Component, Swing, Orientation, BoxPanel, Action, Label, MenuItem, TextField}
+import scala.swing.{Action, BoxPanel, Component, Label, MenuItem, Orientation, Swing}
 
 abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatrix: Boolean,
                                                                      canRemoveMatrix: Boolean)
@@ -161,7 +160,7 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
             val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
             val editOpt = impl.cursor.step { implicit tx =>
               val v0        = drag.matrix()
-              val v         = if (isCopy) Matrix.Var.unapply(v0).fold(v0)(_.apply()).mkCopy() else v0
+              val v         = if (isCopy) Obj.copy(Matrix.Var.unapply(v0).fold(v0)(_.apply())) else v0
               val sourceOpt = sourceOptRef.get(tx.peer).map(_.apply())
               val vrOpt     = sourceOpt.flatMap(src => Matrix.Var.unapply(matrix(src)))
               val res = vrOpt.fold {

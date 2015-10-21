@@ -24,9 +24,9 @@ import at.iem.sysson.util.NetCdfFileUtil
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{DialogSource, FileDialog, Menu, OptionPane, UndoManager, Window, WindowHandler}
 import de.sciss.file._
-import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.{CellView, View, defer, deferTx, requireEDT}
 import de.sciss.mellite.gui.impl.WindowImpl
 import de.sciss.mellite.{Application, Workspace}
@@ -42,12 +42,12 @@ import scala.annotation.tailrec
 import scala.collection.breakOut
 import scala.concurrent.stm.atomic
 import scala.concurrent.{ExecutionContext, Future, blocking}
-import scala.swing.{Orientation, SplitPane, Alignment, BorderPanel, Button, Component, FlowPanel, GridPanel, Label}
+import scala.swing.{Alignment, BorderPanel, Button, Component, FlowPanel, GridPanel, Label, Orientation, SplitPane}
 import scala.util.{Failure, Success}
 import scalax.chart.{Chart, XYChart}
 
 object DataSourceFrameImpl {
-  def apply[S <: Sys[S]](source: DataSourceElem.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S],
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                                 cursor: stm.Cursor[S]): DataSourceFrame[S] = {
     val view  = DataSourceView(source)
     val res   = new Impl(view)

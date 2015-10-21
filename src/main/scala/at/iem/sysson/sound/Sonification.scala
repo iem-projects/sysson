@@ -15,19 +15,19 @@
 package at.iem.sysson
 package sound
 
-import de.sciss.lucre.{event => evt}
-import evt.{Publisher, Sys}
-import de.sciss.lucre.expr.Expr
-import de.sciss.model
-import de.sciss.lucre.expr
-import de.sciss.synth.proc.Proc
-import impl.{SonificationImpl => Impl}
-import de.sciss.serial.{Serializer, DataInput}
+import at.iem.sysson.sound.impl.{SonificationImpl => Impl}
+import de.sciss.lucre.event.Publisher
+import de.sciss.lucre.expr.{DoubleObj, StringObj}
 import de.sciss.lucre.matrix.Matrix
-import de.sciss.synth.proc
+import de.sciss.lucre.stm.{Obj, Sys}
+import de.sciss.lucre.{event => evt}
+import de.sciss.serial.{DataInput, Serializer}
+import de.sciss.synth.proc.Proc
 
-object Sonification {
+object Sonification extends Obj.Type {
   final val typeID = 0x30004
+
+  def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] = ???
 
   // ---- implementation forwards ----
 
@@ -35,7 +35,7 @@ object Sonification {
 
   def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Sonification[S] = Impl.read(in, access)
 
-  implicit def serializer[S <: Sys[S]]: evt.NodeSerializer[S, Sonification[S]] = Impl.serializer[S]
+  implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Sonification[S]] = Impl.serializer[S]
 
   // ---- event types ----
 
@@ -52,13 +52,17 @@ object Sonification {
 
   // -------------------------------------------------------
 
-  object Source {
+  object Source extends Obj.Type {
+    final val typeID: Int = ???
+
+    def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] = ???
+
     sealed trait Update[S <: Sys[S]] { def source: Source[S] }
     final case class DimsChanged[S <: Sys[S]](source: Source[S],
-                                              update: expr.Map.Update[S, String, Expr[S, String], model.Change[String]])
+                                              update: evt.Map.Update[S, String, StringObj])
       extends Update[S]
 
-    implicit def serializer[S <: Sys[S]]: evt.Serializer[S, Source[S]] = Impl.sourceSerializer
+    implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Source[S]] = Impl.sourceSerializer
 
     def apply[S <: Sys[S]](matrix: Matrix[S])(implicit tx: S#Tx): Source[S] =
       Impl.applySource(matrix)
@@ -68,41 +72,45 @@ object Sonification {
     * @see [[graph.Var]]
     * @see [[graph.Dim]]
     */
-  trait Source[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Source.Update[S]] {
+  trait Source[S <: Sys[S]] extends Obj[S] with Publisher[S, Source.Update[S]] {
+    final def tpe: Obj.Type = Source
+
     def matrix: Matrix[S]
     /** Maps sonification model/patch dimensions (keys) to source matrix dimensions (values). */
-    def dims: expr.Map[S, String, Expr[S, String], model.Change[String]]
+    def dims: evt.Map[S, String, StringObj]
 
-    def mkCopy()(implicit tx: S#Tx): Source[S]
+    // def mkCopy()(implicit tx: S#Tx): Source[S]
   }
 
   // ---- element ----
 
-  object Elem {
-    def apply[S <: Sys[S]](peer: Sonification[S])(implicit tx: S#Tx): Sonification.Elem[S] =
-      Impl.SonificationElemImpl(peer)
-
-    implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Sonification.Elem[S]] =
-      Impl.SonificationElemImpl.serializer
-  }
-  trait Elem[S <: Sys[S]] extends proc.Elem[S] {
-    type Peer       = Sonification[S]
-    type PeerUpdate = Sonification.Update[S]
-    type This       = Elem[S]
-  }
-
-  object Obj {
-    def unapply[S <: Sys[S]](obj: Obj[S]): Option[Sonification.Obj[S]] =
-      if (obj.elem.isInstanceOf[Sonification.Elem[S]]) Some(obj.asInstanceOf[Sonification.Obj[S]])
-      else None
-  }
-
-  type Obj[S <: Sys[S]] = proc.Obj.T[S, Sonification.Elem]
+//  object Elem {
+//    def apply[S <: Sys[S]](peer: Sonification[S])(implicit tx: S#Tx): Sonification.Elem[S] =
+//      Impl.SonificationElemImpl(peer)
+//
+//    implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Sonification.Elem[S]] =
+//      Impl.SonificationElemImpl.serializer
+//  }
+//  trait Elem[S <: Sys[S]] extends proc.Elem[S] {
+//    type Peer       = Sonification[S]
+//    type PeerUpdate = Sonification.Update[S]
+//    type This       = Elem[S]
+//  }
+//
+//  object Obj {
+//    def unapply[S <: Sys[S]](obj: Obj[S]): Option[Sonification.Obj[S]] =
+//      if (obj.elem.isInstanceOf[Sonification.Elem[S]]) Some(obj.asInstanceOf[Sonification.Obj[S]])
+//      else None
+//  }
+//
+//  type Obj[S <: Sys[S]] = proc.Obj.T[S, Sonification.Elem]
 }
 /** A sonification pairs a sound process with a map to data sources and user controls. */
-trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonification.Update[S]] {
+trait Sonification[S <: Sys[S]] extends Obj[S] with Publisher[S, Sonification.Update[S]] {
   /** The sound process that implements the sonification */
-  def proc: Proc.Obj[S]
+  def proc: Proc[S]
+
+  final def tpe: Obj.Type = Sonification
 
   /** A map from logical keys to sonification sources. A source is
     * a matrix paired with a dimensional map.
@@ -110,11 +118,11 @@ trait Sonification[S <: Sys[S]] extends evt.Node[S] with Publisher[S, Sonificati
     * @see [[graph.Var]]
     * @see [[graph.Dim]]
     */
-  def sources : expr.Map[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
+  def sources : evt.Map[S, String, Sonification.Source]
 
   /** A map from logical keys to control values.
     *
     * @see [[graph.UserValue]]
     */
-  def controls: expr.Map[S, String, Expr[S, Double], model.Change[Double]]
+  def controls: evt.Map[S, String, DoubleObj]
 }

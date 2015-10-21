@@ -14,8 +14,8 @@
 
 package at.iem.sysson
 
-import de.sciss.lucre.event.{Publisher, Sys}
-import de.sciss.lucre.data
+import de.sciss.lucre.event.Publisher
+import de.sciss.lucre.stm.Sys
 import de.sciss.serial
 
 trait TreeTypes {
@@ -32,7 +32,7 @@ trait TreeTypes {
 object TreeLike extends TreeTypes {
   trait Branch[S <: Sys[S], T <: TreeLike[S, T]] {
     def size    (implicit tx: S#Tx): Int
-    def iterator(implicit tx: S#Tx): data.Iterator[S#Tx, Node[T#Branch, T#Leaf]]
+    def iterator(implicit tx: S#Tx): Iterator[Node[T#Branch, T#Leaf]]
     def isEmpty (implicit tx: S#Tx): Boolean
     def nonEmpty(implicit tx: S#Tx): Boolean
     def apply(idx: Int)(implicit tx: S#Tx): Node[T#Branch, T#Leaf]

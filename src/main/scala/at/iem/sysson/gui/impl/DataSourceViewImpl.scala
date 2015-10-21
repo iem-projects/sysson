@@ -24,16 +24,15 @@ import javax.swing.{JComponent, JTree, TransferHandler}
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.file._
 import de.sciss.icons.raphael
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.matrix.Matrix
+import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing._
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.swingtree.{ExternalTreeModel, Tree}
-import de.sciss.synth.proc.Obj
 import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
@@ -45,12 +44,11 @@ import scala.swing.{Action, BorderPanel, BoxPanel, Component, Orientation, Scrol
 object DataSourceViewImpl {
   import at.iem.sysson.Implicits._
 
-  def apply[S <: Sys[S]](sourceObj: DataSourceElem.Obj[S])(implicit workspace: Workspace[S], tx: S#Tx,
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx,
                                                 cursor: stm.Cursor[S]): DataSourceView[S] = {
     implicit val resolver = WorkspaceResolver[S]
-    val source= sourceObj.elem.peer
     val data  = source.data()
-    val docH  = tx.newHandle(sourceObj)
+    val docH  = tx.newHandle(source)
     val res   = new Impl[S](docH, source.artifact.value, data)
     deferTx(res.guiInit())
     res
@@ -130,7 +128,7 @@ object DataSourceViewImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](sourceH: stm.Source[S#Tx, DataSourceElem.Obj[S]],
+  private final class Impl[S <: Sys[S]](sourceH: stm.Source[S#Tx, DataSource[S]],
                                         val file: File, data: nc2.NetcdfFile)
                                        (implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
     extends DataSourceView[S] with ComponentHolder[Component] {
@@ -146,7 +144,7 @@ object DataSourceViewImpl {
 
     private var tGroups    : Tree[nc2.Group]  = _
 
-    def source(implicit tx: S#Tx): DataSourceElem.Obj[S] = sourceH()
+    def source(implicit tx: S#Tx): DataSource[S] = sourceH()
 
     def guiInit(): Unit = {
       requireEDT()
@@ -217,12 +215,12 @@ object DataSourceViewImpl {
             val key     = vr.name
             val attrKey = s"plot-$key"
             val src     = source
-            val plotOpt = src.attr.get(attrKey).flatMap(Plot.Obj.unapply)
+            val plotOpt = src.attr.$[Plot](attrKey) // .flatMap(Plot.Obj.unapply)
             // val mr      = findRoot(m)
             val plot    = plotOpt.orElse {
               mkMatrix(vr).map { mr =>
                 val p   = Plot[S](mr)
-                val po  = Obj(Plot.Elem(p))
+                val po  = p // Obj(Plot.Elem(p))
                 src.attr.put(attrKey, po)
                 po
               }
@@ -262,11 +260,10 @@ object DataSourceViewImpl {
       }
 
     private def mkMatrix(vr: nc2.Variable)(implicit tx: S#Tx): Option[Matrix[S]] = {
-      val ds      = source.elem.peer
+      val ds      = source // .elem.peer
       val p       = vr.parents
       val n       = vr.name
-      import TypeCheckedTripleEquals._
-      val dsvOpt  = ds.variables.find(dsv => dsv.name === n && dsv.parents === p)
+      val dsvOpt  = ds.variables.find(dsv => dsv.name == n && dsv.parents == p)
       dsvOpt
     }
 

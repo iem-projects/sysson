@@ -1,9 +1,9 @@
 package at.iem.sysson
 
-import org.scalatest.{Outcome, Matchers, fixture}
-import de.sciss.lucre.event.Durable
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Durable
 import de.sciss.lucre.stm.store.BerkeleyDB
+import org.scalatest.{Matchers, Outcome, fixture}
 
 trait DurableSpec extends fixture.FlatSpec with Matchers {
   type S = Durable

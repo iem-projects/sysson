@@ -17,34 +17,29 @@ package gui
 package impl
 
 import at.iem.sysson.sound.Sonification
-import at.iem.sysson.sound.impl.SonificationImpl.SonificationElemImpl
 import de.sciss.desktop
 import de.sciss.desktop.OptionPane
 import de.sciss.icons.raphael
-import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.{Expr, String => StringEx}
+import de.sciss.lucre.expr.{StringObj, SpanLikeObj}
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.impl.timeline.TimelineObjViewImpl
 import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.mellite.gui.{ListObjView, TimelineObjView}
-import de.sciss.span.SpanLike
-import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.{StringElem, ObjKeys, FadeSpec, Obj}
-import org.scalautils.TypeCheckedTripleEquals
-
-import scala.swing.{Component, Label}
+import de.sciss.synth.proc.{FadeSpec, ObjKeys}
 
 object SonificationObjView extends ListObjView.Factory with TimelineObjView.Factory {
-  type E[S <: Sys[S]] = Sonification.Elem[S]
+  type E[S <: Sys[S]] = Sonification[S]
   final val prefix  = "Sonification"
   def humanName     = prefix
   final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.Feed)
-  final val typeID  = SonificationElemImpl.typeID
+  final val typeID  = Sonification.typeID
   def category      = SwingApplication.categSonification
+
+  def tpe: Obj.Type = ???
 
   def hasMakeDialog: Boolean = true
 
@@ -55,23 +50,24 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
 
   def init(): Unit = _init
 
-  def mkListView[S <: SSys[S]](obj: Obj.T[S, E])(implicit tx: S#Tx): ListObjView[S] = {
+  def mkListView[S <: SSys[S]](obj: E[S])(implicit tx: S#Tx): ListObjView[S] = {
     // val son       = obj.elem.peer
     // val procName  = son.proc.name
     new SonificationObjView.ListImpl(tx.newHandle(obj) /* , value = new Value(procName) */).initAttrs(obj)
   }
 
-  def mkTimelineView[S <: SSys[S]](id: S#ID, span: Expr[S, SpanLike], obj: Sonification.Obj[S],
+  def mkTimelineView[S <: SSys[S]](id: S#ID, span: SpanLikeObj[S], obj: Sonification[S],
                                   context: TimelineObjView.Context[S])
                         (implicit tx: S#Tx): TimelineObjView[S] = {
-    import SpanLikeEx.serializer
     // val son       = obj.elem.peer
     // val procName  = son.proc.name
     val res = new TimelineImpl(objH = tx.newHandle(obj) /*,
       value = new Value(procName) */).initAttrs(id, span, obj)
-    TimelineObjViewImpl.initGainAttrs(span, obj, res)
-    TimelineObjViewImpl.initMuteAttrs(span, obj, res)
-    TimelineObjViewImpl.initFadeAttrs(span, obj, res)
+
+    ???
+//    TimelineObjViewImpl.initGainAttrs(span, obj, res)
+//    TimelineObjViewImpl.initMuteAttrs(span, obj, res)
+//    TimelineObjViewImpl.initFadeAttrs(span, obj, res)
     res
   }
 
@@ -87,12 +83,12 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
   }
 
   def makeObj[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {
-    val elem  = Sonification.Elem(Sonification[S])
-    val obj   = Obj(elem)
-    val nameObj = Obj(StringElem(StringEx.newVar(StringEx.newConst[S](name))))
+    val elem  = Sonification[S]
+    val obj   = elem // Obj(elem)
+    val nameObj = StringObj.newVar(StringObj.newConst[S](name))
     // share the name, so it appears in the proc editor as well
-    obj               .attr.put(ObjKeys.attrName, nameObj)
-    obj.elem.peer.proc.attr.put(ObjKeys.attrName, nameObj)
+    obj     .attr.put(ObjKeys.attrName, nameObj)
+    obj.proc.attr.put(ObjKeys.attrName, nameObj)
     obj :: Nil
   }
 
@@ -109,9 +105,9 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
     with ListObjViewImpl.EmptyRenderer[S]
     with ListObjView[S] {
 
-    override def objH: stm.Source[S#Tx, Sonification.Obj[S]]
+    override def objH: stm.Source[S#Tx, Sonification[S]]
 
-    override def obj(implicit tx: S#Tx): Sonification.Obj[S] = objH()
+    override def obj(implicit tx: S#Tx): Sonification[S] = objH()
 
     def factory = SonificationObjView
     def prefix  = SonificationObjView.prefix
@@ -139,10 +135,10 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
 //    }
   }
 
-  private final class ListImpl[S <: SSys[S]](val objH: stm.Source[S#Tx, Obj.T[S, Sonification.Elem]] /*, var value: Value */)
+  private final class ListImpl[S <: SSys[S]](val objH: stm.Source[S#Tx, Sonification[S]] /*, var value: Value */)
     extends Impl[S]
 
-  private final class TimelineImpl[S <: SSys[S]](val objH: stm.Source[S#Tx, Sonification.Obj[S]] /* , val value: Value */)
+  private final class TimelineImpl[S <: SSys[S]](val objH: stm.Source[S#Tx, Sonification[S]] /* , val value: Value */)
     extends Impl[S] with TimelineObjViewImpl.BasicImpl[S]
     with TimelineObjView.HasMute
     with TimelineObjView.HasGain

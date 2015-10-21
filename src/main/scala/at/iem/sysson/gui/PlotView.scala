@@ -15,25 +15,25 @@
 package at.iem.sysson
 package gui
 
-import de.sciss.lucre.{event => evt}
-import de.sciss.lucre.stm
+import at.iem.sysson.gui.impl.{PlotViewImpl => Impl}
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
+import de.sciss.lucre.stm
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
-import impl.{PlotViewImpl => Impl}
 
 object PlotView {
-  def apply[S <: evt.Sys[S]](plot: Plot.Obj[S], parent: SonificationView[S])
+  def apply[S <: Sys[S]](plot: Plot[S], parent: SonificationView[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] =
     Impl(plot, parent)
 
-  def apply[S <: evt.Sys[S]](plot: Plot.Obj[S])
+  def apply[S <: Sys[S]](plot: Plot[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] =
     Impl(plot)
 }
-trait PlotView[S <: evt.Sys[S]]
+trait PlotView[S <: Sys[S]]
   extends ViewHasWorkspace[S]
   with View.Editable[S] {
 
-  def plot(implicit tx: S#Tx): Plot.Obj[S]
+  def plot(implicit tx: S#Tx): Plot[S]
 }

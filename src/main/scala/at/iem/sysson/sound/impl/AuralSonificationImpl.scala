@@ -19,36 +19,36 @@ package impl
 import at.iem.sysson.graph.UserValue
 import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.stm.Disposable
-import de.sciss.lucre.synth.Sys
+import de.sciss.lucre.synth.{Sys => SSys}
+import de.sciss.lucre.{event => evt, stm}
 import de.sciss.numbers
 import de.sciss.synth.proc.AuralObj.State
-import de.sciss.synth.proc.{UGenGraphBuilder => UGB, TimeRef, AuralContext, AuralObj}
-import de.sciss.synth.proc.impl.{AsyncProcBuilder, SynthBuilder, AuralProcImpl, AuralProcDataImpl}
-import de.sciss.lucre.{event => evt, stm}
+import de.sciss.synth.proc.impl.{AsyncProcBuilder, AuralProcDataImpl, AuralProcImpl, SynthBuilder}
+import de.sciss.synth.proc.{AuralContext, AuralObj, TimeRef, UGenGraphBuilder => UGB}
 import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.TxnLocal
 
 object AuralSonificationImpl {
-  def apply[S <: Sys[S]](obj: Sonification.Obj[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralSonification[S] = {
+  def apply[S <: SSys[S]](obj: Sonification[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralSonification[S] = {
     logDebugTx(s"AuralSonification($obj)")
     val objH      = tx.newHandle(obj)
-    val proc      = obj.elem.peer.proc
+    val proc      = obj.proc
     val procData  = context.acquire[AuralObj.ProcData[S]](proc)(new ProcDataImpl[S].initSonif(obj))
     val res       = new Impl[S]
     val procView  = new ProcImpl[S](res).init(procData)
     res.init(objH, procView)
   }
 
-  private def findSource[S <: Sys[S]](obj: Sonification.Obj[S], variable: graph.Var)
+  private def findSource[S <: SSys[S]](obj: Sonification[S], variable: graph.Var)
                                      (implicit tx: S#Tx): Sonification.Source[S] = {
-    val sonif   = obj.elem.peer
+    val sonif   = obj // .elem.peer
     val varKey  = variable.name
     val source  = sonif.sources.get(varKey).getOrElse(sys.error(s"Missing source for key $varKey"))
     source
   }
 
-  private def findDimIndex[S <: Sys[S]](source: Sonification.Source[S], dimElem: graph.Dim)
+  private def findDimIndex[S <: SSys[S]](source: Sonification.Source[S], dimElem: graph.Dim)
                                        (implicit tx: S#Tx): Int = {
     val dimKey  = dimElem.name
     val dimName = source.dims  .get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key $dimKey")).value
@@ -59,13 +59,13 @@ object AuralSonificationImpl {
     dimIdx
   }
 
-  private final class ProcDataImpl[S <: Sys[S]](implicit context: AuralContext[S])
+  private final class ProcDataImpl[S <: SSys[S]](implicit context: AuralContext[S])
     extends AuralProcDataImpl.Impl[S]() {
 
-    private val sonifLoc = TxnLocal[Sonification.Obj[S]]() // cache-only purpose
-    private var _obj: stm.Source[S#Tx, Sonification.Obj[S]] = _
+    private val sonifLoc = TxnLocal[Sonification[S]]() // cache-only purpose
+    private var _obj: stm.Source[S#Tx, Sonification[S]] = _
 
-    private def sonifCached()(implicit tx: S#Tx): Sonification.Obj[S] = {
+    private def sonifCached()(implicit tx: S#Tx): Sonification[S] = {
       implicit val itx = tx.peer
       if (sonifLoc.isInitialized) sonifLoc.get
       else {
@@ -75,9 +75,9 @@ object AuralSonificationImpl {
       }
     }
 
-    def initSonif(obj: Sonification.Obj[S])(implicit tx: S#Tx): this.type = {
+    def initSonif(obj: Sonification[S])(implicit tx: S#Tx): this.type = {
       _obj = tx.newHandle(obj)
-      init(obj.elem.peer.proc)
+      init(obj.proc)
     }
 
     private def oldMatrixSpecs(req: UGB.Input, st: UGB.Incomplete[S]): Vec[MatrixPrepare.Spec] =
@@ -142,13 +142,13 @@ object AuralSonificationImpl {
     }
   }
 
-  private final class ProcImpl[S <: Sys[S]](sonifData: Impl[S])(implicit context: AuralContext[S])
+  private final class ProcImpl[S <: SSys[S]](sonifData: Impl[S])(implicit context: AuralContext[S])
     extends AuralProcImpl.Impl[S]() {
 
     override protected def buildSyncInput(b: SynthBuilder[S], keyW: UGB.Key, value: UGB.Value)
                                          (implicit tx: S#Tx): Unit = keyW match {
       case UserValue.Key(key) =>
-        val sonif = sonifData.sonifCached().elem.peer
+        val sonif = sonifData.sonifCached() // .elem.peer
         sonif.controls.get(key).foreach { expr =>
           val ctlName = UserValue.controlName(key)
           b.setMap += ctlName -> expr.value
@@ -193,9 +193,9 @@ object AuralSonificationImpl {
     private def addMatrixStream(b: AsyncProcBuilder[S], spec: MatrixPrepare.Spec, idx: Int)
                                (implicit tx: S#Tx): Unit = {
       // note: info-only graph elems not yet supported (or existent)
-      import context.{server, workspaceHandle}
       import context.scheduler.cursor
-      import spec.{streamDim, elem}
+      import context.{server, workspaceHandle}
+      import spec.{elem, streamDim}
       implicit val resolver = WorkspaceResolver[S]
 
       val source  = findSource(sonifData.obj(), elem.variable)
@@ -239,19 +239,19 @@ object AuralSonificationImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]]
+  private final class Impl[S <: SSys[S]]
     extends AuralSonification[S] with ObservableImpl[S, AuralObj.State] {
 
     def typeID = Sonification.typeID
 
     private var procViewL: Disposable[S#Tx] = _
 
-    private val sonifLoc = TxnLocal[Sonification.Obj[S]]() // cache-only purpose
+    private val sonifLoc = TxnLocal[Sonification[S]]() // cache-only purpose
 
-    private var _obj: stm.Source[S#Tx, Sonification.Obj[S]] = _
+    private var _obj: stm.Source[S#Tx, Sonification[S]] = _
     private var _procView: AuralObj[S] = _
 
-    def obj: stm.Source[S#Tx, Sonification.Obj[S]] = _obj
+    def obj: stm.Source[S#Tx, Sonification[S]] = _obj
 
     object status
       extends ObservableImpl[S, AuralSonification.Update /* [S] */]
@@ -260,7 +260,7 @@ object AuralSonificationImpl {
       def update(u: AuralSonification.Update /* [S] */)(implicit tx: S#Tx): Unit = fire(u)
     }
 
-    def init(obj: stm.Source[S#Tx, Sonification.Obj[S]], procView: AuralObj[S])(implicit tx: S#Tx): this.type = {
+    def init(obj: stm.Source[S#Tx, Sonification[S]], procView: AuralObj[S])(implicit tx: S#Tx): this.type = {
       _obj      = obj
       _procView = procView
       procViewL = procView.react { implicit tx => upd =>
@@ -269,7 +269,7 @@ object AuralSonificationImpl {
       this
     }
 
-    def sonifCached()(implicit tx: S#Tx): Sonification.Obj[S] = {
+    def sonifCached()(implicit tx: S#Tx): Sonification[S] = {
       implicit val itx = tx.peer
       if (sonifLoc.isInitialized) sonifLoc.get
       else {

@@ -17,9 +17,9 @@ package gui
 
 import at.iem.sysson.gui.impl.{SonificationSourceViewImpl => Impl}
 import de.sciss.desktop.UndoManager
-import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
 import de.sciss.mellite.Workspace
 

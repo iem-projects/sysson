@@ -24,27 +24,25 @@ import javax.swing.undo.UndoableEdit
 
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.{Expr, Int => IntEx}
+import de.sciss.lucre.expr.IntObj
 import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.TxnLike
+import de.sciss.lucre.stm.{Sys, TxnLike}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.serial.Serializer
-import org.scalautils.TypeCheckedTripleEquals
 
-import scala.concurrent.stm.{TxnExecutor, Ref}
+import scala.concurrent.stm.{Ref, TxnExecutor}
 import scala.language.higherKinds
-import scala.swing.{Button, BoxPanel, Component, Dimension, Label, Orientation, Swing}
+import scala.swing.{BoxPanel, Component, Dimension, Label, Orientation, Swing}
 
 object MatrixAssocViewImpl {
   private trait IntDrag {
     type S1 <: Sys[S1]
     def workspace: Workspace[S1]
-    def source: stm.Source[S1#Tx, Expr[S1, Int]]
+    def source: stm.Source[S1#Tx, IntObj[S1]]
     def value: Int
   }
   private val IntFlavor = DragAndDrop.internalFlavor[IntDrag]
@@ -110,23 +108,23 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
   private object TH extends MatrixView.TransferHandler[S] {
     def canImportInt(t: TransferSupport): Boolean = t.isDataFlavorSupported(IntFlavor)
 
-    def exportInt(x: Expr[S, Int])(implicit tx: S#Tx): Option[Transferable] = {
+    def exportInt(x: IntObj[S])(implicit tx: S#Tx): Option[Transferable] = {
       val drag = new IntDrag {
         type S1 = S
         val workspace = impl.workspace
-        val source    = tx.newHandle(x)(IntEx.serializer)
+        val source    = tx.newHandle(x) // (IntEx.serializer)
         val value     = x.value
       }
       val t = DragAndDrop.Transferable(IntFlavor)(drag)
       Some(t)
     }
 
-    def importInt(t: TransferSupport)(implicit tx: S#Tx): Option[Expr[S, Int]] = {
+    def importInt(t: TransferSupport)(implicit tx: S#Tx): Option[IntObj[S]] = {
       val drag = t.getTransferable.getTransferData(IntFlavor).asInstanceOf[IntDrag]
-      val x: Expr[S, Int] = if (drag.workspace == /* === */ impl.workspace) {
+      val x: IntObj[S] = if (drag.workspace == /* === */ impl.workspace) {
         drag.asInstanceOf[IntDrag { type S1 = S }].source()
       } else {
-        IntEx.newConst[S](drag.value)
+        IntObj.newConst[S](drag.value)
       }
       Some(x)
     }

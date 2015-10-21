@@ -17,25 +17,23 @@ package gui
 package impl
 
 import java.awt.image.BufferedImage
-import java.awt.{Paint, Color, Rectangle, Shape, TexturePaint}
+import java.awt.{Color, Paint, Rectangle, Shape, TexturePaint}
 
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.intensitypalette.IntensityPalette
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.{String => StringEx, Boolean => BooleanEx}
+import de.sciss.lucre.expr.{BooleanObj, StringObj}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.Disposable
+import de.sciss.lucre.stm.{Sys, Disposable}
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{CellView, BooleanCheckBoxView, View, defer, deferTx}
+import de.sciss.lucre.swing.{BooleanCheckBoxView, CellView, View, defer, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 import de.sciss.swingplus.{ComboBox, OverlayPanel}
-import de.sciss.synth.proc.{StringElem, BooleanElem}
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot
@@ -47,10 +45,10 @@ import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.Future
 import scala.concurrent.stm.Ref
-import scala.swing.{Alignment, Label, FlowPanel, Swing, BorderPanel, Component, Graphics2D}
+import scala.swing.{Alignment, BorderPanel, Component, FlowPanel, Graphics2D, Label, Swing}
 
 object PlotChartImpl {
-  def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager,
+  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager,
                                             workspace: Workspace[S]): View.Editable[S] = {
     implicit val resolver = WorkspaceResolver[S]
     new Impl[S].init(plot)
@@ -256,7 +254,7 @@ object PlotChartImpl {
     private var overlayEmpty    : Component = _
     private var cellPalette     : CellView.Var[S, Option[String]] = _
 
-    private var plotH: stm.Source[S#Tx, Plot.Obj[S]] = _
+    private var plotH: stm.Source[S#Tx, Plot[S]] = _
 
     // called on the EDT
     private def updateOverlay(): Unit = {
@@ -264,16 +262,16 @@ object PlotChartImpl {
       mapOverlay.enabled    = isMap && viewOverlay.component.selected
     }
 
-    def init(plotObj: Plot.Obj[S])(implicit tx: S#Tx): this.type = {
+    def init(plotObj: Plot[S])(implicit tx: S#Tx): this.type = {
       plotH = tx.newHandle(plotObj)
 
-      implicit val booleanEx  = BooleanEx
-      implicit val stringEx   = StringEx
+      implicit val booleanEx  = BooleanObj
+      implicit val stringEx   = StringObj
 
-      val cellOverlay = AttrCellView[S, Boolean, BooleanElem](plotObj, Plot.attrShowOverlay)
+      val cellOverlay = AttrCellView[S, Boolean, BooleanObj](plotObj.attr, Plot.attrShowOverlay)
       viewOverlay     = BooleanCheckBoxView.optional(cellOverlay, name = "Map Overlay", default = false)
       observerOverlay = cellOverlay.react { implicit tx => _ => deferTx(updateOverlay()) }
-      cellPalette     = AttrCellView[S, String, StringElem](plotObj, Plot.attrPalette)
+      cellPalette     = AttrCellView[S, String, StringObj](plotObj.attr, Plot.attrPalette)
       observerPalette = cellPalette.react { implicit tx => nameOpt =>
         deferTx {
           setPalette(nameOpt)
@@ -282,7 +280,7 @@ object PlotChartImpl {
 
       val paletteValue0 = cellPalette()
       deferTx(guiInit(paletteValue0 = paletteValue0))
-      val plot = plotObj.elem.peer
+      val plot = plotObj // .elem.peer
       updateData(plot)
 
       observerPlot = plot.changed.react { implicit tx => u =>
@@ -477,10 +475,10 @@ object PlotChartImpl {
         case ComboBox.Model.SelectionChanged(_) =>
           val value = mColorTable.selectedItem
           val edit = cursor.step { implicit tx =>
-            import StringEx.serializer
-            val valueEx = value.map(StringEx.newConst[S])
-            EditAttrMap.expr[S, String, StringElem](name = "Palette", obj = plotH(), key = Plot.attrPalette,
-              value = valueEx)(StringElem.apply[S])
+            val valueEx = value.map(StringObj.newConst[S])
+            implicit val stringTpe = StringObj
+            EditAttrMap.expr[S, String, StringObj](name = "Palette", obj = plotH(), key = Plot.attrPalette,
+              value = valueEx) // (StringObj.apply[S])
           }
           undoManager.add(edit)
       }

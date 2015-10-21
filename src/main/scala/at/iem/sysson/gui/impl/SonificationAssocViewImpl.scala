@@ -17,13 +17,9 @@ package impl
 
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
-import de.sciss.icons.raphael
-import de.sciss.lucre.event.Sys
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Sys
 import de.sciss.mellite.Workspace
-import de.sciss.mellite.gui.GUI
-
-import scala.swing.{FlowPanel, Action, Component, Label}
 
 object SonificationAssocViewImpl {
   def apply[S <: Sys[S]](source: Sonification.Source[S], keyName: String)

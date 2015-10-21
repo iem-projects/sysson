@@ -24,11 +24,10 @@ import at.iem.sysson.sound.AuralSonification
 import de.sciss.desktop.UndoManager
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.icons.raphael
-import de.sciss.lucre.event.Sys
-import de.sciss.lucre.expr.{Expr, Int => IntEx}
+import de.sciss.lucre.expr.{IntObj, Expr}
 import de.sciss.lucre.matrix.{Dimension, Matrix, Reduce}
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.Disposable
+import de.sciss.lucre.stm.{Sys, Disposable}
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
@@ -47,16 +46,16 @@ import scala.util.{Failure, Success}
 object PlotViewImpl {
   private val DEBUG = false
 
-  def apply[S <: Sys[S]](plot: Plot.Obj[S], parent: SonificationView[S])(implicit tx: S#Tx, workspace: Workspace[S],
+  def apply[S <: Sys[S]](plot: Plot[S], parent: SonificationView[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                             cursor: stm.Cursor[S]): PlotView[S] = mk(plot, Some(parent))
 
-  def apply[S <: Sys[S]](plot: Plot.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S],
+  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                             cursor: stm.Cursor[S]): PlotView[S] = mk(plot, None)
 
-  private def mk[S <: Sys[S]](plot: Plot.Obj[S], parentOpt: Option[SonificationView[S]])
+  private def mk[S <: Sys[S]](plot: Plot[S], parentOpt: Option[SonificationView[S]])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] = {
     implicit val undoMgr    = new UndoManagerImpl
-    val isEditable          = Matrix.Var.unapply(plot.elem.peer.matrix).isDefined
+    val isEditable          = Matrix.Var.unapply(plot.matrix).isDefined
     val plotMatrixView      = new PlotMatrixView(canSetMatrix = isEditable, parentOpt = parentOpt).init(plot)
     val chartView           = PlotChartImpl(plot)
     val statsView           = PlotStatsView(plot)
@@ -71,7 +70,7 @@ object PlotViewImpl {
     def cursor      : stm.Cursor[S] = matrixView.cursor
     def undoManager : UndoManager   = matrixView.undoManager
 
-    def plot(implicit tx: S#Tx): Plot.Obj[S] = matrixView.plotH()
+    def plot(implicit tx: S#Tx): Plot[S] = matrixView.plotH()
 
     def init()(implicit tx: S#Tx): this.type = {
       deferTx(guiInit())
@@ -127,10 +126,10 @@ object PlotViewImpl {
       res
     }
 
-    private var _plotH: stm.Source[S#Tx, Plot.Obj[S]] = _
+    private var _plotH: stm.Source[S#Tx, Plot[S]] = _
     private var _obsStatus = Option.empty[Disposable[S#Tx]]
 
-    def plotH: stm.Source[S#Tx, Plot.Obj[S]] = _plotH
+    def plotH: stm.Source[S#Tx, Plot[S]] = _plotH
 
     private val synced  = Ref(false)
     // private var syncFut = Future.successful[Unit]
@@ -145,10 +144,10 @@ object PlotViewImpl {
       case _ => None
     }
 
-    def init(plot: Plot.Obj[S])(implicit tx: S#Tx): this.type = {
+    def init(plot: Plot[S])(implicit tx: S#Tx): this.type = {
       _plotH = tx.newHandle(plot)
       init()
-      updateSource(Some(plot.elem.peer))
+      updateSource(Some(plot))
 
       _obsStatus = parentOpt.map(mkElapsedObservation)
       this
@@ -190,7 +189,7 @@ object PlotViewImpl {
         upd => if (synced.get(tx.peer)) upd match {
           case AuralSonification.Elapsed(dim, ratio, dimValue) =>
             matrixView.matrix.foreach { m =>
-              val sonif = sonifView.sonification.elem.peer
+              val sonif = sonifView.sonification
               sonif.sources.get(dim.variable.name).foreach { source =>
                 source.dims.get(dim.name).foreach { mDimExpr =>
                   val mDim = mDimExpr.value
@@ -213,7 +212,7 @@ object PlotViewImpl {
                                     val idx   = if (idx0 >= 0) idx0 else -(idx0 + 1)
                                     if (DEBUG) println(s"Elapsed index for $dimValue is $idx")
                                     val idxOld = idxVr.value
-                                    if (idx != idxOld) idxVr() = IntEx.newConst(idx)
+                                    if (idx != idxOld) idxVr() = IntObj.newConst(idx)
 
                                   case _ =>
                                 }
@@ -246,7 +245,7 @@ object PlotViewImpl {
       })
 
     protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] =
-      Matrix.Var.unapply(plotH().elem.peer.matrix).flatMap { vr =>
+      Matrix.Var.unapply(plotH().matrix).flatMap { vr =>
         import TypeCheckedTripleEquals._
         @tailrec def isRecursive(m0: Matrix[S]): Boolean = m0 match {
           case Matrix.Var(vr0) => if (vr0 === vr) true else isRecursive(vr0())

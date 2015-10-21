@@ -17,9 +17,7 @@ package at.iem
 import java.text.SimpleDateFormat
 import java.util.{Date, Locale}
 
-import at.iem.sysson.gui.impl.DataSourceElem
-import at.iem.sysson.impl.PlotImpl
-import at.iem.sysson.sound.AuralSonification
+import at.iem.sysson.sound.{AuralSonification, Sonification}
 import de.sciss.file._
 import de.sciss.lucre.matrix
 import de.sciss.lucre.stm.TxnLike
@@ -31,8 +29,6 @@ import ucar.nc2
 import scala.annotation.elidable
 import scala.annotation.elidable.{CONFIG, INFO, WARNING}
 import scala.concurrent.stm.Txn
-//import at.iem.sysson.sound.impl.PatchImpl.PatchElemImpl
-import at.iem.sysson.sound.impl.SonificationImpl.SonificationElemImpl
 
 package object sysson {
   val  Vec     = collection.immutable.IndexedSeq
@@ -103,10 +99,10 @@ package object sysson {
     mellite               .initTypes()
     matrix                .initTypes()
     Wolkenpumpe           .init()
-    SonificationElemImpl  .init()
-    DataSourceElem        .init()
+    Sonification          .init()
+    // DataSourceElem        .init()
     AuralSonification     .init()
-    PlotImpl              .init()
+    Plot                  .init()
     importExtensions
   }
 }

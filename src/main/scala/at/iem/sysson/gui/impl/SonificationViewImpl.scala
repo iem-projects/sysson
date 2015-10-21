@@ -24,8 +24,8 @@ import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{KeyStrokes, OptionPane, UndoManager, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
-import de.sciss.lucre.bitemp.{SpanLike => SpanLikeEx}
 import de.sciss.lucre.event.impl.ObservableImpl
+import de.sciss.lucre.expr.{SpanLikeObj, BooleanObj, DoubleObj, StringObj}
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
@@ -39,7 +39,7 @@ import de.sciss.model.impl.ModelImpl
 import de.sciss.span.Span
 import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{BooleanElem, ExprImplicits, Obj, ObjKeys, StringElem, Timeline, Transport}
+import de.sciss.synth.proc.{ObjKeys, Timeline, Transport}
 
 import scala.concurrent.stm.Ref
 import scala.swing.event.{ButtonClicked, Key}
@@ -47,19 +47,19 @@ import scala.swing.{Action, Alignment, BoxPanel, Component, FlowPanel, Label, Or
 import scala.util.control.NonFatal
 
 object SonificationViewImpl {
-  def apply[S <: Sys[S]](sonification: Sonification.Obj[S])
+  def apply[S <: Sys[S]](sonification: Sonification[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] = {
     implicit val undoMgr = new UndoManagerImpl
     val sonifH    = tx.newHandle(sonification)
-    val nameView  = sonification.attr[StringElem](ObjKeys.attrName).map { expr =>
+    val nameView  = sonification.attr.$[StringObj](ObjKeys.attrName).map { expr =>
       // import workspace.cursor
       StringFieldView(expr, "Name")
     }
 
-    val p = sonification.elem.peer.proc
+    val p = sonification.proc
 
     val res = new Impl[S, workspace.I](sonifH, /* TTT transport, */ nameView)(workspace, undoMgr, cursor) {
-      val graphObserver = p.elem.peer.graph.changed.react { implicit tx => upd =>
+      val graphObserver = p.graph.changed.react { implicit tx => upd =>
         updateGraph(upd.now)
       }
     }
@@ -68,7 +68,7 @@ object SonificationViewImpl {
       res.guiInit(/* sonifState */)
     }
 
-    val graph0  = p.elem.peer.graph.value
+    val graph0  = p.graph.value
     res.updateGraph(graph0)
 
     res
@@ -87,7 +87,7 @@ object SonificationViewImpl {
     }
   }
 
-  private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Sonification.Obj[S]],
+  private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Sonification[S]],
                                                           /* TTT transport: Transport[S], */
                                         nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S] { type I = I1 },
                                                                               val undoManager: UndoManager,
@@ -98,7 +98,7 @@ object SonificationViewImpl {
 
     protected def graphObserver: Disposable[S#Tx]
 
-    def sonification(implicit tx: S#Tx): Sonification.Obj[S] = sonifH()
+    def sonification(implicit tx: S#Tx): Sonification[S] = sonifH()
 
     private var pMapping : FlowPanel = _
     private var pControls: FlowPanel = _
@@ -177,12 +177,12 @@ object SonificationViewImpl {
 
       // ---- controls tx ----
 
-      val controls    = sonif.elem.peer.controls
+      val controls    = sonif.controls
       val userValues  = g.sources.collect {
         case graph.UserValue(key, default) =>
           // val view = DoubleSpinnerView.fromMap(controls, key, default, key.capitalize)
-          implicit val doubleEx = de.sciss.lucre.expr.Double
-          val cell      = CellView.exprMap(controls, key)
+          implicit val doubleEx = DoubleObj
+          val cell      = CellView.exprMap[S, String, Double, DoubleObj](controls, key)
           val view      = DoubleSpinnerView.optional[S](cell, name = key.capitalize, default = Some(default))
           (key, view)
       }
@@ -254,7 +254,7 @@ object SonificationViewImpl {
       val actionEditProcAttr = new Action(null) {
         def apply(): Unit = cursor.step { implicit tx =>
           val sonif = sonifH()
-          AttrMapFrame(sonif.elem.peer.proc)
+          AttrMapFrame(sonif.proc)
         }
       }
       val actionEditProcGraph = new Action(null) {
@@ -262,7 +262,7 @@ object SonificationViewImpl {
           val sonif = sonifH()
           // PatchCodeWindow(sonif.elem.peer.proc)
           import de.sciss.mellite.Mellite.compiler
-          CodeFrame.proc(sonif.elem.peer.proc)
+          CodeFrame.proc(sonif.proc)
         }
       }
 
@@ -305,10 +305,9 @@ object SonificationViewImpl {
             val muted = me.selected
             implicit val cursor = impl.cursor
             val edit = cursor /* workspace.inMemoryCursor */ .step { implicit tx =>
-              val imp = ExprImplicits[S]
-              import imp._
-              val value = Obj(BooleanElem[S](muted))
-              val proc  = sonification.elem.peer.proc
+              // val imp = ExprImplicits[S]
+              val value = BooleanObj.newConst[S](muted)
+              val proc  = sonification.proc
               // Not sure that making an undoable edit is necessary, perhaps just overkill?
               EditAttrMap(if (muted) "Mute" else "Un-Mute", obj = proc, key = ObjKeys.attrMute, value = Some(value))
               //              sonifView.auralPresentation.group.foreach { g =>
@@ -447,8 +446,8 @@ object SonificationViewImpl {
             val groupEH = cursor.step { implicit tx =>
               val tl    = Timeline[S]
               val span  = _settings.span
-              tl.add(SpanLikeEx.newConst(span), sonifH())
-              val tlObj = Obj(Timeline.Elem(tl))
+              tl.add(SpanLikeObj.newConst(span), sonifH())
+              val tlObj = tl // Obj(Timeline.Elem(tl))
               tx.newHandle(tlObj)
             }
             import Mellite.compiler

@@ -15,18 +15,18 @@
 package at.iem.sysson.gui
 
 import at.iem.sysson.Plot
-import de.sciss.lucre.event.Sys
-import impl.{PlotFrameImpl => Impl}
+import at.iem.sysson.gui.impl.{PlotFrameImpl => Impl}
+import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.Window
 import de.sciss.mellite.Workspace
-import de.sciss.lucre.stm
 
 object PlotFrame {
-  def apply[S <: Sys[S]](plot: Plot.Obj[S])
+  def apply[S <: Sys[S]](plot: Plot[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotFrame[S] =
     Impl(plot)
 
-  def apply[S <: Sys[S]](plot: Plot.Obj[S], parent: SonificationView[S])
+  def apply[S <: Sys[S]](plot: Plot[S], parent: SonificationView[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotFrame[S] =
     Impl(plot, parent)
 }

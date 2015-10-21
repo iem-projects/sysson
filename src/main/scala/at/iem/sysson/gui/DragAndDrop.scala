@@ -20,9 +20,9 @@ import java.awt.event.{MouseAdapter, MouseEvent}
 import javax.swing.{JComponent, TransferHandler}
 
 import at.iem.sysson.sound.Sonification
-import de.sciss.lucre.event.Sys
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Sys
 import de.sciss.mellite.Workspace
 import org.scalautils.TypeCheckedTripleEquals
 

@@ -14,6 +14,7 @@
 
 package at.iem.sysson
 
+import de.sciss.mellite
 import gui.SwingApplication
 import scala.util.control.NonFatal
 import at.iem.sysson.legacy.NcviewSync
@@ -39,8 +40,6 @@ object Main {
 
     // ---- type extensions ----
 
-    // mellite.initTypes()
-    de.sciss.lucre.synth.expr.initTypes()
     sysson.initTypes()
 
     if (useNcView) {

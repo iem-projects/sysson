@@ -17,9 +17,10 @@ package gui
 
 import at.iem.sysson.gui.impl.{SonificationViewImpl => Impl}
 import at.iem.sysson.sound.{AuralSonification, Sonification}
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.{event => evt, stm}
 import de.sciss.lucre.swing.View
-import de.sciss.lucre.synth.Sys
+import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.model.Model
@@ -27,19 +28,19 @@ import de.sciss.model.Model
 import scala.swing.Action
 
 object SonificationView {
-  def apply[S <: Sys[S]](sonification: Sonification.Obj[S])
+  def apply[S <: SSys[S]](sonification: Sonification[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] =
     Impl(sonification)
 
   sealed trait Update
   case object Resized extends Update
 }
-trait SonificationView[S <: evt.Sys[S]]
+trait SonificationView[S <: Sys[S]]
   extends ViewHasWorkspace[S]
   with View.Editable[S]
   with Model[SonificationView.Update] {
 
-  def sonification(implicit tx: S#Tx): Sonification.Obj[S]
+  def sonification(implicit tx: S#Tx): Sonification[S]
 
   def status: evt.Observable[S#Tx, AuralSonification.Update /* [S] */]
 

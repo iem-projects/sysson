@@ -15,14 +15,15 @@
 package at.iem.sysson
 package gui
 
-import at.iem.sysson.gui.impl.{DataSourceElem, DataSourceFrameImpl => Impl}
-import de.sciss.lucre.event.Sys
+import at.iem.sysson.gui.impl.{DataSourceFrameImpl => Impl}
+import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.stm
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.Window
 import de.sciss.mellite.Workspace
 
 object DataSourceFrame {
-  def apply[S <: Sys[S]](source: DataSourceElem.Obj[S])(implicit tx: S#Tx, workspace: Workspace[S],
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                                 cursor: stm.Cursor[S]): DataSourceFrame[S] =
     Impl(source)
 }
