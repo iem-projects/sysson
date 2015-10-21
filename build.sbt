@@ -22,6 +22,9 @@ resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/conten
 // maven repository for Oracle BDB JE
 resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
 
+// typesafe put play into some non-standard repo, "thanks!"
+resolvers += "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/"  // https://stackoverflow.com/questions/23979577
+
 fork in run := true
 
 // ---- library versions ----
