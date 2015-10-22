@@ -25,7 +25,8 @@ import de.sciss.serial.{DataInput, Serializer}
 object Plot extends Obj.Type {
   final val typeID = 0x30006
 
-  override def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] = ???
+  def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] =
+    Impl.readIdentifiedObj(in, access)
 
   // ---- implementation forwards ----
 

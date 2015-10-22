@@ -15,6 +15,7 @@
 package at.iem.sysson
 package impl
 
+import de.sciss.lucre.event.Targets
 import de.sciss.lucre.expr.{IntObj, StringObj}
 import de.sciss.lucre.matrix.{Dimension, Matrix, Reduce}
 import de.sciss.lucre.stm.impl.ObjSerializer
@@ -58,14 +59,14 @@ object PlotImpl {
       }
 
     val m2 = mkVar(m1)
-    new Impl(targets, m2, dims)
+    new Impl(targets, m2, dims).connect()
   }
 
   /** NOTE: does not copy the arguments but assumes they have been! */
   def copy[S <: Sys[S]](matrix: Matrix[S], dims: evt.Map.Modifiable[S, String, StringObj])
                        (implicit tx: S#Tx): Plot[S] = {
     val targets = evt.Targets[S]
-    new Impl(targets, matrix, dims)
+    new Impl(targets, matrix, dims).connect()
   }
 
   def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Plot[S] =
@@ -77,43 +78,51 @@ object PlotImpl {
 
   private val anySer = new Ser[NoSys]
 
+  def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Plot[S] = {
+    val targets   = Targets.read(in, access)
+    val cookie    = in.readInt()
+    if (cookie != SER_VERSION)
+      sys.error(s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
+
+    val matrix    = Matrix.read(in, access)
+    val dims      = evt.Map.read[S, String, StringObj](in, access)
+    new Impl(targets, matrix, dims)
+  }
+
   private final class Ser[S <: Sys[S]] extends ObjSerializer[S, Plot[S]] {
     def tpe: Obj.Type = Plot
-//    def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Plot[S] = {
-//      implicit val str = StringObj.serializer[S]
-//      val cookie = in.readInt()
-//      require(cookie == SER_VERSION,
-//        s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
-//      val matrix    = Matrix.read(in, access)
-//      val dims      = expr.Map.read[S, String, Expr[S, String], model.Change[String]](in, access)
-//      new Impl(targets, matrix, dims)
-//    }
   }
 
   // XXX TODO: listen to matrix
-  private final class Impl[S <: Sys[S]](protected val targets: evt.Targets[S],
+  private final class Impl[S <: Sys[S]](protected val targets: Targets[S],
                                         val matrix: Matrix[S],
                                         val dims: evt.Map[S, String, StringObj])
     extends Plot[S]
     with evt.impl.SingleNode[S, Plot.Update[S]] {
     source =>
 
-//    def mkCopy()(implicit tx: S#Tx): Plot[S] = {
-//      val tgt       = evt.Targets[S]
-//      val matrixCpy = matrix.mkCopy()
-//      import StringObj.{serializer => stringSer, varSerializer => stringVarSer}
-//      val dimsCpy   = evt.Map.Modifiable[S, String, StringObj]
-//      dims.iterator.foreach { case (key, value) =>
-//        val valueCpy = value match {
-//          case Expr.Var(vr) => StringObj.newVar(vr())
-//          case other => other
+    def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: Copy[S, Out]): Elem[Out] = {
+      val targetsOut  = Targets[Out]
+      val matrixOut   = context(matrix)
+      val dimsOut     = evt.Map.Modifiable[Out, String, StringObj]
+//      context.defer(source, res) {
+//        import StringObj.{serializer => stringSer, varSerializer => stringVarSer}
+//        dims.iterator.foreach { case (key, value) =>
+//          val valueCpy = value match {
+//            case Expr.Var(vr) => StringObj.newVar(vr())
+//            case other => other
+//          }
+//          dimsCpy.put(key, valueCpy)
 //        }
-//        dimsCpy.put(key, valueCpy)
 //      }
-//      new Impl[S](tgt, matrixCpy, dimsCpy)
-//    }
-
-    def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: Copy[S, Out]): Elem[Out] = ???
+      val res = new Impl[Out](targetsOut, matrixOut, dimsOut).connect()
+      context.defer(source, res) {
+        dims.iterator.foreach { case (k, v) =>
+          dimsOut.put(k, context(v))
+        }
+      }
+      res
+    }
 
     def connect   ()(implicit tx: S#Tx): this.type = {
       matrix.changed ---> changed

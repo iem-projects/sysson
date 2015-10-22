@@ -17,7 +17,7 @@ package sound
 package impl
 
 import at.iem.sysson.sound.Sonification.Source
-import de.sciss.lucre.event.{Event, Pull}
+import de.sciss.lucre.event.{Targets, Event, Pull}
 import de.sciss.lucre.expr.{DoubleObj, StringObj}
 import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.stm.impl.ObjSerializer
@@ -35,7 +35,7 @@ object SonificationImpl {
     implicit val str = StringObj.serializer[S]
     val targets = evt.Targets[S]
     val dims    = evt.Map.Modifiable[S, String, StringObj]
-    new SourceImpl(targets, matrix, dims)
+    new SourceImpl(targets, matrix, dims).connect()
   }
 
 //  def mkCopy()(implicit tx: S#Tx): Sonification.Elem[S] = {
@@ -57,21 +57,23 @@ object SonificationImpl {
 
   private val anySourceSer = new SourceSer[NoSys]
 
+  def readIdentifiedSource[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Source[S] = {
+    val targets = Targets.read(in, access)
+    val cookie  = in.readInt()
+    if (cookie != SER_VERSION)
+      sys.error(s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
+
+    val matrix    = Matrix.read(in, access)
+    val dims      = evt.Map.read[S, String, StringObj](in, access)
+    new SourceImpl(targets, matrix, dims)
+  }
+
   private final class SourceSer[S <: Sys[S]] extends ObjSerializer[S, Source[S]] {
     def tpe: Obj.Type = Source
-//    def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Source[S] = {
-//      implicit val str = StringObj.serializer[S]
-//      val cookie = in.readInt()
-//      require(cookie == SER_VERSION,
-//        s"Unexpected cookie (expected ${SER_VERSION.toHexString}, found ${cookie.toHexString})")
-//      val matrix    = Matrix.read(in, access)
-//      val dims      = evt.Map.read[S, String, StringObj](in, access)
-//      new SourceImpl(targets, matrix, dims)
-//    }
   }
 
   // XXX TODO: listen to matrix
-  private final class SourceImpl[S <: Sys[S]](protected val targets: evt.Targets[S],
+  private final class SourceImpl[S <: Sys[S]](protected val targets: Targets[S],
                                         val matrix: Matrix[S],
                                         val dims: evt.Map[S, String, StringObj])
     extends Source[S]
@@ -92,7 +94,18 @@ object SonificationImpl {
 //      new SourceImpl[S](tgt, matrixCpy, dimsCpy)
 //    }
 
-    def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: stm.Copy[S, Out]): Elem[Out] = ???
+    def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: stm.Copy[S, Out]): Elem[Out] = {
+      val targetsOut  = Targets[Out]
+      val matrixOut   = context(matrix)
+      val dimsOut     = evt.Map.Modifiable[Out, String, StringObj]
+      val res         = new SourceImpl(targetsOut, matrixOut, dimsOut).connect()
+      context.defer(source, res) {
+        dims.iterator.foreach { case (k, v) =>
+          dimsOut.put(k, context(v))
+        }
+      }
+      res
+    }
 
     private def disconnect()(implicit tx: S#Tx): Unit = dims.changed ---> changed
 
@@ -120,14 +133,14 @@ object SonificationImpl {
     }
   }
 
-  def apply[S <: Sys[S]](implicit tx: S#Tx): Sonification[S] = new New[S]
+  def apply[S <: Sys[S]](implicit tx: S#Tx): Sonification[S] = new New[S].connect()
 
   /** NOTE: does not copy the arguments but assumes they have been! */
   def copy[S <: Sys[S]](proc: Proc[S], sources: evt.Map.Modifiable[S, String, Source],
                         controls: evt.Map.Modifiable[S, String, DoubleObj])
                        (implicit tx: S#Tx): Sonification[S] = {
     val targets = evt.Targets[S]
-    new Copy(targets, proc, sources, controls)
+    new Copy(targets, proc, sources, controls).connect()
   }
 
   def read[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Sonification[S] =
@@ -138,10 +151,13 @@ object SonificationImpl {
 
   private val anySer = new Ser[NoSys]
 
+  def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Sonification[S] = {
+    val targets = Targets.read(in, access)
+    new Read[S](in, access, targets)
+  }
+
   private class Ser[S <: Sys[S]] extends ObjSerializer[S, Sonification[S]] {
     def tpe: Obj.Type = Sonification
-//    def read(in: DataInput, access: S#Acc, targets: evt.Targets[S])(implicit tx: S#Tx): Sonification[S] =
-//      new Read[S](in, access, targets)
   }
 
   private sealed trait Impl[S <: Sys[S]]
@@ -151,6 +167,29 @@ object SonificationImpl {
 
     type Update       = Sonification.Update[S]
     type Change       = Sonification.Change[S]
+
+    final def event(slot: Int): Event[S, Any] = slot match {
+      case changed    .slot => changed
+      //      case attr .slot => attr
+      // case StateEvent .slot => StateEvent
+    }
+
+    final def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: stm.Copy[S, Out]): Elem[Out] = {
+      val targetsOut  = Targets[Out]
+      val procOut     = context(proc)
+      val sourcesOut  = evt.Map.Modifiable[Out, String, Sonification.Source]
+      val controlsOut = evt.Map.Modifiable[Out, String, DoubleObj]
+      val res         = new Copy[Out](targetsOut, procOut, sourcesOut, controlsOut).connect()
+      context.defer(sonif, res) {
+        sources.iterator.foreach { case (k, v) =>
+          sourcesOut.put(k, context[Sonification.Source](v))
+        }
+        controls.iterator.foreach { case (k, v) =>
+          controlsOut.put(k, context[DoubleObj](v))
+        }
+      }
+      res
+    }
 
     // final protected def reader: evt.Reader[S, Sonification[S]] = SonificationImpl.serializer
 
@@ -166,6 +205,19 @@ object SonificationImpl {
       final def node: Sonification[S] with evt.Node[S] = sonif
     }
 
+    final def connect   ()(implicit tx: S#Tx): this.type = {
+      proc.changed ---> changed
+      // attr    ---> this
+      // StateEvent    ---> this
+      this
+    }
+
+    private def disconnect()(implicit tx: S#Tx): Unit = {
+      proc.changed -/-> changed
+      // attr    -/-> this
+      // StateEvent    -/-> this
+    }
+
     object changed
 //      extends evt.impl.EventImpl[S, Update, Sonification[S]]
 //      with evt.InvariantEvent   [S, Update, Sonification[S]]
@@ -173,18 +225,6 @@ object SonificationImpl {
       with SelfEvent {
 
       final val slot = 3
-
-      def connect   ()(implicit tx: S#Tx): Unit = {
-        proc.changed ---> this
-        // attr    ---> this
-        // StateEvent    ---> this
-      }
-
-      def disconnect()(implicit tx: S#Tx): Unit = {
-        proc.changed -/-> this
-        // attr    -/-> this
-        // StateEvent    -/-> this
-      }
 
       // XXX TODO: for completeness, should forward changes to sources and controls!
       def pullUpdate(pull: evt.Pull[S])(implicit tx: S#Tx): Option[Update] = {
@@ -206,11 +246,11 @@ object SonificationImpl {
       }
     }
 
-    final def select(slot: Int): Event[S, Any] = slot match {
-      case changed    .slot => changed
-      //      case attr .slot => attr
-      // case StateEvent .slot => StateEvent
-    }
+//    final def select(slot: Int): Event[S, Any] = slot match {
+//      case changed    .slot => changed
+//      //      case attr .slot => attr
+//      // case StateEvent .slot => StateEvent
+//    }
 
     final protected def writeData(out: DataOutput): Unit = {
       out.writeInt(SER_VERSION)
@@ -221,6 +261,7 @@ object SonificationImpl {
     }
 
     final protected def disposeData()(implicit tx: S#Tx): Unit = {
+      disconnect()
       proc        .dispose()
       sources     .dispose()
       controls    .dispose()
@@ -236,12 +277,7 @@ object SonificationImpl {
                                         val proc: Proc[S],
                                         val sources: evt.Map.Modifiable[S, String, Source],
                                         val controls: evt.Map.Modifiable[S, String, DoubleObj])
-    extends Impl[S] {
-
-    def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: stm.Copy[S, Out]): Elem[Out] = ???
-
-    def event(slot: Int): Event[S, Any] = ???
-  }
+    extends Impl[S]
 
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
     protected val targets       = evt.Targets[S](tx0)
@@ -252,11 +288,6 @@ object SonificationImpl {
       // implicit val ser = DoubleObj.serializer[S]
       evt.Map.Modifiable[S, String, DoubleObj]
     }
-    //    protected val attributeMap  = SkipList.Map.empty[S, String, AttributeEntry]
-
-    def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: stm.Copy[S, Out]): Elem[Out] = ???
-
-    def event(slot: Int): Event[S, Any] = ???
   }
 
   private final class Read[S <: Sys[S]](in: DataInput, access: S#Acc, protected val targets: evt.Targets[S])
@@ -265,14 +296,9 @@ object SonificationImpl {
 
     {
       val serVer = in.readInt()
-      require(serVer == SER_VERSION, s"Incompatible serialized (found $serVer, required $SER_VERSION)")
+      if (serVer != SER_VERSION) sys.error(s"Incompatible serialized (found $serVer, required $SER_VERSION)")
     }
 
-    def copy[Out <: Sys[Out]]()(implicit tx: S#Tx, txOut: Out#Tx, context: stm.Copy[S, Out]): Elem[Out] = ???
-
-    def event(slot: Int): Event[S, Any] = ???
-
-    // val patch                   = Obj.readT[S, Patch.Elem](in, access)
     val proc        = Proc.read(in, access)
     val sources     = evt.Map.read[S, String, Source](in, access)
     val controls    = {

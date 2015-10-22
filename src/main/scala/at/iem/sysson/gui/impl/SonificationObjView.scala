@@ -39,7 +39,7 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
   final val typeID  = Sonification.typeID
   def category      = SwingApplication.categSonification
 
-  def tpe: Obj.Type = ???
+  def tpe: Obj.Type = Sonification
 
   def hasMakeDialog: Boolean = true
 

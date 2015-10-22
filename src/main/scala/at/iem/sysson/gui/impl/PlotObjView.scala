@@ -46,7 +46,7 @@ object PlotObjView extends ListObjView.Factory {
 
   def init(): Unit = _init
 
-  def tpe: Obj.Type = ???
+  def tpe: Obj.Type = Plot
 
   def mkListView[S <: SSys[S]](obj: E[S])(implicit tx: S#Tx): ListObjView[S] = {
     val plot      = obj // .elem.peer

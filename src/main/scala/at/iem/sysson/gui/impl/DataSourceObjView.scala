@@ -38,7 +38,7 @@ object DataSourceObjView extends ListObjView.Factory {
 
   def init(): Unit = _init
 
-  def tpe: Obj.Type = ???
+  def tpe: Obj.Type = DataSource
 
   type E[S <: Sys[S]] = DataSource[S]
   final val prefix    = "DataSource"

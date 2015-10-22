@@ -27,7 +27,8 @@ import de.sciss.synth.proc.Proc
 object Sonification extends Obj.Type {
   final val typeID = 0x30004
 
-  def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] = ???
+  def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] =
+    Impl.readIdentifiedObj(in, access)
 
   // ---- implementation forwards ----
 
@@ -53,9 +54,10 @@ object Sonification extends Obj.Type {
   // -------------------------------------------------------
 
   object Source extends Obj.Type {
-    final val typeID: Int = ???
+    final val typeID = 0x30007
 
-    def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] = ???
+    def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] =
+      Impl.readIdentifiedSource(in, access)
 
     sealed trait Update[S <: Sys[S]] { def source: Source[S] }
     final case class DimsChanged[S <: Sys[S]](source: Source[S],
