@@ -109,7 +109,7 @@ object PlotImpl {
 //        import StringObj.{serializer => stringSer, varSerializer => stringVarSer}
 //        dims.iterator.foreach { case (key, value) =>
 //          val valueCpy = value match {
-//            case Expr.Var(vr) => StringObj.newVar(vr())
+//            case StringObj.Var(vr) => StringObj.newVar(vr())
 //            case other => other
 //          }
 //          dimsCpy.put(key, valueCpy)
@@ -174,7 +174,7 @@ object PlotImpl {
 //    import StringObj.{serializer => stringSer, varSerializer => stringVarSer}
 //    val dimsCpy = expr.Map.Modifiable[S, String, Expr[S, String], model.Change[String]]
 //    peer.dims.iterator.foreach {
-//      case (key, Expr.Var(vr))  => dimsCpy.put(key, StringObj.newVar(vr()))
+//      case (key, StringObj.Var(vr))  => dimsCpy.put(key, StringObj.newVar(vr()))
 //      case (key, value)         => dimsCpy.put(key, value)
 //    }
 //    val plotCpy = PlotImpl.copy(matrixCpy, dimsCpy)

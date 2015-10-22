@@ -197,7 +197,7 @@ object PlotViewImpl {
                     r.op match {
                       case idxApp: Reduce.Op.Apply[S] =>
                         idxApp.index match {
-                          case Expr.Var(idxVr) =>
+                          case IntObj.Var(idxVr) =>
                             elapsedReduce.get(tx.peer) match {
                               case None /* | Some((src, _)) if src() != r */ =>
                                 val e = readElapsedData(r, mDim)

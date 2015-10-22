@@ -100,6 +100,7 @@ package object sysson {
     matrix                .initTypes()
     Wolkenpumpe           .init()
     Sonification          .init()
+    Sonification.Source   .init()
     // DataSourceElem        .init()
     AuralSonification     .init()
     Plot                  .init()

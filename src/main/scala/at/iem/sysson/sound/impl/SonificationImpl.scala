@@ -46,7 +46,7 @@ object SonificationImpl {
 //    }
 //    val controls = expr.Map.Modifiable[S, String, Expr[S, Double], model.Change[Double]]
 //    peer.controls.iterator.foreach {
-//      case (key, Expr.Var(vr))  => controls.put(key, DoubleObj.newVar(vr()))
+//      case (key, DoubleObj.Var(vr))  => controls.put(key, DoubleObj.newVar(vr()))
 //      case (key, value)         => controls.put(key, value)
 //    }
 //    val sonif = SonificationImpl.copy[S](proc, sources, controls)
