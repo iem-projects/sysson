@@ -233,10 +233,16 @@ object DataSourceViewImpl {
       tGroups.selectInterval(0, 0)
 
       val ggPlot  = GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
+      tGroupAttrs.preferredViewportSize = tGroupAttrs.preferredSize // WTF? why do we even have to do this explicitly?
+      tGroupVars .preferredViewportSize = tGroupVars .preferredSize // WTF? why do we even have to do this explicitly?
       val ggSplit = new SplitPane(Orientation.Horizontal, new ScrollPane(tGroupAttrs), new ScrollPane(tGroupVars))
+      // println(s"tGroupAttrs: ${tGroupAttrs.preferredSize}")
+      // println(s"tGroupVars : ${tGroupVars .preferredSize}")
 
       component = new BorderPanel {
-        add(new ScrollPane(tGroups), BorderPanel.Position.North)
+        if (data.rootGroup.children.nonEmpty) {
+          add(new ScrollPane(tGroups), BorderPanel.Position.North)
+        }
         add(ggSplit, BorderPanel.Position.Center)
         // new ScrollPane(tGroupAttrs),
         // new ScrollPane(tGroupVars),

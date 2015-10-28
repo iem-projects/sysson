@@ -1,13 +1,10 @@
 # bugs or problems
 
-- cannot drag from attributes editor to folder
-- plot: cannot reassign x-axis/y-axis
-- matrix-editor: row-header baseline
-- data-source-view: attribute table is hidden
-
-# alleviated
+# alleviated or less important
 
 - sonif-editor: controls - should allow tuning of spec (improved: now shows more digits)
+- cannot drag from attributes editor to folder - low priority
+- matrix-editor: row-header baseline
 
 # exceptions
 
@@ -26,7 +23,7 @@ while performing some dnd in a folder. (cannot reproduce)
 - 26.11., 13:30h. 1 hour presentation, then individual work
 - three examples: 
     - 1-variable ("augmented")
-    - 2-variables ("thresholds" = Regen)
+    - 2-variables ("thresholds" = Regen = CMFJ)
     - QBO
 - each documented on the wiki
 - fix most annoying things, e.g. prevent matrices to become too large for playback

@@ -21,11 +21,11 @@ import java.awt.{Color, Paint, Rectangle, Shape, TexturePaint}
 
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
-import de.sciss.intensitypalette.IntensityPalette
+import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.expr.{BooleanObj, StringObj}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.{Sys, Disposable}
+import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{BooleanCheckBoxView, CellView, View, defer, deferTx}
 import de.sciss.mellite.Workspace
@@ -37,19 +37,19 @@ import de.sciss.swingplus.{ComboBox, OverlayPanel}
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot
+import org.jfree.chart.renderer.PaintScale
 import org.jfree.chart.renderer.xy.XYBlockRenderer
-import org.jfree.chart.renderer.{LookupPaintScale, PaintScale}
 import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
 import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.Future
-import scala.concurrent.stm.Ref
+import scala.concurrent.stm.{TMap, Ref}
 import scala.swing.{Alignment, BorderPanel, Component, FlowPanel, Graphics2D, Label, Swing}
 
 object PlotChartImpl {
   def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager,
-                                            workspace: Workspace[S]): View.Editable[S] = {
+                                        workspace: Workspace[S]): View.Editable[S] = {
     implicit val resolver = WorkspaceResolver[S]
     new Impl[S].init(plot)
   }
@@ -286,15 +286,43 @@ object PlotChartImpl {
       observerPlot = plot.changed.react { implicit tx => u =>
         if (DEBUG) println("plot changed")
         updateData(u.plot)
+        u.changes.foreach {
+          case Plot.DimsChange(mu) => mu.changes.foreach {
+            case evt.Map.Added  (key, value) => addPlotDim   (key, value)
+            case evt.Map.Removed(key, value) => removePlotDim(key, value)
+          }
+          case _ =>
+        }
       }
+
+      plot.dims.iterator.foreach { case (key, value) => addPlotDim(key, value) }
+
       this
     }
 
+    private val plotDimObs = TMap.empty[String, Disposable[S#Tx]]
+
+    private def addPlotDim(key: String, value: StringObj[S])(implicit tx: S#Tx): Unit = {
+      implicit val ptx = tx.peer
+      val obs = value.changed.react { implicit tx => _ =>
+        updateData(plotH())
+      }
+      plotDimObs.put(key, obs)
+    }
+
+    private def removePlotDim(key: String, value: StringObj[S])(implicit tx: S#Tx): Unit = {
+      implicit val ptx = tx.peer
+      plotDimObs.remove(key).foreach(_.dispose())
+    }
+
     def dispose()(implicit tx: S#Tx): Unit = {
+      implicit val ptx = tx.peer
       observerPlot    .dispose()
       observerOverlay .dispose()
       observerPalette .dispose()
       val p = readerRef.get(tx.peer)
+      plotDimObs.foreach(_._2.dispose())
+      plotDimObs.clear()
       deferTx(p.abort())
     }
 
@@ -329,16 +357,16 @@ object PlotChartImpl {
       }
     }
 
-    private lazy val intensityScale: PaintScale = {
-      val res = new LookupPaintScale(0.0, 1.0, nanPaint /* Color.red */)
-      val numM = IntensityPalette.numColors - 1
-      for(i <- 0 to numM) {
-        val d   = i.toDouble / numM
-        val pnt = new Color(IntensityPalette.apply(d.toFloat))
-        res.add(d, pnt)
-      }
-      res
-    }
+//    private lazy val intensityScale: PaintScale = {
+//      val res = new LookupPaintScale(0.0, 1.0, nanPaint /* Color.red */)
+//      val numM = IntensityPalette.numColors - 1
+//      for(i <- 0 to numM) {
+//        val d   = i.toDouble / numM
+//        val pnt = new Color(IntensityPalette.apply(d.toFloat))
+//        res.add(d, pnt)
+//      }
+//      res
+//    }
 
     private object mapOverlay extends AbstractOverlay with Overlay {
       import scala.concurrent.ExecutionContext.Implicits.global

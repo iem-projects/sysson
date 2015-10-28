@@ -23,20 +23,21 @@ import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.lucre.expr.StringObj
-import de.sciss.lucre.stm.Sys
+import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.edit.EditExprMap
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.lucre.{event => evt, stm}
 import de.sciss.mellite.Workspace
+import de.sciss.model.Change
 
-import scala.concurrent.stm.Ref
+import scala.concurrent.stm.{TMap, Ref}
 import scala.language.higherKinds
 import scala.swing.{Alignment, Component, Label}
 
 /** Building block for dropping dimension keys. E.g. used as column headers in the sonification source view */
 abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
-                                          (implicit workspace: Workspace[S], undo: UndoManager, cursor: stm.Cursor[S])
+                                            (implicit workspace: Workspace[S], undo: UndoManager, cursor: stm.Cursor[S])
     extends View[S] with ComponentHolder[Component] { me =>
 
   // ---- abstract ----
@@ -52,48 +53,68 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
   protected type MappingDrag  = DragAndDrop.MappingDrag { type Source[S1 <: Sys[S1]] = me.Source[S1] }
   protected type MappingDragS = MappingDrag { type S1 = S }
 
-  private var bindings: Ref[Set[String]] = _
+  private val bindings    = Ref(Vector.empty[String])
+  private val bindingObs  = TMap.empty[String, Disposable[S#Tx]]
   private var dimsH: stm.Source[S#Tx, evt.Map[S, String, StringObj]] = _
   private var observer: stm.Disposable[S#Tx] = _
   private var label: Label = _
 
   /** Sub-classes must call `super` if they override this. */
-  def dispose()(implicit tx: S#Tx): Unit = observer.dispose()
+  def dispose()(implicit tx: S#Tx): Unit = {
+    implicit val ptx = tx.peer
+    observer.dispose()
+    bindingObs.foreach(_._2.dispose())
+    bindingObs.clear()
+  }
 
   def init(dims: evt.Map[S, String, StringObj])(implicit tx: S#Tx): this.type = {
     dimsH = tx.newHandle(dims)
-    val b0: Set[String] = dims.iterator.collect {
-      case (key, valueEx) if valueEx.value == keyName => key
-    } .toSet
-    bindings = Ref(b0)
 
     observer = dims.changed.react { implicit tx => upd => upd.changes.foreach {
-        case evt.Map.Added  (key, valueEx) if valueEx.value == keyName => addBinding   (key)
-        case evt.Map.Removed(key, valueEx) if valueEx.value == keyName => removeBinding(key)
-// ELEM XXX TODO
-//        case evt.Map.Element(key, _, change) =>
-//          change match {
-//            case Change(_, `keyName`) => addBinding   (key)
-//            case Change(`keyName`, _) => removeBinding(key)
-//            case _ =>
-//          }
+        case evt.Map.Added  (key, valueEx) => testAddBinding(key, valueEx)
+        case evt.Map.Removed(key, valueEx) =>
+          removeBindingObserver(key)
+          if (valueEx.value == keyName) removeBinding(key)
         case _ =>
       }
     }
 
     deferTx(guiInit())
-    update(b0.headOption)
+
+    dims.iterator.foreach {
+      case (key, valueEx) => testAddBinding(key, valueEx)
+    }
     this
   }
 
+  private def testAddBinding(key: String, valueEx: StringObj[S])(implicit tx: S#Tx): Unit = {
+    addBindingObserver(key, valueEx)
+    if (valueEx.value == keyName) addBinding(key)
+  }
+
   private def addBinding(key: String)(implicit tx: S#Tx): Unit = {
-    val b = bindings.transformAndGet(_ + key)(tx.peer)
+    val b = bindings.transformAndGet(key +: _)(tx.peer)
     update(b.headOption)
   }
 
   private def removeBinding(key: String)(implicit tx: S#Tx): Unit = {
-    val b = bindings.transformAndGet(_ - key)(tx.peer)
+    val b = bindings.transformAndGet(_ diff Vector(key))(tx.peer)
     update(b.headOption)
+  }
+
+  private def addBindingObserver(key: String, valueEx: StringObj[S])(implicit tx: S#Tx): Unit = {
+    val obs = valueEx.changed.react { implicit tx => {
+      case Change(_, `keyName`) => addBinding   (key)
+      case Change(`keyName`, _) => removeBinding(key)
+      case _ =>
+    }}
+    implicit val ptx = tx.peer
+    bindingObs.put(key, obs)
+  }
+
+  private def removeBindingObserver(key: String)(implicit tx: S#Tx): Unit = {
+    implicit val ptx = tx.peer
+    bindingObs.remove(key).foreach(_.dispose())
   }
 
   private def update(key: Option[String])(implicit tx: S#Tx): Unit =
