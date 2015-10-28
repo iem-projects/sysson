@@ -23,6 +23,7 @@ import at.iem.sysson.gui.DragAndDrop.SonificationSourceMappingDrag
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
+import de.sciss.lucre.expr.StringObj
 import de.sciss.lucre.matrix.{Matrix, Reduce}
 import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.stm.{Sys, Disposable}
@@ -32,6 +33,7 @@ import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
+import de.sciss.synth.proc.ObjKeys
 
 import scala.annotation.tailrec
 import scala.swing.{Action, Component, FlowPanel}
@@ -126,13 +128,14 @@ object SonificationSourceViewImpl {
           matrixView.matrix.foreach { m =>
             val sonif   = parent.sonification
             val attrKey = s"plot-$key"
-            val plotOpt = sonif.attr.$[Plot](attrKey)
+            val sonifA  = sonif.attr
+            val plotOpt = sonifA.$[Plot](attrKey)
             val mr      = findRoot(m)
             val plot    = plotOpt.getOrElse {
               val p   = Plot[S](mr)
-              val po  = p // Obj(Plot.Elem(p))
-              sonif.attr.put(attrKey, po)
-              po
+              sonifA.$[StringObj](ObjKeys.attrName).foreach(v => p.attr.put(ObjKeys.attrName, v))
+              sonifA.put(attrKey, p)
+              p
             }
             val m1  = plot.matrix
             val m1r = findRoot(m1)

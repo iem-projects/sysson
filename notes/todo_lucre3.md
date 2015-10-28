@@ -1,10 +1,13 @@
+# bugs or problems
+
 - cannot drag from attributes editor to folder
 - plot: cannot reassign x-axis/y-axis
-- sonif-editor: transport pause not implemented, should hide button
-- sonif-editor: controls - should allow tuning of spec
-- sonif-editor: controls - updates are not registered by aural-sonif
 - matrix-editor: row-header baseline
-- plot from sonif-editor: should set initial name
+- data-source-view: attribute table is hidden
+
+# alleviated
+
+- sonif-editor: controls - should allow tuning of spec (improved: now shows more digits)
 
 # exceptions
 
@@ -21,6 +24,9 @@ while performing some dnd in a folder. (cannot reproduce)
 # workshop
 
 - 26.11., 13:30h. 1 hour presentation, then individual work
-- three examples: 1-variable ("augmented"), 2-variables ("thresholds" = Regen), QBO
+- three examples: 
+    - 1-variable ("augmented")
+    - 2-variables ("thresholds" = Regen)
+    - QBO
 - each documented on the wiki
 - fix most annoying things, e.g. prevent matrices to become too large for playback

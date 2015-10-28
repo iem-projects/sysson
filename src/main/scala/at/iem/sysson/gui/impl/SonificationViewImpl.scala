@@ -149,8 +149,8 @@ object SonificationViewImpl {
         // ggElapsed.textVisible = !stopped
           if (stopped) {
           ggMute.selected = false
-          val ggPause     = transportButtons.button(GUITransport.Pause).get
-          ggPause.selected = false
+//          val ggPause     = transportButtons.button(GUITransport.Pause).get
+//          ggPause.selected = false
         }
         /* if (upd == AuralSonificationOLD.Preparing) timerPrepare.restart() else */ timerPrepare.stop()
     }
@@ -228,7 +228,7 @@ object SonificationViewImpl {
         }
 
         val pCtl = new GroupPanel {
-          import de.sciss.swingplus.GroupPanel.Element
+          import GroupPanel.Element
           horizontal = Seq(
             Par(ggCtl.map(tup => Element(tup._1)): _*),
             Par(ggCtl.map(tup => Element(tup._2)): _*)
@@ -287,7 +287,7 @@ object SonificationViewImpl {
 
       transportButtons = GUITransport.makeButtonStrip {
         import de.sciss.audiowidgets.Transport._
-        Seq(/* GoToBegin(tGotToBegin()), */ Stop(tStop()), Pause(tPause()), Play(tPlay()) /*, Loop(tLoop()) */)
+        Seq(/* GoToBegin(tGotToBegin()), */ Stop(tStop()), /* Pause(tPause()), */ Play(tPlay()) /*, Loop(tLoop()) */)
       }
       timerPrepare = new javax.swing.Timer(100, Swing.ActionListener { _ =>
         val ggPlay      = transportButtons.button(GUITransport.Play).get
@@ -355,8 +355,8 @@ object SonificationViewImpl {
     private val transportRef = Ref(Option.empty[TransportRef[S]])
 
     private def tStop(): Unit = {
-      val ggPause   = transportButtons.button(GUITransport.Pause).get
-      val isPausing = ggPause.selected
+      // val ggPause   = transportButtons.button(GUITransport.Pause).get
+      val isPausing = false // ggPause.selected
       cursor.step { implicit tx =>
         // TTT
         // transport.stop()
@@ -368,17 +368,17 @@ object SonificationViewImpl {
     private def stopAndDisposeTransport()(implicit tx: S#Tx): Unit =
       transportRef.swap(None)(tx.peer).foreach(_.dispose())
 
-    private def tPause(): Unit = {
-      val ggPause   = transportButtons.button(GUITransport.Pause).get
-      val isPausing = !ggPause.selected
-      val isPlaying = cursor.step { implicit tx =>
-        // val p = sonifView.state == AuralSonificationOLD.Playing
-        val p = transportRef.get(tx.peer).exists(_.transport.isPlaying) // transport.isPlaying
-        if (p) runGroup(state = !isPausing)
-        p
-      }
-      if (isPlaying) ggPause.selected = isPausing
-    }
+//    private def tPause(): Unit = {
+//      val ggPause   = transportButtons.button(GUITransport.Pause).get
+//      val isPausing = !ggPause.selected
+//      val isPlaying = cursor.step { implicit tx =>
+//        // val p = sonifView.state == AuralSonificationOLD.Playing
+//        val p = transportRef.get(tx.peer).exists(_.transport.isPlaying) // transport.isPlaying
+//        if (p) runGroup(state = !isPausing)
+//        p
+//      }
+//      if (isPlaying) ggPause.selected = isPausing
+//    }
 
     private def tPlay(): Unit = cursor.step { implicit tx =>
       try {
