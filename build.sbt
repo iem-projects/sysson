@@ -1,31 +1,27 @@
-name          := "SysSon"
+import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
-version       := "1.6.1-SNAPSHOT"
+lazy val baseName   = "SysSon"
+lazy val baseNameL  = baseName.toLowerCase
 
-organization  := "at.iem.sysson"
-
-description   := "Sonification platform of the IEM SysSon project"
-
-homepage      := Some(url("https://github.com/iem-projects/sysson"))
-
-licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt"))
-
-// ---- scala compiler settings and libraries ----
-
-scalaVersion  := "2.11.7"
-
-crossScalaVersions := Seq("2.11.7", "2.10.5")
-
-// maven repository for NetCDF library
-resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases"
-
-// maven repository for Oracle BDB JE
-resolvers    += "Oracle Repository" at "http://download.oracle.com/maven"
-
-// typesafe put play into some non-standard repo, "thanks!"
-resolvers += "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/"  // https://stackoverflow.com/questions/23979577
-
-fork in run := true
+lazy val commonSettings = Seq(
+  name          := baseName,
+  version       := "1.6.1-SNAPSHOT",
+  organization  := "at.iem.sysson",
+  description   := "Sonification platform of the IEM SysSon project",
+  homepage      := Some(url(s"https://github.com/iem-projects/$baseNameL")),
+  licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")),
+  // ---- scala compiler settings and libraries ----
+  scalaVersion  := "2.11.7",
+  crossScalaVersions := Seq("2.11.7", "2.10.5"),
+  // maven repository for NetCDF library
+  resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases",
+  // maven repository for Oracle BDB JE
+  resolvers    += "Oracle Repository" at "http://download.oracle.com/maven",
+  // typesafe put play into some non-standard repo, "thanks!"
+  resolvers += "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/", // https://stackoverflow.com/questions/23979577
+  fork in run := true,
+  scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
+)
 
 // ---- library versions ----
 
@@ -48,71 +44,27 @@ lazy val slfVersion                 = "1.7.12"
 
 lazy val scalaTestVersion           = "2.2.5"
 
-libraryDependencies ++= Seq(
-  "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
-  "de.sciss" %% "soundprocesses-core"         % soundProcessesVersion,      // computer music environment
-  "de.sciss" %% "scalacollider"               % scalaColliderVersion,       // sound synthesis
-  "de.sciss" %% "scalacolliderswing-core"     % scalaColliderSwingVersion,
-  "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
-  "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
-  "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
-  "de.sciss" %% "lucreswing"                  % lucreSwingVersion,          // reactive widgets
-  "de.sciss" %% "lucre-core"                  % lucreVersion,               // object model
-  "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
-  "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
-  "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
-  "de.sciss" %% "fscapejobs"                  % fscapeJobsVersion,
-  "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
-  "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
-)
+// ---- other global constants
 
-libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
+lazy val authorName                 = "Hanns Holger Rutz"
+lazy val authorEMail                = "contact@sciss.de"
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
-
-// ---- runtime settings ----
-
-initialCommands in console :=
-  """import at.iem.sysson._
-    |import Implicits._
-    |import de.sciss.synth._
-    |import ugen._
-    |import Ops._
-    |import de.sciss.osc.Implicits._
-    |import concurrent.duration._
-    |import ucar.{nc2, ma2}
-    |""".stripMargin
-
-// ---- build info source generator ----
-
-enablePlugins(BuildInfoPlugin)
-
-buildInfoKeys := Seq(name, organization, version, scalaVersion, description,
-  BuildInfoKey.map(homepage) { case (k, opt) => k -> opt.get },
-  BuildInfoKey.map(licenses) { case (_, Seq((lic, _))) => "license" -> lic }
-)
-
-buildInfoPackage := organization.value
+lazy val mainClazz                  = "at.iem.sysson.Main"
 
 // ---- publishing ----
 
-publishMavenStyle := true
-
-publishTo :=
-  Some(if (isSnapshot.value)
-    "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-  else
-    "Sonatype Releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-  )
-
-publishArtifact in Test := false
-
-pomIncludeRepository := { _ => false }
-
-lazy val authorName  = "Hanns Holger Rutz"
-lazy val authorEMail = "contact@sciss.de"
-
-pomExtra := { val n = name.value
+lazy val publishSettings = Seq(
+  publishMavenStyle := true,
+  publishTo := {
+    Some(if (isSnapshot.value)
+      "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+    else
+      "Sonatype Releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+    )
+  },
+  publishArtifact in Test := false,
+  pomIncludeRepository := { _ => false },
+  pomExtra := { val n = name.value
 <scm>
   <url>git@github.com:iem-projects/{n}.git</url>
   <connection>scm:git:git@github.com:iem-projects/{n}.git</connection>
@@ -125,43 +77,118 @@ pomExtra := { val n = name.value
   </developer>
 </developers>
 }
+)
 
 // ---- packaging (making standalones) ----
 
-lazy val mainClazz = Some("at.iem.sysson.Main")
-
 //////////////// standalone fat jar
-
-test            in assembly := ()
-target          in assembly := baseDirectory.value    // make .jar file in the main directory
-assemblyJarName in assembly := s"${name.value}.jar"
-
-mainClass in Compile := mainClazz
-
-assemblyMergeStrategy in assembly := {
-//  case "META-INF/MANIFEST.MF" => MergeStrategy.last
-  case PathList("javax", "xml", xs @ _*)   => MergeStrategy.first  // conflict xml-apis vs. stax-api
-  case PathList("org", "xmlpull", xs @ _*) => MergeStrategy.first  // from xstream I think
-  case x =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
-    oldStrategy(x)
-}
-
-//////////////// universal (directory) installer
-
-enablePlugins(JavaAppPackaging)
-
-useNativeZip  // cf. https://github.com/sbt/sbt-native-packager/issues/334
-
-javaOptions in Universal ++= Seq(
-  // -J params will be added as jvm parameters
-  "-J-Xmx1024m"
-  // others will be added as app parameters
-  // "-Dproperty=true",
+lazy val assemblySettings = Seq(
+  test            in assembly := (),
+  target          in assembly := baseDirectory.value,   // make .jar file in the main directory
+  assemblyJarName in assembly := s"${name.value}.jar",
+  mainClass in Compile := Some(mainClazz),
+  assemblyMergeStrategy in assembly := {
+  //  case "META-INF/MANIFEST.MF" => MergeStrategy.last
+    case PathList("javax", "xml", xs @ _*)   => MergeStrategy.first  // conflict xml-apis vs. stax-api
+    case PathList("org", "xmlpull", xs @ _*) => MergeStrategy.first  // from xstream I think
+    case x =>
+      val oldStrategy = (assemblyMergeStrategy in assembly).value
+      oldStrategy(x)
+  }
 )
 
-// Since our class path is very very long,
-// we use instead the wild-card, supported
-// by Java 6+. In the packaged script this
-// results in something like `java -cp "../lib/*" ...`.
-scriptClasspath := Seq("*")
+lazy val root = Project(id = baseNameL, base = file("."))
+  .enablePlugins(BuildInfoPlugin)
+  .enablePlugins(JavaAppPackaging, DebianPlugin)
+  .settings(commonSettings)
+  .settings(publishSettings)
+  .settings(assemblySettings)
+  .settings(useNativeZip) // cf. https://github.com/sbt/sbt-native-packager/issues/334
+  .settings(pkgUniversalSettings, pkgDebianSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
+      "de.sciss" %% "soundprocesses-core"         % soundProcessesVersion,      // computer music environment
+      "de.sciss" %% "scalacollider"               % scalaColliderVersion,       // sound synthesis
+      "de.sciss" %% "scalacolliderswing-core"     % scalaColliderSwingVersion,
+      "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
+      "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
+      "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
+      "de.sciss" %% "lucreswing"                  % lucreSwingVersion,          // reactive widgets
+      "de.sciss" %% "lucre-core"                  % lucreVersion,               // object model
+      "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
+      "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
+      "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
+      "de.sciss" %% "fscapejobs"                  % fscapeJobsVersion,
+      "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
+      "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
+    ),
+    libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test",
+    // ---- runtime settings ----
+    initialCommands in console :=
+    """import at.iem.sysson._
+      |import Implicits._
+      |import de.sciss.synth._
+      |import ugen._
+      |import Ops._
+      |import de.sciss.osc.Implicits._
+      |import concurrent.duration._
+      |import ucar.{nc2, ma2}
+      |""".stripMargin,
+    // ---- build info source generator ----
+    buildInfoKeys := Seq(name, organization, version, scalaVersion, description,
+      BuildInfoKey.map(homepage) { case (k, opt) => k -> opt.get },
+      BuildInfoKey.map(licenses) { case (_, Seq((lic, _))) => "license" -> lic }
+    ),
+    buildInfoPackage := organization.value
+  )
+
+//// trick stolen from https://stackoverflow.com/questions/33071612/cross-platform-build-with-sbt
+//val make = taskKey[File]("Build specific packages")
+
+//////////////// universal (directory) installer
+lazy val pkgUniversalSettings: Seq[sbt.Def.Setting[_]] = Seq(
+  javaOptions in Universal ++= Seq(
+    // -J params will be added as jvm parameters
+    "-J-Xmx1024m"
+    // others will be added as app parameters
+    // "-Dproperty=true",
+  ),
+  // Since our class path is very very long,
+  // we use instead the wild-card, supported
+  // by Java 6+. In the packaged script this
+  // results in something like `java -cp "../lib/*" ...`.
+  scriptClasspath in Universal := Seq("*")
+  // make := packageBin.in(Universal).value
+)
+
+//////////////// debian installer
+lazy val pkgDebianSettings: Seq[sbt.Def.Setting[_]] = Seq(
+  maintainer in Debian := s"$authorName <$authorEMail>",
+  debianPackageDependencies in Debian += "java7-runtime",
+  packageSummary in Debian := description.value,
+  packageDescription in Debian :=
+    """SysSon is a platform for the development and application
+      |  of sonification. It aims to be an integrative system that
+      |  serves different types of users, from domain scientists to
+      |  sonification researchers to composers and sound artists.
+      |  It therefore has an open nature capable of addressing different
+      |  usage scenarios.
+      |""".stripMargin,
+  // include all files in src/debian in the installed base directory
+  linuxPackageMappings in Debian ++= {
+    val n     = (name            in Debian).value.toLowerCase
+    val dir   = (sourceDirectory in Debian).value / "debian"
+    val f1    = (dir * "*").filter(_.isFile).get  // direct child files inside `debian` folder
+    val f2    = ((dir / "doc") * "*").get
+    //
+    def readOnly(in: LinuxPackageMapping) =
+      in.withUser ("root")
+        .withGroup("root")
+        .withPerms("0644")  // http://help.unc.edu/help/how-to-use-unix-and-linux-file-permissions/
+    //
+    val aux   = f1.map { fIn => packageMapping(fIn -> s"/usr/share/$n/${fIn.name}") }
+    val doc   = f2.map { fIn => packageMapping(fIn -> s"/usr/share/doc/$n/${fIn.name}") }
+    (aux ++ doc).map(readOnly)
+  }
+)

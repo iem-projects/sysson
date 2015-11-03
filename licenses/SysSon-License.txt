@@ -1,7 +1,7 @@
 /*
  *  SysSon
  *
- *  Copyright (c) 2013 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
  *  Written by Hanns Holger Rutz.
  *
  *  This software is published under the GNU General Public License v3+

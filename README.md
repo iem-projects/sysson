@@ -27,6 +27,14 @@ Then to build the project:
 
 The resulting file is `SysSon.jar`.
 
+Building cross-platform installer package:
+
+    $ ./sbt universal:packageBin
+
+Building Debian installer package:
+
+    $ ./sbt debian:packageBin
+
 ### API Docs
 
 The latest API docs are available here: https://iem-projects.github.io/sysson/latest/api/

@@ -32,6 +32,7 @@ import scala.concurrent.stm.TxnExecutor
 import scala.language.existentials
 import scala.swing.Label
 import scala.swing.event.{Key, MouseClicked}
+import scala.util.control.NonFatal
 
 object MenuFactory {
   def root: Menu.Root = _root
@@ -44,6 +45,19 @@ object MenuFactory {
       val addr    = "sysson.kug.ac.at"
       val url     = s"http://$addr/"
       val version = Main.version
+      val jreInfo: String = {
+        val name    = sys.props.getOrElse("java.runtime.name"   , "?")
+        val version = sys.props.getOrElse("java.runtime.version", "?")
+        s"$name (build $version)"
+      }
+      val scalaVersion = try {
+        val clazz = Class.forName("at.iem.sysson.BuildInfo")
+        val m     = clazz.getMethod("scalaVersion")
+        m.invoke(null).toString
+      } catch {
+        case NonFatal(e) => "?"
+      }
+
       val html =
         s"""<html><center>
            |<font size=+1><b>About ${App.name}</b></font><p>
@@ -58,6 +72,9 @@ object MenuFactory {
            |and funded by the Austrian Science Fund (FWF).<p>
            |<p>
            |<a href="$url">$addr</a>
+           |<p><br><hr>
+           |<i>Scala v$scalaVersion<i><br>
+           |<i>$jreInfo<i>
            |""".stripMargin
       val lb = new Label(html) {
         // cf. http://stackoverflow.com/questions/527719/how-to-add-hyperlink-in-jlabel
