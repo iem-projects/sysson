@@ -1,6 +1,6 @@
 name          := "SysSon"
 
-version       := "1.6.0-SNAPSHOT"
+version       := "1.6.0"
 
 organization  := "at.iem.sysson"
 
@@ -31,9 +31,9 @@ fork in run := true
 
 lazy val melliteVersion             = "2.0.0"
 lazy val soundProcessesVersion      = "3.2.1"
-lazy val lucreMatrixVersion         = "0.11.0-SNAPSHOT"
-lazy val lucreSwingVersion          = "1.2.2-SNAPSHOT"
-lazy val lucreVersion               = "3.2.2-SNAPSHOT"
+lazy val lucreMatrixVersion         = "0.11.0"
+lazy val lucreSwingVersion          = "1.2.2"
+lazy val lucreVersion               = "3.2.2"
 lazy val scalaColliderVersion       = "1.17.4"
 lazy val scalaColliderSwingVersion  = "1.25.3"
 lazy val ugensVersion               = "1.13.4"
@@ -152,6 +152,13 @@ assemblyMergeStrategy in assembly := {
 enablePlugins(JavaAppPackaging)
 
 useNativeZip  // cf. https://github.com/sbt/sbt-native-packager/issues/334
+
+javaOptions in Universal ++= Seq(
+  // -J params will be added as jvm parameters
+  "-J-Xmx1024m"
+  // others will be added as app parameters
+  // "-Dproperty=true",
+)
 
 //////////////// jdk-bundled installer - requires Oracle Java 8 to build
 
