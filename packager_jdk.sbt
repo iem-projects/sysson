@@ -2,9 +2,12 @@
 
 enablePlugins(JDKPackagerPlugin)
 
-packageSummary      := s"${name.value} Application"
-packageDescription  := description.value
-maintainer          := authorName
+lazy val authorName  = "Hanns Holger Rutz"
+lazy val authorEMail = "contact@sciss.de"
+
+packageSummary     in JDKPackager := s"${name.value} Application"
+packageDescription in JDKPackager := description.value
+maintainer         in JDKPackager := authorName
 
 // wixProductId              := "ce07be71-510d-414a-92d4-dff47631848a" // XXX TODO -- ???
 // wixProductUpgradeId       := "4552fb0e-e257-4dbd-9ecb-dba9dbacf424" // XXX TODO -- ???

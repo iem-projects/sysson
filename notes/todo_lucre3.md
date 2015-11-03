@@ -1,5 +1,11 @@
 # bugs or problems
 
+- enforce .mllt ending when creating workspaces or allow open-workspace for files not ending in .mllt
+
+# features
+
+- option to clear cache upon exit
+
 # alleviated or less important
 
 - sonif-editor: controls - should allow tuning of spec (improved: now shows more digits)

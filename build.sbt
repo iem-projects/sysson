@@ -160,8 +160,8 @@ javaOptions in Universal ++= Seq(
   // "-Dproperty=true",
 )
 
-/* Since our class path is very very long,
-   we use instead the wild-card, supported
-   by Java 6+. In the packaged script this
-   results in something like `java -cp "../lib/*" ...`. */
+// Since our class path is very very long,
+// we use instead the wild-card, supported
+// by Java 6+. In the packaged script this
+// results in something like `java -cp "../lib/*" ...`.
 scriptClasspath := Seq("*")

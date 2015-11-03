@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=SysSon
+Version=1.6.1-SNAPSHOT
+GenericName=SysSon
+Comment=SysSon Sonification Environment
+Exec=/usr/share/sysson/bin/sysson
+StartupWMClass=at-iem-sysson-Main
+Icon=/usr/share/sysson/SysSon.png
+Categories=Audio;AudioVideo;
+Terminal=false
+Type=Application
