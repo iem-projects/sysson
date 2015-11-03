@@ -16,21 +16,23 @@ package at.iem.sysson
 package gui
 package impl
 
+import java.awt.geom.AffineTransform
+import java.awt.{RenderingHints, Color, Font, Graphics}
 import javax.imageio.ImageIO
-import javax.swing.{Icon, BorderFactory, ImageIcon}
+import javax.swing.{BorderFactory, Icon, ImageIcon}
+
+import de.sciss.audiowidgets.PeakMeter
+import de.sciss.desktop.impl.DynamicComponentImpl
+import de.sciss.lucre.swing._
+import de.sciss.lucre.synth.{Server, Txn}
 import de.sciss.mellite.{Mellite, Prefs}
+import de.sciss.osc
 import de.sciss.synth.proc.AuralSystem
+import de.sciss.synth.swing.ServerStatusPanel
 
 import scala.concurrent.stm.TxnExecutor
-import swing.{Swing, Alignment, Label, Orientation, BoxPanel}
-import de.sciss.synth.swing.ServerStatusPanel
-import de.sciss.audiowidgets.PeakMeter
-import java.awt.{Font, Graphics, Color}
-import Swing._
-import de.sciss.desktop.impl.DynamicComponentImpl
-import de.sciss.lucre.synth.{Txn, Server}
-import de.sciss.osc
-import de.sciss.lucre.swing._
+import scala.swing.Swing._
+import scala.swing.{Graphics2D, Alignment, BoxPanel, Label, Orientation, Swing}
 
 private[gui] object MainViewImpl {
   def apply(background: Option[Color] = None): MainView = {
@@ -43,7 +45,7 @@ private[gui] object MainViewImpl {
   private def AUTO_BOOT = Prefs.audioAutoBoot.getOrElse(false)
 
   private lazy val logo: Icon = {
-    val is = Main.getClass.getResourceAsStream("SysSon-Logo_web_noshadow.png")
+    val is = Main.getClass.getResourceAsStream("SysSon-Logo_noshadow_566px.png")
     if (is == null) new Icon {
       val getIconHeight = 109
       val getIconWidth  = 283
@@ -54,7 +56,24 @@ private[gui] object MainViewImpl {
       }
     } else try {
       val img = ImageIO.read(is)
-      new ImageIcon(img)
+      new ImageIcon(img) {
+        override def getIconWidth : Int = 283 // 566
+        override def getIconHeight: Int = 109 // 218
+
+        private val at = new AffineTransform
+
+        override def paintIcon(c: java.awt.Component, g: Graphics, x: Int, y: Int): Unit = synchronized {
+          val imageObserver = getImageObserver
+          val obs           = if (imageObserver == null) c else imageObserver
+          val image         = getImage
+          val g2            = g.asInstanceOf[Graphics2D]
+          g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC)
+          g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING , RenderingHints.VALUE_ANTIALIAS_ON         )
+          at.setToTranslation(x, y)
+          at.scale(0.5, 0.5)
+          g2.drawImage(image, at, obs)
+        }
+      }
     } finally {
       is.close()
     }

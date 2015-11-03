@@ -1,6 +1,7 @@
 # bugs or problems
 
 - enforce .mllt ending when creating workspaces or allow open-workspace for files not ending in .mllt
+  (`ActionOpenWorkspace` in Mellite)
 
 # features
 

@@ -1,4 +1,6 @@
-![logo](https://raw.githubusercontent.com/iem-projects/sysson/master/src/main/resources/at/iem/sysson/SysSon-Logo_web_noshadow.png)
+![logo](https://raw.githubusercontent.com/iem-projects/sysson/master/src/main/resources/at/iem/sysson/SysSon-Logo_noshadow_566px.png)
+
+[[src/main/resources/at/iem/sysson/SysSon-Logo_noshadow_566px.png|width=283px]]
 
 # SysSon
 
