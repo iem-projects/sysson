@@ -5,7 +5,7 @@ lazy val baseNameL  = baseName.toLowerCase
 
 lazy val commonSettings = Seq(
   name          := baseName,
-  version       := "1.6.1-SNAPSHOT",
+  version       := "1.6.1",
   organization  := "at.iem.sysson",
   description   := "Sonification platform of the IEM SysSon project",
   homepage      := Some(url(s"https://github.com/iem-projects/$baseNameL")),

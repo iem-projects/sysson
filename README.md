@@ -1,6 +1,4 @@
-![logo](https://raw.githubusercontent.com/iem-projects/sysson/master/src/main/resources/at/iem/sysson/SysSon-Logo_noshadow_566px.png)
-
-<IMG ALT="logo" SRC="https://raw.githubusercontent.com/iem-projects/sysson/work/src/main/resources/at/iem/sysson/SysSon-Logo_noshadow_566px.png" WIDTH="283">
+<IMG ALT="logo" SRC="https://raw.githubusercontent.com/iem-projects/sysson/master/src/main/resources/at/iem/sysson/SysSon-Logo_noshadow_566px.png" WIDTH="283">
 
 # SysSon
 
