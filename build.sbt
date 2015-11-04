@@ -149,7 +149,8 @@ lazy val pkgUniversalSettings: Seq[sbt.Def.Setting[_]] = Seq(
   // provide manual file `SYSSON_config.txt` instead!
   javaOptions in Universal ++= Seq(
     // -J params will be added as jvm parameters
-    "-J-Xmx1024m"
+    "-J-Xmx1024m",
+    "-J-XX:MaxPermSize=128M"
     // others will be added as app parameters
     // "-Dproperty=true",
   ),
