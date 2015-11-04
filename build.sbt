@@ -143,11 +143,10 @@ lazy val root = Project(id = baseNameL, base = file("."))
     buildInfoPackage := organization.value
   )
 
-//// trick stolen from https://stackoverflow.com/questions/33071612/cross-platform-build-with-sbt
-//val make = taskKey[File]("Build specific packages")
-
 //////////////// universal (directory) installer
 lazy val pkgUniversalSettings: Seq[sbt.Def.Setting[_]] = Seq(
+  // NOTE: doesn't work on Windows, where we have to
+  // provide manual file `SYSSON_config.txt` instead!
   javaOptions in Universal ++= Seq(
     // -J params will be added as jvm parameters
     "-J-Xmx1024m"
@@ -158,8 +157,10 @@ lazy val pkgUniversalSettings: Seq[sbt.Def.Setting[_]] = Seq(
   // we use instead the wild-card, supported
   // by Java 6+. In the packaged script this
   // results in something like `java -cp "../lib/*" ...`.
-  scriptClasspath in Universal := Seq("*")
-  // make := packageBin.in(Universal).value
+  // NOTE: `in Universal` does not work. It therefore
+  // also affects debian package building :-/
+  // We need this settings for Windows.
+  scriptClasspath /* in Universal */ := Seq("*")
 )
 
 //////////////// debian installer
@@ -169,11 +170,11 @@ lazy val pkgDebianSettings: Seq[sbt.Def.Setting[_]] = Seq(
   packageSummary in Debian := description.value,
   packageDescription in Debian :=
     """SysSon is a platform for the development and application
-      |  of sonification. It aims to be an integrative system that
-      |  serves different types of users, from domain scientists to
-      |  sonification researchers to composers and sound artists.
-      |  It therefore has an open nature capable of addressing different
-      |  usage scenarios.
+      | of sonification. It aims to be an integrative system that
+      | serves different types of users, from domain scientists to
+      | sonification researchers to composers and sound artists.
+      | It therefore has an open nature capable of addressing different
+      | usage scenarios.
       |""".stripMargin,
   // include all files in src/debian in the installed base directory
   linuxPackageMappings in Debian ++= {
