@@ -14,11 +14,11 @@
 
 package at.iem.sysson
 
-import de.sciss.mellite
-import gui.SwingApplication
-import scala.util.control.NonFatal
-import at.iem.sysson.legacy.NcviewSync
 import at.iem.sysson
+import at.iem.sysson.gui.SwingApplication
+import at.iem.sysson.legacy.NcviewSync
+
+import scala.util.control.NonFatal
 
 object Main {
   final val useNcView = false

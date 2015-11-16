@@ -132,8 +132,14 @@ object SonificationSourceViewImpl {
             val plotOpt = sonifA.$[Plot](attrKey)
             val mr      = findRoot(m)
             val plot    = plotOpt.getOrElse {
-              val p   = Plot[S](mr)
-              sonifA.$[StringObj](ObjKeys.attrName).foreach(v => p.attr.put(ObjKeys.attrName, v))
+              val p         = Plot[S](mr)
+              val varName   = m.name: StringObj[S]
+              val plotName  = sonifA.$[StringObj](ObjKeys.attrName).fold(varName) { srcName =>
+                import expr.Ops._
+                srcName ++ " > " ++ varName
+              }
+              p.attr.put(ObjKeys.attrName, plotName)
+              // sonifA.$[StringObj](ObjKeys.attrName).foreach(v => p.attr.put(ObjKeys.attrName, v))
               sonifA.put(attrKey, p)
               p
             }

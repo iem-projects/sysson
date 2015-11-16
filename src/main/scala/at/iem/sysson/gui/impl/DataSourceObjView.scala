@@ -59,18 +59,18 @@ object DataSourceObjView extends ListObjView.Factory {
     new DataSourceObjView.Impl(tx.newHandle(ds), value = new Value(file = f, multiDim = multiDim)).initAttrs(ds)
   }
 
-  final case class Config[S <: Sys[S]](file: File, location: ActionArtifactLocation.QueryResult[S],
+  final case class Config[S <: Sys[S]](files: List[File], location: ActionArtifactLocation.QueryResult[S],
                                        workspace: Workspace[S])
 
   def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
                              (implicit cursor: Cursor[S]): Option[Config[S]] = {
     val dlg = FileDialog.open(title = "Add Data Source")
     dlg.setFilter(util.NetCdfFileFilter)
-    val fOpt = dlg.show(window)
-
-    fOpt.flatMap { f =>
-      ActionArtifactLocation.query[S](workspace.rootH, file = f, window = window).map { location =>
-        Config(file = f, location = location, workspace = workspace)
+    dlg.multiple  = true
+    val fOpt      = dlg.show(window)
+    fOpt.flatMap { f0 =>
+      ActionArtifactLocation.query[S](workspace.rootH, file = f0, window = window).map { location =>
+        Config(files = dlg.files, location = location, workspace = workspace)
       }
     }
   }
@@ -84,11 +84,13 @@ object DataSourceObjView extends ListObjView.Factory {
     }
     implicit val ws       = config.workspace
     implicit val resolver = WorkspaceResolver[S]
-    val artifact          = Artifact(loc, config.file) // locM.add(config.file)
-    val ds                = DataSource[S](artifact)
-    val obj               = ds // Obj(DataSourceElem(ds))
-    obj.name              = config.file.base
-    obj :: list0
+    val obj = config.files.map { f =>
+      val artifact = Artifact(loc, f)
+      val ds       = DataSource[S](artifact)
+      ds.name      = f.base
+      ds
+    }
+    list0 ++ obj
   }
 
   private final class Value(file: File, multiDim: List[(String, Vec[Int])]) {

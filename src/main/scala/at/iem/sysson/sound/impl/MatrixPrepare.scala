@@ -16,6 +16,7 @@ package at.iem.sysson
 package sound
 package impl
 
+import at.iem.sysson.graph.MatrixTooLargeException
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.synth.{Buffer, Server, Sys}
@@ -50,6 +51,7 @@ object MatrixPrepare {
     private[sysson] def isDimension: Boolean
     private[sysson] def isStreaming: IsStreaming
     private[sysson] def dimOption: Option[graph.Dim]
+    private[sysson] def maxNumChannels: Int
 
     final protected def makeUGens: UGenInLike = MatrixPrepare.makeUGen(this)
   }
@@ -154,20 +156,22 @@ object MatrixPrepare {
     val idx     = /* if (spec.isEmpty) 0 else */ info.specs.size - 1
     val key     = mkKey(in)
     val ctlName = mkCtlName(key = key, idx = idx, isStreaming = spec.isStreaming)
+    val numCh   = spec.numChannels
+    if (numCh > in.maxNumChannels) {
+      val vName = in.variable.name
+      val name  = if (!in.isDimension) vName else in.dimOption.fold(vName)(dim => s"${vName}_${dim.name}")
+      throw new MatrixTooLargeException(name, numCh, in.maxNumChannels)
+    }
 
     in.isStreaming match {
       case IsStreaming.Yes(freq, interp) =>
         val bufSr   = SampleRate.ir // note: VDiskIn uses server sample rate as scale base
         val speed   = freq / bufSr
-        // val ctlName = proc.graph.impl.Stream.controlName(key, idx)
         val buf     = ctlName.ir(0f)
-        val numCh   = spec.numChannels
         // only for dimensions: assert(numCh == 1)
         StreamBuffer.makeUGen(key = key, idx = idx, buf = buf, numChannels = numCh, speed = speed, interp = interp)
 
       case IsStreaming.No =>
-        val numCh   = spec.numChannels
-        // val ctlName = graph.Dim.Values.controlName(key)
         val buf     = ctlName.ir(0f)
         BufRd.ir(numCh, buf = buf, loop = 0, interp = 1)
     }

@@ -70,6 +70,8 @@ object Stats {
 
    */
 
+  def cacheDir: File = dataDir / "cache"
+
   private lazy val cache: TxnProducer[File, CacheValue] = {
     val config        = filecache.Config[File, CacheValue]()
     config.capacity   = filecache.Limit(count = 100, space = 1L * 1024 * 1024)  // 1 MB... whatever, these files are incredibly small
@@ -83,7 +85,7 @@ object Stats {
       debug(s"evict $value")
       value.data.delete()
     }
-    config.folder     = dataDir / "cache"
+    config.folder     = cacheDir
     atomic { implicit tx => filecache.TxnProducer(config) }
   }
 

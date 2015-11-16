@@ -1,15 +1,9 @@
 # bugs or problems
 
-- enforce .mllt ending when creating workspaces or allow open-workspace for files not ending in .mllt
-  (`ActionOpenWorkspace` in Mellite)
-
 # features
-
-- option to clear cache upon exit
 
 # alleviated or less important
 
-- sonif-editor: offline media - text is HTML escaped as "&lt;offline&gt;" (at least on Windows)
 - sonif-editor: controls - should allow tuning of spec (improved: now shows more digits)
 - cannot drag from attributes editor to folder - low priority
 - matrix-editor: row-header baseline

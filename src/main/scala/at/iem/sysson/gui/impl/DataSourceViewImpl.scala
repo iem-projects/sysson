@@ -24,8 +24,9 @@ import javax.swing.{JComponent, JTree, TransferHandler}
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.file._
 import de.sciss.icons.raphael
+import de.sciss.lucre.expr.StringObj
 import de.sciss.lucre.matrix.{DataSource, Matrix}
-import de.sciss.lucre.stm
+import de.sciss.lucre.{expr, stm}
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing._
 import de.sciss.lucre.swing.impl.ComponentHolder
@@ -33,6 +34,7 @@ import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.swingtree.{ExternalTreeModel, Tree}
+import de.sciss.synth.proc.ObjKeys
 import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
@@ -215,11 +217,18 @@ object DataSourceViewImpl {
             val key     = vr.name
             val attrKey = s"plot-$key"
             val src     = source
-            val plotOpt = src.attr.$[Plot](attrKey) // .flatMap(Plot.Obj.unapply)
+            val srcAttr = src.attr
+            val plotOpt = srcAttr.$[Plot](attrKey) // .flatMap(Plot.Obj.unapply)
             // val mr      = findRoot(m)
             val plot    = plotOpt.orElse {
               mkMatrix(vr).map { mr =>
-                val p   = Plot[S](mr)
+                val p         = Plot[S](mr)
+                val varName   = key: StringObj[S]
+                val plotName  = srcAttr.$[StringObj](ObjKeys.attrName).fold(varName) { srcName =>
+                  import expr.Ops._
+                  srcName ++ " > " ++ varName
+                }
+                p.attr.put(ObjKeys.attrName, plotName)
                 val po  = p // Obj(Plot.Elem(p))
                 src.attr.put(attrKey, po)
                 po

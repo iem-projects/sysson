@@ -23,7 +23,11 @@ import de.sciss.synth.{ScalarRated, UGenInLike}
 import org.scalautils.TypeCheckedTripleEquals
 
 object Var {
-  final case class Play(variable: Var, time: Dim.Play, interp: Int)
+  object Play {
+    def apply(variable: Var, time: Dim.Play, interp: Int): Play =
+      apply(variable = variable, time = time, interp = interp, maxNumChannels = 1000)
+  }
+  final case class Play(variable: Var, time: Dim.Play, interp: Int, maxNumChannels: Int)
     extends MatrixPrepare.VarGE with MatrixPrepare.PlayGE with UGB.Input {
 
     override def productPrefix  = "Var$Play"
@@ -48,8 +52,13 @@ object Var {
     }
   }
 
-  final case class Values(variable: Var)
+  object Values {
+    def apply(variable: Var): Values = apply(variable = variable, maxSize = 1000)
+  }
+  final case class Values(variable: Var, maxSize: Int)
     extends MatrixPrepare.VarGE with MatrixPrepare.ValuesGE with UGB.Input {
+
+    private[sysson] def maxNumChannels = maxSize
 
     override def productPrefix  = "Var$Values"
     override def toString       = s"$variable.values"
@@ -89,7 +98,10 @@ object Var {
       override def productPrefix = "Var.Axis.Key"
       override def toString = s"$productPrefix(stream = $stream, axis = $axis)"
     }
-    final case class Values(axis: Var.Axis)
+    object Values {
+      def apply(axis: Var.Axis): Values = apply(axis = axis, maxSize = 1000)
+    }
+    final case class Values(axis: Var.Axis, maxSize: Int)
       extends MatrixPrepare.GE with ScalarRated {
 
       override def productPrefix = "Var$Axis$Values"
@@ -102,6 +114,8 @@ object Var {
       type Value = ShapeAndIndex
 
       def variable: Var = axis.variable.variable
+
+      private[sysson] def maxNumChannels = maxSize
 
       protected def makeUGens: UGenInLike = {
         val b         = UGB.get
@@ -116,6 +130,10 @@ object Var {
         if (matSizeL > 0xFFFFFF) sys.error(s"Matrix too large for axis value generation ($matSizeL)")
         val div       = divL.toInt
         val matSize   = matSizeL.toInt
+
+        if (matSize > maxNumChannels)
+          throw new MatrixTooLargeException(axis.variable.variable.name, matSize, maxNumChannels)
+
         val dimVals   = axis.asDim.values
         logDebug(s"$this: $shapeAndIndex; axisSize = $axisSize, div = $div, matSize = $matSize")
         Vector.tabulate(matSize)(i => dimVals \ (i/div)): synth.GE
@@ -135,7 +153,8 @@ object Var {
 
     override def toString = s"""$variable.axis($dim)"""
 
-    def values    : synth.GE = Axis.Values(this)
+    def values              : synth.GE = Axis.Values(this)
+    def values(maxSize: Int): synth.GE = Axis.Values(this, maxSize = maxSize)
 
     // def indices   : synth.GE = ...
     // def startValue: synth.GE = ...
@@ -177,9 +196,11 @@ final case class Var(name: String, higherRank: Boolean = true) extends UserInter
   // def kr: Var.GE
 
   def values: Var.Values = Var.Values(this)
+  def values(maxSize: Int): Var.Values = Var.Values(this, maxSize = maxSize)
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */
-  def play(time: Dim.Play, interp: Int = 1): Var.Play = Var.Play(this, time, interp)
+  def play(time: Dim.Play, interp: Int = 1, maxNumChannels: Int = 1000): Var.Play =
+    Var.Play(this, time = time, interp = interp, maxNumChannels = maxNumChannels)
 
   def size: Var.Size = Var.Size(this)
 }

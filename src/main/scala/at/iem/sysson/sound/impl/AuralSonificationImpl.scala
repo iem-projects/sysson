@@ -45,18 +45,18 @@ object AuralSonificationImpl {
                                      (implicit tx: S#Tx): Sonification.Source[S] = {
     val sonif   = obj // .elem.peer
     val varKey  = variable.name
-    val source  = sonif.sources.get(varKey).getOrElse(sys.error(s"Missing source for key $varKey"))
+    val source  = sonif.sources.get(varKey).getOrElse(sys.error(s"Missing source for key '$varKey'"))
     source
   }
 
   private def findDimIndex[S <: SSys[S]](source: Sonification.Source[S], dimElem: graph.Dim)
                                        (implicit tx: S#Tx): Int = {
     val dimKey  = dimElem.name
-    val dimName = source.dims  .get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key $dimKey")).value
+    val dimName = source.dims  .get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key '$dimKey'")).value
     val full    = source.matrix
     import TypeCheckedTripleEquals._
     val dimIdx  = full.dimensions.indexWhere(_.name === dimName)
-    if (dimIdx < 0) sys.error(s"Dimension $dimName not in matrix")
+    if (dimIdx < 0) sys.error(s"Dimension '$dimName' not in matrix")
     dimIdx
   }
 
@@ -140,7 +140,7 @@ object AuralSonificationImpl {
       st.acceptedInputs.get(req.key) match {
         case Some(mv: MatrixPrepare.Value) => mv.specs
         case Some(other) =>
-          logDebug(s"For key ${req.key} found something other than MatrixPrepare.Value: $other")
+          logDebug(s"For key '${req.key}' found something other than MatrixPrepare.Value: $other")
           Vector.empty
         case _ => Vector.empty
       }

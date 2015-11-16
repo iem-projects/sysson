@@ -2,8 +2,8 @@
 E       - relative ArtifactLocation (zu Workspace Ordner)
         - Stride: GUI -- numbers should be at least 1; kann automatisch nach oben begrenzt werden?
         - [LucreMatrix] drag and drop a new data set: keep settings of matrix reductions as long as dimensions are the same: 2
-E       - Parameter GUI: "elapsed"... feedback on where in time: 0.5 (gibt alte Version): player functionality (re-hear, e.g., last 10 seconds...)
-E       - Plot: synchronize with sonification playback: 1
+[OK]    - Parameter GUI: "elapsed"... feedback on where in time: 0.5 (gibt alte Version): player functionality (re-hear, e.g., last 10 seconds...)
+[OK]    - Plot: synchronize with sonification playback: 1
 E       - Plot: min/max/normalize scale
         - Plot: label matrix-DnD button; und datenquelle sichtbar machen koennen (siehe unten)
         - Matrix Association View: indicate object ID
@@ -11,10 +11,10 @@ E       - Plot: min/max/normalize scale
         - Parameter GUI: parameters as sliders within a given Range, "UserRange": 0.75 (-format of typing numbers … (anzeige > 3 kommastellen)
         - Parameter GUI: verknuepfung matrix datenquelle (ueberpruefen welche daten reingeladen sind): 0.5
         - Parameter GUI: parameter automatisch zuweisen; wenn "fehler" deutlich sichtbar, dass dimension nicht zugeordnet: 0.5
-        - Installer/Release
-        - Online help system
+[OK]    - Installer/Release
+[OK]    - Online help system
         - [Mellite] Save As workspace
-        - Data source window: alten plot gegen neuen tauschen
+[OK]    - Data source window: alten plot gegen neuen tauschen
         - dummy data - no real data playing...: fill matrix globally... not efficient; perhaps replace values! (switch in GUI -> UserSwitch); problem: needs pretty, interactive GUI: 1
         - matrix reductions: averages: 3
         - third party component:

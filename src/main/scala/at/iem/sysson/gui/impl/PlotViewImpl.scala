@@ -24,10 +24,10 @@ import at.iem.sysson.sound.AuralSonification
 import de.sciss.desktop.UndoManager
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.icons.raphael
-import de.sciss.lucre.expr.{IntObj, Expr}
+import de.sciss.lucre.expr.IntObj
 import de.sciss.lucre.matrix.{Dimension, Matrix, Reduce}
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.{Sys, Disposable}
+import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
@@ -57,8 +57,8 @@ object PlotViewImpl {
     implicit val undoMgr    = new UndoManagerImpl
     val isEditable          = Matrix.Var.unapply(plot.matrix).isDefined
     val plotMatrixView      = new PlotMatrixView(canSetMatrix = isEditable, parentOpt = parentOpt).init(plot)
-    val chartView           = PlotChartImpl(plot)
     val statsView           = PlotStatsView(plot)
+    val chartView           = PlotChartImpl(plot, statsView)
     val res                 = new Impl(chartView, plotMatrixView, statsView).init()
     res
   }

@@ -24,6 +24,7 @@ import com.alee.laf.checkbox.WebCheckBoxStyle
 import com.alee.laf.progressbar.WebProgressBarStyle
 import de.sciss.desktop.impl.{SwingApplicationImpl, WindowHandlerImpl}
 import de.sciss.desktop.{Menu, WindowHandler}
+import de.sciss.file._
 import de.sciss.mellite
 import de.sciss.mellite.gui.LogFrame
 import de.sciss.mellite.gui.impl.document.DocumentHandlerImpl
@@ -83,9 +84,16 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
 
     LogFrame           .instance    // init
 
-    val mlltFrame = args.contains("--mellite-frame")
+    sys.addShutdownHook {
+      Stats.cacheDir.children { f =>
+        val n = f.name
+        n.startsWith("sysson") || n.endsWith(".cache")
+      } .foreach(_.delete())
+    }
 
-    if (mlltFrame)
+    val melliteFrame = args.contains("--mellite-frame")
+
+    if (melliteFrame)
       new mellite.gui.MainFrame
     else
       MainFrame()
@@ -106,5 +114,5 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
     case _ => true
   }
 
-  lazy val categSonification = "Sonification"
+  def categSonification = "Sonification"
 }

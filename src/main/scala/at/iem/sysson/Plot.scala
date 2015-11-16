@@ -49,6 +49,9 @@ object Plot extends Obj.Type {
 
   final val attrShowOverlay = "show-overlay"
   final val attrPalette     = "palette"
+  final val attrMin         = "min"
+  final val attrMax         = "max"
+  final val attrNormalize   = "normalize"
 }
 trait Plot[S <: Sys[S]] extends Obj[S] with Publisher[S, Plot.Update[S]] {
   def matrix: Matrix[S]

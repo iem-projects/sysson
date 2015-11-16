@@ -25,12 +25,19 @@ object Dim {
   final case class Play(dim: Dim, freq: synth.GE, maxFreq: Double, interp: Int)
     extends MatrixPrepare.DimGE with MatrixPrepare.PlayGE {
 
+    private[sysson] def maxNumChannels = 1
+
     override def productPrefix  = "Dim$Play"
     override def toString       = s"$dim.play($freq)"
   }
 
-  final case class Values(dim: Dim)
+  object Values {
+    def apply(dim: Dim): Values = apply(dim = dim, maxSize = 1000)
+  }
+  final case class Values(dim: Dim, maxSize: Int)
     extends MatrixPrepare.DimGE with MatrixPrepare.ValuesGE {
+
+    private[sysson] def maxNumChannels = maxSize
 
     override def productPrefix  = "Dim$Values"
     override def toString       = s"$dim.values"
@@ -78,7 +85,8 @@ final case class Dim(variable: Var, name: String)
     Dim.Play(this, freq = freq, maxFreq = maxFreq1, interp = interp)
   }
 
-  def values : Dim.Values = Dim.Values(this)
+  def values              : Dim.Values = Dim.Values(this)
+  def values(maxSize: Int): Dim.Values = Dim.Values(this, maxSize = maxSize)
 
   // def indices: GE = ...
 

@@ -1,6 +1,6 @@
-E       - Installer angucken
-E       - Plot: min/max/normalize scale
-E       - #14 Patch requires `output :=` to be present bug (otherwise time play is zero)
+[OK]    - Installer angucken
+[OK]    - Plot: min/max/normalize scale
+[OK]    - #14 Patch requires `output :=` to be present bug (otherwise time play is zero)
         - [Mellite]     im Workspace: "under-tree" die variablen und "Auge" wird plot button; trotzdem metadaten
                         fenster (wenn header ausgewaehlt): 1
         - [LucreMatrix] drag and drop a new data set: keep settings of matrix reductions as long as dimensions are the same: 2

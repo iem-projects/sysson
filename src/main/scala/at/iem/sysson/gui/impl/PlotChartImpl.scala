@@ -22,15 +22,16 @@ import java.awt.{Color, Paint, Rectangle, Shape, TexturePaint}
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.lucre.{event => evt}
-import de.sciss.lucre.expr.{BooleanObj, StringObj}
+import de.sciss.lucre.expr.{DoubleObj, BooleanObj, StringObj}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{BooleanCheckBoxView, CellView, View, defer, deferTx}
+import de.sciss.lucre.swing.{DoubleSpinnerView, BooleanCheckBoxView, CellView, View, defer, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.edit.EditAttrMap
+import de.sciss.model.Model
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 import de.sciss.swingplus.{ComboBox, OverlayPanel}
@@ -48,10 +49,11 @@ import scala.concurrent.stm.{TMap, Ref}
 import scala.swing.{Alignment, BorderPanel, Component, FlowPanel, Graphics2D, Label, Swing}
 
 object PlotChartImpl {
-  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, cursor: stm.Cursor[S], undoManager: UndoManager,
-                                        workspace: Workspace[S]): View.Editable[S] = {
+  def apply[S <: Sys[S]](plot: Plot[S], stats: PlotStatsView[S])(implicit tx: S#Tx, cursor: stm.Cursor[S],
+                                                                 undoManager: UndoManager,
+                                                                 workspace: Workspace[S]): View.Editable[S] = {
     implicit val resolver = WorkspaceResolver[S]
-    new Impl[S].init(plot)
+    new Impl[S](stats).init(plot)
   }
 
   private final val DEBUG = false
@@ -88,8 +90,9 @@ object PlotChartImpl {
     }
   }
 
-  private final class Impl[S <: Sys[S]](implicit val cursor: stm.Cursor[S], val undoManager: UndoManager,
-                                        resolver: DataSource.Resolver[S])
+  private final class Impl[S <: Sys[S]](statsView: PlotStatsView[S])(implicit val cursor: stm.Cursor[S],
+                                                                     val undoManager: UndoManager,
+                                                                     resolver: DataSource.Resolver[S])
     extends View.Editable[S] with ComponentHolder[Component] {
 
     // checks if the shape is reducible in all but the provided dimensions
@@ -97,6 +100,8 @@ object PlotChartImpl {
       shape.zipWithIndex.forall { case (n, i) => n == 1 || i == hIdx || i == vIdx }
 
     private val readerRef = Ref(new Reader(null, null, null, null, null, null))
+
+//    private def updateData()(implicit tx: S#Tx): Unit = updateData(plotH())
 
     private def updateData(plot: Plot[S])(implicit tx: S#Tx): Unit = {
       val m       = plot.matrix
@@ -146,8 +151,7 @@ object PlotChartImpl {
 
     private val dataset = new MatrixSeriesCollection
 
-    // returns (add, mul)
-    private def normalize(d: Array[Array[Float]], fill: Float): Array[Array[Float]] = {
+    private def calcMinMax(d: Array[Array[Float]], fill: Float): (Float, Float) = {
       var min  = Float.MaxValue
       var max  = Float.MinValue
 
@@ -169,19 +173,27 @@ object PlotChartImpl {
         }
         i += 1
       }
-      val div = max - min
-      if (div <= 0f) return d
-      val mul = 1f / div
-      val res = d.clone()
+      (min, max)
+    }
 
-      i = 0
-      while (i < d.length) {
-        val d1 = d(i)
+    private def scalaData(d: Array[Array[Float]], fill: Float, min: Float, max: Float): Array[Array[Float]] = {
+      val div       = max - min
+      if (div <= 0f) return d
+      val mul       = 1f / div
+      val res       = new Array[Array[Float]](d.length)
+      val fillIsNaN = fill.isNaN
+
+      var i = 0
+      while (i < res.length) {
+        val d1  = d(i)
+        val d2  = new Array[Float](d1.length)
+        res(i)  = d2
+        // val d1 = res(i)
         var j = 0
         while (j < d1.length) {
           val f = d1(j)
           val isNaN = if (fillIsNaN) f.isNaN else f == fill
-          if (!isNaN) d1(j) = (f - min) * mul
+          d2(j) = if (isNaN) f else (f - min) * mul
           j += 1
         }
         i += 1
@@ -194,8 +206,16 @@ object PlotChartImpl {
     private var _lastXVals: Array[Float] = new Array[Float](0)  // we use `sameElements`, so ensure it's not null
     private var _lastYVals: Array[Float] = _lastXVals           // dito
 
+
+    private var _plotData: PlotData = _
+
+    // called on EDT
+    private def rescalePlot(): Unit = if (_plotData != null) updatePlot(_plotData)
+
     // called on EDT
     private def updatePlot(data: PlotData): Unit = {
+      _plotData = data
+
       dataset.removeAllSeries()
       val xName     = data.hName
       val xVals     = data.hData
@@ -217,7 +237,18 @@ object PlotChartImpl {
       }
 
       // XXX TODO -- look for stats
-      val mData = normalize(data.mData, Float.NaN)  // XXX TODO -- find fill value
+      val fillValue = Float.NaN   // XXX TODO -- find fill value
+      lazy val normMinMax = statsView.stats.fold(calcMinMax(data.mData, fillValue)) { stats =>
+        val tot = stats.total
+        (tot.min.toFloat, tot.max.toFloat)
+      }
+
+      val (minValue, maxValue) = if (normalize) normMinMax else {
+        (minOpt.getOrElse(normMinMax._1.toDouble).toFloat,
+         maxOpt.getOrElse(normMinMax._2.toDouble).toFloat)
+      }
+
+      val mData = scalaData(data.mData, fill = fillValue, min = minValue, max = maxValue)
       val mRows = mData.length
       val mCols = if (mRows == 0) 0 else mData(0).length
       val ms = new MatrixSeries(data.mName, mRows, mCols) {
@@ -245,14 +276,24 @@ object PlotChartImpl {
       }
     }
 
-    private var isMap = false
-    private var observerPlot    : Disposable[S#Tx] = _
-    private var observerOverlay : Disposable[S#Tx] = _
-    private var observerPalette : Disposable[S#Tx] = _
+    // ---- gui values ----
+
+    private var isMap     = false
+    private var minOpt    = Option.empty[Double]
+    private var maxOpt    = Option.empty[Double]
+    private var normalize = true
+
+    // ----
+
+    private var observers       = List.empty[Disposable[S#Tx]]
 
     private var viewOverlay     : BooleanCheckBoxView[S] = _
     private var overlayEmpty    : Component = _
     private var cellPalette     : CellView.Var[S, Option[String]] = _
+
+    private var minView         : DoubleSpinnerView.Optional[S] = _
+    private var maxView         : DoubleSpinnerView.Optional[S] = _
+    private var normalizeView   : BooleanCheckBoxView[S] = _
 
     private var plotH: stm.Source[S#Tx, Plot[S]] = _
 
@@ -262,28 +303,55 @@ object PlotChartImpl {
       mapOverlay.enabled    = isMap && viewOverlay.component.selected
     }
 
-    def init(plotObj: Plot[S])(implicit tx: S#Tx): this.type = {
-      plotH = tx.newHandle(plotObj)
+    def init(plot: Plot[S])(implicit tx: S#Tx): this.type = {
+      plotH = tx.newHandle(plot)
 
       implicit val booleanEx  = BooleanObj
       implicit val stringEx   = StringObj
+      implicit val doubleEx   = DoubleObj
 
-      val cellOverlay = AttrCellView[S, Boolean, BooleanObj](plotObj.attr, Plot.attrShowOverlay)
+      val plotAttr    = plot.attr
+      val cellOverlay = AttrCellView[S, Boolean, BooleanObj](plotAttr, Plot.attrShowOverlay)
       viewOverlay     = BooleanCheckBoxView.optional(cellOverlay, name = "Map Overlay", default = false)
-      observerOverlay = cellOverlay.react { implicit tx => _ => deferTx(updateOverlay()) }
-      cellPalette     = AttrCellView[S, String, StringObj](plotObj.attr, Plot.attrPalette)
-      observerPalette = cellPalette.react { implicit tx => nameOpt =>
+      observers     ::= cellOverlay.react { implicit tx => _ => deferTx(updateOverlay()) }
+      cellPalette     = AttrCellView[S, String, StringObj](plotAttr, Plot.attrPalette)
+      observers     ::= cellPalette.react { implicit tx => nameOpt =>
         deferTx {
           setPalette(nameOpt)
         }
       }
 
+      val cellMin   = AttrCellView[S, Double , DoubleObj ](plotAttr, Plot.attrMin      )
+      val cellMax   = AttrCellView[S, Double , DoubleObj ](plotAttr, Plot.attrMax      )
+      val cellNorm  = AttrCellView[S, Boolean, BooleanObj](plotAttr, Plot.attrNormalize)
+      minView       = DoubleSpinnerView  .optional(cellMin , name = "Minimum")
+      maxView       = DoubleSpinnerView  .optional(cellMax , name = "Maximum")
+      normalizeView = BooleanCheckBoxView.optional(cellNorm, name = "Normalize", default = true)
+
+      observers ::= cellMin.react { implicit tx => value => deferTx {
+        minOpt = value
+        rescalePlot()
+      }}
+
+      observers ::= cellMax.react { implicit tx => value => deferTx {
+        maxOpt = value
+        rescalePlot()
+      }}
+
+      observers ::= cellNorm.react { implicit tx => value => deferTx {
+        normalize = value.getOrElse(true)
+        rescalePlot()
+      }}
+
       val paletteValue0 = cellPalette()
-      deferTx(guiInit(paletteValue0 = paletteValue0))
-      val plot = plotObj // .elem.peer
+      val minVal0       = cellMin()
+      val maxVal0       = cellMax()
+      val norm0         = cellNorm().getOrElse(true)
+
+      deferTx(guiInit(paletteValue0 = paletteValue0, minVal0 = minVal0, maxVal0 = maxVal0, norm0 = norm0))
       updateData(plot)
 
-      observerPlot = plot.changed.react { implicit tx => u =>
+      observers ::= plot.changed.react { implicit tx => u =>
         if (DEBUG) println("plot changed")
         updateData(u.plot)
         u.changes.foreach {
@@ -317,13 +385,14 @@ object PlotChartImpl {
 
     def dispose()(implicit tx: S#Tx): Unit = {
       implicit val ptx = tx.peer
-      observerPlot    .dispose()
-      observerOverlay .dispose()
-      observerPalette .dispose()
+      observers.foreach(_.dispose())
       val p = readerRef.get(tx.peer)
       plotDimObs.foreach(_._2.dispose())
       plotDimObs.clear()
-      deferTx(p.abort())
+      deferTx {
+        p.abort()
+        statsView.removeListener(statsListener)
+      }
     }
 
     private lazy val nanPaint: Paint = {
@@ -356,17 +425,6 @@ object PlotChartImpl {
         }
       }
     }
-
-//    private lazy val intensityScale: PaintScale = {
-//      val res = new LookupPaintScale(0.0, 1.0, nanPaint /* Color.red */)
-//      val numM = IntensityPalette.numColors - 1
-//      for(i <- 0 to numM) {
-//        val d   = i.toDouble / numM
-//        val pnt = new Color(IntensityPalette.apply(d.toFloat))
-//        res.add(d, pnt)
-//      }
-//      res
-//    }
 
     private object mapOverlay extends AbstractOverlay with Overlay {
       import scala.concurrent.ExecutionContext.Implicits.global
@@ -462,23 +520,19 @@ object PlotChartImpl {
     private def setPalette(name: Option[String]): Unit =
       blockRenderer.setPaintScale(mkScale(name.getOrElse("panoply")))
 
-    private def guiInit(paletteValue0: Option[String]): Unit = {
+    private val statsListener: Model.Listener[Stats.Variable] = { case stats =>
+      updateMinMaxDefaults(stats)
+      if (normalize) rescalePlot()
+    }
+
+    private def guiInit(paletteValue0: Option[String], minVal0: Option[Double], maxVal0: Option[Double],
+                        norm0: Boolean): Unit = {
       blockRenderer = new XYBlockRenderer()
       setPalette(paletteValue0)
 
       _plot = new XYPlot // (coll, xAxis, yAxis, renderer)
       _plot.setDataset(dataset)
       _plot.setRenderer(blockRenderer)
-
-      //    val xmValue = mkValueMarker(xDimRed)
-      //    val ymValue = mkValueMarker(yDimRed)
-      //    val xmRange = mkRangeMarker(xDimRed)
-      //    val ymRange = mkRangeMarker(yDimRed)
-      //
-      //    plot.addDomainMarker(xmValue)
-      //    plot.addRangeMarker (ymValue)
-      //    plot.addDomainMarker(xmRange)
-      //    plot.addRangeMarker (ymRange)
 
       _plot.setBackgroundPaint(Color.lightGray)
       _plot.setDomainGridlinesVisible(false)
@@ -512,13 +566,28 @@ object PlotChartImpl {
       }
       val ggColorTable  = new ComboBox(mColorTable)
 
-      val topPanel = new FlowPanel(panelOverlay, Swing.HStrut(8), new Label("Palette:"), ggColorTable)
+      statsView.stats.foreach(updateMinMaxDefaults)
+      statsView.addListener(statsListener)
+
+      minOpt    = minVal0
+      maxOpt    = maxVal0
+      normalize = norm0
+
+      val topPanel = new FlowPanel(panelOverlay, Swing.HStrut(8), new Label("Palette:"), ggColorTable,
+        new Label("Min:"), minView.component, new Label("Max:"), maxView.component,
+        normalizeView.component)
 
       _main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
       component = new BorderPanel {
         add(Component.wrap(_main), BorderPanel.Position.Center)
         add(topPanel             , BorderPanel.Position.South )
       }
+    }
+
+    private def updateMinMaxDefaults(stats: Stats.Variable): Unit = {
+      val tot = stats.total
+      minView.default = Some(tot.min)
+      maxView.default = Some(tot.max)
     }
   }
 }
