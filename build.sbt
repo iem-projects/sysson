@@ -12,7 +12,7 @@ lazy val commonSettings = Seq(
   licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")),
   // ---- scala compiler settings and libraries ----
   scalaVersion  := "2.11.7",
-  crossScalaVersions := Seq("2.11.7", "2.10.5"),
+  crossScalaVersions := Seq("2.11.7", "2.10.6"),
   // maven repository for NetCDF library
   resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases",
   // maven repository for Oracle BDB JE
@@ -25,19 +25,19 @@ lazy val commonSettings = Seq(
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.0.1-SNAPSHOT"
-lazy val soundProcessesVersion      = "3.2.1"
+lazy val melliteVersion             = "2.1.0-SNAPSHOT"
+lazy val soundProcessesVersion      = "3.3.0-SNAPSHOT"
 lazy val lucreMatrixVersion         = "0.11.1-SNAPSHOT"
 lazy val lucreSwingVersion          = "1.2.2"
 lazy val lucreVersion               = "3.2.2"
-lazy val scalaColliderVersion       = "1.17.4"
-lazy val scalaColliderSwingVersion  = "1.25.3"
-lazy val ugensVersion               = "1.13.4"
+lazy val scalaColliderVersion       = "1.18.0-SNAPSHOT"
+lazy val scalaColliderSwingVersion  = "1.27.0-SNAPSHOT"
+lazy val ugensVersion               = "1.14.0-SNAPSHOT"
 lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"
 lazy val fscapeJobsVersion          = "1.5.0"
-lazy val sheetVersion               = "0.1.0"
+lazy val sheetVersion               = "0.1.1"
 lazy val slfVersion                 = "1.7.12"
 
 // ---- test libraries ----

@@ -20,15 +20,17 @@ import at.iem.sysson.graph.UserValue
 import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.stm.Disposable
-import de.sciss.lucre.synth.{Sys => SSys, NodeRef}
+import de.sciss.lucre.synth.{NodeRef, Sys => SSys}
 import de.sciss.lucre.{event => evt, stm}
 import de.sciss.numbers
 import de.sciss.synth.proc.AuralObj.State
-import de.sciss.synth.proc.impl.{SynthUpdater, AsyncProcBuilder, AuralProcDataImpl, AuralProcImpl, SynthBuilder}
+import de.sciss.synth.proc.UGenGraphBuilder.Complete
+import de.sciss.synth.proc.impl.{AsyncProcBuilder, AuralProcDataImpl, AuralProcImpl, SynthBuilder, SynthUpdater}
 import de.sciss.synth.proc.{AuralContext, AuralObj, TimeRef, UGenGraphBuilder => UGB}
 import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.{TMap, TxnLocal}
+import scala.util.control.NonFatal
 
 object AuralSonificationImpl {
   def apply[S <: SSys[S]](obj: Sonification[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralSonification[S] = {
@@ -207,6 +209,18 @@ object AuralSonificationImpl {
 
   private final class ProcImpl[S <: SSys[S]](sonifData: Impl[S])(implicit context: AuralContext[S])
     extends AuralProcImpl.Impl[S]() {
+
+    // A nasty override to be able to catch `IndexOutOfBoundsException`
+    // thrown when `UGenGraph` expansion exceed maximum number of wire buffers
+    override protected def launch(ugen: Complete[S], timeRef: TimeRef)(implicit tx: S#Tx): Unit = try {
+      super.launch(ugen, timeRef)
+    } catch {
+      case NonFatal(e) =>
+        // XXX TODO -- yes, really ugly to catch that exception
+        // within a transaction. but in the no-scans version
+        // of SP we'll find a cleaner solution
+        sonifData.status.update(AuralSonification.PlayFailed(e))
+    }
 
     override protected def buildSyncInput(b: SynthBuilder[S], keyW: UGB.Key, value: UGB.Value)
                                          (implicit tx: S#Tx): Unit = keyW match {

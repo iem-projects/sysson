@@ -14,11 +14,7 @@ object AuralSonification extends AuralObj.Factory {
 
   def typeID = Sonification.typeID
 
-  // type E[S <: Sys[S]] = Sonification[S]
-
   type Repr[S <: Sys[S]] = Sonification[S]
-
-  // def apply[S <: SSys[S]](obj: Sonification[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralObj[S] = ...
 
   def apply[S <: SSys[S]](obj: Sonification[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralSonification[S] =
     Impl(obj)
@@ -28,6 +24,7 @@ object AuralSonification extends AuralObj.Factory {
   }
   case class Elapsed(key: graph.Dim, ratio: Float, dimValue: Float)
     extends Update /* [S] */
+  case class PlayFailed(cause: Throwable) extends Update
 }
 trait AuralSonification[S <: SSys[S]] extends AuralObj[S] {
   def status: evt.Observable[S#Tx, AuralSonification.Update /* [S] */]

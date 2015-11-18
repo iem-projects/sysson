@@ -126,6 +126,12 @@ object SonificationViewImpl {
               deferTx {
                 ggElapsed.value = ratio
               }
+
+            case AuralSonification.PlayFailed(cause) =>
+              // status() = e
+              deferTx {
+                showPlayError(cause)
+              }
           }}
       }
       new TransportRef(t, observer, elapsedOpt)
@@ -389,13 +395,16 @@ object SonificationViewImpl {
         ref.transport.play()
 
       } catch {
-        case NonFatal(e) =>
-          val message = s"<html><b>Sonification failed:</b> <i>(${e.getClass.getSimpleName})</i><p>${e.getMessage}"
-          val options = Seq("Ok", "Show Stack Trace")
-          val opt = OptionPane(message = message, messageType = OptionPane.Message.Error,
-            optionType = OptionPane.Options.YesNo, entries = options, initial = options.headOption)
-          if (opt.show(Window.find(component)).id == 1) e.printStackTrace()
+        case NonFatal(e) => showPlayError(e)
       }
+    }
+
+    private def showPlayError(cause: Throwable): Unit = {
+      val message = s"<html><b>Sonification failed:</b> <i>(${cause.getClass.getSimpleName})</i><p>${cause.getMessage}"
+      val options = Seq("Ok", "Show Stack Trace")
+      val opt = OptionPane(message = message, messageType = OptionPane.Message.Error,
+        optionType = OptionPane.Options.YesNo, entries = options, initial = options.headOption)
+      if (opt.show(Window.find(component)).id == 1) cause.printStackTrace()
     }
 
     //    private def tLoop(): Unit = {
