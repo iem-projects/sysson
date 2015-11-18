@@ -5,7 +5,7 @@ lazy val baseNameL  = baseName.toLowerCase
 
 lazy val commonSettings = Seq(
   name          := baseName,
-  version       := "1.7.0-SNAPSHOT",
+  version       := "1.7.0",
   organization  := "at.iem.sysson",
   description   := "Sonification platform of the IEM SysSon project",
   homepage      := Some(url(s"https://github.com/iem-projects/$baseNameL")),
@@ -25,14 +25,14 @@ lazy val commonSettings = Seq(
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.1.0-SNAPSHOT"
-lazy val soundProcessesVersion      = "3.3.0-SNAPSHOT"
-lazy val lucreMatrixVersion         = "0.11.1-SNAPSHOT"
+lazy val melliteVersion             = "2.1.0"
+lazy val soundProcessesVersion      = "3.3.0"
+lazy val lucreMatrixVersion         = "0.11.1"
 lazy val lucreSwingVersion          = "1.2.2"
 lazy val lucreVersion               = "3.2.2"
-lazy val scalaColliderVersion       = "1.18.0-SNAPSHOT"
-lazy val scalaColliderSwingVersion  = "1.27.0-SNAPSHOT"
-lazy val ugensVersion               = "1.14.0-SNAPSHOT"
+lazy val scalaColliderVersion       = "1.18.0"
+lazy val scalaColliderSwingVersion  = "1.27.0"
+lazy val ugensVersion               = "1.14.0"
 lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"
