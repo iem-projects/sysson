@@ -347,10 +347,11 @@ object DataSourceFrameImpl {
       withSelectedVariable(title) { vr =>
         import Implicits._
 
-        if (!vr.dimensionMap.contains("time")) {
+        val timeNameOpt = vr.dimensionMap.keySet.find(_.toLowerCase == "time")
+        timeNameOpt.fold[Unit] {
           OptionPane.message("Selected variable must have a dimension named 'time'", OptionPane.Message.Error)
             .show(sw, title)
-        } else {
+        } { timeName =>
           val mYears    = new SpinnerNumberModel(30, 1, 10000, 1)
           val ggYears   = new Spinner(mYears)
           val pYears    = new FlowPanel(new Label("Average Years:"), ggYears)
@@ -374,7 +375,7 @@ object DataSourceFrameImpl {
           import TypeCheckedTripleEquals._
           if (res === OptionPane.Result.Ok) {
             withSaveFile(window, "Anomalies Output File") { out =>
-              val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = "time",
+              val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = timeName,
                 windowYears = mYears.getNumber.intValue())
               import ExecutionContext.Implicits.global
               proc.monitor(printResult = false)
