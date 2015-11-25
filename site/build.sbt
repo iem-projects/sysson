@@ -1,19 +1,19 @@
-lazy val SYSSON_VERSION = "1.4.0"
+lazy val SYSSON_VERSION = "1.7.1"
 
 val commonSettings = Seq(
   organization := "de.sciss",  // ghpages push only works with this, not "at.iem.sysson"...
   version      := SYSSON_VERSION,
-  scalaVersion := "2.11.6"
+  scalaVersion := "2.11.7"
 )
 
 // retrieveManaged in ThisBuild := true
 
-val scalaOSC           = RootProject(uri("git://github.com/Sciss/ScalaOSC.git#v1.1.4"))
+val scalaOSC           = RootProject(uri("git://github.com/Sciss/ScalaOSC.git#v1.1.5"))
 val scalaAudioFile     = RootProject(uri("git://github.com/Sciss/ScalaAudioFile.git#v1.4.5"))
-val scalaColliderUGens = RootProject(uri("git://github.com/Sciss/ScalaColliderUGens.git#v1.13.2"))
-val scalaCollider      = RootProject(uri("git://github.com/Sciss/ScalaCollider.git#v1.17.3"))
-val lucreMatrix        = RootProject(uri("git://github.com/iem-projects/LucreMatrix.git#v0.10.0"))
-val soundProcesses     = RootProject(uri("git://github.com/Sciss/SoundProcesses.git#v2.19.0"))
+val scalaColliderUGens = RootProject(uri("git://github.com/Sciss/ScalaColliderUGens.git#v1.14.0"))
+val scalaCollider      = RootProject(uri("git://github.com/Sciss/ScalaCollider.git#v1.18.0"))
+val lucreMatrix        = RootProject(uri("git://github.com/iem-projects/LucreMatrix.git#v0.11.2"))
+val soundProcesses     = RootProject(uri("git://github.com/Sciss/SoundProcesses.git#v3.3.0"))
 val sysson             = RootProject(uri("git://github.com/iem-projects/sysson.git#v" + SYSSON_VERSION))
 
 git.gitCurrentBranch in ThisBuild := "master"
