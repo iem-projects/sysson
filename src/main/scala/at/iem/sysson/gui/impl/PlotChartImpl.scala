@@ -576,10 +576,10 @@ object PlotChartImpl {
 
           def paintIcon(c: awt.Component, g: Graphics, x: Int, y: Int): Unit = {
             if (palette == null) return
-            val paint = ColorPaletteTable.toPaint(palette)
+            val paint = ColorPaletteTable.toPaint(palette, startX = x, endX = x + getIconWidth)
             val g2    = g.asInstanceOf[Graphics2D]
             g2.setPaint(paint)
-            g2.fillRect(x, y, 64, 16)
+            g2.fillRect(x, y, getIconWidth, getIconHeight)
           }
         }
 

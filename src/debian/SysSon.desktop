@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=SysSon
-Version=1.7.2
+Version=1.7.3
 GenericName=SysSon
 Comment=SysSon Sonification Environment
 Exec=/usr/share/sysson/bin/sysson
