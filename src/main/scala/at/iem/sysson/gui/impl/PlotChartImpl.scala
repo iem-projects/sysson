@@ -16,8 +16,10 @@ package at.iem.sysson
 package gui
 package impl
 
+import java.awt
 import java.awt.image.BufferedImage
-import java.awt.{Color, Paint, Rectangle, Shape, TexturePaint}
+import java.awt.{LinearGradientPaint, Graphics, Color, Paint, Rectangle, Shape, TexturePaint}
+import javax.swing.Icon
 
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
@@ -34,7 +36,7 @@ import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.model.Model
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
-import de.sciss.swingplus.{ComboBox, OverlayPanel}
+import de.sciss.swingplus.{ListView, ComboBox, OverlayPanel}
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot
@@ -551,11 +553,11 @@ object PlotChartImpl {
         contents += overlayEmpty
       }
 
-      val mColorTable = ComboBox.Model.wrap(ColorPaletteTable.builtIn.keys.toSeq.sortBy(_.toUpperCase))
-      mColorTable.selectedItem = paletteValue0
+      val mColorTable = ComboBox.Model.wrap(ColorPaletteTable.builtIn.values.toSeq.sortBy(_.name.toUpperCase))
+      mColorTable.selectedItem = paletteValue0.flatMap(ColorPaletteTable.builtIn.get)
       mColorTable.reactions += {
         case ComboBox.Model.SelectionChanged(_) =>
-          val value = mColorTable.selectedItem
+          val value = mColorTable.selectedItem.map(_.name)
           val edit = cursor.step { implicit tx =>
             val valueEx = value.map(StringObj.newConst[S])
             implicit val stringTpe = StringObj
@@ -565,6 +567,61 @@ object PlotChartImpl {
           undoManager.add(edit)
       }
       val ggColorTable  = new ComboBox(mColorTable)
+      val rColorTable   = new ListView.Renderer[ColorPaletteTable] {
+        private[this] var palette: ColorPaletteTable = _
+
+        private[this] val icon = new Icon {
+          def getIconWidth : Int = 64
+          def getIconHeight: Int = 16
+
+          def paintIcon(c: awt.Component, g: Graphics, x: Int, y: Int): Unit = {
+            if (palette == null) return
+            var i         = 0
+            val num       = palette.num
+            val fractions = new Array[Float](num << 1)
+            val colors    = new Array[Color](num << 1)
+            val pLow      = palette.minValue
+            val pHigh     = palette.maxValue
+            val pRange    = pHigh - pLow
+            while (i < num) {
+              palette.minValue
+              val segm = palette(i)
+              val f1 = (segm.lowValue  - pLow) / pRange
+              val f2 = (segm.highValue - pLow) / pRange
+              var j  = i << 1
+              fractions(j) = f1.toFloat
+              colors   (j) = new Color(segm.lowColor)
+              j += 1
+              fractions(j) = f2.toFloat - 1.0e-3f
+              colors   (j) = new Color(segm.highColor)
+              i += 1
+            }
+            val paint = new LinearGradientPaint(x, y, x + getIconWidth, y, fractions, colors)
+            val g2    = g.asInstanceOf[Graphics2D]
+            g2.setPaint(paint)
+            g2.fillRect(x, y, 64, 16)
+          }
+        }
+
+        private[this] val component = new Label(null: String, icon, Alignment.Leading)
+        component.opaque      = true
+        component.iconTextGap = 6
+        component.border      = Swing.EmptyBorder(2)
+
+        def componentFor(list: ListView[_], sel: Boolean, focused: Boolean, c: ColorPaletteTable, idx: Int): Component = {
+          if (sel) {
+            component.background = list.selectionBackground
+            component.foreground = list.selectionForeground
+          } else {
+            component.background = list.background
+            component.foreground = list.foreground
+          }
+          palette         = c
+          component.text  = c.name
+          component
+        }
+      }
+      ggColorTable.renderer = rColorTable
 
       statsView.stats.foreach(updateMinMaxDefaults)
       statsView.addListener(statsListener)

@@ -44,7 +44,7 @@ object ColorPaletteTableImpl {
       new SeqImpl(name, values, background = background, foreground = foreground, fill = fill)
     } else {
       if (tpe != 1 && tpe != 2) sys.error(s"Unexpected palette type $tpe")
-      val isDiscrete = tpe == 1
+      val isDiscrete  = tpe == 1
       val num         = in.readInt()
       val segm        = Array.fill(num)(if (isDiscrete) readDiscreteSegment(in) else readGradientSegment(in))
       new SegmImpl(name, segm, background = background, foreground = foreground, fill = fill, isDiscrete = isDiscrete)
