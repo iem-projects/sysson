@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>WorkspaceHandle - SysSon 1.4.0 API - de.sciss.synth.proc.WorkspaceHandle</title>
-          <meta name="description" content="WorkspaceHandle - SysSon 1.4.0 API - de.sciss.synth.proc.WorkspaceHandle" />
-          <meta name="keywords" content="WorkspaceHandle SysSon 1.4.0 API de.sciss.synth.proc.WorkspaceHandle" />
+          <title>WorkspaceHandle - SysSon 1.7.1 API - de.sciss.synth.proc.WorkspaceHandle</title>
+          <meta name="description" content="WorkspaceHandle - SysSon 1.7.1 API - de.sciss.synth.proc.WorkspaceHandle" />
+          <meta name="keywords" content="WorkspaceHandle SysSon 1.7.1 API de.sciss.synth.proc.WorkspaceHandle" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="WorkspaceHandle$.html" title="See companion object"><img src="../../../../lib/trait_to_object_big.png" /></a>
+        <a href="WorkspaceHandle$.html" title="See companion object"><img alt="Trait/Object" src="../../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.proc">proc</a></p>
         <h1><a href="WorkspaceHandle$.html" title="See companion object">WorkspaceHandle</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -36,7 +36,7 @@
             | <a href="package.html" class="extype" name="de.sciss.synth.proc">package proc</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkspaceHandle</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.WorkspaceHandle.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">WorkspaceHandle</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.WorkspaceHandle.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       
@@ -79,7 +79,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -104,16 +103,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addDependent</span><span class="params">(<span name="dep">dep: <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.event.Sys.Tx">S.Tx</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">addDependent</span><span class="params">(<span name="dep">dep: <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@addDependent(dep:de.sciss.lucre.stm.Disposable[S#Tx])(implicittx:de.sciss.lucre.stm.TxnLike):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Adds a dependent which is disposed just before the workspace is disposed.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a dependent which is disposed just before the workspace is disposed.
-</p></div><dl class="paramcmts block"><dt class="param">dep</dt><dd class="cmt"><p>the dependent. This must be an _ephemeral_ object.
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">dep</dt><dd class="cmt"><p>the dependent. This must be an _ephemeral_ object.</p></dd></dl></div>
     </li><li name="de.sciss.synth.proc.WorkspaceHandle#removeDependent" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="removeDependent(dep:de.sciss.lucre.stm.Disposable[S#Tx])(implicittx:de.sciss.lucre.stm.TxnLike):Unit"></a>
       <a id="removeDependent(Disposable[S.Tx])(TxnLike):Unit"></a>
@@ -123,11 +121,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">removeDependent</span><span class="params">(<span name="dep">dep: <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.event.Sys.Tx">S.Tx</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">removeDependent</span><span class="params">(<span name="dep">dep: <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@removeDependent(dep:de.sciss.lucre.stm.Disposable[S#Tx])(implicittx:de.sciss.lucre.stm.TxnLike):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -140,11 +138,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">root</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.event.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <a href="package.html#Folder[S&lt;:de.sciss.lucre.event.Sys[S]]=de.sciss.lucre.expr.List.Modifiable[S,de.sciss.synth.proc.Obj[S],de.sciss.synth.proc.Obj.Update[S]]" class="extmbr" name="de.sciss.synth.proc.Folder">Folder</a>[<span class="extype" name="de.sciss.synth.proc.WorkspaceHandle.S">S</span>]</span>
+        <span class="name">root</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <a href="Folder.html" class="extype" name="de.sciss.synth.proc.Folder">Folder</a>[<span class="extype" name="de.sciss.synth.proc.WorkspaceHandle.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@root(implicittx:S#Tx):de.sciss.synth.proc.Folder[S]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -166,7 +164,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -183,7 +181,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@##():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -200,7 +198,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -217,7 +215,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -234,7 +232,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@clone():Object" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -257,7 +255,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -274,7 +272,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -291,7 +289,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -314,7 +312,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -331,7 +329,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -348,7 +346,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -365,7 +363,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -382,7 +380,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -399,7 +397,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -416,7 +414,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -433,7 +431,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@toString():String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -450,7 +448,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -473,7 +471,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -496,7 +494,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>

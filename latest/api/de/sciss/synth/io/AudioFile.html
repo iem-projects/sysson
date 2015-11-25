@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>AudioFile - SysSon 1.4.0 API - de.sciss.synth.io.AudioFile</title>
-          <meta name="description" content="AudioFile - SysSon 1.4.0 API - de.sciss.synth.io.AudioFile" />
-          <meta name="keywords" content="AudioFile SysSon 1.4.0 API de.sciss.synth.io.AudioFile" />
+          <title>AudioFile - SysSon 1.7.1 API - de.sciss.synth.io.AudioFile</title>
+          <meta name="description" content="AudioFile - SysSon 1.7.1 API - de.sciss.synth.io.AudioFile" />
+          <meta name="keywords" content="AudioFile SysSon 1.7.1 API de.sciss.synth.io.AudioFile" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="AudioFile$.html" title="See companion object"><img src="../../../../lib/trait_to_object_big.png" /></a>
+        <a href="AudioFile$.html" title="See companion object"><img alt="Trait/Object" src="../../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.io">io</a></p>
         <h1><a href="AudioFile$.html" title="See companion object">AudioFile</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -36,7 +36,7 @@
             | <a href="package.html" class="extype" name="de.sciss.synth.io">package io</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -79,7 +79,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -108,14 +107,13 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@cleanUp():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Flushes and closes the file.</p><div class="fullcomment"><div class="comment cmt"><p>Flushes and closes the file. As opposed
 to <code>close()</code>, this does not
 throw any exceptions but simply ignores any errors.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>#close()
-</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>#close()</p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#close" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="close():Unit"></a>
       <a id="close():Unit"></a>
@@ -129,7 +127,7 @@ throw any exceptions but simply ignores any errors.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@close():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Flushes and closes the file
@@ -141,8 +139,7 @@ throw any exceptions but simply ignores any errors.
     </span>)</span>
               
         </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if an error occurs during buffer flush
-                    or closing the file.
-</p></span></dd></dl></div>
+                    or closing the file.</p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#copyTo" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="copyTo(target:de.sciss.synth.io.AudioFile,numFrames:Long):de.sciss.synth.io.AudioFile"></a>
       <a id="copyTo(AudioFile,Long):AudioFile"></a>
@@ -156,7 +153,7 @@ throw any exceptions but simply ignores any errors.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@copyTo(target:de.sciss.synth.io.AudioFile,numFrames:Long):de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Copies sample frames from a source sound file
@@ -169,15 +166,13 @@ or any other class implementing the
 Both files must have the same number of channels.
 </p></div><dl class="paramcmts block"><dt class="param">target</dt><dd class="cmt"><p>to file to copy to from this audio file</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to copy. Reading
                    and writing begins at the current positions
-                   of both files.
-</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                   of both files.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a read or writer error occurs
-</p></span></dd></dl></div>
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a read or writer error occurs</p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#file" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="file:Option[java.io.File]"></a>
       <a id="file:Option[File]"></a>
@@ -191,7 +186,7 @@ Both files must have the same number of channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@file:Option[java.io.File]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Returns the underlying <code>File</code> if it was
@@ -213,7 +208,7 @@ this will return <code>None</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@flush():de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Flushes pending buffer content, and
@@ -239,7 +234,7 @@ as accurate as possible.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@isOpen():Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Channel</dd></dl></div>
@@ -256,7 +251,7 @@ as accurate as possible.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@isReadable:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -273,7 +268,7 @@ as accurate as possible.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@isWritable:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -290,7 +285,7 @@ as accurate as possible.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@numFrames:Long" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Returns the number of frames
@@ -298,11 +293,9 @@ in the file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the
 in the file.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the number of sample frames
          in the file. includes pending
-         buffer content
-</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> this is never thrown
+         buffer content</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> this is never thrown
                       but declared as of the <code>InterleavedStreamFile</code>
-                      interface
-</p></span></dd></dl></div>
+                      interface</p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#position" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="position:Long"></a>
       <a id="position:Long"></a>
@@ -316,15 +309,13 @@ in the file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@position:Long" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Returns the current file pointer in sample frames
 </p><div class="fullcomment"><div class="comment cmt"><p>Returns the current file pointer in sample frames
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the sample frame index which is the off
-           for the next reader or writer operation.
-</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> when the position cannot be queried
-</p></span></dd></dl></div>
+           for the next reader or writer operation.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> when the position cannot be queried</p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#read" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="read(data:de.sciss.synth.io.Frames,off:Int,len:Int):de.sciss.synth.io.AudioFile"></a>
       <a id="read(Frames,Int,Int):AudioFile"></a>
@@ -338,7 +329,7 @@ in the file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@read(data:de.sciss.synth.io.Frames,off:Int,len:Int):de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Reads sample frames from the current position
@@ -351,15 +342,13 @@ in the file.
               (e.g. data[0] == null), in which case these channels
               are skipped when reading</p></dd><dt class="param">off</dt><dd class="cmt"><p>off in the buffer in sample frames, such
              that he first frame of the first channel will
-             be placed in data[0][off] etc.</p></dd><dt class="param">len</dt><dd class="cmt"><p>number of continuous frames to reader.
-</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+             be placed in data[0][off] etc.</p></dd><dt class="param">len</dt><dd class="cmt"><p>number of continuous frames to reader.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a reader error or end-of-file occurs.
-</p></span></dd></dl></div>
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a reader error or end-of-file occurs.</p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#seek" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="seek(frame:Long):de.sciss.synth.io.AudioFile"></a>
       <a id="seek(Long):AudioFile"></a>
@@ -373,7 +362,7 @@ in the file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@seek(frame:Long):de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Moves the file pointer to a specific
@@ -388,8 +377,7 @@ frame.
     </span>)</span>
               
         </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> when a seek error occurs or you try to
-                    seek past the file's end.
-</p></span></dd></dl></div>
+                    seek past the file's end.</p></span></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#spec" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="spec:de.sciss.synth.io.AudioFileSpec"></a>
       <a id="spec:AudioFileSpec"></a>
@@ -403,7 +391,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@spec:de.sciss.synth.io.AudioFileSpec" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Returns a description of the audio file's specification.</p>
@@ -420,7 +408,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@write(data:de.sciss.synth.io.Frames,off:Int,len:Int):de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Writes sample frames to the file starting at the current position.</p><div class="fullcomment"><div class="comment cmt"><p>Writes sample frames to the file starting at the current position.
@@ -429,15 +417,13 @@ frame.
               data[0][] holds the first channel, data[1][]
               holds the second channel etc.</p></dd><dt class="param">off</dt><dd class="cmt"><p>off in the buffer in sample frames, such
              that he first frame of the first channel will
-             be reader from data[0][off] etc.</p></dd><dt class="param">len</dt><dd class="cmt"><p>number of continuous frames to writer.
-</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+             be reader from data[0][off] etc.</p></dd><dt class="param">len</dt><dd class="cmt"><p>number of continuous frames to writer.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[IOException]</span>
     </span>)</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a writer error occurs.
-</p></span></dd></dl></div>
+        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.io.IOException"><code>java.io.IOException</code></span> if a writer error occurs.</p></span></dd></dl></div>
     </li></ol>
             </div>
 
@@ -456,7 +442,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -473,7 +459,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@##():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -490,7 +476,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -507,7 +493,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -524,7 +510,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@buffer(bufFrames:Int):de.sciss.synth.io.Frames" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -541,7 +527,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@clone():Object" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -564,7 +550,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -581,7 +567,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -598,7 +584,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@fileType:de.sciss.synth.io.AudioFileType" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -615,7 +601,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -638,7 +624,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -655,7 +641,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -672,7 +658,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -689,7 +675,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -706,7 +692,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -723,7 +709,7 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -740,14 +726,13 @@ frame.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@numChannels:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Convenience method: Returns the number of channels
 in the file.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method: Returns the number of channels
 in the file. Same as <code>spec.numChannels</code>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the number of channels
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the number of channels</p></dd></dl></div>
     </li><li name="de.sciss.synth.io.AudioFile#position_=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="position_=(frame:Long):Unit"></a>
       <a id="position_=(Long):Unit"></a>
@@ -761,7 +746,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@position_=(frame:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -784,7 +769,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@read(data:de.sciss.synth.io.Frames):de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -807,7 +792,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@sampleFormat:de.sciss.synth.io.SampleFormat" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -824,7 +809,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@sampleRate:Double" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -841,7 +826,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -858,7 +843,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@toString():String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -875,7 +860,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -898,7 +883,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -921,7 +906,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -944,7 +929,7 @@ in the file. Same as <code>spec.numChannels</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.io.AudioFile@write(data:de.sciss.synth.io.Frames):de.sciss.synth.io.AudioFile" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>

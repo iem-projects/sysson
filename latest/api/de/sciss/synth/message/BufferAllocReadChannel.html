@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufferAllocReadChannel - SysSon 1.4.0 API - de.sciss.synth.message.BufferAllocReadChannel</title>
-          <meta name="description" content="BufferAllocReadChannel - SysSon 1.4.0 API - de.sciss.synth.message.BufferAllocReadChannel" />
-          <meta name="keywords" content="BufferAllocReadChannel SysSon 1.4.0 API de.sciss.synth.message.BufferAllocReadChannel" />
+          <title>BufferAllocReadChannel - SysSon 1.7.1 API - de.sciss.synth.message.BufferAllocReadChannel</title>
+          <meta name="description" content="BufferAllocReadChannel - SysSon 1.7.1 API - de.sciss.synth.message.BufferAllocReadChannel" />
+          <meta name="keywords" content="BufferAllocReadChannel SysSon 1.7.1 API de.sciss.synth.message.BufferAllocReadChannel" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,13 +28,13 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../lib/class_big.png" />
+        <img alt="Class" src="../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.message">message</a></p>
         <h1>BufferAllocReadChannel</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="de.sciss.synth.message">package message</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -58,9 +58,7 @@ by the audio-file.
                     resolve with respect to the server's current working directory. If the server is running on
                     a remote node, the path will be resolved in the server's local file system.</p></dd><dt class="param">startFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
                     value of <code>-1</code> denotes that the number of frames available in the file
-                    from the given offset is used (the entire file will be read).</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a>
-</p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocReadChannelMsg(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocReadChannel" class="extmbr" name="de.sciss.synth.Buffer#allocReadChannelMsg">Buffer#allocReadChannelMsg</a></p></span></dd></dl><div class="toggleContainer block">
+                    from the given offset is used (the entire file will be read).</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a></p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocReadChannelMsg(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocReadChannel" class="extmbr" name="de.sciss.synth.Buffer#allocReadChannelMsg">Buffer#allocReadChannelMsg</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a>, <a href="AsyncSend.html" class="extype" name="de.sciss.synth.message.AsyncSend">AsyncSend</a>, <a href="Send.html" class="extype" name="de.sciss.synth.message.Send">Send</a>, <a href="ServerMessage.html" class="extype" name="de.sciss.synth.message.ServerMessage">ServerMessage</a>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>, <span class="extype" name="scala.collection.LinearSeq">LinearSeq</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.LinearSeqLike">LinearSeqLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.SeqLike">SeqLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.GenSeq">GenSeq</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.GenSeqLike">GenSeqLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.Iterable">Iterable</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.IterableLike">IterableLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.collection.GenIterable">GenIterable</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.GenIterableLike">GenIterableLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.Traversable">Traversable</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.GenTraversable">GenTraversable</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.collection.LinearSeq">LinearSeq</span>], <span class="extype" name="scala.collection.TraversableLike">TraversableLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.GenTraversableLike">GenTraversableLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.Parallelizable">Parallelizable</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.collection.parallel.ParSeq">ParSeq</span>[<span class="extype" name="scala.Any">Any</span>]], <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.GenTraversableOnce">GenTraversableOnce</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.generic.FilterMonadic">FilterMonadic</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Any">Any</span>], (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -88,7 +86,6 @@ by the audio-file.
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -113,7 +110,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@&lt;init&gt;(id:Int,path:String,startFrame:Int,numFrames:Int,channels:List[Int],completion:Option[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocReadChannel" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier to use for the buffer. It must denote a currently un-allocated buffer
@@ -121,8 +118,7 @@ by the audio-file.
                     resolve with respect to the server's current working directory. If the server is running on
                     a remote node, the path will be resolved in the server's local file system.</p></dd><dt class="param">startFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
                     value of <code>-1</code> denotes that the number of frames available in the file
-                    from the given offset is used (the entire file will be read).</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.
-</p></dd></dl></div>
+                    from the given offset is used (the entire file will be read).</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -141,7 +137,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@Self=Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -158,7 +154,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@WithFilterextendsFilterMonadic[A,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -182,7 +178,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -199,7 +195,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@##():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -216,7 +212,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@++[B&gt;:A,That](that:scala.collection.GenTraversableOnce[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -233,7 +229,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@++:[B&gt;:A,That](that:Traversable[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -250,7 +246,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@++:[B&gt;:A,That](that:scala.collection.TraversableOnce[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -267,7 +263,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@+:[B&gt;:A,That](elem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -284,7 +280,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@/:[B](z:B)(op:(B,A)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -301,7 +297,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@:+[B&gt;:A,That](elem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -318,7 +314,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@:\[B](z:B)(op:(A,B)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -335,7 +331,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -352,7 +348,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@addString(b:StringBuilder):StringBuilder" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -369,7 +365,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@addString(b:StringBuilder,sep:String):StringBuilder" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -386,7 +382,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@addString(b:StringBuilder,start:String,sep:String,end:String):StringBuilder" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -403,7 +399,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@aggregate[B](z:=&gt;B)(seqop:(B,A)=&gt;B,combop:(B,B)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -420,7 +416,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@andThen[C](k:B=&gt;C):PartialFunction[A,C]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction → Function1</dd></dl></div>
@@ -437,7 +433,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@apply(idx:Int):Any" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → SeqLike → GenSeqLike → Function1</dd></dl></div>
@@ -454,7 +450,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@applyOrElse[A1&lt;:A,B1&gt;:B](x:A1,default:A1=&gt;B1):B1" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
@@ -471,7 +467,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@args:Any*" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a></dd></dl></div>
@@ -488,7 +484,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -505,7 +501,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@canEqual(that:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → Equals</dd></dl></div>
@@ -522,11 +518,10 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@channels:List[Int]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">a sequence of channel indices to read.</p><div class="fullcomment"><div class="comment cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.
-</p></div></div>
+      <p class="shortcomment cmt">a sequence of channel indices to read.</p><div class="fullcomment"><div class="comment cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -540,7 +535,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@clone():Object" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -563,7 +558,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@collect[B,That](pf:PartialFunction[A,B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -580,7 +575,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@collectFirst[B](pf:PartialFunction[A,B]):Option[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -597,7 +592,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@combinations(n:Int):Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -614,7 +609,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@companion:scala.collection.generic.GenericCompanion[scala.collection.LinearSeq]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>LinearSeq → Seq → GenSeq → Iterable → GenIterable → Traversable → GenTraversable → GenericTraversableTemplate</dd></dl></div>
@@ -631,7 +626,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@completion:Option[de.sciss.osc.Packet]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a> → <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a></dd></dl></div>
@@ -648,7 +643,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@compose[A](g:A=&gt;T1):A=&gt;R" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -668,7 +663,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@contains[A1&gt;:A](elem:A1):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -685,7 +680,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@containsSlice[B](that:scala.collection.GenSeq[B]):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -702,7 +697,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@copyToArray[B&gt;:A](xs:Array[B],start:Int,len:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -719,7 +714,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@copyToArray[B&gt;:A](xs:Array[B]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -736,7 +731,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@copyToArray[B&gt;:A](xs:Array[B],start:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -753,7 +748,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@copyToBuffer[B&gt;:A](dest:scala.collection.mutable.Buffer[B]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -770,7 +765,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@corresponds[B](that:scala.collection.GenSeq[B])(p:(A,B)=&gt;Boolean):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>LinearSeqLike → SeqLike → GenSeqLike</dd><dt>Annotations</dt><dd>
@@ -790,7 +785,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@count(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -807,7 +802,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@diff[B&gt;:A](that:scala.collection.GenSeq[B]):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -824,7 +819,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@distinct:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -841,7 +836,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@drop(n:Int):de.sciss.osc.Message" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -858,7 +853,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@dropRight(n:Int):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -875,7 +870,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@dropWhile(p:A=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -892,7 +887,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@encode(c:de.sciss.osc.PacketCodec,b:java.nio.ByteBuffer):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → <a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a></dd></dl></div>
@@ -909,7 +904,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@encodedSize(c:de.sciss.osc.PacketCodec):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → <a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a></dd></dl></div>
@@ -926,7 +921,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@endsWith[B](that:scala.collection.GenSeq[B]):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -943,7 +938,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -960,7 +955,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@equals(other:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → GenSeqLike → Equals → AnyRef → Any</dd></dl></div>
@@ -977,7 +972,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@exists(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -994,7 +989,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@filter(p:A=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1011,7 +1006,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@filterNot(p:A=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1028,7 +1023,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1051,7 +1046,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@find(p:A=&gt;Boolean):Option[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1068,7 +1063,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@flatMap[B,That](f:A=&gt;scala.collection.GenTraversableOnce[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike → FilterMonadic</dd></dl></div>
@@ -1085,7 +1080,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@flatten[B](implicitasTraversable:A=&gt;scala.collection.GenTraversableOnce[B]):CC[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd></dl></div>
@@ -1102,7 +1097,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@fold[A1&gt;:A](z:A1)(op:(A1,A1)=&gt;A1):A1" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1119,7 +1114,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@foldLeft[B](z:B)(op:(B,A)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1136,7 +1131,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@foldRight[B](z:B)(op:(A,B)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1153,7 +1148,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@forall(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1170,7 +1165,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@foreach[U](f:A=&gt;U):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike → TraversableOnce → GenTraversableOnce → FilterMonadic</dd></dl></div>
@@ -1187,7 +1182,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@genericBuilder[B]:scala.collection.mutable.Builder[B,CC[B]]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd></dl></div>
@@ -1204,7 +1199,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -1221,7 +1216,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@groupBy[K](f:A=&gt;K):scala.collection.immutable.Map[K,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1238,7 +1233,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@grouped(size:Int):Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -1255,7 +1250,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@hasDefiniteSize:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1272,7 +1267,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → LinearSeqLike → GenSeqLike → AnyRef → Any</dd></dl></div>
@@ -1289,7 +1284,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@head:A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1306,7 +1301,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@headOption:Option[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1323,7 +1318,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@id:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the identifier to use for the buffer.</p><div class="fullcomment"><div class="comment cmt"><p>the identifier to use for the buffer. It must denote a currently un-allocated buffer
@@ -1341,7 +1336,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@indexOf[B&gt;:A](elem:B,from:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1358,7 +1353,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@indexOf[B&gt;:A](elem:B):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1375,7 +1370,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@indexOfSlice[B&gt;:A](that:scala.collection.GenSeq[B],from:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1392,7 +1387,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@indexOfSlice[B&gt;:A](that:scala.collection.GenSeq[B]):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1409,7 +1404,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@indexWhere(p:A=&gt;Boolean,from:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -1426,7 +1421,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@indexWhere(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1443,7 +1438,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@indices:scala.collection.immutable.Range" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1460,7 +1455,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@init:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1477,7 +1472,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@inits:Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -1494,7 +1489,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@intersect[B&gt;:A](that:scala.collection.GenSeq[B]):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -1511,7 +1506,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@isComparable(other:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a></dd></dl></div>
@@ -1528,7 +1523,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@isDefinedAt(idx:Int):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1545,7 +1540,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@isEmpty:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1562,7 +1557,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1579,7 +1574,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@isSynchronous:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AsyncSend.html" class="extype" name="de.sciss.synth.message.AsyncSend">AsyncSend</a> → <a href="Send.html" class="extype" name="de.sciss.synth.message.Send">Send</a></dd></dl></div>
@@ -1596,7 +1591,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@isTraversableAgain:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike → GenTraversableOnce</dd></dl></div>
@@ -1613,7 +1608,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@iterator:Iterator[Any]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → LinearSeqLike → IterableLike → GenIterableLike</dd></dl></div>
@@ -1630,7 +1625,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@last:A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1647,7 +1642,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lastIndexOf[B&gt;:A](elem:B,end:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1664,7 +1659,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lastIndexOf[B&gt;:A](elem:B):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1681,7 +1676,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lastIndexOfSlice[B&gt;:A](that:scala.collection.GenSeq[B],end:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1698,7 +1693,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lastIndexOfSlice[B&gt;:A](that:scala.collection.GenSeq[B]):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1715,7 +1710,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lastIndexWhere(p:A=&gt;Boolean,end:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -1732,7 +1727,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lastIndexWhere(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1749,7 +1744,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lastOption:Option[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1766,7 +1761,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@length:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → SeqLike → GenSeqLike</dd></dl></div>
@@ -1783,7 +1778,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lengthCompare(len:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1800,7 +1795,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@lift:A=&gt;Option[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
@@ -1817,7 +1812,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@map[B,That](f:A=&gt;B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike → FilterMonadic</dd></dl></div>
@@ -1834,7 +1829,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@max[B&gt;:A](implicitcmp:Ordering[B]):A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1851,7 +1846,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@maxBy[B](f:A=&gt;B)(implicitcmp:Ordering[B]):A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1868,7 +1863,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@min[B&gt;:A](implicitcmp:Ordering[B]):A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1885,7 +1880,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@minBy[B](f:A=&gt;B)(implicitcmp:Ordering[B]):A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1902,7 +1897,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@mkString:String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1919,7 +1914,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@mkString(sep:String):String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1936,7 +1931,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@mkString(start:String,sep:String,end:String):String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1953,7 +1948,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@name:String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → <a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a></dd></dl></div>
@@ -1970,7 +1965,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1987,7 +1982,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@newBuilder:scala.collection.mutable.Builder[Any,de.sciss.osc.Message]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → GenericTraversableTemplate → TraversableLike → HasNewBuilder</dd></dl></div>
@@ -2004,7 +1999,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@nonEmpty:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2021,7 +2016,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -2038,7 +2033,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -2055,7 +2050,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@numFrames:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the number of frames to read which will be the size of the allocated buffer.</p><div class="fullcomment"><div class="comment cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
@@ -2074,7 +2069,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@orElse[A1&lt;:A,B1&gt;:B](that:PartialFunction[A1,B1]):PartialFunction[A1,B1]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
@@ -2091,7 +2086,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@padTo[B&gt;:A,That](len:Int,elem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2108,7 +2103,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@par:ParRepr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parallelizable</dd></dl></div>
@@ -2125,7 +2120,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@parCombiner:scala.collection.parallel.Combiner[A,scala.collection.parallel.ParSeq[A]]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>SeqLike → TraversableLike → Parallelizable</dd></dl></div>
@@ -2142,7 +2137,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@partition(p:A=&gt;Boolean):(Repr,Repr)" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2159,7 +2154,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@patch[B&gt;:A,That](from:Int,patch:scala.collection.GenSeq[B],replaced:Int)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2176,7 +2171,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@path:String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the path of the audio-file to read.</p><div class="fullcomment"><div class="comment cmt"><p>the path of the audio-file to read. Since the server is an independent process, this must
@@ -2195,7 +2190,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@permutations:Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2212,7 +2207,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@prefixLength(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -2229,7 +2224,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@product[B&gt;:A](implicitnum:Numeric[B]):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2246,7 +2241,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reduce[A1&gt;:A](op:(A1,A1)=&gt;A1):A1" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2263,7 +2258,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reduceLeft[B&gt;:A](op:(B,A)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -2280,7 +2275,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reduceLeftOption[B&gt;:A](op:(B,A)=&gt;B):Option[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2297,7 +2292,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reduceOption[A1&gt;:A](op:(A1,A1)=&gt;A1):Option[A1]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2314,7 +2309,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reduceRight[B&gt;:A](op:(A,B)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2331,7 +2326,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reduceRightOption[B&gt;:A](op:(A,B)=&gt;B):Option[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2348,7 +2343,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@repr:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2365,7 +2360,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reverse:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2382,7 +2377,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reverseIterator:Iterator[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2399,7 +2394,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reverseMap[B,That](f:A=&gt;B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2416,7 +2411,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@reversed:List[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -2433,7 +2428,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@runWith[U](action:B=&gt;U):A=&gt;Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
@@ -2450,7 +2445,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@sameElements[B&gt;:A](that:scala.collection.GenIterable[B]):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → GenIterableLike</dd></dl></div>
@@ -2467,7 +2462,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@scan[B&gt;:A,That](z:B)(op:(B,B)=&gt;B)(implicitcbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2484,7 +2479,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@scanLeft[B,That](z:B)(op:(B,A)=&gt;B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2501,7 +2496,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@scanRight[B,That](z:B)(op:(A,B)=&gt;B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd><dt>Annotations</dt><dd>
@@ -2521,7 +2516,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@segmentLength(p:A=&gt;Boolean,from:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2538,7 +2533,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@seq:scala.collection.LinearSeq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>LinearSeq → LinearSeqLike → Seq → GenSeq → GenSeqLike → Iterable → GenIterable → Traversable → GenTraversable → Parallelizable → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2555,7 +2550,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@size:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenTraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2572,7 +2567,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@slice(from:Int,until:Int):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2589,7 +2584,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@sliding(size:Int,step:Int):Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -2606,7 +2601,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@sliding(size:Int):Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -2623,7 +2618,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@sortBy[B](f:A=&gt;B)(implicitord:scala.math.Ordering[B]):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2640,7 +2635,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@sortWith(lt:(A,A)=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2657,7 +2652,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@sorted[B&gt;:A](implicitord:scala.math.Ordering[B]):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2674,7 +2669,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@span(p:A=&gt;Boolean):(Repr,Repr)" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2691,7 +2686,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@splitAt(n:Int):(Repr,Repr)" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2708,7 +2703,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@startFrame:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the offset in frames into the audio-file to begin reading from</p>
@@ -2725,7 +2720,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@startsWith[B](that:scala.collection.GenSeq[B],offset:Int):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2742,11 +2737,11 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@startsWith[B](that:scala.collection.GenSeq[B]):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
-    </li><li name="scala.collection.TraversableLike#stringPrefix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="de.sciss.osc.Message#stringPrefix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>
       <h4 class="signature">
@@ -2759,10 +2754,10 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@stringPrefix:String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → TraversableLike → GenTraversableLike</dd></dl></div>
     </li><li name="scala.collection.TraversableOnce#sum" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sum[B&gt;:A](implicitnum:Numeric[B]):B"></a>
       <a id="sum[B&gt;:Any](Numeric[B]):B"></a>
@@ -2776,7 +2771,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@sum[B&gt;:A](implicitnum:Numeric[B]):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2793,7 +2788,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -2810,7 +2805,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@tail:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2827,7 +2822,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@tails:Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -2844,7 +2839,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@take(n:Int):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2861,7 +2856,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@takeRight(n:Int):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -2878,7 +2873,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@takeWhile(p:A=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2895,7 +2890,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@thisCollection:scala.collection.LinearSeq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>LinearSeqLike → SeqLike → IterableLike → TraversableLike</dd></dl></div>
@@ -2912,7 +2907,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@to[Col[_]](implicitcbf:scala.collection.generic.CanBuildFrom[Nothing,A,Col[A@scala.annotation.unchecked.uncheckedVariance]]):Col[A@scala.annotation.unchecked.uncheckedVariance]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2929,7 +2924,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toArray[B&gt;:A](implicitevidence$1:scala.reflect.ClassTag[B]):Array[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2946,7 +2941,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toBuffer[B&gt;:A]:scala.collection.mutable.Buffer[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2963,7 +2958,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toCollection(repr:Repr):scala.collection.LinearSeq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>LinearSeqLike → SeqLike → IterableLike → TraversableLike</dd></dl></div>
@@ -2980,7 +2975,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toIndexedSeq:scala.collection.immutable.IndexedSeq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2997,7 +2992,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toIterable:Iterable[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3014,7 +3009,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toIterator:Iterator[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableOnce</dd><dt>Annotations</dt><dd>
@@ -3040,7 +3035,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toList:List[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3057,7 +3052,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toMap[T,U](implicitev:&lt;:&lt;[A,(T,U)]):scala.collection.immutable.Map[T,U]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3074,7 +3069,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toSeq:Seq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3091,7 +3086,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toSet[B&gt;:A]:scala.collection.immutable.Set[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3108,7 +3103,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toStream:scala.collection.immutable.Stream[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableOnce</dd></dl></div>
@@ -3125,7 +3120,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toString():String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → SeqLike → TraversableLike → Function1 → AnyRef → Any</dd></dl></div>
@@ -3142,7 +3137,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toTraversable:Traversable[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → TraversableOnce → GenTraversableOnce</dd><dt>Annotations</dt><dd>
@@ -3168,7 +3163,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@toVector:Vector[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3185,7 +3180,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@transpose[B](implicitasTraversable:A=&gt;scala.collection.GenTraversableOnce[B]):CC[CC[B]@scala.annotation.unchecked.uncheckedVariance]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd><dt>Annotations</dt><dd>
@@ -3205,7 +3200,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@union[B&gt;:A,That](that:scala.collection.GenSeq[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -3222,7 +3217,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@unzip[A1,A2](implicitasPair:A=&gt;(A1,A2)):(CC[A1],CC[A2])" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd></dl></div>
@@ -3239,7 +3234,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@unzip3[A1,A2,A3](implicitasTriple:A=&gt;(A1,A2,A3)):(CC[A1],CC[A2],CC[A3])" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd></dl></div>
@@ -3256,7 +3251,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@updateCompletion(completion:Option[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocReadChannel" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a> → <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a></dd></dl></div>
@@ -3273,7 +3268,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@updated[B&gt;:A,That](index:Int,elem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -3290,7 +3285,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@view(from:Int,until:Int):scala.collection.SeqView[A,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → IterableLike → TraversableLike</dd></dl></div>
@@ -3307,7 +3302,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@view:scala.collection.SeqView[A,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → IterableLike → TraversableLike</dd></dl></div>
@@ -3324,7 +3319,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -3347,7 +3342,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -3370,7 +3365,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -3393,7 +3388,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@withFilter(p:A=&gt;Boolean):scala.collection.generic.FilterMonadic[A,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → FilterMonadic</dd></dl></div>
@@ -3410,7 +3405,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@zip[A1&gt;:A,B,That](that:scala.collection.GenIterable[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,(A1,B),That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → GenIterableLike</dd></dl></div>
@@ -3427,7 +3422,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@zipAll[B,A1&gt;:A,That](that:scala.collection.GenIterable[B],thisElem:A1,thatElem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,(A1,B),That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → GenIterableLike</dd></dl></div>
@@ -3444,7 +3439,7 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferAllocReadChannel@zipWithIndex[A1&gt;:A,That](implicitbf:scala.collection.generic.CanBuildFrom[Repr,(A1,Int),That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → GenIterableLike</dd></dl></div>

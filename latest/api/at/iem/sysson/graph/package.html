@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>graph - SysSon 1.4.0 API - at.iem.sysson.graph</title>
-          <meta name="description" content="graph - SysSon 1.4.0 API - at.iem.sysson.graph" />
-          <meta name="keywords" content="graph SysSon 1.4.0 API at.iem.sysson.graph" />
+          <title>graph - SysSon 1.7.1 API - at.iem.sysson.graph</title>
+          <meta name="description" content="graph - SysSon 1.7.1 API - at.iem.sysson.graph" />
+          <meta name="keywords" content="graph SysSon 1.7.1 API at.iem.sysson.graph" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,11 +28,11 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../../lib/package_big.png" />
+        <img alt="Package" src="../../../../lib/package_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="at">at</a>.<a href="../../package.html" class="extype" name="at.iem">iem</a>.<a href="../package.html" class="extype" name="at.iem.sysson">sysson</a></p>
         <h1>graph</h1><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -79,15 +79,14 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@DimextendsUserInteractionwithUGenGraphBuilder.KeywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Specification of a data source dimension
 </p><div class="fullcomment"><div class="comment cmt"><p>Specification of a data source dimension
-</p></div><dl class="paramcmts block"><dt class="param">variable</dt><dd class="cmt"><p>Data source to which this dimension refers</p></dd><dt class="param">name</dt><dd class="cmt"><p>Logical name by which the dimension is referred to
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">variable</dt><dd class="cmt"><p>Data source to which this dimension refers</p></dd><dt class="param">name</dt><dd class="cmt"><p>Logical name by which the dimension is referred to</p></dd></dl></div>
     </li><li name="at.iem.sysson.graph.Elapsed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ElapsedextendsGE.LazywithHasSideEffectwithProductwithSerializable"></a>
+      <a id="ElapsedextendsUserInteractionwithUGenGraphBuilder.InputwithUGenGraphBuilder.KeywithProductwithSerializable"></a>
       <a id="Elapsed:Elapsed"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -95,17 +94,32 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Elapsed.html"><span class="name">Elapsed</span></a><span class="params">(<span name="rate">rate: <a href="../../../../de/sciss/synth/Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="Dim$$Play.html" class="extype" name="at.iem.sysson.graph.Dim.Play">Play</a></span>, <span name="terminate">terminate: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../../../de/sciss/synth/GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">Lazy</a> with <a href="../../../../de/sciss/synth/HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Elapsed.html"><span class="name">Elapsed</span></a><span class="params">(<span name="in">in: <a href="Dim$$Play.html" class="extype" name="at.iem.sysson.graph.Dim.Play">Play</a></span>)</span><span class="result"> extends <a href="UserInteraction.html" class="extype" name="at.iem.sysson.graph.UserInteraction">UserInteraction</a> with <a href="../../../../de/sciss/synth/proc/UGenGraphBuilder$$Input.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</a> with <a href="../../../../de/sciss/synth/proc/UGenGraphBuilder$$Key.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#at.iem.sysson.graph.package@ElapsedextendsGE.LazywithHasSideEffectwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+      <a href="../../../../index.html#at.iem.sysson.graph.package@ElapsedextendsUserInteractionwithUGenGraphBuilder.InputwithUGenGraphBuilder.KeywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A special graph element that measures the progress of a playing dimension.</p><div class="fullcomment"><div class="comment cmt"><p>A special graph element that measures the progress of a playing dimension.
-Additionally it can stop the playing synth when that progress has reached 100%.
-</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the playing dimension</p></dd><dt class="param">terminate</dt><dd class="cmt"><p>if <code>true</code>, stops the synth when 100% is reached
-</p></dd></dl></div>
+      <p class="shortcomment cmt">A special element that measures the progress of a playing dimension.</p><div class="fullcomment"><div class="comment cmt"><p>A special element that measures the progress of a playing dimension.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the playing dimension</p></dd></dl></div>
+    </li><li name="at.iem.sysson.graph.MatrixTooLargeException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MatrixTooLargeExceptionextendsRuntimeException"></a>
+      <a id="MatrixTooLargeException:MatrixTooLargeException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MatrixTooLargeException.html"><span class="name">MatrixTooLargeException</span></a><span class="result"> extends <a href="../../../../scala/package.html#RuntimeException=RuntimeException" class="extmbr" name="scala.RuntimeException">RuntimeException</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#at.iem.sysson.graph.package@MatrixTooLargeExceptionextendsRuntimeException" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="at.iem.sysson.graph.UserInteraction" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="UserInteractionextendsLazy.Expander[Unit]withHasSideEffect"></a>
       <a id="UserInteraction:UserInteraction"></a>
@@ -119,7 +133,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@UserInteractionextendsLazy.Expander[Unit]withHasSideEffect" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Indicates a graph element that provides a user interface element.</p>
@@ -136,7 +150,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@UserValueextendsUserInteractionwithUGenGraphBuilder.InputwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -153,7 +167,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@VarextendsUserInteractionwithUGenGraphBuilder.KeywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -177,7 +191,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@Dim" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -194,7 +208,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@Elapsed" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">A special graph element that measures the progress of a playing dimension.</p><div class="fullcomment"><div class="comment cmt"><p>A special graph element that measures the progress of a playing dimension.
@@ -213,7 +227,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@UserValue" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -230,7 +244,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@Var" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -247,7 +261,7 @@ Additionally it can stop the playing synth when that progress has reached 100%.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#at.iem.sysson.graph.package@output" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       

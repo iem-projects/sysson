@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Grapheme - SysSon 1.4.0 API - de.sciss.synth.proc.Grapheme</title>
-          <meta name="description" content="Grapheme - SysSon 1.4.0 API - de.sciss.synth.proc.Grapheme" />
-          <meta name="keywords" content="Grapheme SysSon 1.4.0 API de.sciss.synth.proc.Grapheme" />
+          <title>Grapheme - SysSon 1.7.1 API - de.sciss.synth.proc.Grapheme</title>
+          <meta name="description" content="Grapheme - SysSon 1.7.1 API - de.sciss.synth.proc.Grapheme" />
+          <meta name="keywords" content="Grapheme SysSon 1.7.1 API de.sciss.synth.proc.Grapheme" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,7 +28,7 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="Grapheme.html" title="See companion trait"><img src="../../../../lib/object_to_trait_big.png" /></a>
+        <a href="Grapheme.html" title="See companion trait"><img alt="Object/Trait" src="../../../../lib/object_to_trait_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.proc">proc</a></p>
         <h1><a href="Grapheme.html" title="See companion trait">Grapheme</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -36,7 +36,7 @@
             | <a href="package.html" class="extype" name="de.sciss.synth.proc">package proc</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Grapheme</span>
+        <span class="name">Grapheme</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span>, <span class="extype" name="de.sciss.lucre.stm.Elem.Type">Type</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.synth.proc.Grapheme"><span>Grapheme</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.synth.proc.Grapheme"><span>Grapheme</span></li><li class="in" name="de.sciss.lucre.stm.Obj.Type"><span>Type</span></li><li class="in" name="de.sciss.lucre.stm.Elem.Type"><span>Type</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -79,7 +79,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -94,7 +93,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="de.sciss.synth.proc.Grapheme.Expr" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Expr[S&lt;:de.sciss.lucre.event.Sys[S]]extendsExpr[S,de.sciss.synth.proc.Grapheme.Value]"></a>
+      <a id="Expr[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsExpr[S,de.sciss.synth.proc.Grapheme.Value]"></a>
       <a id="Expr[S&lt;:Sys[S]]:Expr[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -102,16 +101,16 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grapheme$$Expr.html"><span class="name">Expr</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Expr.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.expr.Expr">lucre.expr.Expr</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Expr.S">S</span>, <a href="Grapheme$$Value.html" class="extype" name="de.sciss.synth.proc.Grapheme.Value">Value</a>]</span>
+        <a href="Grapheme$$Expr.html"><span class="name">Expr</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Expr.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.expr.Expr">lucre.expr.Expr</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Expr.S">S</span>, <a href="Grapheme$$Value.html" class="extype" name="de.sciss.synth.proc.Grapheme.Value">Value</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Expr[S&lt;:de.sciss.lucre.event.Sys[S]]extendsExpr[S,de.sciss.synth.proc.Grapheme.Value]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Expr[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsExpr[S,de.sciss.synth.proc.Grapheme.Value]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.proc.Grapheme.Modifiable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Modifiable[S&lt;:de.sciss.lucre.event.Sys[S]]extendsGrapheme[S]"></a>
+      <a id="Modifiable[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsGrapheme[S]"></a>
       <a id="Modifiable[S&lt;:Sys[S]]:Modifiable[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -119,11 +118,11 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grapheme$$Modifiable.html"><span class="name">Modifiable</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Modifiable.S">S</span>]</span>]</span><span class="result"> extends <a href="Grapheme.html" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Modifiable.S">S</span>]</span>
+        <a href="Grapheme$$Modifiable.html"><span class="name">Modifiable</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Modifiable.S">S</span>]</span>]</span><span class="result"> extends <a href="Grapheme.html" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Modifiable.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Modifiable[S&lt;:de.sciss.lucre.event.Sys[S]]extendsGrapheme[S]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Modifiable[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsGrapheme[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -140,12 +139,12 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@SegmentextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.proc.Grapheme.TimedElem" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TimedElem[S&lt;:de.sciss.lucre.event.Sys[S]]=de.sciss.lucre.bitemp.BiExpr[S,de.sciss.synth.proc.Grapheme.Value]"></a>
+      <a id="TimedElem[S&lt;:de.sciss.lucre.stm.Sys[S]]=de.sciss.lucre.bitemp.BiPin.Entry[S,de.sciss.synth.proc.Grapheme.Expr[S]]"></a>
       <a id="TimedElem[S&lt;:Sys[S]]:TimedElem[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -153,16 +152,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">TimedElem</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.TimedElem.S">S</span>]</span>]</span><span class="result"> = <a href="../../lucre/bitemp/BiExpr.html" class="extype" name="de.sciss.lucre.bitemp.BiExpr">BiExpr</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.TimedElem.S">S</span>, <a href="Grapheme$$Value.html" class="extype" name="de.sciss.synth.proc.Grapheme.Value">Value</a>]</span>
+        <span class="name">TimedElem</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.TimedElem.S">S</span>]</span>]</span><span class="result"> = <span class="extype" name="de.sciss.lucre.bitemp.BiPin.Entry">Entry</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.TimedElem.S">S</span>, <a href="Grapheme$$Expr.html" class="extype" name="de.sciss.synth.proc.Grapheme.Expr">Expr</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.TimedElem.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@TimedElem[S&lt;:de.sciss.lucre.event.Sys[S]]=de.sciss.lucre.bitemp.BiExpr[S,de.sciss.synth.proc.Grapheme.Value]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@TimedElem[S&lt;:de.sciss.lucre.stm.Sys[S]]=de.sciss.lucre.bitemp.BiPin.Entry[S,de.sciss.synth.proc.Grapheme.Expr[S]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.proc.Grapheme.Update" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Update[S&lt;:de.sciss.lucre.event.Sys[S]]extendsProductwithSerializable"></a>
+      <a id="Update[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsProductwithSerializable"></a>
       <a id="Update[S&lt;:Sys[S]]:Update[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -170,11 +169,11 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Grapheme$$Update.html"><span class="name">Update</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Update.S">S</span>]</span>]</span><span class="params">(<span name="grapheme">grapheme: <a href="Grapheme.html" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Update.S">S</span>]</span>, <span name="changes">changes: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="Grapheme$$Segment.html" class="extype" name="de.sciss.synth.proc.Grapheme.Segment">Segment</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Grapheme$$Update.html"><span class="name">Update</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Update.S">S</span>]</span>]</span><span class="params">(<span name="grapheme">grapheme: <a href="Grapheme.html" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.Update.S">S</span>]</span>, <span name="changes">changes: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="Grapheme$$Segment.html" class="extype" name="de.sciss.synth.proc.Grapheme.Segment">Segment</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Update[S&lt;:de.sciss.lucre.event.Sys[S]]extendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Update[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -191,7 +190,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@ValueextendsWritable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">An evaluated and flattened scan element.</p><div class="fullcomment"><div class="comment cmt"><p>An evaluated and flattened scan element. This is either an immutable value such as a constant or
@@ -218,7 +217,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -235,7 +234,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@##():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -252,7 +251,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -265,11 +264,11 @@ fed by another embedded process (<code>Sink</code>).
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Grapheme$$Expr$.html"><span class="name">Expr</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.expr.impl.ExprTypeImplA">ExprTypeImplA</span>[<a href="Grapheme$$Value.html" class="extype" name="de.sciss.synth.proc.Grapheme.Value">Value</a>]</span>
+        <a href="Grapheme$$Expr$.html"><span class="name">Expr</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.expr.impl.ExprTypeImpl">ExprTypeImpl</span>[<a href="Grapheme$$Value.html" class="extype" name="de.sciss.synth.proc.Grapheme.Value">Value</a>, <a href="Grapheme$$Expr.html" class="extype" name="de.sciss.synth.proc.Grapheme.Expr">Expr</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Expr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -286,7 +285,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Modifiable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -303,7 +302,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Segment" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -320,12 +319,12 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@Value" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.proc.Grapheme#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[S&lt;:de.sciss.lucre.event.Sys[S]](numChannels:Int)(implicittx:S#Tx):de.sciss.synth.proc.Grapheme.Modifiable[S]"></a>
+      <a id="apply[S&lt;:de.sciss.lucre.stm.Sys[S]](numChannels:Int)(implicittx:S#Tx):de.sciss.synth.proc.Grapheme.Modifiable[S]"></a>
       <a id="apply[S&lt;:Sys[S]](Int)(Grapheme.apply.S.Tx):Modifiable[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -333,11 +332,11 @@ fed by another embedded process (<code>Sink</code>).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.apply.S">S</span>]</span>]</span><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.event.Sys.Tx">Grapheme.apply.S.Tx</span></span>)</span><span class="result">: <a href="Grapheme$$Modifiable.html" class="extype" name="de.sciss.synth.proc.Grapheme.Modifiable">Modifiable</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.apply.S">S</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.apply.S">S</span>]</span>]</span><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">Grapheme.apply.S.Tx</span></span>)</span><span class="result">: <a href="Grapheme$$Modifiable.html" class="extype" name="de.sciss.synth.proc.Grapheme.Modifiable">Modifiable</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.apply.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@apply[S&lt;:de.sciss.lucre.event.Sys[S]](numChannels:Int)(implicittx:S#Tx):de.sciss.synth.proc.Grapheme.Modifiable[S]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@apply[S&lt;:de.sciss.lucre.stm.Sys[S]](numChannels:Int)(implicittx:S#Tx):de.sciss.synth.proc.Grapheme.Modifiable[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -354,7 +353,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -371,7 +370,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@clone():Object" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -394,7 +393,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -411,7 +410,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -428,7 +427,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -451,7 +450,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -468,10 +467,27 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.proc.Grapheme#init" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="init():Unit"></a>
+      <a id="init():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">init</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@init():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a> → Type → Type</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -485,7 +501,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -502,7 +518,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -519,7 +535,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -536,12 +552,12 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="de.sciss.synth.proc.Grapheme#read" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="read[S&lt;:de.sciss.lucre.event.Sys[S]](in:de.sciss.serial.DataInput,access:S#Acc)(implicittx:S#Tx):de.sciss.synth.proc.Grapheme[S]"></a>
+      <a id="read[S&lt;:de.sciss.lucre.stm.Sys[S]](in:de.sciss.serial.DataInput,access:S#Acc)(implicittx:S#Tx):de.sciss.synth.proc.Grapheme[S]"></a>
       <a id="read[S&lt;:Sys[S]](DataInput,Grapheme.read.S.Acc)(Grapheme.read.S.Tx):Grapheme[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -549,28 +565,62 @@ fed by another embedded process (<code>Sink</code>).
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">read</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.read.S">S</span>]</span>]</span><span class="params">(<span name="in">in: <span class="extype" name="de.sciss.serial.DataInput">DataInput</span></span>, <span name="access">access: <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">Grapheme.read.S.Acc</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.event.Sys.Tx">Grapheme.read.S.Tx</span></span>)</span><span class="result">: <a href="Grapheme.html" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.read.S">S</span>]</span>
+        <span class="name">read</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.read.S">S</span>]</span>]</span><span class="params">(<span name="in">in: <span class="extype" name="de.sciss.serial.DataInput">DataInput</span></span>, <span name="access">access: <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">Grapheme.read.S.Acc</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">Grapheme.read.S.Tx</span></span>)</span><span class="result">: <a href="Grapheme.html" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.read.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@read[S&lt;:de.sciss.lucre.event.Sys[S]](in:de.sciss.serial.DataInput,access:S#Acc)(implicittx:S#Tx):de.sciss.synth.proc.Grapheme[S]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@read[S&lt;:de.sciss.lucre.stm.Sys[S]](in:de.sciss.serial.DataInput,access:S#Acc)(implicittx:S#Tx):de.sciss.synth.proc.Grapheme[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.proc.Grapheme#readIdentifiedObj" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="readIdentifiedObj[S&lt;:de.sciss.lucre.stm.Sys[S]](in:de.sciss.serial.DataInput,access:S#Acc)(implicittx:S#Tx):de.sciss.lucre.stm.Obj[S]"></a>
+      <a id="readIdentifiedObj[S&lt;:Sys[S]](DataInput,Grapheme.readIdentifiedObj.S.Acc)(Grapheme.readIdentifiedObj.S.Tx):Obj[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">readIdentifiedObj</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.readIdentifiedObj.S">S</span>]</span>]</span><span class="params">(<span name="in">in: <span class="extype" name="de.sciss.serial.DataInput">DataInput</span></span>, <span name="access">access: <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">Grapheme.readIdentifiedObj.S.Acc</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">Grapheme.readIdentifiedObj.S.Tx</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.readIdentifiedObj.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@readIdentifiedObj[S&lt;:de.sciss.lucre.stm.Sys[S]](in:de.sciss.serial.DataInput,access:S#Acc)(implicittx:S#Tx):de.sciss.lucre.stm.Obj[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a> → Type → Type</dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Obj.Type#readObj" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="readObj[S&lt;:de.sciss.lucre.stm.Sys[S]](in:de.sciss.serial.DataInput,access:S#Acc)(implicittx:S#Tx):de.sciss.lucre.stm.Obj[S]"></a>
+      <a id="readObj[S&lt;:Sys[S]](DataInput,lucre.stm.Obj.Type.readObj.S.Acc)(lucre.stm.Obj.Type.readObj.S.Tx):Obj[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">readObj</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.lucre.stm.Obj.Type.readObj.S">S</span>]</span>]</span><span class="params">(<span name="in">in: <span class="extype" name="de.sciss.serial.DataInput">DataInput</span></span>, <span name="access">access: <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">lucre.stm.Obj.Type.readObj.S.Acc</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">lucre.stm.Obj.Type.readObj.S.Tx</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.lucre.stm.Obj.Type.readObj.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@readObj[S&lt;:de.sciss.lucre.stm.Sys[S]](in:de.sciss.serial.DataInput,access:S#Acc)(implicittx:S#Tx):de.sciss.lucre.stm.Obj[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Type → Type</dd></dl></div>
     </li><li name="de.sciss.synth.proc.Grapheme#serializer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="serializer[S&lt;:de.sciss.lucre.event.Sys[S]]:de.sciss.lucre.event.Serializer[S,de.sciss.synth.proc.Grapheme[S]]"></a>
-      <a id="serializer[S&lt;:Sys[S]]:Serializer[S,Grapheme[S]]"></a>
+      <a id="serializer[S&lt;:de.sciss.lucre.stm.Sys[S]]:de.sciss.serial.Serializer[S#Tx,S#Acc,de.sciss.synth.proc.Grapheme[S]]"></a>
+      <a id="serializer[S&lt;:Sys[S]]:Serializer[Grapheme.serializer.S.Tx,Grapheme.serializer.S.Acc,Grapheme[S]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">serializer</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.event.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.serializer.S">S</span>]</span>]</span><span class="result">: <span class="extype" name="de.sciss.lucre.event.Serializer">Serializer</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.serializer.S">S</span>, <a href="Grapheme.html" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.serializer.S">S</span>]]</span>
+        <span class="name">serializer</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.serializer.S">S</span>]</span>]</span><span class="result">: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">Grapheme.serializer.S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">Grapheme.serializer.S.Acc</span>, <a href="Grapheme.html" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.serializer.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@serializer[S&lt;:de.sciss.lucre.event.Sys[S]]:de.sciss.lucre.event.Serializer[S,de.sciss.synth.proc.Grapheme[S]]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@serializer[S&lt;:de.sciss.lucre.stm.Sys[S]]:de.sciss.serial.Serializer[S#Tx,S#Acc,de.sciss.synth.proc.Grapheme[S]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -587,7 +637,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -604,10 +654,27 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@toString():String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.proc.Grapheme#typeID" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="typeID:Int(65538)"></a>
+      <a id="typeID:Int(65538)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">typeID</span><span class="result">: Int(65538)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@typeID:Int(65538)" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.Grapheme">Grapheme</a> → Type</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -621,7 +688,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -644,7 +711,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -667,7 +734,7 @@ fed by another embedded process (<code>Sink</code>).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Grapheme$@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -686,7 +753,11 @@ fed by another embedded process (<code>Sink</code>).
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="de.sciss.lucre.stm.Obj.Type">
+              <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></h3>
+            </div><div class="parent" name="de.sciss.lucre.stm.Elem.Type">
+              <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.Elem.Type">Type</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

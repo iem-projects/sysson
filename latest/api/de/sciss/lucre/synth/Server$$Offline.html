@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Offline - SysSon 1.4.0 API - de.sciss.lucre.synth.Server.Offline</title>
-          <meta name="description" content="Offline - SysSon 1.4.0 API - de.sciss.lucre.synth.Server.Offline" />
-          <meta name="keywords" content="Offline SysSon 1.4.0 API de.sciss.lucre.synth.Server.Offline" />
+          <title>Offline - SysSon 1.7.1 API - de.sciss.lucre.synth.Server.Offline</title>
+          <meta name="description" content="Offline - SysSon 1.7.1 API - de.sciss.lucre.synth.Server.Offline" />
+          <meta name="keywords" content="Offline SysSon 1.7.1 API de.sciss.lucre.synth.Server.Offline" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,13 +28,13 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../lib/trait_big.png" />
+        <img alt="Trait" src="../../../../lib/trait_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.lucre">lucre</a>.<a href="package.html" class="extype" name="de.sciss.lucre.synth">synth</a>.<a href="Server$.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></p>
         <h1>Offline</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="Server$.html" class="extype" name="de.sciss.lucre.synth.Server">package Server</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -77,7 +77,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -106,7 +105,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@!(p:de.sciss.osc.Packet):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Sends out a packet immediately without synchronization</p><div class="fullcomment"><div class="comment cmt"><p>Sends out a packet immediately without synchronization</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -123,11 +122,69 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@!!(b:de.sciss.osc.Bundle):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Sends out a packet with an added sync message.</p><div class="fullcomment"><div class="comment cmt"><p>Sends out a packet with an added sync message. The returned future is completed with the
 sync message's reply having arrived.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#acquireSynthDef" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="acquireSynthDef(graph:de.sciss.synth.UGenGraph,nameHint:Option[String])(implicittx:de.sciss.lucre.synth.Txn):de.sciss.lucre.synth.SynthDef"></a>
+      <a id="acquireSynthDef(UGenGraph,Option[String])(Txn):SynthDef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">acquireSynthDef</span><span class="params">(<span name="graph">graph: <a href="../../synth/UGenGraph.html" class="extype" name="de.sciss.synth.UGenGraph">UGenGraph</a></span>, <span name="nameHint">nameHint: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <a href="SynthDef.html" class="extype" name="de.sciss.lucre.synth.SynthDef">SynthDef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@acquireSynthDef(graph:de.sciss.synth.UGenGraph,nameHint:Option[String])(implicittx:de.sciss.lucre.synth.Txn):de.sciss.lucre.synth.SynthDef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Acquires a synth def to be used in this transaction on the server.</p><div class="fullcomment"><div class="comment cmt"><p>Acquires a synth def to be used in this transaction on the server.
+If the ugen graph was already sent to the server, it returns the
+corresponding synth def, and no <code>recv()</code> is necessary. The internal
+use counter is increment. Otherwise produces a fresh synth def and
+stores it in the cache.</p><p>If the number of synth defs on the server would exceed the maximum,
+a number of synth-def disposals are issued for those that have a
+use count of zero.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#addEdge" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="addEdge(edge:de.sciss.lucre.synth.NodeRef.Edge)(implicittx:de.sciss.lucre.synth.Txn):Boolean"></a>
+      <a id="addEdge(Edge)(Txn):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addEdge</span><span class="params">(<span name="edge">edge: <a href="NodeRef$$Edge.html" class="extype" name="de.sciss.lucre.synth.NodeRef.Edge">Edge</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@addEdge(edge:de.sciss.lucre.synth.NodeRef.Edge)(implicittx:de.sciss.lucre.synth.Txn):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#addVertex" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="addVertex(node:de.sciss.lucre.synth.NodeRef)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="addVertex(NodeRef)(Txn):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addVertex</span><span class="params">(<span name="node">node: <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@addVertex(node:de.sciss.lucre.synth.NodeRef)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
     </li><li name="de.sciss.lucre.synth.Server#allocAudioBus" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="allocAudioBus(numChannels:Int)(implicittx:de.sciss.lucre.synth.Txn):Int"></a>
       <a id="allocAudioBus(Int)(Txn):Int"></a>
@@ -141,7 +198,7 @@ sync message's reply having arrived.</p></div><dl class="attributes block"> <dt>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@allocAudioBus(numChannels:Int)(implicittx:de.sciss.lucre.synth.Txn):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -158,7 +215,7 @@ sync message's reply having arrived.</p></div><dl class="attributes block"> <dt>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@allocBuffer(numConsecutive:Int)(implicittx:de.sciss.lucre.synth.Txn):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -175,7 +232,7 @@ sync message's reply having arrived.</p></div><dl class="attributes block"> <dt>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@allocControlBus(numChannels:Int)(implicittx:de.sciss.lucre.synth.Txn):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -192,14 +249,13 @@ sync message's reply having arrived.</p></div><dl class="attributes block"> <dt>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@bundles(addDefaultGroup:Boolean):scala.collection.immutable.IndexedSeq[de.sciss.osc.Bundle]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Logically closes the offline server and returns a list of all the bundles collected so far.</p><div class="fullcomment"><div class="comment cmt"><p>Logically closes the offline server and returns a list of all the bundles collected so far.
 <u>Note</u>: Calling this method will clear the bundles held by the server.
 </p></div><dl class="paramcmts block"><dt class="param">addDefaultGroup</dt><dd class="cmt"><p>if <code>true</code>, prepends a <code>/g_new</code> message for the standard default group
-                      (node id 1) to the returned bundles
-</p></dd></dl></div>
+                      (node id 1) to the returned bundles</p></dd></dl></div>
     </li><li name="de.sciss.lucre.synth.Server#clientConfig" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="clientConfig:de.sciss.synth.Client.Config"></a>
       <a id="clientConfig:synth.Client.Config"></a>
@@ -213,7 +269,7 @@ sync message's reply having arrived.</p></div><dl class="attributes block"> <dt>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@clientConfig:de.sciss.synth.Client.Config" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -230,7 +286,7 @@ sync message's reply having arrived.</p></div><dl class="attributes block"> <dt>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@commit(future:scala.concurrent.Future[Unit]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Signalizes that no more messages are sent from the currently committing transaction.</p><div class="fullcomment"><div class="comment cmt"><p>Signalizes that no more messages are sent from the currently committing transaction.
@@ -251,7 +307,7 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@committed():scala.concurrent.Future[Unit]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Returns a future of ongoing message sending.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a future of ongoing message sending.
@@ -270,7 +326,24 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@config:de.sciss.lucre.synth.Server.Config" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#counts" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="counts:de.sciss.synth.message.StatusReply"></a>
+      <a id="counts:StatusReply"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">counts</span><span class="result">: <a href="../../synth/message/StatusReply.html" class="extype" name="de.sciss.synth.message.StatusReply">StatusReply</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@counts:de.sciss.synth.message.StatusReply" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -287,7 +360,7 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@defaultGroup:de.sciss.lucre.synth.Group" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -304,7 +377,7 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@executionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -321,7 +394,7 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@freeAudioBus(index:Int,numChannels:Int)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -338,7 +411,7 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@freeBuffer(index:Int,numConsecutive:Int)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -355,7 +428,7 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@freeControlBus(index:Int,numChannels:Int)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -372,7 +445,24 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@isLocal:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#isRealtime" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="isRealtime:Boolean"></a>
+      <a id="isRealtime:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isRealtime</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@isRealtime:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -389,7 +479,24 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@maxPacketSize:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#mkSynthDefName" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="mkSynthDefName(nameHint:Option[String])(implicittx:de.sciss.lucre.synth.Txn):String"></a>
+      <a id="mkSynthDefName(Option[String])(Txn):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mkSynthDefName</span><span class="params">(<span name="nameHint">nameHint: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@mkSynthDefName(nameHint:Option[String])(implicittx:de.sciss.lucre.synth.Txn):String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -406,7 +513,7 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@nextNodeID()(implicittx:de.sciss.lucre.synth.Txn):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -423,7 +530,7 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@peer:de.sciss.synth.Server" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
@@ -440,12 +547,80 @@ The realtime server just ignores these futures.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@position:Long" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The current frame position in the OSC file.</p><div class="fullcomment"><div class="comment cmt"><p>The current frame position in the OSC file. The user should
 increment this according to a reference transport, so that
 messages are queued in the correct position.</p></div></div>
+    </li><li name="de.sciss.lucre.synth.Server#removeEdge" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="removeEdge(edge:de.sciss.lucre.synth.NodeRef.Edge)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="removeEdge(Edge)(Txn):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">removeEdge</span><span class="params">(<span name="edge">edge: <a href="NodeRef$$Edge.html" class="extype" name="de.sciss.lucre.synth.NodeRef.Edge">Edge</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@removeEdge(edge:de.sciss.lucre.synth.NodeRef.Edge)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#removeVertex" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="removeVertex(node:de.sciss.lucre.synth.NodeRef)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="removeVertex(NodeRef)(Txn):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">removeVertex</span><span class="params">(<span name="node">node: <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@removeVertex(node:de.sciss.lucre.synth.NodeRef)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#sampleRate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="sampleRate:Double"></a>
+      <a id="sampleRate:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sampleRate</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@sampleRate:Double" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Server#topology" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="topology(implicittx:de.sciss.lucre.synth.Txn):de.sciss.topology.Topology[de.sciss.lucre.synth.NodeRef,de.sciss.lucre.synth.NodeRef.Edge]"></a>
+      <a id="topology(Txn):Topology[NodeRef,Edge]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">topology</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="de.sciss.topology.Topology">Topology</span>[<a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a>, <a href="NodeRef$$Edge.html" class="extype" name="de.sciss.lucre.synth.NodeRef.Edge">Edge</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@topology(implicittx:de.sciss.lucre.synth.Txn):de.sciss.topology.Topology[de.sciss.lucre.synth.NodeRef,de.sciss.lucre.synth.NodeRef.Edge]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Queries the current topology</p><div class="fullcomment"><div class="comment cmt"><p>Queries the current topology</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -464,7 +639,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -481,7 +656,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@##():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -498,7 +673,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -515,7 +690,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -532,7 +707,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@clone():Object" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -555,7 +730,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -572,7 +747,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -589,7 +764,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -612,7 +787,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -629,7 +804,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -646,7 +821,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -663,7 +838,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -680,7 +855,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -697,27 +872,10 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.lucre.synth.Server#sampleRate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sampleRate:Double"></a>
-      <a id="sampleRate:Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">sampleRate</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@sampleRate:Double" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Server.html" class="extype" name="de.sciss.lucre.synth.Server">Server</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -731,7 +889,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -748,7 +906,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@toString():String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -765,7 +923,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -788,7 +946,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -811,7 +969,7 @@ messages are queued in the correct position.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Server$$Offline@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>

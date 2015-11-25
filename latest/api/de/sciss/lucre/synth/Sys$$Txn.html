@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Txn - SysSon 1.4.0 API - de.sciss.lucre.synth.Sys.Txn</title>
-          <meta name="description" content="Txn - SysSon 1.4.0 API - de.sciss.lucre.synth.Sys.Txn" />
-          <meta name="keywords" content="Txn SysSon 1.4.0 API de.sciss.lucre.synth.Sys.Txn" />
+          <title>Txn - SysSon 1.7.1 API - de.sciss.lucre.synth.Sys.Txn</title>
+          <meta name="description" content="Txn - SysSon 1.7.1 API - de.sciss.lucre.synth.Sys.Txn" />
+          <meta name="keywords" content="Txn SysSon 1.7.1 API de.sciss.lucre.synth.Sys.Txn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,13 +28,13 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../lib/trait_big.png" />
+        <img alt="Trait" src="../../../../lib/trait_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.lucre">lucre</a>.<a href="package.html" class="extype" name="de.sciss.lucre.synth">synth</a>.<a href="Sys$.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a></p>
         <h1>Txn</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="Sys$.html" class="extype" name="de.sciss.lucre.synth.Sys">package Sys</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -45,16 +45,16 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Txn</span><span class="tparams">[<span name="S">S &lt;: <a href="Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.event.Txn">event.Txn</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>] with <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">synth.Txn</a></span>
+        <span class="name">Txn</span><span class="tparams">[<span name="S">S &lt;: <a href="Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Txn">stm.Txn</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>] with <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">synth.Txn</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">synth.Txn</a>, <span class="extype" name="de.sciss.lucre.event.Txn">event.Txn</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>], <span class="extype" name="de.sciss.lucre.stm.Txn">stm.Txn</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>], <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">synth.Txn</a>, <span class="extype" name="de.sciss.lucre.stm.Txn">stm.Txn</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>], <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="../../synth/proc/Durable$$Txn.html" class="extype" name="de.sciss.synth.proc.Durable.Txn">Txn</a>, <a href="../../synth/proc/Confluent$$Txn.html" class="extype" name="de.sciss.synth.proc.Confluent.Txn">Txn</a></div>
+            <div class="subClasses hiddenContent"><a href="../../synth/proc/Confluent$$Txn.html" class="extype" name="de.sciss.synth.proc.Confluent.Txn">Txn</a>, <a href="../../synth/proc/Durable$$Txn.html" class="extype" name="de.sciss.synth.proc.Durable.Txn">Txn</a>, <a href="InMemory$$Txn.html" class="extype" name="de.sciss.lucre.synth.InMemory.Txn">Txn</a></div>
           </div></div>
         
 
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.lucre.synth.Sys.Txn"><span>Txn</span></li><li class="in" name="de.sciss.lucre.synth.Txn"><span>Txn</span></li><li class="in" name="de.sciss.lucre.event.Txn"><span>Txn</span></li><li class="in" name="de.sciss.lucre.stm.Txn"><span>Txn</span></li><li class="in" name="de.sciss.lucre.stm.TxnLike"><span>TxnLike</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.lucre.synth.Sys.Txn"><span>Txn</span></li><li class="in" name="de.sciss.lucre.synth.Txn"><span>Txn</span></li><li class="in" name="de.sciss.lucre.stm.Txn"><span>Txn</span></li><li class="in" name="de.sciss.lucre.stm.TxnLike"><span>TxnLike</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -80,7 +80,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -109,7 +108,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@addMessage(resource:de.sciss.lucre.synth.Resource,m:de.sciss.osc.Messagewithde.sciss.synth.message.Send,dependencies:Seq[de.sciss.lucre.synth.Resource]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></dd></dl></div>
@@ -126,10 +125,27 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@afterCommit(fun:=&gt;Unit):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn → TxnLike</dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Txn#attrMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="attrMap(obj:de.sciss.lucre.stm.Obj[S]):de.sciss.lucre.stm.Obj.AttrMap[S]"></a>
+      <a id="attrMap(Obj[S]):AttrMap[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">attrMap</span><span class="params">(<span name="obj">obj: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Obj.AttrMap">AttrMap</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@attrMap(obj:de.sciss.lucre.stm.Obj[S]):de.sciss.lucre.stm.Obj.AttrMap[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#beforeCommit" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="beforeCommit(fun:S#Tx=&gt;Unit):Unit"></a>
       <a id="beforeCommit((S.Tx)⇒Unit):Unit"></a>
@@ -143,24 +159,24 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@beforeCommit(fun:S#Tx=&gt;Unit):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#inMemory" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="inMemory:S#I#Tx"></a>
-      <a id="inMemory:event.Sys.I.Tx"></a>
+      <a id="inMemory:stm.Sys.I.Tx"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit abstract </span>
+        <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">inMemory</span><span class="result">: <span class="extype" name="de.sciss.lucre.event.Sys.Tx">event.Sys.I.Tx</span></span>
+        <span class="name">inMemory</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.InMemoryLike.Tx">stm.Sys.I.Tx</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@inMemory:S#I#Tx" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -177,24 +193,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newBooleanVar(id:S#ID,init:Boolean):S#Var[Boolean]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
-    </li><li name="de.sciss.lucre.stm.Txn#newDurableIDMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="newDurableIDMap[A](implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):de.sciss.lucre.stm.IdentifierMap[S#ID,S#Tx,A]"></a>
-      <a id="newDurableIDMap[A](Serializer[S.Tx,S.Acc,A]):IdentifierMap[S.ID,S.Tx,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">newDurableIDMap</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="serializer">serializer: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">S.Acc</span>, <span class="extype" name="de.sciss.lucre.stm.Txn.newDurableIDMap.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.IdentifierMap">IdentifierMap</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span>, <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Txn.newDurableIDMap.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newDurableIDMap[A](implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):de.sciss.lucre.stm.IdentifierMap[S#ID,S#Tx,A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -211,7 +210,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newHandle[A](value:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):de.sciss.lucre.stm.Source[S#Tx,A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -228,7 +227,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newID():S#ID" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -245,7 +244,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newInMemoryIDMap[A]:de.sciss.lucre.stm.IdentifierMap[S#ID,S#Tx,A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -262,24 +261,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newIntVar(id:S#ID,init:Int):S#Var[Int]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
-    </li><li name="de.sciss.lucre.stm.Txn#newLocalVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="newLocalVar[A](init:S#Tx=&gt;A):de.sciss.lucre.stm.LocalVar[S#Tx,A]"></a>
-      <a id="newLocalVar[A]((S.Tx)⇒A):LocalVar[S.Tx,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">newLocalVar</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="init">init: (<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>) ⇒ <span class="extype" name="de.sciss.lucre.stm.Txn.newLocalVar.A">A</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.LocalVar">LocalVar</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Txn.newLocalVar.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newLocalVar[A](init:S#Tx=&gt;A):de.sciss.lucre.stm.LocalVar[S#Tx,A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -296,41 +278,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newLongVar(id:S#ID,init:Long):S#Var[Long]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
-    </li><li name="de.sciss.lucre.stm.Txn#newPartialID" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="newPartialID():S#ID"></a>
-      <a id="newPartialID():S.ID"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">newPartialID</span><span class="params">()</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newPartialID():S#ID" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
-    </li><li name="de.sciss.lucre.stm.Txn#newPartialVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="newPartialVar[A](id:S#ID,init:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):S#Var[A]"></a>
-      <a id="newPartialVar[A](S.ID,A)(Serializer[S.Tx,S.Acc,A]):S.Var[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">newPartialVar</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>, <span name="init">init: <span class="extype" name="de.sciss.lucre.stm.Txn.newPartialVar.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="serializer">serializer: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">S.Acc</span>, <span class="extype" name="de.sciss.lucre.stm.Txn.newPartialVar.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Sys.Var">S.Var</span>[<span class="extype" name="de.sciss.lucre.stm.Txn.newPartialVar.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newPartialVar[A](id:S#ID,init:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):S#Var[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -347,7 +295,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newVar[A](id:S#ID,init:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):S#Var[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -364,7 +312,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@newVarArray[A](size:Int):Array[S#Var[A]]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -381,7 +329,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@peer:scala.concurrent.stm.InTxn" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TxnLike</dd></dl></div>
@@ -398,24 +346,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@readBooleanVar(id:S#ID,in:de.sciss.serial.DataInput):S#Var[Boolean]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
-    </li><li name="de.sciss.lucre.stm.Txn#readDurableIDMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="readDurableIDMap[A](in:de.sciss.serial.DataInput)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):de.sciss.lucre.stm.IdentifierMap[S#ID,S#Tx,A]"></a>
-      <a id="readDurableIDMap[A](DataInput)(Serializer[S.Tx,S.Acc,A]):IdentifierMap[S.ID,S.Tx,A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">readDurableIDMap</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="in">in: <span class="extype" name="de.sciss.serial.DataInput">DataInput</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="serializer">serializer: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">S.Acc</span>, <span class="extype" name="de.sciss.lucre.stm.Txn.readDurableIDMap.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.IdentifierMap">IdentifierMap</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span>, <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Txn.readDurableIDMap.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@readDurableIDMap[A](in:de.sciss.serial.DataInput)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):de.sciss.lucre.stm.IdentifierMap[S#ID,S#Tx,A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -432,7 +363,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@readID(in:de.sciss.serial.DataInput,acc:S#Acc):S#ID" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -449,7 +380,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@readIntVar(id:S#ID,in:de.sciss.serial.DataInput):S#Var[Int]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -466,41 +397,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@readLongVar(id:S#ID,in:de.sciss.serial.DataInput):S#Var[Long]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
-    </li><li name="de.sciss.lucre.stm.Txn#readPartialID" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="readPartialID(in:de.sciss.serial.DataInput,acc:S#Acc):S#ID"></a>
-      <a id="readPartialID(DataInput,S.Acc):S.ID"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">readPartialID</span><span class="params">(<span name="in">in: <span class="extype" name="de.sciss.serial.DataInput">DataInput</span></span>, <span name="acc">acc: <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">S.Acc</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@readPartialID(in:de.sciss.serial.DataInput,acc:S#Acc):S#ID" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
-    </li><li name="de.sciss.lucre.stm.Txn#readPartialVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="readPartialVar[A](id:S#ID,in:de.sciss.serial.DataInput)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):S#Var[A]"></a>
-      <a id="readPartialVar[A](S.ID,DataInput)(Serializer[S.Tx,S.Acc,A]):S.Var[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">readPartialVar</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>, <span name="in">in: <span class="extype" name="de.sciss.serial.DataInput">DataInput</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="serializer">serializer: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Acc">S.Acc</span>, <span class="extype" name="de.sciss.lucre.stm.Txn.readPartialVar.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Sys.Var">S.Var</span>[<span class="extype" name="de.sciss.lucre.stm.Txn.readPartialVar.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@readPartialVar[A](id:S#ID,in:de.sciss.serial.DataInput)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):S#Var[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -517,7 +414,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@readVar[A](id:S#ID,in:de.sciss.serial.DataInput)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):S#Var[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -534,7 +431,24 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@system:S" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Txn#use" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="use[A](context:S#Context)(fun:=&gt;A):A"></a>
+      <a id="use[A](S.Context)(⇒A):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">use</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="context">context: <span class="extype" name="de.sciss.lucre.stm.Sys.Context">S.Context</span></span>)</span><span class="params">(<span name="fun">fun: ⇒ <span class="extype" name="de.sciss.lucre.stm.Txn.use.A">A</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Txn.use.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@use[A](context:S#Context)(fun:=&gt;A):A" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
@@ -556,7 +470,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -573,7 +487,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@##():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -590,7 +504,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -607,7 +521,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -624,7 +538,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@clone():Object" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -647,7 +561,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -664,7 +578,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -681,7 +595,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -704,7 +618,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -721,7 +635,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -738,7 +652,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -755,7 +669,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -772,7 +686,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -789,7 +703,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -806,7 +720,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -823,7 +737,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@toString():String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -840,7 +754,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -863,7 +777,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -886,7 +800,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.Sys$$Txn@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -907,8 +821,6 @@
         <div id="inheritedMembers">
         <div class="parent" name="de.sciss.lucre.synth.Txn">
               <h3>Inherited from <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">synth.Txn</a></h3>
-            </div><div class="parent" name="de.sciss.lucre.event.Txn">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.event.Txn">event.Txn</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>]</h3>
             </div><div class="parent" name="de.sciss.lucre.stm.Txn">
               <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.Txn">stm.Txn</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Txn.S">S</span>]</h3>
             </div><div class="parent" name="de.sciss.lucre.stm.TxnLike">

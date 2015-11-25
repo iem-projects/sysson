@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>AuralSystem - SysSon 1.4.0 API - de.sciss.synth.proc.AuralSystem</title>
-          <meta name="description" content="AuralSystem - SysSon 1.4.0 API - de.sciss.synth.proc.AuralSystem" />
-          <meta name="keywords" content="AuralSystem SysSon 1.4.0 API de.sciss.synth.proc.AuralSystem" />
+          <title>AuralSystem - SysSon 1.7.1 API - de.sciss.synth.proc.AuralSystem</title>
+          <meta name="description" content="AuralSystem - SysSon 1.7.1 API - de.sciss.synth.proc.AuralSystem" />
+          <meta name="keywords" content="AuralSystem SysSon 1.7.1 API de.sciss.synth.proc.AuralSystem" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="AuralSystem$.html" title="See companion object"><img src="../../../../lib/trait_to_object_big.png" /></a>
+        <a href="AuralSystem$.html" title="See companion object"><img alt="Trait/Object" src="../../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.proc">proc</a></p>
         <h1><a href="AuralSystem$.html" title="See companion object">AuralSystem</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -36,7 +36,7 @@
             | <a href="package.html" class="extype" name="de.sciss.synth.proc">package proc</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -82,7 +82,6 @@ server is up and running.
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -111,15 +110,14 @@ server is up and running.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@addClient(c:de.sciss.synth.proc.AuralSystem.Client)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Adds a client to the system.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a client to the system. It is safe to call this method both inside and
 outside of a transaction. If called inside a transaction, this is transaction
 safe (no duplicate registration if the transaction is retried).
 </p></div><dl class="paramcmts block"><dt class="param">c</dt><dd class="cmt"><p>the client to register. If the server is already running, the client
-          will _not_ be immediately notified.
-</p></dd></dl></div>
+          will _not_ be immediately notified.</p></dd></dl></div>
     </li><li name="de.sciss.synth.proc.AuralSystem#removeClient" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="removeClient(c:de.sciss.synth.proc.AuralSystem.Client)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
       <a id="removeClient(AuralSystem.Client)(Txn):Unit"></a>
@@ -133,15 +131,14 @@ safe (no duplicate registration if the transaction is retried).
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@removeClient(c:de.sciss.synth.proc.AuralSystem.Client)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Removes a client to the system.</p><div class="fullcomment"><div class="comment cmt"><p>Removes a client to the system. It is safe to call this method both inside and
 outside of a transaction. If called inside a transaction, this is transaction
 safe.
 </p></div><dl class="paramcmts block"><dt class="param">c</dt><dd class="cmt"><p>the client to unregister. It is allowed to call this method even if
-          the client was already unregistered.
-</p></dd></dl></div>
+          the client was already unregistered.</p></dd></dl></div>
     </li><li name="de.sciss.synth.proc.AuralSystem#serverOption" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="serverOption(implicittx:de.sciss.lucre.synth.Txn):Option[de.sciss.lucre.synth.Server]"></a>
       <a id="serverOption(Txn):Option[lucre.synth.Server]"></a>
@@ -155,7 +152,7 @@ safe.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@serverOption(implicittx:de.sciss.lucre.synth.Txn):Option[de.sciss.lucre.synth.Server]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -172,7 +169,7 @@ safe.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@start(config:de.sciss.lucre.synth.Server.Config,connect:Boolean)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Boots the server.</p><div class="fullcomment"><div class="comment cmt"><p>Boots the server. This method must be called from within a transaction.</p></div></div>
@@ -189,7 +186,7 @@ safe.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@stop()(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Quits the server.</p><div class="fullcomment"><div class="comment cmt"><p>Quits the server. This method must not be called from within a transaction.</p></div></div>
@@ -206,7 +203,7 @@ safe.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@whenStarted(fun:de.sciss.lucre.synth.Server=&gt;Unit)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Registers a callback to be invoked when the server has been booted.</p><div class="fullcomment"><div class="comment cmt"><p>Registers a callback to be invoked when the server has been booted.
@@ -230,7 +227,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -247,7 +244,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@##():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -264,7 +261,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -281,7 +278,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -298,7 +295,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@clone():Object" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -321,7 +318,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -338,7 +335,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -355,7 +352,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -378,7 +375,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -395,7 +392,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -412,7 +409,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -429,7 +426,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -446,7 +443,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -463,7 +460,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -480,7 +477,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -497,7 +494,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@toString():String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -514,7 +511,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -537,7 +534,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -560,7 +557,7 @@ If the server is already running, this has no effect. This method is transaction
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralSystem@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>UGen - SysSon 1.4.0 API - de.sciss.synth.UGen</title>
-          <meta name="description" content="UGen - SysSon 1.4.0 API - de.sciss.synth.UGen" />
-          <meta name="keywords" content="UGen SysSon 1.4.0 API de.sciss.synth.UGen" />
+          <title>UGen - SysSon 1.7.1 API - de.sciss.synth.UGen</title>
+          <meta name="description" content="UGen - SysSon 1.7.1 API - de.sciss.synth.UGen" />
+          <meta name="keywords" content="UGen SysSon 1.7.1 API de.sciss.synth.UGen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="UGen$.html" title="See companion object"><img src="../../../lib/trait_to_object_big.png" /></a>
+        <a href="UGen$.html" title="See companion object"><img alt="Trait/Object" src="../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
         <h1><a href="UGen$.html" title="See companion object">UGen</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -36,7 +36,7 @@
             | <a href="package.html" class="extype" name="de.sciss.synth">package synth</a>
           </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -47,13 +47,17 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">UGen</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span></span>
+        <span class="name">UGen</span><span class="result"> extends <a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a> with <span class="extype" name="scala.Product">Product</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen during graph building process is a more
+rich thing than <code>RawUGen</code>: it implements equality
+based on <code>isIndividual</code> status and may be omitted
+from the final graph based on <code>hasSideEffect</code> status.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="ugen/impl/ControlImpl.html" class="extype" name="de.sciss.synth.ugen.impl.ControlImpl">ControlImpl</a>, <a href="UGen$$MultiOut.html" class="extype" name="de.sciss.synth.UGen.MultiOut">MultiOut</a>, <a href="ugen/impl/MultiOutImpl.html" class="extype" name="de.sciss.synth.ugen.impl.MultiOutImpl">MultiOutImpl</a>, <a href="UGen$$SingleOut.html" class="extype" name="de.sciss.synth.UGen.SingleOut">SingleOut</a>, <a href="ugen/impl/SingleOutImpl.html" class="extype" name="de.sciss.synth.ugen.impl.SingleOutImpl">SingleOutImpl</a>, <a href="UGen$$ZeroOut.html" class="extype" name="de.sciss.synth.UGen.ZeroOut">ZeroOut</a>, <a href="ugen/impl/ZeroOutImpl.html" class="extype" name="de.sciss.synth.ugen.impl.ZeroOutImpl">ZeroOutImpl</a></div>
@@ -74,7 +78,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.synth.UGen"><span>UGen</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.synth.UGen"><span>UGen</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="de.sciss.synth.RawUGen"><span>RawUGen</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -82,7 +86,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -111,7 +114,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@hasSideEffect:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -128,7 +131,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@inputs:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -145,11 +148,11 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@isIndividual:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.UGen#name" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.RawUGen#name" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>
       <h4 class="signature">
@@ -162,11 +165,11 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@name:String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.synth.UGen#numOutputs" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a></dd></dl></div>
+    </li><li name="de.sciss.synth.RawUGen#numOutputs" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="numOutputs:Int"></a>
       <a id="numOutputs:Int"></a>
       <h4 class="signature">
@@ -179,11 +182,11 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@numOutputs:Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.synth.UGen#outputRates" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a></dd></dl></div>
+    </li><li name="de.sciss.synth.RawUGen#outputRates" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="outputRates:scala.collection.immutable.IndexedSeq[de.sciss.synth.Rate]"></a>
       <a id="outputRates:IndexedSeq[Rate]"></a>
       <h4 class="signature">
@@ -196,11 +199,11 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@outputRates:scala.collection.immutable.IndexedSeq[de.sciss.synth.Rate]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.synth.UGen#rate" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a></dd></dl></div>
+    </li><li name="de.sciss.synth.RawUGen#rate" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="rate:de.sciss.synth.Rate"></a>
       <a id="rate:Rate"></a>
       <h4 class="signature">
@@ -213,10 +216,27 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@rate:de.sciss.synth.Rate" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a></dd></dl></div>
+    </li><li name="de.sciss.synth.RawUGen#specialIndex" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="specialIndex:Int"></a>
+      <a id="specialIndex:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">specialIndex</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGen@specialIndex:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -235,7 +255,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -252,7 +272,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@##():Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -269,7 +289,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -286,7 +306,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -303,7 +323,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@canEqual(x:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.UGen">UGen</a> → Equals</dd></dl></div>
@@ -320,7 +340,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@clone():Object" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -343,7 +363,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -360,7 +380,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@equals(x:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.UGen">UGen</a> → Equals → AnyRef → Any</dd></dl></div>
@@ -377,7 +397,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -400,7 +420,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -417,7 +437,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@hashCode:Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.UGen">UGen</a> → AnyRef → Any</dd></dl></div>
@@ -434,7 +454,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -451,7 +471,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -468,7 +488,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -485,11 +505,11 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.UGen#numInputs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.UGen#numInputs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="numInputs:Int"></a>
       <a id="numInputs:Int"></a>
       <h4 class="signature">
@@ -502,10 +522,10 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@numInputs:Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.UGen">UGen</a> → <a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a></dd></dl></div>
     </li><li name="de.sciss.synth.UGen#productArity" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="productArity:Int"></a>
       <a id="productArity:Int"></a>
@@ -519,7 +539,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@productArity:Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.UGen">UGen</a> → Product</dd></dl></div>
@@ -536,7 +556,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@productElement(n:Int):Any" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.UGen">UGen</a> → Product</dd></dl></div>
@@ -553,7 +573,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@productIterator:Iterator[Any]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
@@ -570,44 +590,10 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@productPrefix:String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.UGen">UGen</a> → Product</dd></dl></div>
-    </li><li name="de.sciss.synth.UGen#source" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="source:de.sciss.synth.UGen"></a>
-      <a id="source:UGen"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">source</span><span class="result">: <a href="" class="extype" name="de.sciss.synth.UGen">UGen</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.UGen@source:de.sciss.synth.UGen" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.UGen#specialIndex" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="specialIndex:Int"></a>
-      <a id="specialIndex:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">specialIndex</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.UGen@specialIndex:Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -621,7 +607,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -638,7 +624,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@toString():String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.UGen">UGen</a> → AnyRef → Any</dd></dl></div>
@@ -655,7 +641,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -678,7 +664,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -701,7 +687,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.UGen@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -724,6 +710,8 @@
               <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="de.sciss.synth.RawUGen">
+              <h3>Inherited from <a href="RawUGen.html" class="extype" name="de.sciss.synth.RawUGen">RawUGen</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

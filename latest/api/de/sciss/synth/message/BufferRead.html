@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufferRead - SysSon 1.4.0 API - de.sciss.synth.message.BufferRead</title>
-          <meta name="description" content="BufferRead - SysSon 1.4.0 API - de.sciss.synth.message.BufferRead" />
-          <meta name="keywords" content="BufferRead SysSon 1.4.0 API de.sciss.synth.message.BufferRead" />
+          <title>BufferRead - SysSon 1.7.1 API - de.sciss.synth.message.BufferRead</title>
+          <meta name="description" content="BufferRead - SysSon 1.7.1 API - de.sciss.synth.message.BufferRead" />
+          <meta name="keywords" content="BufferRead SysSon 1.7.1 API de.sciss.synth.message.BufferRead" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,13 +28,13 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../lib/class_big.png" />
+        <img alt="Class" src="../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.message">message</a></p>
         <h1>BufferRead</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="de.sciss.synth.message">package message</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -53,9 +53,7 @@
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer to read into.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to read.</p></dd><dt class="param">fileStartFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
                         value of <code>-1</code> denotes that as many frames are read as are available in the file or
                         fit into the buffer.</p></dd><dt class="param">bufStartFrame</dt><dd class="cmt"><p>the frame offset in the buffer to begin writing to.</p></dd><dt class="param">leaveOpen</dt><dd class="cmt"><p>if <code>true</code>, leaves the file open for streaming with the
-                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a>
-</p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="../Buffer.html#readMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" class="extmbr" name="de.sciss.synth.Buffer#readMsg">Buffer#readMsg</a></p></span></dd></dl><div class="toggleContainer block">
+                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a></p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="../Buffer.html#readMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" class="extmbr" name="de.sciss.synth.Buffer#readMsg">Buffer#readMsg</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a>, <a href="AsyncSend.html" class="extype" name="de.sciss.synth.message.AsyncSend">AsyncSend</a>, <a href="Send.html" class="extype" name="de.sciss.synth.message.Send">Send</a>, <a href="ServerMessage.html" class="extype" name="de.sciss.synth.message.ServerMessage">ServerMessage</a>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>, <span class="extype" name="scala.collection.LinearSeq">LinearSeq</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.LinearSeqLike">LinearSeqLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.SeqLike">SeqLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.GenSeq">GenSeq</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.GenSeqLike">GenSeqLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.Iterable">Iterable</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.IterableLike">IterableLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.collection.GenIterable">GenIterable</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.GenIterableLike">GenIterableLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.Traversable">Traversable</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.GenTraversable">GenTraversable</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.collection.LinearSeq">LinearSeq</span>], <span class="extype" name="scala.collection.TraversableLike">TraversableLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.GenTraversableLike">GenTraversableLike</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.Parallelizable">Parallelizable</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.collection.parallel.ParSeq">ParSeq</span>[<span class="extype" name="scala.Any">Any</span>]], <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.GenTraversableOnce">GenTraversableOnce</span>[<span class="extype" name="scala.Any">Any</span>], <span class="extype" name="scala.collection.generic.FilterMonadic">FilterMonadic</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</span>[<span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a>], <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Any">Any</span>], (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Any">Any</span>, <a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -83,7 +81,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -108,14 +105,13 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@&lt;init&gt;(id:Int,path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:Option[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer to read into.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to read.</p></dd><dt class="param">fileStartFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
                         value of <code>-1</code> denotes that as many frames are read as are available in the file or
                         fit into the buffer.</p></dd><dt class="param">bufStartFrame</dt><dd class="cmt"><p>the frame offset in the buffer to begin writing to.</p></dd><dt class="param">leaveOpen</dt><dd class="cmt"><p>if <code>true</code>, leaves the file open for streaming with the
-                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.
-</p></dd></dl></div>
+                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -134,7 +130,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@Self=Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -151,7 +147,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@WithFilterextendsFilterMonadic[A,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -175,7 +171,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -192,7 +188,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@##():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -209,7 +205,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@++[B&gt;:A,That](that:scala.collection.GenTraversableOnce[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -226,7 +222,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@++:[B&gt;:A,That](that:Traversable[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -243,7 +239,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@++:[B&gt;:A,That](that:scala.collection.TraversableOnce[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -260,7 +256,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@+:[B&gt;:A,That](elem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -277,7 +273,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@/:[B](z:B)(op:(B,A)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -294,7 +290,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@:+[B&gt;:A,That](elem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -311,7 +307,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@:\[B](z:B)(op:(A,B)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -328,7 +324,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -345,7 +341,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@addString(b:StringBuilder):StringBuilder" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -362,7 +358,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@addString(b:StringBuilder,sep:String):StringBuilder" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -379,7 +375,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@addString(b:StringBuilder,start:String,sep:String,end:String):StringBuilder" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -396,7 +392,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@aggregate[B](z:=&gt;B)(seqop:(B,A)=&gt;B,combop:(B,B)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -413,7 +409,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@andThen[C](k:B=&gt;C):PartialFunction[A,C]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction → Function1</dd></dl></div>
@@ -430,7 +426,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@apply(idx:Int):Any" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → SeqLike → GenSeqLike → Function1</dd></dl></div>
@@ -447,7 +443,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@applyOrElse[A1&lt;:A,B1&gt;:B](x:A1,default:A1=&gt;B1):B1" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
@@ -464,7 +460,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@args:Any*" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a></dd></dl></div>
@@ -481,7 +477,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -498,7 +494,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@bufStartFrame:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the frame offset in the buffer to begin writing to.</p>
@@ -515,7 +511,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@canEqual(that:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → Equals</dd></dl></div>
@@ -532,7 +528,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@clone():Object" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -555,7 +551,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@collect[B,That](pf:PartialFunction[A,B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -572,7 +568,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@collectFirst[B](pf:PartialFunction[A,B]):Option[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -589,7 +585,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@combinations(n:Int):Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -606,7 +602,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@companion:scala.collection.generic.GenericCompanion[scala.collection.LinearSeq]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>LinearSeq → Seq → GenSeq → Iterable → GenIterable → Traversable → GenTraversable → GenericTraversableTemplate</dd></dl></div>
@@ -623,7 +619,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@completion:Option[de.sciss.osc.Packet]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a> → <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a></dd></dl></div>
@@ -640,7 +636,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@compose[A](g:A=&gt;T1):A=&gt;R" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -660,7 +656,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@contains[A1&gt;:A](elem:A1):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -677,7 +673,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@containsSlice[B](that:scala.collection.GenSeq[B]):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -694,7 +690,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@copyToArray[B&gt;:A](xs:Array[B],start:Int,len:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -711,7 +707,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@copyToArray[B&gt;:A](xs:Array[B]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -728,7 +724,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@copyToArray[B&gt;:A](xs:Array[B],start:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -745,7 +741,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@copyToBuffer[B&gt;:A](dest:scala.collection.mutable.Buffer[B]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -762,7 +758,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@corresponds[B](that:scala.collection.GenSeq[B])(p:(A,B)=&gt;Boolean):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>LinearSeqLike → SeqLike → GenSeqLike</dd><dt>Annotations</dt><dd>
@@ -782,7 +778,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@count(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -799,7 +795,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@diff[B&gt;:A](that:scala.collection.GenSeq[B]):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -816,7 +812,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@distinct:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -833,7 +829,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@drop(n:Int):de.sciss.osc.Message" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -850,7 +846,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@dropRight(n:Int):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -867,7 +863,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@dropWhile(p:A=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -884,7 +880,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@encode(c:de.sciss.osc.PacketCodec,b:java.nio.ByteBuffer):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → <a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a></dd></dl></div>
@@ -901,7 +897,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@encodedSize(c:de.sciss.osc.PacketCodec):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → <a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a></dd></dl></div>
@@ -918,7 +914,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@endsWith[B](that:scala.collection.GenSeq[B]):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -935,7 +931,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -952,7 +948,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@equals(other:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → GenSeqLike → Equals → AnyRef → Any</dd></dl></div>
@@ -969,7 +965,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@exists(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -986,7 +982,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@fileStartFrame:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the offset in frames into the audio-file to begin reading from</p>
@@ -1003,7 +999,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@filter(p:A=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1020,7 +1016,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@filterNot(p:A=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1037,7 +1033,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1060,7 +1056,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@find(p:A=&gt;Boolean):Option[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1077,7 +1073,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@flatMap[B,That](f:A=&gt;scala.collection.GenTraversableOnce[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike → FilterMonadic</dd></dl></div>
@@ -1094,7 +1090,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@flatten[B](implicitasTraversable:A=&gt;scala.collection.GenTraversableOnce[B]):CC[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd></dl></div>
@@ -1111,7 +1107,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@fold[A1&gt;:A](z:A1)(op:(A1,A1)=&gt;A1):A1" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1128,7 +1124,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@foldLeft[B](z:B)(op:(B,A)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1145,7 +1141,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@foldRight[B](z:B)(op:(A,B)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1162,7 +1158,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@forall(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1179,7 +1175,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@foreach[U](f:A=&gt;U):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike → TraversableOnce → GenTraversableOnce → FilterMonadic</dd></dl></div>
@@ -1196,7 +1192,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@genericBuilder[B]:scala.collection.mutable.Builder[B,CC[B]]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd></dl></div>
@@ -1213,7 +1209,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -1230,7 +1226,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@groupBy[K](f:A=&gt;K):scala.collection.immutable.Map[K,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1247,7 +1243,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@grouped(size:Int):Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -1264,7 +1260,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@hasDefiniteSize:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1281,7 +1277,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → LinearSeqLike → GenSeqLike → AnyRef → Any</dd></dl></div>
@@ -1298,7 +1294,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@head:A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1315,7 +1311,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@headOption:Option[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1332,7 +1328,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@id:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the identifier of the buffer to read into.</p>
@@ -1349,7 +1345,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@indexOf[B&gt;:A](elem:B,from:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1366,7 +1362,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@indexOf[B&gt;:A](elem:B):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1383,7 +1379,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@indexOfSlice[B&gt;:A](that:scala.collection.GenSeq[B],from:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1400,7 +1396,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@indexOfSlice[B&gt;:A](that:scala.collection.GenSeq[B]):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1417,7 +1413,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@indexWhere(p:A=&gt;Boolean,from:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -1434,7 +1430,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@indexWhere(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1451,7 +1447,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@indices:scala.collection.immutable.Range" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1468,7 +1464,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@init:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1485,7 +1481,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@inits:Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -1502,7 +1498,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@intersect[B&gt;:A](that:scala.collection.GenSeq[B]):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -1519,7 +1515,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@isComparable(other:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a></dd></dl></div>
@@ -1536,7 +1532,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@isDefinedAt(idx:Int):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1553,7 +1549,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@isEmpty:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → IterableLike → TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1570,7 +1566,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -1587,7 +1583,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@isSynchronous:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AsyncSend.html" class="extype" name="de.sciss.synth.message.AsyncSend">AsyncSend</a> → <a href="Send.html" class="extype" name="de.sciss.synth.message.Send">Send</a></dd></dl></div>
@@ -1604,7 +1600,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@isTraversableAgain:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike → GenTraversableOnce</dd></dl></div>
@@ -1621,7 +1617,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@iterator:Iterator[Any]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → LinearSeqLike → IterableLike → GenIterableLike</dd></dl></div>
@@ -1638,7 +1634,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@last:A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1655,7 +1651,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lastIndexOf[B&gt;:A](elem:B,end:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1672,7 +1668,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lastIndexOf[B&gt;:A](elem:B):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1689,7 +1685,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lastIndexOfSlice[B&gt;:A](that:scala.collection.GenSeq[B],end:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1706,7 +1702,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lastIndexOfSlice[B&gt;:A](that:scala.collection.GenSeq[B]):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1723,7 +1719,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lastIndexWhere(p:A=&gt;Boolean,end:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -1740,7 +1736,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lastIndexWhere(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -1757,7 +1753,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lastOption:Option[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -1774,7 +1770,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@leaveOpen:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">if <code>true</code>, leaves the file open for streaming with the
@@ -1792,7 +1788,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@length:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → SeqLike → GenSeqLike</dd></dl></div>
@@ -1809,7 +1805,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lengthCompare(len:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -1826,7 +1822,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@lift:A=&gt;Option[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
@@ -1843,7 +1839,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@map[B,That](f:A=&gt;B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike → FilterMonadic</dd></dl></div>
@@ -1860,7 +1856,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@max[B&gt;:A](implicitcmp:Ordering[B]):A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1877,7 +1873,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@maxBy[B](f:A=&gt;B)(implicitcmp:Ordering[B]):A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1894,7 +1890,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@min[B&gt;:A](implicitcmp:Ordering[B]):A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1911,7 +1907,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@minBy[B](f:A=&gt;B)(implicitcmp:Ordering[B]):A" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1928,7 +1924,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@mkString:String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1945,7 +1941,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@mkString(sep:String):String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1962,7 +1958,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@mkString(start:String,sep:String,end:String):String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -1979,7 +1975,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@name:String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → <a href="../../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a></dd></dl></div>
@@ -1996,7 +1992,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -2013,7 +2009,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@newBuilder:scala.collection.mutable.Builder[Any,de.sciss.osc.Message]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → GenericTraversableTemplate → TraversableLike → HasNewBuilder</dd></dl></div>
@@ -2030,7 +2026,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@nonEmpty:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2047,7 +2043,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -2064,7 +2060,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -2081,7 +2077,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@numFrames:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the number of frames to read which will be the size of the allocated buffer.</p><div class="fullcomment"><div class="comment cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
@@ -2100,7 +2096,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@orElse[A1&lt;:A,B1&gt;:B](that:PartialFunction[A1,B1]):PartialFunction[A1,B1]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
@@ -2117,7 +2113,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@padTo[B&gt;:A,That](len:Int,elem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2134,7 +2130,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@par:ParRepr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Parallelizable</dd></dl></div>
@@ -2151,7 +2147,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@parCombiner:scala.collection.parallel.Combiner[A,scala.collection.parallel.ParSeq[A]]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>SeqLike → TraversableLike → Parallelizable</dd></dl></div>
@@ -2168,7 +2164,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@partition(p:A=&gt;Boolean):(Repr,Repr)" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2185,7 +2181,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@patch[B&gt;:A,That](from:Int,patch:scala.collection.GenSeq[B],replaced:Int)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2202,7 +2198,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@path:String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">the path of the audio-file to read.</p>
@@ -2219,7 +2215,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@permutations:Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2236,7 +2232,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@prefixLength(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
@@ -2253,7 +2249,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@product[B&gt;:A](implicitnum:Numeric[B]):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2270,7 +2266,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reduce[A1&gt;:A](op:(A1,A1)=&gt;A1):A1" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2287,7 +2283,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reduceLeft[B&gt;:A](op:(B,A)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -2304,7 +2300,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reduceLeftOption[B&gt;:A](op:(B,A)=&gt;B):Option[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2321,7 +2317,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reduceOption[A1&gt;:A](op:(A1,A1)=&gt;A1):Option[A1]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2338,7 +2334,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reduceRight[B&gt;:A](op:(A,B)=&gt;B):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2355,7 +2351,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reduceRightOption[B&gt;:A](op:(A,B)=&gt;B):Option[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2372,7 +2368,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@repr:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2389,7 +2385,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reverse:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2406,7 +2402,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reverseIterator:Iterator[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2423,7 +2419,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reverseMap[B,That](f:A=&gt;B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2440,7 +2436,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@reversed:List[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>TraversableOnce</dd></dl></div>
@@ -2457,7 +2453,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@runWith[U](action:B=&gt;U):A=&gt;Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>PartialFunction</dd></dl></div>
@@ -2474,7 +2470,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@sameElements[B&gt;:A](that:scala.collection.GenIterable[B]):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → GenIterableLike</dd></dl></div>
@@ -2491,7 +2487,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@scan[B&gt;:A,That](z:B)(op:(B,B)=&gt;B)(implicitcbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2508,7 +2504,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@scanLeft[B,That](z:B)(op:(B,A)=&gt;B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2525,7 +2521,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@scanRight[B,That](z:B)(op:(A,B)=&gt;B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd><dt>Annotations</dt><dd>
@@ -2545,7 +2541,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@segmentLength(p:A=&gt;Boolean,from:Int):Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2562,7 +2558,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@seq:scala.collection.LinearSeq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>LinearSeq → LinearSeqLike → Seq → GenSeq → GenSeqLike → Iterable → GenIterable → Traversable → GenTraversable → Parallelizable → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2579,7 +2575,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@size:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenTraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2596,7 +2592,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@slice(from:Int,until:Int):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2613,7 +2609,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@sliding(size:Int,step:Int):Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -2630,7 +2626,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@sliding(size:Int):Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -2647,7 +2643,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@sortBy[B](f:A=&gt;B)(implicitord:scala.math.Ordering[B]):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2664,7 +2660,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@sortWith(lt:(A,A)=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2681,7 +2677,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@sorted[B&gt;:A](implicitord:scala.math.Ordering[B]):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike</dd></dl></div>
@@ -2698,7 +2694,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@span(p:A=&gt;Boolean):(Repr,Repr)" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2715,7 +2711,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@splitAt(n:Int):(Repr,Repr)" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2732,7 +2728,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@startsWith[B](that:scala.collection.GenSeq[B],offset:Int):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -2749,11 +2745,11 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@startsWith[B](that:scala.collection.GenSeq[B]):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenSeqLike</dd></dl></div>
-    </li><li name="scala.collection.TraversableLike#stringPrefix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="de.sciss.osc.Message#stringPrefix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>
       <h4 class="signature">
@@ -2766,10 +2762,10 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@stringPrefix:String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → TraversableLike → GenTraversableLike</dd></dl></div>
     </li><li name="scala.collection.TraversableOnce#sum" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="sum[B&gt;:A](implicitnum:Numeric[B]):B"></a>
       <a id="sum[B&gt;:Any](Numeric[B]):B"></a>
@@ -2783,7 +2779,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@sum[B&gt;:A](implicitnum:Numeric[B]):B" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2800,7 +2796,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -2817,7 +2813,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@tail:Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2834,7 +2830,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@tails:Iterator[Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike</dd></dl></div>
@@ -2851,7 +2847,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@take(n:Int):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2868,7 +2864,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@takeRight(n:Int):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike</dd></dl></div>
@@ -2885,7 +2881,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@takeWhile(p:A=&gt;Boolean):Repr" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
@@ -2902,7 +2898,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@thisCollection:scala.collection.LinearSeq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>LinearSeqLike → SeqLike → IterableLike → TraversableLike</dd></dl></div>
@@ -2919,7 +2915,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@to[Col[_]](implicitcbf:scala.collection.generic.CanBuildFrom[Nothing,A,Col[A@scala.annotation.unchecked.uncheckedVariance]]):Col[A@scala.annotation.unchecked.uncheckedVariance]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2936,7 +2932,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toArray[B&gt;:A](implicitevidence$1:scala.reflect.ClassTag[B]):Array[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2953,7 +2949,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toBuffer[B&gt;:A]:scala.collection.mutable.Buffer[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -2970,7 +2966,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toCollection(repr:Repr):scala.collection.LinearSeq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>LinearSeqLike → SeqLike → IterableLike → TraversableLike</dd></dl></div>
@@ -2987,7 +2983,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toIndexedSeq:scala.collection.immutable.IndexedSeq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3004,7 +3000,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toIterable:Iterable[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3021,7 +3017,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toIterator:Iterator[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableOnce</dd><dt>Annotations</dt><dd>
@@ -3047,7 +3043,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toList:List[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3064,7 +3060,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toMap[T,U](implicitev:&lt;:&lt;[A,(T,U)]):scala.collection.immutable.Map[T,U]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3081,7 +3077,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toSeq:Seq[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike → TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3098,7 +3094,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toSet[B&gt;:A]:scala.collection.immutable.Set[B]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3115,7 +3111,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toStream:scala.collection.immutable.Stream[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableOnce</dd></dl></div>
@@ -3132,7 +3128,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toString():String" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../osc/Message.html" class="extype" name="de.sciss.osc.Message">Message</a> → SeqLike → TraversableLike → Function1 → AnyRef → Any</dd></dl></div>
@@ -3149,7 +3145,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toTraversable:Traversable[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → TraversableOnce → GenTraversableOnce</dd><dt>Annotations</dt><dd>
@@ -3175,7 +3171,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@toVector:Vector[A]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
@@ -3192,7 +3188,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@transpose[B](implicitasTraversable:A=&gt;scala.collection.GenTraversableOnce[B]):CC[CC[B]@scala.annotation.unchecked.uncheckedVariance]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd><dt>Annotations</dt><dd>
@@ -3212,7 +3208,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@union[B&gt;:A,That](that:scala.collection.GenSeq[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -3229,7 +3225,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@unzip[A1,A2](implicitasPair:A=&gt;(A1,A2)):(CC[A1],CC[A2])" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd></dl></div>
@@ -3246,7 +3242,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@unzip3[A1,A2,A3](implicitasTriple:A=&gt;(A1,A2,A3)):(CC[A1],CC[A2],CC[A3])" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>GenericTraversableTemplate</dd></dl></div>
@@ -3263,7 +3259,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@updateCompletion(completion:Option[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a> → <a href="HasCompletion.html" class="extype" name="de.sciss.synth.message.HasCompletion">HasCompletion</a></dd></dl></div>
@@ -3280,7 +3276,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@updated[B&gt;:A,That](index:Int,elem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,B,That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → GenSeqLike</dd></dl></div>
@@ -3297,7 +3293,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@view(from:Int,until:Int):scala.collection.SeqView[A,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → IterableLike → TraversableLike</dd></dl></div>
@@ -3314,7 +3310,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@view:scala.collection.SeqView[A,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SeqLike → IterableLike → TraversableLike</dd></dl></div>
@@ -3331,7 +3327,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -3354,7 +3350,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -3377,7 +3373,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -3400,7 +3396,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@withFilter(p:A=&gt;Boolean):scala.collection.generic.FilterMonadic[A,Repr]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableLike → FilterMonadic</dd></dl></div>
@@ -3417,7 +3413,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@zip[A1&gt;:A,B,That](that:scala.collection.GenIterable[B])(implicitbf:scala.collection.generic.CanBuildFrom[Repr,(A1,B),That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → GenIterableLike</dd></dl></div>
@@ -3434,7 +3430,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@zipAll[B,A1&gt;:A,That](that:scala.collection.GenIterable[B],thisElem:A1,thatElem:B)(implicitbf:scala.collection.generic.CanBuildFrom[Repr,(A1,B),That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → GenIterableLike</dd></dl></div>
@@ -3451,7 +3447,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.BufferRead@zipWithIndex[A1&gt;:A,That](implicitbf:scala.collection.generic.CanBuildFrom[Repr,(A1,Int),That]):That" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → GenIterableLike</dd></dl></div>

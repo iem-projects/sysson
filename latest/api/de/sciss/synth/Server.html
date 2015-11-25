@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Server - SysSon 1.4.0 API - de.sciss.synth.Server</title>
-          <meta name="description" content="Server - SysSon 1.4.0 API - de.sciss.synth.Server" />
-          <meta name="keywords" content="Server SysSon 1.4.0 API de.sciss.synth.Server" />
+          <title>Server - SysSon 1.7.1 API - de.sciss.synth.Server</title>
+          <meta name="description" content="Server - SysSon 1.7.1 API - de.sciss.synth.Server" />
+          <meta name="keywords" content="Server SysSon 1.7.1 API de.sciss.synth.Server" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="Server$.html" title="See companion object"><img src="../../../lib/trait_to_object_big.png" /></a>
+        <a href="Server$.html" title="See companion object"><img alt="Trait/Object" src="../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.synth">synth</a></p>
         <h1><a href="Server$.html" title="See companion object">Server</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -36,7 +36,7 @@
             | <a href="package.html" class="extype" name="de.sciss.synth">package synth</a>
           </div></span></h3><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -79,7 +79,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -108,7 +107,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@!(p:de.sciss.osc.Packet):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -125,7 +124,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@!![A](packet:de.sciss.osc.Packet,timeout:scala.concurrent.duration.Duration)(handler:PartialFunction[de.sciss.osc.Message,A]):scala.concurrent.Future[A]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Sends out an OSC packet that generates some kind of reply, and
@@ -135,9 +134,7 @@ The handler is tested for each incoming OSC message (using its
 <code>isDefinedAt</code> method) and invoked and removed in case of a
 match, completing the returned future.</p><p>If the handler does not match in the given timeout period,
 the future fails with a <code>Timeout</code> exception, and the handler is removed.
-</p></div><dl class="paramcmts block"><dt class="param">packet</dt><dd class="cmt"><p>the packet to send out</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>the timeout duration</p></dd><dt class="param">handler</dt><dd class="cmt"><p>the handler to match against incoming messages</p></dd><dt>returns</dt><dd class="cmt"><p>a future of the successfully completed handler or timeout exception
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="message/Timeout.html" class="extype" name="de.sciss.synth.message.Timeout">de.sciss.synth.message.Timeout</a>
-</p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">packet</dt><dd class="cmt"><p>the packet to send out</p></dd><dt class="param">timeout</dt><dd class="cmt"><p>the timeout duration</p></dd><dt class="param">handler</dt><dd class="cmt"><p>the handler to match against incoming messages</p></dd><dt>returns</dt><dd class="cmt"><p>a future of the successfully completed handler or timeout exception</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="message/Timeout.html" class="extype" name="de.sciss.synth.message.Timeout">de.sciss.synth.message.Timeout</a></p></span></dd></dl></div>
     </li><li name="de.sciss.model.Model#addListener" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="addListener(pf:de.sciss.model.Model.Listener[U]):pf.type"></a>
       <a id="addListener(Listener[Update]):pf.type"></a>
@@ -151,7 +148,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@addListener(pf:de.sciss.model.Model.Listener[U]):pf.type" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Model</dd></dl></div>
@@ -168,7 +165,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@addr:java.net.InetSocketAddress" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ServerLike.html" class="extype" name="de.sciss.synth.ServerLike">ServerLike</a></dd></dl></div>
@@ -185,7 +182,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@allocAudioBus(numChannels:Int):Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -202,7 +199,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@allocBuffer(numChannels:Int):Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -219,7 +216,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@allocControlBus(numChannels:Int):Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -236,7 +233,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@bufManager:de.sciss.synth.BufferManager" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -253,7 +250,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@clientConfig:de.sciss.synth.Client.Config" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -270,7 +267,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@condition:de.sciss.synth.Server.Condition" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -287,7 +284,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@config:de.sciss.synth.Server.Config" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ServerLike.html" class="extype" name="de.sciss.synth.ServerLike">ServerLike</a></dd></dl></div>
@@ -304,7 +301,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@counts:de.sciss.synth.message.StatusReply" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -321,7 +318,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@defaultGroup:de.sciss.synth.Group" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -338,7 +335,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@dispose():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -355,7 +352,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@dumpInOSC(mode:de.sciss.osc.Dump,filter:de.sciss.osc.Packet=&gt;Boolean):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -372,7 +369,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@dumpOSC(mode:de.sciss.osc.Dump,filter:de.sciss.osc.Packet=&gt;Boolean):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -389,7 +386,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@dumpOutOSC(mode:de.sciss.osc.Dump,filter:de.sciss.osc.Packet=&gt;Boolean):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -406,7 +403,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@dumpTree(controls:Boolean):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -423,7 +420,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@freeAudioBus(index:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -440,7 +437,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@freeBuffer(index:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -457,7 +454,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@freeControlBus(index:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -474,7 +471,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@isConnected:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -491,7 +488,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@isLocal:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -508,7 +505,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@isOffline:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -525,7 +522,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@isRunning:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -542,7 +539,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@name:String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ServerLike.html" class="extype" name="de.sciss.synth.ServerLike">ServerLike</a></dd></dl></div>
@@ -559,7 +556,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@nextNodeID():Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -576,7 +573,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@nextSyncID():Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -593,7 +590,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@nodeManager:de.sciss.synth.NodeManager" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -610,7 +607,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@queryCounts():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -627,7 +624,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@quit():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -644,7 +641,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@quitMsg:de.sciss.synth.message.ServerQuit.type" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -661,7 +658,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@removeListener(pf:de.sciss.model.Model.Listener[U]):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Model</dd></dl></div>
@@ -678,7 +675,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@rootNode:de.sciss.synth.Group" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -695,7 +692,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@sampleRate:Double" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -712,7 +709,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@startAliveThread(delay:Float,period:Float,deathBounces:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -729,7 +726,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@stopAliveThread():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -746,7 +743,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@syncMsg():de.sciss.synth.message.Sync" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -768,7 +765,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -785,7 +782,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@##():Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -802,7 +799,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -819,7 +816,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -836,7 +833,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@clone():Object" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -859,7 +856,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -876,7 +873,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -893,7 +890,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -916,7 +913,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -933,7 +930,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
@@ -950,7 +947,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
@@ -967,7 +964,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -984,7 +981,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@notify():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1001,7 +998,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1018,7 +1015,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1035,7 +1032,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@toString():String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.Server">Server</a> → AnyRef → Any</dd></dl></div>
@@ -1052,7 +1049,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@wait():Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1075,7 +1072,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -1098,7 +1095,7 @@ the future fails with a <code>Timeout</code> exception, and the handler is remov
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#de.sciss.synth.Server@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>

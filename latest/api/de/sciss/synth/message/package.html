@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>message - SysSon 1.4.0 API - de.sciss.synth.message</title>
-          <meta name="description" content="message - SysSon 1.4.0 API - de.sciss.synth.message" />
-          <meta name="keywords" content="message SysSon 1.4.0 API de.sciss.synth.message" />
+          <title>message - SysSon 1.7.1 API - de.sciss.synth.message</title>
+          <meta name="description" content="message - SysSon 1.7.1 API - de.sciss.synth.message" />
+          <meta name="keywords" content="message SysSon 1.7.1 API de.sciss.synth.message" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,11 +28,11 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../../lib/package_big.png" />
+        <img alt="Package" src="../../../../lib/package_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a></p>
         <h1>message</h1><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -79,7 +79,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@AsyncSendextendsSend" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Identifies messages sent to the server which are executed asynchronously and reply with a form of done-message.</p>
@@ -96,14 +96,13 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferAllocextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_alloc</code> message tells the server to allocate memory for a buffer associated
 with its logical identifier.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_alloc</code> message tells the server to allocate memory for a buffer associated
 with its logical identifier.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a>
-</p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocMsg(numFrames:Int,numChannels:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAlloc" class="extmbr" name="de.sciss.synth.Buffer#allocMsg">Buffer#allocMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocMsg(numFrames:Int,numChannels:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAlloc" class="extmbr" name="de.sciss.synth.Buffer#allocMsg">Buffer#allocMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferAllocRead" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferAllocReadextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="BufferAllocRead:BufferAllocRead"></a>
@@ -117,7 +116,7 @@ with its logical identifier.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferAllocReadextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_allocRead</code> message tells the server to allocate memory for a buffer and read
@@ -129,9 +128,7 @@ and the sample-rate of the buffer are determined by that audio-file.
                     resolve with respect to the server's current working directory. If the server is running on
                     a remote node, the path will be resolved in the server's local file system.</p></dd><dt class="param">startFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
                     value less than or equal to zero denotes that the number of frames available in the file
-                    from the given offset is used (the entire file will be read).
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a>
-</p></span><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></p></span><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocReadMsg(path:String,startFrame:Int,numFrames:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocRead" class="extmbr" name="de.sciss.synth.Buffer#allocReadMsg">Buffer#allocReadMsg</a></p></span></dd></dl></div>
+                    from the given offset is used (the entire file will be read).</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a></p></span><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></p></span><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocReadMsg(path:String,startFrame:Int,numFrames:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocRead" class="extmbr" name="de.sciss.synth.Buffer#allocReadMsg">Buffer#allocReadMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferAllocReadChannel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferAllocReadChannelextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="BufferAllocReadChannel:BufferAllocReadChannel"></a>
@@ -145,7 +142,7 @@ and the sample-rate of the buffer are determined by that audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferAllocReadChannelextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_allocReadChannel</code> message tells the server to allocate memory for a buffer and read
@@ -158,9 +155,7 @@ by the audio-file.
                     resolve with respect to the server's current working directory. If the server is running on
                     a remote node, the path will be resolved in the server's local file system.</p></dd><dt class="param">startFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
                     value of <code>-1</code> denotes that the number of frames available in the file
-                    from the given offset is used (the entire file will be read).</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a>
-</p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocReadChannelMsg(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocReadChannel" class="extmbr" name="de.sciss.synth.Buffer#allocReadChannelMsg">Buffer#allocReadChannelMsg</a></p></span></dd></dl></div>
+                    from the given offset is used (the entire file will be read).</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a></p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#allocReadChannelMsg(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferAllocReadChannel" class="extmbr" name="de.sciss.synth.Buffer#allocReadChannelMsg">Buffer#allocReadChannelMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferClose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferCloseextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="BufferClose:BufferClose"></a>
@@ -174,14 +169,13 @@ by the audio-file.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferCloseextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_close</code> message ensures that a buffer closes an associated audio-file.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_close</code> message ensures that a buffer closes an associated audio-file.
 This is a no-op if the buffer is not associated with an audio-file or if that
 file is already closed.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a>
-</p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#closeMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferClose" class="extmbr" name="de.sciss.synth.Buffer#closeMsg">Buffer#closeMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferFree.html" class="extype" name="de.sciss.synth.message.BufferFree">BufferFree</a></p></span><span class="cmt"><p><a href="../Buffer.html#closeMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferClose" class="extmbr" name="de.sciss.synth.Buffer#closeMsg">Buffer#closeMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferFill" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferFillextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="BufferFill:BufferFill"></a>
@@ -195,14 +189,12 @@ file is already closed.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferFillextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_fill</code> message sets individual ranges of samples of the buffer to given values.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_fill</code> message sets individual ranges of samples of the buffer to given values.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">ranges</dt><dd class="cmt"><p>tuples which specify the offset into the buffer, the number of samples to overwrite and the
-                value with which to overwrite.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a>
-</p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#fillMsg(ranges:de.sciss.synth.FillRange*):de.sciss.synth.message.BufferFill" class="extmbr" name="de.sciss.synth.Buffer#fillMsg">Buffer#fillMsg</a></p></span></dd></dl></div>
+                value with which to overwrite.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a></p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#fillMsg(ranges:de.sciss.synth.FillRange*):de.sciss.synth.message.BufferFill" class="extmbr" name="de.sciss.synth.Buffer#fillMsg">Buffer#fillMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferFree" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferFreeextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="BufferFree:BufferFree"></a>
@@ -216,15 +208,14 @@ file is already closed.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferFreeextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_free</code> message frees a buffer on the server side.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_free</code> message frees a buffer on the server side. The client side
 typically maintains a logical list of allocated buffer identifiers as well,
 so one should normally rely on the specific client side API to correctly
 free a buffer.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a>
-</p></span><span class="cmt"><p><a href="BufferClose.html" class="extype" name="de.sciss.synth.message.BufferClose">BufferClose</a></p></span><span class="cmt"><p><a href="../Buffer.html#freeMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet],release:Boolean):de.sciss.synth.message.BufferFree" class="extmbr" name="de.sciss.synth.Buffer#freeMsg">Buffer#freeMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferAlloc.html" class="extype" name="de.sciss.synth.message.BufferAlloc">BufferAlloc</a></p></span><span class="cmt"><p><a href="BufferClose.html" class="extype" name="de.sciss.synth.message.BufferClose">BufferClose</a></p></span><span class="cmt"><p><a href="../Buffer.html#freeMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet],release:Boolean):de.sciss.synth.message.BufferFree" class="extmbr" name="de.sciss.synth.Buffer#freeMsg">Buffer#freeMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferGen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferGenextendsMessagewithSendwithProductwithSerializable"></a>
       <a id="BufferGen:BufferGen"></a>
@@ -238,13 +229,11 @@ free a buffer.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferGenextendsMessagewithSendwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_gen</code> message uses a dedicated command to generate or manipulate the buffer content.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_gen</code> message uses a dedicated command to generate or manipulate the buffer content.
-</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">command</dt><dd class="cmt"><p>the operation to carry out on the buffer, such as generating a waveform or copying the content
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a>
-</p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#genMsg(command:de.sciss.synth.message.BufferGen.Command):de.sciss.synth.message.BufferGen" class="extmbr" name="de.sciss.synth.Buffer#genMsg">Buffer#genMsg</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">command</dt><dd class="cmt"><p>the operation to carry out on the buffer, such as generating a waveform or copying the content</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#genMsg(command:de.sciss.synth.message.BufferGen.Command):de.sciss.synth.message.BufferGen" class="extmbr" name="de.sciss.synth.Buffer#genMsg">Buffer#genMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferGet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferGetextendsMessagewithSyncQuerywithProductwithSerializable"></a>
       <a id="BufferGet:BufferGet"></a>
@@ -258,12 +247,11 @@ free a buffer.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferGetextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_get</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_get</code> message.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a>
-</p></span><span class="cmt"><p><a href="BufferGetn.html" class="extype" name="de.sciss.synth.message.BufferGetn">BufferGetn</a></p></span><span class="cmt"><p><a href="../Buffer.html#getMsg(indices:Int*):de.sciss.synth.message.BufferGet" class="extmbr" name="de.sciss.synth.Buffer#getMsg">Buffer#getMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="BufferGetn.html" class="extype" name="de.sciss.synth.message.BufferGetn">BufferGetn</a></p></span><span class="cmt"><p><a href="../Buffer.html#getMsg(indices:Int*):de.sciss.synth.message.BufferGet" class="extmbr" name="de.sciss.synth.Buffer#getMsg">Buffer#getMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferGetn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferGetnextendsMessagewithSyncQuerywithProductwithSerializable"></a>
       <a id="BufferGetn:BufferGetn"></a>
@@ -277,12 +265,11 @@ free a buffer.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferGetnextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_getn</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_getn</code> message.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a>
-</p></span><span class="cmt"><p><a href="BufferGet.html" class="extype" name="de.sciss.synth.message.BufferGet">BufferGet</a></p></span><span class="cmt"><p><a href="../Buffer.html#getnMsg(ranges:Range*):de.sciss.synth.message.BufferGetn" class="extmbr" name="de.sciss.synth.Buffer#getnMsg">Buffer#getnMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferGet.html" class="extype" name="de.sciss.synth.message.BufferGet">BufferGet</a></p></span><span class="cmt"><p><a href="../Buffer.html#getnMsg(ranges:Range*):de.sciss.synth.message.BufferGetn" class="extmbr" name="de.sciss.synth.Buffer#getnMsg">Buffer#getnMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferInfo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferInfoextendsMessagewithReceivewithProductwithSerializable"></a>
       <a id="BufferInfo:BufferInfo"></a>
@@ -296,12 +283,11 @@ free a buffer.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferInfoextendsMessagewithReceivewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">A <code>/b_info</code> message is received in reply to a <code>/b_query</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>/b_info</code> message is received in reply to a <code>/b_query</code> message.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferQuery.html" class="extype" name="de.sciss.synth.message.BufferQuery">BufferQuery</a>
-</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferQuery.html" class="extype" name="de.sciss.synth.message.BufferQuery">BufferQuery</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferQuery" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferQueryextendsMessagewithSyncQuerywithProductwithSerializable"></a>
       <a id="BufferQuery:BufferQuery"></a>
@@ -315,15 +301,13 @@ free a buffer.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferQueryextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_query</code> messages requests a <code>/b_info</code> reply message from the server, providing
 information about the size and sample-rate of the specified buffers.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_query</code> messages requests a <code>/b_info</code> reply message from the server, providing
 information about the size and sample-rate of the specified buffers.
-</p></div><dl class="paramcmts block"><dt class="param">ids</dt><dd class="cmt"><p>a sequence of buffer identifiers to query
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Buffer.html#queryMsg:de.sciss.synth.message.BufferQuery" class="extmbr" name="de.sciss.synth.Buffer#queryMsg">Buffer#queryMsg</a>
-</p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">ids</dt><dd class="cmt"><p>a sequence of buffer identifiers to query</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Buffer.html#queryMsg:de.sciss.synth.message.BufferQuery" class="extmbr" name="de.sciss.synth.Buffer#queryMsg">Buffer#queryMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferRead" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferReadextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="BufferRead:BufferRead"></a>
@@ -337,16 +321,14 @@ information about the size and sample-rate of the specified buffers.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferReadextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_read</code> message tells the server to read a portion of an audio-file into an existing buffer.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_read</code> message tells the server to read a portion of an audio-file into an existing buffer.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer to read into.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to read.</p></dd><dt class="param">fileStartFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
                         value of <code>-1</code> denotes that as many frames are read as are available in the file or
                         fit into the buffer.</p></dd><dt class="param">bufStartFrame</dt><dd class="cmt"><p>the frame offset in the buffer to begin writing to.</p></dd><dt class="param">leaveOpen</dt><dd class="cmt"><p>if <code>true</code>, leaves the file open for streaming with the
-                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a>
-</p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="../Buffer.html#readMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" class="extmbr" name="de.sciss.synth.Buffer#readMsg">Buffer#readMsg</a></p></span></dd></dl></div>
+                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferReadChannel.html" class="extype" name="de.sciss.synth.message.BufferReadChannel">BufferReadChannel</a></p></span><span class="cmt"><p><a href="BufferAllocRead.html" class="extype" name="de.sciss.synth.message.BufferAllocRead">BufferAllocRead</a></p></span><span class="cmt"><p><a href="../Buffer.html#readMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferRead" class="extmbr" name="de.sciss.synth.Buffer#readMsg">Buffer#readMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferReadChannel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferReadChannelextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="BufferReadChannel:BufferReadChannel"></a>
@@ -360,7 +342,7 @@ information about the size and sample-rate of the specified buffers.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferReadChannelextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_readChannel</code> message tells the server to read a portion of an audio-file into an existing buffer,
@@ -369,9 +351,7 @@ selecting a subset of the file's channels.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer to read into.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to read.</p></dd><dt class="param">fileStartFrame</dt><dd class="cmt"><p>the offset in frames into the audio-file to begin reading from</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to read which will be the size of the allocated buffer. The special
                         value of <code>-1</code> denotes that as many frames are read as are available in the file or
                         fit into the buffer.</p></dd><dt class="param">bufStartFrame</dt><dd class="cmt"><p>the frame offset in the buffer to begin writing to.</p></dd><dt class="param">leaveOpen</dt><dd class="cmt"><p>if <code>true</code>, leaves the file open for streaming with the
-                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a>
-</p></span><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></p></span><span class="cmt"><p><a href="../Buffer.html#readChannelMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferReadChannel" class="extmbr" name="de.sciss.synth.Buffer#readChannelMsg">Buffer#readChannelMsg</a></p></span></dd></dl></div>
+                        <a href="../ugen/DiskIn.html" class="extype" name="de.sciss.synth.ugen.DiskIn">DiskIn</a> UGen.</p></dd><dt class="param">channels</dt><dd class="cmt"><p>a sequence of channel indices to read. Zero corresponds to the first channel of the file.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a></p></span><span class="cmt"><p><a href="BufferAllocReadChannel.html" class="extype" name="de.sciss.synth.message.BufferAllocReadChannel">BufferAllocReadChannel</a></p></span><span class="cmt"><p><a href="../Buffer.html#readChannelMsg(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferReadChannel" class="extmbr" name="de.sciss.synth.Buffer#readChannelMsg">Buffer#readChannelMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferSetextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="BufferSet:BufferSet"></a>
@@ -385,15 +365,13 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferSetextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_set</code> message sets individual samples of the buffer to given values.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_set</code> message sets individual samples of the buffer to given values.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">pairs</dt><dd class="cmt"><p>pairs of sample offsets and sample values. The offsets are de-interleaved samples,
                 so for multi-channel buffers, to address a particular frame, the frame index must
-                be multiplied by the number of channels and offset by the channel to write into.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a>
-</p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="../Buffer.html#setMsg(pairs:de.sciss.synth.FillValue*):de.sciss.synth.message.BufferSet" class="extmbr" name="de.sciss.synth.Buffer#setMsg">Buffer#setMsg</a></p></span></dd></dl></div>
+                be multiplied by the number of channels and offset by the channel to write into.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a></p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="../Buffer.html#setMsg(pairs:de.sciss.synth.FillValue*):de.sciss.synth.message.BufferSet" class="extmbr" name="de.sciss.synth.Buffer#setMsg">Buffer#setMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferSetn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferSetnextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="BufferSetn:BufferSetn"></a>
@@ -407,16 +385,14 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferSetnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_setn</code> message sets individual ranges of samples of the buffer to given values.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_setn</code> message sets individual ranges of samples of the buffer to given values.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">indicesAndValues</dt><dd class="cmt"><p>pairs of sample offsets and sequences of sample values.
                           The offsets are de-interleaved samples,
                           so for multi-channel buffers, to address a particular frame, the frame index must
-                          be multiplied by the number of channels and offset by the channel to write into.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a>
-</p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#setnMsg(pairs:(Int,IndexedSeq[Float])*):de.sciss.synth.message.BufferSetn" class="extmbr" name="de.sciss.synth.Buffer#setnMsg">Buffer#setnMsg</a></p></span></dd></dl></div>
+                          be multiplied by the number of channels and offset by the channel to write into.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a></p></span><span class="cmt"><p><a href="BufferZero.html" class="extype" name="de.sciss.synth.message.BufferZero">BufferZero</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="../Buffer.html#setnMsg(pairs:(Int,IndexedSeq[Float])*):de.sciss.synth.message.BufferSetn" class="extmbr" name="de.sciss.synth.Buffer#setnMsg">Buffer#setnMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferWrite" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferWriteextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="BufferWrite:BufferWrite"></a>
@@ -430,16 +406,14 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferWriteextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_write</code> message writes a portion of the buffer contents to an audio-file.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_write</code> message writes a portion of the buffer contents to an audio-file.
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>the identifier of the buffer whose contents to write.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the audio-file to write to.</p></dd><dt class="param">fileType</dt><dd class="cmt"><p>the header format of the audio-file</p></dd><dt class="param">sampleFormat</dt><dd class="cmt"><p>the sample resolution of the audio-file</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to write. The special
                         value of <code>-1</code> denotes that the whole buffer content (or the remainder
                         after the <code>startFrame</code>) is written out.</p></dd><dt class="param">startFrame</dt><dd class="cmt"><p>the frame offset in the buffer to begin reading from</p></dd><dt class="param">leaveOpen</dt><dd class="cmt"><p>if <code>true</code>, leaves the file open for streaming with
-                        the <a href="../ugen/DiskOut.html" class="extype" name="de.sciss.synth.ugen.DiskOut">DiskOut</a> UGen.
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a>
-</p></span><span class="cmt"><p><a href="../Buffer.html#writeMsg(path:String,fileType:de.sciss.synth.io.AudioFileType,sampleFormat:de.sciss.synth.io.SampleFormat,numFrames:Int,startFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferWrite" class="extmbr" name="de.sciss.synth.Buffer#writeMsg">Buffer#writeMsg</a></p></span></dd></dl></div>
+                        the <a href="../ugen/DiskOut.html" class="extype" name="de.sciss.synth.ugen.DiskOut">DiskOut</a> UGen.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferRead.html" class="extype" name="de.sciss.synth.message.BufferRead">BufferRead</a></p></span><span class="cmt"><p><a href="../Buffer.html#writeMsg(path:String,fileType:de.sciss.synth.io.AudioFileType,sampleFormat:de.sciss.synth.io.SampleFormat,numFrames:Int,startFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferWrite" class="extmbr" name="de.sciss.synth.Buffer#writeMsg">Buffer#writeMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.BufferZero" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferZeroextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="BufferZero:BufferZero"></a>
@@ -453,12 +427,11 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferZeroextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/b_zero</code> message clears the contents of a buffer (all samples will be zero).</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/b_zero</code> message clears the contents of a buffer (all samples will be zero).
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a>
-</p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="../Buffer.html#zeroMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferZero" class="extmbr" name="de.sciss.synth.Buffer#zeroMsg">Buffer#zeroMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufferGen.html" class="extype" name="de.sciss.synth.message.BufferGen">BufferGen</a></p></span><span class="cmt"><p><a href="BufferSetn.html" class="extype" name="de.sciss.synth.message.BufferSetn">BufferSetn</a></p></span><span class="cmt"><p><a href="BufferSet.html" class="extype" name="de.sciss.synth.message.BufferSet">BufferSet</a></p></span><span class="cmt"><p><a href="BufferFill.html" class="extype" name="de.sciss.synth.message.BufferFill">BufferFill</a></p></span><span class="cmt"><p><a href="../Buffer.html#zeroMsg(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.BufferZero" class="extmbr" name="de.sciss.synth.Buffer#zeroMsg">Buffer#zeroMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.ControlBusFill" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ControlBusFillextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="ControlBusFill:ControlBusFill"></a>
@@ -472,12 +445,11 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusFillextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/c_fill</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_fill</code> message.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a>
-</p></span><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#fillMsg(data:de.sciss.synth.FillRange*):de.sciss.synth.message.ControlBusFill" class="extmbr" name="de.sciss.synth.ControlBus#fillMsg">ControlBus#fillMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a></p></span><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#fillMsg(data:de.sciss.synth.FillRange*):de.sciss.synth.message.ControlBusFill" class="extmbr" name="de.sciss.synth.ControlBus#fillMsg">ControlBus#fillMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.ControlBusGet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ControlBusGetextendsMessagewithSyncQuerywithProductwithSerializable"></a>
       <a id="ControlBusGet:ControlBusGet"></a>
@@ -491,12 +463,11 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusGetextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/c_get</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_get</code> message.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a>
-</p></span><span class="cmt"><p><a href="ControlBusGetn.html" class="extype" name="de.sciss.synth.message.ControlBusGetn">ControlBusGetn</a></p></span><span class="cmt"><p><a href="../ControlBus.html#getMsg(offsets:Int*):de.sciss.synth.message.ControlBusGet" class="extmbr" name="de.sciss.synth.ControlBus#getMsg">ControlBus#getMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a></p></span><span class="cmt"><p><a href="ControlBusGetn.html" class="extype" name="de.sciss.synth.message.ControlBusGetn">ControlBusGetn</a></p></span><span class="cmt"><p><a href="../ControlBus.html#getMsg(offsets:Int*):de.sciss.synth.message.ControlBusGet" class="extmbr" name="de.sciss.synth.ControlBus#getMsg">ControlBus#getMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.ControlBusGetn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ControlBusGetnextendsMessagewithSyncQuerywithProductwithSerializable"></a>
       <a id="ControlBusGetn:ControlBusGetn"></a>
@@ -510,12 +481,11 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusGetnextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/c_getn</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_getn</code> message.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a>
-</p></span><span class="cmt"><p><a href="ControlBusGet.html" class="extype" name="de.sciss.synth.message.ControlBusGet">ControlBusGet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#getnMsg(ranges:Range*):de.sciss.synth.message.ControlBusGetn" class="extmbr" name="de.sciss.synth.ControlBus#getnMsg">ControlBus#getnMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a></p></span><span class="cmt"><p><a href="ControlBusGet.html" class="extype" name="de.sciss.synth.message.ControlBusGet">ControlBusGet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#getnMsg(ranges:Range*):de.sciss.synth.message.ControlBusGetn" class="extmbr" name="de.sciss.synth.ControlBus#getnMsg">ControlBus#getnMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.ControlBusSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ControlBusSetextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="ControlBusSet:ControlBusSet"></a>
@@ -529,12 +499,11 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusSetextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/c_set</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_set</code> message.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusFill.html" class="extype" name="de.sciss.synth.message.ControlBusFill">ControlBusFill</a>
-</p></span><span class="cmt"><p><a href="ControlBusGet.html" class="extype" name="de.sciss.synth.message.ControlBusGet">ControlBusGet</a></p></span><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a></p></span><span class="cmt"><p><a href="../ControlBus.html#setMsg(pairs:de.sciss.synth.FillValue*):de.sciss.synth.message.ControlBusSet" class="extmbr" name="de.sciss.synth.ControlBus#setMsg">ControlBus#setMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusFill.html" class="extype" name="de.sciss.synth.message.ControlBusFill">ControlBusFill</a></p></span><span class="cmt"><p><a href="ControlBusGet.html" class="extype" name="de.sciss.synth.message.ControlBusGet">ControlBusGet</a></p></span><span class="cmt"><p><a href="ControlBusSetn.html" class="extype" name="de.sciss.synth.message.ControlBusSetn">ControlBusSetn</a></p></span><span class="cmt"><p><a href="../ControlBus.html#setMsg(pairs:de.sciss.synth.FillValue*):de.sciss.synth.message.ControlBusSet" class="extmbr" name="de.sciss.synth.ControlBus#setMsg">ControlBus#setMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.ControlBusSetn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ControlBusSetnextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="ControlBusSetn:ControlBusSetn"></a>
@@ -548,12 +517,11 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ControlBusSetnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/c_setn</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/c_setn</code> message.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusFill.html" class="extype" name="de.sciss.synth.message.ControlBusFill">ControlBusFill</a>
-</p></span><span class="cmt"><p><a href="ControlBusGetn.html" class="extype" name="de.sciss.synth.message.ControlBusGetn">ControlBusGetn</a></p></span><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#setnMsg(pairs:(Int,IndexedSeq[Float])*):de.sciss.synth.message.ControlBusSetn" class="extmbr" name="de.sciss.synth.ControlBus#setnMsg">ControlBus#setnMsg</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ControlBusFill.html" class="extype" name="de.sciss.synth.message.ControlBusFill">ControlBusFill</a></p></span><span class="cmt"><p><a href="ControlBusGetn.html" class="extype" name="de.sciss.synth.message.ControlBusGetn">ControlBusGetn</a></p></span><span class="cmt"><p><a href="ControlBusSet.html" class="extype" name="de.sciss.synth.message.ControlBusSet">ControlBusSet</a></p></span><span class="cmt"><p><a href="../ControlBus.html#setnMsg(pairs:(Int,IndexedSeq[Float])*):de.sciss.synth.message.ControlBusSetn" class="extmbr" name="de.sciss.synth.ControlBus#setnMsg">ControlBus#setnMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.DumpOSC" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DumpOSCextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="DumpOSC:DumpOSC"></a>
@@ -567,13 +535,12 @@ selecting a subset of the file's channels.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@DumpOSCextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/dumpOSC</code> message that selects how the server reports incoming OSC packets.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/dumpOSC</code> message that selects how the server reports incoming OSC packets.</p><p><u>Note:</u> The OSC dump behavior of scsynth has long time been broken. It is recommended
 to use client-side only reporting, provided by the <code>dumpOSC</code> method of the <code>Server</code> class.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Server.html#dumpOSC(mode:de.sciss.osc.Dump,filter:de.sciss.osc.Packet=&gt;Boolean):Unit" class="extmbr" name="de.sciss.synth.Server#dumpOSC">Server#dumpOSC</a>
-</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Server.html#dumpOSC(mode:de.sciss.osc.Dump,filter:de.sciss.osc.Packet=&gt;Boolean):Unit" class="extmbr" name="de.sciss.synth.Server#dumpOSC">Server#dumpOSC</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.Error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ErrorextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="Error:Error"></a>
@@ -587,7 +554,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ErrorextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Produces an <code>/error</code> message that selects how the server will report errors to the console.</p>
@@ -604,7 +571,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@GroupDeepFreeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_deepFree</code> message.</p>
@@ -621,7 +588,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@GroupDumpTreeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_dumpTree</code> message.</p>
@@ -638,7 +605,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@GroupFreeAllextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_freeAll</code> message.</p>
@@ -655,7 +622,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@GroupHeadextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_head</code> message pair-wise places nodes at the head of groups.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/g_head</code> message pair-wise places nodes at the head of groups.</p><pre>/g_head
@@ -677,7 +644,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@GroupNewextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_new</code> message.</p>
@@ -694,7 +661,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@GroupQueryTreeextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_queryTree</code> message.</p>
@@ -711,7 +678,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@GroupTailextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/g_tail</code> message pair-wise places nodes at the tail of groups.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/g_tail</code> message pair-wise places nodes at the tail of groups.</p><pre>/g_tail
@@ -733,7 +700,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@HandlerextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -750,7 +717,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@HasCompletionextendsAsyncSend" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -767,7 +734,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeAfterextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_after</code> message pair-wise places nodes after other nodes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_after</code> message pair-wise places nodes after other nodes.</p><pre>/n_after
@@ -789,7 +756,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeBeforeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_before</code> message pair-wise places nodes before other nodes.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_before</code> message pair-wise places nodes before other nodes.</p><pre>/n_before
@@ -811,7 +778,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeChangeextendsReceive" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -828,7 +795,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeEndextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -845,7 +812,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeFillextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_fill</code> message.</p>
@@ -862,7 +829,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeFreeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_free</code> message.</p>
@@ -879,7 +846,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeGoextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -896,13 +863,11 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeInfoextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">An <code>/n_info</code> message is received as a reply to an <code>/n_query</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>An <code>/n_info</code> message is received as a reply to an <code>/n_query</code> message.
-</p></div><dl class="paramcmts block"><dt class="param">nodeID</dt><dd class="cmt"><p>the identifier of the node for which information has been received</p></dd><dt class="param">info</dt><dd class="cmt"><p>the information object describing the topological position of the node
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeQuery.html" class="extype" name="de.sciss.synth.message.NodeQuery">NodeQuery</a>
-</p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nodeID</dt><dd class="cmt"><p>the identifier of the node for which information has been received</p></dd><dt class="param">info</dt><dd class="cmt"><p>the information object describing the topological position of the node</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeQuery.html" class="extype" name="de.sciss.synth.message.NodeQuery">NodeQuery</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.NodeMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NodeMapextendsMessagewithSyncCmdwithProductwithSerializable"></a>
       <a id="NodeMap:NodeMap"></a>
@@ -916,7 +881,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeMapextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_map</code> message.</p>
@@ -933,7 +898,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeMapaextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_mapa</code> message.</p>
@@ -950,7 +915,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeMapanextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_mapan</code> message.</p>
@@ -967,7 +932,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeMapnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_mapn</code> message.</p>
@@ -984,7 +949,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeMoveextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1001,7 +966,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeNoIDextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_noid</code> message.</p>
@@ -1018,7 +983,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeOffextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1035,7 +1000,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeOnextendsMessagewithNodeChangewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1052,7 +1017,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeOrderextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_order</code> message.</p>
@@ -1069,7 +1034,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeQueryextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_query</code> message.</p>
@@ -1086,7 +1051,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeRunextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_run</code> message.</p>
@@ -1103,7 +1068,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeSetextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_set</code> message.</p>
@@ -1120,7 +1085,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeSetnextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_setn</code> message.</p>
@@ -1137,7 +1102,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeTraceextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_trace</code> message.</p>
@@ -1154,7 +1119,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ParGroupNewextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/p_new</code> message.</p>
@@ -1171,7 +1136,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ReceiveextendsServerMessage" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Identifies messages returned by SuperCollider server.</p>
@@ -1188,7 +1153,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ResponderextendsHandler" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1205,7 +1170,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SendextendsServerMessage" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Identifies messages sent to the SuperCollider server.</p>
@@ -1222,7 +1187,7 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ServerMessageextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Identifies messages received or sent by the SuperCollider server.</p>
@@ -1239,15 +1204,14 @@ to use client-side only reporting, provided by the <code>dumpOSC</code> method o
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ServerNotifyextendsMessagewithAsyncSendwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/notify</code> messages registers or de-registers a client with respect
 to receiving reply messages from the server.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/notify</code> messages registers or de-registers a client with respect
 to receiving reply messages from the server.</p><p>Booting or connecting a server through the regular API automatically handles and does
 not require the explicit use of this message.
-</p></div><dl class="paramcmts block"><dt class="param">on</dt><dd class="cmt"><p>if <code>true</code>, the client is registered, if <code>false</code> it is de-registered.
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">on</dt><dd class="cmt"><p>if <code>true</code>, the client is registered, if <code>false</code> it is de-registered.</p></dd></dl></div>
     </li><li name="de.sciss.synth.message.StatusReply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="StatusReplyextendsMessagewithReceivewithProductwithSerializable"></a>
       <a id="StatusReply:StatusReply"></a>
@@ -1261,7 +1225,7 @@ not require the explicit use of this message.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@StatusReplyextendsMessagewithReceivewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1278,7 +1242,7 @@ not require the explicit use of this message.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SyncextendsMessagewithAsyncSendwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Represents a <code>/sync</code> message, which is queued with the asynchronous messages
@@ -1288,8 +1252,7 @@ on the server, and which, when executed, triggers a corresponding <code>/synced<
 message (i.e. with the same id)
 </p></div><dl class="paramcmts block"><dt class="param">id</dt><dd class="cmt"><p>an arbitrary identifier which can be used to match the corresponding
                reply message. typically the id is incremented by 1 for each
-               <code>/sync</code> message sent out.
-</p></dd></dl></div>
+               <code>/sync</code> message sent out.</p></dd></dl></div>
     </li><li name="de.sciss.synth.message.SyncCmd" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SyncCmdextendsSyncSend"></a>
       <a id="SyncCmd:SyncCmd"></a>
@@ -1303,7 +1266,7 @@ message (i.e. with the same id)
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SyncCmdextendsSyncSend" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Identifies command messages sent to the server which are executed synchronously and do not return a message.</p>
@@ -1320,7 +1283,7 @@ message (i.e. with the same id)
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SyncQueryextendsSyncSend" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Identifies query messages sent to the server which are executed synchronously and produce a reply message.</p>
@@ -1337,7 +1300,7 @@ message (i.e. with the same id)
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SyncSendextendsSend" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Identifies messages sent to the server which are executed synchronously.</p>
@@ -1354,7 +1317,7 @@ message (i.e. with the same id)
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SyncedextendsMessagewithReceivewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Represents a <code>/synced</code> message, a reply from the server acknowledging that
@@ -1375,7 +1338,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SynthDefFreeextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/d_free</code> message.</p>
@@ -1392,14 +1355,12 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SynthDefLoadextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/d_load</code> message.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/d_load</code> message.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the path to the file that stores the definition. This can be a pattern
-              like <code>&quot;synthdefs/perc-*&quot;</code>
-</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SynthDef$.html#loadMsg(path:String,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.SynthDefLoad" class="extmbr" name="de.sciss.synth.SynthDef#loadMsg">SynthDef.loadMsg</a>
-</p></span></dd></dl></div>
+              like <code>&quot;synthdefs/perc-*&quot;</code></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SynthDef$.html#loadMsg(path:String,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.SynthDefLoad" class="extmbr" name="de.sciss.synth.SynthDef#loadMsg">SynthDef.loadMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.SynthDefLoadDir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SynthDefLoadDirextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="SynthDefLoadDir:SynthDefLoadDir"></a>
@@ -1413,12 +1374,11 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SynthDefLoadDirextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/d_loadDir</code> message tells the server to load all synth definitions within a directory.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/d_loadDir</code> message tells the server to load all synth definitions within a directory.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SynthDef$.html#loadDirMsg(path:String,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.SynthDefLoadDir" class="extmbr" name="de.sciss.synth.SynthDef#loadDirMsg">SynthDef.loadDirMsg</a>
-</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../SynthDef$.html#loadDirMsg(path:String,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):de.sciss.synth.message.SynthDefLoadDir" class="extmbr" name="de.sciss.synth.SynthDef#loadDirMsg">SynthDef.loadDirMsg</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.SynthDefRecv" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SynthDefRecvextendsMessagewithHasCompletionwithProductwithSerializable"></a>
       <a id="SynthDefRecv:SynthDefRecv"></a>
@@ -1432,7 +1392,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SynthDefRecvextendsMessagewithHasCompletionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/d_recv</code> message.</p>
@@ -1449,7 +1409,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SynthGetextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/s_get</code> message.</p>
@@ -1466,7 +1426,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SynthGetnextendsMessagewithSyncQuerywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/s_getn</code> message.</p>
@@ -1483,7 +1443,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@SynthNewextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/s_new</code> message.</p>
@@ -1500,7 +1460,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@TimeoutextendsRuntimeExceptionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1517,7 +1477,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@TriggerextendsMessagewithReceivewithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/tr</code> message send from a <a href="../ugen/SendTrig.html" class="extype" name="de.sciss.synth.ugen.SendTrig">SendTrig</a> UGen.</p>
@@ -1534,7 +1494,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@UGenCommandextendsMessagewithSyncCmdwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/u_cmd</code> message allows one to send UGen specific commands.</p>
@@ -1558,7 +1518,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferGen" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1575,7 +1535,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@BufferInfo" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1592,7 +1552,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ClearSched" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1609,7 +1569,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@Error" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1626,7 +1586,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@GroupNew" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1643,12 +1603,11 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeEnd" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_end</code> message is received from the server when a node has been freed.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_end</code> message is received from the server when a node has been freed.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeFree.html" class="extype" name="de.sciss.synth.message.NodeFree">NodeFree</a>
-</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeFree.html" class="extype" name="de.sciss.synth.message.NodeFree">NodeFree</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.NodeGo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NodeGo"></a>
       <a id="NodeGo:NodeGo"></a>
@@ -1662,12 +1621,11 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeGo" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_go</code> message is received from the server when a node has been newly created.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_go</code> message is received from the server when a node has been newly created.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GroupNew.html" class="extype" name="de.sciss.synth.message.GroupNew">GroupNew</a>
-</p></span><span class="cmt"><p><a href="SynthNew.html" class="extype" name="de.sciss.synth.message.SynthNew">SynthNew</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GroupNew.html" class="extype" name="de.sciss.synth.message.GroupNew">GroupNew</a></p></span><span class="cmt"><p><a href="SynthNew.html" class="extype" name="de.sciss.synth.message.SynthNew">SynthNew</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.NodeInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NodeInfo"></a>
       <a id="NodeInfo:NodeInfo"></a>
@@ -1681,7 +1639,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeInfo" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1698,12 +1656,11 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeMove" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_move</code> message is received from the server when a node has changed its position in the tree.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_move</code> message is received from the server when a node has changed its position in the tree.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GroupTail.html" class="extype" name="de.sciss.synth.message.GroupTail">GroupTail</a>
-</p></span><span class="cmt"><p><a href="GroupHead.html" class="extype" name="de.sciss.synth.message.GroupHead">GroupHead</a></p></span><span class="cmt"><p><a href="NodeAfter.html" class="extype" name="de.sciss.synth.message.NodeAfter">NodeAfter</a></p></span><span class="cmt"><p><a href="NodeBefore.html" class="extype" name="de.sciss.synth.message.NodeBefore">NodeBefore</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="GroupTail.html" class="extype" name="de.sciss.synth.message.GroupTail">GroupTail</a></p></span><span class="cmt"><p><a href="GroupHead.html" class="extype" name="de.sciss.synth.message.GroupHead">GroupHead</a></p></span><span class="cmt"><p><a href="NodeAfter.html" class="extype" name="de.sciss.synth.message.NodeAfter">NodeAfter</a></p></span><span class="cmt"><p><a href="NodeBefore.html" class="extype" name="de.sciss.synth.message.NodeBefore">NodeBefore</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.NodeOff" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NodeOff"></a>
       <a id="NodeOff:NodeOff"></a>
@@ -1717,12 +1674,11 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeOff" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_off</code> message is received from the server when a node has been paused.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_off</code> message is received from the server when a node has been paused.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeRun.html" class="extype" name="de.sciss.synth.message.NodeRun">NodeRun</a>
-</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeRun.html" class="extype" name="de.sciss.synth.message.NodeRun">NodeRun</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.NodeOn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NodeOn"></a>
       <a id="NodeOn:NodeOn"></a>
@@ -1736,12 +1692,11 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@NodeOn" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/n_on</code> message is received from the server when a node has resumed.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/n_on</code> message is received from the server when a node has resumed.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeRun.html" class="extype" name="de.sciss.synth.message.NodeRun">NodeRun</a>
-</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NodeRun.html" class="extype" name="de.sciss.synth.message.NodeRun">NodeRun</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.Responder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Responder"></a>
       <a id="Responder:Responder"></a>
@@ -1755,7 +1710,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@Responder" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1772,7 +1727,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ServerCodec" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -1789,12 +1744,11 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@ServerQuit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/quit</code> message tells the server to shut down.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>/quit</code> message tells the server to shut down.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Server.html#quit():Unit" class="extmbr" name="de.sciss.synth.Server#quit">Server#quit</a>
-</p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Server.html#quit():Unit" class="extmbr" name="de.sciss.synth.Server#quit">Server#quit</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.message.Status" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Status"></a>
       <a id="Status:Status"></a>
@@ -1808,7 +1762,7 @@ the same id) have been completed
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.message.package@Status" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" />
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">The <code>/status</code> message that queries the current statistics from the server.</p>
