@@ -22,6 +22,7 @@ import javax.imageio.ImageIO
 import javax.swing.{BorderFactory, Icon, ImageIcon}
 
 import de.sciss.audiowidgets.PeakMeter
+import de.sciss.desktop.Desktop
 import de.sciss.desktop.impl.DynamicComponentImpl
 import de.sciss.lucre.swing._
 import de.sciss.lucre.synth.{Server, Txn}
@@ -122,7 +123,10 @@ private[gui] object MainViewImpl {
         case osc.Message("/$meter", syn.id, _, vals @ _*) =>
           val pairs = vals.asInstanceOf[Seq[Float]].toIndexedSeq
           val time  = System.currentTimeMillis()
-          Swing.onEDT(mainMeters.update(pairs, 0, time))
+          Swing.onEDT {
+            mainMeters.update(pairs, 0, time)
+            if (Desktop.isLinux) mainMeters.toolkit.sync()  // cf. https://github.com/Sciss/AudioWidgets/issues/6
+          }
       }
 
       val recvMsg = d.recvMsg(completion = newMsg)

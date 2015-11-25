@@ -14,6 +14,7 @@
 
 package at.iem.sysson.gui
 
+import java.awt.{LinearGradientPaint, Color}
 import java.io.{FileInputStream, InputStream}
 
 import at.iem.sysson.gui.impl.{ColorPaletteTableImpl => Impl}
@@ -169,6 +170,34 @@ object ColorPaletteTable {
   }
 
   def builtIn: Map[String, ColorPaletteTable] = Impl.builtIn
+
+  // ---- display ----
+
+  /** Constructs a Swing `Paint` object from a palette, painting the entire scale.  */
+  def toPaint(palette: ColorPaletteTable, startX: Float = 0f, startY: Float = 0f,
+                                          endX  : Float = 1f, endY  : Float = 0f): LinearGradientPaint = {
+    var i         = 0
+    val num       = palette.num
+    val fractions = new Array[Float](num << 1)
+    val colors    = new Array[Color](num << 1)
+    val pLow      = palette.minValue
+    val pHigh     = palette.maxValue
+    val pRange    = pHigh - pLow
+    while (i < num) {
+      palette.minValue
+      val segm = palette(i)
+      val f1 = (segm.lowValue  - pLow) / pRange
+      val f2 = (segm.highValue - pLow) / pRange
+      var j  = i << 1
+      fractions(j) = f1.toFloat
+      colors   (j) = new Color(segm.lowColor)
+      j += 1
+      fractions(j) = f2.toFloat - 1.0e-3f
+      colors   (j) = new Color(segm.highColor)
+      i += 1
+    }
+    new LinearGradientPaint(startX, startY, endX, endY, fractions, colors)
+  }
 }
 trait ColorPaletteTable extends Writable {
   def name: String

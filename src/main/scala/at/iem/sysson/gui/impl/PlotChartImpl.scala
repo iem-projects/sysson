@@ -18,7 +18,7 @@ package impl
 
 import java.awt
 import java.awt.image.BufferedImage
-import java.awt.{LinearGradientPaint, Graphics, Color, Paint, Rectangle, Shape, TexturePaint}
+import java.awt.{Graphics, Color, Paint, Rectangle, Shape, TexturePaint}
 import javax.swing.Icon
 
 import de.sciss.desktop.UndoManager
@@ -576,27 +576,7 @@ object PlotChartImpl {
 
           def paintIcon(c: awt.Component, g: Graphics, x: Int, y: Int): Unit = {
             if (palette == null) return
-            var i         = 0
-            val num       = palette.num
-            val fractions = new Array[Float](num << 1)
-            val colors    = new Array[Color](num << 1)
-            val pLow      = palette.minValue
-            val pHigh     = palette.maxValue
-            val pRange    = pHigh - pLow
-            while (i < num) {
-              palette.minValue
-              val segm = palette(i)
-              val f1 = (segm.lowValue  - pLow) / pRange
-              val f2 = (segm.highValue - pLow) / pRange
-              var j  = i << 1
-              fractions(j) = f1.toFloat
-              colors   (j) = new Color(segm.lowColor)
-              j += 1
-              fractions(j) = f2.toFloat - 1.0e-3f
-              colors   (j) = new Color(segm.highColor)
-              i += 1
-            }
-            val paint = new LinearGradientPaint(x, y, x + getIconWidth, y, fractions, colors)
+            val paint = ColorPaletteTable.toPaint(palette)
             val g2    = g.asInstanceOf[Graphics2D]
             g2.setPaint(paint)
             g2.fillRect(x, y, 64, 16)
@@ -608,7 +588,8 @@ object PlotChartImpl {
         component.iconTextGap = 6
         component.border      = Swing.EmptyBorder(2)
 
-        def componentFor(list: ListView[_], sel: Boolean, focused: Boolean, c: ColorPaletteTable, idx: Int): Component = {
+        def componentFor(list: ListView[_], sel: Boolean, focused: Boolean,
+                         c: ColorPaletteTable, idx: Int): Component = {
           if (sel) {
             component.background = list.selectionBackground
             component.foreground = list.selectionForeground
@@ -617,7 +598,7 @@ object PlotChartImpl {
             component.foreground = list.foreground
           }
           palette         = c
-          component.text  = c.name
+          component.text  = if (c == null) null else c.name
           component
         }
       }
