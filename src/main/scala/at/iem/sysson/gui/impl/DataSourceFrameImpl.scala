@@ -2,8 +2,8 @@
  *  DataSourceFrameImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -23,6 +23,7 @@ import javax.swing.undo.UndoableEdit
 import at.iem.sysson.util.NetCdfFileUtil
 import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{DialogSource, FileDialog, Menu, OptionPane, UndoManager, Window, WindowHandler}
+import de.sciss.equal
 import de.sciss.file._
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
@@ -35,7 +36,6 @@ import de.sciss.swingplus.Spinner
 import de.sciss.{desktop, kollflitz, numbers}
 import org.jfree.chart.ChartPanel
 import org.jfree.chart.renderer.xy.XYStepAreaRenderer
-import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
 import scala.annotation.tailrec
@@ -113,7 +113,7 @@ object DataSourceFrameImpl {
           import Implicits._
           val dim1 = v1.dimensions
           val dim2 = v2.dimensions
-          import TypeCheckedTripleEquals._
+          import equal.Implicits._
           val sameDimNames = (dim1 zip dim2).forall { case (d1, d2) => d1.name === d2.name }
           val diffDimSizes = (dim1 zip dim2).count  { case (d1, d2) => d1.size !== d2.size }
           if (sameDimNames && diffDimSizes <= 1) {
@@ -372,7 +372,7 @@ object DataSourceFrameImpl {
             add(pYears, BorderPanel.Position.South )
           }
           val res = OptionPane(message = pMessage, optionType = OptionPane.Options.OkCancel).show(sw, title)
-          import TypeCheckedTripleEquals._
+          import equal.Implicits._
           if (res === OptionPane.Result.Ok) {
             withSaveFile(window, "Anomalies Output File") { out =>
               val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = timeName,

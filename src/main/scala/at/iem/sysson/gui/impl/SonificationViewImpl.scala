@@ -2,8 +2,8 @@
  *  SonificationViewImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -25,7 +25,7 @@ import de.sciss.desktop.{KeyStrokes, OptionPane, UndoManager, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.impl.ObservableImpl
-import de.sciss.lucre.expr.{SpanLikeObj, BooleanObj, DoubleObj, StringObj}
+import de.sciss.lucre.expr.{BooleanObj, DoubleObj, SpanLikeObj, StringObj}
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
@@ -39,7 +39,7 @@ import de.sciss.model.impl.ModelImpl
 import de.sciss.span.Span
 import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{ObjKeys, Timeline, Transport}
+import de.sciss.synth.proc.{ObjKeys, TimeRef, Timeline, Transport}
 
 import scala.concurrent.stm.Ref
 import scala.swing.event.{ButtonClicked, Key}
@@ -429,7 +429,7 @@ object SonificationViewImpl {
       import ActionBounceTimeline.{DurationSelection, QuerySettings, performGUI, query1}
 
       private var settings = QuerySettings[S](
-        realtime = true, span = Span(0L, (Timeline.SampleRate * 10).toLong), channels = Vector(0 to 1)
+        realtime = true, span = Span(0L, (TimeRef.SampleRate * 10).toLong), channels = Vector(0 to 1)
       )
 
       accelerator = Some(KeyStrokes.menu1 + Key.B)
@@ -445,7 +445,7 @@ object SonificationViewImpl {
             parentOption.fold(file(child))(_ / child)
           })
         }
-        val timelineModel = TimelineModel(Span(0L, (Timeline.SampleRate * 10000).toLong), Timeline.SampleRate)
+        val timelineModel = TimelineModel(Span(0L, (TimeRef.SampleRate * 10000).toLong), TimeRef.SampleRate)
         val (_settings, ok) = query1(setUpd, workspace, timelineModel, window = window,
           showImport = false, showTransform = false, showSelection = DurationSelection)
         settings = _settings

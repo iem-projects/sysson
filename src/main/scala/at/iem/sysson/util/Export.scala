@@ -2,8 +2,8 @@
  *  Export.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -53,7 +53,7 @@ object Export {
 
       val units   = v.units.map(str => del + ":units" + del + "\"" + str.escape + "\"").getOrElse("")
       val dimStr  = dimensions.map(str => "\"" + str.escape + "\"").mkString(del)
-      w.write(s""":var$del"${v.name.escape}"${units}$del:dim${del}$dimStr\n""")
+      w.write(s""":var$del"${v.name.escape}"$units$del:dim$del$dimStr\n""")
 
       def iter(sec: VariableSection, prefix: String, dims: Vec[nc2.Dimension], shape: Vec[Int]): Unit = {
 //        val rank      = sec.reducedRank
@@ -62,14 +62,14 @@ object Export {
           val arr   = sec.read()
           val data  = if (arr.isFloat) arr.float1D else arr.double1D
           val dataS = data.mkString(del)
-          w.write(s"$prefix:val${del}$dataS\n")
+          w.write(s"$prefix:val$del$dataS\n")
         } else {
           val dimName   = dims.head.name
           val dimNameS  = "\"" + dimName.escape + "\""
           val num       = shape.head
           var i = 0
           while (i < num) {
-            iter(sec in dimName select i, s"${prefix}${dimNameS}${del}${i}$del", dims.tail, shape.tail)
+            iter(sec in dimName select i, s"$prefix$dimNameS$del$i$del", dims.tail, shape.tail)
           i += 1 }
         }
       }

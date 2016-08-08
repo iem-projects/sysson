@@ -2,8 +2,8 @@
  *  MatrixPrepare.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -19,12 +19,12 @@ package impl
 import at.iem.sysson.graph.MatrixTooLargeException
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
-import de.sciss.lucre.synth.{Buffer, Server, Sys}
+import de.sciss.lucre.synth.{Buffer, NodeRef, Server, Sys}
 import de.sciss.model.impl.ModelImpl
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.{FutureProxy, ProcessorImpl}
 import de.sciss.synth
-import de.sciss.synth.proc.impl.{AsyncResource, StreamBuffer, SynthBuilder}
+import de.sciss.synth.proc.impl.{AsyncResource, StreamBuffer}
 import de.sciss.synth.proc.{SoundProcesses, UGenGraphBuilder => UGB}
 import de.sciss.synth.{AudioRated, ScalarRated, UGenInLike, proc}
 
@@ -251,7 +251,7 @@ object MatrixPrepare {
 
     protected def cache: Future[AudioFileCache.Value]
 
-    final def install(b: SynthBuilder[S])(implicit tx: S#Tx): Unit = {
+    final def install(b: NodeRef.Full[S])(implicit tx: S#Tx): Unit = {
       val value         = cache.value.get.get
       val numFrames     = value.spec.numFrames
       val numChannels   = value.spec.numChannels
@@ -261,6 +261,7 @@ object MatrixPrepare {
       val buf           = Buffer(server)(numFrames = bufSize1, numChannels = numChannels)
       val path          = value.file.getAbsolutePath
       val ctlName       = mkCtlName(key = key, idx = index, isStreaming = isStreaming)
+      val syn           = b.node /* b.synth */
       if (isStreaming) {
         // XXX TODO - dirty workaround for Turbulence. Generally enable loop. Read start frame
         val startFrame = 0L
@@ -280,16 +281,19 @@ object MatrixPrepare {
 //          0L
 //        }
 
-        val trig  = new StreamBuffer(key = key, idx = index, synth = b.synth, buf = buf,
+        val trig  = new StreamBuffer(key = key, idx = index, synth = syn, buf = buf,
           path = path, fileFrames = numFrames, interp = 1, startFrame = startFrame, loop = true, resetFrame = 0L)
-        b.users ::= trig // NOT: b.addUser(trig) -- which is keyed!
+        b.addUser(trig) // XXX TODO --- CORRECT?
+        // b.users ::= trig // NOT: b.addUser(trig) -- which is keyed!
         // trig.install()
       } else {
         buf.read(path)
       }
-      b.setMap         += ctlName -> buf.id
-      b.dependencies  ::= buf
-      b.synth.onEndTxn { implicit tx =>
+      b.addControl(ctlName -> buf.id)  // XXX TODO --- CORRECT?
+      // b.setMap         += ctlName -> buf.id
+      b.addResource(buf) // XXX TODO --- CORRECT?
+      // b.dependencies  ::= buf
+      syn.onEndTxn { implicit tx =>
         AudioFileCache.release(config.matrix)
       }
     }

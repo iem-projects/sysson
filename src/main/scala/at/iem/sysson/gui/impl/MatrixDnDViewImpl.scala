@@ -2,8 +2,8 @@
  *  MatrixDnDViewImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -24,6 +24,7 @@ import javax.swing.{JComponent, TransferHandler}
 
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.desktop.UndoManager
+import de.sciss.equal
 import de.sciss.lucre.matrix.{Matrix, Sys}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Obj, TxnLike}
@@ -34,7 +35,6 @@ import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.serial.Serializer
 import de.sciss.swingplus.PopupMenu
-import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
@@ -131,7 +131,7 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
 
         override def importData(support: TransferSupport): Boolean = {
           val t         = support.getTransferable
-          import TypeCheckedTripleEquals._
+          import equal.Implicits._
           val isCopy    = support.getDropAction === TransferHandler.COPY
           val drag0     = t.getTransferData(DragAndDrop.MatrixFlavor).asInstanceOf[MatrixDrag]
           if (drag0.workspace == /* === */ workspace) {

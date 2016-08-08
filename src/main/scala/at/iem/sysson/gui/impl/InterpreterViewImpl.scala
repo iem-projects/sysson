@@ -2,8 +2,8 @@
  *  InterpreterViewImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -16,11 +16,10 @@ package at.iem.sysson
 package gui
 package impl
 
-import de.sciss.scalainterpreter.{InterpreterPane, Interpreter, CodePane}
-import java.io.{IOException, FileInputStream, File}
-import swing.Component
+import java.io.{File, FileInputStream, IOException}
+
 import de.sciss.desktop
-import de.sciss.mellite.gui.GUI
+import de.sciss.scalainterpreter.{CodePane, Interpreter, InterpreterPane}
 
 private[gui] object InterpreterViewImpl {
   def apply(): InterpreterView = new Impl

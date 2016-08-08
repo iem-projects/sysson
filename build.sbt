@@ -1,18 +1,19 @@
 import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
-lazy val baseName   = "SysSon"
-lazy val baseNameL  = baseName.toLowerCase
+lazy val baseName       = "SysSon"
+lazy val baseNameL      = baseName.toLowerCase
+lazy val projectVersion = "1.8.0-SNAPSHOT"
 
 lazy val commonSettings = Seq(
   name          := baseName,
-  version       := "1.7.3",
+  version       := projectVersion,
   organization  := "at.iem.sysson",
   description   := "Sonification platform of the IEM SysSon project",
   homepage      := Some(url(s"https://github.com/iem-projects/$baseNameL")),
   licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")),
   // ---- scala compiler settings and libraries ----
-  scalaVersion  := "2.11.7",
-  crossScalaVersions := Seq("2.11.7", "2.10.6"),
+  scalaVersion  := scalaMainVersion,
+  crossScalaVersions := Seq(scalaMainVersion, "2.10.6"),
   // maven repository for NetCDF library
   resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases",
   // maven repository for Oracle BDB JE
@@ -23,26 +24,28 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
 )
 
+lazy val scalaMainVersion           = "2.11.8"
+
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.1.0"
-lazy val soundProcessesVersion      = "3.3.0"
-lazy val lucreMatrixVersion         = "0.11.2"
-lazy val lucreSwingVersion          = "1.2.2"
-lazy val lucreVersion               = "3.2.2"
-lazy val scalaColliderVersion       = "1.18.0"
-lazy val scalaColliderSwingVersion  = "1.27.0"
-lazy val ugensVersion               = "1.14.0"
+lazy val melliteVersion             = "2.2.0"
+lazy val soundProcessesVersion      = "3.5.2"
+lazy val lucreMatrixVersion         = "0.12.0"
+lazy val lucreSwingVersion          = "1.4.0"
+lazy val lucreVersion               = "3.3.1"
+lazy val scalaColliderVersion       = "1.18.1"
+lazy val scalaColliderSwingVersion  = "1.29.0"
+lazy val ugensVersion               = "1.14.1"
 lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"
 lazy val fscapeJobsVersion          = "1.5.0"
 lazy val sheetVersion               = "0.1.1"
-lazy val slfVersion                 = "1.7.12"
+lazy val slfVersion                 = "1.7.21"
 
 // ---- test libraries ----
 
-lazy val scalaTestVersion           = "2.2.5"
+lazy val scalaTestVersion           = "3.0.0"
 
 // ---- other global constants
 

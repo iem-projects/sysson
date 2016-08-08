@@ -2,8 +2,8 @@
  *  PlotViewImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -23,6 +23,7 @@ import at.iem.sysson.gui.DragAndDrop.PlotMappingDrag
 import at.iem.sysson.sound.AuralSonification
 import de.sciss.desktop.UndoManager
 import de.sciss.desktop.impl.UndoManagerImpl
+import de.sciss.equal
 import de.sciss.icons.raphael
 import de.sciss.lucre.expr.IntObj
 import de.sciss.lucre.matrix.{Dimension, Matrix, Reduce}
@@ -34,7 +35,6 @@ import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
-import org.scalautils.TypeCheckedTripleEquals
 
 import scala.annotation.tailrec
 import scala.concurrent.stm.Ref
@@ -246,7 +246,7 @@ object PlotViewImpl {
 
     protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] =
       Matrix.Var.unapply(plotH().matrix).flatMap { vr =>
-        import TypeCheckedTripleEquals._
+        import equal.Implicits._
         @tailrec def isRecursive(m0: Matrix[S]): Boolean = m0 match {
           case Matrix.Var(vr0) => if (vr0 === vr) true else isRecursive(vr0())
           case _ => false

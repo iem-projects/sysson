@@ -2,8 +2,8 @@
  *  ColorPaletteTableImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -170,7 +170,7 @@ object ColorPaletteTableImpl {
     val highValue = in.readDouble()
     val lowColor  = in.readInt   ()
     val highColor = in.readInt   ()
-    new Segment(lowValue = lowValue, lowColor = lowColor, highValue = highValue, highColor = highColor)
+    Segment(lowValue = lowValue, lowColor = lowColor, highValue = highValue, highColor = highColor)
   }
 
   private def writeGradientSegment(s: Segment, out: DataOutput): Unit = {
@@ -184,7 +184,7 @@ object ColorPaletteTableImpl {
     val lowValue  = in.readDouble()
     val highValue = in.readDouble()
     val color     = in.readInt   ()
-    new Segment(lowValue = lowValue, lowColor = color, highValue = highValue, highColor = color)
+    Segment(lowValue = lowValue, lowColor = color, highValue = highValue, highColor = color)
   }
 
   private def writeDiscreteSegment(s: Segment, out: DataOutput): Unit = {

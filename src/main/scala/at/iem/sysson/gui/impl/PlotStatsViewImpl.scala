@@ -2,8 +2,8 @@
  *  PlotStatsViewImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -21,6 +21,7 @@ import javax.swing.table.{AbstractTableModel, DefaultTableCellRenderer}
 import javax.swing.{JTable, SwingConstants}
 
 import at.iem.sysson.Implicits._
+import de.sciss.equal
 import de.sciss.file.File
 import de.sciss.lucre.matrix.{DataSource, Matrix, Reduce}
 import de.sciss.lucre.stm.{Sys, Disposable}
@@ -28,7 +29,6 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.model.impl.ModelImpl
-import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
 import scala.annotation.tailrec
@@ -139,7 +139,7 @@ object PlotStatsViewImpl {
       val f   = nf.file
       val fOpt= Some(f)
       val of  = fileRef.swap(fOpt)(tx.peer)
-      import TypeCheckedTripleEquals._
+      import equal.Implicits._
       if (of === fOpt) return  // same file as before
 
       import at.iem.sysson.Stats.executionContext

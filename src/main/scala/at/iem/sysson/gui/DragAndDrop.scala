@@ -2,8 +2,8 @@
  *  DragAndDrop.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -20,11 +20,11 @@ import java.awt.event.{MouseAdapter, MouseEvent}
 import javax.swing.{JComponent, TransferHandler}
 
 import at.iem.sysson.sound.Sonification
+import de.sciss.equal
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.mellite.Workspace
-import org.scalautils.TypeCheckedTripleEquals
 
 import scala.collection.breakOut
 import scala.language.higherKinds
@@ -91,7 +91,7 @@ object DragAndDrop {
       // println(s"My flavor is $flavor")
       def getTransferDataFlavors: Array[DataFlavor] = Array(flavor) // flavors.toArray
       def isDataFlavorSupported(_flavor: DataFlavor): Boolean = {
-        import TypeCheckedTripleEquals._
+        import equal.Implicits._
         _flavor === flavor
       }
       def getTransferData(_flavor: DataFlavor): AnyRef  = {

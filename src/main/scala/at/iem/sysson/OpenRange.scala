@@ -2,8 +2,8 @@
  *  OpenRange.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -76,7 +76,7 @@ final case class OpenRange(startOption: Option[Int], endOption: Option[Int], isI
     val endS    = endOption.getOrElse("end")
     val moveS   = if (isInclusive) "to" else "until"
     val byS     = if (step == 1) "" else s" by $step"
-    s"($startS $moveS ${endS}$byS)"
+    s"($startS $moveS $endS$byS)"
   }
 
   /** Note: `maxStop` is always _exclusive_ */

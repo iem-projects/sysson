@@ -2,8 +2,8 @@
  *  PlotChartImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -18,25 +18,27 @@ package impl
 
 import java.awt
 import java.awt.image.BufferedImage
-import java.awt.{Graphics, Color, Paint, Rectangle, Shape, TexturePaint}
+import java.awt.{Color, Graphics, Paint, Rectangle, Shape, TexturePaint}
+import java.util.Locale
 import javax.swing.Icon
 
 import de.sciss.desktop.UndoManager
+import de.sciss.equal
 import de.sciss.icons.raphael
 import de.sciss.lucre.{event => evt}
-import de.sciss.lucre.expr.{DoubleObj, BooleanObj, StringObj}
+import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{DoubleSpinnerView, BooleanCheckBoxView, CellView, View, defer, deferTx}
+import de.sciss.lucre.swing.{BooleanCheckBoxView, CellView, DoubleSpinnerView, View, defer, deferTx}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.model.Model
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
-import de.sciss.swingplus.{ListView, ComboBox, OverlayPanel}
+import de.sciss.swingplus.{ComboBox, ListView, OverlayPanel}
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot
@@ -44,10 +46,9 @@ import org.jfree.chart.renderer.PaintScale
 import org.jfree.chart.renderer.xy.XYBlockRenderer
 import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
-import org.scalautils.TypeCheckedTripleEquals
 
 import scala.concurrent.Future
-import scala.concurrent.stm.{TMap, Ref}
+import scala.concurrent.stm.{Ref, TMap}
 import scala.swing.{Alignment, BorderPanel, Component, FlowPanel, Graphics2D, Label, Swing}
 
 object PlotChartImpl {
@@ -111,7 +112,7 @@ object PlotChartImpl {
       val dims    = m.dimensions
       val hName   = dimMap.get(Plot.HKey).map(_.value).getOrElse("?")
       val vName   = dimMap.get(Plot.VKey).map(_.value).getOrElse("?")
-      import TypeCheckedTripleEquals._
+      import equal.Implicits._
       val hIdx    = dims.indexWhere(_.name === hName)
       val vIdx    = dims.indexWhere(_.name === vName)
       val mShape  = m.shape
@@ -270,9 +271,9 @@ object PlotChartImpl {
       // _plot.setDataset(dataset)
 
       if (xChanged || yChanged) {
-        val xNameL    = xName.toLowerCase
-        val yNameL    = yName.toLowerCase
-        import TypeCheckedTripleEquals._
+        val xNameL    = xName.toLowerCase(Locale.US)
+        val yNameL    = yName.toLowerCase(Locale.US)
+        import equal.Implicits._
         isMap         = (xNameL === "lon" || xName === "Longitude") && (yNameL === "lat" || yNameL === "Latitude")
         updateOverlay()
       }
@@ -358,8 +359,11 @@ object PlotChartImpl {
         updateData(u.plot)
         u.changes.foreach {
           case Plot.DimsChange(mu) => mu.changes.foreach {
-            case evt.Map.Added  (key, value) => addPlotDim   (key, value)
-            case evt.Map.Removed(key, value) => removePlotDim(key, value)
+            case evt.Map.Added   (key, value) => addPlotDim   (key, value)
+            case evt.Map.Removed (key, value) => removePlotDim(key, value)
+            case evt.Map.Replaced(key, before, now) =>
+              removePlotDim(key, before)
+              addPlotDim   (key, now   )
           }
           case _ =>
         }

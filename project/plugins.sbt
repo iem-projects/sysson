@@ -1,7 +1,3 @@
-addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.5.0")    // provides version information to copy into main class
-
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.0")    // builds standalone jar for Windows and Linux
-
-// addSbtPlugin("de.sciss" % "sbt-appbundle" % "1.0.2")        // builds standalone application for OS X
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.3")
+addSbtPlugin("com.eed3si9n"     % "sbt-buildinfo"       % "0.6.1" )    // provides version information to copy into main class
+addSbtPlugin("com.eed3si9n"     % "sbt-assembly"        % "0.14.3")    // builds standalone jar for Windows and Linux
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.1" )    // package binary artifacts

@@ -2,8 +2,8 @@
  *  VariableSection.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -14,16 +14,12 @@
 
 package at.iem.sysson
 
-import org.scalautils.TypeCheckedTripleEquals
-import ucar.{nc2, ma2}
+import at.iem.sysson.Implicits._
+import ucar.{ma2, nc2}
 
-import Implicits._
 import scala.collection.{JavaConversions, breakOut}
 import scala.concurrent.Future
 import scala.concurrent.stm.InTxn
-import at.iem.sysson.legacy.ColumnSource
-import at.iem.sysson.legacy.RowSource
-import at.iem.sysson.legacy.MatrixSource
 
 object VariableSection {
   /** A transitory class specifying a variable section along with a dimension
@@ -133,8 +129,8 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
   def stats(implicit tx: InTxn): Future[Stats.Counts] = {
     import Stats.executionContext
     Stats.get(variable.file).map { s =>
-      import TypeCheckedTripleEquals._
-      require(scale === Scale.Identity, "Scaled sections are not yet supported")
+//      import equal.Implicits._
+      require(scale == /* === */ Scale.Identity, "Scaled sections are not yet supported")
       val sv  = s.map.getOrElse(variable.name, sys.error(s"Statistics does not include variable ${variable.name}"))
       val red = section.zipWithIndex.filterNot(_._1.isAll)
       if (red.isEmpty) sv.total else {
@@ -155,21 +151,13 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
     }
   }
 
-  // ---- conversion to sonification source (OBSOLETE) ----
-
-  def asColumn      = ColumnSource(this)
-  def asRow         = RowSource   (this)
-
-  def asMatrix(row: String, column: String) =
-    MatrixSource(this, rowDim = dimIdxByName(row), columnDim = dimIdxByName(column))
-
-  override def toString = {
+  override def toString: String = {
+//    import equal.Implicits._
     val relevant = section.zipWithIndex.filterNot(_._1.isAll)
     val selected = if (relevant.isEmpty) variable.name else {
       val relT      = relevant.map { case (r, idx) => s"${variable.getDimension(idx).nameOption.getOrElse(idx)}: $r" }
       s"${variable.name} @ ${relT.mkString("[", ", ", "]")}"
     }
-    import TypeCheckedTripleEquals._
-    if (scale === Scale.Identity) selected else s"$selected ; scale = $scale"
+    if (scale == /* === */ Scale.Identity) selected else s"$selected ; scale = $scale"
   }
 }

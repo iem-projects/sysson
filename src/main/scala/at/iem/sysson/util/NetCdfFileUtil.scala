@@ -2,8 +2,8 @@
  *  NetCdfFileUtil.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -15,10 +15,10 @@
 package at.iem.sysson
 package util
 
+import de.sciss.equal
 import de.sciss.file._
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
-import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2.constants.CDM
 import ucar.{ma2, nc2}
 
@@ -91,7 +91,7 @@ object NetCdfFileUtil {
         (outDim, c.values, outVarD)
     } .unzip3
 
-    import TypeCheckedTripleEquals._
+    import equal.Implicits._
     val outDims = outDimsSpec.map {
       case Keep(name) => keepOutDims .find(_.name ===   name).getOrElse(sys.error(s"No dimension '$name'"))
       case c: Create  => alterOutDims.find(_.name === c.name).getOrElse(sys.error(s"No dimension '${c.name}'"))
@@ -233,7 +233,7 @@ object NetCdfFileUtil {
 
     val allInDims = inVar1.dimensions
 
-    import TypeCheckedTripleEquals._
+    import equal.Implicits._
     val (outDims, keepOutDimsV) = allInDims.map { inDim =>
       val size    = if (inDim.name === dimName) inDim.size + inVar2.dimensionMap(inDim.name).size else inDim.size
       val outDim  = writer.addDimension(null, inDim.name, size)
@@ -343,7 +343,7 @@ object NetCdfFileUtil {
 
     val inVar         = in.variableMap(varName)
     val inDims        = inVar.dimensions
-    import TypeCheckedTripleEquals._
+    import equal.Implicits._
     val timeIdx       = inDims  .indexWhere(_.name === timeName)
     // val otherDims     = inDims  .patch(timeIdx, Nil, 1)
     // val otherShape    = inVar.shape.patch(timeIdx, Nil, 1)

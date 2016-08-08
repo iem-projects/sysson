@@ -2,8 +2,8 @@
  *  SwingApplication.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -15,13 +15,9 @@
 package at.iem.sysson
 package gui
 
-import java.awt.Color
 import java.util.Locale
-import javax.swing.UIManager
 
 import at.iem.sysson
-import com.alee.laf.checkbox.WebCheckBoxStyle
-import com.alee.laf.progressbar.WebProgressBarStyle
 import de.sciss.desktop.impl.{SwingApplicationImpl, WindowHandlerImpl}
 import de.sciss.desktop.{Menu, WindowHandler}
 import de.sciss.file._
@@ -66,21 +62,21 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
     // ---- look and feel ----
 
     try {
-      val web = "com.alee.laf.WebLookAndFeel"
-      UIManager.installLookAndFeel("Web Look And Feel", web)
-      UIManager.setLookAndFeel(Prefs.lookAndFeel.getOrElse(Prefs.defaultLookAndFeel).getClassName)
+//      val web = "com.alee.laf.WebLookAndFeel"
+//      UIManager.installLookAndFeel("Web Look And Feel", web)
+      Prefs.lookAndFeel.getOrElse(Prefs.LookAndFeel.default).install()
     } catch {
       case NonFatal(_) =>
     }
-    // work-around for web-laf bug #118
-    new javax.swing.JSpinner
-    // some custom web-laf settings
-    WebCheckBoxStyle   .animated            = false
-    WebProgressBarStyle.progressTopColor    = Color.lightGray
-    WebProgressBarStyle.progressBottomColor = Color.gray
-    // XXX TODO: how to really turn of animation?
-    WebProgressBarStyle.highlightWhite      = new Color(255, 255, 255, 0)
-    WebProgressBarStyle.highlightDarkWhite  = new Color(255, 255, 255, 0)
+
+//    // work-around for web-laf bug #118
+//    new javax.swing.JSpinner
+//    // some custom web-laf settings
+//    WebCheckBoxStyle   .animated            = false
+//    WebProgressBarStyle.progressTopColor    = Color.lightGray
+//    WebProgressBarStyle.progressBottomColor = Color.gray
+//    WebProgressBarStyle.highlightWhite      = new Color(255, 255, 255, 0)
+//    WebProgressBarStyle.highlightDarkWhite  = new Color(255, 255, 255, 0)
 
     LogFrame           .instance    // init
 

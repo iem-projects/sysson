@@ -2,8 +2,8 @@
  *  Implicits.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -166,8 +166,8 @@ object Implicits {
     private def requireFloat(): Unit =
       require(isFloat, s"Wrong element type (${peer.getElementType}); required: Float")
 
-    private def requireDouble(): Unit =
-      require(isDouble, s"Wrong element type (${peer.getElementType}); required: Double")
+//    private def requireDouble(): Unit =
+//      require(isDouble, s"Wrong element type (${peer.getElementType}); required: Double")
 
     private def requireInt(): Unit =
       require(isInt, s"Wrong element type (${peer.getElementType}); required: Int")
@@ -236,13 +236,13 @@ object Implicits {
       peer.getIndexIterator
     }
 
-    private def double1DIter: ma2.IndexIterator = {
-      requireDouble()
-      //      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
-      val sz = peer.getSize
-      require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
-      peer.getIndexIterator
-    }
+//    private def double1DIter: ma2.IndexIterator = {
+//      requireDouble()
+//      //      if (!force) require(peer.getRank == 1, s"Wrong rank (${peer.getRank}); required: 1")
+//      val sz = peer.getSize
+//      require(sz <= 0x7FFFFFFF, s"Array too large (size = $sz)")
+//      peer.getIndexIterator
+//    }
 
     private def int1DIter: ma2.IndexIterator = {
       requireInt()
@@ -320,7 +320,7 @@ object Implicits {
 
     def asEnv(dur: Double, shape: synth.Curve = synth.Curve.step): ugen.EnvGen = {
       import synth._
-         import ugen._
+      import ugen._
       val sz = peer.size
       require(sz > 0, "Sequence is empty")
       val segDur  = dur / sz

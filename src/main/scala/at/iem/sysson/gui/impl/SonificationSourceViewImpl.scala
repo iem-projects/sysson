@@ -2,8 +2,8 @@
  *  SonificationSourceViewImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -104,7 +104,7 @@ object SonificationSourceViewImpl {
     protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] = mapHOpt.map { mapH =>
       val map     = mapH()
       val source  = Sonification.Source(m)
-      val edit    = EditMutableMap("Assign Matrix", map, key, Some(source))
+      val edit    = EditMutableMap[S, String, Sonification.Source]("Assign Matrix", map, key, Some(source))
       edit
     }
 

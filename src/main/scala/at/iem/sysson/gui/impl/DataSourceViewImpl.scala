@@ -2,8 +2,8 @@
  *  DataSourceViewImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -22,23 +22,23 @@ import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.{JComponent, JTree, TransferHandler}
 
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
+import de.sciss.equal
 import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.expr.StringObj
 import de.sciss.lucre.matrix.{DataSource, Matrix}
-import de.sciss.lucre.{expr, stm}
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing._
 import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.swingtree.{ExternalTreeModel, Tree}
 import de.sciss.synth.proc.ObjKeys
-import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2
 
-import scala.annotation.{switch, tailrec}
+import scala.annotation.switch
 import scala.swing.Swing._
 import scala.swing.event.TableRowsSelected
 import scala.swing.{Action, BorderPanel, BoxPanel, Component, Orientation, ScrollPane, SplitPane, Table}
@@ -66,7 +66,7 @@ object DataSourceViewImpl {
       val v2 = value match {
         case g: nc2.Group =>
           val n = g.name
-          import TypeCheckedTripleEquals._
+          import equal.Implicits._
           if (n === "") "<untitled group>" else n
         case _ => value
       }
@@ -291,24 +291,24 @@ object DataSourceViewImpl {
       tGroupVars .model = mGroupVars
     }
 
-    private def selectGroup(group: nc2.Group): Unit = {
-      @tailrec def loop(path: Tree.Path[nc2.Group], g: nc2.Group): Tree.Path[nc2.Group] = {
-        val p2 = g +: path
-        g.parentOption match {
-          case Some(p)  => loop(p2, p)
-          case _        => p2
-        }
-      }
-      val fullPath = loop(Tree.Path.empty[nc2.Group], group)
-      tGroups.expandPath(fullPath)
-      tGroups.selection.paths += fullPath
-      tGroups.peer.makeVisible(tGroups.pathToTreePath(fullPath))
-      // the following in fact kicks in automatically due to the event dispatch;
-      // but the caller needs to make selections to tGroupVars for example,
-      // so that update must happen synchronously. eventually we could
-      // add a filter to `groupSelected` not to do the work twice.
-      groupSelected(group)    // XXX TODO - problematic -- resets table column widths
-    }
+//    private def selectGroup(group: nc2.Group): Unit = {
+//      @tailrec def loop(path: Tree.Path[nc2.Group], g: nc2.Group): Tree.Path[nc2.Group] = {
+//        val p2 = g +: path
+//        g.parentOption match {
+//          case Some(p)  => loop(p2, p)
+//          case _        => p2
+//        }
+//      }
+//      val fullPath = loop(Tree.Path.empty[nc2.Group], group)
+//      tGroups.expandPath(fullPath)
+//      tGroups.selection.paths += fullPath
+//      tGroups.peer.makeVisible(tGroups.pathToTreePath(fullPath))
+//      // the following in fact kicks in automatically due to the event dispatch;
+//      // but the caller needs to make selections to tGroupVars for example,
+//      // so that update must happen synchronously. eventually we could
+//      // add a filter to `groupSelected` not to do the work twice.
+//      groupSelected(group)    // XXX TODO - problematic -- resets table column widths
+//    }
 
     def selectedVariable: Option[nc2.Variable] = {
       requireEDT()

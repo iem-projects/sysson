@@ -2,8 +2,8 @@
  *  SonificationObjView.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -20,13 +20,13 @@ import at.iem.sysson.sound.Sonification
 import de.sciss.desktop
 import de.sciss.desktop.OptionPane
 import de.sciss.icons.raphael
-import de.sciss.lucre.expr.{StringObj, SpanLikeObj}
+import de.sciss.lucre.expr.{SpanLikeObj, StringObj}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.mellite.Workspace
-import de.sciss.mellite.gui.impl.timeline.TimelineObjViewImpl
+import de.sciss.mellite.gui.impl.timeline.TimelineObjViewBasicImpl
 import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.mellite.gui.{ListObjView, TimelineObjView}
 import de.sciss.synth.proc.{FadeSpec, ObjKeys}
@@ -139,7 +139,7 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
     extends Impl[S]
 
   private final class TimelineImpl[S <: SSys[S]](val objH: stm.Source[S#Tx, Sonification[S]] /* , val value: Value */)
-    extends Impl[S] with TimelineObjViewImpl.BasicImpl[S]
+    extends Impl[S] with TimelineObjViewBasicImpl[S]
     with TimelineObjView.HasMute
     with TimelineObjView.HasGain
     with TimelineObjView.HasFade { self =>

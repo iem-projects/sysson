@@ -2,8 +2,8 @@
  *  ActionConvertSpreadsheet.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2015 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2015 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -18,20 +18,20 @@ package impl
 
 import javax.swing.table.DefaultTableModel
 
-import de.sciss.desktop.{OptionPane, DialogSource, FileDialog}
+import de.sciss.desktop.{DialogSource, FileDialog, OptionPane}
+import de.sciss.equal
 import de.sciss.file._
 import de.sciss.mellite
-import de.sciss.sheet.{BooleanCell, StringCell, Cell, StyledCell, NumericCell, Sheet, Workbook}
+import de.sciss.sheet.{BooleanCell, Cell, NumericCell, Sheet, StringCell, StyledCell, Workbook}
 import de.sciss.swingplus.ListView
-import org.scalautils.TypeCheckedTripleEquals
 import ucar.nc2.constants.CDM
 import ucar.{ma2, nc2}
 
 import scala.annotation.tailrec
 import scala.collection.{JavaConverters, breakOut}
-import scala.swing.{FlowPanel, Swing, Label, BoxPanel, Orientation, ScrollPane, Table, Action}
+import scala.swing.{Action, BoxPanel, FlowPanel, Label, Orientation, ScrollPane, Swing, Table}
 import scala.util.control.NonFatal
-import scala.util.{Success, Failure, Try}
+import scala.util.{Failure, Success, Try}
 
 object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
   private def title0 = title.dropRight(3)
@@ -39,7 +39,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
   def apply(): Unit = {
     val fDlg = FileDialog.open(title = "Select .xls/.xlsx Spreadsheet")
     fDlg.setFilter { f =>
-      import TypeCheckedTripleEquals._
+      import equal.Implicits._
       val ext = f.ext.toLowerCase
       ext === "xls" || ext === "xlsx"
     }
@@ -274,8 +274,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
       val varName = getCol(0).getOrElse("untitled")
       val desc    = getCol(2)
       val unit    = getCol(3)
-
-      import TypeCheckedTripleEquals._
+      import equal.Implicits._
       if (varName === "untitled") Left(s"Variable in row ${row + 1} must be named")
       else {
         val shapeS  = mTableOut.getValueAt(row, 1).toString
@@ -315,7 +314,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
 
     @tailrec def showPane(): List[TableVarDef] = {
       val res = OptionPane(pane, OptionPane.Options.OkCancel, OptionPane.Message.Plain).show(None, title0)
-      import TypeCheckedTripleEquals._
+      import equal.Implicits._
       if (res === OptionPane.Result.Yes) {
         val numVars = mTableOut.getRowCount
 
@@ -371,7 +370,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
     }
     val allVars = vars ++ synthVars
 
-    val (dimMap, varMap) = ((Map.empty[String, nc2.Dimension], Map.empty[String, nc2.Variable]) /: allVars) {
+    val (_ /* dimMap */, varMap) = ((Map.empty[String, nc2.Dimension], Map.empty[String, nc2.Variable]) /: allVars) {
       case ((dimMap0, varMap0), v) =>
         val dimMap1 = v.dimMap
         val (dimMap2, dims1) = ((dimMap0, Vec.empty[nc2.Dimension]) /: (0 until v.rank)) { case ((dimMap3, dims0), dimIdx) =>
