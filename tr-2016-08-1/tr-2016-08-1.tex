@@ -1,0 +1,96 @@
+\documentclass[11pt,a4paper]{article}
+% cf. http://tex.stackexchange.com/questions/50182/subtitle-with-the-maketitle-page
+\usepackage{titling}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large\textbf{#1}\end{center}
+    \vskip0.5em}%
+}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[pdftex,colorlinks=false]{hyperref}
+% get rid of the horrible coloured boxes around links
+\hypersetup{
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black
+}
+
+\usepackage[UKenglish,german]{babel}
+
+\widowpenalty10000  % http://tex.stackexchange.com/questions/4152/how-do-i-prevent-widow-orphan-lines
+\clubpenalty10000
+
+\title{The SysSon Platform}
+\subtitle{Technical Report TR-2016-08-1\\Institute of Electronic Music and Acoustics, Graz}
+\author{Hanns Holger Rutz}
+% \date{09-Feb-2016}
+\date{August 2016}
+
+% \renewcommand*\rmdefault{dayrom}
+% \usepackage{concmath}
+\usepackage[lf]{venturis} %% lf option gives lining figures as default; 
+			  %% remove option to get oldstyle figures as default
+% \renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif
+\usepackage[T1]{fontenc}
+
+% cf. https://tex.stackexchange.com/questions/94126/change-font-to-only-section-and-subsection-of-my-document
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\fontfamily{pag}\selectfont\huge\bfseries}
+%  {\chaptertitlename\ \thechapter}
+%  {20pt}
+%  {\Huge}
+%\titleformat{\section}
+%  {\fontfamily{pag}\selectfont\bfseries\Large}
+%  {\thesection}
+%  {1em}
+%  {}
+%\titleformat{\subsection}
+%  {\fontfamily{pag}\selectfont\bfseries\Large}
+%  {\thesection}
+%  {1em}
+%  {}
+
+
+\usepackage[utf8]{inputenc}
+%\usepackage[backend=biber,natbib=true,citestyle=verbose-ibid,isbn=false,maxnames=3,bibstyle=authoryear,useprefix=true,sorting=ydnt]{biblatex} % citereset=chapter
+\usepackage[backend=biber,natbib=true,citestyle=verbose-ibid,isbn=false,maxnames=20,bibstyle=authoryear,firstinits=true,sorting=ydnt,useprefix=true]{biblatex} % citereset=chapter, 
+\addbibresource{rutz.bib} % add a bib-reference file
+
+% warning: https://tex.stackexchange.com/questions/313477/
+% \usepackage{csquotes}
+
+\usepackage{tabularx}
+% cf. https://tex.stackexchange.com/questions/84400/table-layout-with-tabularx-column-widths-502525
+\newcolumntype{s}{>{\hsize=1cm}X}
+
+% says you should load after babel and fontspec
+\usepackage[shrink=10, babel=true]{microtype}	% http://tex.stackexchange.com/questions/141852/latex-allows-line-break-between-concluding-em-dash-and-comma-before-a-new-sub-cl/141854#141854
+
+\newcommand{\todo}[1]{\colorbox{yellow}{\textsc{todo}: #1}}
+
+\newcommand{\quot}[1]{\guillemotleft {#1}\guillemotright}
+
+\newcommand{\worktitle}[1]{\textit{#1}}
+
+\newcommand{\workentry}[2]{\vspace{7.5pt}\noindent\textbf{#1} (#2)}
+\newcommand{\workentrySel}[2]{\vspace{7.5pt}\noindent\textbf{#1}$*$ (#2)}
+
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+
+\newcommand{\software}[1]{\textit{#1}}
+
+\begin{document}
+% \begin{titlepage}
+\maketitle
+\selectlanguage{UKenglish}
+\thispagestyle{empty}
+\newpage
+\section{\todo{}}
+
+\end{document}
