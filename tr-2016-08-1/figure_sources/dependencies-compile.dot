@@ -1,0 +1,270 @@
+digraph "dependency-graph" {
+    graph[rankdir="LR"]
+    edge [
+        arrowtail="none"
+    ]
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT"[label=<at.iem.sysson<BR/><B>sysson_2.11</B><BR/>1.8.0-SNAPSHOT> style=""]
+    "com.github.wookietreiber:scala-chart_2.11:0.5.0"[label=<com.github.wookietreiber<BR/><B>scala-chart_2.11</B><BR/>0.5.0> style=""]
+    "com.github.scopt:scopt_2.11:3.4.0"[label=<com.github.scopt<BR/><B>scopt_2.11</B><BR/>3.4.0> style=""]
+    "com.itextpdf:itextpdf:5.5.5"[label=<com.itextpdf<BR/><B>itextpdf</B><BR/>5.5.5> style=""]
+    "com.sleepycat:je:4.0.92"[label=<com.sleepycat<BR/><B>je</B><BR/>4.0.92> style="dashed"]
+    "com.sleepycat:je:5.0.104"[label=<com.sleepycat<BR/><B>je</B><BR/>5.0.104> style=""]
+    // "com.typesafe.play:play-iteratees_2.11:2.3.10"[label=<com.typesafe.play<BR/><B>play-iteratees_2.11</B><BR/>2.3.10> style=""]
+    "com.typesafe.play:play-json_2.11:2.3.10"[label=<com.typesafe.play<BR/><B>play-json_2.11</B><BR/>2.3.10> style=""]
+    "de.sciss:audiowidgets-app_2.11:1.10.0"[label=<de.sciss<BR/><B>audiowidgets-app_2.11</B><BR/>1.10.0> style=""]
+    "de.sciss:audiowidgets-core_2.11:1.10.0"[label=<de.sciss<BR/><B>audiowidgets-core_2.11</B><BR/>1.10.0> style=""]
+    "de.sciss:audiowidgets-swing_2.11:1.10.0"[label=<de.sciss<BR/><B>audiowidgets-swing_2.11</B><BR/>1.10.0> style=""]
+    "de.sciss:desktop_2.11:0.7.2"[label=<de.sciss<BR/><B>desktop_2.11</B><BR/>0.7.2> style=""]
+    "de.sciss:desktop-mac_2.11:0.7.2"[label=<de.sciss<BR/><B>desktop-mac_2.11</B><BR/>0.7.2> style=""]
+    "de.sciss:equal_2.11:0.1.1"[label=<de.sciss<BR/><B>equal_2.11</B><BR/>0.1.1> style=""]
+    // "de.sciss:filecache-common_2.11:0.3.2"[label=<de.sciss<BR/><B>filecache-common_2.11</B><BR/>0.3.2> style="dashed"]
+    "de.sciss:filecache-common_2.11:0.3.x"[label=<de.sciss<BR/><B>filecache-common_2.11</B><BR/>0.3.3> style=""]
+    "de.sciss:filecache-mutable_2.11:0.3.2"[label=<de.sciss<BR/><B>filecache-mutable_2.11</B><BR/>0.3.2> style=""]
+    "de.sciss:filecache-txn_2.11:0.3.3"[label=<de.sciss<BR/><B>filecache-txn_2.11</B><BR/>0.3.3> style=""]
+    "de.sciss:fileutil_2.11:1.1.1"[label=<de.sciss<BR/><B>fileutil_2.11</B><BR/>1.1.1> style=""]
+    "de.sciss:fingertree_2.11:1.5.2"[label=<de.sciss<BR/><B>fingertree_2.11</B><BR/>1.5.2> style=""]
+    "de.sciss:fscapejobs_2.11:1.5.0"[label=<de.sciss<BR/><B>fscapejobs_2.11</B><BR/>1.5.0> style=""]
+    "de.sciss:intensitypalette:1.0.0"[label=<de.sciss<BR/><B>intensitypalette</B><BR/>1.0.0> style=""]
+    "de.sciss:kollflitz_2.11:0.2.0"[label=<de.sciss<BR/><B>kollflitz_2.11</B><BR/>0.2.0> style=""]
+    "de.sciss:lucre-bdb_2.11:3.3.1"[label=<de.sciss<BR/><B>lucre-bdb_2.11</B><BR/>3.3.1> style=""]
+    "de.sciss:lucre-confluent_2.11:3.3.1"[label=<de.sciss<BR/><B>lucre-confluent_2.11</B><BR/>3.3.1> style=""]
+    "de.sciss:lucre-core_2.11:3.3.1"[label=<de.sciss<BR/><B>lucre-core_2.11</B><BR/>3.3.1> style=""]
+    "de.sciss:lucre-expr_2.11:3.3.1"[label=<de.sciss<BR/><B>lucre-expr_2.11</B><BR/>3.3.1> style=""]
+    "de.sciss:lucrematrix_2.11:0.12.0"[label=<de.sciss<BR/><B>lucrematrix_2.11</B><BR/>0.12.0> style=""]
+    "de.sciss:lucrematrix-core_2.11:0.12.0"[label=<de.sciss<BR/><B>lucrematrix-core_2.11</B><BR/>0.12.0> style=""]
+    "de.sciss:lucrematrix-views_2.11:0.12.0"[label=<de.sciss<BR/><B>lucrematrix-views_2.11</B><BR/>0.12.0> style=""]
+    "de.sciss:lucreswing_2.11:1.4.0"[label=<de.sciss<BR/><B>lucreswing_2.11</B><BR/>1.4.0> style=""]
+    "de.sciss:lucresynth_2.11:3.5.2"[label=<de.sciss<BR/><B>lucresynth_2.11</B><BR/>3.5.2> style=""]
+    "de.sciss:mellite_2.11:2.2.0"[label=<de.sciss<BR/><B>mellite_2.11</B><BR/>2.2.0> style=""]
+    "de.sciss:mellite-core_2.11:2.2.0"[label=<de.sciss<BR/><B>mellite-core_2.11</B><BR/>2.2.0> style=""]
+    "de.sciss:mellite-views_2.11:2.2.0"[label=<de.sciss<BR/><B>mellite-views_2.11</B><BR/>2.2.0> style=""]
+    "de.sciss:model_2.11:0.3.2"[label=<de.sciss<BR/><B>model_2.11</B><BR/>0.3.2> style=""]
+    "de.sciss:numbers_2.11:0.1.1"[label=<de.sciss<BR/><B>numbers_2.11</B><BR/>0.1.1> style=""]
+    "de.sciss:pdflitz_2.11:1.2.1"[label=<de.sciss<BR/><B>pdflitz_2.11</B><BR/>1.2.1> style=""]
+    "de.sciss:play-json-sealed_2.11:0.4.0"[label=<de.sciss<BR/><B>play-json-sealed_2.11</B><BR/>0.4.0> style=""]
+    "de.sciss:prefuse-core:1.0.1"[label=<de.sciss<BR/><B>prefuse-core</B><BR/>1.0.1> style=""]
+    "de.sciss:processor_2.11:0.4.0"[label=<de.sciss<BR/><B>processor_2.11</B><BR/>0.4.0> style=""]
+    "de.sciss:raphael-icons_2.11:1.0.3"[label=<de.sciss<BR/><B>raphael-icons_2.11</B><BR/>1.0.3> style=""]
+    "de.sciss:scala-swing-tree_2.11:0.1.1"[label=<de.sciss<BR/><B>scala-swing-tree_2.11</B><BR/>0.1.1> style=""]
+    // "de.sciss:scalaaudiofile_2.11:1.4.3"[label=<de.sciss<BR/><B>scalaaudiofile_2.11</B><BR/>1.4.3> style="dashed"]
+    // "de.sciss:scalaaudiofile_2.11:1.4.4"[label=<de.sciss<BR/><B>scalaaudiofile_2.11</B><BR/>1.4.4> style="dashed"]
+    "de.sciss:scalaaudiofile_2.11:1.4.x"[label=<de.sciss<BR/><B>scalaaudiofile_2.11</B><BR/>1.4.5> style=""]
+    "de.sciss:scalacollider_2.11:1.18.1"[label=<de.sciss<BR/><B>scalacollider_2.11</B><BR/>1.18.1> style=""]
+    "de.sciss:scalacolliderswing-core_2.11:1.29.0"[label=<de.sciss<BR/><B>scalacolliderswing-core_2.11</B><BR/>1.29.0> style=""]
+    "de.sciss:scalacolliderswing-interpreter_2.11:1.29.0"[label=<de.sciss<BR/><B>scalacolliderswing-interpreter_2.11</B><BR/>1.29.0> style=""]
+    "de.sciss:scalacolliderswing-plotting_2.11:1.29.0"[label=<de.sciss<BR/><B>scalacolliderswing-plotting_2.11</B><BR/>1.29.0> style=""]
+    "de.sciss:scalacolliderugens-api_2.11:1.14.1"[label=<de.sciss<BR/><B>scalacolliderugens-api_2.11</B><BR/>1.14.1> style=""]
+    // "de.sciss:scalacolliderugens-core_2.11:1.14.0"[label=<de.sciss<BR/><B>scalacolliderugens-core_2.11</B><BR/>1.14.0> style="dashed"]
+    "de.sciss:scalacolliderugens-core_2.11:1.14.x"[label=<de.sciss<BR/><B>scalacolliderugens-core_2.11</B><BR/>1.14.1> style=""]
+    "de.sciss:scalacolliderugens-plugins_2.11:1.14.1"[label=<de.sciss<BR/><B>scalacolliderugens-plugins_2.11</B><BR/>1.14.1> style=""]
+    "de.sciss:scalacolliderugens-spec:1.14.1"[label=<de.sciss<BR/><B>scalacolliderugens-spec</B><BR/>1.14.1> style=""]
+    "de.sciss:scalainterpreterpane_2.11:1.7.3"[label=<de.sciss<BR/><B>scalainterpreterpane_2.11</B><BR/>1.7.3> style=""]
+    // "de.sciss:scalaosc_2.11:1.1.3"[label=<de.sciss<BR/><B>scalaosc_2.11</B><BR/>1.1.3> style="dashed"]
+    "de.sciss:scalaosc_2.11:1.1.x"[label=<de.sciss<BR/><B>scalaosc_2.11</B><BR/>1.1.5> style=""]
+    // "de.sciss:scissdsp_2.11:1.2.1"[label=<de.sciss<BR/><B>scissdsp_2.11</B><BR/>1.2.1> style="dashed"]
+    "de.sciss:scissdsp_2.11:1.2.x"[label=<de.sciss<BR/><B>scissdsp_2.11</B><BR/>1.2.2> style=""]
+    "de.sciss:serial_2.11:1.0.2"[label=<de.sciss<BR/><B>serial_2.11</B><BR/>1.0.2> style=""]
+    "de.sciss:sheet_2.11:0.1.1"[label=<de.sciss<BR/><B>sheet_2.11</B><BR/>0.1.1> style=""]
+    "de.sciss:sonogramoverview_2.11:1.9.0"[label=<de.sciss<BR/><B>sonogramoverview_2.11</B><BR/>1.9.0> style=""]
+    "de.sciss:soundprocesses-compiler_2.11:3.5.2"[label=<de.sciss<BR/><B>soundprocesses-compiler_2.11</B><BR/>3.5.2> style=""]
+    "de.sciss:soundprocesses-core_2.11:3.5.2"[label=<de.sciss<BR/><B>soundprocesses-core_2.11</B><BR/>3.5.2> style=""]
+    // "de.sciss:soundprocesses-views_2.11:3.5.1"[label=<de.sciss<BR/><B>soundprocesses-views_2.11</B><BR/>3.5.1> style="dashed"]
+    "de.sciss:soundprocesses-views_2.11:3.5.x"[label=<de.sciss<BR/><B>soundprocesses-views_2.11</B><BR/>3.5.2> style=""]
+    // "de.sciss:span_2.11:1.3.0"[label=<de.sciss<BR/><B>span_2.11</B><BR/>1.3.0> style="dashed"]
+    "de.sciss:span_2.11:1.3.x"[label=<de.sciss<BR/><B>span_2.11</B><BR/>1.3.1> style=""]
+    "de.sciss:strugatzki_2.11:2.11.0"[label=<de.sciss<BR/><B>strugatzki_2.11</B><BR/>2.11.0> style=""]
+    "de.sciss:submin:0.2.1"[label=<de.sciss<BR/><B>submin</B><BR/>0.2.1> style=""]
+    // "de.sciss:swingplus_2.11:0.2.0"[label=<de.sciss<BR/><B>swingplus_2.11</B><BR/>0.2.0> style="dashed"]
+    "de.sciss:swingplus_2.11:0.2.x"[label=<de.sciss<BR/><B>swingplus_2.11</B><BR/>0.2.1> style=""]
+    // "de.sciss:syntaxpane:1.1.4"[label=<de.sciss<BR/><B>syntaxpane</B><BR/>1.1.4> style="dashed"]
+    "de.sciss:syntaxpane:1.1.x"[label=<de.sciss<BR/><B>syntaxpane</B><BR/>1.1.5> style=""]
+    "de.sciss:topology_2.11:1.0.0"[label=<de.sciss<BR/><B>topology_2.11</B><BR/>1.0.0> style=""]
+    "de.sciss:treetable-java:1.3.8"[label=<de.sciss<BR/><B>treetable-java</B><BR/>1.3.8> style=""]
+    "de.sciss:treetable-scala_2.11:1.3.8"[label=<de.sciss<BR/><B>treetable-scala_2.11</B><BR/>1.3.8> style=""]
+    "de.sciss:weblaf:2.1.1"[label=<de.sciss<BR/><B>weblaf</B><BR/>2.1.1> style=""]
+    "de.sciss:wolkenpumpe_2.11:2.7.0"[label=<de.sciss<BR/><B>wolkenpumpe_2.11</B><BR/>2.7.0> style=""]
+    "edu.ucar:netcdf:4.3.23"[label=<edu.ucar<BR/><B>netcdf</B><BR/>4.3.23> style=""]
+    // "jline:jline:2.12.1"[label=<jline<BR/><B>jline</B><BR/>2.12.1> style=""]
+    // "lucene:lucene:1.4.3"[label=<lucene<BR/><B>lucene</B><BR/>1.4.3> style=""]
+    "net.sourceforge.jtransforms:jtransforms:2.4.0"[label=<net.sourceforge.jtransforms<BR/><B>jtransforms</B><BR/>2.4.0> style=""]
+    "org.apache.poi:poi-ooxml:3.13"[label=<org.apache.poi<BR/><B>poi-ooxml</B><BR/>3.13> style=""]
+    "org.apache.poi:poi:3.13"[label=<org.apache.poi<BR/><B>poi</B><BR/>3.13> style=""]
+    "org.jfree:jfreechart:1.0.19"[label=<org.jfree<BR/><B>jfreechart</B><BR/>1.0.19> style=""]
+    "org.scala-lang:scala-actors:2.11.8"[label=<org.scala-lang<BR/><B>scala-actors</B><BR/>2.11.8> style=""]
+    // "org.scala-lang.modules:scala-xml_2.11:1.0.4"[label=<org.scala-lang.modules<BR/><B>scala-xml_2.11</B><BR/>1.0.4> style="dashed"]
+    // "org.scala-lang.modules:scala-xml_2.11:1.0.x"[label=<org.scala-lang.modules<BR/><B>scala-xml_2.11</B><BR/>1.0.5> style=""]
+    // "org.scala-lang.modules:scala-swing_2.11:1.0.1"[label=<org.scala-lang.modules<BR/><B>scala-swing_2.11</B><BR/>1.0.1> style="dashed"]
+    "org.scala-lang.modules:scala-swing_2.11:1.0.x"[label=<org.scala-lang.modules<BR/><B>scala-swing_2.11</B><BR/>1.0.2> style=""]
+    "org.scala-lang:scala-compiler:2.11.8"[label=<org.scala-lang<BR/><B>scala-compiler</B><BR/>2.11.8> style=""]
+    // "org.scala-lang.modules:scala-parser-combinators_2.11:1.0.4"[label=<org.scala-lang.modules<BR/><B>scala-parser-combinators_2.11</B><BR/>1.0.4> style=""]
+    // "org.scala-lang:scala-reflect:2.11.8"[label=<org.scala-lang<BR/><B>scala-reflect</B><BR/>2.11.8> style=""]
+    "org.scala-stm:scala-stm_2.11:0.7"[label=<org.scala-stm<BR/><B>scala-stm_2.11</B><BR/>0.7> style=""]
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:sheet_2.11:0.1.1"
+    "de.sciss:sheet_2.11:0.1.1" -> "org.apache.poi:poi-ooxml:3.13"
+    "de.sciss:sheet_2.11:0.1.1" -> "org.apache.poi:poi:3.13"
+    "org.apache.poi:poi-ooxml:3.13" -> "org.apache.poi:poi:3.13"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:kollflitz_2.11:0.2.0"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:scala-swing-tree_2.11:0.1.1"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:lucrematrix_2.11:0.12.0"
+    "de.sciss:lucrematrix_2.11:0.12.0" -> "de.sciss:lucrematrix-views_2.11:0.12.0"
+    "de.sciss:lucrematrix-views_2.11:0.12.0" -> "de.sciss:lucrematrix-core_2.11:0.12.0"
+    "de.sciss:lucrematrix_2.11:0.12.0" -> "de.sciss:lucrematrix-core_2.11:0.12.0"
+    "de.sciss:lucrematrix-core_2.11:0.12.0" -> "de.sciss:filecache-txn_2.11:0.3.3"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:filecache-txn_2.11:0.3.3"
+    "de.sciss:filecache-txn_2.11:0.3.3" -> "de.sciss:filecache-common_2.11:0.3.x"
+    "de.sciss:filecache-mutable_2.11:0.3.2" -> "de.sciss:filecache-common_2.11:0.3.x"
+    "de.sciss:lucrematrix-core_2.11:0.12.0" -> "edu.ucar:netcdf:4.3.23"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:scalacolliderswing-plotting_2.11:1.29.0"
+    "de.sciss:scalacolliderswing-plotting_2.11:1.29.0" -> "com.github.wookietreiber:scala-chart_2.11:0.5.0"
+    "com.github.wookietreiber:scala-chart_2.11:0.5.0" -> "org.jfree:jfreechart:1.0.19"
+    "de.sciss:fscapejobs_2.11:1.5.0" -> "org.scala-lang:scala-actors:2.11.8"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:mellite_2.11:2.2.0"
+    "de.sciss:mellite_2.11:2.2.0" -> "de.sciss:mellite-views_2.11:2.2.0"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:pdflitz_2.11:1.2.1"
+    "de.sciss:scalacolliderswing-plotting_2.11:1.29.0" -> "de.sciss:pdflitz_2.11:1.2.1"
+    "de.sciss:pdflitz_2.11:1.2.1" -> "com.itextpdf:itextpdf:5.5.5"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:sonogramoverview_2.11:1.9.0"
+    "de.sciss:sonogramoverview_2.11:1.9.0" -> "de.sciss:filecache-mutable_2.11:0.3.2"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:desktop-mac_2.11:0.7.2"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:scalacolliderswing-interpreter_2.11:1.29.0"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:wolkenpumpe_2.11:2.7.0"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "de.sciss:scissdsp_2.11:1.2.x"
+    "de.sciss:sonogramoverview_2.11:1.9.0" -> "de.sciss:scissdsp_2.11:1.2.x"
+    "de.sciss:scissdsp_2.11:1.2.x" -> "net.sourceforge.jtransforms:jtransforms:2.4.0"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:soundprocesses-compiler_2.11:3.5.2"
+    "de.sciss:scalacolliderswing-plotting_2.11:1.29.0" -> "de.sciss:scalacolliderswing-core_2.11:1.29.0"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "de.sciss:scalacolliderswing-core_2.11:1.29.0"
+    "de.sciss:scalacolliderswing-interpreter_2.11:1.29.0" -> "de.sciss:scalacolliderswing-core_2.11:1.29.0"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:scalacolliderswing-core_2.11:1.29.0"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "de.sciss:prefuse-core:1.0.1"
+    "de.sciss:scalacolliderswing-core_2.11:1.29.0" -> "de.sciss:prefuse-core:1.0.1"
+    // "de.sciss:prefuse-core:1.0.1" -> "lucene:lucene:1.4.3"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:scalacolliderugens-plugins_2.11:1.14.1"
+    "de.sciss:scalacolliderswing-core_2.11:1.29.0" -> "de.sciss:scalacolliderugens-plugins_2.11:1.14.1"
+    "de.sciss:scalacolliderugens-plugins_2.11:1.14.1" -> "de.sciss:scalacolliderugens-core_2.11:1.14.x"
+    "de.sciss:scalacolliderswing-core_2.11:1.29.0" -> "de.sciss:scalacolliderugens-core_2.11:1.14.x"
+    "de.sciss:scalacollider_2.11:1.18.1" -> "de.sciss:scalacolliderugens-core_2.11:1.14.x"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:soundprocesses-views_2.11:3.5.x"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "de.sciss:soundprocesses-views_2.11:3.5.x"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:audiowidgets-app_2.11:1.10.0"
+    "de.sciss:soundprocesses-views_2.11:3.5.x" -> "de.sciss:audiowidgets-app_2.11:1.10.0"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:raphael-icons_2.11:1.0.3"
+    "de.sciss:audiowidgets-app_2.11:1.10.0" -> "de.sciss:raphael-icons_2.11:1.0.3"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:lucreswing_2.11:1.4.0"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "de.sciss:lucreswing_2.11:1.4.0"
+    "de.sciss:soundprocesses-views_2.11:3.5.x" -> "de.sciss:lucreswing_2.11:1.4.0"
+    "de.sciss:lucrematrix-views_2.11:0.12.0" -> "de.sciss:lucreswing_2.11:1.4.0"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:lucreswing_2.11:1.4.0"
+    "de.sciss:lucreswing_2.11:1.4.0" -> "de.sciss:treetable-scala_2.11:1.3.8"
+    "de.sciss:treetable-scala_2.11:1.3.8" -> "de.sciss:treetable-java:1.3.8"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:audiowidgets-swing_2.11:1.10.0"
+    "de.sciss:soundprocesses-views_2.11:3.5.x" -> "de.sciss:audiowidgets-swing_2.11:1.10.0"
+    "de.sciss:lucreswing_2.11:1.4.0" -> "de.sciss:audiowidgets-swing_2.11:1.10.0"
+    "de.sciss:audiowidgets-app_2.11:1.10.0" -> "de.sciss:audiowidgets-swing_2.11:1.10.0"
+    "de.sciss:scalacolliderswing-core_2.11:1.29.0" -> "de.sciss:audiowidgets-swing_2.11:1.10.0"
+    "de.sciss:audiowidgets-swing_2.11:1.10.0" -> "de.sciss:audiowidgets-core_2.11:1.10.0"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:submin:0.2.1"
+    "de.sciss:submin:0.2.1" -> "de.sciss:weblaf:2.1.1"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:desktop_2.11:0.7.2"
+    "de.sciss:lucreswing_2.11:1.4.0" -> "de.sciss:desktop_2.11:0.7.2"
+    "de.sciss:desktop-mac_2.11:0.7.2" -> "de.sciss:desktop_2.11:0.7.2"
+    "de.sciss:audiowidgets-app_2.11:1.10.0" -> "de.sciss:desktop_2.11:0.7.2"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:mellite-core_2.11:2.2.0"
+    "de.sciss:mellite_2.11:2.2.0" -> "de.sciss:mellite-core_2.11:2.2.0"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:play-json-sealed_2.11:0.4.0"
+    "de.sciss:play-json-sealed_2.11:0.4.0" -> "com.typesafe.play:play-json_2.11:2.3.10"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:equal_2.11:0.1.1"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:strugatzki_2.11:2.11.0"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "com.github.scopt:scopt_2.11:3.4.0"
+    "de.sciss:strugatzki_2.11:2.11.0" -> "com.github.scopt:scopt_2.11:3.4.0"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "de.sciss:intensitypalette:1.0.0"
+    "de.sciss:strugatzki_2.11:2.11.0" -> "de.sciss:intensitypalette:1.0.0"
+    "de.sciss:sonogramoverview_2.11:1.9.0" -> "de.sciss:intensitypalette:1.0.0"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:fscapejobs_2.11:1.5.0"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:fscapejobs_2.11:1.5.0"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:scalacolliderugens-spec:1.14.1"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:scalacolliderugens-api_2.11:1.14.1"
+    "de.sciss:scalacolliderugens-core_2.11:1.14.x" -> "de.sciss:scalacolliderugens-api_2.11:1.14.1"
+    // "de.sciss:scalacolliderugens-api_2.11:1.14.1" -> "org.scala-lang.modules:scala-xml_2.11:1.0.x"
+    // "org.scala-lang:scala-compiler:2.11.8" -> "org.scala-lang.modules:scala-xml_2.11:1.0.x"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:syntaxpane:1.1.x"
+    "de.sciss:scalainterpreterpane_2.11:1.7.3" -> "de.sciss:syntaxpane:1.1.x"
+    "de.sciss:scalacolliderswing-interpreter_2.11:1.29.0" -> "de.sciss:scalainterpreterpane_2.11:1.7.3"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:scalainterpreterpane_2.11:1.7.3"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:swingplus_2.11:0.2.x"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "de.sciss:swingplus_2.11:0.2.x"
+    "de.sciss:soundprocesses-views_2.11:3.5.x" -> "de.sciss:swingplus_2.11:0.2.x"
+    "de.sciss:desktop_2.11:0.7.2" -> "de.sciss:swingplus_2.11:0.2.x"
+    "de.sciss:scalainterpreterpane_2.11:1.7.3" -> "de.sciss:swingplus_2.11:0.2.x"
+    "de.sciss:pdflitz_2.11:1.2.1" -> "de.sciss:swingplus_2.11:0.2.x"
+    "de.sciss:audiowidgets-swing_2.11:1.10.0" -> "org.scala-lang.modules:scala-swing_2.11:1.0.x"
+    "de.sciss:treetable-scala_2.11:1.3.8" -> "org.scala-lang.modules:scala-swing_2.11:1.0.x"
+    "de.sciss:swingplus_2.11:0.2.x" -> "org.scala-lang.modules:scala-swing_2.11:1.0.x"
+    "com.github.wookietreiber:scala-chart_2.11:0.5.0" -> "org.scala-lang.modules:scala-swing_2.11:1.0.x"
+    "de.sciss:scala-swing-tree_2.11:0.1.1" -> "org.scala-lang.modules:scala-swing_2.11:1.0.x"
+    "de.sciss:soundprocesses-compiler_2.11:3.5.2" -> "org.scala-lang:scala-compiler:2.11.8"
+    "de.sciss:scalacolliderswing-interpreter_2.11:1.29.0" -> "org.scala-lang:scala-compiler:2.11.8"
+    "de.sciss:scalainterpreterpane_2.11:1.7.3" -> "org.scala-lang:scala-compiler:2.11.8"
+    // "de.sciss:scalainterpreterpane_2.11:1.7.3" -> "jline:jline:2.12.1"
+    // "org.scala-lang:scala-compiler:2.11.8" -> "org.scala-lang.modules:scala-parser-combinators_2.11:1.0.4"
+    // "com.typesafe.play:play-json_2.11:2.3.10" -> "org.scala-lang:scala-reflect:2.11.8"
+    // "org.scala-lang:scala-compiler:2.11.8" -> "org.scala-lang:scala-reflect:2.11.8"
+    "de.sciss:soundprocesses-compiler_2.11:3.5.2" -> "de.sciss:soundprocesses-core_2.11:3.5.2"
+    "de.sciss:soundprocesses-views_2.11:3.5.x" -> "de.sciss:soundprocesses-core_2.11:3.5.2"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:soundprocesses-core_2.11:3.5.2"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:soundprocesses-core_2.11:3.5.2"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:lucre-bdb_2.11:3.3.1"
+    "de.sciss:lucre-bdb_2.11:3.3.1" -> "com.sleepycat:je:5.0.104"
+    "edu.ucar:netcdf:4.3.23" -> "com.sleepycat:je:4.0.92"
+    "de.sciss:wolkenpumpe_2.11:2.7.0" -> "de.sciss:fileutil_2.11:1.1.1"
+    "de.sciss:strugatzki_2.11:2.11.0" -> "de.sciss:fileutil_2.11:1.1.1"
+    "de.sciss:desktop_2.11:0.7.2" -> "de.sciss:fileutil_2.11:1.1.1"
+    "de.sciss:soundprocesses-core_2.11:3.5.2" -> "de.sciss:fileutil_2.11:1.1.1"
+    "de.sciss:filecache-common_2.11:0.3.x" -> "de.sciss:fileutil_2.11:1.1.1"
+    "de.sciss:lucreswing_2.11:1.4.0" -> "de.sciss:lucre-expr_2.11:3.3.1"
+    "de.sciss:lucrematrix-core_2.11:0.12.0" -> "de.sciss:lucre-expr_2.11:3.3.1"
+    "de.sciss:soundprocesses-core_2.11:3.5.2" -> "de.sciss:lucre-expr_2.11:3.3.1"
+    "de.sciss:lucre-expr_2.11:3.3.1" -> "de.sciss:numbers_2.11:0.1.1"
+    "de.sciss:scalacolliderugens-api_2.11:1.14.1" -> "de.sciss:numbers_2.11:0.1.1"
+    "de.sciss:mellite-views_2.11:2.2.0" -> "de.sciss:span_2.11:1.3.x"
+    "de.sciss:lucre-expr_2.11:3.3.1" -> "de.sciss:span_2.11:1.3.x"
+    "de.sciss:strugatzki_2.11:2.11.0" -> "de.sciss:span_2.11:1.3.x"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:span_2.11:1.3.x"
+    "de.sciss:audiowidgets-app_2.11:1.10.0" -> "de.sciss:span_2.11:1.3.x"
+    "de.sciss:sonogramoverview_2.11:1.9.0" -> "de.sciss:span_2.11:1.3.x"
+    "de.sciss:soundprocesses-core_2.11:3.5.2" -> "de.sciss:lucre-confluent_2.11:3.3.1"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:lucre-confluent_2.11:3.3.1"
+    "de.sciss:lucre-confluent_2.11:3.3.1" -> "de.sciss:fingertree_2.11:1.5.2"
+    "de.sciss:soundprocesses-core_2.11:3.5.2" -> "de.sciss:lucresynth_2.11:3.5.2"
+    "de.sciss:strugatzki_2.11:2.11.0" -> "de.sciss:scalacollider_2.11:1.18.1"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:scalacollider_2.11:1.18.1"
+    "de.sciss:lucresynth_2.11:3.5.2" -> "de.sciss:scalacollider_2.11:1.18.1"
+    "de.sciss:scalacolliderswing-core_2.11:1.29.0" -> "de.sciss:scalacollider_2.11:1.18.1"
+    "de.sciss:scalacollider_2.11:1.18.1" -> "de.sciss:processor_2.11:0.4.0"
+    "de.sciss:sonogramoverview_2.11:1.9.0" -> "de.sciss:processor_2.11:0.4.0"
+    "de.sciss:lucre-expr_2.11:3.3.1" -> "de.sciss:model_2.11:0.3.2"
+    "de.sciss:desktop_2.11:0.7.2" -> "de.sciss:model_2.11:0.3.2"
+    "de.sciss:processor_2.11:0.4.0" -> "de.sciss:model_2.11:0.3.2"
+    "de.sciss:lucrematrix-core_2.11:0.12.0" -> "de.sciss:scalaaudiofile_2.11:1.4.x"
+    "de.sciss:scalacollider_2.11:1.18.1" -> "de.sciss:scalaaudiofile_2.11:1.4.x"
+    "de.sciss:sonogramoverview_2.11:1.9.0" -> "de.sciss:scalaaudiofile_2.11:1.4.x"
+    "de.sciss:fscapejobs_2.11:1.5.0" -> "de.sciss:scalaaudiofile_2.11:1.4.x"
+    "de.sciss:scalacollider_2.11:1.18.1" -> "de.sciss:scalaosc_2.11:1.1.x"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:scalaosc_2.11:1.1.x"
+    "de.sciss:fscapejobs_2.11:1.5.0" -> "de.sciss:scalaosc_2.11:1.1.x"
+    "de.sciss:lucre-bdb_2.11:3.3.1" -> "de.sciss:lucre-core_2.11:3.3.1"
+    "de.sciss:lucre-expr_2.11:3.3.1" -> "de.sciss:lucre-core_2.11:3.3.1"
+    "de.sciss:lucre-confluent_2.11:3.3.1" -> "de.sciss:lucre-core_2.11:3.3.1"
+    "de.sciss:mellite-core_2.11:2.2.0" -> "de.sciss:lucre-core_2.11:3.3.1"
+    "at.iem.sysson:sysson_2.11:1.8.0-SNAPSHOT" -> "de.sciss:lucre-core_2.11:3.3.1"
+    "de.sciss:lucresynth_2.11:3.5.2" -> "de.sciss:lucre-core_2.11:3.3.1"
+    "de.sciss:lucre-core_2.11:3.3.1" -> "de.sciss:serial_2.11:1.0.2"
+    "de.sciss:filecache-common_2.11:0.3.x" -> "de.sciss:serial_2.11:1.0.2"
+    "de.sciss:scissdsp_2.11:1.2.x" -> "de.sciss:serial_2.11:1.0.2"
+    "de.sciss:span_2.11:1.3.x" -> "de.sciss:serial_2.11:1.0.2"
+    "de.sciss:scalaaudiofile_2.11:1.4.x" -> "de.sciss:serial_2.11:1.0.2"
+    "de.sciss:lucre-core_2.11:3.3.1" -> "org.scala-stm:scala-stm_2.11:0.7"
+    // "com.typesafe.play:play-iteratees_2.11:2.3.10" -> "org.scala-stm:scala-stm_2.11:0.7"
+    "de.sciss:filecache-txn_2.11:0.3.3" -> "org.scala-stm:scala-stm_2.11:0.7"
+    "de.sciss:lucresynth_2.11:3.5.2" -> "de.sciss:topology_2.11:1.0.0"
+}
