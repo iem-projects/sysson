@@ -127,4 +127,20 @@ This approach helps keeping the code base modular, and furthermore can improve t
 \label{fig:dependencies}%
 \end{figure}
 
+\subsubsection{Description of Modules}
+
+We will now give a brief overview of the modules and libraries on which \sysson{} relies and which were shown in \figref{fig:dependencies}.
+
+\paragraph{Mellite}
+
+By far the strongest dependency is on the \software{Mellite} computer music environment. In fact, \sysson{} can be understood as a domain specific extension of \software{Mellite}, adding abstractions for sonification and matrix data, although the GUI is also slightly different.
+%
+Mellite is a graphical front end and application built on top of the \software{SoundProcesses} library. It introduces a tree based workspace structure with graphical views and editors for various objects.
+
+\textbf{Artefacts:} \verb!-core! contains additional objects, such a color, the workspace and cursorss abstractions, and a set of editing operations. \verb!-views! contains the graphical user interface.
+
+\textbf{Assessment:} The workspace abstraction should probably be moved directly into the \software{SoundProcesses} project, making the \verb!-core! artefact superfluous. It could be useful to define public API in a separate \verb!-api! artefact and create sub-modules for specific editors that do not necessarily have to be bundled in every application. An example is the \software{Wolkenpumpe} live improvisation tool that is currently a dependency of \verb!-views!.
+
+\todo{continue here}
+
 \end{document}
