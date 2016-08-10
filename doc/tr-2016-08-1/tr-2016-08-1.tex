@@ -29,12 +29,11 @@
     urlcolor=black
 }
 
+\usepackage[utf8]{inputenc}
+\usepackage[lf]{venturis} %% lf option gives lining figures as default; 
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
 \usepackage[UKenglish,german]{babel}
-
-\usepackage[backend=biber,authordate]{biblatex-chicago} % citereset=chapter
-%\usepackage[backend=biber,natbib,isbn=false,useprefix=true,sorting=ydnt]{biblatex-chicago} % citereset=chapter
-% \addbibresource{all.bib} % add a bib-reference file
-\addbibresource{rutz.bib} % add a bib-reference file
 
 \usepackage{fancyvrb}
 \VerbatimFootnotes
@@ -47,13 +46,6 @@
 \author{Hanns Holger Rutz}
 % \date{09-Feb-2016}
 \date{August 2016}
-
-% \renewcommand*\rmdefault{dayrom}
-% \usepackage{concmath}
-\usepackage[lf]{venturis} %% lf option gives lining figures as default; 
-			  %% remove option to get oldstyle figures as default
-% \renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif
-\usepackage[T1]{fontenc}
 
 % cf. https://tex.stackexchange.com/questions/94126/change-font-to-only-section-and-subsection-of-my-document
 %\usepackage{titlesec}
@@ -73,10 +65,9 @@
 %  {1em}
 %  {}
 
-
-\usepackage[utf8]{inputenc}
-%\usepackage[backend=biber,natbib=true,citestyle=verbose-ibid,isbn=false,maxnames=3,bibstyle=authoryear,useprefix=true,sorting=ydnt]{biblatex} % citereset=chapter
-\usepackage[backend=biber,natbib=true,citestyle=verbose-ibid,isbn=false,maxnames=20,bibstyle=authoryear,firstinits=true,sorting=ydnt,useprefix=true]{biblatex} % citereset=chapter, 
+\usepackage[backend=biber,authordate]{biblatex-chicago} % citereset=chapter
+%\usepackage[backend=biber,natbib,isbn=false,useprefix=true,sorting=ydnt]{biblatex-chicago} % citereset=chapter
+% \addbibresource{all.bib} % add a bib-reference file
 \addbibresource{rutz.bib} % add a bib-reference file
 
 % warning: https://tex.stackexchange.com/questions/313477/
@@ -157,8 +148,10 @@ Defined as a separate library, this module provides a matrix data abstraction, b
 
 \paragraph{Lucre}
 
-The name \software{Lucre} serves as a code word for an approach to memory and data modelling based on software transactional memory (STM). \software{Lucre} defines an abstract system layer that usually occurs in objects as a type parameter \verb!S!, e.g. \verb!Sonification[S]!. At runtime, different systems can be initiated: an ephemeral pure in-memory system, a durable system where objects are automatically persisted to hard-disk, and a confluent system which extends the durable system with a version history of the modification of objects. This kind of temporal database approach has been developed extensively through my thesis, and forms the basis for \software{SoundProcesses}, \software{Mellite}, and \sysson{} respectively.
+The name \software{Lucre} serves as a code word for an approach to memory and data modelling based on software transactional memory (STM). \software{Lucre} defines an abstract system layer that usually occurs in objects as a type parameter \verb!S!, e.g. \verb!Sonification[S]!. At runtime, different systems can be initiated: an ephemeral pure in-memory system, a durable system where objects are automatically persisted to hard-disk, and a confluent system which extends the durable system with a version history of the modification of objects. This kind of temporal database approach has been developed extensively through my thesis \autocite{rutz2014tracing}, and forms the basis for \software{SoundProcesses}, \software{Mellite}, and \sysson{} respectively.
 
 \todo{continue here}
+
+\printbibliography
 
 \end{document}
