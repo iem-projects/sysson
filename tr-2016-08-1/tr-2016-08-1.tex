@@ -31,6 +31,11 @@
 
 \usepackage[UKenglish,german]{babel}
 
+\usepackage[backend=biber,authordate]{biblatex-chicago} % citereset=chapter
+%\usepackage[backend=biber,natbib,isbn=false,useprefix=true,sorting=ydnt]{biblatex-chicago} % citereset=chapter
+% \addbibresource{all.bib} % add a bib-reference file
+\addbibresource{rutz.bib} % add a bib-reference file
+
 \usepackage{fancyvrb}
 \VerbatimFootnotes
 
@@ -137,9 +142,22 @@ By far the strongest dependency is on the \software{Mellite} computer music envi
 %
 Mellite is a graphical front end and application built on top of the \software{SoundProcesses} library. It introduces a tree based workspace structure with graphical views and editors for various objects.
 
-\textbf{Artefacts:} \verb!-core! contains additional objects, such a color, the workspace and cursorss abstractions, and a set of editing operations. \verb!-views! contains the graphical user interface.
+\textbf{Artefacts:} \verb!-core! contains objects in addition to \software{SoundProcesses}, such a color, the workspace and cursors abstractions, and a set of editing operations. \verb!-views! contains the graphical user interface, and undo-redo editing facilities.
 
 \textbf{Assessment:} The workspace abstraction should probably be moved directly into the \software{SoundProcesses} project, making the \verb!-core! artefact superfluous. It could be useful to define public API in a separate \verb!-api! artefact and create sub-modules for specific editors that do not necessarily have to be bundled in every application. An example is the \software{Wolkenpumpe} live improvisation tool that is currently a dependency of \verb!-views!.
+A big challenge is the inter-linkage between visual representations and text-based editing. While the model-view approach already makes programmatic changes instantly visible across the UI, there is no global UI protocol through which the views ``know each other'' such that for example selecting one view implies a visual highlight on related views. Also because of the traditional windowing system, there are challenges in connecting objects (e.g. through ``cords'') across different windows. A radical revision of \software{Mellite} could focus on making text-editing a first class citizen, e.g. by allowing to activate a text-based view for every object on the UI. In terms of \sysson{}, an interesting model to look at might be the ``notebook'' approaches taken with software such as Jupyter.\footnote{\url{http://jupyter.org/}}
+
+\paragraph{Lucre-Matrix}
+
+Defined as a separate library, this module provides a matrix data abstraction, bridging \software{NetCDF} and the transactional-memory model defined by \software{Lucre} and underlying \software{SoundProcesses}. It makes it possible to build data-flow graphs, e.g. by applying a dimensional reduction operation to an input matrix, yielding a graph that constitutes a new compound matrix object.
+
+\textbf{Artefacts:} \verb!-core! contains the data structures, and a mechanism for caching matrix data in sound files (\sysson{}'s way of passing matrix data to \software{ScalaCollider}). \verb!-views! contains the graphical user interface element, noticeable as the matrix editor component in \sysson{}'s sonification editor.
+
+\textbf{Assessment:} The number of operations that can be performed on the matrices is quite small. It would also be worth exploring the possibilities of using a different matrix abstraction than the one of \software{NetCDF} as blue print, linking this library closer with standard ``data science'' frameworks. Another huge question arises from the way sonification models are built in \sysson{}. It appears that it may become much more important to be able to pre-process matrix data before they become part of the real-time sound synthesis. One way to conceive this is through additional ``graph elements'' in the sonification synthesis definition, i.e. as is done with elements such as \verb!Dim#values!. The down-side of this is that we risk duplicating the functionality on the ``Lucre side'' vs. the ``ScalaCollider side''. Therefore, the development of \software{Lucre-Matrix} very much depends on the evolution of the sonification model in \sysson{} and the way in which one will be able to represent ``sonification programs'', the way in which these programs can be ``co-edited'' with synthesis definitions.
+
+\paragraph{Lucre}
+
+The name \software{Lucre} serves as a code word for an approach to memory and data modelling based on software transactional memory (STM). \software{Lucre} defines an abstract system layer that usually occurs in objects as a type parameter \verb!S!, e.g. \verb!Sonification[S]!. At runtime, different systems can be initiated: an ephemeral pure in-memory system, a durable system where objects are automatically persisted to hard-disk, and a confluent system which extends the durable system with a version history of the modification of objects. This kind of temporal database approach has been developed extensively through my thesis, and forms the basis for \software{SoundProcesses}, \software{Mellite}, and \sysson{} respectively.
 
 \todo{continue here}
 
