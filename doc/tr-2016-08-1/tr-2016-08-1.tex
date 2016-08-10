@@ -166,7 +166,86 @@ This module defines a small serialization layer used by \software{Lucre} and oth
 
 \textbf{Assessment:} The module is optimised for speed and size, making serialization quite efficient. However, a current drawback is vulnerability to schema evolution. Serialised objects simply become unreadable if the schema is altered without any precautions in place that can parse older versions. In many cases it may simply not be possible to parse older versions, and in those cases it would be required to entirely ``upgrade'' an objects, for example allocating additional objects. While such upgrades are currently not foreseen, there are also made nearly impossible by the fact that the same entity might be written multiple times in the database. If every \verb!Obj! with an identifier \verb!S#ID! would be written as a small reference to one and the same location in the database, perhaps upgrading schemas would become feasible. For robustness, it would also be very helpful if an automatic export to other formats such as JSON would be available. This would require the serialisation API to change, for example including field names. Another current limitation is the prohibition of reference cycles within the same serialisation, something that can currently be worked around by the indirection of a \verb!S#Var!. Finally, one must currently write serialisers by hand which from our experience is \emph{very} prone to errors, and also clutters the source code unnecessarily. After deciding on an updated API, it might thus be advisable to look into macro-based synthesis of serialisers.
 
+\paragraph{SoundProcesses}
+
+Sound synthesis abstractions are provided by the \software{SoundProcesses} module which can be understood as bridge between lower-level sound synthesis library \software{ScalaCollider} and the \software{Lucre} memory model. \software{SoundProcesses} defines an abstraction \verb!Proc! that encapsulates a sound synthesis function with a dictionary of controllers and resources. It makes it safe to connect and alter sound processes transactionally, automatically providing correct node topology, resource management, and real-time dispatch. A notion of aural-views is introduced, translating the MVC concept from the visual domain to sound. \software{SoundProcesses} is described in detail in my thesis, as well as in several conference papers (e.g. \autocite{rutz2014sound}).
+
+
 \todo{continue here}
+
+\paragraph{File-Cache}
+
+\paragraph{Scala-STM}
+
+\paragraph{NetCDF}
+
+\paragraph{FScape-Jobs}
+
+\paragraph{Sciss-DSP}
+
+\paragraph{JTransforms}
+
+\paragraph{Sonogram-Overview}
+
+\paragraph{Intensity-Palette}
+
+\paragraph{Finger-Tree}
+
+\paragraph{Span}
+
+\paragraph{Scala-OSC}
+
+\paragraph{Equal}
+
+\paragraph{Strugatzki}
+
+\paragraph{ScalaCollider-UGens}
+
+\paragraph{Play-JSON-Sealed}
+
+\paragraph{Topology}
+
+\paragraph{Processor}
+
+\paragraph{Model}
+
+\paragraph{Numbers}
+
+\paragraph{File-Util}
+
+\paragraph{Scala-Interpreter-Pane}
+
+\paragraph{Scala-Compiler}
+
+\paragraph{Audio-Widgets}
+
+\paragraph{Raphael-Icons}
+
+\paragraph{Desktop}
+
+\paragraph{Wolkenpumpe}
+
+\paragraph{Lucre-Swing}
+
+\paragraph{Tree-Table}
+
+\paragraph{Swing-Plus}
+
+\paragraph{Scala-Swing}
+
+\paragraph{Prefuse}
+
+\paragraph{PDFlitz}
+
+\paragraph{Submin}
+
+\paragraph{Scala-Swing-Tree}
+
+\paragraph{Scala-Chart}
+
+\paragraph{Koll-Flitz}
+
+\paragraph{Sheet}
 
 \printbibliography
 
