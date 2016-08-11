@@ -306,28 +306,51 @@ Bundled with \software{Mellite} but should probably be optional. A basic music-i
 
 Bundled with \software{Mellite} but should probably be optional. A simple OSC client library to issue DSP jobs through \software{FScape}. We are currently rewriting \software{FScape} based on a finer UGen granularity, Scala, and Akka-Stream. This new version 2 will make \software{FScape-Jobs} eventually obsolete.
 
-\paragraph{Finger-Tree}
-
-\paragraph{Span}
-
-\paragraph{Scala-OSC}
-
-\paragraph{Equal}
-
-\paragraph{Play-JSON-Sealed}
-
-\paragraph{Topology}
-
 \paragraph{Processor}
+
+An interface for defining asynchronous offline rendering jobs, extending Scala's \verb!Future! with the ability to cancel the job and to monitor progress.
 
 \paragraph{Model}
 
+A simple library for publisher-subscriber functionality.
+
+\paragraph{Finger-Tree}
+
+A versatile functional data structure that is used here mainly as an immutable data structure for sorting intervals.
+
+\paragraph{Topology}
+
+A data structure for maintaining an online directed graph. When edges are inserted, the caller gets information on how vertices have to been moved to correctly preserve a linear order. Used for example by \software{SoundProcesses} to automatically reshuffle \verb!Proc! instances a they are interconnected.
+
+\paragraph{Span}
+
+A pair of start and stop sample frames defines a time span in \software{SoundProcesses} and \sysson{}.
+
+\paragraph{Scala-OSC}
+
+The Open Sound Control library used by \software{ScalaCollider}.
+
+\paragraph{Equal}
+
+A simple library allowing for more type-safe comparisons of values through the \verb!===! (triple-equals) and \verb$!==$ operators.
+
+\paragraph{Play-JSON-Sealed}
+
+An extension of the JSON library that is part of the \software{Play} framework, allowing the automatic macro based construction of serialisation code for sealed type hierarchies (algebraic data types).
+
+\assessment{} Scala does not have a standard JSON library (its standard library does contain some rudimentary JSON functions but they are generally considered inferior to any other library), and as a consequence there are now dozens of alternatives available. We found Play JSON to be fairly simple and straight forward, with its macro based serialisation generation freeing one from writing serialisers by hand. It might still be worth to evaluate other JSON libraries.
+
 \paragraph{Numbers}
+
+A library that enriches number types with operator often known from \software{SuperCollider} and \software{ScalaCollider}. For example we can write \verb!2.0.sqrt! or \verb!7.nextPowerOfTwo!.
 
 \paragraph{PDFlitz}
 
+A thin wrapper around \software{iText PDF}, allowing especially the export of any Swing or Java2D component as a PDF file. Enforces a GPL v3+ license.
+
 \paragraph{Koll-Flitz}
 
+A library that enriches collection types with useful operators such as iterating or mapping over pairwise groups.
 
 \printbibliography
 
