@@ -275,10 +275,33 @@ The \software{NetCDF} is written by UCAR and was used in \sysson{} because all t
 
 \textbf{Assessment:} The file access is not thread-safe, so one has to throw a \verb!synchronized {}! block at it. We currently only use synchronous reading, but it might be the case that asynchronous I/O is also supported (to be evaluated).
 
-\todo{continue here}
+\paragraph{Submin}
 
+A combination of light (dark text on bright background) and dark (light text on dark background) ``skins'' for the Web-look-and-feel, the cross platform Swing-based look used in \software{Mellite} and \sysson{}.
+
+\textbf{Assessment:} The underlying \software{Web-Look-And-Feel} is currently under development for a release version 1.29. The GNU GPL 3 licenses is unfortunate and we therefore strive to avoid any hard dependencies on this look and feel. All GUI in \software{Mellite} and \sysson{} is written agnotic to the look-and-feel selected. Therefore, depending on Web-LaF's docking framework would be a serious decision. The LaF is also quite large and not extremely fast in comparison to other Swing LaFs. There were a few issues with keyboard shortcuts on OS X that are probably resolved by now. On the up-side, it is probably one of the best looking LaFs available, with the light scheme directly taken from Web-LaF, and the dark scheme designed by me but closely based on the light scheme. \sysson{} is not yet fully tested with the dark scheme and might need some customisation to support both light and dark scheme.
+
+\paragraph{Raphael-Icons}
+
+The icon set used by \software{Mellite} and \sysson{} is mostly based on \software{Raphael.js}, and the original SVG graphics have been converted to a simple library dependency.
+
+\textbf{Assessment:} Translating the SVG to code may have actually been a bad idea, as the library can become quite large. Perhaps a better approach is a fast SVG path parser and preservation of the SVG path strings.
+
+\paragraph{Prefuse}
+
+\software{Prefuse} is used to render dynamic graphs in the \software{Wolkenpumpe} live improvisation interface, but also other widgets such as \software{ScalaCollider-Swing}'s node tree view.
+
+\paragraph{Wolkenpumpe}
+
+Bundled with \software{Mellite} but should probably be optional. A live improvisation interface, otherwise not used in \sysson{}.
+
+\paragraph{Strugatzki}
+
+Bundled with \software{Mellite} but should probably be optional. A basic music-information-retrieval kit, based on \software{ScalaCollider}.
 
 \paragraph{FScape-Jobs}
+
+Bundled with \software{Mellite} but should probably be optional. A simple OSC client library to issue DSP jobs through \software{FScape}. We are currently rewriting \software{FScape} based on a finer UGen granularity, Scala, and Akka-Stream. This new version 2 will make \software{FScape-Jobs} eventually obsolete.
 
 \paragraph{Finger-Tree}
 
@@ -287,8 +310,6 @@ The \software{NetCDF} is written by UCAR and was used in \sysson{} because all t
 \paragraph{Scala-OSC}
 
 \paragraph{Equal}
-
-\paragraph{Strugatzki}
 
 \paragraph{Play-JSON-Sealed}
 
@@ -300,15 +321,7 @@ The \software{NetCDF} is written by UCAR and was used in \sysson{} because all t
 
 \paragraph{Numbers}
 
-\paragraph{Raphael-Icons}
-
-\paragraph{Wolkenpumpe}
-
-\paragraph{Prefuse}
-
 \paragraph{PDFlitz}
-
-\paragraph{Submin}
 
 \paragraph{Koll-Flitz}
 
