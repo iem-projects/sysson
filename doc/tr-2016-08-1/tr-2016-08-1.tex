@@ -19,15 +19,6 @@
 
 \usepackage{color}
 \usepackage{graphicx}
-\usepackage[pdftex,colorlinks=false]{hyperref}
-% get rid of the horrible coloured boxes around links
-\hypersetup{
-    colorlinks,%
-    citecolor=black,%
-    filecolor=black,%
-    linkcolor=black,%
-    urlcolor=black
-}
 
 \usepackage[utf8]{inputenc}
 \usepackage[lf]{venturis} %% lf option gives lining figures as default; 
@@ -36,7 +27,6 @@
 \usepackage[UKenglish,german]{babel}
 
 \usepackage{fancyvrb}
-\VerbatimFootnotes
 
 \widowpenalty10000  % http://tex.stackexchange.com/questions/4152/how-do-i-prevent-widow-orphan-lines
 \clubpenalty10000
@@ -79,6 +69,19 @@
 
 % says you should load after babel and fontspec
 \usepackage[shrink=10, babel=true]{microtype}	% http://tex.stackexchange.com/questions/141852/latex-allows-line-break-between-concluding-em-dash-and-comma-before-a-new-sub-cl/141854#141854
+
+% has to come first for full scale TeX voodoo bullcrap
+\usepackage{hyperref}
+% get rid of the horrible coloured boxes around links
+\hypersetup{
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black
+}
+% has to come after frickin hyperref
+\VerbatimFootnotes
 
 \newcommand{\todo}[1]{\colorbox{yellow}{\textsc{todo}: #1}}
 
@@ -249,13 +252,12 @@ A simply utility library for constructing files and paths.
 
 A Swing widget built around the Scala compiler/interpreter and a text editor with syntax highlight.
 
-\textbf{Assessment:} The interpreter is a this layer on top of Scala's own \verb!IMain! interpreter structure. Similar to the \software{SuperCollider IDE}, pressing control and return executes the selected text or the current line. An interesting alternative could be that executed source code is appended to a sort of protocol so that it becomes easier to reproduce a REPL session. Another model currently found is the ``worksheet'', where a ``hot'' interpreter runs the entire source code and prints the results of each statement on the right-hand side of the code. The editor highlight is rather simple and based on the \software{Syntax-Pane} artefact, which is just a lexer without further code analysis. There are more advanced systems such as ENSIME\footnote{\url{http://ensime.github.io/}} that improve on code completion, look-up, type checking and inspections, and so forth. There are also improved REPLs such as Ammonite\footnote{\url{http://www.lihaoyi.com/Ammonite/}} that claim better code completion. On the other hand it would be interesting to explore possibilities of representing placeholders for objects in the GUI in the text editor. Custom widgets such as live sliders are for example implemented in Field\footnote{\url{http://openendedgroup.com/field/}}, and there are vocal proponents of more visually interactive systems such as Bret Victor\footnote{See for example \url{http://worrydream.com/\#!/TheFutureOfProgramming} and \url{http://worrydream.com/\#!/MediaForThinkingTheUnthinkable}; 
+\textbf{Assessment:} The interpreter is a thin layer on top of Scala's own \verb!IMain! interpreter structure. Similar to the \software{SuperCollider IDE}, pressing control and return executes the selected text or the current line. An interesting alternative could be that executed source code is appended to a sort of protocol so that it becomes easier to reproduce a REPL session. This might be similar to how the ``notebook'' approaches of IPython/Jupyter work. Another model currently seen is the ``worksheet'', where a ``hot'' interpreter continuously evaluates the entire source code and prints the results of each statement on the right-hand side of the code. With respect to the text editor, the code highlight is rather simple and based on the \software{Syntax-Pane} artefact, which is just a lexer without further code analysis. There are more advanced systems such as \software{ENSIME}\footnote{\url{http://ensime.github.io/}} that improve on code completion, look-up, type checking and inspections, and so forth. There are also improved REPLs such as \software{Ammonite}\footnote{\url{http://www.lihaoyi.com/Ammonite/}} that claim better code completion. On the other hand it would be interesting to explore possibilities of representing placeholders for objects in the GUI in the text editor. Custom widgets such as live sliders are for example implemented in \software{Field},\footnote{\url{http://openendedgroup.com/field/}} and there are vocal proponents of more visually interactive systems such as Bret Victor\footnote{See for example \url{http://worrydream.com/\#!/TheFutureOfProgramming} and \url{http://worrydream.com/\#!/MediaForThinkingTheUnthinkable}; 
 also the work of Sean McDirmid on ``live programming''.}.
 
-\paragraph{Scala-Compiler}
-
-\paragraph{Syntax-Pane}
-
+%\paragraph{Scala-Compiler}
+%
+%\paragraph{Syntax-Pane}
 
 \todo{continue here}
 
