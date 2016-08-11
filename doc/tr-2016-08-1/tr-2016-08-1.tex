@@ -159,6 +159,12 @@ The name \software{Lucre} serves as a placeholder for an approach to memory and 
 
 So far we have used BDB DB JE 5 to allow \sysson{} to run on legacy computers with Java 6, such as Mac OS X 10.6. The next version of \sysson{} can probably drop that constraint and require presence of Java 8 and thus the newer database version.
 
+\paragraph{Scala-STM}
+
+The reference implementation for software transactional memory in Scala. 
+
+\textbf{Assessment:} This library is quite stable, error free, and fast. The only bottle neck is using a decider-hook when coupling to a database transaction that must be completed with the \software{Scala-STM} transaction. For performance reasons, implicit transaction values have to be carried around when defining a transactional API, although the library also allows the lookup of transactions from a thread-local variable and the automatic coalescence of transactions if one unknowingly starts a new \verb!atomic {}! block. Care has to be taken in nested functions to prevent catching a stale implicit transaction context from an other function. From experience, the best solution to this problem is to move transactional methods all to the top-level of an object and avoid nesting them.
+
 \paragraph{Lucre-Swing}
 
 Published as a separate library, this module provides a set of simple widgets that can interface with expressions and other data structures from the \software{Lucre} project.
@@ -259,11 +265,18 @@ also the work of Sean McDirmid on ``live programming''.}.
 %
 %\paragraph{Syntax-Pane}
 
-\todo{continue here}
+\paragraph{Sheet}
 
-\paragraph{Scala-STM}
+This is a simple library for reading spread sheet data from Excel files, based on the Apache POI library. It is used as an import function in \sysson{}.
 
 \paragraph{NetCDF}
+
+The \software{NetCDF} is written by UCAR and was used in \sysson{} because all the climatology data was in \verb!.nc! NetCDF format. The library contains its own matrix and array data types.
+
+\textbf{Assessment:} The file access is not thread-safe, so one has to throw a \verb!synchronized {}! block at it. We currently only use synchronous reading, but it might be the case that asynchronous I/O is also supported (to be evaluated).
+
+\todo{continue here}
+
 
 \paragraph{FScape-Jobs}
 
@@ -299,7 +312,6 @@ also the work of Sean McDirmid on ``live programming''.}.
 
 \paragraph{Koll-Flitz}
 
-\paragraph{Sheet}
 
 \printbibliography
 
