@@ -57,7 +57,7 @@
 
 \usepackage[backend=biber,authordate]{biblatex-chicago} % citereset=chapter
 %\usepackage[backend=biber,natbib,isbn=false,useprefix=true,sorting=ydnt]{biblatex-chicago} % citereset=chapter
-% \addbibresource{all.bib} % add a bib-reference file
+\addbibresource{all.bib} % add a bib-reference file
 \addbibresource{rutz.bib} % add a bib-reference file
 
 % warning: https://tex.stackexchange.com/questions/313477/
@@ -109,7 +109,62 @@
 \selectlanguage{UKenglish}
 \thispagestyle{empty}
 \newpage
-\section{\todo{}}
+\section{}
+
+\subsection{Statement}
+
+\subsubsection{General Mission Statement}
+
+\begin{itemize}
+\item to understand the specific expertise of artists and the potentials of transfer of knowledge from research in the arts into applied contexts
+\item to define the interfaces necessary to warrant a successful application of approaches and prototypes that have been developed in long-term practice
+\item conduct a series of self-standing case studies, generate best practices examples
+\item interdisciplinary process of artistic research and natural sciences and engineering: assess and document
+\item production of a catalogue of criteria for future reference
+ translation of artistic research ``results'' from proof-of-concept status to a status with greater number of recipients and users.
+\end{itemize}
+
+\subsubsection{Project Year 1 -- SysSon}
+
+\begin{itemize}
+\item a case study is developed based on the prototype of a sonification software
+\item collaboration between IEM and WegC
+\item WegC staff is user group along with which prototype is elaborated, creating a product usable in their work
+\item development of sonification templates; creation of a suitable platform, distribution and integration
+\item systematic documentation; basis for successive project year
+\end{itemize}
+
+\subsection{Areas for Development}
+
+\subsubsection{Sonification Design}
+
+\begin{itemize}
+\item Seamless transitions between server and client side processing
+\item Modularity of sounding components
+\item Better programmatic access to matrices
+\item Pre-processing stages for matrices
+\item UI: programmatic building blocks for control elements
+\end{itemize}
+
+\subsubsection{Sonification Usage}
+
+\begin{itemize}
+\item Integration: IPython / Jupyter, etc.; Scala in ``Data Science''
+\item Stronger linkage between sounding and visual components
+\item Wizards, guided building blocks
+\item Import/export interfacing
+\item UI: docking framework, usability
+\item Specific scenarios, e.g. presentation tool for a conference, export for a web-site
+\end{itemize}
+
+\subsubsection{Overall Computer Music Perspective}
+
+\begin{itemize}
+\item UI: Linkage between text editing and visual components
+\item ``Thinking tool''; note-pad, mark-down, hyper-text, mind-maps, small-talk
+\end{itemize}
+
+% \subsubsection{Integration}
 
 \subsection{Libraries and Modules}
 
@@ -261,8 +316,8 @@ A simply utility library for constructing files and paths.
 
 A Swing widget built around the Scala compiler/interpreter and a text editor with syntax highlight.
 
-\assessment{} The interpreter is a thin layer on top of Scala's own \verb!IMain! interpreter structure. Similar to the \software{SuperCollider IDE}, pressing control and return executes the selected text or the current line. An interesting alternative could be that executed source code is appended to a sort of protocol so that it becomes easier to reproduce a REPL session. This might be similar to how the ``notebook'' approaches of IPython/Jupyter work. Another model currently seen is the ``worksheet'', where a ``hot'' interpreter continuously evaluates the entire source code and prints the results of each statement on the right-hand side of the code. With respect to the text editor, the code highlight is rather simple and based on the \software{Syntax-Pane} artefact, which is just a lexer without further code analysis. There are more advanced systems such as \software{ENSIME}\footnote{\url{http://ensime.github.io/}} that improve on code completion, look-up, type checking and inspections, and so forth. There are also improved REPLs such as \software{Ammonite}\footnote{\url{http://www.lihaoyi.com/Ammonite/}} that claim better code completion. On the other hand it would be interesting to explore possibilities of representing placeholders for objects in the GUI in the text editor. Custom widgets such as live sliders are for example implemented in \software{Field},\footnote{\url{http://openendedgroup.com/field/}} and there are vocal proponents of more visually interactive systems such as Bret Victor\footnote{See for example \url{http://worrydream.com/\#!/TheFutureOfProgramming} and \url{http://worrydream.com/\#!/MediaForThinkingTheUnthinkable}; 
-also the work of Sean McDirmid on ``live programming''.}.
+\assessment{} The interpreter is a thin layer on top of Scala's own \verb!IMain! interpreter structure. Similar to the \software{SuperCollider IDE}, pressing control and return executes the selected text or the current line. An interesting alternative could be that executed source code is appended to a sort of protocol so that it becomes easier to reproduce a REPL session. This might be similar to how the ``notebook'' approaches of IPython/Jupyter work. Another model currently seen is the ``worksheet'', where a ``hot'' interpreter continuously evaluates the entire source code and prints the results of each statement on the right-hand side of the code. With respect to the text editor, the code highlight is rather simple and based on the \software{Syntax-Pane} artefact, which is just a lexer without further code analysis. There are more advanced systems such as \software{ENSIME}\footnote{\url{http://ensime.github.io/}} that improve on code completion, look-up, type checking and inspections, and so forth. There are also improved REPLs such as \software{Ammonite}\footnote{\url{http://www.lihaoyi.com/Ammonite/}} that claim better code completion. On the other hand it would be interesting to explore possibilities of representing placeholders for objects in the GUI in the text editor. Custom widgets such as live sliders are for example implemented in \software{Field}\footnote{\url{http://openendedgroup.com/field/}} \autocite{downie2008field}, and there are vocal proponents of more visually interactive systems such as Bret Victor\footnote{See for example \url{http://worrydream.com/\#!/TheFutureOfProgramming} and \url{http://worrydream.com/\#!/MediaForThinkingTheUnthinkable}; 
+also the work of Sean McDirmid on ``live programming'' \autocite{mcdirmid2013usable}.}.
 
 %\paragraph{Scala-Compiler}
 %
