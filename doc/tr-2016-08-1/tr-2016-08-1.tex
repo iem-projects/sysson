@@ -204,7 +204,7 @@ Then the next question would be how we can define those expressions and expressi
 
 Now if we have a simple additional UI editor anyway---because we want to be able to style the elements slightly, position them etc.---then it would make sense to remove \verb!graph.UserValue! and simply use the existing \verb!graph.Attribute!. And then indeed we should introduce a \software{ScalaCollider}-like \verb!"key".kr! shortcut. The sonification editor could still listen to graph updates and ``notify'' the developer about newly appearing attributes, offering to create UI elements for them. We could repurpose \verb!.controls! so that we rely on the double-object's attribute map to store the type of widget and widget parameters, adopting \verb!ParamSpec! from \software{Wolkenpumpe}, etc. We wouldn't even need the \verb!.getRef! because now we could refer to the \verb!S#Var! directly.
 
-Since this principle is general, it should be decomposable into things directly within \software{SoundProcesses}. For example, we could even completely diminish \verb!.controls! if attributes are stored with the \verb!Proc!'s attribute map. Instead we would just associated a simple \verb!Panel! object.
+Since this principle is general, it should be decomposable into things directly within \software{SoundProcesses}. For example, we could even completely diminish \verb!.controls! if attributes are stored with the \verb!Proc!'s attribute map. Instead we would just associated a simple \verb!Panel! object. It makes sense to start a new sub-module within the \software{Lucre-Swing} project.
 
 \section{Libraries and Modules}
 
