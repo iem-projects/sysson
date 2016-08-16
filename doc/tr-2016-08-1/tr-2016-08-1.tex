@@ -174,6 +174,38 @@ In the meeting of 12-Aug-2016, it was decided that the strategy will focus on th
 \item Possibility of subjecting these branches to real-time interactive control (vs. simply evaluating at the beginning of the play action)
 \end{itemize}
 
+\subsection{Sonification UI Elements}
+
+The current code for determining control elements is in \verb!SonificationViewImpl! method \verb!updateGraph!, with the following scanning process:
+%
+\begin{verbatim}
+val userValues  = g.sources.collect { case graph.UserValue(key, default) =>
+  val cell = CellView.exprMap[S, String, Double, DoubleObj](controls, key)
+  val view = DoubleSpinnerView.optional[S](cell, name = key.capitalize, 
+    default = Some(default))
+  (key, view)
+}
+\end{verbatim}
+%
+In other words, we require that \verb!UserValue! elements are found on the top level, and in the order of their appearance we build double-spinner-views. The idea is shown in \figref{fig:ui}
+
+\begin{figure}%
+\centering%
+\includegraphics[width=0.8\textwidth]{figures/discuss_ui.pdf}%
+\caption{Concept for simple UI definitions.}%
+\label{fig:ui}%
+\end{figure}
+
+\subsubsection*{Discussion}
+
+User values are then stored in the \verb!controls! field of the sonification object, a map from control names to double objects. If we ensure that an \verb!S#Var! is always used here, we can uses that as a reference for further UI coding. Let's assume we had the possibility to create an expression for an option of a map entry, like \verb!controls.getRef(key): DoubleOption!. Then we could somehow boil that down to a flat expression, like \verb!.getOrElse(DoubleObj.Const(0)): DoubleObj!.\footnote{Another possibility is to have \verb!controls.getOrElseRef(...): DoubleObj! and avoid having to introduce the option object, which is probably a good ideas as we still have no support for objects with type-parameters and would have to define an option object for any peer type.} Then we can transform it into a boolean, like \verb!.>(thresh): BooleanObj! and store it inside a user interface element attribute such as \verb!visible! or \verb!enabled!.
+
+Then the next question would be how we can define those expressions and expression-combinators from within \software{Mellite}? This looks like a bit more work. Perhaps the best option here is to have built-in context menu functions to produce the most common expressions.
+
+Now if we have a simple additional UI editor anyway---because we want to be able to style the elements slightly, position them etc.---then it would make sense to remove \verb!graph.UserValue! and simply use the existing \verb!graph.Attribute!. And then indeed we should introduce a \software{ScalaCollider}-like \verb!"key".kr! shortcut. The sonification editor could still listen to graph updates and ``notify'' the developer about newly appearing attributes, offering to create UI elements for them. We could repurpose \verb!.controls! so that we rely on the double-object's attribute map to store the type of widget and widget parameters, adopting \verb!ParamSpec! from \software{Wolkenpumpe}, etc. We wouldn't even need the \verb!.getRef! because now we could refer to the \verb!S#Var! directly.
+
+Since this principle is general, it should be decomposable into things directly within \software{SoundProcesses}. For example, we could even completely diminish \verb!.controls! if attributes are stored with the \verb!Proc!'s attribute map. Instead we would just associated a simple \verb!Panel! object.
+
 \section{Libraries and Modules}
 
 This section serves as a status-quo document, detailing the current module structure of the software, with possible points of entry for further development and improvement.

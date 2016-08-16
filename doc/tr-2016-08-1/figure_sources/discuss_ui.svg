@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="700"
+   height="700"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="discuss_ui.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="DotL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="DotL"
+       style="overflow:visible">
+      <path
+         id="path3895"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,5.92,0.8)"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="128.06741"
+     inkscape:cy="403.05315"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1440"
+     inkscape:window-height="834"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-352.36218)">
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="426.05219"
+       y="561.86145"
+       id="text2985"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="426.05219"
+         y="561.86145">graph: SynthGraphObj.Var[S]</tspan><tspan
+         sodipodi:role="line"
+         x="426.05219"
+         y="581.86145"
+         id="tspan3005">outputs: Outputs[S]</tspan><tspan
+         sodipodi:role="line"
+         x="426.05219"
+         y="601.86145"
+         id="tspan3011">attr</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="211.07112"
+       y="379.77274"
+       id="text2989"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2991"
+         x="211.07112"
+         y="379.77274">Sonification[S]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="243.396"
+       y="406.03671"
+       id="text2993"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2995"
+         x="243.396"
+         y="406.03671">proc: Proc[S]</tspan><tspan
+         sodipodi:role="line"
+         x="243.396"
+         y="426.03671"
+         id="tspan2997">sources : evt.Map[S, String, Sonification.Source]</tspan><tspan
+         sodipodi:role="line"
+         x="243.396"
+         y="446.03671"
+         id="tspan2999">controls: evt.Map[S, String, DoubleObj]</tspan><tspan
+         sodipodi:role="line"
+         x="243.396"
+         y="466.03671"
+         id="tspan3057">controls: Controls[S]</tspan><tspan
+         sodipodi:role="line"
+         x="243.396"
+         y="486.03671"
+         id="tspan3013">attr</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="395.92902"
+       y="535.33624"
+       id="text3001"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3003"
+         x="395.92902"
+         y="535.33624">Proc[S]</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#DotL);marker-end:url(#DotL)"
+       d="m 345.91163,400.3942 c 58.06071,-19.59478 117.9371,-40.29888 180.12941,-36.9944 26.31181,1.12519 55.30663,1.07752 77.3657,17.56306 11.35623,7.77229 16.30499,22.14423 13.79862,35.43749 -2.00325,18.87251 -17.22723,32.69048 -33.25049,40.92746 -23.50971,11.91146 -45.22653,27.00326 -69.03876,38.36597 -17.88903,9.12431 -35.94681,18.03387 -52.83698,28.94918"
+       id="path3019"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="446.43668"
+       y="624.22968"
+       id="text3053"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3055"
+         x="446.43668"
+         y="624.22968">- used by graph.Attribute</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 235.31479,441.39204 c 110.56771,-3.18253 185.29086,-3.37428 286.88332,-1.01015"
+       id="path3061"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="39.345188"
+       y="542.40729"
+       id="text3068"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3070"
+         x="39.345188"
+         y="542.40729">type Controls[S] = Folder[S] ?!</tspan><tspan
+         sodipodi:role="line"
+         x="39.345188"
+         y="562.40729"
+         id="tspan3072">                                 attr</tspan><tspan
+         sodipodi:role="line"
+         x="39.345188"
+         y="582.40729"
+         id="tspan3074">                                   &quot;layout&quot;</tspan><tspan
+         sodipodi:role="line"
+         x="39.345188"
+         y="602.40729"
+         id="tspan3076">                                   &quot;padding&quot;</tspan><tspan
+         sodipodi:role="line"
+         x="39.345188"
+         y="622.40729"
+         id="tspan3078">                                   &quot;background&quot;</tspan><tspan
+         sodipodi:role="line"
+         x="39.345188"
+         y="642.40729"
+         id="tspan3080">                                   &quot;visible&quot;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="52.477177"
+       y="608.0672"
+       id="text3082"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3084"
+         x="52.477177"
+         y="608.0672"
+         style="font-style:italic;-inkscape-font-specification:Liberation Sans Italic">SmallTalk FTW!</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="114.09648"
+       y="695.9505"
+       id="text3086"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3088"
+         x="114.09648"
+         y="695.9505">so a folder is a container, the containing elements are the main &quot;models&quot;</tspan><tspan
+         sodipodi:role="line"
+         x="114.09648"
+         y="715.9505"
+         id="tspan3090">and their respective attribute maps configure the UI views?</tspan><tspan
+         sodipodi:role="line"
+         x="114.09648"
+         y="735.9505"
+         id="tspan3092" /><tspan
+         sodipodi:role="line"
+         x="114.09648"
+         y="755.9505"
+         id="tspan3094">Then a default &quot;layout&quot; for a folder is just that - a folder tree view</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="71.670074"
+       y="793.93524"
+       id="text3096"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3098"
+         x="71.670074"
+         y="793.93524">A hen an egg question: does the container contain the models who carry their views</tspan><tspan
+         sodipodi:role="line"
+         x="71.670074"
+         y="813.93524"
+         id="tspan3100">as attribute, or vice versa. One would think that MVC implies the latter, because the</tspan><tspan
+         sodipodi:role="line"
+         x="71.670074"
+         y="833.93524"
+         id="tspan3102">same model can be viewed multiple times. That in turn means we need at least one</tspan><tspan
+         sodipodi:role="line"
+         x="71.670074"
+         y="853.93524"
+         id="tspan3104">object type for widget, possibly one per widget.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       x="5"
+       y="904.04187"
+       id="text3106"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="5"
+         y="904.04187"
+         id="tspan3110">DoubleWidget:</tspan><tspan
+         sodipodi:role="line"
+         x="5"
+         y="924.04187"
+         id="tspan3114">   model: DoubleObj</tspan><tspan
+         sodipodi:role="line"
+         x="5"
+         y="944.04187"
+         id="tspan3116">   attr</tspan><tspan
+         sodipodi:role="line"
+         x="5"
+         y="964.04187"
+         id="tspan3124">     visible</tspan><tspan
+         sodipodi:role="line"
+         x="5"
+         y="984.04187"
+         id="tspan3128">     enabled</tspan><tspan
+         sodipodi:role="line"
+         x="5"
+         y="1004.0419"
+         id="tspan3130">     min</tspan><tspan
+         sodipodi:role="line"
+         x="5"
+         y="1024.0419"
+         id="tspan3134">     max</tspan><tspan
+         sodipodi:role="line"
+         x="5"
+         y="1044.0419"
+         id="tspan3138">     renderer: String of &quot;slider&quot;, &quot;rotary&quot;, etc.</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3140"
+       y="904.04187"
+       x="281.36038"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Sans;-inkscape-font-specification:Sans"
+       xml:space="preserve"><tspan
+         id="tspan3142"
+         y="904.04187"
+         x="281.36038"
+         sodipodi:role="line">BooleanWidget:</tspan><tspan
+         id="tspan3144"
+         y="924.04187"
+         x="281.36038"
+         sodipodi:role="line">   model: BooleanObj</tspan><tspan
+         id="tspan3146"
+         y="944.04187"
+         x="281.36038"
+         sodipodi:role="line">   attr</tspan><tspan
+         id="tspan3148"
+         y="964.04187"
+         x="281.36038"
+         sodipodi:role="line">     visible</tspan><tspan
+         id="tspan3150"
+         y="984.04187"
+         x="281.36038"
+         sodipodi:role="line">     enabled</tspan><tspan
+         id="tspan3156"
+         y="1004.0419"
+         x="281.36038"
+         sodipodi:role="line">     renderer: String of &quot;checkbox&quot;, &quot;toggle-button&quot;, ...</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#DotL);marker-mid:none;marker-end:url(#DotL)"
+       d="m 156.09058,918.07648 c 40.3408,-37.7757 -35.29508,-56.40268 -63.912459,-51.70208 -51.543477,7.31485 -77.806074,-36.4666 -63.109259,-83.75893 0.0022,-49.8428 22.074277,-111.83394 77.382278,-119.07941 84.91817,-18.47845 173.05268,-6.07477 258.40335,-22.55935 24.9186,-5.28644 51.70172,-5.12316 75.14552,-15.75739"
+       id="path3056"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#DotL);marker-end:url(#DotL)"
+       d="m 439.46764,917.77637 c 35.0265,2.53173 69.81695,-1.77064 103.71274,-12.71863 42.65478,-7.31314 93.43678,3.04751 126.95573,-38.4 29.21681,-45.86273 4.1068,-104.15265 -16.12958,-146.74241 -11.42639,-30.50203 -18.28522,-81.05808 -51.02169,-84.48164"
+       id="path5002"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
