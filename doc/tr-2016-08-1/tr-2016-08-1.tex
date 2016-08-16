@@ -109,11 +109,11 @@
 \selectlanguage{UKenglish}
 \thispagestyle{empty}
 \newpage
-\section{}
+\section{Statement}
 
-\subsection{Statement}
+The next sub-sections lists the main points of the WTZ project, followed by an outline for the preparation of the first milestone.
 
-\subsubsection{General Mission Statement}
+\subsection{General Mission Statement}
 
 \begin{itemize}
 \item to understand the specific expertise of artists and the potentials of transfer of knowledge from research in the arts into applied contexts
@@ -124,7 +124,7 @@
  translation of artistic research ``results'' from proof-of-concept status to a status with greater number of recipients and users.
 \end{itemize}
 
-\subsubsection{Project Year 1 -- SysSon}
+\subsection{Project Year 1 -- SysSon}
 
 \begin{itemize}
 \item a case study is developed based on the prototype of a sonification software
@@ -134,9 +134,9 @@
 \item systematic documentation; basis for successive project year
 \end{itemize}
 
-\subsection{Areas for Development}
+\section{Areas for Development}
 
-\subsubsection{Sonification Design}
+\subsection{Sonification Design}
 
 \begin{itemize}
 \item Seamless transitions between server and client side processing
@@ -146,7 +146,7 @@
 \item UI: programmatic building blocks for control elements
 \end{itemize}
 
-\subsubsection{Sonification Usage}
+\subsection{Sonification Usage}
 
 \begin{itemize}
 \item Integration: IPython / Jupyter, etc.; Scala in ``Data Science''
@@ -157,16 +157,26 @@
 \item Specific scenarios, e.g. presentation tool for a conference, export for a web-site
 \end{itemize}
 
-\subsubsection{Overall Computer Music Perspective}
+\subsection{Overall Computer Music Perspective}
 
 \begin{itemize}
 \item UI: Linkage between text editing and visual components
 \item ``Thinking tool''; note-pad, mark-down, hyper-text, mind-maps, small-talk
 \end{itemize}
 
-% \subsubsection{Integration}
+\section{Next Planning Stage}
 
-\subsection{Libraries and Modules}
+In the meeting of 12-Aug-2016, it was decided that the strategy will focus on the development of the sonification templates, in iteration with select individuals from WegC over a longer period. Development of the software must be carefully planned in order to produce achievable milestones with the available resources. As a first step, the work effort for implementing the following changes should be assessed:
+
+\begin{itemize}
+\item Improving the sonification editor user interface by adding a few widgets such as buttons, toggle switches etc., being able to control their layout broadly.
+\item In conjunction, being able to branch in the synth graph, i.e. being able to select different sub-programs based for example on the user interface elements.
+\item Possibility of subjecting these branches to real-time interactive control (vs. simply evaluating at the beginning of the play action)
+\end{itemize}
+
+\section{Libraries and Modules}
+
+This section serves as a status-quo document, detailing the current module structure of the software, with possible points of entry for further development and improvement.
 
 \sysson{} is built with the \software{sbt} build tool.\footnote{\url{http://www.scala-sbt.org/}} \software{Sbt} manages module and library dependencies though a software called \software{Ivy} and using so-called \software{Maven} artefacts. Such artefacts are composed of a group-identifier, artefact-identifier, and a version string. For example, \sysson{} itself has group-id \verb!at.iem.sysson!, artefact-id \verb!sysson!, and current version \verb!1.8.0-SNAPSHOT!. The version scheme is the one proposed as \emph{Semantic Versioning}\footnote{\url{http://semver.org/}}, i.e. \verb!MAJOR.MINOR.PATCH!. The \verb!MAJOR! version indicates an entire new architecture, where the first stable generation is usually indicated by the digit \verb!1!. The \verb!MINOR! version indicates incremental changes, while the \verb!PATCH! version indicate bug fixes without change in functionality. In the Scala eco-system, the terminology is slightly different, where the major version is called "epoch", the minor version is called major version and the patch version is called minor version. So Scala 2.11.8, the latest release, has epoch 2, major version 11, and minor version 8 in the Scala terminology. We will henceforth use this naming scheme. The special suffix \verb!-SNAPSHOT! indicates that the version is not a stable released artefact but work in progress. Stable artefacts of libraries are published to a repository such a the public Maven Central,\footnote{\url{http://central.sonatype.org/}} and build tools can thus automatically download required artefacts based on a description of an application's dependencies.
 
@@ -174,7 +184,7 @@ The Maven based build tool \software{sbt} assumes a \emph{binary compatibility} 
 
 This versioning scheme can be observed in the dependency graph that shows all the libraries and transitive libraries,\footnote{Transitive means a library A is used by another library B, and B is used by \sysson{}. Then A is a transitive dependency of \sysson{}.} generated by the \software{sbt-dependency-graph} plugin\footnote{The call is \verb!sbt dependencyDot!.} and shown in \figref{fig:dependencies}.\footnote{In the figure, lower level transitive third-party dependencies have been omitted for a clearer overview.} We can see the \sysson{} main artefact on the left-hand side with arrows pointing to immediate dependencies (libraries), which in turn point to other transitive libraries. Some libraries are published as a set of related artefacts, often bound together by one ``virtual'' meta-package. For example, the \software{Mellite} computer music environment is actually composed of two artefacts \verb!mellite-core! and \verb!mellite-views!, combined as virtual artefact \verb!mellite!. The \verb!-views! artefact connects to the graphical user interface, whereas \verb!-core! only contains data structures. Since \verb!-views! depends on \verb!-core! but not vice versa, it means we can develop a library merely based on the data structures without requiring the dependency on any GUI.
 
-\subsubsection{Licensing Questions}
+\subsection{Licensing Questions}
 
 This approach helps keeping the code base modular, and furthermore can improve the licensing situation: In general we try to avoid dependency on GPL licensed code,\footnote{\url{https://www.gnu.org/licenses/gpl.html}} because it enforces the GPL on the entire product, something that is not the case with the LGPL\footnote{\url{https://www.gnu.org/copyleft/lesser.html}} or even more permissive licenses. We try to decouple GPL dependencies as far as possible, allowing for LGPL terms in most cases. GPL artefacts are often commercially developed products, because a commercial client company will likely not want to release their own product as open source under GPL terms and is thus forced to buy a commercial license from the library vendor, an approach that is called dual licensing. For example, the \software{iText} PDF library is available for free under GPL terms or by buying a commercial license that allows the client to develop their product without requiring to open source it. The same is true for the \software{Berkeley DB} database (developed by Oracle) and the \software{WebLaF} user interface look-and-feel. We currently do not own any commercially bought licenses, and thus \textbf{\sysson{} must be licensed under GPL version 3} terms. However except for the mentioned GPL based libraries, we have control over most other libraries, and thus in the future a different license might be chosen if replacements are found for the GPL libraries (or commercial licenses purchased).
 
@@ -184,7 +194,7 @@ This approach helps keeping the code base modular, and furthermore can improve t
 \label{fig:dependencies}%
 \end{figure}
 
-\subsubsection{Description of Modules}
+\subsection{Description of Modules}
 
 We will now give a brief overview of the modules and libraries on which \sysson{} relies and which were shown in \figref{fig:dependencies}.
 
