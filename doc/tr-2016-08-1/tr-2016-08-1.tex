@@ -167,7 +167,7 @@ The next sub-sections lists the main points of the WTZ project, followed by an o
 \section{Next Planning Stage}
 
 In the meeting of 12-Aug-2016, it was decided that the strategy will focus on the development of the sonification templates, in iteration with select individuals from WegC over a longer period. Development of the software must be carefully planned in order to produce achievable milestones with the available resources. As a first step, the work effort for implementing the following changes should be assessed:
-
+%
 \begin{itemize}
 \item Improving the sonification editor user interface by adding a few widgets such as buttons, toggle switches etc., being able to control their layout broadly.
 \item In conjunction, being able to branch in the synth graph, i.e. being able to select different sub-programs based for example on the user interface elements.
@@ -205,6 +205,64 @@ Then the next question would be how we can define those expressions and expressi
 Now if we have a simple additional UI editor anyway---because we want to be able to style the elements slightly, position them etc.---then it would make sense to remove \verb!graph.UserValue! and simply use the existing \verb!graph.Attribute!. And then indeed we should introduce a \software{ScalaCollider}-like \verb!"key".kr! shortcut. The sonification editor could still listen to graph updates and ``notify'' the developer about newly appearing attributes, offering to create UI elements for them. We could repurpose \verb!.controls! so that we rely on the double-object's attribute map to store the type of widget and widget parameters, adopting \verb!ParamSpec! from \software{Wolkenpumpe}, etc. We wouldn't even need the \verb!.getRef! because now we could refer to the \verb!S#Var! directly.
 
 Since this principle is general, it should be decomposable into things directly within \software{SoundProcesses}. For example, we could even completely diminish \verb!.controls! if attributes are stored with the \verb!Proc!'s attribute map. Instead we would just associated a simple \verb!Panel! object. It makes sense to start a new sub-module within the \software{Lucre-Swing} project.
+
+\subsection{Conditional Synth Sub-Graphs}
+
+This is a quite complex issue, as it touches the internals of \software{SoundProcesses} (how and when to build synth graphs, how they access the outside context, etc.) and the serialisation of synth graphs. One has to distinguish two cases
+%
+\begin{itemize}
+\item determination at initialisation time \emph{on the client side}
+\item determination \emph{on the server side} (the distinction between scalar rate or initialisation time and audio rate is less relevant)
+\end{itemize}
+%
+It also affects the question whether a sound model should be described by one monolithic synth graph or rather by a connected collection of graphs.
+
+\subsubsection*{Discussion}
+
+Let us first explore the case where branching is solely solved inside one monolithic synth graph function. There are two possibilities: Stick to the \verb!GE! (graph elements) ``interpreter'' approach, where a \verb!SynthGraph! is directly serialised. This is the more ``functional'' style. Or allow instead to execute a \verb!Function0[SynthGraph]!, similar to the \verb!Action! object, and going for a more ``imperative'' style.
+
+In the functional style,\footnote{This becomes a sort of proof for ``Greenspun's tenth rule'': \url{https://en.wikipedia.org/wiki/Greenspun's_tenth_rule}} we would have a restricted set of pseudo-UGens or graph elements that handle the branching. For client-side initialisation time, we might have something like
+%
+\begin{verbatim}
+// possibly: IfAttrGt.ir
+val amp: GE = ???
+val res: GE = IfAttrGt("key", 0) {
+  WhiteNoise.ar(amp)
+} ElseIfGt(1) {
+  SinOsc.ar(441) * amp
+} Else {
+  DC.ar(0)
+}
+\end{verbatim}
+%
+The disadvantages here are that
+\begin{itemize}
+\item we might need a large number of graph elements for the possible comparison cases, \verb!IfAttr("boolean")!, \verb!IfAttrEquals("key", value)!, etc.
+\item there is no possibility to perform general arithmetic operations on the attribute value. For example, if the attribute is a buffer, we might want to check the duration of the buffer. It does not make sense to define an entire new language interpreter here.
+%\item We will most likely want to use graph elements from the outer context as input to the branches. The UGen graph builder thus must be capable to detect these dependencies and implicitly insert 
+\end{itemize}
+%
+A potential advantage is that we could extend this syntax to theoretically support real-time branching:
+%
+\begin{verbatim}
+val amp: GE = ???
+val res: GE = IfAttrGt.kr("key", 0) {
+  WhiteNoise.ar(amp)
+} ElseIfGt(1) {
+  SinOsc.ar(441) * amp
+} Else {
+  DC.ar(0)
+}
+\end{verbatim}
+%
+However, this produces two difficult implementation problems:
+%
+\begin{itemize}
+\item We need to capture the dependency of the inner branches on the outer context, i.e. here the use of the signal \verb!amp! that must---upon expansion---be modelled by a bus between two synths, where the branches are conditionally created synths.
+\item We need to capture the dependency of the outer context on the result of the conditional, i.e. here the further use of the signal \verb!res! that again must be modelled by a bus between two synths.
+\end{itemize}
+
+\todo{}
 
 \section{Libraries and Modules}
 
