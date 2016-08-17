@@ -219,9 +219,9 @@ It also affects the question whether a sound model should be described by one mo
 
 \subsubsection*{Discussion}
 
-Let us first explore the case where branching is solely solved inside one monolithic synth graph function. There are two possibilities: Stick to the \verb!GE! (graph elements) ``interpreter'' approach, where a \verb!SynthGraph! is directly serialised. This is the more ``functional'' style. Or allow instead to execute a \verb!Function0[SynthGraph]!, similar to the \verb!Action! object, and going for a more ``imperative'' style.
+Let us first explore the case where branching is solely solved \textbf{inside one monolithic synth graph function.} There are two possibilities: Stick to the \verb!GE! (graph elements) ``interpreter'' approach, where a \verb!SynthGraph! is directly serialised. This is the more ``functional'' style. Or allow instead to execute a \verb!Function0[SynthGraph]!, similar to the \verb!Action! object, and going for a more ``imperative'' style.
 
-In the functional style,\footnote{This becomes a sort of proof for ``Greenspun's tenth rule'': \url{https://en.wikipedia.org/wiki/Greenspun's_tenth_rule}} we would have a restricted set of pseudo-UGens or graph elements that handle the branching. For client-side initialisation time, we might have something like
+\textbf{In the functional style,}\footnote{This becomes a sort of proof for ``Greenspun's tenth rule'': \url{https://en.wikipedia.org/wiki/Greenspun's_tenth_rule}} we would have a restricted set of pseudo-UGens or graph elements that handle the branching. For client-side initialisation time, we might have something like
 %
 \begin{verbatim}
 // possibly: IfAttrGt.ir
@@ -261,6 +261,32 @@ However, this produces two difficult implementation problems:
 \item We need to capture the dependency of the inner branches on the outer context, i.e. here the use of the signal \verb!amp! that must---upon expansion---be modelled by a bus between two synths, where the branches are conditionally created synths.
 \item We need to capture the dependency of the outer context on the result of the conditional, i.e. here the further use of the signal \verb!res! that again must be modelled by a bus between two synths.
 \end{itemize}
+%
+If this implementation is solved, it will make this approach very powerful, though, and client vs. server solution could be transparently determined from pattern matching. E.g.
+%
+\begin{verbatim}
+If ("key".ir > 0) { ... }
+\end{verbatim}
+%
+This would capture a \verb!BinaryOpUGen! which could be analysed for its rate and operands, possibly erasing to a real boolean check on the client side if the rate is \verb!scalar!, one operand is an attribute and the other a constant. This way, still arbitrary arithmetic expressions can be used, although without the guarantee that they are indeed erased to a boolean type and so might end up creating a second (possibly paused) synth.
+
+The pausing synth of course could cause other problems, but it might be a sensible approach, as the programmer can still explicitly go for entirely non-paused branches using standard UGen comparators such as \verb!sig_==! and multiplications with zero or one.
+
+\textbf{In the imperative style}, instead of evaluating code that produces a \verb!SynthGraph! and serialising that graph, we serialise a function that when applied creates the \verb!SynthGraph!. This makes it possible to ask directly for the value of an attribute and branch based on it:
+%
+\begin{verbatim}
+val amp: GE = ???
+val keyVal: Double = "key".value
+val res: GE = if (keyVal > 0) {
+  WhiteNoise.ar(amp)
+} else if (keyVal > 1) {
+  SinOsc.ar(441) * amp
+} else {
+  DC.ar(0)
+}
+\end{verbatim}
+%
+This looks nice at the first look, but indeed is not that different from the \verb!If ("key".ir > 0) ...! variant that we sketched out before using UGens only. It is also clear that with this imperative example, we do not yet have a solution for real-time control of branches. In Scala, we also cannot enforce the side-effect freedom of the function, while the function might have to be evaluated multiple times, for example if we wish to scan the sources of the synth graph for matrix variables. We introduce two control exceptions now that have to be thrown if the context information is insufficient to build the graph; first within the function that builds the \verb!SynthGraph!, then in the UGen builder when the graph is expanded. In other words, this also introduces additional complexity, even before we evaluate the performance impact by having to go through one extra interpretation step. It would thus appear that the functional style variant is generally preferable, although we do not know yet whether an implementation is feasible.
 
 \todo{}
 
