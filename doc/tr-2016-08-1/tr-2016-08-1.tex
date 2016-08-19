@@ -294,6 +294,39 @@ Going away from a monolithic synth function, branches could also be represented 
 
 I would therefore think that the strategy should be to start with the implementation of the \verb!If! graph element and then evaluate how far this gets us. There are most likely follow-up problem that must be addressed, such as the increased demand of inter-synth bus channels that asks for a smart bus-reuse in the topology, an endeavour currently not yet undertaken.
 
+\section{Conditional Synth Sub-Graphs -- Implementation}
+
+The case where pattern matching leads to early client-side resolution seems easy enough, so the implementation plan needs to focus on the question how to coordinate multiple synth instances on the server.
+
+Let's take the original example again:
+%
+\begin{verbatim}
+val amp: GE = ???
+val keyVal: GE = "key".kr
+val res: GE = If (keyVal > 0) {
+  WhiteNoise.ar(amp)
+} Else If (keyVal > 1) {
+  SinOsc.ar(441) * amp
+} Else {
+  DC.ar(0)
+}
+Out.ar(0, res)
+\end{verbatim}
+%
+There are two possibilities for a branch activation: One is that a paused synth is resumed, the other is that the synth is restarted. This has a huge impact on UGens that change over time. Take for instance a \verb!Line! object. Both scenarios might be useful, thus we either define two different \verb!If! UGens, or we add an auxiliary UGen \verb!Resumed!, or we add a second parameter to \verb!If! that specifies the behaviour, or of of the latter: \verb!If (cond: GE, restart: GE = 0)! and \verb!Resumed()!. Where \verb!Resumed! could be a simple control input for a predefined name such as \verb!$resumed!. This would allow the programmer to decide if and how to reset particular UGens when the branch is activated.
+
+Technically the pausing is probably much simpler than restarting the synth, which would require a client responder and might run into trouble with high frequency triggering? In contrast, we do have a \verb!Pause! UGen that operates at control rate. The restarting might also be implemented using \verb!Action! objects. For paused synths, the question remains whether we get a high CPU peak when initialising the synth.
+
+The most flexible approach now would be to pause---no need to add another argument to \verb!If!---and add the \verb!Resumed! UGen.
+
+\subsection*{\centering *}
+
+The problem in the example with connecting buses for \verb!amp! and \verb!res! is that if we don't want to accept latency, this cannot be a feedback. That is, there is another implicit split in the outer context, with one part containing everything but the sub-trees that use \verb!res!, and one part containing the sub-trees beginning at \verb!res!, so that the topology would be \verb!amp -> branches -> res-usage!. So we need a general mechanism for partitioning the graph into partial graphs, i.e. around boundaries.
+
+An experimental project has been set up to develop syntax and implementation: \url{https://github.com/iem-projects/sysson-experiments}. Syntax is currently developed, along this idea: \url{http://stackoverflow.com/questions/39036332}.
+
+\todo{}
+
 \section{Libraries and Modules}
 
 This section serves as a status-quo document, detailing the current module structure of the software, with possible points of entry for further development and improvement.
