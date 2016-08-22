@@ -294,6 +294,23 @@ Going away from a monolithic synth function, branches could also be represented 
 
 I would therefore think that the strategy should be to start with the implementation of the \verb!If! graph element and then evaluate how far this gets us. There are most likely follow-up problem that must be addressed, such as the increased demand of inter-synth bus channels that asks for a smart bus-reuse in the topology, an endeavour currently not yet undertaken.
 
+\section{Overview of Areas for Improvement}
+
+\figref{fig:status-ui-user} shows the main user interface windows for interaction of the domain scientists, along with a list of possible improvements. In terms of integration, focus should probably lie on seamless connection to the common workflow of these users, as shown in \figref{fig:wegc-workflows}.
+
+\begin{figure}%
+\includegraphics[width=\textwidth]{figures/status_ui_user.pdf}%
+\caption{Current problems and areas for improvement from the perspective of the domain scientist \autocite{rutz2015sysson}.}%
+\label{fig:status-ui-user}%
+\end{figure}
+
+\begin{figure}%
+\includegraphics[width=\textwidth]{figures/egu_poster_workflow4.pdf}%
+\caption{Results from workflow analysis of climatologists % \autocite{rutz2013sysson} 
+\todo{bib: source: opac-irowg poster}.}%
+\label{fig:wegc-workflows}%
+\end{figure}
+
 \section{Conditional Synth Sub-Graphs -- Implementation}
 
 The case where pattern matching leads to early client-side resolution seems easy enough, so the implementation plan needs to focus on the question how to coordinate multiple synth instances on the server.
@@ -325,7 +342,7 @@ The problem in the example with connecting buses for \verb!amp! and \verb!res! i
 
 An experimental project has been set up to develop syntax and implementation: \url{https://github.com/iem-projects/sysson-experiments}. Syntax is currently developed, along this idea: \url{http://stackoverflow.com/questions/39036332}.
 
-\todo{}
+\todo{work continues here}
 
 \section{Libraries and Modules}
 
