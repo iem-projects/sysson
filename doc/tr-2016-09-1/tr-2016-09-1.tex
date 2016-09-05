@@ -1,0 +1,187 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={150mm,237mm},
+ left=30mm,
+ top=30mm,
+ }
+
+% cf. http://tex.stackexchange.com/questions/50182/subtitle-with-the-maketitle-page
+\usepackage{titling}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large\textbf{#1}\end{center}
+    \vskip0.5em}%
+}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\usepackage[utf8]{inputenc}
+\usepackage[lf]{venturis} %% lf option gives lining figures as default; 
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
+\usepackage[UKenglish,german]{babel}
+
+\usepackage{fancyvrb}
+
+\widowpenalty10000  % http://tex.stackexchange.com/questions/4152/how-do-i-prevent-widow-orphan-lines
+\clubpenalty10000
+
+\title{The SysSon Platform}
+\subtitle{Technical Report TR-2016-09-1\\Institute of Electronic Music and Acoustics, Graz\\(Status: in progress)}
+\author{Hanns Holger Rutz}
+% \date{09-Feb-2016}
+\date{September 2016}
+
+% cf. https://tex.stackexchange.com/questions/94126/change-font-to-only-section-and-subsection-of-my-document
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\fontfamily{pag}\selectfont\huge\bfseries}
+%  {\chaptertitlename\ \thechapter}
+%  {20pt}
+%  {\Huge}
+%\titleformat{\section}
+%  {\fontfamily{pag}\selectfont\bfseries\Large}
+%  {\thesection}
+%  {1em}
+%  {}
+%\titleformat{\subsection}
+%  {\fontfamily{pag}\selectfont\bfseries\Large}
+%  {\thesection}
+%  {1em}
+%  {}
+
+\usepackage[backend=biber,authordate]{biblatex-chicago} % citereset=chapter
+%\usepackage[backend=biber,natbib,isbn=false,useprefix=true,sorting=ydnt]{biblatex-chicago} % citereset=chapter
+\addbibresource{all.bib} % add a bib-reference file
+\addbibresource{rutz.bib} % add a bib-reference file
+
+% warning: https://tex.stackexchange.com/questions/313477/
+% \usepackage{csquotes}
+
+\usepackage{tabularx}
+% cf. https://tex.stackexchange.com/questions/84400/table-layout-with-tabularx-column-widths-502525
+\newcolumntype{s}{>{\hsize=1cm}X}
+
+% says you should load after babel and fontspec
+\usepackage[shrink=10, babel=true]{microtype}	% http://tex.stackexchange.com/questions/141852/latex-allows-line-break-between-concluding-em-dash-and-comma-before-a-new-sub-cl/141854#141854
+
+% has to come first for full scale TeX voodoo bullcrap
+\usepackage{hyperref}
+% get rid of the horrible coloured boxes around links
+\hypersetup{
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black
+}
+% has to come after frickin hyperref
+\VerbatimFootnotes
+
+\newcommand{\todo}[1]{\colorbox{yellow}{\textsc{todo}: #1}}
+
+\newcommand{\quot}[1]{\guillemotleft {#1}\guillemotright}
+
+\newcommand{\worktitle}[1]{\textit{#1}}
+
+\newcommand{\workentry}[2]{\vspace{7.5pt}\noindent\textbf{#1} (#2)}
+\newcommand{\workentrySel}[2]{\vspace{7.5pt}\noindent\textbf{#1}$*$ (#2)}
+
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+
+\newcommand{\software}[1]{\textit{#1}}
+
+\newcommand{\sysson}[0]{SysSon}
+\newcommand{\syssonVersion}[0]{1.8.0}
+\newcommand{\syssonVersionS}[0]{1.8.0-SNAPSHOT}
+
+\newcommand{\artefacts}[0]{\textsc{Artefacts:}}
+\newcommand{\assessment}[0]{\textsc{Assessment:}}
+
+\begin{document}
+% \begin{titlepage}
+\maketitle
+\selectlanguage{UKenglish}
+\thispagestyle{empty}
+\newpage
+\section{Implemention of If-Branch}
+
+A small DSL is provided that allows the definition of conditional branches using a syntax relatively close to standard Scala `if/else` blocks. The following shows the example scenario to test the implementation:
+%
+\begin{verbatim}
+SynthGraph {
+  val amp : GE = "amp" .kr(0.2)
+  val freq: GE = "freq".kr
+
+  val res0: GE = 
+    If (freq > 1000) Then {
+      SinOsc.ar(freq)
+    } ElseIf (freq > 100) Then {
+      Dust.ar(freq)
+    } Else {
+      WhiteNoise.ar
+    }
+
+  Out.ar(0, Pan2.ar(res0 * amp))
+}
+\end{verbatim}
+%
+We first have a \textbf{``monolithic''} implementation that rewrites this graph into one single UGen graph where all branches are always computed but the resulting signal \Verb!res0! only contains the signal of the ``active'' branch. The UGen graph is shown in \figref{fig:ugen-mono}. Basically the branch signals are multiplied by the logical branch condition (a graph element that is forced to be zero or one) and then summed up.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{figures/ugen-if-mono.pdf}
+\caption{``Monolithically'' expanded synth graph.}
+\label{fig:ugen-mono}
+\end{figure}
+
+The second implementation then actually performs the \textbf{modular} decomposition into a set of related UGen graphs. Each conditional branch becomes a child UGen graph that will be run in its own \Verb!Synth! instance. Using a \Verb!Group! we can share the same control signals among them. For example, a control is specified for the ``return bus'' to which all branches are adding up their output. The main graph uses \Verb!Pause! UGens to start and stop the branches, receiving additional controls for the node-identifiers of the children. If a branch refers to elements from the outer context, auxiliary buses are established. In the example, the \Verb!freq! control signal is used by the main body (because it forms part of the branch-conditions that are tested here) and inside two of the three branches. Therefore, the main graph routes this signal to an auxiliary bus using an \Verb!Out! UGen, and that signal is then read by the respective child branches using an \Verb!In! UGen.
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{0.6\textwidth}%
+\includegraphics[scale=0.5]{figures/ugen-if-mod-top.pdf}
+\caption{Top level}\label{fig:ugen-mod-top}
+\end{subfigure}
+\begin{subfigure}[b]{0.3\textwidth}%
+\includegraphics[scale=0.5]{figures/ugen-if-mod-child_4.pdf}
+\caption{Child 4 (top-level sink)}\label{fig:ugen-mod-c4}
+\end{subfigure}
+\begin{subfigure}[b]{0.3\textwidth}%
+\includegraphics[scale=0.5]{figures/ugen-if-mod-child_1.pdf}
+\caption{Child 1 (if-branch)}\label{fig:ugen-mod-c1}
+\end{subfigure}
+\begin{subfigure}[b]{0.3\textwidth}%
+\includegraphics[scale=0.5]{figures/ugen-if-mod-child_2.pdf}
+\caption{Child 2 (else-if-branch)}\label{fig:ugen-mod-c2}
+\end{subfigure}
+\begin{subfigure}[b]{0.3\textwidth}%
+\includegraphics[scale=0.5]{figures/ugen-if-mod-child_3.pdf}
+\caption{Child 3 (else-branch)}\label{fig:ugen-mod-c3}
+\end{subfigure}
+\caption{Modular expanded synth graph.}
+\label{fig:ugen-modular}
+\end{figure}
+
+Several possibilities of handling the ``return signal'' have been evaluated, and the implementation settled on a simple and straight forward construction, whereby the property of the acyclicity of the directed graph implies that dependants on the branch signals can only occur after them in the sequence of graph elements registered with the \Verb!SynthGraph!. We thus initiate a new child branch after having visited any if-branch whose return type is \Verb!GE!. In other words, \Verb!Out.ar(0, Pan2.ar(res0 * amp))! will be encapsulated in another (forth) child branch.
+
+\pagebreak
+\subsection*{Remaining Work}
+
+\begin{itemize}
+\item The structure should already allow for the nesting of if-branches within other if-branches. However this has not yet been tested.
+\item We are envisioning a graph element that tells a branch when it is activated, so specific things might be triggered, like the reset of an envelope, a fade-in etc.
+\item Likewise, we want to add the possibility of a branch to be notified that it will be \emph{deactivated}. To do that, the switching of the branches must have a ``lag'' of a definable duration. This could go into a second starter element such as \Verb!IfLag!.
+\item We want to foresee the possibility to match for i-rate conditions that can be resolved at graph expansion time, for example because the condition evaluates to a constant number. In that case, we can avoid creating sub-graphs for each branch but simply synthesise the branch that is always active. This exercise is not just a tweak for performance, but will be useful for evaluating constants coming from an \Verb!Obj!'s attribute map in \software{Sound\,Processes}.
+\item The last step will be the provision of an API that can be extended by the specific needs of \software{Sound\,Processes}.
+\end{itemize}
+
+% \printbibliography
+
+\end{document}
