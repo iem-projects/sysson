@@ -171,16 +171,22 @@ The second implementation then actually performs the \textbf{modular} decomposit
 
 Several possibilities of handling the ``return signal'' have been evaluated, and the implementation settled on a simple and straight forward construction, whereby the property of the acyclicity of the directed graph implies that dependants on the branch signals can only occur after them in the sequence of graph elements registered with the \Verb!SynthGraph!. We thus initiate a new child branch after having visited any if-branch whose return type is \Verb!GE!. In other words, \Verb!Out.ar(0, Pan2.ar(res0 * amp))! will be encapsulated in another (forth) child branch.
 
-\pagebreak
-\subsection*{Remaining Work}
+\subsection{IfLag}
+
+We want to be able to specify a fade-out time in seconds. We distinguish between fade-out phase and normal state. During fade-out phase, changes in conditionals have no effect. Once the fade-out is complete, the conditionals take effect again. This means that if the branch changes fast from one to two back to one, we might not actually pause the first branch and resume the second one, but simply fade out the first and then fade it back in (retrigger \Verb!ThisBranch!).
+
+\todo{continue here}
+
+\subsection{Remaining Work}
 
 \begin{itemize}
 \item The structure should already allow for the nesting of if-branches within other if-branches. However this has not yet been tested.
-\item We are envisioning a graph element that tells a branch when it is activated, so specific things might be triggered, like the reset of an envelope, a fade-in etc.
-\item Likewise, we want to add the possibility of a branch to be notified that it will be \emph{deactivated}. To do that, the switching of the branches must have a ``lag'' of a definable duration. This could go into a second starter element such as \Verb!IfLag!.
+\item We want to add the possibility of a branch to be notified that it will be \emph{deactivated}. To do that, the switching of the branches must have a ``lag'' of a definable duration. This could go into a second starter element such as \Verb!IfLag!.
 \item We want to foresee the possibility to match for i-rate conditions that can be resolved at graph expansion time, for example because the condition evaluates to a constant number. In that case, we can avoid creating sub-graphs for each branch but simply synthesise the branch that is always active. This exercise is not just a tweak for performance, but will be useful for evaluating constants coming from an \Verb!Obj!'s attribute map in \software{Sound\,Processes}.
 \item The last step will be the provision of an API that can be extended by the specific needs of \software{Sound\,Processes}.
 \end{itemize}
+
+\todo{continue here}
 
 % \printbibliography
 
