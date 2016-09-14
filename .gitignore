@@ -8,3 +8,4 @@ project/boot/
 *.app
 *.jar
 dependency-graph.sbt
+_creation/
