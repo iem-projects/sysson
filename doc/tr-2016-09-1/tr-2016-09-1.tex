@@ -215,6 +215,23 @@ SynthGraph {
 }
 \end{verbatim}
 
+\section{Integration of If-elements with Sound\,Processes}
+
+The UGen graph builder in \software{Sound\,Processes} was based on the basic building block in \software{ScalaCollider}, and operated in an ``incremental'' fashion: For each graph element expanded, it made a copy of the current state of the builder (controls, UGens expanded so far, etc.), then tried to expand the element. If in the course of this expansion a missing context property is detected, such as a missing attribute map entry, an exception is thrown, and the state is reset to the previous stable state.
+
+Incorporating the \Verb!NestedUGenGraphBuilder! from the \software{ScalaCollider-If} library makes this even more complicated, because now state goes as deep as updating the child branches of an if-block. While it is not impossible to preserve this state, the bookkeeping will become very large, and therefore we must assess the value of the incremental build.
+
+The original concept of the incremental build was that two graphs could co-dependent on each other, i.e. there might be a situation where two graphs could only be completely expanded, if each had partial knowledge about the other, usually in terms of the number of channels used for some particular output or input. So the vision was that for example the first graph could be half built, producing some knowledge that would then be needed by the other graph, and the second half of the first graph could only be completed once the other graph successfully provided some information.
+
+But is this really a common scenario? From observing debugging sessions, it can be said that:
+%
+\begin{itemize}
+\item incremental build is prone to bugs, because updating correctly as new information enters the system is difficult, and rolling back is also difficult.
+\item often the element that requires the missing information is deep in the graph, which means that building the graph does not advance very far, so the advantage of having keeping already expanded elements becomes moot. It might be just as fast building the graph completely from scratch in the second and third attempt.
+\end{itemize}
+%
+Therefore, if the incremental is dropped, we may get rid of a lot of complexity, and probably performance is not affected at all. The disadvantage is that large parts of the \Verb!AuralProcImpl! will have to be rewritten. On the other hand, we know that this class has bugs for many corner cases, and cleaning it up may benefit \software{SysSon} in the longer term.
+
 \subsection{Remaining Work}
 
 \begin{itemize}
