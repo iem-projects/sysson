@@ -177,11 +177,47 @@ We want to be able to specify a fade-out time in seconds. We distinguish between
 
 \todo{continue here}
 
+\begin{figure}
+\centering
+\begin{subfigure}[b]{1.0\textwidth}%
+\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-cond-1.pdf}
+\caption{The flip-flop signal used as condition for the first branch \\\phantom{(a) }(the linear slopes are an artifact resulting from converting a k-rate to an a-rate signal)}\label{fig:iflag-cond-1}
+\end{subfigure}
+\begin{subfigure}[b]{1.0\textwidth}%
+\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-gate-1.pdf}
+\caption{Gate signal of the If-Then branch}\label{fig:iflag-gate-1}
+\end{subfigure}
+\begin{subfigure}[b]{1.0\textwidth}%
+\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-gate-2.pdf}
+\caption{Gate signal of the Else branch}\label{fig:iflag-gate-1}
+\end{subfigure}
+\caption{\todo{}}
+\label{fig:iflag-gate}
+\end{figure}
+
+\begin{verbatim}
+SynthGraph {
+  val tr    = Impulse.kr(ControlRate.ir / 15)
+  val ff    = ToggleFF.kr(tr)
+  val dur   = ControlDur.ir * 5
+  val res   = IfLag (ff, dur) Then {
+    val gate  = ThisBranch()
+    val env   = Env.asr(attack = dur, release = dur, curve = Curve.lin)
+    val eg    = EnvGen.ar(env, gate)
+    Seq(eg, DC.ar(0)): GE
+  } Else {
+    val gate  = ThisBranch()
+    val env   = Env.asr(attack = dur, release = dur, curve = Curve.lin)
+    val eg    = EnvGen.ar(env, gate)
+    Seq(DC.ar(0), eg): GE
+  }
+  Out.ar(0, res)
+}
+\end{verbatim}
+
 \subsection{Remaining Work}
 
 \begin{itemize}
-\item The structure should already allow for the nesting of if-branches within other if-branches. However this has not yet been tested.
-\item We want to add the possibility of a branch to be notified that it will be \emph{deactivated}. To do that, the switching of the branches must have a ``lag'' of a definable duration. This could go into a second starter element such as \Verb!IfLag!.
 \item We want to foresee the possibility to match for i-rate conditions that can be resolved at graph expansion time, for example because the condition evaluates to a constant number. In that case, we can avoid creating sub-graphs for each branch but simply synthesise the branch that is always active. This exercise is not just a tweak for performance, but will be useful for evaluating constants coming from an \Verb!Obj!'s attribute map in \software{Sound\,Processes}.
 \item The last step will be the provision of an API that can be extended by the specific needs of \software{Sound\,Processes}.
 \end{itemize}
