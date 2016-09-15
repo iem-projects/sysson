@@ -44,6 +44,7 @@ object MenuFactory {
     def funAbout(): Unit = {
       val addr    = "sysson.kug.ac.at"
       val url     = s"http://$addr/"
+      val name    = Main.name
       val version = Main.version
       val jreInfo: String = {
         val name    = sys.props.getOrElse("java.runtime.name"   , "?")
@@ -60,7 +61,7 @@ object MenuFactory {
 
       val html =
         s"""<html><center>
-           |<font size=+1><b>About ${App.name}</b></font><p>
+           |<font size=+1><b>About $name</b></font><p>
            |Version $version<p>
            |<p>
            |Copyright (c) 2013&ndash;2016 Institute of Electronic Music and Acoustics, Graz.<p>

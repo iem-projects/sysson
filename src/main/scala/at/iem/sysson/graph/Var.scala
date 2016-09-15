@@ -30,7 +30,7 @@ object Var {
   final case class Play(variable: Var, time: Dim.Play, interp: Int, maxNumChannels: Int)
     extends MatrixPrepare.VarGE with MatrixPrepare.PlayGE with UGB.Input {
 
-    override def productPrefix  = classOf[Play].getName // "Var$Play"
+    override def productPrefix  = s"Var$$Play"
     override def toString       = s"$variable.play($time)"
 
     type Key    = Dim
@@ -60,7 +60,7 @@ object Var {
 
     private[sysson] def maxNumChannels = maxSize
 
-    override def productPrefix  = classOf[Values].getName // "Var$Values"
+    override def productPrefix  = s"Var$$Values"
     override def toString       = s"$variable.values"
 
     type Key    = Var
@@ -72,7 +72,7 @@ object Var {
   final case class Size(variable: Var)
     extends synth.GE.Lazy with UGB.Input with ScalarRated with UGB.Key {
 
-    override def productPrefix  = classOf[Size].getName // "Var$Size"
+    override def productPrefix  = s"Var$$Size"
     override def toString       = s"Var.Size($variable)"
 
     type Key      = Size
@@ -105,7 +105,7 @@ object Var {
     final case class Values(axis: Var.Axis, maxSize: Int)
       extends MatrixPrepare.GE with ScalarRated {
 
-      override def productPrefix = "Var$Axis$Values"
+      override def productPrefix = s"Var$$Axis$$Values"
 
       override def toString = s"$axis.values"
 
@@ -150,7 +150,7 @@ object Var {
     * variable with the corresponding axes elements.
     */
   final case class Axis(variable: Var.Play, dim: String) {
-    override def productPrefix = classOf[Axis].getName // "Var$Axis"
+    override def productPrefix = s"Var$$Axis"
 
     override def toString = s"""$variable.axis($dim)"""
 

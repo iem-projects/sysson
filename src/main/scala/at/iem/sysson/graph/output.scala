@@ -24,7 +24,7 @@ object output {
   def :=(in: GE): Lazy = Signal(in)
 
   final case class Signal(in: GE) extends Lazy.Expander[Unit] with HasSideEffect with IsIndividual {
-    override def productPrefix  = classOf[Signal].getName // "output$Signal"
+    override def productPrefix  = s"output$$Signal"
     override def toString       = s"output := $in"
 
     // XXX TODO - this refers to the Proc but not Sonification attrMap.

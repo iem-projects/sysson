@@ -21,7 +21,7 @@ lazy val commonSettings = Seq(
   // typesafe put play into some non-standard repo, "thanks!"
   resolvers += "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/", // https://stackoverflow.com/questions/23979577
   fork in run := true,
-  scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture", "-Xlint")
+  scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture", "-Xlint:-stars-align,_")
 )
 
 lazy val scalaMainVersion           = "2.11.8"

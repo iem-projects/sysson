@@ -21,7 +21,7 @@ import de.sciss.synth
 
 object UserValue {
   case class GE(rate: Rate, peer: UserValue) extends synth.GE.Lazy /* with SonificationElement */ {
-    override def productPrefix = classOf[GE].getName // "UserValue$GE"
+    override def productPrefix = s"UserValue$$GE"
 
     protected def makeUGens: UGenInLike = {
       val b       = UGenGraphBuilder.get
