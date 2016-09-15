@@ -21,21 +21,21 @@ lazy val commonSettings = Seq(
   // typesafe put play into some non-standard repo, "thanks!"
   resolvers += "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/", // https://stackoverflow.com/questions/23979577
   fork in run := true,
-  scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
+  scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture", "-Xlint")
 )
 
 lazy val scalaMainVersion           = "2.11.8"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.2.0"
-lazy val soundProcessesVersion      = "3.5.2"
+lazy val melliteVersion             = "2.3.0-SNAPSHOT"
+lazy val soundProcessesVersion      = "3.6.0-SNAPSHOT"
 lazy val lucreMatrixVersion         = "0.12.0"
 lazy val lucreSwingVersion          = "1.4.0"
 lazy val lucreVersion               = "3.3.1"
-lazy val scalaColliderVersion       = "1.18.1"
-lazy val scalaColliderSwingVersion  = "1.29.0"
-lazy val ugensVersion               = "1.14.1"
+lazy val scalaColliderVersion       = "1.20.1"
+lazy val scalaColliderSwingVersion  = "1.30.0"
+lazy val ugensVersion               = "1.15.3"
 lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"

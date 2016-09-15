@@ -27,11 +27,11 @@ import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.edit.EditExprMap
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
-import de.sciss.lucre.{event => evt, stm}
-import de.sciss.mellite.Workspace
+import de.sciss.lucre.{stm, event => evt}
 import de.sciss.model.Change
+import de.sciss.synth.proc.Workspace
 
-import scala.concurrent.stm.{TMap, Ref}
+import scala.concurrent.stm.{Ref, TMap}
 import scala.language.higherKinds
 import scala.swing.{Alignment, Component, Label}
 
@@ -50,7 +50,7 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
 
   // ---- impl ----
 
-  protected type MappingDrag  = DragAndDrop.MappingDrag { type Source[S1 <: Sys[S1]] = me.Source[S1] }
+  protected type MappingDrag  = DragAndDrop.MappingDrag { type Source[S2 <: Sys[S2]] = me.Source[S2] }
   protected type MappingDragS = MappingDrag { type S1 = S }
 
   private val bindings    = Ref(Vector.empty[String])

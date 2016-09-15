@@ -27,7 +27,7 @@ object Dim {
 
     private[sysson] def maxNumChannels = 1
 
-    override def productPrefix  = "Dim$Play"
+    override def productPrefix  = classOf[Play].getName
     override def toString       = s"$dim.play($freq)"
   }
 
@@ -39,14 +39,14 @@ object Dim {
 
     private[sysson] def maxNumChannels = maxSize
 
-    override def productPrefix  = "Dim$Values"
+    override def productPrefix  = classOf[Dim].getName
     override def toString       = s"$dim.values"
   }
 
   final case class Size(dim: Dim)
     extends synth.GE.Lazy with UGB.Input with ScalarRated with UGB.Key {
 
-    override def productPrefix  = "Dim$Size"
+    override def productPrefix  = classOf[Size].getName
     override def toString       = s"Dim.Size($dim)"
 
     type Key      = Size
@@ -57,6 +57,7 @@ object Dim {
 
     protected def makeUGens: UGenInLike = {
       import synth._
+      import Ops.stringToControl
       val b = UGB.get
       b.requestInput(this)
       ctlName.ir(0f)

@@ -26,10 +26,10 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Cursor, Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.mellite.gui.{ActionArtifactLocation, ListObjView}
 import de.sciss.synth.proc.Implicits._
+import de.sciss.synth.proc.Workspace
 
 import scala.swing.{Component, Label}
 
@@ -63,16 +63,17 @@ object DataSourceObjView extends ListObjView.Factory {
                                        workspace: Workspace[S])
 
   def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
-                             (implicit cursor: Cursor[S]): Option[Config[S]] = {
+                                  (ok: Config[S] => Unit)(implicit cursor: Cursor[S]): Unit = {
     val dlg = FileDialog.open(title = "Add Data Source")
     dlg.setFilter(util.NetCdfFileFilter)
     dlg.multiple  = true
     val fOpt      = dlg.show(window)
-    fOpt.flatMap { f0 =>
+    val res = fOpt.flatMap { f0 =>
       ActionArtifactLocation.query[S](workspace.rootH, file = f0, window = window).map { location =>
         Config(files = dlg.files, location = location, workspace = workspace)
       }
     }
+    res.foreach(ok(_))
   }
 
   def makeObj[S <: Sys[S]](config: Config[S])(implicit tx: S#Tx): List[Obj[S]] = {

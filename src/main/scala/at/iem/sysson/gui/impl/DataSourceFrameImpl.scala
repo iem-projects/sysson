@@ -30,9 +30,10 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.{CellView, View, defer, deferTx, requireEDT}
 import de.sciss.mellite.gui.impl.WindowImpl
-import de.sciss.mellite.{Application, Workspace}
+import de.sciss.mellite.Application
 import de.sciss.serial.Serializer
 import de.sciss.swingplus.Spinner
+import de.sciss.synth.proc.Workspace
 import de.sciss.{desktop, kollflitz, numbers}
 import org.jfree.chart.ChartPanel
 import org.jfree.chart.renderer.xy.XYStepAreaRenderer

@@ -25,11 +25,10 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.impl.timeline.TimelineObjViewBasicImpl
 import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.mellite.gui.{ListObjView, TimelineObjView}
-import de.sciss.synth.proc.{FadeSpec, ObjKeys}
+import de.sciss.synth.proc.{FadeSpec, ObjKeys, Workspace}
 
 object SonificationObjView extends ListObjView.Factory with TimelineObjView.Factory {
   type E[S <: Sys[S]] = Sonification[S]
@@ -73,13 +72,13 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
 
   type Config[S <: Sys[S]] = String
 
-  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
-                              (implicit cursor: stm.Cursor[S]): Option[Config[S]] = {
+  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])(ok: Config[S] => Unit)
+                              (implicit cursor: stm.Cursor[S]): Unit = {
     val opt = OptionPane.textInput(message = "Enter Sonification Name:",
       messageType = OptionPane.Message.Question, initial = "Sonification")
     opt.title = "Add Sonification"
     val res = opt.show(window)
-    res
+    res.foreach(ok(_))
   }
 
   def makeObj[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {

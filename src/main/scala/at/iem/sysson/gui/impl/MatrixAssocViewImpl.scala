@@ -31,8 +31,8 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Sys, TxnLike}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
-import de.sciss.mellite.Workspace
 import de.sciss.serial.Serializer
+import de.sciss.synth.proc.Workspace
 
 import scala.concurrent.stm.{Ref, TxnExecutor}
 import scala.language.higherKinds

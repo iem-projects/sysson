@@ -31,10 +31,10 @@ import de.sciss.lucre.stm.{Obj, TxnLike}
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.serial.Serializer
 import de.sciss.swingplus.PopupMenu
+import de.sciss.synth.proc.Workspace
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds

@@ -32,13 +32,13 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{BooleanCheckBoxView, CellView, DoubleSpinnerView, View, defer, deferTx}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.model.Model
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 import de.sciss.swingplus.{ComboBox, ListView, OverlayPanel}
+import de.sciss.synth.proc.Workspace
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot

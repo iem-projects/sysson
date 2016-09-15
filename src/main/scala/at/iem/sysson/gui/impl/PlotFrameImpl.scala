@@ -19,9 +19,9 @@ package impl
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.CellView
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.impl.WindowImpl
+import de.sciss.synth.proc.Workspace
 
 object PlotFrameImpl {
   def apply[S <: Sys[S]](obj: Plot[S], parent: SonificationView[S])

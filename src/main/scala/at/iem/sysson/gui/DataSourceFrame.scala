@@ -20,7 +20,7 @@ import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.Window
-import de.sciss.mellite.Workspace
+import de.sciss.synth.proc.Workspace
 
 object DataSourceFrame {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],

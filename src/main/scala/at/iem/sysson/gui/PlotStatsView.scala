@@ -18,8 +18,8 @@ import at.iem.sysson.gui.impl.{PlotStatsViewImpl => Impl}
 import at.iem.sysson.{Plot, Stats}
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
-import de.sciss.mellite.Workspace
 import de.sciss.model.Model
+import de.sciss.synth.proc.Workspace
 
 object PlotStatsView {
   def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, workspace: Workspace[S]): PlotStatsView[S] = Impl(plot)

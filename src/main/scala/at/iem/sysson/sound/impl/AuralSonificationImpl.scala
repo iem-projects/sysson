@@ -139,7 +139,7 @@ object AuralSonificationImpl {
       // b.finish()
     }
 
-    private def oldMatrixSpecs(req: UGB.Input, st: UGB.Incomplete[S]): Vec[MatrixPrepare.Spec] =
+    private def oldMatrixSpecs(req: UGB.Input, st: UGB.IO[S]): Vec[MatrixPrepare.Spec] =
       st.acceptedInputs.get(req.key) match {
         case Some((_, mv: MatrixPrepare.Value)) => mv.specs
         case Some((_, other)) =>
@@ -148,10 +148,10 @@ object AuralSonificationImpl {
         case _ => Vector.empty
       }
 
-    private def addSpec(req: UGB.Input, st: UGB.Incomplete[S], spec: MatrixPrepare.Spec): MatrixPrepare.Value =
+    private def addSpec(req: UGB.Input, st: UGB.IO[S], spec: MatrixPrepare.Spec): MatrixPrepare.Value =
       MatrixPrepare.Value(oldMatrixSpecs(req, st) :+ spec)
 
-    override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.Incomplete[S])
+    override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.IO[S])
                                   (implicit tx: S#Tx): Res = req match {
       case _: graph.UserValue | _: graph.Dim.Size | _: graph.Var.Size | _: graph.Elapsed => UGB.Unit
 

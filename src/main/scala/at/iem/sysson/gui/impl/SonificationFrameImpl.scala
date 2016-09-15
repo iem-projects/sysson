@@ -21,9 +21,9 @@ import de.sciss.desktop.Menu
 import de.sciss.lucre.stm
 import de.sciss.lucre.swing.{CellView, deferTx}
 import de.sciss.lucre.synth.Sys
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.impl.WindowImpl
+import de.sciss.synth.proc.Workspace
 
 object SonificationFrameImpl {
   def apply[S <: Sys[S]](obj: Sonification[S])

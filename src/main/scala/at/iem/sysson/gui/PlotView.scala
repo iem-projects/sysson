@@ -19,8 +19,8 @@ import at.iem.sysson.gui.impl.{PlotViewImpl => Impl}
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
 import de.sciss.lucre.stm
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
+import de.sciss.synth.proc.Workspace
 
 object PlotView {
   def apply[S <: Sys[S]](plot: Plot[S], parent: SonificationView[S])

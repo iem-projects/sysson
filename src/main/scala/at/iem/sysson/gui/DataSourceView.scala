@@ -20,8 +20,8 @@ import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
+import de.sciss.synth.proc.Workspace
 import ucar.nc2
 
 object DataSourceView {

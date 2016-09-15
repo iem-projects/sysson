@@ -24,7 +24,7 @@ import de.sciss.equal
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
-import de.sciss.mellite.Workspace
+import de.sciss.synth.proc.Workspace
 
 import scala.collection.breakOut
 import scala.language.higherKinds

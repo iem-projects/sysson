@@ -19,7 +19,7 @@ import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
-import de.sciss.mellite.Workspace
+import de.sciss.synth.proc.Workspace
 
 object SonificationAssocViewImpl {
   def apply[S <: Sys[S]](source: Sonification.Source[S], keyName: String)

@@ -18,12 +18,12 @@ package gui
 import at.iem.sysson.gui.impl.{SonificationViewImpl => Impl}
 import at.iem.sysson.sound.{AuralSonification, Sonification}
 import de.sciss.lucre.stm.Sys
-import de.sciss.lucre.{event => evt, stm}
+import de.sciss.lucre.{stm, event => evt}
 import de.sciss.lucre.swing.View
 import de.sciss.lucre.synth.{Sys => SSys}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.model.Model
+import de.sciss.synth.proc.Workspace
 
 import scala.swing.Action
 

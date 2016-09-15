@@ -32,9 +32,9 @@ import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
+import de.sciss.synth.proc.Workspace
 
 import scala.annotation.tailrec
 import scala.concurrent.stm.Ref

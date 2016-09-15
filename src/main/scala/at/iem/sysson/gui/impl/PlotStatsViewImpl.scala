@@ -24,11 +24,11 @@ import at.iem.sysson.Implicits._
 import de.sciss.equal
 import de.sciss.file.File
 import de.sciss.lucre.matrix.{DataSource, Matrix, Reduce}
-import de.sciss.lucre.stm.{Sys, Disposable}
+import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx}
-import de.sciss.mellite.Workspace
 import de.sciss.model.impl.ModelImpl
+import de.sciss.synth.proc.Workspace
 import ucar.nc2
 
 import scala.annotation.tailrec

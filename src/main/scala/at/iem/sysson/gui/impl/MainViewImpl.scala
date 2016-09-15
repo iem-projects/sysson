@@ -104,6 +104,7 @@ private[gui] object MainViewImpl {
     private def startMeters(server: Server): Unit = {
       import de.sciss.synth._
       import ugen._
+      import Ops.stringToControl
 
       val numChannels = 2 // fixed for now...
       val offset      = 0

@@ -19,7 +19,7 @@ import at.iem.sysson.gui.impl.{PlotFrameImpl => Impl}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.Window
-import de.sciss.mellite.Workspace
+import de.sciss.synth.proc.Workspace
 
 object PlotFrame {
   def apply[S <: Sys[S]](plot: Plot[S])

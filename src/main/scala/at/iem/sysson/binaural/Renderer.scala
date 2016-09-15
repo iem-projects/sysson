@@ -167,6 +167,7 @@ object Renderer {
     val tailGraph = SynthGraph {
       import synth._
       import ugen._
+      import Ops.stringToControl
       // val in    = In.ar(ChannelIndices)
       val in    = In.ar("in".kr, N)
       val inF   = Flatten(in)
@@ -219,7 +220,7 @@ object Renderer {
     // import Turbulence.{NumChannels => N}
     val N         = inBus.numChannels
     val s         = target.server
-    val g         = Group(target, addAction)
+    val g         = Group.play(target, addAction)
     val stereoBus = Bus.audio(s, 2)
     val delayBus  = Bus.audio(s, N)
     mkTail(listener, g, addToHead, delayBus = delayBus, stereoBus = stereoBus, inBus = inBus, speakers = speakers,
@@ -228,6 +229,7 @@ object Renderer {
     val rplcGraph = SynthGraph {
       import synth._
       import ugen._
+      import Ops.stringToControl
       val in  = "in".kr
       val sig = In.ar(in, 2)
       // Mix(sig).poll(1, "route")
@@ -252,6 +254,7 @@ object Renderer {
     lazy val chanGraph = SynthGraph {
       import synth._
       import ugen._
+      import Ops.stringToControl
       val in      = "in".kr
       val ch      = "chan".kr
       val inSig   = Select.ar(ch, In.ar(in, N)) // todo - not nice. this is simply because delayBus is multi-chan

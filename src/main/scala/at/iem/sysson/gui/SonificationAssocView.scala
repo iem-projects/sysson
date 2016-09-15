@@ -20,7 +20,7 @@ import de.sciss.desktop.UndoManager
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
-import de.sciss.mellite.Workspace
+import de.sciss.synth.proc.Workspace
 
 object SonificationAssocView {
   def apply[S <: Sys[S]](source: Sonification.Source[S], dimName: String)

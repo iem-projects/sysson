@@ -34,12 +34,12 @@ import de.sciss.lucre.swing.{CellView, DoubleSpinnerView, StringFieldView, defer
 import de.sciss.lucre.synth.Sys
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.mellite.gui.{ActionBounceTimeline, AttrMapFrame, CodeFrame, GUI}
-import de.sciss.mellite.{Mellite, Workspace}
+import de.sciss.mellite.Mellite
 import de.sciss.model.impl.ModelImpl
 import de.sciss.span.Span
 import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{ObjKeys, TimeRef, Timeline, Transport}
+import de.sciss.synth.proc.{ObjKeys, TimeRef, Timeline, Transport, Workspace}
 
 import scala.concurrent.stm.Ref
 import scala.swing.event.{ButtonClicked, Key}

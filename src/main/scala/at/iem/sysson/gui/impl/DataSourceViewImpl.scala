@@ -31,11 +31,10 @@ import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing._
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.{expr, stm}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.swingtree.{ExternalTreeModel, Tree}
-import de.sciss.synth.proc.ObjKeys
+import de.sciss.synth.proc.{ObjKeys, Workspace}
 import ucar.nc2
 
 import scala.annotation.switch

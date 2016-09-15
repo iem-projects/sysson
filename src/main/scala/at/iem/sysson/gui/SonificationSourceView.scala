@@ -21,7 +21,7 @@ import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
-import de.sciss.mellite.Workspace
+import de.sciss.synth.proc.Workspace
 
 object SonificationSourceView {
   /** Creates a new view for editing the mapping between a sonification data source matrix and model dimensions.

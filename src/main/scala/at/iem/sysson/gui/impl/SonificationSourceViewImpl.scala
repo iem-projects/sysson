@@ -26,14 +26,13 @@ import de.sciss.icons.raphael
 import de.sciss.lucre.expr.StringObj
 import de.sciss.lucre.matrix.{Matrix, Reduce}
 import de.sciss.lucre.{event => evt}
-import de.sciss.lucre.stm.{Sys, Disposable}
+import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.View
 import de.sciss.lucre.swing.edit.EditMutableMap
 import de.sciss.lucre.{expr, stm}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
-import de.sciss.synth.proc.ObjKeys
+import de.sciss.synth.proc.{ObjKeys, Workspace}
 
 import scala.annotation.tailrec
 import scala.swing.{Action, Component, FlowPanel}

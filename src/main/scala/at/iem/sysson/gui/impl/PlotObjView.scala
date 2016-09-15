@@ -25,10 +25,10 @@ import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.lucre.{matrix, stm}
-import de.sciss.mellite.Workspace
 import de.sciss.mellite.gui.ListObjView
 import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.synth.proc.Implicits._
+import de.sciss.synth.proc.Workspace
 
 import scala.swing.{Component, Label}
 
@@ -56,13 +56,13 @@ object PlotObjView extends ListObjView.Factory {
 
   type Config[S <: Sys[S]] = String
 
-  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
-                              (implicit cursor: stm.Cursor[S]): Option[Config[S]] = {
+  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])(ok: Config[S] => Unit)
+                              (implicit cursor: stm.Cursor[S]): Unit = {
     val opt = OptionPane.textInput(message = "Enter Plot Name:",
       messageType = OptionPane.Message.Question, initial = "Plot")
     opt.title = "Add Plot"
     val res = opt.show(window)
-    res
+    res.foreach(ok(_))
   }
 
   def makeObj[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {

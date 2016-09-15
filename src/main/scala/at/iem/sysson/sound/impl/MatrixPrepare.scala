@@ -152,6 +152,7 @@ object MatrixPrepare {
 
     import synth._
     import ugen._
+    import Ops.stringToControl
 
     val idx     = /* if (spec.isEmpty) 0 else */ info.specs.size - 1
     val key     = mkKey(in)

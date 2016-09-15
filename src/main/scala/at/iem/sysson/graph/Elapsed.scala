@@ -53,7 +53,7 @@ object Elapsed {
   case class GE(rate: Rate, peer: Elapsed, terminate: Boolean) extends synth.GE.Lazy with HasSideEffect {
     import peer.in
 
-    override def productPrefix  = "Elapsed$GE"
+    override def productPrefix  = classOf[GE].getName // "Elapsed$GE"
     override def toString       = {
       val suffix = if (terminate) "(terminate = true)" else ""
       s"Elapsed($in).${rate.methodName}$suffix"
