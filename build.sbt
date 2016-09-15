@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.8.0-SNAPSHOT"
+lazy val projectVersion = "1.8.0"
 
 lazy val commonSettings = Seq(
   name          := baseName,
@@ -21,15 +21,18 @@ lazy val commonSettings = Seq(
   // typesafe put play into some non-standard repo, "thanks!"
   resolvers += "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/", // https://stackoverflow.com/questions/23979577
   fork in run := true,
-  scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture", "-Xlint:-stars-align,_")
+  scalacOptions ++= {
+    val xs = Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
+    if (scalaVersion.value.startsWith("2.10")) xs else xs :+ "-Xlint:-stars-align,_"
+  }
 )
 
 lazy val scalaMainVersion           = "2.11.8"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.3.0-SNAPSHOT"
-lazy val soundProcessesVersion      = "3.6.0-SNAPSHOT"
+lazy val melliteVersion             = "2.3.0"
+lazy val soundProcessesVersion      = "3.6.0"
 lazy val lucreMatrixVersion         = "0.12.0"
 lazy val lucreSwingVersion          = "1.4.0"
 lazy val lucreVersion               = "3.3.1"

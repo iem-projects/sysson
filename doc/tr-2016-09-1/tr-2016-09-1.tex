@@ -175,26 +175,10 @@ Several possibilities of handling the ``return signal'' have been evaluated, and
 
 We want to be able to specify a fade-out time in seconds. We distinguish between fade-out phase and normal state. During fade-out phase, changes in conditionals have no effect. Once the fade-out is complete, the conditionals take effect again. This means that if the branch changes fast from one to two back to one, we might not actually pause the first branch and resume the second one, but simply fade out the first and then fade it back in (retrigger \Verb!ThisBranch!).
 
-\todo{continue here}
+The implementation changes from trigger to gate signal for \Verb!ThisBranch!. This is achieved by adding a release period of the given duration when the branch index changes. In this period, the old index is still held, but the gate signal goes low. Any changes in the index during the release are blocked out. Once the release has completed, the current index is let throw and causes a new branch to be resumed with a high gate signal.
 
-\begin{figure}
-\centering
-\begin{subfigure}[b]{1.0\textwidth}%
-\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-cond-1.pdf}
-\caption{The flip-flop signal used as condition for the first branch \\\phantom{(a) }(the linear slopes are an artifact resulting from converting a k-rate to an a-rate signal)}\label{fig:iflag-cond-1}
-\end{subfigure}
-\begin{subfigure}[b]{1.0\textwidth}%
-\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-gate-1.pdf}
-\caption{Gate signal of the If-Then branch}\label{fig:iflag-gate-1}
-\end{subfigure}
-\begin{subfigure}[b]{1.0\textwidth}%
-\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-gate-2.pdf}
-\caption{Gate signal of the Else branch}\label{fig:iflag-gate-1}
-\end{subfigure}
-\caption{\todo{}}
-\label{fig:iflag-gate}
-\end{figure}
-
+Here is an example:
+%
 \begin{verbatim}
 SynthGraph {
   val tr    = Impulse.kr(ControlRate.ir / 15)
@@ -214,6 +198,26 @@ SynthGraph {
   Out.ar(0, res)
 }
 \end{verbatim}
+%
+The corresponding phase diagram is shown in \figref{fig:iflag-gate}. Because there is no release phase in the very beginning, the period where the first signal has a high gate is longer. Then one can see that the release of the previous branch does not overlap with the attach of the next branch. No two nodes are computed at the same time.
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{1.0\textwidth}%
+\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-cond-1.pdf}
+\caption{The flip-flop signal used as condition for the first branch \\\phantom{(a) }(the linear slopes are an artifact resulting from converting a k-rate to an a-rate signal)}\label{fig:iflag-cond-1}
+\end{subfigure}
+\begin{subfigure}[b]{1.0\textwidth}%
+\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-gate-1.pdf}
+\caption{Gate signal of the If-Then branch}\label{fig:iflag-gate-1}
+\end{subfigure}
+\begin{subfigure}[b]{1.0\textwidth}%
+\includegraphics[width=\textwidth,trim=0 0 25mm 8mm,clip]{figures/iflag-gate-2.pdf}
+\caption{Gate signal of the Else branch}\label{fig:iflag-gate-1}
+\end{subfigure}
+\caption{Phase diagram for an IfLag block with two branches}
+\label{fig:iflag-gate}
+\end{figure}
 
 \section{Integration of If-elements with Sound\,Processes}
 
@@ -232,14 +236,15 @@ But is this really a common scenario? From observing debugging sessions, it can 
 %
 Therefore, if the incremental is dropped, we may get rid of a lot of complexity, and probably performance is not affected at all. The disadvantage is that large parts of the \Verb!AuralProcImpl! will have to be rewritten. On the other hand, we know that this class has bugs for many corner cases, and cleaning it up may benefit \software{SysSon} in the longer term.
 
+\paragraph{Solution:} We dropped indeed the incremental graph build in favour of a more simple approach where the arrival of missing attribute entries leads to an entire rebuild of the graph.
+
+Artefacts have been published for the If-Then extension: \url{https://github.com/iem-projects/ScalaCollider-If}, and \software{Sound\,Processes} version 3.6.0 incorporates this into its own graph building.
+
 \subsection{Remaining Work}
 
 \begin{itemize}
 \item We want to foresee the possibility to match for i-rate conditions that can be resolved at graph expansion time, for example because the condition evaluates to a constant number. In that case, we can avoid creating sub-graphs for each branch but simply synthesise the branch that is always active. This exercise is not just a tweak for performance, but will be useful for evaluating constants coming from an \Verb!Obj!'s attribute map in \software{Sound\,Processes}.
-\item The last step will be the provision of an API that can be extended by the specific needs of \software{Sound\,Processes}.
 \end{itemize}
-
-\todo{continue here}
 
 % \printbibliography
 
