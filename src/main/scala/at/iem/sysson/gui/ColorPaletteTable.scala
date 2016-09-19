@@ -34,7 +34,15 @@ object ColorPaletteTable {
     }
   }
 
-  /** Reads a color table from the source, assuming `.cpt` format. Closes the source before returning. */
+  def seq(name: String, values: Array[Int], background: Int, foreground: Int, fill: Int): ColorPaletteTable =
+    Impl.seq(name, values, background = background, foreground = foreground, fill = fill)
+
+  def segments(name: String, values: Array[Segment], background: Int, foreground: Int, fill: Int): ColorPaletteTable =
+    Impl.segments(name, values, background = background, foreground = foreground, fill = fill)
+
+  def fallBack: ColorPaletteTable = seq("fallback", Array[Int](0x000000, 0xFFFFFF), 0x000000, 0xFFFFFF, 0xFF0000)
+
+    /** Reads a color table from the source, assuming `.cpt` format. Closes the source before returning. */
   def readCPT(name: String, source: InputStream): ColorPaletteTable = try {
     val lines   = activeLines(source)
     // start-value r256 g256 b256 end-value r256 g256 b256

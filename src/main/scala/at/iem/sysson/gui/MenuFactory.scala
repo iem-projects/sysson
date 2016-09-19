@@ -69,8 +69,10 @@ object MenuFactory {
            |This software is published under the GNU General Public License v3+<p>
            |<p>
            |SysSon is a research project of IEM / Kunst Uni Graz<p>
-           |in collaboration with Wegener Center for Climate and Global Change<p>
-           |and funded by the Austrian Science Fund (FWF).<p>
+           |in collaboration with Wegener Center for Climate and Global Change.<p>
+           |<p>
+           |SySon was created with funding by the Austrian Science Fund FWF (P 24159).<br>
+           |Further development funded by the Austrian Knowledge Transfer Centre (WTZ S&uuml;d).
            |<p>
            |<a href="$url">$addr</a>
            |<p><br><hr>

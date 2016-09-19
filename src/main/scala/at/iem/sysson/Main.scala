@@ -20,8 +20,6 @@ import at.iem.sysson.gui.SwingApplication
 import scala.util.control.NonFatal
 
 object Main {
-  final val useGUI = true
-
   lazy val name   : String = buildInfoString("name"   )
   lazy val version: String = buildInfoString("version")
 
@@ -36,17 +34,6 @@ object Main {
   def main(args: Array[String]): Unit = {
     logInfo(s"Welcome to $name v$version")
 
-    // ---- type extensions ----
-
-    sysson.initTypes()
-
-    if (useGUI) {
-      SwingApplication.main(args)
-      //      // this is just for simple IDEA run configurations.
-      //      // the app-bundle will have these already
-      //      sys.props("com.apple.mrj.application.apple.menu.about.name")  = name
-      //      sys.props("apple.laf.useScreenMenuBar")                       = "true"
-      //      Swing.onEDT(gui.GUI.init())
-    }
+    SwingApplication.main(args)
   }
 }

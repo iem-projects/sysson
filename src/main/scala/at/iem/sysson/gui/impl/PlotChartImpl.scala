@@ -414,7 +414,7 @@ object PlotChartImpl {
       def getLowerBound: Double = 0.0
       def getUpperBound: Double = 1.0
 
-      private val cpt   = ColorPaletteTable.builtIn(name)
+      private val cpt   = ColorPaletteTable.builtIn.getOrElse(name, ColorPaletteTable.fallBack) // problems in IntelliJ
       private val fill  = nanPaint
       private val pre   = if (cpt.isDiscrete) Array.tabulate(cpt.num)(s => new Color(cpt(s).lowColor)) else null
       private val bg    = new Color(cpt.background)

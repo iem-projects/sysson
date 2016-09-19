@@ -54,24 +54,29 @@ object ColorPaletteTableImpl {
   lazy val builtIn: Map[String, ColorPaletteTable] = {
     val mapSer  = implicitly[ImmutableSerializer[Map[String, ColorPaletteTable]]]
     val is      = Main.getClass.getResourceAsStream("color-tables.bin")
-    val bytes   = new Array[Byte](is.available())
+    if (is == null) { // problems in IntelliJ
+      Console.err.println("Error: palette resource file \"color-tables.bin\" not found.")
+      Map.empty
+    } else {
+      val bytes   = new Array[Byte](is.available())
 
-    // NOTE: this shit doesn't work, apparently `read(array)` doesn't return the full amount
-    // if the file is too large (> 20 KB).
-    //
-    //    val bytes   = new Array[Byte](is.available())
-    //    is.read(bytes)
-    var off = 0
-    do {
-      val read = is.read(bytes, off, bytes.length - off)
-      off += read
-    } while (off < bytes.length)
-    is.close()
-    // val bb = java.nio.ByteBuffer.wrap(bytes)
-    // de.sciss.osc.Packet.printHexOn(bb, System.out)
+      // NOTE: this doesn't work, apparently `read(array)` doesn't return the full amount
+      // if the file is too large (> 20 KB).
+      //
+      //    val bytes   = new Array[Byte](is.available())
+      //    is.read(bytes)
+      var off = 0
+      do {
+        val read = is.read(bytes, off, bytes.length - off)
+        off += read
+      } while (off < bytes.length)
+      is.close()
+      // val bb = java.nio.ByteBuffer.wrap(bytes)
+      // de.sciss.osc.Packet.printHexOn(bb, System.out)
 
-    val in = DataInput(bytes)
-    mapSer.read(in)
+      val in = DataInput(bytes)
+      mapSer.read(in)
+    }
   }
 
   private final val SER_VERSION = 0x43505400  // "CPT\0"

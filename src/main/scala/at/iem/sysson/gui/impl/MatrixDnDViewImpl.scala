@@ -87,7 +87,8 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
 
   private def guiInit(): Unit = {
     ggDataName = new Label("") // Precipitation")
-    ggDataName.border = Swing.EmptyBorder(0, 8, 0, 8)
+    // the following is broken in WebLaF:
+    // ggDataName.border = Swing.EmptyBorder(0, 8, 0, 8)
 
     val lbDataName = new Label(null: String) {
       icon      = Icons.Target(DropButton.IconSize)
@@ -228,8 +229,9 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
 
       contents += Swing.HStrut(2)
       contents += lbDataName
-      // contents += Swing.HStrut(2)
+      contents += Swing.HStrut(8)
       contents += ggDataName
+      contents += Swing.HStrut(8)
       contents += Swing.HGlue
     }
   }

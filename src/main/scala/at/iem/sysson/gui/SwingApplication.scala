@@ -15,7 +15,10 @@
 package at.iem.sysson
 package gui
 
+import java.awt.Color
 import java.util.Locale
+import javax.swing.UIManager
+import javax.swing.plaf.ColorUIResource
 
 import at.iem.sysson
 import de.sciss.desktop.impl.{SwingApplicationImpl, WindowHandlerImpl}
@@ -24,7 +27,7 @@ import de.sciss.file._
 import de.sciss.mellite
 import de.sciss.mellite.gui.LogFrame
 import de.sciss.mellite.gui.impl.document.DocumentHandlerImpl
-import de.sciss.mellite.{Application, Prefs}
+import de.sciss.mellite.{Application, Mellite, Prefs}
 
 import scala.collection.immutable.{Seq => ISeq}
 import scala.language.existentials
@@ -54,29 +57,27 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
     //    de.sciss.synth.proc.showTransportLog  = true
     // de.sciss.synth.proc.impl.BounceImpl.DEBUG = true
 
-    // ---- type extensions ----
-
-    sysson.initTypes()
-    sysson.gui.registerViews()
-
     // ---- look and feel ----
 
     try {
-//      val web = "com.alee.laf.WebLookAndFeel"
-//      UIManager.installLookAndFeel("Web Look And Feel", web)
       Prefs.lookAndFeel.getOrElse(Prefs.LookAndFeel.default).install()
     } catch {
       case NonFatal(_) =>
     }
 
-//    // work-around for web-laf bug #118
-//    new javax.swing.JSpinner
-//    // some custom web-laf settings
-//    WebCheckBoxStyle   .animated            = false
-//    WebProgressBarStyle.progressTopColor    = Color.lightGray
-//    WebProgressBarStyle.progressBottomColor = Color.gray
-//    WebProgressBarStyle.highlightWhite      = new Color(255, 255, 255, 0)
-//    WebProgressBarStyle.highlightDarkWhite  = new Color(255, 255, 255, 0)
+    // XXX TODO --- this should be fixed in Submin
+    if (Mellite.isDarkSkin) {
+      // for titled border
+      UIManager.put("TitledBorder.titleColor" , new ColorUIResource(216, 220, 224))
+      // for lucre matrix
+      UIManager.put("Label.foreground"        , new ColorUIResource(216, 220, 224))
+      UIManager.put("Label.disabledForeground", new ColorUIResource(new Color(216, 220, 224, 96)))
+    }
+
+    // ---- type extensions ----
+
+    sysson.initTypes()
+    sysson.gui.registerViews()
 
     LogFrame           .instance    // init
 

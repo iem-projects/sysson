@@ -47,6 +47,9 @@ private[gui] object MainViewImpl {
 
   private lazy val logo: Icon = {
     val is = Main.getClass.getResourceAsStream("SysSon-Logo_noshadow_566px.png")
+//    val x = getClass.getClassLoader.getResource("at/iem/sysson/SysSon-Logo_noshadow_566px.png")
+//    println(s"URI: $x")
+//    val is = getClass.getClassLoader.getResourceAsStream("/at/iem/sysson/SysSon-Logo_noshadow_566px.png")
     if (is == null) new Icon {
       val getIconHeight = 109
       val getIconWidth  = 283

@@ -140,13 +140,12 @@ object AuralSonificationImpl {
     }
 
     private def oldMatrixSpecs(req: UGB.Input, st: UGB.IO[S]): Vec[MatrixPrepare.Spec] =
-      st.acceptedInputs.get(req.key) match {
-        case Some((_, mv: MatrixPrepare.Value)) => mv.specs
-        case Some((_, other)) =>
-          logDebug(s"For key '${req.key}' found something other than MatrixPrepare.Value: $other")
-          Vector.empty
-        case _ => Vector.empty
-      }
+      st.acceptedInputs.getOrElse(req.key, Map.empty).collectFirst {
+        case (_, mv: MatrixPrepare.Value) => mv.specs
+        //        case (_, other) =>
+        //          logDebug(s"For key '${req.key}' found something other than MatrixPrepare.Value: $other")
+        //          Vector.empty
+      }.getOrElse(Vector.empty)
 
     private def addSpec(req: UGB.Input, st: UGB.IO[S], spec: MatrixPrepare.Spec): MatrixPrepare.Value =
       MatrixPrepare.Value(oldMatrixSpecs(req, st) :+ spec)
