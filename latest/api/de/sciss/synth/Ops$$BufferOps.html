@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>BufferOps - SysSon 1.7.1 API - de.sciss.synth.Ops.BufferOps</title>
-          <meta name="description" content="BufferOps - SysSon 1.7.1 API - de.sciss.synth.Ops.BufferOps" />
-          <meta name="keywords" content="BufferOps SysSon 1.7.1 API de.sciss.synth.Ops.BufferOps" />
+          <title>BufferOps - Mellite 1.9.0 API - de.sciss.synth.Ops.BufferOps</title>
+          <meta name="description" content="BufferOps - Mellite 1.9.0 API - de.sciss.synth.Ops.BufferOps" />
+          <meta name="keywords" content="BufferOps Mellite 1.9.0 API de.sciss.synth.Ops.BufferOps" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -62,7 +62,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -75,7 +75,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -166,7 +166,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="de.sciss.synth.Ops.BufferOps#alloc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="alloc(numFrames:Int,numChannels:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
+      <a id="alloc(numFrames:Int,numChannels:Int,completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
       <a id="alloc(Int,Int,Optional[Packet]):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -174,16 +174,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">alloc</span><span class="params">(<span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">alloc</span><span class="params">(<span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@alloc(numFrames:Int,numChannels:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@alloc(numFrames:Int,numChannels:Int,completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.Ops.BufferOps#allocRead" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="allocRead(path:String,startFrame:Int,numFrames:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
+      <a id="allocRead(path:String,startFrame:Int,numFrames:Int,completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
       <a id="allocRead(String,Int,Int,Optional[Packet]):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -191,16 +191,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">allocRead</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">allocRead</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@allocRead(path:String,startFrame:Int,numFrames:Int,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@allocRead(path:String,startFrame:Int,numFrames:Int,completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.Ops.BufferOps#allocReadChannel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="allocReadChannel(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
+      <a id="allocReadChannel(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
       <a id="allocReadChannel(String,Int,Int,Seq[Int],Optional[Packet]):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -208,10 +208,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">allocReadChannel</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="channels">channels: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">allocReadChannel</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="channels">channels: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@allocReadChannel(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@allocReadChannel(path:String,startFrame:Int,numFrames:Int,channels:Seq[Int],completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -234,7 +234,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="de.sciss.synth.Ops.BufferOps#close" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="close(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):Unit"></a>
+      <a id="close(completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):Unit"></a>
       <a id="close(Optional[Packet]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -242,10 +242,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">close</span><span class="params">(<span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">close</span><span class="params">(<span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@close(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@close(completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -285,7 +285,7 @@
     </span>
       
     </li><li name="de.sciss.synth.Ops.BufferOps#free" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="free(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):Unit"></a>
+      <a id="free(completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):Unit"></a>
       <a id="free(Optional[Packet]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -293,10 +293,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">free</span><span class="params">(<span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">free</span><span class="params">(<span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@free(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@free(completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -427,7 +427,7 @@ This is safe but potentially slow for large buffers.
     </span>
       
     </li><li name="de.sciss.synth.Ops.BufferOps#read" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="read(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
+      <a id="read(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
       <a id="read(String,Int,Int,Int,Boolean,Optional[Packet]):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -435,16 +435,16 @@ This is safe but potentially slow for large buffers.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">read</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">read</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@read(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@read(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.Ops.BufferOps#readChannel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="readChannel(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
+      <a id="readChannel(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,channels:Seq[Int],completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
       <a id="readChannel(String,Int,Int,Int,Boolean,Seq[Int],Optional[Packet]):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -452,10 +452,10 @@ This is safe but potentially slow for large buffers.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">readChannel</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="channels">channels: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">readChannel</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileStartFrame">fileStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="bufStartFrame">bufStartFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="channels">channels: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@readChannel(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,channels:Seq[Int],completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@readChannel(path:String,fileStartFrame:Int,numFrames:Int,bufStartFrame:Int,leaveOpen:Boolean,channels:Seq[Int],completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -596,7 +596,7 @@ of samples in the buffer.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="de.sciss.synth.Ops.BufferOps#write" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="write(path:String,fileType:de.sciss.synth.io.AudioFileType,sampleFormat:de.sciss.synth.io.SampleFormat,numFrames:Int,startFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
+      <a id="write(path:String,fileType:de.sciss.synth.io.AudioFileType,sampleFormat:de.sciss.synth.io.SampleFormat,numFrames:Int,startFrame:Int,leaveOpen:Boolean,completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
       <a id="write(String,AudioFileType,SampleFormat,Int,Int,Boolean,Optional[Packet]):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -604,16 +604,16 @@ of samples in the buffer.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">write</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileType">fileType: <a href="io/AudioFileType.html" class="extype" name="de.sciss.synth.io.AudioFileType">AudioFileType</a> = <span class="symbol"><span class="name"><a href="io/package.html">io.AudioFileType.AIFF</a></span></span></span>, <span name="sampleFormat">sampleFormat: <a href="io/SampleFormat.html" class="extype" name="de.sciss.synth.io.SampleFormat">SampleFormat</a> = <span class="symbol"><span class="name"><a href="io/package.html">io.SampleFormat.Float</a></span></span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">write</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileType">fileType: <a href="io/AudioFileType.html" class="extype" name="de.sciss.synth.io.AudioFileType">AudioFileType</a> = <span class="symbol"><span class="name"><a href="io/package.html">io.AudioFileType.AIFF</a></span></span></span>, <span name="sampleFormat">sampleFormat: <a href="io/SampleFormat.html" class="extype" name="de.sciss.synth.io.SampleFormat">SampleFormat</a> = <span class="symbol"><span class="name"><a href="io/package.html">io.SampleFormat.Float</a></span></span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="startFrame">startFrame: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="leaveOpen">leaveOpen: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@write(path:String,fileType:de.sciss.synth.io.AudioFileType,sampleFormat:de.sciss.synth.io.SampleFormat,numFrames:Int,startFrame:Int,leaveOpen:Boolean,completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@write(path:String,fileType:de.sciss.synth.io.AudioFileType,sampleFormat:de.sciss.synth.io.SampleFormat,numFrames:Int,startFrame:Int,leaveOpen:Boolean,completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.Ops.BufferOps#zero" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="zero(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
+      <a id="zero(completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]"></a>
       <a id="zero(Optional[Packet]):Future[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -621,10 +621,10 @@ of samples in the buffer.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">zero</span><span class="params">(<span name="completion">completion: <a href="Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">zero</span><span class="params">(<span name="completion">completion: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<a href="../osc/Packet.html" class="extype" name="de.sciss.osc.Packet">Packet</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@zero(completion:de.sciss.synth.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Ops$$BufferOps@zero(completion:de.sciss.optional.Optional[de.sciss.osc.Packet]):scala.concurrent.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

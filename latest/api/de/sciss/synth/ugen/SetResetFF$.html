@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SetResetFF - SysSon 1.7.1 API - de.sciss.synth.ugen.SetResetFF</title>
-          <meta name="description" content="SetResetFF - SysSon 1.7.1 API - de.sciss.synth.ugen.SetResetFF" />
-          <meta name="keywords" content="SetResetFF SysSon 1.7.1 API de.sciss.synth.ugen.SetResetFF" />
+          <title>SetResetFF - Mellite 1.9.0 API - de.sciss.synth.ugen.SetResetFF</title>
+          <meta name="description" content="SetResetFF - Mellite 1.9.0 API - de.sciss.synth.ugen.SetResetFF" />
+          <meta name="keywords" content="SetResetFF Mellite 1.9.0 API de.sciss.synth.ugen.SetResetFF" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -62,6 +62,17 @@ play {
   <span class="kw">val</span> reset = Impulse.kr(<span class="num">1</span>)
   <span class="kw">val</span> ff    = SetResetFF.kr(set, reset)
   SinOsc.ar(ff.madd(<span class="num">400</span>, <span class="num">800</span>)) * <span class="num">0.1</span>
+}</pre><pre><span class="cmt">// limit trigger rate</span>
+play {
+  <span class="cmt">// with a combination of TDelay and SetResetFF</span>
+  <span class="cmt">// we can build a filter that lets triggers</span>
+  <span class="cmt">// pass at a maximum rate.</span>
+  <span class="kw">val</span> dur   = <span class="num">1.0</span>  <span class="cmt">// minimum spacing between triggers</span>
+  <span class="kw">val</span> in    = Dust.ar(<span class="num">10</span>)  <span class="cmt">// high frequency trigger</span>
+  <span class="kw">val</span> lim   = SetResetFF.ar(in, TDelay.ar(in, dur))
+  <span class="kw">val</span> time  = Timer.ar(lim)
+  time.poll(lim, <span class="lit">"bang"</span>)
+  ()
 }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ToggleFF$.html" class="extype" name="de.sciss.synth.ugen.ToggleFF">ToggleFF</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
@@ -75,7 +86,7 @@ play {
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -88,7 +99,7 @@ play {
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">

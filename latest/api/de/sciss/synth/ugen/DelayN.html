@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>DelayN - SysSon 1.7.1 API - de.sciss.synth.ugen.DelayN</title>
-          <meta name="description" content="DelayN - SysSon 1.7.1 API - de.sciss.synth.ugen.DelayN" />
-          <meta name="keywords" content="DelayN SysSon 1.7.1 API de.sciss.synth.ugen.DelayN" />
+          <title>DelayN - Mellite 1.9.0 API - de.sciss.synth.ugen.DelayN</title>
+          <meta name="description" content="DelayN - Mellite 1.9.0 API - de.sciss.synth.ugen.DelayN" />
+          <meta name="keywords" content="DelayN Mellite 1.9.0 API de.sciss.synth.ugen.DelayN" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -51,9 +51,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Simple delay line with no interpolation.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Simple delay line with no interpolation. The initial buffer contents is zero.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayC$.html" class="extype" name="de.sciss.synth.ugen.DelayC">DelayC</a></p></span><span class="cmt"><p><a href="DelayL$.html" class="extype" name="de.sciss.synth.ugen.DelayL">DelayL</a></p></span></dd></dl><div class="toggleContainer block">
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayC$.html" class="extype" name="de.sciss.synth.ugen.DelayC">DelayC</a></p></span><span class="cmt"><p><a href="DelayL$.html" class="extype" name="de.sciss.synth.ugen.DelayL">DelayL</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -66,7 +66,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -79,7 +79,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -109,7 +109,7 @@
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl></div>
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -373,7 +373,7 @@ expansion
       </a>
     </span>
       <p class="shortcomment cmt">The maximum delay time in seconds.</p><div class="fullcomment"><div class="comment cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></div></div>
+                        the delay buffer size. <i>(init-time only)</i></p></div></div>
     </li><li name="de.sciss.synth.UGenSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>

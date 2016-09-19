@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>AuralContext - SysSon 1.7.1 API - de.sciss.synth.proc.AuralContext</title>
-          <meta name="description" content="AuralContext - SysSon 1.7.1 API - de.sciss.synth.proc.AuralContext" />
-          <meta name="keywords" content="AuralContext SysSon 1.7.1 API de.sciss.synth.proc.AuralContext" />
+          <title>AuralContext - Mellite 1.9.0 API - de.sciss.synth.proc.AuralContext</title>
+          <meta name="description" content="AuralContext - Mellite 1.9.0 API - de.sciss.synth.proc.AuralContext" />
+          <meta name="keywords" content="AuralContext Mellite 1.9.0 API de.sciss.synth.proc.AuralContext" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -47,13 +47,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">AuralContext</span><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">AuralContext</span><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>]</span><span class="result"> extends <a href="AuxContext.html" class="extype" name="de.sciss.synth.proc.AuxContext">AuxContext</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="AuxContext.html" class="extype" name="de.sciss.synth.proc.AuxContext">AuxContext</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>], <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -64,20 +64,20 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.synth.proc.AuralContext"><span>AuralContext</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.synth.proc.AuralContext"><span>AuralContext</span></li><li class="in" name="de.sciss.synth.proc.AuxContext"><span>AuxContext</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -103,7 +103,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">acquire</span><span class="tparams">[<span name="A">A &lt;: <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>]</span>]</span><span class="params">(<span name="obj">obj: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>)</span><span class="params">(<span name="init">init: ⇒ <span class="extype" name="de.sciss.synth.proc.AuralContext.acquire.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.synth.proc.AuralContext.acquire.A">A</span></span>
+        <span class="name">acquire</span><span class="tparams">[<span name="A">A &lt;: <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>]</span><span class="params">(<span name="obj">obj: <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>)</span><span class="params">(<span name="init">init: ⇒ <span class="extype" name="de.sciss.synth.proc.AuralContext.acquire.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.synth.proc.AuralContext.acquire.A">A</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralContext@acquire[A&lt;:de.sciss.lucre.stm.Disposable[S#Tx]](obj:de.sciss.lucre.stm.Obj[S])(init:=&gt;A)(implicittx:S#Tx):A" title="Permalink" target="_top">
@@ -120,7 +120,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="obj">obj: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="de.sciss.synth.proc.AuralContext.get.A">A</span>]</span>
+        <span class="name">get</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="obj">obj: <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="de.sciss.synth.proc.AuralContext.get.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralContext@get[A](obj:de.sciss.lucre.stm.Obj[S])(implicittx:S#Tx):Option[A]" title="Permalink" target="_top">
@@ -128,7 +128,7 @@
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.AuralContext#getAux" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.proc.AuxContext#getAux" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getAux[A](id:S#ID)(implicittx:S#Tx):Option[A]"></a>
       <a id="getAux[A](S.ID)(S.Tx):Option[A]"></a>
       <h4 class="signature">
@@ -137,15 +137,34 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getAux</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="de.sciss.synth.proc.AuralContext.getAux.A">A</span>]</span>
+        <span class="name">getAux</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="de.sciss.synth.proc.AuxContext.getAux.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralContext@getAux[A](id:S#ID)(implicittx:S#Tx):Option[A]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.synth.proc.AuralContext#putAux" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuxContext.html" class="extype" name="de.sciss.synth.proc.AuxContext">AuxContext</a></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.AuxContext#observeAux" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="observeAux[A](id:S#ID)(fun:S#Tx=&gt;(de.sciss.synth.proc.AuxContext.Update[S,A]=&gt;Unit))(implicittx:S#Tx):de.sciss.lucre.stm.Disposable[S#Tx]"></a>
+      <a id="observeAux[A](S.ID)((S.Tx)⇒(Update[S,A])⇒Unit)(S.Tx):Disposable[S.Tx]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">observeAux</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>)</span><span class="params">(<span name="fun">fun: (<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>) ⇒ (<a href="AuxContext$$Update.html" class="extype" name="de.sciss.synth.proc.AuxContext.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>, <span class="extype" name="de.sciss.synth.proc.AuxContext.observeAux.A">A</span>]) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.AuralContext@observeAux[A](id:S#ID)(fun:S#Tx=&gt;(de.sciss.synth.proc.AuxContext.Update[S,A]=&gt;Unit))(implicittx:S#Tx):de.sciss.lucre.stm.Disposable[S#Tx]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Waits for the auxiliary object to appear.</p><div class="fullcomment"><div class="comment cmt"><p>Waits for the auxiliary object to appear. If the object
+appears the function is applied, otherwise nothing happens.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuxContext.html" class="extype" name="de.sciss.synth.proc.AuxContext">AuxContext</a></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.AuxContext#putAux" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="putAux[A](id:S#ID,value:A)(implicittx:S#Tx):Unit"></a>
       <a id="putAux[A](S.ID,A)(S.Tx):Unit"></a>
       <h4 class="signature">
@@ -154,14 +173,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">putAux</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>, <span name="value">value: <span class="extype" name="de.sciss.synth.proc.AuralContext.putAux.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">putAux</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>, <span name="value">value: <span class="extype" name="de.sciss.synth.proc.AuxContext.putAux.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralContext@putAux[A](id:S#ID,value:A)(implicittx:S#Tx):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuxContext.html" class="extype" name="de.sciss.synth.proc.AuxContext">AuxContext</a></dd></dl></div>
     </li><li name="de.sciss.synth.proc.AuralContext#release" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="release(obj:de.sciss.lucre.stm.Obj[S])(implicittx:S#Tx):Unit"></a>
       <a id="release(Obj[S])(S.Tx):Unit"></a>
@@ -171,7 +190,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">release</span><span class="params">(<span name="obj">obj: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">release</span><span class="params">(<span name="obj">obj: <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralContext@release(obj:de.sciss.lucre.stm.Obj[S])(implicittx:S#Tx):Unit" title="Permalink" target="_top">
@@ -179,7 +198,7 @@
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.AuralContext#removeAux" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.proc.AuxContext#removeAux" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="removeAux(id:S#ID)(implicittx:S#Tx):Unit"></a>
       <a id="removeAux(S.ID)(S.Tx):Unit"></a>
       <h4 class="signature">
@@ -188,14 +207,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">removeAux</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">removeAux</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.AuralContext@removeAux(id:S#ID)(implicittx:S#Tx):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="AuxContext.html" class="extype" name="de.sciss.synth.proc.AuxContext">AuxContext</a></dd></dl></div>
     </li><li name="de.sciss.synth.proc.AuralContext#scheduler" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="scheduler:de.sciss.synth.proc.Scheduler[S]"></a>
       <a id="scheduler:Scheduler[S]"></a>
@@ -230,26 +249,6 @@
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.AuralContext#waitForAux" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="waitForAux[A](id:S#ID)(fun:PartialFunction[A,Unit])(implicittx:S#Tx):Unit"></a>
-      <a id="waitForAux[A](S.ID)(PartialFunction[A,Unit])(S.Tx):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">waitForAux</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>)</span><span class="params">(<span name="fun">fun: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="de.sciss.synth.proc.AuralContext.waitForAux.A">A</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.AuralContext@waitForAux[A](id:S#ID)(fun:PartialFunction[A,Unit])(implicittx:S#Tx):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A bit of a hack.</p><div class="fullcomment"><div class="comment cmt"><p>A bit of a hack. Waits for the auxiliary object to appear
-within the _current_ transaction only. If the object
-appears the function is applied, otherwise nothing happens.
-</p></div></div>
     </li><li name="de.sciss.synth.proc.AuralContext#workspaceHandle" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="workspaceHandle:de.sciss.synth.proc.WorkspaceHandle[S]"></a>
       <a id="workspaceHandle:WorkspaceHandle[S]"></a>
@@ -634,7 +633,9 @@ appears the function is applied, otherwise nothing happens.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="de.sciss.synth.proc.AuxContext">
+              <h3>Inherited from <a href="AuxContext.html" class="extype" name="de.sciss.synth.proc.AuxContext">AuxContext</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Full - SysSon 1.7.1 API - de.sciss.lucre.synth.NodeRef.Full</title>
-          <meta name="description" content="Full - SysSon 1.7.1 API - de.sciss.lucre.synth.NodeRef.Full" />
-          <meta name="keywords" content="Full SysSon 1.7.1 API de.sciss.lucre.synth.NodeRef.Full" />
+          <title>Full - Mellite 1.9.0 API - de.sciss.lucre.synth.NodeRef.Full</title>
+          <meta name="description" content="Full - Mellite 1.9.0 API - de.sciss.lucre.synth.NodeRef.Full" />
+          <meta name="keywords" content="Full Mellite 1.9.0 API de.sciss.lucre.synth.NodeRef.Full" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -45,16 +45,16 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Full</span><span class="result"> extends <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a> with <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a>]</span>
+        <span class="name">Full</span><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">stm.Sys</a>[<span class="extype" name="de.sciss.lucre.synth.NodeRef.Full.S">S</span>]</span>]</span><span class="result"> extends <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a> with <a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">NodeRef.Full.S.Tx</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a>], <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>], <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="AuralNode.html" class="extype" name="de.sciss.lucre.synth.AuralNode">AuralNode</a>, <a href="NodeRef$$Group.html" class="extype" name="de.sciss.lucre.synth.NodeRef.Group">Group</a></div>
+            <div class="subClasses hiddenContent"><a href="../../synth/proc/AuralNode.html" class="extype" name="de.sciss.synth.proc.AuralNode">AuralNode</a>, <a href="../../synth/proc/AuralNode$$Builder.html" class="extype" name="de.sciss.synth.proc.AuralNode.Builder">Builder</a></div>
           </div></div>
         
 
@@ -65,7 +65,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -78,7 +78,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -95,40 +95,76 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="de.sciss.lucre.synth.NodeRef.Full#addAttrResources" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="addAttrResources(key:String,values:List[de.sciss.lucre.stm.Disposable[de.sciss.lucre.synth.Txn]])(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
-      <a id="addAttrResources(String,List[Disposable[Txn]])(Txn):Unit"></a>
+              <ol><li name="de.sciss.lucre.synth.NodeRef.Full#addControl" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="addControl(pair:de.sciss.synth.ControlSet)(implicittx:S#Tx):Unit"></a>
+      <a id="addControl(ControlSet)(S.Tx):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addAttrResources</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="values">values: <a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">addControl</span><span class="params">(<span name="pair">pair: <a href="../../synth/ControlSet.html" class="extype" name="de.sciss.synth.ControlSet">ControlSet</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.NodeRef$$Full@addAttrResources(key:String,values:List[de.sciss.lucre.stm.Disposable[de.sciss.lucre.synth.Txn]])(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.lucre.synth.NodeRef$$Full@addControl(pair:de.sciss.synth.ControlSet)(implicittx:S#Tx):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
-    </li><li name="de.sciss.lucre.stm.Disposable#dispose" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="dispose()(implicittx:Tx):Unit"></a>
-      <a id="dispose()(Txn):Unit"></a>
+    </li><li name="de.sciss.lucre.synth.NodeRef.Full#addResource" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="addResource(resource:de.sciss.lucre.synth.Resource)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="addResource(Resource)(Txn):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">dispose</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">addResource</span><span class="params">(<span name="resource">resource: <a href="Resource.html" class="extype" name="de.sciss.lucre.synth.Resource">Resource</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.NodeRef$$Full@addResource(resource:de.sciss.lucre.synth.Resource)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.synth.NodeRef.Full#addUser" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="addUser(user:de.sciss.lucre.synth.DynamicUser)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="addUser(DynamicUser)(Txn):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addUser</span><span class="params">(<span name="user">user: <a href="DynamicUser.html" class="extype" name="de.sciss.lucre.synth.DynamicUser">DynamicUser</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.NodeRef$$Full@addUser(user:de.sciss.lucre.synth.DynamicUser)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds a user to the node-ref.</p><div class="fullcomment"><div class="comment cmt"><p>Adds a user to the node-ref. If it is already playing,
+it successively calls <code>user.add()</code>.
+</p></div></div>
+    </li><li name="de.sciss.lucre.stm.Disposable#dispose" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="dispose()(implicittx:Tx):Unit"></a>
+      <a id="dispose()(S.Tx):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dispose</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.lucre.synth.NodeRef$$Full@dispose()(implicittx:Tx):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Disposable</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a></dd></dl></div>
     </li><li name="de.sciss.lucre.synth.NodeRef#node" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="node(implicittx:de.sciss.lucre.synth.Txn):de.sciss.lucre.synth.Node"></a>
       <a id="node(Txn):Node"></a>
@@ -146,23 +182,44 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a></dd></dl></div>
-    </li><li name="de.sciss.lucre.synth.NodeRef.Full#removeAttrResources" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="removeAttrResources(key:String)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
-      <a id="removeAttrResources(String)(Txn):Unit"></a>
+    </li><li name="de.sciss.lucre.synth.NodeRef.Full#removeResource" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="removeResource(resource:de.sciss.lucre.synth.Resource)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="removeResource(Resource)(Txn):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">removeAttrResources</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">removeResource</span><span class="params">(<span name="resource">resource: <a href="Resource.html" class="extype" name="de.sciss.lucre.synth.Resource">Resource</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.NodeRef$$Full@removeAttrResources(key:String)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.lucre.synth.NodeRef$$Full@removeResource(resource:de.sciss.lucre.synth.Resource)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Removes and frees resources associated with the attribute specified by <code>key</code></p>
+      
+    </li><li name="de.sciss.lucre.synth.NodeRef.Full#removeUser" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="removeUser(user:de.sciss.lucre.synth.DynamicUser)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="removeUser(DynamicUser)(Txn):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">removeUser</span><span class="params">(<span name="user">user: <a href="DynamicUser.html" class="extype" name="de.sciss.lucre.synth.DynamicUser">DynamicUser</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.NodeRef$$Full@removeUser(user:de.sciss.lucre.synth.DynamicUser)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Removes a user from the node-ref.</p><div class="fullcomment"><div class="comment cmt"><p>Removes a user from the node-ref. <u>Note:</u> If the node-ref
+is already playing, it currently does not call <code>user.remove()</code>,
+but this must be done by the caller.
+XXX TODO -- perhaps we should change that?
+</p></div></div>
     </li><li name="de.sciss.lucre.synth.NodeRef#server" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="server:de.sciss.lucre.synth.Server"></a>
       <a id="server:Server"></a>
@@ -548,7 +605,7 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="de.sciss.lucre.stm.Disposable">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a>]</h3>
+              <h3>Inherited from <a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</h3>
             </div><div class="parent" name="de.sciss.lucre.synth.NodeRef">
               <h3>Inherited from <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a></h3>
             </div><div class="parent" name="scala.AnyRef">

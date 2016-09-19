@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>TimeRef - SysSon 1.7.1 API - de.sciss.synth.proc.TimeRef</title>
-          <meta name="description" content="TimeRef - SysSon 1.7.1 API - de.sciss.synth.proc.TimeRef" />
-          <meta name="keywords" content="TimeRef SysSon 1.7.1 API de.sciss.synth.proc.TimeRef" />
+          <title>TimeRef - Mellite 1.9.0 API - de.sciss.synth.proc.TimeRef</title>
+          <meta name="description" content="TimeRef - Mellite 1.9.0 API - de.sciss.synth.proc.TimeRef" />
+          <meta name="keywords" content="TimeRef Mellite 1.9.0 API de.sciss.synth.proc.TimeRef" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,11 +28,11 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="TimeRef.html" title="See companion trait"><img alt="Object/Trait" src="../../../../lib/object_to_trait_big.png" /></a>
+        <a href="TimeRef.html" title="See companion class"><img alt="Object/Class" src="../../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.proc">proc</a></p>
-        <h1><a href="TimeRef.html" title="See companion trait">TimeRef</a></h1><h3><span class="morelinks"><div>
+        <h1><a href="TimeRef.html" title="See companion class">TimeRef</a></h1><h3><span class="morelinks"><div>
             Related Docs:
-            <a href="TimeRef.html" title="See companion trait">trait TimeRef</a>
+            <a href="TimeRef.html" title="See companion class">class TimeRef</a>
             | <a href="package.html" class="extype" name="de.sciss.synth.proc">package proc</a>
           </div></span></h3><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$" title="Permalink" target="_top">
@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">TimeRef</span>
+        <span class="name">TimeRef</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -64,20 +64,20 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.synth.proc.TimeRef"><span>TimeRef</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.synth.proc.TimeRef"><span>TimeRef</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -92,23 +92,30 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="de.sciss.synth.proc.TimeRef.Apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ApplyextendsTimeRefwithProductwithSerializable"></a>
-      <a id="Apply:Apply"></a>
+              <ol><li name="de.sciss.synth.proc.TimeRef.Option" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="OptionextendsAnyRef"></a>
+      <a id="Option:Option"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TimeRef$$Apply.html"><span class="name">Apply</span></a><span class="params">(<span name="span">span: <span class="extype" name="de.sciss.span.Span.NonVoid">NonVoid</span></span>, <span name="frame">frame: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="TimeRef.html" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="TimeRef$$Option.html"><span class="name">Option</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@ApplyextendsTimeRefwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@OptionextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A time reference specifies the temporal context
+within which an aural object is invoked.</p><div class="fullcomment"><div class="comment cmt"><p>A time reference specifies the temporal context
+within which an aural object is invoked. It may
+be either undefined (there is no notion of
+pointers in virtual performance time), or
+defined by a span for the invoked object and
+a time frame corresponding to the current position.
+</p></div></div>
     </li></ol>
             </div>
 
@@ -167,6 +174,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#SampleRate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SampleRate:Double(1.4112E7)"></a>
+      <a id="SampleRate:Double(1.4112E7)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SampleRate</span><span class="result">: Double(1.4112E7)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@SampleRate:Double(1.4112E7)" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.TimeRef.Undefined" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Undefined"></a>
       <a id="Undefined:Undefined"></a>
@@ -176,27 +200,10 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="TimeRef$$Undefined$.html"><span class="name">Undefined</span></a><span class="result"> extends <a href="TimeRef.html" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="TimeRef$$Undefined$.html"><span class="name">Undefined</span></a><span class="result"> extends <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@Undefined" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.proc.TimeRef#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(span:de.sciss.span.Span.NonVoid,frame:Long):de.sciss.synth.proc.TimeRef.Apply"></a>
-      <a id="apply(NonVoid,Long):Apply"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="span">span: <span class="extype" name="de.sciss.span.Span.NonVoid">NonVoid</span></span>, <span name="frame">frame: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="TimeRef$$Apply.html" class="extype" name="de.sciss.synth.proc.TimeRef.Apply">Apply</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@apply(span:de.sciss.span.Span.NonVoid,frame:Long):de.sciss.synth.proc.TimeRef.Apply" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -298,6 +305,24 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#framesAndSecs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="framesAndSecs(n:Long):String"></a>
+      <a id="framesAndSecs(Long):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">framesAndSecs</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@framesAndSecs(n:Long):String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility method that generates a string representation of
+the time both in frames and in seconds.</p>
     </li><li name="de.sciss.synth.proc.TimeRef#framesToSecs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="framesToSecs(n:Long):String"></a>
       <a id="framesToSecs(Long):String"></a>
@@ -418,6 +443,23 @@ the time in seconds of a given frame index.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#spanAndSecs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="spanAndSecs(span:de.sciss.span.SpanLike):String"></a>
+      <a id="spanAndSecs(SpanLike):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">spanAndSecs</span><span class="params">(<span name="span">span: <span class="extype" name="de.sciss.span.SpanLike">SpanLike</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@spanAndSecs(span:de.sciss.span.SpanLike):String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.TimeRef#spanToSecs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="spanToSecs(span:de.sciss.span.SpanLike):String"></a>
       <a id="spanToSecs(SpanLike):String"></a>
@@ -469,36 +511,19 @@ the time in seconds of a given frame index.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.proc.TimeRef#unapply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unapply(r:de.sciss.synth.proc.TimeRef.Apply):Option[(de.sciss.span.Span.NonVoid,Long)]"></a>
-      <a id="unapply(Apply):Option[(NonVoid,Long)]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unapply</span><span class="params">(<span name="r">r: <a href="TimeRef$$Apply.html" class="extype" name="de.sciss.synth.proc.TimeRef.Apply">Apply</a></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="de.sciss.span.Span.NonVoid">NonVoid</span>, <span class="extype" name="scala.Long">Long</span>)]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@unapply(r:de.sciss.synth.proc.TimeRef.Apply):Option[(de.sciss.span.Span.NonVoid,Long)]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="de.sciss.synth.proc.TimeRef#undefined" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="undefined:de.sciss.synth.proc.TimeRef"></a>
-      <a id="undefined:TimeRef"></a>
+      <a id="undefined:de.sciss.synth.proc.TimeRef.Option"></a>
+      <a id="undefined:Option"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">undefined</span><span class="result">: <a href="TimeRef.html" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a></span>
+        <span class="name">undefined</span><span class="result">: <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@undefined:de.sciss.synth.proc.TimeRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef$@undefined:de.sciss.synth.proc.TimeRef.Option" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -581,7 +606,11 @@ the time in seconds of a given frame index.</p>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>UGenGraphBuilder - SysSon 1.7.1 API - de.sciss.synth.proc.UGenGraphBuilder</title>
-          <meta name="description" content="UGenGraphBuilder - SysSon 1.7.1 API - de.sciss.synth.proc.UGenGraphBuilder" />
-          <meta name="keywords" content="UGenGraphBuilder SysSon 1.7.1 API de.sciss.synth.proc.UGenGraphBuilder" />
+          <title>UGenGraphBuilder - Mellite 1.9.0 API - de.sciss.synth.proc.UGenGraphBuilder</title>
+          <meta name="description" content="UGenGraphBuilder - Mellite 1.9.0 API - de.sciss.synth.proc.UGenGraphBuilder" />
+          <meta name="keywords" content="UGenGraphBuilder Mellite 1.9.0 API de.sciss.synth.proc.UGenGraphBuilder" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -47,13 +47,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">UGenGraphBuilder</span><span class="result"> extends <a href="../UGenGraph$$Builder.html" class="extype" name="de.sciss.synth.UGenGraph.Builder">Builder</a></span>
+        <span class="name">UGenGraphBuilder</span><span class="result"> extends <span class="extype" name="de.sciss.synth.NestedUGenGraphBuilder">NestedUGenGraphBuilder</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../UGenGraph$$Builder.html" class="extype" name="de.sciss.synth.UGenGraph.Builder">Builder</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="de.sciss.synth.NestedUGenGraphBuilder">NestedUGenGraphBuilder</span>, <a href="../UGenGraph$$Builder.html" class="extype" name="de.sciss.synth.UGenGraph.Builder">Builder</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -64,20 +64,20 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.synth.proc.UGenGraphBuilder"><span>UGenGraphBuilder</span></li><li class="in" name="de.sciss.synth.UGenGraph.Builder"><span>Builder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.synth.proc.UGenGraphBuilder"><span>UGenGraphBuilder</span></li><li class="in" name="de.sciss.synth.NestedUGenGraphBuilder"><span>NestedUGenGraphBuilder</span></li><li class="in" name="de.sciss.synth.UGenGraph.Builder"><span>Builder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -111,19 +111,19 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../UGenGraph$$Builder.html" class="extype" name="de.sciss.synth.UGenGraph.Builder">Builder</a></dd></dl></div>
-    </li><li name="de.sciss.synth.proc.UGenGraphBuilder#addScanOut" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="addScanOut(key:String,numChannels:Int):Unit"></a>
-      <a id="addScanOut(String,Int):Unit"></a>
+    </li><li name="de.sciss.synth.proc.UGenGraphBuilder#addOutput" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="addOutput(key:String,numChannels:Int):Unit"></a>
+      <a id="addOutput(String,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addScanOut</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">addOutput</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder@addScanOut(key:String,numChannels:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder@addOutput(key:String,numChannels:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -147,6 +147,23 @@ with the number of channels written to it.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../UGenGraph$$Builder.html" class="extype" name="de.sciss.synth.UGenGraph.Builder">Builder</a></dd></dl></div>
+    </li><li name="de.sciss.synth.NestedUGenGraphBuilder#expandIfCase" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="expandIfCase(c:&lt;?&gt;):de.sciss.synth.NestedUGenGraphBuilder.ExpIfCase"></a>
+      <a id="expandIfCase(Then[Any]):ExpIfCase"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">expandIfCase</span><span class="params">(<span name="c">c: <span class="extype" name="de.sciss.synth.ugen.Then">Then</span>[<span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.synth.NestedUGenGraphBuilder.ExpIfCase">ExpIfCase</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder@expandIfCase(c:de.sciss.synth.ugen.Then[Any]):de.sciss.synth.NestedUGenGraphBuilder.ExpIfCase" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NestedUGenGraphBuilder</dd></dl></div>
     </li><li name="de.sciss.synth.UGenGraph.Builder#prependUGen" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="prependUGen(ugen:de.sciss.synth.UGen):Unit"></a>
       <a id="prependUGen(UGen):Unit"></a>
@@ -193,6 +210,40 @@ streaming speeds.</p><p>If an input resource is not ready, the context should th
 The builder will catch that exception and add the key to <code>rejectedInputs</code> instead
 of <code>acceptedInputs</code> instead.
 </p></div></div>
+    </li><li name="de.sciss.synth.proc.UGenGraphBuilder#server" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="server:de.sciss.lucre.synth.Server"></a>
+      <a id="server:lucre.synth.Server"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">server</span><span class="result">: <a href="../../lucre/synth/Server.html" class="extype" name="de.sciss.lucre.synth.Server">lucre.synth.Server</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder@server:de.sciss.lucre.synth.Server" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.NestedUGenGraphBuilder#thisBranch" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="thisBranch:de.sciss.synth.GE"></a>
+      <a id="thisBranch:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thisBranch</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder@thisBranch:de.sciss.synth.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NestedUGenGraphBuilder</dd></dl></div>
     </li><li name="de.sciss.synth.UGenGraph.Builder#visit" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="visit[U](ref:AnyRef,init:=&gt;U):U"></a>
       <a id="visit[U](AnyRef,⇒U):U"></a>
@@ -577,7 +628,9 @@ of <code>acceptedInputs</code> instead.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="de.sciss.synth.UGenGraph.Builder">
+        <div class="parent" name="de.sciss.synth.NestedUGenGraphBuilder">
+              <h3>Inherited from <span class="extype" name="de.sciss.synth.NestedUGenGraphBuilder">NestedUGenGraphBuilder</span></h3>
+            </div><div class="parent" name="de.sciss.synth.UGenGraph.Builder">
               <h3>Inherited from <a href="../UGenGraph$$Builder.html" class="extype" name="de.sciss.synth.UGenGraph.Builder">Builder</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>

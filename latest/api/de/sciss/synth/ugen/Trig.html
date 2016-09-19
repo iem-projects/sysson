@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Trig - SysSon 1.7.1 API - de.sciss.synth.ugen.Trig</title>
-          <meta name="description" content="Trig - SysSon 1.7.1 API - de.sciss.synth.ugen.Trig" />
-          <meta name="keywords" content="Trig SysSon 1.7.1 API de.sciss.synth.ugen.Trig" />
+          <title>Trig - Mellite 1.9.0 API - de.sciss.synth.ugen.Trig</title>
+          <meta name="description" content="Trig - Mellite 1.9.0 API - de.sciss.synth.ugen.Trig" />
+          <meta name="keywords" content="Trig Mellite 1.9.0 API de.sciss.synth.ugen.Trig" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -54,7 +54,9 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen which holds and outputs an input value for a given duration when
 triggered.</p><p>When a trigger occurs at the input, the input value is sampled and output for
 the specified duration, otherwise zero is output. When a new trigger occurs
-while this ugens outputs 1, the hold-time is reset to the duration.
+while this ugens outputs 1, the hold-time is reset to the duration.</p><p><i>Warning:</i> The hold-time is subject to a bug that depends on the input
+signal. For example with <code>Trig1.ar(Impulse.ar(0), 4 * SampleDur.ir)</code> one
+actually gets a high signal for five sample frames instead of four.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the trigger. This can be any signal. A trigger happens
                         when the signal changes from non-positive to positive.</p></dd><dt class="param">dur</dt><dd class="cmt"><p>the duration for which the ugens holds the value of the
                         input signal when triggered</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig1$.html" class="extype" name="de.sciss.synth.ugen.Trig1">Trig1</a></p></span></dd></dl><div class="toggleContainer block">
@@ -70,7 +72,7 @@ while this ugens outputs 1, the hold-time is reset to the duration.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -83,7 +85,7 @@ while this ugens outputs 1, the hold-time is reset to the duration.
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>graph - SysSon 1.7.1 API - de.sciss.synth.proc.graph</title>
-          <meta name="description" content="graph - SysSon 1.7.1 API - de.sciss.synth.proc.graph" />
-          <meta name="keywords" content="graph SysSon 1.7.1 API de.sciss.synth.proc.graph" />
+          <title>graph - Mellite 1.9.0 API - de.sciss.synth.proc.graph</title>
+          <meta name="description" content="graph - Mellite 1.9.0 API - de.sciss.synth.proc.graph" />
+          <meta name="keywords" content="graph Mellite 1.9.0 API de.sciss.synth.proc.graph" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -94,7 +94,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Attribute.html"><span class="name">Attribute</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <a href="Attribute$$Default.html" class="extype" name="de.sciss.synth.proc.graph.Attribute.Default">Default</a></span>, <span name="fixed">fixed: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Attribute.html"><span class="name">Attribute</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Float">Float</span>]]</span>, <span name="fixed">fixed: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@AttributeextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
@@ -172,6 +172,27 @@
       <p class="shortcomment cmt">An element referring to a random access buffer provided through an attribute.</p><div class="fullcomment"><div class="comment cmt"><p>An element referring to a random access buffer provided through an attribute.
 The attribute will typically be an audio grapheme.
 </p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>the attribute key.</p></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.graph.BufferOut" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BufferOutextendsGE.LazywithProductwithSerializable"></a>
+      <a id="BufferOut:BufferOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferOut.html"><span class="name">BufferOut</span></a><span class="params">(<span name="rate">rate: <a href="../../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="artifact">artifact: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="action">action: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="numFrames">numFrames: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="numChannels">numChannels: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufferOutextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that creates an empty buffer for the synth graph to write to.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that creates an empty buffer for the synth graph to write to. Upon completion
+of the encompassing proc, the buffer contents is written to an artifact referred to by its
+attribute-map key. When the file has been written, the action referred to by its attribute-map
+key is called. The element outputs the buffer-id.
+</p></div><dl class="paramcmts block"><dt class="param">rate</dt><dd class="cmt"><p>the rate at which the buffer-id is presented</p></dd><dt class="param">artifact</dt><dd class="cmt"><p>a key into the encompassing object's attribute map, leading to an <code>Artifact</code>.</p></dd><dt class="param">action</dt><dd class="cmt"><p>a key into the encompassing object's attribute map, leading to an <code>Action</code>.</p></dd><dt class="param">numFrames</dt><dd class="cmt"><p>the number of frames to allocate</p></dd><dt class="param">numChannels</dt><dd class="cmt"><p>the number of channels to allocate</p></dd></dl></div>
     </li><li name="de.sciss.synth.proc.graph.DiskIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DiskInextendsStreamwithIsIndividualwithProductwithSerializable"></a>
       <a id="DiskIn:DiskIn"></a>
@@ -375,6 +396,30 @@ in the action through the <code>values</code> method.
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.proc.graph.StopSelf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="StopSelfextendsLazy.Expander[Unit]withProductwithSerializable"></a>
+      <a id="StopSelf:StopSelf"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="StopSelf.html"><span class="name">StopSelf</span></a><span class="params">(<span name="trig">trig: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="pause">pause: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@StopSelfextendsLazy.Expander[Unit]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that when triggers stops the encompassing synth.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that when triggers stops the encompassing synth.
+As opposed to <code>FreeSelf</code>, this triggers a disposal action on
+the client side, possibly synchronising the disposal of
+associated resources.
+</p></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>the trigger signal that invokes the disposal</p></dd><dt class="param">pause</dt><dd class="cmt"><p>if non-zero, immediately pauses the synth
+              when the trigger is received. This can be useful
+              because the client may take a moment to actually
+              dispose the synth.</p></dd></dl></div>
     </li><li name="de.sciss.synth.proc.graph.Time" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TimeextendsGE.LazywithScalarRatedwithProductwithSerializable"></a>
       <a id="Time:Time"></a>
@@ -392,7 +437,7 @@ in the action through the <code>values</code> method.
       </a>
     </span>
       <p class="shortcomment cmt">Absolute time on the canvas, in seconds.</p>
-    </li><li name="de.sciss.synth.proc.graph.VDiskIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.proc.graph.VDiskIn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="VDiskInextendsStreamwithIsIndividualwithProductwithSerializable"></a>
       <a id="VDiskIn:VDiskIn"></a>
       <h4 class="signature">
@@ -408,7 +453,15 @@ in the action through the <code>values</code> method.
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A SoundProcesses aware variant of <code>VDiskIn</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A SoundProcesses aware variant of <code>VDiskIn</code>. It takes its streaming buffer input from
+an attribute with the given <code>key</code>. Default values provide automatic sample-rate-conversion
+to match the audio server.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>key into the containing object's attribute map, where an <code>AudioCue</code> is to be found.</p></dd><dt class="param">speed</dt><dd class="cmt"><p>speed factor as in <code>ugen.VDiskIn</code>. If a negative constant value is given,
+                the actual factor is <code>BufRateScale.kr * -speed</code>, thus <code>-1</code> indicates playback
+                at correct sample rate.</p></dd><dt class="param">interp</dt><dd class="cmt"><p>same as in <code>ugen.VDiskIn</code>. Additionally, a value of <code>-1</code> indicates that
+                interpolation should be chosen according to <code>speed</code>. This is useful in conjunction
+                with negative speed values where interpolation might depend on actual SRC.</p></dd><dt class="param">maxSpeed</dt><dd class="cmt"><p>maximum expected speed, which will be used in consideration of the buffer size needed.
+                if zero (default), and <code>speed</code> is a constant, this will be aligned with <code>speed</code>.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -503,6 +556,23 @@ in the action through the <code>values</code> method.
       <p class="shortcomment cmt">An element referring to a random access buffer provided through an attribute.</p><div class="fullcomment"><div class="comment cmt"><p>An element referring to a random access buffer provided through an attribute.
 The attribute will typically be an audio grapheme.
 </p></div></div>
+    </li><li name="de.sciss.synth.proc.graph.BufferOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufferOut"></a>
+      <a id="BufferOut:BufferOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferOut$.html"><span class="name">BufferOut</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@BufferOut" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.graph.DiskIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DiskIn"></a>
       <a id="DiskIn:DiskIn"></a>
@@ -622,6 +692,23 @@ The attribute will typically be an audio grapheme.
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.proc.graph.Ops" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Ops"></a>
+      <a id="Ops:Ops"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Ops$.html"><span class="name">Ops</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@Ops" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.graph.ScanIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ScanIn"></a>
       <a id="ScanIn:ScanIn"></a>
@@ -669,6 +756,23 @@ The attribute will typically be an audio grapheme.
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@ScanOut" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.graph.StopSelf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StopSelf"></a>
+      <a id="StopSelf:StopSelf"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StopSelf$.html"><span class="name">StopSelf</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.package@StopSelf" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

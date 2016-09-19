@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Input - SysSon 1.7.1 API - de.sciss.synth.proc.UGenGraphBuilder.Input</title>
-          <meta name="description" content="Input - SysSon 1.7.1 API - de.sciss.synth.proc.UGenGraphBuilder.Input" />
-          <meta name="keywords" content="Input SysSon 1.7.1 API de.sciss.synth.proc.UGenGraphBuilder.Input" />
+          <title>Input - Mellite 1.9.0 API - de.sciss.synth.proc.UGenGraphBuilder.Input</title>
+          <meta name="description" content="Input - Mellite 1.9.0 API - de.sciss.synth.proc.UGenGraphBuilder.Input" />
+          <meta name="keywords" content="Input Mellite 1.9.0 API de.sciss.synth.proc.UGenGraphBuilder.Input" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -64,7 +64,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -77,7 +77,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -119,15 +119,15 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="UGenGraphBuilder$$Input$$Attribute.html"><span class="name">Attribute</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="UGenGraphBuilder$$Input.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="UGenGraphBuilder$$Input$$Attribute.html"><span class="name">Attribute</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="UGenGraphBuilder$$Input.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$$Input$@AttributeextendsUGenGraphBuilder.InputwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Specifies access to a scalar attribute.</p><div class="fullcomment"><div class="comment cmt"><p>Specifies access to a scalar attribute.
-</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>name (key) of the attribute</p></dd><dt class="param">numChannels</dt><dd class="cmt"><p>the required number of channels or <code>-1</code> if no specific requirement</p></dd></dl></div>
+      <p class="shortcomment cmt">Specifies access to a an attribute's value at build time.</p><div class="fullcomment"><div class="comment cmt"><p>Specifies access to a an attribute's value at build time.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>name (key) of the attribute</p></dd></dl></div>
     </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.Buffer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufferextendsUGenGraphBuilder.InputwithProductwithSerializable"></a>
       <a id="Buffer:Buffer"></a>
@@ -147,6 +147,24 @@
       <p class="shortcomment cmt">Specifies access to a random access buffer.</p><div class="fullcomment"><div class="comment cmt"><p>Specifies access to a random access buffer.
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>name (key) of the attribute referring to an object that
                     can be buffered (e.g. audio grapheme)</p></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.BufferOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufferOutextendsUGenGraphBuilder.InputwithUGenGraphBuilder.KeywithProductwithSerializable"></a>
+      <a id="BufferOut:BufferOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenGraphBuilder$$Input$$BufferOut.html"><span class="name">BufferOut</span></a><span class="params">(<span name="artifact">artifact: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="action">action: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="numFrames">numFrames: <span class="extype" name="scala.Int">Int</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="UGenGraphBuilder$$Input.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</a> with <a href="UGenGraphBuilder$$Key.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$$Input$@BufferOutextendsUGenGraphBuilder.InputwithUGenGraphBuilder.KeywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Specifies access to an empty buffer that will be
+written to disk when the encompassing graph finishes.</p>
     </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.DiskOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DiskOutextendsUGenGraphBuilder.InputwithProductwithSerializable"></a>
       <a id="DiskOut:DiskOut"></a>
@@ -164,23 +182,24 @@
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.Scan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ScanextendsUGenGraphBuilder.InputwithProductwithSerializable"></a>
-      <a id="Scan:Scan"></a>
+    </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.Scalar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ScalarextendsUGenGraphBuilder.InputwithProductwithSerializable"></a>
+      <a id="Scalar:Scalar"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="UGenGraphBuilder$$Input$$Scan.html"><span class="name">Scan</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fixed">fixed: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="UGenGraphBuilder$$Input.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="UGenGraphBuilder$$Input$$Scalar.html"><span class="name">Scalar</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="requiredNumChannels">requiredNumChannels: <span class="extype" name="scala.Int">Int</span></span>, <span name="defaultNumChannels">defaultNumChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="UGenGraphBuilder$$Input.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$$Input$@ScanextendsUGenGraphBuilder.InputwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$$Input$@ScalarextendsUGenGraphBuilder.InputwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Specifies access to a scalar attribute as a control signal.</p><div class="fullcomment"><div class="comment cmt"><p>Specifies access to a scalar attribute as a control signal.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>name (key) of the attribute</p></dd><dt class="param">requiredNumChannels</dt><dd class="cmt"><p>the required number of channels or <code>-1</code> if no specific requirement</p></dd><dt class="param">defaultNumChannels</dt><dd class="cmt"><p>the default  number of channels or <code>-1</code> if no default provided</p></dd></dl></div>
     </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.Stream" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="StreamextendsUGenGraphBuilder.InputwithProductwithSerializable"></a>
       <a id="Stream:Stream"></a>
@@ -324,19 +343,36 @@
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.Scan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Scan"></a>
-      <a id="Scan:Scan"></a>
+    </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.Scalar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Scalar"></a>
+      <a id="Scalar:Scalar"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="UGenGraphBuilder$$Input$$Scan$.html"><span class="name">Scan</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="UGenGraphBuilder$$Input$$Scalar$.html"><span class="name">Scalar</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$$Input$@Scan" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$$Input$@Scalar" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Input.StopSelf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StopSelf"></a>
+      <a id="StopSelf:StopSelf"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenGraphBuilder$$Input$$StopSelf$.html"><span class="name">StopSelf</span></a><span class="result"> extends <a href="UGenGraphBuilder$$Input.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</a> with <a href="UGenGraphBuilder$$Key.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$$Input$@StopSelf" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

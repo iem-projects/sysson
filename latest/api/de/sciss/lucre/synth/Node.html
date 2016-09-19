@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Node - SysSon 1.7.1 API - de.sciss.lucre.synth.Node</title>
-          <meta name="description" content="Node - SysSon 1.7.1 API - de.sciss.lucre.synth.Node" />
-          <meta name="keywords" content="Node SysSon 1.7.1 API de.sciss.lucre.synth.Node" />
+          <title>Node - Mellite 1.9.0 API - de.sciss.lucre.synth.Node</title>
+          <meta name="description" content="Node - Mellite 1.9.0 API - de.sciss.lucre.synth.Node" />
+          <meta name="keywords" content="Node Mellite 1.9.0 API de.sciss.lucre.synth.Node" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a>, <a href="Resource.html" class="extype" name="de.sciss.lucre.synth.Resource">Resource</a>, <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a>], <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a>, <a href="Resource.html" class="extype" name="de.sciss.lucre.synth.Resource">Resource</a>, <a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a>], <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="Group.html" class="extype" name="de.sciss.lucre.synth.Group">Group</a>, <a href="Synth.html" class="extype" name="de.sciss.lucre.synth.Synth">Synth</a></div>
@@ -65,7 +65,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -78,7 +78,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -111,7 +111,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Disposable</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a></dd></dl></div>
     </li><li name="de.sciss.lucre.synth.Node#fill" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="fill(data:de.sciss.synth.ControlFillRange*)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
       <a id="fill(ControlFillRange*)(Txn):Unit"></a>
@@ -350,6 +350,23 @@
       </a>
     </span>
       
+    </li><li name="de.sciss.lucre.synth.Node#play" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="play(target:de.sciss.lucre.synth.Node,args:scala.collection.immutable.Seq[de.sciss.synth.ControlSet],addAction:de.sciss.synth.AddAction,dependencies:List[de.sciss.lucre.synth.Resource])(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="play(Node,Seq[ControlSet],AddAction,List[Resource])(Txn):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">play</span><span class="params">(<span name="target">target: <a href="" class="extype" name="de.sciss.lucre.synth.Node">Node</a></span>, <span name="args">args: <span class="extype" name="scala.collection.immutable.Seq">Seq</span>[<a href="../../synth/ControlSet.html" class="extype" name="de.sciss.synth.ControlSet">ControlSet</a>]</span>, <span name="addAction">addAction: <a href="../../synth/AddAction.html" class="extype" name="de.sciss.synth.AddAction">AddAction</a></span>, <span name="dependencies">dependencies: <a href="../../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<a href="Resource.html" class="extype" name="de.sciss.lucre.synth.Resource">Resource</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Node@play(target:de.sciss.lucre.synth.Node,args:scala.collection.immutable.Seq[de.sciss.synth.ControlSet],addAction:de.sciss.synth.AddAction,dependencies:List[de.sciss.lucre.synth.Resource])(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.lucre.synth.Node#read" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="read(assoc:(de.sciss.lucre.synth.ControlBus,String))(implicittx:de.sciss.lucre.synth.Txn):de.sciss.lucre.synth.ControlBusNodeSetter"></a>
       <a id="read((ControlBus,String))(Txn):ControlBusNodeSetter"></a>
@@ -419,7 +436,7 @@
     </span>
       
     </li><li name="de.sciss.lucre.synth.Node#release" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="release(releaseTime:de.sciss.synth.Optional[Double])(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="release(releaseTime:de.sciss.optional.Optional[Double])(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
       <a id="release(Optional[Double])(Txn):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -427,10 +444,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">release</span><span class="params">(<span name="releaseTime">releaseTime: <a href="../../synth/Optional.html" class="extype" name="de.sciss.synth.Optional">Optional</a>[<span class="extype" name="scala.Double">Double</span>] = <span class="symbol"><span class="name"><a href="../../../../scala/package.html">None</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">release</span><span class="params">(<span name="releaseTime">releaseTime: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<span class="extype" name="scala.Double">Double</span>] = <span class="symbol"><span class="name"><a href="../../../../scala/package.html">None</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Node@release(releaseTime:de.sciss.synth.Optional[Double])(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Node@release(releaseTime:de.sciss.optional.Optional[Double])(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -929,7 +946,7 @@ this node ends.
             </div><div class="parent" name="de.sciss.lucre.synth.Resource">
               <h3>Inherited from <a href="Resource.html" class="extype" name="de.sciss.lucre.synth.Resource">Resource</a></h3>
             </div><div class="parent" name="de.sciss.lucre.stm.Disposable">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a>]</h3>
+              <h3>Inherited from <a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

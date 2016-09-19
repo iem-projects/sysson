@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>IFFT - SysSon 1.7.1 API - de.sciss.synth.ugen.IFFT</title>
-          <meta name="description" content="IFFT - SysSon 1.7.1 API - de.sciss.synth.ugen.IFFT" />
-          <meta name="keywords" content="IFFT SysSon 1.7.1 API de.sciss.synth.ugen.IFFT" />
+          <title>IFFT - Mellite 1.9.0 API - de.sciss.synth.ugen.IFFT</title>
+          <meta name="description" content="IFFT - Mellite 1.9.0 API - de.sciss.synth.ugen.IFFT" />
+          <meta name="keywords" content="IFFT Mellite 1.9.0 API de.sciss.synth.ugen.IFFT" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -56,9 +56,10 @@ domain signal back into the time domain.
 </p></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>reference to the spectral signal, returned as a
                         buffer-identifier from <code>FFT</code> or the <code>PV_...</code> UGens.</p></dd><dt class="param">winType</dt><dd class="cmt"><p>The window function applied after each IFFT is taken.
                         The default of <code>0</code> is a sine window, <code>-1</code> is a rectangle
-                        window, and <code>1</code> is a Hann window.</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
+                        window, and <code>1</code> is a Hann window. <i>(init-time only)</i></p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
                         the fft size. If you wish to perform zero padding, an
-                        explicit window size can be specified.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FFT$.html" class="extype" name="de.sciss.synth.ugen.FFT">FFT</a></p></span></dd></dl><div class="toggleContainer block">
+                        explicit window size can be specified. <i>(init-time
+                        only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FFT$.html" class="extype" name="de.sciss.synth.ugen.FFT">FFT</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -71,7 +72,7 @@ domain signal back into the time domain.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -84,7 +85,7 @@ domain signal back into the time domain.
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -116,9 +117,10 @@ domain signal back into the time domain.
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>reference to the spectral signal, returned as a
                         buffer-identifier from <code>FFT</code> or the <code>PV_...</code> UGens.</p></dd><dt class="param">winType</dt><dd class="cmt"><p>The window function applied after each IFFT is taken.
                         The default of <code>0</code> is a sine window, <code>-1</code> is a rectangle
-                        window, and <code>1</code> is a Hann window.</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
+                        window, and <code>1</code> is a Hann window. <i>(init-time only)</i></p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
                         the fft size. If you wish to perform zero padding, an
-                        explicit window size can be specified.</p></dd></dl></div>
+                        explicit window size can be specified. <i>(init-time
+                        only)</i></p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -573,7 +575,8 @@ expansion
       <p class="shortcomment cmt">With the default value of zero, the window size equals
                         the fft size.</p><div class="fullcomment"><div class="comment cmt"><p>With the default value of zero, the window size equals
                         the fft size. If you wish to perform zero padding, an
-                        explicit window size can be specified.</p></div></div>
+                        explicit window size can be specified. <i>(init-time
+                        only)</i></p></div></div>
     </li><li name="de.sciss.synth.ugen.IFFT#winType" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="winType:de.sciss.synth.GE"></a>
       <a id="winType:GE"></a>
@@ -592,7 +595,7 @@ expansion
     </span>
       <p class="shortcomment cmt">The window function applied after each IFFT is taken.</p><div class="fullcomment"><div class="comment cmt"><p>The window function applied after each IFFT is taken.
                         The default of <code>0</code> is a sine window, <code>-1</code> is a rectangle
-                        window, and <code>1</code> is a Hann window.</p></div></div>
+                        window, and <code>1</code> is a Hann window. <i>(init-time only)</i></p></div></div>
     </li></ol>
             </div>
 

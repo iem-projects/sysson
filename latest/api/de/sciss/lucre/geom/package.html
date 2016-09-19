@@ -1,0 +1,831 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>geom - Mellite 1.9.0 API - de.sciss.lucre.geom</title>
+          <meta name="description" content="geom - Mellite 1.9.0 API - de.sciss.lucre.geom" />
+          <meta name="keywords" content="geom Mellite 1.9.0 API de.sciss.lucre.geom" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'de.sciss.lucre.geom.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.lucre">lucre</a></p>
+        <h1>geom</h1><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">geom</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.lucre.geom.DistanceMeasure" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="DistanceMeasure[M,D&lt;:de.sciss.lucre.geom.Space[D]]extendsAnyRef"></a>
+      <a id="DistanceMeasure[M,D&lt;:Space[D]]:DistanceMeasure[M,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DistanceMeasure.html"><span class="name">DistanceMeasure</span></a><span class="tparams">[<span name="M">M</span>, <span name="D">D &lt;: <a href="Space.html" class="extype" name="de.sciss.lucre.geom.Space">Space</a>[<span class="extype" name="de.sciss.lucre.geom.DistanceMeasure.D">D</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@DistanceMeasure[M,D&lt;:de.sciss.lucre.geom.Space[D]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>DistanceMeasure</code> is used in nearest neighbour search,
+in order to allow different ways points and children are
+favoured or filtered during the search.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>DistanceMeasure</code> is used in nearest neighbour search,
+in order to allow different ways points and children are
+favoured or filtered during the search.</p><p>For simplicity and performance, the measures, although
+they could be generalized as <code>Ordered</code>, are given as
+<code>Long</code> values. Only comparisons are performed with
+the results, therefore some optimizations may be made,
+for example the <code>euclidean</code> measure omits taking
+the square root of the distances, while still preserving
+the ordering between the possible results.
+</p></div></div>
+    </li><li name="de.sciss.lucre.geom.HyperCube" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HyperCube[D&lt;:de.sciss.lucre.geom.Space[D]]extendsAnyRef"></a>
+      <a id="HyperCube[D&lt;:Space[D]]:HyperCube[D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HyperCube.html"><span class="name">HyperCube</span></a><span class="tparams">[<span name="D">D &lt;: <a href="Space.html" class="extype" name="de.sciss.lucre.geom.Space">Space</a>[<span class="extype" name="de.sciss.lucre.geom.HyperCube.D">D</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@HyperCube[D&lt;:de.sciss.lucre.geom.Space[D]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntCube" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntCubeextendsIntCubeLikewithProductwithSerializable"></a>
+      <a id="IntCube:IntCube"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntCube.html"><span class="name">IntCube</span></a><span class="params">(<span name="cx">cx: <span class="extype" name="scala.Int">Int</span></span>, <span name="cy">cy: <span class="extype" name="scala.Int">Int</span></span>, <span name="cz">cz: <span class="extype" name="scala.Int">Int</span></span>, <span name="extent">extent: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="IntCubeLike.html" class="extype" name="de.sciss.lucre.geom.IntCubeLike">IntCubeLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntCubeextendsIntCubeLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntCubeLike" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="IntCubeLikeextendsHyperCube[de.sciss.lucre.geom.IntSpace.ThreeDim]withQueryShape[BigInt,de.sciss.lucre.geom.IntSpace.ThreeDim]"></a>
+      <a id="IntCubeLike:IntCubeLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntCubeLike.html"><span class="name">IntCubeLike</span></a><span class="result"> extends <a href="HyperCube.html" class="extype" name="de.sciss.lucre.geom.HyperCube">HyperCube</a>[<a href="IntSpace$$ThreeDim.html" class="extype" name="de.sciss.lucre.geom.IntSpace.ThreeDim">ThreeDim</a>] with <a href="QueryShape.html" class="extype" name="de.sciss.lucre.geom.QueryShape">QueryShape</a>[<a href="../../../../scala/package.html#BigInt=scala.math.BigInt" class="extmbr" name="scala.BigInt">BigInt</a>, <a href="IntSpace$$ThreeDim.html" class="extype" name="de.sciss.lucre.geom.IntSpace.ThreeDim">ThreeDim</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntCubeLikeextendsHyperCube[de.sciss.lucre.geom.IntSpace.ThreeDim]withQueryShape[BigInt,de.sciss.lucre.geom.IntSpace.ThreeDim]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A three dimensional cube.</p><div class="fullcomment"><div class="comment cmt"><p>A three dimensional cube.</p><p>Wikipedia: &quot;Usually, the octant with all three positive coordinates is
+referred to as the first octant. There is no generally used naming
+convention for the other seven octants.&quot;</p><p>However the article suggests (given that we count from zero):
+- 0 (binary 000) - top-front-left
+- 1 (binary 001) - top-back-right
+- 2 (binary 010) - top-back-left
+- 3 (binary 011) - top-front-left
+- 4 (binary 100) - bottom-front-left
+- 5 (binary 101) - bottom-back-left
+- 6 (binary 110) - bottom-back-right
+- 7 (binary 111) - bottom-front-right</p><p>Obviously there is no clear connection between the orientation
+and the binary representation. We thus prefer to chose the
+the octants numbering in a binary fashion, assigning bit 0
+to the x-axis, bit 1 to the y-axis, and bit 2 to
+the z-axis, where top-front-left is 000, hence:</p><p>- 0 (binary 000) - left-top-front
+- 1 (binary 001) - right-top-front
+- 2 (binary 010) - left-bottom-front
+- 3 (binary 011) - right-bottom-front
+- 4 (binary 100) - left-top-back
+- 5 (binary 101) - right-top-back
+- 6 (binary 110) - left-bottom-back
+- 7 (binary 111) - right-bottom-back
+</p></div></div>
+    </li><li name="de.sciss.lucre.geom.IntHyperCubeN" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntHyperCubeNextendsIntHyperCubeNLikewithProductwithSerializable"></a>
+      <a id="IntHyperCubeN:IntHyperCubeN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntHyperCubeN.html"><span class="name">IntHyperCubeN</span></a><span class="params">(<span name="components">components: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Int">Int</span>]</span>, <span name="extent">extent: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="IntHyperCubeNLike.html" class="extype" name="de.sciss.lucre.geom.IntHyperCubeNLike">IntHyperCubeNLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntHyperCubeNextendsIntHyperCubeNLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntHyperCubeNLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IntHyperCubeNLikeextendsHyperCube[de.sciss.lucre.geom.IntSpace.NDim]withQueryShape[BigInt,de.sciss.lucre.geom.IntSpace.NDim]"></a>
+      <a id="IntHyperCubeNLike:IntHyperCubeNLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntHyperCubeNLike.html"><span class="name">IntHyperCubeNLike</span></a><span class="result"> extends <a href="HyperCube.html" class="extype" name="de.sciss.lucre.geom.HyperCube">HyperCube</a>[<a href="IntSpace$$NDim.html" class="extype" name="de.sciss.lucre.geom.IntSpace.NDim">NDim</a>] with <a href="QueryShape.html" class="extype" name="de.sciss.lucre.geom.QueryShape">QueryShape</a>[<a href="../../../../scala/package.html#BigInt=scala.math.BigInt" class="extmbr" name="scala.BigInt">BigInt</a>, <a href="IntSpace$$NDim.html" class="extype" name="de.sciss.lucre.geom.IntSpace.NDim">NDim</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntHyperCubeNLikeextendsHyperCube[de.sciss.lucre.geom.IntSpace.NDim]withQueryShape[BigInt,de.sciss.lucre.geom.IntSpace.NDim]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntHyperRectangleN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IntHyperRectangleNextendsIntHyperRectangleNLikewithProductwithSerializable"></a>
+      <a id="IntHyperRectangleN:IntHyperRectangleN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntHyperRectangleN.html"><span class="name">IntHyperRectangleN</span></a><span class="params">(<span name="components">components: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)]</span>)</span><span class="result"> extends <a href="IntHyperRectangleNLike.html" class="extype" name="de.sciss.lucre.geom.IntHyperRectangleNLike">IntHyperRectangleNLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntHyperRectangleNextendsIntHyperRectangleNLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An n-dimensional hyper rectangular.</p><div class="fullcomment"><div class="comment cmt"><p>An n-dimensional hyper rectangular.
+</p></div><dl class="paramcmts block"><dt class="param">components</dt><dd class="cmt"><p>pairs of minimum and maximum coordinates for each dimension. In each tuple,
+                  <code>_1</code> must be <code>&lt;=</code> <code>_2</code>. The maximum coordinates are inclusive (defining the maximum
+                  coordinate **within** the shape), thus it is not possible to create rectangles with
+                  side lengths of zero.</p></dd></dl></div>
+    </li><li name="de.sciss.lucre.geom.IntHyperRectangleNLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IntHyperRectangleNLikeextendsQueryShape[BigInt,de.sciss.lucre.geom.IntSpace.NDim]"></a>
+      <a id="IntHyperRectangleNLike:IntHyperRectangleNLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntHyperRectangleNLike.html"><span class="name">IntHyperRectangleNLike</span></a><span class="result"> extends <a href="QueryShape.html" class="extype" name="de.sciss.lucre.geom.QueryShape">QueryShape</a>[<a href="../../../../scala/package.html#BigInt=scala.math.BigInt" class="extmbr" name="scala.BigInt">BigInt</a>, <a href="IntSpace$$NDim.html" class="extype" name="de.sciss.lucre.geom.IntSpace.NDim">NDim</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntHyperRectangleNLikeextendsQueryShape[BigInt,de.sciss.lucre.geom.IntSpace.NDim]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An n-dimensional rectangular query shape.</p>
+    </li><li name="de.sciss.lucre.geom.IntPoint2D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntPoint2DextendsIntPoint2DLikewithProductwithSerializable"></a>
+      <a id="IntPoint2D:IntPoint2D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPoint2D.html"><span class="name">IntPoint2D</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Int">Int</span></span>, <span name="y">y: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="IntPoint2DLike.html" class="extype" name="de.sciss.lucre.geom.IntPoint2DLike">IntPoint2DLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPoint2DextendsIntPoint2DLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntPoint2DLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IntPoint2DLikeextendsAnyRef"></a>
+      <a id="IntPoint2DLike:IntPoint2DLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPoint2DLike.html"><span class="name">IntPoint2DLike</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPoint2DLikeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntPoint3D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntPoint3DextendsIntPoint3DLikewithProductwithSerializable"></a>
+      <a id="IntPoint3D:IntPoint3D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPoint3D.html"><span class="name">IntPoint3D</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Int">Int</span></span>, <span name="y">y: <span class="extype" name="scala.Int">Int</span></span>, <span name="z">z: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="IntPoint3DLike.html" class="extype" name="de.sciss.lucre.geom.IntPoint3DLike">IntPoint3DLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPoint3DextendsIntPoint3DLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntPoint3DLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IntPoint3DLikeextendsAnyRef"></a>
+      <a id="IntPoint3DLike:IntPoint3DLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPoint3DLike.html"><span class="name">IntPoint3DLike</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPoint3DLikeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntPointN" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntPointNextendsIntPointNLikewithProductwithSerializable"></a>
+      <a id="IntPointN:IntPointN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPointN.html"><span class="name">IntPointN</span></a><span class="params">(<span name="components">components: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result"> extends <a href="IntPointNLike.html" class="extype" name="de.sciss.lucre.geom.IntPointNLike">IntPointNLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPointNextendsIntPointNLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntPointNLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IntPointNLikeextendsAnyRef"></a>
+      <a id="IntPointNLike:IntPointNLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPointNLike.html"><span class="name">IntPointNLike</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPointNLikeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntRectangle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntRectangleextendsIntRectangleLikewithProductwithSerializable"></a>
+      <a id="IntRectangle:IntRectangle"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntRectangle.html"><span class="name">IntRectangle</span></a><span class="params">(<span name="left">left: <span class="extype" name="scala.Int">Int</span></span>, <span name="top">top: <span class="extype" name="scala.Int">Int</span></span>, <span name="width">width: <span class="extype" name="scala.Int">Int</span></span>, <span name="height">height: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="IntRectangleLike.html" class="extype" name="de.sciss.lucre.geom.IntRectangleLike">IntRectangleLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntRectangleextendsIntRectangleLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntRectangleLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IntRectangleLikeextendsQueryShape[Long,de.sciss.lucre.geom.IntSpace.TwoDim]"></a>
+      <a id="IntRectangleLike:IntRectangleLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntRectangleLike.html"><span class="name">IntRectangleLike</span></a><span class="result"> extends <a href="QueryShape.html" class="extype" name="de.sciss.lucre.geom.QueryShape">QueryShape</a>[<span class="extype" name="scala.Long">Long</span>, <a href="IntSpace$$TwoDim.html" class="extype" name="de.sciss.lucre.geom.IntSpace.TwoDim">TwoDim</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntRectangleLikeextendsQueryShape[Long,de.sciss.lucre.geom.IntSpace.TwoDim]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A 2D rectangular query shape.</p>
+    </li><li name="de.sciss.lucre.geom.IntSquare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntSquareextendsIntSquareLikewithProductwithSerializable"></a>
+      <a id="IntSquare:IntSquare"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntSquare.html"><span class="name">IntSquare</span></a><span class="params">(<span name="cx">cx: <span class="extype" name="scala.Int">Int</span></span>, <span name="cy">cy: <span class="extype" name="scala.Int">Int</span></span>, <span name="extent">extent: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="IntSquareLike.html" class="extype" name="de.sciss.lucre.geom.IntSquareLike">IntSquareLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntSquareextendsIntSquareLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntSquareLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IntSquareLikeextendsHyperCube[de.sciss.lucre.geom.IntSpace.TwoDim]withQueryShape[Long,de.sciss.lucre.geom.IntSpace.TwoDim]"></a>
+      <a id="IntSquareLike:IntSquareLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntSquareLike.html"><span class="name">IntSquareLike</span></a><span class="result"> extends <a href="HyperCube.html" class="extype" name="de.sciss.lucre.geom.HyperCube">HyperCube</a>[<a href="IntSpace$$TwoDim.html" class="extype" name="de.sciss.lucre.geom.IntSpace.TwoDim">TwoDim</a>] with <a href="QueryShape.html" class="extype" name="de.sciss.lucre.geom.QueryShape">QueryShape</a>[<span class="extype" name="scala.Long">Long</span>, <a href="IntSpace$$TwoDim.html" class="extype" name="de.sciss.lucre.geom.IntSpace.TwoDim">TwoDim</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntSquareLikeextendsHyperCube[de.sciss.lucre.geom.IntSpace.TwoDim]withQueryShape[Long,de.sciss.lucre.geom.IntSpace.TwoDim]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.LongPoint2D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongPoint2DextendsLongPoint2DLikewithProductwithSerializable"></a>
+      <a id="LongPoint2D:LongPoint2D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LongPoint2D.html"><span class="name">LongPoint2D</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Long">Long</span></span>, <span name="y">y: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="LongPoint2DLike.html" class="extype" name="de.sciss.lucre.geom.LongPoint2DLike">LongPoint2DLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongPoint2DextendsLongPoint2DLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.LongPoint2DLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LongPoint2DLikeextendsAnyRef"></a>
+      <a id="LongPoint2DLike:LongPoint2DLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LongPoint2DLike.html"><span class="name">LongPoint2DLike</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongPoint2DLikeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.LongRectangle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongRectangleextendsLongRectangleLikewithProductwithSerializable"></a>
+      <a id="LongRectangle:LongRectangle"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LongRectangle.html"><span class="name">LongRectangle</span></a><span class="params">(<span name="left">left: <span class="extype" name="scala.Long">Long</span></span>, <span name="top">top: <span class="extype" name="scala.Long">Long</span></span>, <span name="width">width: <span class="extype" name="scala.Long">Long</span></span>, <span name="height">height: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="LongRectangleLike.html" class="extype" name="de.sciss.lucre.geom.LongRectangleLike">LongRectangleLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongRectangleextendsLongRectangleLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.LongRectangleLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LongRectangleLikeextendsQueryShape[BigInt,de.sciss.lucre.geom.LongSpace.TwoDim]"></a>
+      <a id="LongRectangleLike:LongRectangleLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LongRectangleLike.html"><span class="name">LongRectangleLike</span></a><span class="result"> extends <a href="QueryShape.html" class="extype" name="de.sciss.lucre.geom.QueryShape">QueryShape</a>[<a href="../../../../scala/package.html#BigInt=scala.math.BigInt" class="extmbr" name="scala.BigInt">BigInt</a>, <a href="LongSpace$$TwoDim.html" class="extype" name="de.sciss.lucre.geom.LongSpace.TwoDim">TwoDim</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongRectangleLikeextendsQueryShape[BigInt,de.sciss.lucre.geom.LongSpace.TwoDim]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A 2D rectangular query shape.</p>
+    </li><li name="de.sciss.lucre.geom.LongSquare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongSquareextendsLongSquareLikewithProductwithSerializable"></a>
+      <a id="LongSquare:LongSquare"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LongSquare.html"><span class="name">LongSquare</span></a><span class="params">(<span name="cx">cx: <span class="extype" name="scala.Long">Long</span></span>, <span name="cy">cy: <span class="extype" name="scala.Long">Long</span></span>, <span name="extent">extent: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="LongSquareLike.html" class="extype" name="de.sciss.lucre.geom.LongSquareLike">LongSquareLike</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongSquareextendsLongSquareLikewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.LongSquareLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LongSquareLikeextendsHyperCube[de.sciss.lucre.geom.LongSpace.TwoDim]withQueryShape[BigInt,de.sciss.lucre.geom.LongSpace.TwoDim]"></a>
+      <a id="LongSquareLike:LongSquareLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LongSquareLike.html"><span class="name">LongSquareLike</span></a><span class="result"> extends <a href="HyperCube.html" class="extype" name="de.sciss.lucre.geom.HyperCube">HyperCube</a>[<a href="LongSpace$$TwoDim.html" class="extype" name="de.sciss.lucre.geom.LongSpace.TwoDim">TwoDim</a>] with <a href="QueryShape.html" class="extype" name="de.sciss.lucre.geom.QueryShape">QueryShape</a>[<a href="../../../../scala/package.html#BigInt=scala.math.BigInt" class="extmbr" name="scala.BigInt">BigInt</a>, <a href="LongSpace$$TwoDim.html" class="extype" name="de.sciss.lucre.geom.LongSpace.TwoDim">TwoDim</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongSquareLikeextendsHyperCube[de.sciss.lucre.geom.LongSpace.TwoDim]withQueryShape[BigInt,de.sciss.lucre.geom.LongSpace.TwoDim]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.QueryShape" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="QueryShape[Area,D&lt;:de.sciss.lucre.geom.Space[D]]extendsAnyRef"></a>
+      <a id="QueryShape[Area,D&lt;:Space[D]]:QueryShape[Area,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="QueryShape.html"><span class="name">QueryShape</span></a><span class="tparams">[<span name="Area">Area</span>, <span name="D">D &lt;: <a href="Space.html" class="extype" name="de.sciss.lucre.geom.Space">Space</a>[<span class="extype" name="de.sciss.lucre.geom.QueryShape.D">D</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@QueryShape[Area,D&lt;:de.sciss.lucre.geom.Space[D]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A shape for range queries.</p><div class="fullcomment"><div class="comment cmt"><p>A shape for range queries. Type <code>A</code> indicates the results
+of area calculations, and may be specialized.
+</p></div></div>
+    </li><li name="de.sciss.lucre.geom.Space" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Space[D&lt;:de.sciss.lucre.geom.Space[D]]extendsAnyRef"></a>
+      <a id="Space[D&lt;:Space[D]]:Space[D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Space.html"><span class="name">Space</span></a><span class="tparams">[<span name="D">D &lt;: <a href="Space.html" class="extype" name="de.sciss.lucre.geom.Space">Space</a>[<span class="extype" name="de.sciss.lucre.geom.Space.D">D</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@Space[D&lt;:de.sciss.lucre.geom.Space[D]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Space</code> abstracts over the number of dimensions
+that are used for point and hypercube operations.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>Space</code> abstracts over the number of dimensions
+that are used for point and hypercube operations.</p><p>Big thanks to Aleksey Nikiforov for figuring out
+how to plug the types together...
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="de.sciss.lucre.geom.DistanceMeasure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DistanceMeasure"></a>
+      <a id="DistanceMeasure:DistanceMeasure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DistanceMeasure$.html"><span class="name">DistanceMeasure</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@DistanceMeasure" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntCube" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntCube"></a>
+      <a id="IntCube:IntCube"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntCube$.html"><span class="name">IntCube</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntCube" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntDistanceMeasure2D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntDistanceMeasure2D"></a>
+      <a id="IntDistanceMeasure2D:IntDistanceMeasure2D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntDistanceMeasure2D$.html"><span class="name">IntDistanceMeasure2D</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntDistanceMeasure2D" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntDistanceMeasure3D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntDistanceMeasure3D"></a>
+      <a id="IntDistanceMeasure3D:IntDistanceMeasure3D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntDistanceMeasure3D$.html"><span class="name">IntDistanceMeasure3D</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntDistanceMeasure3D" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntHyperCubeN" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntHyperCubeN"></a>
+      <a id="IntHyperCubeN:IntHyperCubeN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntHyperCubeN$.html"><span class="name">IntHyperCubeN</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntHyperCubeN" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntPoint2D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntPoint2D"></a>
+      <a id="IntPoint2D:IntPoint2D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPoint2D$.html"><span class="name">IntPoint2D</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPoint2D" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntPoint3D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntPoint3D"></a>
+      <a id="IntPoint3D:IntPoint3D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPoint3D$.html"><span class="name">IntPoint3D</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPoint3D" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntPointN" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntPointN"></a>
+      <a id="IntPointN:IntPointN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntPointN$.html"><span class="name">IntPointN</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntPointN" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.IntSpace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntSpace"></a>
+      <a id="IntSpace:IntSpace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntSpace$.html"><span class="name">IntSpace</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@IntSpace" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.LongDistanceMeasure2D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongDistanceMeasure2D"></a>
+      <a id="LongDistanceMeasure2D:LongDistanceMeasure2D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LongDistanceMeasure2D$.html"><span class="name">LongDistanceMeasure2D</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongDistanceMeasure2D" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.LongPoint2D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongPoint2D"></a>
+      <a id="LongPoint2D:LongPoint2D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LongPoint2D$.html"><span class="name">LongPoint2D</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongPoint2D" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.LongSpace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LongSpace"></a>
+      <a id="LongSpace:LongSpace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LongSpace$.html"><span class="name">LongSpace</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongSpace" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides spaces in which coordinates are expressed using <code>Long</code> values.</p><div class="fullcomment"><div class="comment cmt"><p>Provides spaces in which coordinates are expressed using <code>Long</code> values.
+Note that the current implementation due to performance considerations
+requires that the coordinates are clipped to 62-bit range. That is,
+they should be &gt;= -0x2000000000000000L and &lt; 0x2000000000000000L
+</p></div></div>
+    </li><li name="de.sciss.lucre.geom.LongSquare" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongSquare"></a>
+      <a id="LongSquare:LongSquare"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LongSquare$.html"><span class="name">LongSquare</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@LongSquare" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.geom.Space" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Space"></a>
+      <a id="Space:Space"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Space$.html"><span class="name">Space</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.geom.package@Space" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

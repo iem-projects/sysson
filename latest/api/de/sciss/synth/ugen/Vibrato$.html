@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Vibrato - SysSon 1.7.1 API - de.sciss.synth.ugen.Vibrato</title>
-          <meta name="description" content="Vibrato - SysSon 1.7.1 API - de.sciss.synth.ugen.Vibrato" />
-          <meta name="keywords" content="Vibrato SysSon 1.7.1 API de.sciss.synth.ugen.Vibrato" />
+          <title>Vibrato - Mellite 1.9.0 API - de.sciss.synth.ugen.Vibrato</title>
+          <meta name="description" content="Vibrato - Mellite 1.9.0 API - de.sciss.synth.ugen.Vibrato" />
+          <meta name="keywords" content="Vibrato Mellite 1.9.0 API de.sciss.synth.ugen.Vibrato" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -77,7 +77,7 @@ play {
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -90,7 +90,7 @@ play {
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -182,15 +182,18 @@ play {
                         Note that if this is set to a too low value, you may
                         never get vibrato back, since this input is only checked
                         at the end of a cycle.</p></dd><dt class="param">depth</dt><dd class="cmt"><p>amount of vibrato frequency deviation around the
-                        fundamental, as a proportion of the fundamental.</p></dd><dt class="param">delay</dt><dd class="cmt"><p>delay in seconds before vibrato is established.</p></dd><dt class="param">onset</dt><dd class="cmt"><p>transition time in seconds from no vibrato to full
-                        vibrato after the initial delay time.</p></dd><dt class="param">beatVar</dt><dd class="cmt"><p>random (noise) variation on the beat parameter,
+                        fundamental, as a proportion of the fundamental.</p></dd><dt class="param">delay</dt><dd class="cmt"><p>delay in seconds before vibrato is established.
+                        <i>(init-time only)</i></p></dd><dt class="param">onset</dt><dd class="cmt"><p>transition time in seconds from no vibrato to full
+                        vibrato after the initial delay time. <i>(init-time
+                        only)</i></p></dd><dt class="param">beatVar</dt><dd class="cmt"><p>random (noise) variation on the beat parameter,
                         expressed as a proportion of <code>beat</code> . It can change once
                         per cycle of vibrato.</p></dd><dt class="param">depthVar</dt><dd class="cmt"><p>random (noise) variation on the depth of modulation,
                         expressed as a proportion of <code>depth</code> . It can change
                         once per cycle of vibrato. The noise affects
                         independently the up and the down part of vibrato shape
                         within a cycle.</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of vibrato modulation, allowing starting
-                        above or below the fundamental rather than on it.</p></dd></dl></div>
+                        above or below the fundamental rather than on it.
+                        <i>(init-time only)</i></p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Vibrato#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.Vibrato"></a>
       <a id="ar:Vibrato"></a>
@@ -378,15 +381,18 @@ play {
                         Note that if this is set to a too low value, you may
                         never get vibrato back, since this input is only checked
                         at the end of a cycle.</p></dd><dt class="param">depth</dt><dd class="cmt"><p>amount of vibrato frequency deviation around the
-                        fundamental, as a proportion of the fundamental.</p></dd><dt class="param">delay</dt><dd class="cmt"><p>delay in seconds before vibrato is established.</p></dd><dt class="param">onset</dt><dd class="cmt"><p>transition time in seconds from no vibrato to full
-                        vibrato after the initial delay time.</p></dd><dt class="param">beatVar</dt><dd class="cmt"><p>random (noise) variation on the beat parameter,
+                        fundamental, as a proportion of the fundamental.</p></dd><dt class="param">delay</dt><dd class="cmt"><p>delay in seconds before vibrato is established.
+                        <i>(init-time only)</i></p></dd><dt class="param">onset</dt><dd class="cmt"><p>transition time in seconds from no vibrato to full
+                        vibrato after the initial delay time. <i>(init-time
+                        only)</i></p></dd><dt class="param">beatVar</dt><dd class="cmt"><p>random (noise) variation on the beat parameter,
                         expressed as a proportion of <code>beat</code> . It can change once
                         per cycle of vibrato.</p></dd><dt class="param">depthVar</dt><dd class="cmt"><p>random (noise) variation on the depth of modulation,
                         expressed as a proportion of <code>depth</code> . It can change
                         once per cycle of vibrato. The noise affects
                         independently the up and the down part of vibrato shape
                         within a cycle.</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of vibrato modulation, allowing starting
-                        above or below the fundamental rather than on it.</p></dd></dl></div>
+                        above or below the fundamental rather than on it.
+                        <i>(init-time only)</i></p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Vibrato#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.Vibrato"></a>
       <a id="kr:Vibrato"></a>

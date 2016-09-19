@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Pluck - SysSon 1.7.1 API - de.sciss.synth.ugen.Pluck</title>
-          <meta name="description" content="Pluck - SysSon 1.7.1 API - de.sciss.synth.ugen.Pluck" />
-          <meta name="keywords" content="Pluck SysSon 1.7.1 API de.sciss.synth.ugen.Pluck" />
+          <title>Pluck - Mellite 1.9.0 API - de.sciss.synth.ugen.Pluck</title>
+          <meta name="description" content="Pluck - Mellite 1.9.0 API - de.sciss.synth.ugen.Pluck" />
+          <meta name="keywords" content="Pluck Mellite 1.9.0 API de.sciss.synth.ugen.Pluck" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -54,7 +54,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Karplus-Strong UGen.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>An excitation signal.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>Upon a negative to positive transition, the excitation
                         signal will be fed into the delay line.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>Maximum delay time in seconds (initializes the internal
-                        delay buffer).</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. Negative
+                        delay buffer). <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. Negative
                         times emphasize odd partials.</p></dd><dt class="param">coeff</dt><dd class="cmt"><p>the coefficient of the internal OnePole filter. Values
                         should be between -1 and +1 (larger values will be
                         unstable... so be careful!).</p></dd></dl><div class="toggleContainer block">
@@ -70,7 +70,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -83,7 +83,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -114,7 +114,7 @@
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>An excitation signal.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>Upon a negative to positive transition, the excitation
                         signal will be fed into the delay line.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>Maximum delay time in seconds (initializes the internal
-                        delay buffer).</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. Negative
+                        delay buffer). <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. Negative
                         times emphasize odd partials.</p></dd><dt class="param">coeff</dt><dd class="cmt"><p>the coefficient of the internal OnePole filter. Values
                         should be between -1 and +1 (larger values will be
                         unstable... so be careful!).</p></dd></dl></div>
@@ -401,7 +401,7 @@ during expansion.</p><div class="fullcomment"><div class="comment cmt"><p>Abstra
 during expansion. This method is at most called once during graph
 expansion
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the expanded object (depending on the type parameter <code>U</code>)</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.ugen.Pluck">Pluck</a> → <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Pluck#maxDelayTime" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.ugen.Pluck#maxDelayTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="maxDelayTime:de.sciss.synth.GE"></a>
       <a id="maxDelayTime:GE"></a>
       <h4 class="signature">
@@ -418,7 +418,8 @@ expansion
       </a>
     </span>
       <p class="shortcomment cmt">Maximum delay time in seconds (initializes the internal
-                        delay buffer).</p>
+                        delay buffer).</p><div class="fullcomment"><div class="comment cmt"><p>Maximum delay time in seconds (initializes the internal
+                        delay buffer). <i>(init-time only)</i></p></div></div>
     </li><li name="de.sciss.synth.UGenSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>

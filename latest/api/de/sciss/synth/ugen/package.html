@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ugen - SysSon 1.7.1 API - de.sciss.synth.ugen</title>
-          <meta name="description" content="ugen - SysSon 1.7.1 API - de.sciss.synth.ugen" />
-          <meta name="keywords" content="ugen SysSon 1.7.1 API de.sciss.synth.ugen" />
+          <title>ugen - Mellite 1.9.0 API - de.sciss.synth.ugen</title>
+          <meta name="description" content="ugen - Mellite 1.9.0 API - de.sciss.synth.ugen" />
+          <meta name="keywords" content="ugen Mellite 1.9.0 API de.sciss.synth.ugen" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -60,7 +60,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -73,7 +73,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -145,7 +145,7 @@ are ignored.
     </span>
       <p class="shortcomment cmt">All pass delay line with cubic interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>All pass delay line with cubic interpolation.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
                         octave lower.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AllpassL$.html" class="extype" name="de.sciss.synth.ugen.AllpassL">AllpassL</a></p></span><span class="cmt"><p><a href="AllpassN$.html" class="extype" name="de.sciss.synth.ugen.AllpassN">AllpassN</a></p></span></dd></dl></div>
@@ -167,7 +167,7 @@ are ignored.
     </span>
       <p class="shortcomment cmt">All pass delay line with linear interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>All pass delay line with linear interpolation.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
                         octave lower.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AllpassC$.html" class="extype" name="de.sciss.synth.ugen.AllpassC">AllpassC</a></p></span><span class="cmt"><p><a href="AllpassN$.html" class="extype" name="de.sciss.synth.ugen.AllpassN">AllpassN</a></p></span></dd></dl></div>
@@ -189,7 +189,7 @@ are ignored.
     </span>
       <p class="shortcomment cmt">All pass delay line with no interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>All pass delay line with no interpolation.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
                         octave lower.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AllpassC$.html" class="extype" name="de.sciss.synth.ugen.AllpassC">AllpassC</a></p></span><span class="cmt"><p><a href="AllpassL$.html" class="extype" name="de.sciss.synth.ugen.AllpassL">AllpassL</a></p></span></dd></dl></div>
@@ -248,9 +248,11 @@ initialization time only.
 </p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>the frequency in Hertz for which to determine the
                         compensation factor</p></dd><dt class="param">root</dt><dd class="cmt"><p>the root frequency in Hertz, relative to which the
                         curve is calculated. This is usually lowest expected
-                        frequency.</p></dd><dt class="param">minAmp</dt><dd class="cmt"><p>amplitude at the minimum point of the curve. This is
-                        the factor output when <code>freq</code> is approx. 2512 Hz.</p></dd><dt class="param">rootAmp</dt><dd class="cmt"><p>amplitude at the root frequency of the curve. This is
-                        the factor output when <code>freq == root</code> .</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AmpComp$.html" class="extype" name="de.sciss.synth.ugen.AmpComp">AmpComp</a></p></span></dd></dl></div>
+                        frequency. <i>(init-time only)</i></p></dd><dt class="param">minAmp</dt><dd class="cmt"><p>amplitude at the minimum point of the curve. This is
+                        the factor output when <code>freq</code> is approx. 2512 Hz.
+                        <i>(init-time only)</i></p></dd><dt class="param">rootAmp</dt><dd class="cmt"><p>amplitude at the root frequency of the curve. This is
+                        the factor output when <code>freq == root</code> . <i>(init-time
+                        only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AmpComp$.html" class="extype" name="de.sciss.synth.ugen.AmpComp">AmpComp</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Amplitude" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="AmplitudeextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="Amplitude:Amplitude"></a>
@@ -738,7 +740,7 @@ argument!
                         that is onset-detection-triggers, as generated by
                         <code>Onsets</code> , and write the trigger-output to this control
                         bus.</p></dd><dt class="param">numChannels</dt><dd class="cmt"><p>(scalar) How many features (ie how many control bus
-                        channels) are provided</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>(scalar) Size of the temporal window desired (2.0 to
+                        channels) are provided <i>(init-time only)</i></p></dd><dt class="param">winSize</dt><dd class="cmt"><p>(scalar) Size of the temporal window desired (2.0 to
                         3.0 seconds models the human temporal window). You might
                         use longer values for stability of estimate at the
                         expense of reactiveness.</p></dd><dt class="param">phaseSpacing</dt><dd class="cmt"><p>(scalar) Relates to how many different phases to test.
@@ -806,7 +808,7 @@ of the 2D (W, X, Y) Ambisonics field. It is equivalent to:</p><pre>PanB2(_, inA,
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Blip.html"><span class="name">Blip</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="numHarm">numHarm: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">200.0f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Blip.html"><span class="name">Blip</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="numHarm">numHarm: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">200</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@BlipextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
@@ -1216,7 +1218,7 @@ issue a done-action.
                         SynthDefs.</p></dd><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use</p></dd><dt class="param">index</dt><dd class="cmt"><p>audio rate frame-index into the buffer. Can be
                         fractional.</p></dd><dt class="param">loop</dt><dd class="cmt"><p>1 to enable looping, 0 to disable looping. this can be
                         modulated.</p></dd><dt class="param">interp</dt><dd class="cmt"><p>1 for no interpolation, 2 for linear, and 4 for cubic
-                        interpolation</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufRateScale$.html" class="extype" name="de.sciss.synth.ugen.BufRateScale">BufRateScale</a></p></span><span class="cmt"><p><a href="BufFrames$.html" class="extype" name="de.sciss.synth.ugen.BufFrames">BufFrames</a></p></span><span class="cmt"><p><a href="Phasor$.html" class="extype" name="de.sciss.synth.ugen.Phasor">Phasor</a></p></span><span class="cmt"><p><a href="BufWr$.html" class="extype" name="de.sciss.synth.ugen.BufWr">BufWr</a></p></span><span class="cmt"><p><a href="PlayBuf$.html" class="extype" name="de.sciss.synth.ugen.PlayBuf">PlayBuf</a></p></span></dd></dl></div>
+                        interpolation. <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="BufRateScale$.html" class="extype" name="de.sciss.synth.ugen.BufRateScale">BufRateScale</a></p></span><span class="cmt"><p><a href="BufFrames$.html" class="extype" name="de.sciss.synth.ugen.BufFrames">BufFrames</a></p></span><span class="cmt"><p><a href="Phasor$.html" class="extype" name="de.sciss.synth.ugen.Phasor">Phasor</a></p></span><span class="cmt"><p><a href="BufWr$.html" class="extype" name="de.sciss.synth.ugen.BufWr">BufWr</a></p></span><span class="cmt"><p><a href="PlayBuf$.html" class="extype" name="de.sciss.synth.ugen.PlayBuf">PlayBuf</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.BufSampleRate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BufSampleRateextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="BufSampleRate:BufSampleRate"></a>
@@ -1298,6 +1300,26 @@ done-action.
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.ugen.ChannelIndices" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ChannelIndicesextendsUGenSource.SingleOutwithScalarRatedwithProductwithSerializable"></a>
+      <a id="ChannelIndices:ChannelIndices"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChannelIndices.html"><span class="name">ChannelIndices</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@ChannelIndicesextendsUGenSource.SingleOutwithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that produces an integer sequence
+from zero until the number-of-channels of the input element.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that produces an integer sequence
+from zero until the number-of-channels of the input element.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the element whose indices to produce</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.ChannelProxy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ChannelProxyextendsGE.LazywithProductwithSerializable"></a>
       <a id="ChannelProxy:ChannelProxy"></a>
@@ -1339,6 +1361,28 @@ console along with a given identifier.
                         line for every bad value; 2 = post a line only when the
                         floating-point classification changes (e.g., normal -&gt;
                         NaN and vice versa)</p></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.CircleRamp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CircleRampextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="CircleRamp:CircleRamp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CircleRamp.html"><span class="name">CircleRamp</span></a><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">180</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">180</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@CircleRampextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This is a UGen like <code>Ramp</code> , but it always takes the shortest way around a
+defined circle, wrapping values where appropriate.</p><div class="fullcomment"><div class="comment cmt"><p>This is a UGen like <code>Ramp</code> , but it always takes the shortest way around a
+defined circle, wrapping values where appropriate. This can be useful when
+smoothing panning signals for speaker rings, for instance in Vector Base
+Amplitude Panning.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The signal to be smoothed.</p></dd><dt class="param">dur</dt><dd class="cmt"><p>Ramp duration in seconds</p></dd><dt class="param">lo</dt><dd class="cmt"><p>The lower wrap value</p></dd><dt class="param">hi</dt><dd class="cmt"><p>The upper wrap value</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Lag$.html" class="extype" name="de.sciss.synth.ugen.Lag">Lag</a></p></span><span class="cmt"><p><a href="Ramp$.html" class="extype" name="de.sciss.synth.ugen.Ramp">Ramp</a></p></span><span class="cmt"><p><a href="VBAP$.html" class="extype" name="de.sciss.synth.ugen.VBAP">VBAP</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.ClassGenerator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ClassGeneratorextendsRefactoringwithTracingwithCompilerProviderwithCompilerAccesswithTreeFactory"></a>
       <a id="ClassGenerator:ClassGenerator"></a>
@@ -1460,7 +1504,7 @@ it may pass with a probability given by the <code>prob</code> argument.
     </span>
       <p class="shortcomment cmt">Comb delay line with cubic interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Comb delay line with cubic interpolation.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
                         octave lower.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="CombL$.html" class="extype" name="de.sciss.synth.ugen.CombL">CombL</a></p></span><span class="cmt"><p><a href="CombN$.html" class="extype" name="de.sciss.synth.ugen.CombN">CombN</a></p></span></dd></dl></div>
@@ -1482,7 +1526,7 @@ it may pass with a probability given by the <code>prob</code> argument.
     </span>
       <p class="shortcomment cmt">Comb delay line with linear interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Comb delay line with linear interpolation.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
                         octave lower.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="CombC$.html" class="extype" name="de.sciss.synth.ugen.CombC">CombC</a></p></span><span class="cmt"><p><a href="CombN$.html" class="extype" name="de.sciss.synth.ugen.CombN">CombN</a></p></span></dd></dl></div>
@@ -1504,7 +1548,7 @@ it may pass with a probability given by the <code>prob</code> argument.
     </span>
       <p class="shortcomment cmt">Comb delay line with no interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Comb delay line with no interpolation.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. If this
                         time is negative then the feedback coefficient will be
                         negative, thus emphasizing only odd harmonics at an
                         octave lower.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="CombC$.html" class="extype" name="de.sciss.synth.ugen.CombC">CombC</a></p></span><span class="cmt"><p><a href="CombL$.html" class="extype" name="de.sciss.synth.ugen.CombL">CombL</a></p></span></dd></dl></div>
@@ -1776,7 +1820,8 @@ CPU friendly alternative. The process introduces a delay of
 <code>frameSize - blockSize</code> .
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>first operand of the convolution</p></dd><dt class="param">kernel</dt><dd class="cmt"><p>second operand of the convolution</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>convolution size in sample frames, which is half of the
                         FFT size. Must be a power of two. There is maximum
-                        frame-size of 16384 (if exceeded, the server may crash).</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
+                        frame-size of 16384 (if exceeded, the server may crash).
+                        <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Convolution2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Convolution2extendsUGenSource.SingleOutwithIsIndividualwithProductwithSerializable"></a>
       <a id="Convolution2:Convolution2"></a>
@@ -1806,7 +1851,7 @@ of 2048 and a control-block size of 64, this is 1984 sample frames.
                         positive (&lt;= 0 to &gt;0)</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
                         FFT calculated internally by the UGen has a size of
                         twice this value. The maximum allowed <code>frameSize</code> is
-                        16384.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
+                        16384. <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Convolution2L" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Convolution2LextendsUGenSource.SingleOutwithIsIndividualwithProductwithSerializable"></a>
       <a id="Convolution2L:Convolution2L"></a>
@@ -1840,10 +1885,11 @@ buffers.
                         non-positive to positive (&lt;= 0 to &gt;0).</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
                         FFT calculated internally by the UGen has a size of
                         twice this value. The maximum allowed <code>frameSize</code> is
-                        16384.</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
+                        16384. <i>(init-time only)</i></p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
                         If the desired duration in seconds is <code>dur</code> , then the
                         number of periods can be calculated as
-                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
+                        <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Convolution3" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Convolution3extendsUGenSource.SingleOutwithIsIndividualwithProductwithSerializable"></a>
       <a id="Convolution3:Convolution3"></a>
@@ -1865,7 +1911,7 @@ buffers.
                         modulated in combination with the trigger. Even a
                         trigger input of zero is used, upon UGen initialization
                         the kernel must point to a valid buffer, otherwise the
-                        UGen aborts.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
+                        UGen aborts.</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p><i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Crackle" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="CrackleextendsUGenSource.SingleOutwithIsIndividualwithProductwithSerializable"></a>
       <a id="Crackle:Crackle"></a>
@@ -1940,7 +1986,8 @@ zero and one. Although this is a deterministic process, it is randomly seeded.
       </a>
     </span>
       <p class="shortcomment cmt">A UGen that creates a constant signal at a given calculation rate.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that creates a constant signal at a given calculation rate.
-</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>constant value to output, fixed at initialisation time.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LeakDC$.html" class="extype" name="de.sciss.synth.ugen.LeakDC">LeakDC</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>constant value to output, fixed at initialisation time.
+                        <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LeakDC$.html" class="extype" name="de.sciss.synth.ugen.LeakDC">LeakDC</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.DFM1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DFM1extendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="DFM1:DFM1"></a>
@@ -1950,7 +1997,7 @@ zero and one. Although this is a deterministic process, it is randomly seeded.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="DFM1.html"><span class="name">DFM1</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="res">res: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>, <span name="gain">gain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="mode">mode: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="noise">noise: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">3.0E-4f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DFM1.html"><span class="name">DFM1</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440</a></span></span></span>, <span name="res">res: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.1f</a></span></span></span>, <span name="gain">gain: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="mode">mode: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="noise">noise: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">3.0E-4f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@DFM1extendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
@@ -2166,7 +2213,8 @@ table and shift octaves as they do.
       </a>
     </span>
       <p class="shortcomment cmt">A UGen that delays the input by 1 audio frame or control period.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that delays the input by 1 audio frame or control period.</p><p>For audio-rate signals the delay is 1 audio frame, and for control-rate signals
-the delay is 1 control period.
+the delay is 1 control period.</p><p><i>Note:</i> The first value output is not zero but the same as the first input
+value! In this respect the UGen behaves different than <code>DelayN</code> .
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input to be delayed</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayN$.html" class="extype" name="de.sciss.synth.ugen.DelayN">DelayN</a></p></span><span class="cmt"><p><a href="Delay2$.html" class="extype" name="de.sciss.synth.ugen.Delay2">Delay2</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Delay2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Delay2extendsUGenSource.SingleOutwithProductwithSerializable"></a>
@@ -2185,7 +2233,9 @@ the delay is 1 control period.
       </a>
     </span>
       <p class="shortcomment cmt">A UGen that delays the input by 2 audio frames or control periods.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that delays the input by 2 audio frames or control periods.</p><p>For audio-rate signals the delay is 2 audio frames, and for control-rate
-signals the delay is 2 control periods.
+signals the delay is 2 control periods.</p><p><i>Warning:</i> the The first value output is zero, while both the second and the
+third value output equal the first input value! In this respect the UGen behaves
+different than <code>DelayN</code> .
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input to be delayed</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayN$.html" class="extype" name="de.sciss.synth.ugen.DelayN">DelayN</a></p></span><span class="cmt"><p><a href="Delay1$.html" class="extype" name="de.sciss.synth.ugen.Delay1">Delay1</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.DelayC" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DelayCextendsUGenSource.SingleOutwithProductwithSerializable"></a>
@@ -2205,7 +2255,7 @@ signals the delay is 2 control periods.
     </span>
       <p class="shortcomment cmt">Simple delay line with cubic interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Simple delay line with cubic interpolation.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayL$.html" class="extype" name="de.sciss.synth.ugen.DelayL">DelayL</a></p></span><span class="cmt"><p><a href="DelayN$.html" class="extype" name="de.sciss.synth.ugen.DelayN">DelayN</a></p></span></dd></dl></div>
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayL$.html" class="extype" name="de.sciss.synth.ugen.DelayL">DelayL</a></p></span><span class="cmt"><p><a href="DelayN$.html" class="extype" name="de.sciss.synth.ugen.DelayN">DelayN</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.DelayL" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DelayLextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="DelayL:DelayL"></a>
@@ -2224,7 +2274,7 @@ signals the delay is 2 control periods.
     </span>
       <p class="shortcomment cmt">Simple delay line with linear interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Simple delay line with linear interpolation.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayC$.html" class="extype" name="de.sciss.synth.ugen.DelayC">DelayC</a></p></span><span class="cmt"><p><a href="DelayN$.html" class="extype" name="de.sciss.synth.ugen.DelayN">DelayN</a></p></span></dd></dl></div>
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayC$.html" class="extype" name="de.sciss.synth.ugen.DelayC">DelayC</a></p></span><span class="cmt"><p><a href="DelayN$.html" class="extype" name="de.sciss.synth.ugen.DelayN">DelayN</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.DelayN" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DelayNextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="DelayN:DelayN"></a>
@@ -2241,9 +2291,9 @@ signals the delay is 2 control periods.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Simple delay line with no interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Simple delay line with no interpolation.
+      <p class="shortcomment cmt">Simple delay line with no interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Simple delay line with no interpolation. The initial buffer contents is zero.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>The maximum delay time in seconds. used to initialize
-                        the delay buffer size.</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayC$.html" class="extype" name="de.sciss.synth.ugen.DelayC">DelayC</a></p></span><span class="cmt"><p><a href="DelayL$.html" class="extype" name="de.sciss.synth.ugen.DelayL">DelayL</a></p></span></dd></dl></div>
+                        the delay buffer size. <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="DelayC$.html" class="extype" name="de.sciss.synth.ugen.DelayC">DelayC</a></p></span><span class="cmt"><p><a href="DelayL$.html" class="extype" name="de.sciss.synth.ugen.DelayL">DelayL</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Demand" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DemandextendsUGenSource.MultiOutwithHasDoneFlagwithProductwithSerializable"></a>
       <a id="Demand:Demand"></a>
@@ -2363,9 +2413,10 @@ amplitude threshold. It is only after the first input sample rising above the
 threshold that the actual monitoring begins and a trigger of <code>1</code> or the firing
 of the done-action may occur.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be measured.</p></dd><dt class="param">amp</dt><dd class="cmt"><p>minimum amplitude threshold which must be exceeded for
-                        the input signal to be considered non-silent.</p></dd><dt class="param">dur</dt><dd class="cmt"><p>The duration in seconds for which the input signal must
+                        the input signal to be considered non-silent.
+                        <i>(init-time only)</i></p></dd><dt class="param">dur</dt><dd class="cmt"><p>The duration in seconds for which the input signal must
                         be continuously smaller than or equal to the threshold
-                        to be considered silent.</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>an action to be performed when the output changes from
+                        to be considered silent. <i>(init-time only)</i></p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>an action to be performed when the output changes from
                         zero to one (silence detected).</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Amplitude$.html" class="extype" name="de.sciss.synth.ugen.Amplitude">Amplitude</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Dgeom" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DgeomextendsUGenSource.SingleOutwithDemandRatedwithIsIndividualwithProductwithSerializable"></a>
@@ -2532,7 +2583,8 @@ output signal changes from zero to one.
       <p class="shortcomment cmt">A demand rate UGen printing the current output value of its input to the
 console when polled.</p><div class="fullcomment"><div class="comment cmt"><p>A demand rate UGen printing the current output value of its input to the
 console when polled.
-</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal you want to poll</p></dd><dt class="param">label</dt><dd class="cmt"><p>a string or symbol to be printed with the polled value</p></dd><dt class="param">run</dt><dd class="cmt"><p>if 1 the polling is active, if 0 it is inactive.</p></dd><dt class="param">trigID</dt><dd class="cmt"><p>if greater then 0, a <code>&quot;/tr&quot;</code> OSC message is sent back
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal you want to poll</p></dd><dt class="param">label</dt><dd class="cmt"><p>a string or symbol to be printed with the polled value
+                        <i>(init-time only)</i></p></dd><dt class="param">run</dt><dd class="cmt"><p>if 1 the polling is active, if 0 it is inactive.</p></dd><dt class="param">trigID</dt><dd class="cmt"><p>if greater then 0, a <code>&quot;/tr&quot;</code> OSC message is sent back
                         to the client (similar to <code>SendTrig</code> )</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Poll$.html" class="extype" name="de.sciss.synth.ugen.Poll">Poll</a></p></span><span class="cmt"><p><a href="SendTrig$.html" class="extype" name="de.sciss.synth.ugen.SendTrig">SendTrig</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Drand" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DrandextendsUGenSource.SingleOutwithDemandRatedwithIsIndividualwithProductwithSerializable"></a>
@@ -3003,22 +3055,25 @@ make sure you change the window type accordingly.
 </p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>The buffer to use for writing the FFT to. The size must
                         be a power of two. Since <code>FFT</code> operates at control rate
                         (also being a power of two), the buffer should probably
-                        be at least as long as the control block size.</p></dd><dt class="param">in</dt><dd class="cmt"><p>The time domain signal to be transformed into the
+                        be at least as long as the control block size.
+                        <i>(init-time only)</i></p></dd><dt class="param">in</dt><dd class="cmt"><p>The time domain signal to be transformed into the
                         spectral domain.</p></dd><dt class="param">hop</dt><dd class="cmt"><p>A factor determining the step size between successive
                         FFTs. That is, FFTs are performed every fftSize * hop
                         sample frames. The default of 0.5 means thus a 50%
                         overlap, while a hope of 1.0 means no overlapping.
-                        Choosing 0.0 will most likely crash the server!</p></dd><dt class="param">winType</dt><dd class="cmt"><p>The window function applied before each FFT is taken.
+                        Choosing 0.0 will most likely crash the server!
+                        <i>(init-time only)</i></p></dd><dt class="param">winType</dt><dd class="cmt"><p>The window function applied before each FFT is taken.
                         The default of <code>0</code> is a sine window which is good for
                         phase vocoder applications (using the <code>PV_...</code> UGens).
                         For analysis applications, you may want to use <code>-1</code>
                         which is a rectangle window (effectively no windowing)
                         or <code>1</code> which is a Hann window. A Hann window gives
                         perfect overlap-add reconstruction for a hope size of
-                        0.5 (or 0.25 etc.)</p></dd><dt class="param">active</dt><dd class="cmt"><p>This parameter can be temporarily set to &lt;= 0 to pause
+                        0.5 (or 0.25 etc.) <i>(init-time only)</i></p></dd><dt class="param">active</dt><dd class="cmt"><p>This parameter can be temporarily set to &lt;= 0 to pause
                         the FFT operation.</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
                         the fft size. If you wish to perform zero padding, an
-                        explicit window size can be specified.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FFTTrigger$.html" class="extype" name="de.sciss.synth.ugen.FFTTrigger">FFTTrigger</a></p></span><span class="cmt"><p><a href="IFFT$.html" class="extype" name="de.sciss.synth.ugen.IFFT">IFFT</a></p></span></dd></dl></div>
+                        explicit window size can be specified. <i>(init-time
+                        only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FFTTrigger$.html" class="extype" name="de.sciss.synth.ugen.FFTTrigger">FFTTrigger</a></p></span><span class="cmt"><p><a href="IFFT$.html" class="extype" name="de.sciss.synth.ugen.IFFT">IFFT</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.FFTTrigger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FFTTriggerextendsUGenSource.SingleOutwithControlRatedwithHasSideEffectwithIsIndividualwithProductwithSerializable"></a>
       <a id="FFTTrigger:FFTTrigger"></a>
@@ -3040,8 +3095,9 @@ chains, without doing an actual FFT on a signal.</p><div class="fullcomment"><di
 chains, without doing an actual FFT on a signal. This is useful if you want to
 provide a buffer whose content had already been transformed into the Fourier
 domain.
-</p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use</p></dd><dt class="param">hop</dt><dd class="cmt"><p>the hop size for timing triggers</p></dd><dt class="param">polar</dt><dd class="cmt"><p>whether the complex buffer content is given in
-                        cartesian coordinates (0) or in polar coordinates (1)</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use <i>(init-time only)</i></p></dd><dt class="param">hop</dt><dd class="cmt"><p>the hop size for timing triggers <i>(init-time only)</i></p></dd><dt class="param">polar</dt><dd class="cmt"><p>whether the complex buffer content is given in
+                        cartesian coordinates (0) or in polar coordinates (1)
+                        <i>(init-time only)</i></p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.FOS" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FOSextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="FOS:FOS"></a>
@@ -3085,7 +3141,7 @@ frequency is modulated by certain alternating signals (e.g. abruptly by <code>TR
 </p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of the oscillator in radians. This cannot
                         be modulated. A value of <code>0.5 Pi</code> means the output
                         starts at +1. A value of <code>1.5 Pi</code> means the output
-                        starts at -1,</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SinOscFB$.html" class="extype" name="de.sciss.synth.ugen.SinOscFB">SinOscFB</a></p></span><span class="cmt"><p><a href="SinOsc$.html" class="extype" name="de.sciss.synth.ugen.SinOsc">SinOsc</a></p></span></dd></dl></div>
+                        starts at -1, <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SinOscFB$.html" class="extype" name="de.sciss.synth.ugen.SinOscFB">SinOscFB</a></p></span><span class="cmt"><p><a href="SinOsc$.html" class="extype" name="de.sciss.synth.ugen.SinOsc">SinOsc</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Flatten" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FlattenextendsGE.LazywithProductwithSerializable"></a>
       <a id="Flatten:Flatten"></a>
@@ -3359,7 +3415,7 @@ server if <code>roomSize</code> becomes larger than <code>maxRoomSize</code> .
                         <code>roomSize</code> may result in zipper noise and an audible
                         Doppler effect.</p></dd><dt class="param">revTime</dt><dd class="cmt"><p>reverberation time in seconds.</p></dd><dt class="param">damping</dt><dd class="cmt"><p>high frequency attenuation (1 is maximum attenuation)</p></dd><dt class="param">inputBW</dt><dd class="cmt"><p>high frequency attenuation of the input signal (0 to 1)</p></dd><dt class="param">spread</dt><dd class="cmt"><p>stereo spread of the reverb signal. Units?</p></dd><dt class="param">dryLevel</dt><dd class="cmt"><p>amount of dry signal</p></dd><dt class="param">earlyRefLevel</dt><dd class="cmt"><p>amount of early reflections</p></dd><dt class="param">tailLevel</dt><dd class="cmt"><p>amount of late reverberation</p></dd><dt class="param">maxRoomSize</dt><dd class="cmt"><p>maximum value that <code>roomSize</code> can take. This is used
                         for the early reflection delay lines and is only read at
-                        initialization time.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FreeVerb2$.html" class="extype" name="de.sciss.synth.ugen.FreeVerb2">FreeVerb2</a></p></span><span class="cmt"><p><a href="FreeVerb$.html" class="extype" name="de.sciss.synth.ugen.FreeVerb">FreeVerb</a></p></span></dd></dl></div>
+                        initialization time. <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FreeVerb2$.html" class="extype" name="de.sciss.synth.ugen.FreeVerb2">FreeVerb2</a></p></span><span class="cmt"><p><a href="FreeVerb$.html" class="extype" name="de.sciss.synth.ugen.FreeVerb">FreeVerb</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Gate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="GateextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="Gate:Gate"></a>
@@ -3377,7 +3433,7 @@ server if <code>roomSize</code> becomes larger than <code>maxRoomSize</code> .
       </a>
     </span>
       <p class="shortcomment cmt">A gate or hold UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A gate or hold UGen. It allows the input signal value to pass when the <code>gate</code>
-argument is positive, otherwise it holds last value.
+argument is positive, otherwise it holds last value.</p><p>Before the first high gate value is registered, this UGen outputs zero.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the input signal to gate</p></dd><dt class="param">gate</dt><dd class="cmt"><p>the signal specifying whether to pass the input signal
                         (when greater than zero) or whether to close the gate
                         and hold the last value (when less than or equal to
@@ -3479,7 +3535,7 @@ Reference: Devaney, R. L. &quot;The Gingerbreadman.&quot; Algorithm 3, 15-16, Ja
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="GrainBuf.html"><span class="name">GrainBuf</span></a><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="buf">buf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="speed">speed: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="pos">pos: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="interp">interp: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">2</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512.0f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="GrainBuf.html"><span class="name">GrainBuf</span></a><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="buf">buf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="speed">speed: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="pos">pos: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="interp">interp: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">2</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@GrainBufextendsUGenSource.MultiOutwithAudioRatedwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
@@ -3515,7 +3571,7 @@ monophonic, but output may be multi-channel, using a panorama control.</p><p>All
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="GrainFM.html"><span class="name">GrainFM</span></a><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="carFreq">carFreq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="modFreq">modFreq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">200.0f</a></span></span></span>, <span name="index">index: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512.0f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="GrainFM.html"><span class="name">GrainFM</span></a><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="carFreq">carFreq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="modFreq">modFreq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">200.0f</a></span></span></span>, <span name="index">index: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@GrainFMextendsUGenSource.MultiOutwithAudioRatedwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
@@ -3532,7 +3588,7 @@ monophonic, but output may be multi-channel, using a panorama control.</p><p>All
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="GrainIn.html"><span class="name">GrainIn</span></a><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512.0f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="GrainIn.html"><span class="name">GrainIn</span></a><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@GrainInextendsUGenSource.MultiOutwithAudioRatedwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
@@ -3549,7 +3605,7 @@ monophonic, but output may be multi-channel, using a panorama control.</p><p>All
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="GrainSin.html"><span class="name">GrainSin</span></a><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512.0f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="GrainSin.html"><span class="name">GrainSin</span></a><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="dur">dur: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0f</a></span></span></span>, <span name="freq">freq: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>, <span name="pan">pan: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0f</a></span></span></span>, <span name="envBuf">envBuf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="maxGrains">maxGrains: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">512</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <a href="../AudioRated.html" class="extype" name="de.sciss.synth.AudioRated">AudioRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@GrainSinextendsUGenSource.MultiOutwithAudioRatedwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
@@ -3616,7 +3672,9 @@ emphasized towards lower frequencies.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A two point difference filter UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A two point difference filter UGen. Implements the formula :</p><pre>out(i) = <span class="num">0.5</span> * (in(i) - in(i-<span class="num">1</span>))</pre></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Delay1$.html" class="extype" name="de.sciss.synth.ugen.Delay1">Delay1</a></p></span><span class="cmt"><p><a href="LPZ1$.html" class="extype" name="de.sciss.synth.ugen.LPZ1">LPZ1</a></p></span><span class="cmt"><p><a href="OneZero$.html" class="extype" name="de.sciss.synth.ugen.OneZero">OneZero</a></p></span></dd></dl></div>
+      <p class="shortcomment cmt">A two point difference filter UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A two point difference filter UGen. Implements the formula :</p><pre>out(i) = <span class="num">0.5</span> * (in(i) - in(i-<span class="num">1</span>))</pre><p><code><code> Note: </code></code> the filter's memory is initialized with the first input sample, so
+for <code>HPZ1.ar(DC.ar(x))</code> the output will be zero, even at the beginning.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be filtered</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Delay1$.html" class="extype" name="de.sciss.synth.ugen.Delay1">Delay1</a></p></span><span class="cmt"><p><a href="LPZ1$.html" class="extype" name="de.sciss.synth.ugen.LPZ1">LPZ1</a></p></span><span class="cmt"><p><a href="OneZero$.html" class="extype" name="de.sciss.synth.ugen.OneZero">OneZero</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.HPZ2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="HPZ2extendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="HPZ2:HPZ2"></a>
@@ -3801,9 +3859,10 @@ domain signal back into the time domain.
 </p></div><dl class="paramcmts block"><dt class="param">chain</dt><dd class="cmt"><p>reference to the spectral signal, returned as a
                         buffer-identifier from <code>FFT</code> or the <code>PV_...</code> UGens.</p></dd><dt class="param">winType</dt><dd class="cmt"><p>The window function applied after each IFFT is taken.
                         The default of <code>0</code> is a sine window, <code>-1</code> is a rectangle
-                        window, and <code>1</code> is a Hann window.</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
+                        window, and <code>1</code> is a Hann window. <i>(init-time only)</i></p></dd><dt class="param">winSize</dt><dd class="cmt"><p>With the default value of zero, the window size equals
                         the fft size. If you wish to perform zero padding, an
-                        explicit window size can be specified.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FFT$.html" class="extype" name="de.sciss.synth.ugen.FFT">FFT</a></p></span></dd></dl></div>
+                        explicit window size can be specified. <i>(init-time
+                        only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FFT$.html" class="extype" name="de.sciss.synth.ugen.FFT">FFT</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.IRand" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="IRandextendsUGenSource.SingleOutwithScalarRatedwithIsIndividualwithProductwithSerializable"></a>
       <a id="IRand:IRand"></a>
@@ -3813,7 +3872,7 @@ domain signal back into the time domain.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="IRand.html"><span class="name">IRand</span></a><span class="params">(<span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">127.0f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="IRand.html"><span class="name">IRand</span></a><span class="params">(<span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">127</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@IRandextendsUGenSource.SingleOutwithScalarRatedwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
@@ -4247,7 +4306,7 @@ the moment a new output value is scheduled.
     </span>
       <p class="shortcomment cmt">A sine-like oscillator UGen with a shape made of two cubic pieces.</p><div class="fullcomment"><div class="comment cmt"><p>A sine-like oscillator UGen with a shape made of two cubic pieces. It is
 smoother than <code>LFPar</code> .
-</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>oscillator frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase in cycle (0 to 1)</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LFPar$.html" class="extype" name="de.sciss.synth.ugen.LFPar">LFPar</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>oscillator frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase in cycle (0 to 1) <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LFPar$.html" class="extype" name="de.sciss.synth.ugen.LFPar">LFPar</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFDClipNoise" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LFDClipNoiseextendsUGenSource.SingleOutwithIsIndividualwithProductwithSerializable"></a>
       <a id="LFDClipNoise:LFDClipNoise"></a>
@@ -4451,7 +4510,7 @@ beyond the normal range of -1 to +1, if the frequency varies in certain ways.
     </span>
       <p class="shortcomment cmt">A sine-like oscillator UGen with a shape made of two parabolas.</p><div class="fullcomment"><div class="comment cmt"><p>A sine-like oscillator UGen with a shape made of two parabolas. It has audible
 odd harmonics and is non-band-limited. Its output ranges from -1 to +1.
-</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>oscillator frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase in cycle (0 to 1)</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LFCub$.html" class="extype" name="de.sciss.synth.ugen.LFCub">LFCub</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>oscillator frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase in cycle (0 to 1) <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="LFCub$.html" class="extype" name="de.sciss.synth.ugen.LFCub">LFCub</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFPulse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LFPulseextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="LFPulse:LFPulse"></a>
@@ -4480,7 +4539,7 @@ value of zero.
                         automatically wrapped into the range of <code>0..1</code> , so
                         putting an <code>iphase</code> of <code>-0.25</code> currently results in a
                         strange initial signal which only stabilizes to the
-                        correct behaviour after one period!</p></dd><dt class="param">width</dt><dd class="cmt"><p>pulse width duty cycle from zero to one. If you want to
+                        correct behaviour after one period! <i>(init-time only)</i></p></dd><dt class="param">width</dt><dd class="cmt"><p>pulse width duty cycle from zero to one. If you want to
                         specify the width rather in seconds, you can use the
                         formula <code>width = freq * dur</code> , e.g. for a single sample
                         impulse use <code>width = freq * SampleDur.ir</code> .</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Pulse$.html" class="extype" name="de.sciss.synth.ugen.Pulse">Pulse</a></p></span></dd></dl></div>
@@ -4507,7 +4566,8 @@ instead. The signal range is -1 to +1.
                         value ranging from -1 to 1 (thus equal to the initial
                         output value). Note that a phase of zero (default) means
                         the wave starts at 0 and rises to +1 before jumping down
-                        to -1. Use a phase of 1 to have the wave start at -1.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Saw$.html" class="extype" name="de.sciss.synth.ugen.Saw">Saw</a></p></span></dd></dl></div>
+                        to -1. Use a phase of 1 to have the wave start at -1.
+                        <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Saw$.html" class="extype" name="de.sciss.synth.ugen.Saw">Saw</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LFTri" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LFTriextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="LFTri:LFTri"></a>
@@ -4533,7 +4593,8 @@ falls to -1. With an initial phase of 3 (or 270 degrees), the oscillator begins
 at -1 and then rises to 1.
 </p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>frequency in Hertz</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of the oscillator. A full phase (2 Pi or
                         360 degrees) is represented by an <code>iphase</code> value of 4.
-                        The initial phase cannot be modulated.</p></dd></dl></div>
+                        The initial phase cannot be modulated. <i>(init-time
+                        only)</i></p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LPF" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LPFextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="LPF:LPF"></a>
@@ -4778,7 +4839,7 @@ input signal.
       </a>
     </span>
       <p class="shortcomment cmt">A sample-and-hold UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A sample-and-hold UGen. When triggered, a new value is taken from the input and
-hold until the next trigger occurs.
+hold until the next trigger occurs.</p><p>Before the first trigger is registered, this UGen outputs zero.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the input signal</p></dd><dt class="param">trig</dt><dd class="cmt"><p>the trigger. The can be any signal. A trigger happens
                         when the signal changes from non-positive to positive.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Demand$.html" class="extype" name="de.sciss.synth.ugen.Demand">Demand</a></p></span><span class="cmt"><p><a href="Gate$.html" class="extype" name="de.sciss.synth.ugen.Gate">Gate</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LatoocarfianC" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -4920,7 +4981,7 @@ introducing a delay in its output. The delay time is equal to twice the value of
 the <code>dur</code> parameter (the buffer internally used).
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be limited</p></dd><dt class="param">level</dt><dd class="cmt"><p>maximum amplitude to which the signal is limited. The
                         limiter will kick in when the input signal exceeds
-                        <code>+level</code> or falls below <code>-level</code> .</p></dd><dt class="param">dur</dt><dd class="cmt"><p>look-ahead time in seconds</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Compander$.html" class="extype" name="de.sciss.synth.ugen.Compander">Compander</a></p></span><span class="cmt"><p><a href="Normalizer$.html" class="extype" name="de.sciss.synth.ugen.Normalizer">Normalizer</a></p></span></dd></dl></div>
+                        <code>+level</code> or falls below <code>-level</code> .</p></dd><dt class="param">dur</dt><dd class="cmt"><p>look-ahead time in seconds <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Compander$.html" class="extype" name="de.sciss.synth.ugen.Compander">Compander</a></p></span><span class="cmt"><p><a href="Normalizer$.html" class="extype" name="de.sciss.synth.ugen.Normalizer">Normalizer</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LinCongC" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LinCongCextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="LinCongC:LinCongC"></a>
@@ -5098,7 +5159,7 @@ input signals are attenuated by 0.5 or approx. -6 dB.
       <p class="shortcomment cmt">A line generator UGen that moves from a start value to the end value in a given
 duration.</p><div class="fullcomment"><div class="comment cmt"><p>A line generator UGen that moves from a start value to the end value in a given
 duration.
-</p></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting value</p></dd><dt class="param">end</dt><dd class="cmt"><p>Ending value</p></dd><dt class="param">dur</dt><dd class="cmt"><p>Duration in seconds</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>A done-action that is evaluated when the Line has
+</p></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting value <i>(init-time only)</i></p></dd><dt class="param">end</dt><dd class="cmt"><p>Ending value <i>(init-time only)</i></p></dd><dt class="param">dur</dt><dd class="cmt"><p>Duration in seconds <i>(init-time only)</i></p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>A done-action that is evaluated when the Line has
                         reached the end value after the given duration</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Ramp$.html" class="extype" name="de.sciss.synth.ugen.Ramp">Ramp</a></p></span><span class="cmt"><p><a href="EnvGen$.html" class="extype" name="de.sciss.synth.ugen.EnvGen">EnvGen</a></p></span><span class="cmt"><p><a href="XLine$.html" class="extype" name="de.sciss.synth.ugen.XLine">XLine</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Linen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LinenextendsUGenSource.SingleOutwithHasSideEffectwithHasDoneFlagwithProductwithSerializable"></a>
@@ -5444,7 +5505,8 @@ signal.
                         to find the median. Must be an odd number from 1 to 31.
                         A value of 1 has no effect. <i>Warning</i>: This parameter
                         is only read an initialization time and cannot be
-                        modulated while the UGen is running.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The argument order is different from its sclang counterpart.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="RunningSum$.html" class="extype" name="de.sciss.synth.ugen.RunningSum">RunningSum</a></p></span><span class="cmt"><p><a href="LeakDC$.html" class="extype" name="de.sciss.synth.ugen.LeakDC">LeakDC</a></p></span><span class="cmt"><p><a href="LPF$.html" class="extype" name="de.sciss.synth.ugen.LPF">LPF</a></p></span></dd></dl></div>
+                        modulated while the UGen is running. <i>(init-time
+                        only)</i></p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The argument order is different from its sclang counterpart.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="RunningSum$.html" class="extype" name="de.sciss.synth.ugen.RunningSum">RunningSum</a></p></span><span class="cmt"><p><a href="LeakDC$.html" class="extype" name="de.sciss.synth.ugen.LeakDC">LeakDC</a></p></span><span class="cmt"><p><a href="LPF$.html" class="extype" name="de.sciss.synth.ugen.LPF">LPF</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.MidEQ" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MidEQextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="MidEQ:MidEQ"></a>
@@ -5700,7 +5762,8 @@ twice the value of the <code>dur</code> parameter (the buffer internally used).
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be normalized</p></dd><dt class="param">level</dt><dd class="cmt"><p>peak output amplitude level to which to normalize the
                         input</p></dd><dt class="param">dur</dt><dd class="cmt"><p>look-ahead time in seconds. Shorter times will produce
                         smaller delays and quicker transient response times, but
-                        may introduce amplitude modulation artifacts.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Compander$.html" class="extype" name="de.sciss.synth.ugen.Compander">Compander</a></p></span><span class="cmt"><p><a href="Limiter$.html" class="extype" name="de.sciss.synth.ugen.Limiter">Limiter</a></p></span></dd></dl></div>
+                        may introduce amplitude modulation artifacts.
+                        <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Compander$.html" class="extype" name="de.sciss.synth.ugen.Compander">Compander</a></p></span><span class="cmt"><p><a href="Limiter$.html" class="extype" name="de.sciss.synth.ugen.Limiter">Limiter</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.NumAudioBuses" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NumAudioBusesextendsUGenSource.SingleOutwithScalarRatedwithProductwithSerializable"></a>
       <a id="NumAudioBuses:NumAudioBuses"></a>
@@ -5737,6 +5800,24 @@ twice the value of the <code>dur</code> parameter (the buffer internally used).
     </span>
       <p class="shortcomment cmt">Maximum number of audio buffers.</p><div class="fullcomment"><div class="comment cmt"><p>Maximum number of audio buffers.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="NumRunningSynths$.html" class="extype" name="de.sciss.synth.ugen.NumRunningSynths">NumRunningSynths</a></p></span><span class="cmt"><p><a href="NumOutputBuses$.html" class="extype" name="de.sciss.synth.ugen.NumOutputBuses">NumOutputBuses</a></p></span><span class="cmt"><p><a href="NumInputBuses$.html" class="extype" name="de.sciss.synth.ugen.NumInputBuses">NumInputBuses</a></p></span><span class="cmt"><p><a href="NumControlBuses$.html" class="extype" name="de.sciss.synth.ugen.NumControlBuses">NumControlBuses</a></p></span><span class="cmt"><p><a href="NumAudioBuses$.html" class="extype" name="de.sciss.synth.ugen.NumAudioBuses">NumAudioBuses</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.NumChannels" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NumChannelsextendsUGenSource.SingleOutwithScalarRatedwithProductwithSerializable"></a>
+      <a id="NumChannels:NumChannels"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NumChannels.html"><span class="name">NumChannels</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../ScalarRated.html" class="extype" name="de.sciss.synth.ScalarRated">ScalarRated</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@NumChannelsextendsUGenSource.SingleOutwithScalarRatedwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that produces an integer with number-of-channels of the input element.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that produces an integer with number-of-channels of the input element.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the element whose number-of-channels to produce</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.NumControlBuses" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NumControlBusesextendsUGenSource.SingleOutwithScalarRatedwithProductwithSerializable"></a>
       <a id="NumControlBuses:NumControlBuses"></a>
@@ -5957,7 +6038,7 @@ quality level.
                         frames) between onset detections, a brute-force way to
                         prevent too many doubled detections.</p></dd><dt class="param">medianSpan</dt><dd class="cmt"><p>(advanced setting) Specifies the size (in FFT frames)
                         of the median window used for smoothing the detection
-                        function before triggering.</p></dd><dt class="param">whType</dt><dd class="cmt"><p>(advanced setting) ?</p></dd><dt class="param">raw</dt><dd class="cmt"><p>(advanced setting) ?</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PV_HainsworthFoote$.html" class="extype" name="de.sciss.synth.ugen.PV_HainsworthFoote">PV_HainsworthFoote</a></p></span><span class="cmt"><p><a href="PV_JensenAndersen$.html" class="extype" name="de.sciss.synth.ugen.PV_JensenAndersen">PV_JensenAndersen</a></p></span></dd></dl></div>
+                        function before triggering.</p></dd><dt class="param">whType</dt><dd class="cmt"><p>(advanced setting) ?</p></dd><dt class="param">raw</dt><dd class="cmt"><p>(advanced setting) ? <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PV_HainsworthFoote$.html" class="extype" name="de.sciss.synth.ugen.PV_HainsworthFoote">PV_HainsworthFoote</a></p></span><span class="cmt"><p><a href="PV_JensenAndersen$.html" class="extype" name="de.sciss.synth.ugen.PV_JensenAndersen">PV_JensenAndersen</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Osc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="OscextendsUGenSource.SingleOutwithIsIndividualwithProductwithSerializable"></a>
       <a id="Osc:Osc"></a>
@@ -6806,6 +6887,29 @@ ready for transforming it back into time-domain audio using IFFT.
                         phase1, mag2, phase2, ... magN, phaseN]. This input is
                         typically demand-rate.</p></dd><dt class="param">from</dt><dd class="cmt"><p>index of lower bin</p></dd><dt class="param">to</dt><dd class="cmt"><p>index of upper bin (inclusive)</p></dd><dt class="param">clear</dt><dd class="cmt"><p>if <code>1</code> , clears the buffer before packing the values,
                         setting its contents to zero.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SetBuf$.html" class="extype" name="de.sciss.synth.ugen.SetBuf">SetBuf</a></p></span><span class="cmt"><p><a href="IFFT$.html" class="extype" name="de.sciss.synth.ugen.IFFT">IFFT</a></p></span><span class="cmt"><p><a href="FFT$.html" class="extype" name="de.sciss.synth.ugen.FFT">FFT</a></p></span><span class="cmt"><p><a href="Unpack1FFT$.html" class="extype" name="de.sciss.synth.ugen.Unpack1FFT">Unpack1FFT</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Pad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PadextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Pad:Pad"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Pad.html"><span class="name">Pad</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="to">to: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@PadextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that controls the multi-channel expansion of
+its <code>in</code> argument to match the <code>to</code> argument by padding (extending
+and wrapping) it.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that controls the multi-channel expansion of
+its <code>in</code> argument to match the <code>to</code> argument by padding (extending
+and wrapping) it.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the element to replicate</p></dd><dt class="param">to</dt><dd class="cmt"><p>the reference element that controls the multi-channel expansion.
+          the signal itself is not used or output by <code>Pad</code>.</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Pan2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Pan2extendsUGenSource.MultiOutwithProductwithSerializable"></a>
       <a id="Pan2:Pan2"></a>
@@ -6970,7 +7074,8 @@ partitioned convolution ready buffer.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the realtime input to be convolved</p></dd><dt class="param">fftSize</dt><dd class="cmt"><p>FFT size which is twice the input signal partition
                         size. This must be a multiple of the control-block size,
                         and there must be at least two blocks per partition (to
-                        allow for amortization)</p></dd><dt class="param">buf</dt><dd class="cmt"><p>buffer identifier for the fixed kernel (init-time only).</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span></dd></dl></div>
+                        allow for amortization) <i>(init-time only)</i></p></dd><dt class="param">buf</dt><dd class="cmt"><p>buffer identifier for the fixed kernel (init-time
+                        only). <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Pause" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="PauseextendsUGenSource.SingleOutwithControlRatedwithHasSideEffectwithProductwithSerializable"></a>
       <a id="Pause:Pause"></a>
@@ -7209,36 +7314,39 @@ Otherwise, the autocorrelation is calculated, and the first peak after the peak
 around the lag of zero that is above <code>peakThresh</code> times the amplitude of the
 peak at lag zero is reported.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The signal to be analyzed.</p></dd><dt class="param">initFreq</dt><dd class="cmt"><p>The initial value of the <code>freq</code> output, until the first
-                        valid pitch is found.</p></dd><dt class="param">minFreq</dt><dd class="cmt"><p>The minimum frequency in Hertz to be considered for
-                        reporting.</p></dd><dt class="param">maxFreq</dt><dd class="cmt"><p>The maximum frequency in Hertz to be considered for
-                        reporting.</p></dd><dt class="param">execFreq</dt><dd class="cmt"><p>The frequency at which the pitch is estimated. This
+                        valid pitch is found. <i>(init-time only)</i></p></dd><dt class="param">minFreq</dt><dd class="cmt"><p>The minimum frequency in Hertz to be considered for
+                        reporting. <i>(init-time only)</i></p></dd><dt class="param">maxFreq</dt><dd class="cmt"><p>The maximum frequency in Hertz to be considered for
+                        reporting. <i>(init-time only)</i></p></dd><dt class="param">execFreq</dt><dd class="cmt"><p>The frequency at which the pitch is estimated. This
                         will be automatically clipped to be between <code>minFreq</code>
-                        and <code>maxFreq</code> .</p></dd><dt class="param">binsPerOct</dt><dd class="cmt"><p>A value which guides the search for the peak frequency
+                        and <code>maxFreq</code> . <i>(init-time only)</i></p></dd><dt class="param">binsPerOct</dt><dd class="cmt"><p>A value which guides the search for the peak frequency
                         in the first coarse step. Its setting does *not* affect
                         the final pitch resolution; setting it larger will cause
                         the coarse search to take longer, and setting it smaller
-                        will cause the fine search to take longer.</p></dd><dt class="param">median</dt><dd class="cmt"><p>This specifies the length of a median filter applied to
+                        will cause the fine search to take longer. <i>(init-time
+                        only)</i></p></dd><dt class="param">median</dt><dd class="cmt"><p>This specifies the length of a median filter applied to
                         the frequency output estimation. With the default value
                         of <code>1</code> the filter is defeated. Median filtering can help
                         eliminating single spikes and jitter. This will however
-                        add latency to the output.</p></dd><dt class="param">ampThresh</dt><dd class="cmt"><p>The minimum amplitude threshold above which the pitch
+                        add latency to the output. <i>(init-time only)</i></p></dd><dt class="param">ampThresh</dt><dd class="cmt"><p>The minimum amplitude threshold above which the pitch
                         follower operates. An input signal below this threshold
-                        is not analyzed.</p></dd><dt class="param">peakThresh</dt><dd class="cmt"><p>This is a threshold used to find the first peak in the
+                        is not analyzed. <i>(init-time only)</i></p></dd><dt class="param">peakThresh</dt><dd class="cmt"><p>This is a threshold used to find the first peak in the
                         autocorrelation signal which gives the reported
                         frequency. It is a factor of the energy of the signal
                         (autocorrelation coefficient at zero). Set this value
                         higher (e.g. to <code>1</code> ) to eliminate false frequencies
-                        corresponding to overtones.</p></dd><dt class="param">downSample</dt><dd class="cmt"><p>An integer factor by which the input signal is down
+                        corresponding to overtones. <i>(init-time only)</i></p></dd><dt class="param">downSample</dt><dd class="cmt"><p>An integer factor by which the input signal is down
                         sampled to reduce CPU overhead. This will also reduce
                         the pitch resolution. The default value of <code>1</code> means
-                        that the input signal is not down sampled.</p></dd><dt class="param">clarity</dt><dd class="cmt"><p>If the <code>clarity</code> argument is greater than zero (it is
+                        that the input signal is not down sampled. <i>(init-time
+                        only)</i></p></dd><dt class="param">clarity</dt><dd class="cmt"><p>If the <code>clarity</code> argument is greater than zero (it is
                         zero by default) then the <code>hasFreq</code> output is given
                         additional detail. Rather than simply being 1 when a
                         pitch is detected, it is a &quot;clarity&quot; measure in the
                         range between zero and one. (Technically, it's the
                         height of the autocorrelation peak normalised by the
                         height of the zero-lag peak.) It therefore gives a kind
-                        of measure of &quot;purity&quot; of the pitched signal.</p></dd></dl></div>
+                        of measure of &quot;purity&quot; of the pitched signal.
+                        <i>(init-time only)</i></p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.PitchShift" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="PitchShiftextendsUGenSource.SingleOutwithAudioRatedwithProductwithSerializable"></a>
       <a id="PitchShift:PitchShift"></a>
@@ -7257,7 +7365,8 @@ peak at lag zero is reported.
     </span>
       <p class="shortcomment cmt">A time domain granular pitch shifter.</p><div class="fullcomment"><div class="comment cmt"><p>A time domain granular pitch shifter. Grains have a triangular amplitude
 envelope and an overlap of 4:1.
-</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>The size of the grain window in seconds.</p></dd><dt class="param">pitchRatio</dt><dd class="cmt"><p>The ratio of the pitch shift. Must be from 0 to 4.</p></dd><dt class="param">pitchDispersion</dt><dd class="cmt"><p>The maximum random deviation of the pitch from the
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The input signal.</p></dd><dt class="param">winSize</dt><dd class="cmt"><p>The size of the grain window in seconds. <i>(init-time
+                        only)</i></p></dd><dt class="param">pitchRatio</dt><dd class="cmt"><p>The ratio of the pitch shift. Must be from 0 to 4.</p></dd><dt class="param">pitchDispersion</dt><dd class="cmt"><p>The maximum random deviation of the pitch from the
                         pitchRatio.</p></dd><dt class="param">timeDispersion</dt><dd class="cmt"><p>A random offset of from zero to timeDispersion seconds
                         is added to the delay of each grain. Use of some
                         dispersion can alleviate a hard comb filter effect due
@@ -7320,7 +7429,7 @@ interpolation.
       <p class="shortcomment cmt">A Karplus-Strong UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A Karplus-Strong UGen.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>An excitation signal.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>Upon a negative to positive transition, the excitation
                         signal will be fed into the delay line.</p></dd><dt class="param">maxDelayTime</dt><dd class="cmt"><p>Maximum delay time in seconds (initializes the internal
-                        delay buffer).</p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. Negative
+                        delay buffer). <i>(init-time only)</i></p></dd><dt class="param">delayTime</dt><dd class="cmt"><p>Delay time in seconds.</p></dd><dt class="param">decayTime</dt><dd class="cmt"><p>Time for the echoes to decay by 60 decibels. Negative
                         times emphasize odd partials.</p></dd><dt class="param">coeff</dt><dd class="cmt"><p>the coefficient of the internal OnePole filter. Values
                         should be between -1 and +1 (larger values will be
                         unstable... so be careful!).</p></dd></dl></div>
@@ -7606,7 +7715,7 @@ numbers when the same seed is set again.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="RandSeed.html"><span class="name">RandSeed</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="seed">seed: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">56789.0f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="RandSeed.html"><span class="name">RandSeed</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="seed">seed: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">56789</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@RandSeedextendsUGenSource.SingleOutwithHasSideEffectwithProductwithSerializable" title="Permalink" target="_top">
@@ -7826,7 +7935,7 @@ state to the current input value.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="RunningSum.html"><span class="name">RunningSum</span></a><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="length">length: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440.0f</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="RunningSum.html"><span class="name">RunningSum</span></a><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="length">length: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">440</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@RunningSumextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
@@ -7840,7 +7949,7 @@ samples.
                         these are the number of audio sample-frames for
                         audio-rate calculation, or the number of blocks for
                         control-rate calculation summed up. <i>Warning</i>: The
-                        UGen crashes when length is zero.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PulseCount$.html" class="extype" name="de.sciss.synth.ugen.PulseCount">PulseCount</a></p></span><span class="cmt"><p><a href="Median$.html" class="extype" name="de.sciss.synth.ugen.Median">Median</a></p></span><span class="cmt"><p><a href="Integrator$.html" class="extype" name="de.sciss.synth.ugen.Integrator">Integrator</a></p></span></dd></dl></div>
+                        UGen crashes when length is zero. <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="PulseCount$.html" class="extype" name="de.sciss.synth.ugen.PulseCount">PulseCount</a></p></span><span class="cmt"><p><a href="Median$.html" class="extype" name="de.sciss.synth.ugen.Median">Median</a></p></span><span class="cmt"><p><a href="Integrator$.html" class="extype" name="de.sciss.synth.ugen.Integrator">Integrator</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.SOS" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SOSextendsUGenSource.SingleOutwithProductwithSerializable"></a>
       <a id="SOS:SOS"></a>
@@ -7963,7 +8072,7 @@ occur with a single-threshold trigger.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ScopeOut2.html"><span class="name">ScopeOut2</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="buf">buf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="maxFrames">maxFrames: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">4096.0f</a></span></span></span>, <span name="frames">frames: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a> with <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ScopeOut2.html"><span class="name">ScopeOut2</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="buf">buf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="maxFrames">maxFrames: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">4096</a></span></span></span>, <span name="frames">frames: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a> with <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@ScopeOut2extendsUGenSource.ZeroOutwithHasSideEffectwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
@@ -8397,7 +8506,7 @@ plasma physicist Boris Chirikov.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Stepper.html"><span class="name">Stepper</span></a><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../../../../scala/package.html">inf</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Stepper.html"><span class="name">Stepper</span></a><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">2147483583</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@StepperextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
@@ -8424,7 +8533,9 @@ is or whether the <code>reset</code> trigger is high or not.
                         value, the counter jumps to <code>hi</code> if it were to fall
                         below <code>lo</code> .</p></dd><dt class="param">hi</dt><dd class="cmt"><p>The maximum value output. For an incremental <code>step</code>
                         value, the counter jumps to <code>lo</code> if it were to rise
-                        beyond <code>hi</code> .</p></dd><dt class="param">step</dt><dd class="cmt"><p>The amount by which the counter increases or decreases
+                        beyond <code>hi</code> . Note that values greater than <code>0x7FFFFFBF</code>
+                        (the default) cause numeric overflow and the UGen to
+                        malfunction.</p></dd><dt class="param">step</dt><dd class="cmt"><p>The amount by which the counter increases or decreases
                         upon receiving triggers. Note that if you use a
                         decremental counter, still <code>lo</code> must be the minimum and
                         <code>hi</code> must be the maximum value output. If <code>lo</code> &gt; <code>hi</code> ,
@@ -8469,10 +8580,11 @@ this way one FFT transformation per period is saved.</p><p><b>Warning: This UGen
                         of periods.</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
                         FFT calculated internally by the UGen has a size of
                         twice this value. The maximum allowed <code>frameSize</code> is
-                        16384.</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
+                        16384. <i>(init-time only)</i></p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
                         If the desired duration in seconds is <code>dur</code> , then the
                         number of periods can be calculated as
-                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
+                        <i>(init-time only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Convolution2L$.html" class="extype" name="de.sciss.synth.ugen.Convolution2L">Convolution2L</a></p></span><span class="cmt"><p><a href="Convolution$.html" class="extype" name="de.sciss.synth.ugen.Convolution">Convolution</a></p></span><span class="cmt"><p><a href="Convolution2$.html" class="extype" name="de.sciss.synth.ugen.Convolution2">Convolution2</a></p></span><span class="cmt"><p><a href="PartConv$.html" class="extype" name="de.sciss.synth.ugen.PartConv">PartConv</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.SubsampleOffset" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SubsampleOffsetextendsUGenSource.SingleOutwithScalarRatedwithProductwithSerializable"></a>
       <a id="SubsampleOffset:SubsampleOffset"></a>
@@ -8762,7 +8874,7 @@ but requires a regular buffer.
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="TIRand.html"><span class="name">TIRand</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">127.0f</a></span></span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="TIRand.html"><span class="name">TIRand</span></a><span class="params">(<span name="rate">rate: <a href="../Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">127</a></span></span></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a> with <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@TIRandextendsUGenSource.SingleOutwithIsIndividualwithProductwithSerializable" title="Permalink" target="_top">
@@ -8889,7 +9001,9 @@ trigger arrives.
 triggered.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen which holds and outputs an input value for a given duration when
 triggered.</p><p>When a trigger occurs at the input, the input value is sampled and output for
 the specified duration, otherwise zero is output. When a new trigger occurs
-while this ugens outputs 1, the hold-time is reset to the duration.
+while this ugens outputs 1, the hold-time is reset to the duration.</p><p><i>Warning:</i> The hold-time is subject to a bug that depends on the input
+signal. For example with <code>Trig1.ar(Impulse.ar(0), 4 * SampleDur.ir)</code> one
+actually gets a high signal for five sample frames instead of four.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the trigger. This can be any signal. A trigger happens
                         when the signal changes from non-positive to positive.</p></dd><dt class="param">dur</dt><dd class="cmt"><p>the duration for which the ugens holds the value of the
                         input signal when triggered</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig1$.html" class="extype" name="de.sciss.synth.ugen.Trig1">Trig1</a></p></span></dd></dl></div>
@@ -8911,7 +9025,9 @@ while this ugens outputs 1, the hold-time is reset to the duration.
     </span>
       <p class="shortcomment cmt">A UGen which outputs a value of 1 for a given duration when triggered.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen which outputs a value of 1 for a given duration when triggered.</p><p>When a trigger occurs at the input, a value of 1 is output for the specified
 duration, otherwise zero is output. When a new trigger occurs while this ugens
-outputs 1, the hold-time is reset to the duration.
+outputs 1, the hold-time is reset to the duration.</p><p><i>Warning:</i> The hold-time is subject to a bug that depends on the input
+signal. For example with <code>Trig1.ar(Impulse.ar(0), 4 * SampleDur.ir)</code> one
+actually gets a high signal for five sample frames instead of four.
 </p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the trigger. This can be any signal. A trigger happens
                         when the signal changes from non-positive to positive.</p></dd><dt class="param">dur</dt><dd class="cmt"><p>the duration for which the ugens holds the value of 1
                         when triggered</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig$.html" class="extype" name="de.sciss.synth.ugen.Trig">Trig</a></p></span></dd></dl></div>
@@ -9074,6 +9190,51 @@ UGen.
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.ugen.VBAP" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="VBAPextendsUGenSource.MultiOutwithProductwithSerializable"></a>
+      <a id="VBAP:VBAP"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="VBAP.html"><span class="name">VBAP</span></a><span class="params">(<span name="rate">rate: <a href="../MaybeRate.html" class="extype" name="de.sciss.synth.MaybeRate">MaybeRate</a></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="buf">buf: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="azimuth">azimuth: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="elevation">elevation: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="spread">spread: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.synth.UGenSource.MultiOut">MultiOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@VBAPextendsUGenSource.MultiOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen for Vector Base Amplitude Panning (VBAP).</p><div class="fullcomment"><div class="comment cmt"><p>A UGen for Vector Base Amplitude Panning (VBAP). This allows for equal power
+panning of a source over an arbitrary array of equidistant speakers. Normally
+this would be a ring, a dome, or partial dome.</p><p>VBAP was created by Ville Pulkki. For more information on VBAP see
+http://www.acoustics.hut.fi/research/cat/vbap/ This version of VBAP for SC was
+ported from the ver. 0.99 PD code by Scott Wilson.
+</p></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>the number of output channels</p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to be panned</p></dd><dt class="param">buf</dt><dd class="cmt"><p>id of a buffer containing data calculated by
+                        <code>VBAPSetup</code> . Its number of channels must correspond to
+                        <code>numChannels</code></p></dd><dt class="param">azimuth</dt><dd class="cmt"><p>+/- 180° from the median plane (i.e. straight ahead)</p></dd><dt class="param">elevation</dt><dd class="cmt"><p>+/- 90° from the azimuth plane</p></dd><dt class="param">spread</dt><dd class="cmt"><p>A value from 0-100. When 0, if the signal is panned
+                        exactly to a speaker location the signal is only on that
+                        speaker. At values higher than 0, the signal will always
+                        be on more than one speaker. This can smooth the panning
+                        effect by making localisation blur more constant.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="CircleRamp$.html" class="extype" name="de.sciss.synth.ugen.CircleRamp">CircleRamp</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.VBAPSetup" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="VBAPSetupextendsAnyRef"></a>
+      <a id="VBAPSetup:VBAPSetup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="VBAPSetup.html"><span class="name">VBAPSetup</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@VBAPSetupextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.ugen.VDiskIn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="VDiskInextendsUGenSource.MultiOutwithHasSideEffectwithIsIndividualwithProductwithSerializable"></a>
       <a id="VDiskIn:VDiskIn"></a>
@@ -9200,15 +9361,18 @@ The vibrato rate determines how quickly one moves through these stages.
                         Note that if this is set to a too low value, you may
                         never get vibrato back, since this input is only checked
                         at the end of a cycle.</p></dd><dt class="param">depth</dt><dd class="cmt"><p>amount of vibrato frequency deviation around the
-                        fundamental, as a proportion of the fundamental.</p></dd><dt class="param">delay</dt><dd class="cmt"><p>delay in seconds before vibrato is established.</p></dd><dt class="param">onset</dt><dd class="cmt"><p>transition time in seconds from no vibrato to full
-                        vibrato after the initial delay time.</p></dd><dt class="param">beatVar</dt><dd class="cmt"><p>random (noise) variation on the beat parameter,
+                        fundamental, as a proportion of the fundamental.</p></dd><dt class="param">delay</dt><dd class="cmt"><p>delay in seconds before vibrato is established.
+                        <i>(init-time only)</i></p></dd><dt class="param">onset</dt><dd class="cmt"><p>transition time in seconds from no vibrato to full
+                        vibrato after the initial delay time. <i>(init-time
+                        only)</i></p></dd><dt class="param">beatVar</dt><dd class="cmt"><p>random (noise) variation on the beat parameter,
                         expressed as a proportion of <code>beat</code> . It can change once
                         per cycle of vibrato.</p></dd><dt class="param">depthVar</dt><dd class="cmt"><p>random (noise) variation on the depth of modulation,
                         expressed as a proportion of <code>depth</code> . It can change
                         once per cycle of vibrato. The noise affects
                         independently the up and the down part of vibrato shape
                         within a cycle.</p></dd><dt class="param">iphase</dt><dd class="cmt"><p>initial phase of vibrato modulation, allowing starting
-                        above or below the fundamental rather than on it.</p></dd></dl></div>
+                        above or below the fundamental rather than on it.
+                        <i>(init-time only)</i></p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Warp1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Warp1extendsUGenSource.MultiOutwithAudioRatedwithIsIndividualwithProductwithSerializable"></a>
       <a id="Warp1:Warp1"></a>
@@ -9362,7 +9526,7 @@ and <code>end</code> have the same sign (e.g. a <code>start</code> of <code>-1</
 valid), otherwise the UGen will output a <code>NaN</code> ! While in the case of <code>end</code>
 being zero the UGen will also output zero, it is recommended to treat this case
 as pathological as well.
-</p></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting value</p></dd><dt class="param">end</dt><dd class="cmt"><p>Ending value</p></dd><dt class="param">dur</dt><dd class="cmt"><p>Duration in seconds</p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>A done-action that is evaluated when the <code>Line</code> has
+</p></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>Starting value <i>(init-time only)</i></p></dd><dt class="param">end</dt><dd class="cmt"><p>Ending value <i>(init-time only)</i></p></dd><dt class="param">dur</dt><dd class="cmt"><p>Duration in seconds <i>(init-time only)</i></p></dd><dt class="param">doneAction</dt><dd class="cmt"><p>A done-action that is evaluated when the <code>Line</code> has
                         reached the end value after the given duration</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Line$.html" class="extype" name="de.sciss.synth.ugen.Line">Line</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.XOut" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="XOutextendsUGenSource.ZeroOutwithHasSideEffectwithIsIndividualwithProductwithSerializable"></a>
@@ -10860,6 +11024,28 @@ output is as follows: 0 = a normal float, 1 = NaN, 2 = infinity, and 3 = a
 denormal. According to the post settings it will print the information to the
 console along with a given identifier.
 </p></div></div>
+    </li><li name="de.sciss.synth.ugen.CircleRamp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CircleRamp"></a>
+      <a id="CircleRamp:CircleRamp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CircleRamp$.html"><span class="name">CircleRamp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@CircleRamp" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This is a UGen like <code>Ramp</code> , but it always takes the shortest way around a
+defined circle, wrapping values where appropriate.</p><div class="fullcomment"><div class="comment cmt"><p>This is a UGen like <code>Ramp</code> , but it always takes the shortest way around a
+defined circle, wrapping values where appropriate. This can be useful when
+smoothing panning signals for speaker rings, for instance in Vector Base
+Amplitude Panning.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Lag$.html" class="extype" name="de.sciss.synth.ugen.Lag">Lag</a></p></span><span class="cmt"><p><a href="Ramp$.html" class="extype" name="de.sciss.synth.ugen.Ramp">Ramp</a></p></span><span class="cmt"><p><a href="VBAP$.html" class="extype" name="de.sciss.synth.ugen.VBAP">VBAP</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.ClearBuf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ClearBuf"></a>
       <a id="ClearBuf:ClearBuf"></a>
@@ -11599,7 +11785,8 @@ play {
       </a>
     </span>
       <p class="shortcomment cmt">A UGen that delays the input by 1 audio frame or control period.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that delays the input by 1 audio frame or control period.</p><p>For audio-rate signals the delay is 1 audio frame, and for control-rate signals
-the delay is 1 control period.</p><h5>Examples</h5><pre><span class="cmt">// analog to HPZ1</span>
+the delay is 1 control period.</p><p><i>Note:</i> The first value output is not zero but the same as the first input
+value! In this respect the UGen behaves different than <code>DelayN</code> .</p><h5>Examples</h5><pre><span class="cmt">// analog to HPZ1</span>
 play {
   <span class="kw">val</span> z = PinkNoise.ar
   <span class="kw">val</span> x = z - Delay1.ar(z)
@@ -11623,7 +11810,9 @@ play {
       </a>
     </span>
       <p class="shortcomment cmt">A UGen that delays the input by 2 audio frames or control periods.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that delays the input by 2 audio frames or control periods.</p><p>For audio-rate signals the delay is 2 audio frames, and for control-rate
-signals the delay is 2 control periods.</p><h5>Examples</h5><pre><span class="cmt">// high-frequency comb filter</span>
+signals the delay is 2 control periods.</p><p><i>Warning:</i> the The first value output is zero, while both the second and the
+third value output equal the first input value! In this respect the UGen behaves
+different than <code>DelayN</code> .</p><h5>Examples</h5><pre><span class="cmt">// high-frequency comb filter</span>
 play {
   <span class="kw">val</span> z = PinkNoise.ar
   <span class="kw">val</span> x = z - Delay2.ar(z)
@@ -11682,7 +11871,7 @@ play {
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Simple delay line with no interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Simple delay line with no interpolation.</p><h5>Examples</h5><pre><span class="cmt">// Delayed random pulses</span>
+      <p class="shortcomment cmt">Simple delay line with no interpolation.</p><div class="fullcomment"><div class="comment cmt"><p>Simple delay line with no interpolation. The initial buffer contents is zero.</p><h5>Examples</h5><pre><span class="cmt">// Delayed random pulses</span>
 play {
   <span class="cmt">// Dust randomly triggers Decay to create an exponential</span>
   <span class="cmt">// decay envelope for the WhiteNoise input source</span>
@@ -12833,7 +13022,7 @@ play {
       </a>
     </span>
       <p class="shortcomment cmt">A gate or hold UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A gate or hold UGen. It allows the input signal value to pass when the <code>gate</code>
-argument is positive, otherwise it holds last value.
+argument is positive, otherwise it holds last value.</p><p>Before the first high gate value is registered, this UGen outputs zero.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Latch$.html" class="extype" name="de.sciss.synth.ugen.Latch">Latch</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.GbmanL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GbmanL"></a>
@@ -13080,7 +13269,8 @@ play {
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A two point difference filter UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A two point difference filter UGen. Implements the formula :</p><pre>out(i) = <span class="num">0.5</span> * (in(i) - in(i-<span class="num">1</span>))</pre><h5>Examples</h5><pre><span class="cmt">// engage with mouse button</span>
+      <p class="shortcomment cmt">A two point difference filter UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A two point difference filter UGen. Implements the formula :</p><pre>out(i) = <span class="num">0.5</span> * (in(i) - in(i-<span class="num">1</span>))</pre><p><code><code> Note: </code></code> the filter's memory is initialized with the first input sample, so
+for <code>HPZ1.ar(DC.ar(x))</code> the output will be zero, even at the beginning.</p><h5>Examples</h5><pre><span class="cmt">// engage with mouse button</span>
 play {
   <span class="kw">val</span> sig = PinkNoise.ar
   <span class="kw">val</span> flt = HPZ1.ar(sig)
@@ -14420,7 +14610,7 @@ play {
       </a>
     </span>
       <p class="shortcomment cmt">A sample-and-hold UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A sample-and-hold UGen. When triggered, a new value is taken from the input and
-hold until the next trigger occurs.
+hold until the next trigger occurs.</p><p>Before the first trigger is registered, this UGen outputs zero.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Demand$.html" class="extype" name="de.sciss.synth.ugen.Demand">Demand</a></p></span><span class="cmt"><p><a href="Gate$.html" class="extype" name="de.sciss.synth.ugen.Gate">Gate</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LatoocarfianC" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LatoocarfianC"></a>
@@ -16534,6 +16724,23 @@ play {
   <span class="kw">val</span> sig = IFFT.ar(chain)
   Pan2.ar(sig)
 }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="SetBuf$.html" class="extype" name="de.sciss.synth.ugen.SetBuf">SetBuf</a></p></span><span class="cmt"><p><a href="IFFT$.html" class="extype" name="de.sciss.synth.ugen.IFFT">IFFT</a></p></span><span class="cmt"><p><a href="FFT$.html" class="extype" name="de.sciss.synth.ugen.FFT">FFT</a></p></span><span class="cmt"><p><a href="Unpack1FFT$.html" class="extype" name="de.sciss.synth.ugen.Unpack1FFT">Unpack1FFT</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.Pad" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Pad"></a>
+      <a id="Pad:Pad"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Pad$.html"><span class="name">Pad</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@Pad" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.ugen.Pan2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Pan2"></a>
       <a id="Pan2:Pan2"></a>
@@ -16899,8 +17106,10 @@ play {
     </span>
       <p class="shortcomment cmt">A graph element which reads from a connected sound driver input.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element which reads from a connected sound driver input. This is a convenience
 element for accessing physical input signals, e.g. from a microphone connected to your
-audio interface. It expands to a regular <code>In</code> UGen offset by <code>NumOutputBuses.ir</code>.
-</p></div></div>
+audio interface. It expands to a regular <code>In</code> UGen offset by <code>NumOutputBuses.ir</code>.</p><p>For example, consider an audio interface with channels 1 to 8 being analog line inputs,
+channels 9 and 10 being AES/EBU and channels 11 to 18 being ADAT inputs. To read a combination
+of the analog and ADAT inputs, either of the following statement can be used:</p><pre>PhysicalIn(<span class="std">Seq</span>(<span class="num">0</span>, <span class="num">8</span>), <span class="std">Seq</span>(<span class="num">8</span>, <span class="num">8</span>))
+PhysicalIn(<span class="std">Seq</span>(<span class="num">0</span>, <span class="num">8</span>), <span class="std">Seq</span>(<span class="num">8</span>))      <span class="cmt">// numChannels wraps!</span></pre></div></div>
     </li><li name="de.sciss.synth.ugen.PhysicalOut" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="PhysicalOut"></a>
       <a id="PhysicalOut:PhysicalOut"></a>
@@ -17941,6 +18150,17 @@ play {
   <span class="kw">val</span> reset = Impulse.kr(<span class="num">1</span>)
   <span class="kw">val</span> ff    = SetResetFF.kr(set, reset)
   SinOsc.ar(ff.madd(<span class="num">400</span>, <span class="num">800</span>)) * <span class="num">0.1</span>
+}</pre><pre><span class="cmt">// limit trigger rate</span>
+play {
+  <span class="cmt">// with a combination of TDelay and SetResetFF</span>
+  <span class="cmt">// we can build a filter that lets triggers</span>
+  <span class="cmt">// pass at a maximum rate.</span>
+  <span class="kw">val</span> dur   = <span class="num">1.0</span>  <span class="cmt">// minimum spacing between triggers</span>
+  <span class="kw">val</span> in    = Dust.ar(<span class="num">10</span>)  <span class="cmt">// high frequency trigger</span>
+  <span class="kw">val</span> lim   = SetResetFF.ar(in, TDelay.ar(in, dur))
+  <span class="kw">val</span> time  = Timer.ar(lim)
+  time.poll(lim, <span class="lit">"bang"</span>)
+  ()
 }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ToggleFF$.html" class="extype" name="de.sciss.synth.ugen.ToggleFF">ToggleFF</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Shaper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Shaper"></a>
@@ -18669,7 +18889,9 @@ play {
 triggered.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen which holds and outputs an input value for a given duration when
 triggered.</p><p>When a trigger occurs at the input, the input value is sampled and output for
 the specified duration, otherwise zero is output. When a new trigger occurs
-while this ugens outputs 1, the hold-time is reset to the duration.</p><h5>Examples</h5><pre><span class="cmt">// hold dust spikes</span>
+while this ugens outputs 1, the hold-time is reset to the duration.</p><p><i>Warning:</i> The hold-time is subject to a bug that depends on the input
+signal. For example with <code>Trig1.ar(Impulse.ar(0), 4 * SampleDur.ir)</code> one
+actually gets a high signal for five sample frames instead of four.</p><h5>Examples</h5><pre><span class="cmt">// hold dust spikes</span>
 play { Trig.ar(Dust.ar(<span class="num">1</span>), <span class="num">0.2</span>) * SinOsc.ar(<span class="num">800</span>) * <span class="num">0.2</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig1$.html" class="extype" name="de.sciss.synth.ugen.Trig1">Trig1</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Trig1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Trig1"></a>
@@ -18689,7 +18911,9 @@ play { Trig.ar(Dust.ar(<span class="num">1</span>), <span class="num">0.2</span>
     </span>
       <p class="shortcomment cmt">A UGen which outputs a value of 1 for a given duration when triggered.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen which outputs a value of 1 for a given duration when triggered.</p><p>When a trigger occurs at the input, a value of 1 is output for the specified
 duration, otherwise zero is output. When a new trigger occurs while this ugens
-outputs 1, the hold-time is reset to the duration.</p><h5>Examples</h5><pre><span class="cmt">// hold dust spikes</span>
+outputs 1, the hold-time is reset to the duration.</p><p><i>Warning:</i> The hold-time is subject to a bug that depends on the input
+signal. For example with <code>Trig1.ar(Impulse.ar(0), 4 * SampleDur.ir)</code> one
+actually gets a high signal for five sample frames instead of four.</p><h5>Examples</h5><pre><span class="cmt">// hold dust spikes</span>
 play { Trig1.ar(Dust.ar(<span class="num">1</span>), <span class="num">0.2</span>) * SinOsc.ar(<span class="num">800</span>) * <span class="num">0.2</span> }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Trig$.html" class="extype" name="de.sciss.synth.ugen.Trig">Trig</a></p></span></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.TrigControl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TrigControl"></a>
@@ -18813,6 +19037,69 @@ play { TwoZero.ar(WhiteNoise.ar(<span class="num">0.125</span>), XLine.kr(<span 
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.package@Unpack1FFT" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.ugen.VBAP" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="VBAP"></a>
+      <a id="VBAP:VBAP"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="VBAP$.html"><span class="name">VBAP</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@VBAP" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen for Vector Base Amplitude Panning (VBAP).</p><div class="fullcomment"><div class="comment cmt"><p>A UGen for Vector Base Amplitude Panning (VBAP). This allows for equal power
+panning of a source over an arbitrary array of equidistant speakers. Normally
+this would be a ring, a dome, or partial dome.</p><p>VBAP was created by Ville Pulkki. For more information on VBAP see
+http://www.acoustics.hut.fi/research/cat/vbap/ This version of VBAP for SC was
+ported from the ver. 0.99 PD code by Scott Wilson.</p><h5>Examples</h5><pre><span class="cmt">// two-dimensional</span>
+<span class="kw">val</span> a = VBAPSetup(<span class="num">2</span>, <span class="std">Seq</span>(<span class="num">0</span>, <span class="num">45</span>, <span class="num">90</span>, <span class="num">135</span>, <span class="num">180</span>, -<span class="num">135</span>, -<span class="num">90</span>, -<span class="num">45</span>)) <span class="cmt">// 8 channel ring</span>
+
+<span class="kw">val</span> b = Buffer.alloc(s, a.bufferData.size)
+b.setn(a.bufferData)
+
+<span class="kw">val</span> x = play {
+  <span class="kw">val</span> azi = <span class="lit">"azi"</span>.kr(<span class="num">0</span>)
+  <span class="kw">val</span> ele = <span class="lit">"ele"</span>.kr(<span class="num">0</span>)
+  <span class="kw">val</span> spr = <span class="lit">"spr"</span>.kr(<span class="num">0</span>)
+  VBAP.ar(<span class="num">8</span>, PinkNoise.ar(<span class="num">0.2</span>), b.id, azi, ele, spr)
+}
+
+<span class="cmt">// test them out</span>
+x.set(<span class="lit">"azi"</span> -&gt; a.directions(<span class="num">1</span>).azi)
+x.set(<span class="lit">"azi"</span> -&gt; a.directions(<span class="num">2</span>).azi)
+x.set(<span class="lit">"azi"</span> -&gt; a.directions(<span class="num">3</span>).azi)
+<span class="cmt">// ...</span>
+x.set(<span class="lit">"azi"</span> -&gt; a.directions(<span class="num">7</span>).azi)
+x.set(<span class="lit">"azi"</span> -&gt; a.directions(<span class="num">0</span>).azi)
+
+<span class="cmt">// try the spread</span>
+x.set(<span class="lit">"spr"</span> -&gt;  <span class="num">20</span>)
+x.set(<span class="lit">"spr"</span> -&gt; <span class="num">100</span>) <span class="cmt">// all speakers</span>
+
+x.free(); b.free();</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="CircleRamp$.html" class="extype" name="de.sciss.synth.ugen.CircleRamp">CircleRamp</a></p></span></dd></dl></div>
+    </li><li name="de.sciss.synth.ugen.VBAPSetup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VBAPSetup"></a>
+      <a id="VBAPSetup:VBAPSetup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="VBAPSetup$.html"><span class="name">VBAPSetup</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.ugen.package@VBAPSetup" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -19144,23 +19431,6 @@ play {
   <span class="kw">val</span> b  = SinOsc.ar(f2) * <span class="num">0.1</span>
   <span class="std">Seq</span>(a, b)
 }</pre></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Pitch$.html" class="extype" name="de.sciss.synth.ugen.Pitch">Pitch</a></p></span></dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.impl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="impl"></a>
-      <a id="impl:impl"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a href="impl/package.html"><span class="name">impl</span></a>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.package@impl" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li></ol>
             </div>
 

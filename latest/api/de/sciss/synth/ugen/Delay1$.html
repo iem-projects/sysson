@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Delay1 - SysSon 1.7.1 API - de.sciss.synth.ugen.Delay1</title>
-          <meta name="description" content="Delay1 - SysSon 1.7.1 API - de.sciss.synth.ugen.Delay1" />
-          <meta name="keywords" content="Delay1 SysSon 1.7.1 API de.sciss.synth.ugen.Delay1" />
+          <title>Delay1 - Mellite 1.9.0 API - de.sciss.synth.ugen.Delay1</title>
+          <meta name="description" content="Delay1 - Mellite 1.9.0 API - de.sciss.synth.ugen.Delay1" />
+          <meta name="keywords" content="Delay1 Mellite 1.9.0 API de.sciss.synth.ugen.Delay1" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -52,7 +52,8 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that delays the input by 1 audio frame or control period.</p><p>For audio-rate signals the delay is 1 audio frame, and for control-rate signals
-the delay is 1 control period.</p><h5>Examples</h5><pre><span class="cmt">// analog to HPZ1</span>
+the delay is 1 control period.</p><p><i>Note:</i> The first value output is not zero but the same as the first input
+value! In this respect the UGen behaves different than <code>DelayN</code> .</p><h5>Examples</h5><pre><span class="cmt">// analog to HPZ1</span>
 play {
   <span class="kw">val</span> z = PinkNoise.ar
   <span class="kw">val</span> x = z - Delay1.ar(z)
@@ -71,7 +72,7 @@ play {
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -84,7 +85,7 @@ play {
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">

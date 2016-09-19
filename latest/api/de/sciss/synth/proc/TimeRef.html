@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>TimeRef - SysSon 1.7.1 API - de.sciss.synth.proc.TimeRef</title>
-          <meta name="description" content="TimeRef - SysSon 1.7.1 API - de.sciss.synth.proc.TimeRef" />
-          <meta name="keywords" content="TimeRef SysSon 1.7.1 API de.sciss.synth.proc.TimeRef" />
+          <title>TimeRef - Mellite 1.9.0 API - de.sciss.synth.proc.TimeRef</title>
+          <meta name="description" content="TimeRef - Mellite 1.9.0 API - de.sciss.synth.proc.TimeRef" />
+          <meta name="keywords" content="TimeRef Mellite 1.9.0 API de.sciss.synth.proc.TimeRef" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -28,7 +28,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="TimeRef$.html" title="See companion object"><img alt="Trait/Object" src="../../../../lib/trait_to_object_big.png" /></a>
+        <a href="TimeRef$.html" title="See companion object"><img alt="Class/Object" src="../../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.synth">synth</a>.<a href="package.html" class="extype" name="de.sciss.synth.proc">proc</a></p>
         <h1><a href="TimeRef$.html" title="See companion object">TimeRef</a></h1><h3><span class="morelinks"><div>
             Related Docs:
@@ -43,27 +43,18 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">TimeRef</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">TimeRef</span><span class="params">(<span name="span">span: <span class="extype" name="de.sciss.span.Span.HasStart">HasStart</span></span>, <span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A time reference specifies the temporal context
-within which an aural object is invoked. It may
-be either undefined (there is no notion of
-pointers in virtual performance time), or
-defined by a span for the invoked object and
-a time frame corresponding to the current position.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="TimeRef$$Apply.html" class="extype" name="de.sciss.synth.proc.TimeRef.Apply">Apply</a>, <a href="TimeRef$$Undefined$.html" class="extype" name="de.sciss.synth.proc.TimeRef.Undefined">Undefined</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -73,20 +64,20 @@ a time frame corresponding to the current position.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.synth.proc.TimeRef"><span>TimeRef</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.synth.proc.TimeRef"><span>TimeRef</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="de.sciss.synth.proc.TimeRef.Option"><span>Option</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -97,151 +88,21 @@ a time frame corresponding to the current position.
 
       <div id="template">
         <div id="allMembers">
-        
-
-        
-
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="de.sciss.synth.proc.TimeRef#force" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="force:de.sciss.synth.proc.TimeRef.Apply"></a>
-      <a id="force:Apply"></a>
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="de.sciss.synth.proc.TimeRef#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(span:de.sciss.span.Span.HasStart,offset:Long):de.sciss.synth.proc.TimeRef"></a>
+      <a id="&lt;init&gt;:TimeRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
+        <span class="modifier"></span>
+        <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">force</span><span class="result">: <a href="TimeRef$$Apply.html" class="extype" name="de.sciss.synth.proc.TimeRef.Apply">Apply</a></span>
+        <span class="name">TimeRef</span><span class="params">(<span name="span">span: <span class="extype" name="de.sciss.span.Span.HasStart">HasStart</span></span>, <span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@force:de.sciss.synth.proc.TimeRef.Apply" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">If the reference is undefined, translates it into a defined one beginning at zero
-with a span from zero.</p><div class="fullcomment"><div class="comment cmt"><p>If the reference is undefined, translates it into a defined one beginning at zero
-with a span from zero. Otherwise returns the reference unmodified.
-</p></div></div>
-    </li><li name="de.sciss.synth.proc.TimeRef#frame" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="frame:Long"></a>
-      <a id="frame:Long"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">frame</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@frame:Long" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.proc.TimeRef#intersect" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="intersect(span:de.sciss.span.SpanLike):de.sciss.synth.proc.TimeRef"></a>
-      <a id="intersect(SpanLike):TimeRef"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">intersect</span><span class="params">(<span name="span">span: <span class="extype" name="de.sciss.span.SpanLike">SpanLike</span></span>)</span><span class="result">: <a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@intersect(span:de.sciss.span.SpanLike):de.sciss.synth.proc.TimeRef" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.proc.TimeRef#isDefined" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="isDefined:Boolean"></a>
-      <a id="isDefined:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isDefined</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@isDefined:Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt"><code>true</code> for <code>TimeRef.Apply</code>, <code>false</code> for <code>TimeRef.Undefined</code>.</p>
-    </li><li name="de.sciss.synth.proc.TimeRef#offsetOrZero" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="offsetOrZero:Long"></a>
-      <a id="offsetOrZero:Long"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">offsetOrZero</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@offsetOrZero:Long" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Offsets within the logical span of the object.</p><div class="fullcomment"><div class="comment cmt"><p>Offsets within the logical span of the object.
-For an undefined time reference, this will report zero,
-otherwise it is equal to <code>frame - span.start</code>. If the
-span does not have a defined start, it will also report zero.
-</p></div></div>
-    </li><li name="de.sciss.synth.proc.TimeRef#shift" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="shift(deltaFrames:Long):de.sciss.synth.proc.TimeRef"></a>
-      <a id="shift(Long):TimeRef"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">shift</span><span class="params">(<span name="deltaFrames">deltaFrames: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@shift(deltaFrames:Long):de.sciss.synth.proc.TimeRef" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.proc.TimeRef#span" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="span:de.sciss.span.SpanLike"></a>
-      <a id="span:SpanLike"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">span</span><span class="result">: <span class="extype" name="de.sciss.span.SpanLike">SpanLike</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@span:de.sciss.span.SpanLike" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.proc.TimeRef#updateFrame" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="updateFrame(newFrame:Long):de.sciss.synth.proc.TimeRef"></a>
-      <a id="updateFrame(Long):TimeRef"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">updateFrame</span><span class="params">(<span name="newFrame">newFrame: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@updateFrame(newFrame:Long):de.sciss.synth.proc.TimeRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@&lt;init&gt;(span:de.sciss.span.Span.HasStart,offset:Long):de.sciss.synth.proc.TimeRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -249,8 +110,12 @@ span does not have a defined start, it will also report zero.
     </li></ol>
             </div>
 
+        
+
+        
+
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -319,6 +184,23 @@ span does not have a defined start, it will also report zero.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#child" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="child(that:de.sciss.span.SpanLike):de.sciss.synth.proc.TimeRef.Option"></a>
+      <a id="child(SpanLike):Option"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">child</span><span class="params">(<span name="that">that: <span class="extype" name="de.sciss.span.SpanLike">SpanLike</span></span>)</span><span class="result">: <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@child(that:de.sciss.span.SpanLike):de.sciss.synth.proc.TimeRef.Option" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -359,23 +241,6 @@ span does not have a defined start, it will also report zero.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -399,6 +264,43 @@ span does not have a defined start, it will also report zero.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#force" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="force:de.sciss.synth.proc.TimeRef"></a>
+      <a id="force:TimeRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">force</span><span class="result">: <a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@force:de.sciss.synth.proc.TimeRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">If the reference is undefined, translates it into a defined one beginning at zero
+with a span from zero.</p><div class="fullcomment"><div class="comment cmt"><p>If the reference is undefined, translates it into a defined one beginning at zero
+with a span from zero. Otherwise returns the reference unmodified.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a> → <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#frame" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="frame:Long"></a>
+      <a id="frame:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">frame</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@frame:Long" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -416,23 +318,40 @@ span does not have a defined start, it will also report zero.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
+    </li><li name="de.sciss.synth.proc.TimeRef#hasEnded" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hasEnded:Boolean"></a>
+      <a id="hasEnded:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hasEnded</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@hasEnded:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <p class="shortcomment cmt"><code>true</code> for a <code>TimeRef</code> whose <code>offset</code> is smaller than its span start, <code>false</code> for <code>TimeRef.Undefined</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>true</code> for a <code>TimeRef</code> whose <code>offset</code> is smaller than its span start, <code>false</code> for <code>TimeRef.Undefined</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a> → <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#isDefined" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDefined:Boolean"></a>
+      <a id="isDefined:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDefined</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@isDefined:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>true</code> for <code>TimeRef</code>, <code>false</code> for <code>TimeRef.Undefined</code>.</p><div class="fullcomment"><div class="comment cmt"><p><code>true</code> for <code>TimeRef</code>, <code>false</code> for <code>TimeRef.Undefined</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a> → <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -501,6 +420,61 @@ span does not have a defined start, it will also report zero.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#offset" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="offset:Long"></a>
+      <a id="offset:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">offset</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@offset:Long" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Offsets within the logical span of the object.</p><div class="fullcomment"><div class="comment cmt"><p>Offsets within the logical span of the object.
+For an undefined time reference, this will report zero,
+otherwise it is equal to <code>frame - span.start</code>. If the
+span does not have a defined start, it will also report zero.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a> → <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#shift" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="shift(deltaFrames:Long):de.sciss.synth.proc.TimeRef"></a>
+      <a id="shift(Long):TimeRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">shift</span><span class="params">(<span name="deltaFrames">deltaFrames: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@shift(deltaFrames:Long):de.sciss.synth.proc.TimeRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.TimeRef#span" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="span:de.sciss.span.Span.HasStart"></a>
+      <a id="span:HasStart"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">span</span><span class="result">: <span class="extype" name="de.sciss.span.Span.HasStart">HasStart</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@span:de.sciss.span.Span.HasStart" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The overall played span.</p><div class="fullcomment"><div class="comment cmt"><p>The overall played span.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a> → <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -518,7 +492,7 @@ span does not have a defined start, it will also report zero.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="de.sciss.synth.proc.TimeRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -527,14 +501,31 @@ span does not have a defined start, it will also report zero.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@toString():String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.proc.TimeRef#updateOffset" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="updateOffset(newOffset:Long):de.sciss.synth.proc.TimeRef"></a>
+      <a id="updateOffset(Long):TimeRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateOffset</span><span class="params">(<span name="newOffset">newOffset: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="" class="extype" name="de.sciss.synth.proc.TimeRef">TimeRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.TimeRef@updateOffset(newOffset:Long):de.sciss.synth.proc.TimeRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -613,7 +604,17 @@ span does not have a defined start, it will also report zero.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="de.sciss.synth.proc.TimeRef.Option">
+              <h3>Inherited from <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SoundProcesses - SysSon 1.7.1 API - de.sciss.synth.proc.SoundProcesses</title>
-          <meta name="description" content="SoundProcesses - SysSon 1.7.1 API - de.sciss.synth.proc.SoundProcesses" />
-          <meta name="keywords" content="SoundProcesses SysSon 1.7.1 API de.sciss.synth.proc.SoundProcesses" />
+          <title>SoundProcesses - Mellite 1.9.0 API - de.sciss.synth.proc.SoundProcesses</title>
+          <meta name="description" content="SoundProcesses - Mellite 1.9.0 API - de.sciss.synth.proc.SoundProcesses" />
+          <meta name="keywords" content="SoundProcesses Mellite 1.9.0 API de.sciss.synth.proc.SoundProcesses" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -62,7 +62,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -75,7 +75,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -162,7 +162,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.proc.SoundProcesses#atomic" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.proc.SoundProcesses#atomic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="atomic[S&lt;:de.sciss.lucre.stm.Sys[S],A](fun:S#Tx=&gt;A)(implicitcursor:de.sciss.lucre.stm.Cursor[S]):scala.concurrent.Future[A]"></a>
       <a id="atomic[S&lt;:Sys[S],A]((SoundProcesses.atomic.S.Tx)⇒A)(Cursor[S]):Future[A]"></a>
       <h4 class="signature">
@@ -171,14 +171,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">atomic</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.SoundProcesses.atomic.S">S</span>]</span>, <span name="A">A</span>]</span><span class="params">(<span name="fun">fun: (<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">SoundProcesses.atomic.S.Tx</span>) ⇒ <span class="extype" name="de.sciss.synth.proc.SoundProcesses.atomic.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="cursor">cursor: <span class="extype" name="de.sciss.lucre.stm.Cursor">Cursor</span>[<span class="extype" name="de.sciss.synth.proc.SoundProcesses.atomic.S">S</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="de.sciss.synth.proc.SoundProcesses.atomic.A">A</span>]</span>
+        <span class="name">atomic</span><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.SoundProcesses.atomic.S">S</span>]</span>, <span name="A">A</span>]</span><span class="params">(<span name="fun">fun: (<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">SoundProcesses.atomic.S.Tx</span>) ⇒ <span class="extype" name="de.sciss.synth.proc.SoundProcesses.atomic.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="cursor">cursor: <a href="../../lucre/stm/Cursor.html" class="extype" name="de.sciss.lucre.stm.Cursor">Cursor</a>[<span class="extype" name="de.sciss.synth.proc.SoundProcesses.atomic.S">S</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="de.sciss.synth.proc.SoundProcesses.atomic.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.SoundProcesses$@atomic[S&lt;:de.sciss.lucre.stm.Sys[S],A](fun:S#Tx=&gt;A)(implicitcursor:de.sciss.lucre.stm.Cursor[S]):scala.concurrent.Future[A]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Spawns a transactional function on the default <code>executionContext</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Spawns a transactional function on the default <code>executionContext</code>. Throws
+an exception if this method is called within a transaction.
+</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -202,40 +204,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="de.sciss.synth.proc.SoundProcesses#cueBufferSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cueBufferSize:Int"></a>
-      <a id="cueBufferSize:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">cueBufferSize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.SoundProcesses$@cueBufferSize:Int" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.proc.SoundProcesses#cueBufferSize_=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cueBufferSize_=(value:Int):Unit"></a>
-      <a id="cueBufferSize_=(Int):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: cueBufferSize_$eq" class="name">cueBufferSize_=</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.SoundProcesses$@cueBufferSize_=(value:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -270,7 +238,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="de.sciss.synth.proc.SoundProcesses#executionContext" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.proc.SoundProcesses#executionContext" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="executionContext:scala.concurrent.ExecutionContext"></a>
       <a id="executionContext:ExecutionContext"></a>
       <h4 class="signature">
@@ -286,7 +254,9 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Default execution-context used for scheduling and spawning functions.</p><div class="fullcomment"><div class="comment cmt"><p>Default execution-context used for scheduling and spawning functions.
+It uses the <code>scheduledExecutorService</code>.
+</p></div></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -435,7 +405,7 @@
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">var</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">poolSize</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>
@@ -445,14 +415,39 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the size of the thread pool used in <code>atomic</code>,
+where <code>None</code> indicates that a single-threaded context is used
+(default).</p>
+    </li><li name="de.sciss.synth.proc.SoundProcesses#poolSize_=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="poolSize_=(value:Option[Int]):Unit"></a>
+      <a id="poolSize_=(Option[Int]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: poolSize_$eq" class="name">poolSize_=</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.SoundProcesses$@poolSize_=(value:Option[Int]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets the size of the thread pool used in <code>atomic</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the size of the thread pool used in <code>atomic</code>.
+Note that this is only effective until the moment that
+pool has been used for the first time (e.g. by invocation
+of <code>atomic</code> or on a node's <code>onEnd</code>. Therefore this method
+should only be used during application startup.</p><p>A <code>Some</code> value specifies the number of concurrent threads,
+a <code>None</code> value is equivalent to a single-threaded context.
+</p></div></div>
     </li><li name="de.sciss.synth.proc.SoundProcesses#scheduledExecutorService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="scheduledExecutorService:java.util.concurrent.ScheduledExecutorService"></a>
       <a id="scheduledExecutorService:ScheduledExecutorService"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">lazy val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">scheduledExecutorService</span><span class="result">: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>
@@ -462,7 +457,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Same as <code>lucre.synth.impl.NodeImpl.pool</code>.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

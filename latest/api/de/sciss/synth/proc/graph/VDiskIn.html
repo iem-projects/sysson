@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>VDiskIn - SysSon 1.7.1 API - de.sciss.synth.proc.graph.VDiskIn</title>
-          <meta name="description" content="VDiskIn - SysSon 1.7.1 API - de.sciss.synth.proc.graph.VDiskIn" />
-          <meta name="keywords" content="VDiskIn SysSon 1.7.1 API de.sciss.synth.proc.graph.VDiskIn" />
+          <title>VDiskIn - Mellite 1.9.0 API - de.sciss.synth.proc.graph.VDiskIn</title>
+          <meta name="description" content="VDiskIn - Mellite 1.9.0 API - de.sciss.synth.proc.graph.VDiskIn" />
+          <meta name="keywords" content="VDiskIn Mellite 1.9.0 API de.sciss.synth.proc.graph.VDiskIn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -51,7 +51,15 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A SoundProcesses aware variant of <code>VDiskIn</code>. It takes its streaming buffer input from
+an attribute with the given <code>key</code>. Default values provide automatic sample-rate-conversion
+to match the audio server.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>key into the containing object's attribute map, where an <code>AudioCue</code> is to be found.</p></dd><dt class="param">speed</dt><dd class="cmt"><p>speed factor as in <code>ugen.VDiskIn</code>. If a negative constant value is given,
+                the actual factor is <code>BufRateScale.kr * -speed</code>, thus <code>-1</code> indicates playback
+                at correct sample rate.</p></dd><dt class="param">interp</dt><dd class="cmt"><p>same as in <code>ugen.VDiskIn</code>. Additionally, a value of <code>-1</code> indicates that
+                interpolation should be chosen according to <code>speed</code>. This is useful in conjunction
+                with negative speed values where interpolation might depend on actual SRC.</p></dd><dt class="param">maxSpeed</dt><dd class="cmt"><p>maximum expected speed, which will be used in consideration of the buffer size needed.
+                if zero (default), and <code>speed</code> is a constant, this will be aligned with <code>speed</code>.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <span class="extype" name="de.sciss.synth.proc.graph.impl.Stream">Stream</span>, <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -64,7 +72,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -77,7 +85,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -90,7 +98,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.proc.graph.VDiskIn#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.synth.proc.graph.VDiskIn#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(rate:de.sciss.synth.Rate,key:String,speed:de.sciss.synth.GE,loop:de.sciss.synth.GE,interp:Int,maxSpeed:Double):de.sciss.synth.proc.graph.VDiskIn"></a>
       <a id="&lt;init&gt;:VDiskIn"></a>
       <h4 class="signature">
@@ -106,7 +114,12 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>key into the containing object's attribute map, where an <code>AudioCue</code> is to be found.</p></dd><dt class="param">speed</dt><dd class="cmt"><p>speed factor as in <code>ugen.VDiskIn</code>. If a negative constant value is given,
+                the actual factor is <code>BufRateScale.kr * -speed</code>, thus <code>-1</code> indicates playback
+                at correct sample rate.</p></dd><dt class="param">interp</dt><dd class="cmt"><p>same as in <code>ugen.VDiskIn</code>. Additionally, a value of <code>-1</code> indicates that
+                interpolation should be chosen according to <code>speed</code>. This is useful in conjunction
+                with negative speed values where interpolation might depend on actual SRC.</p></dd><dt class="param">maxSpeed</dt><dd class="cmt"><p>maximum expected speed, which will be used in consideration of the buffer size needed.
+                if zero (default), and <code>speed</code> is a constant, this will be aligned with <code>speed</code>.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -280,7 +293,9 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.graph.VDiskIn">VDiskIn</a> → Stream</dd></dl></div>
+      <p class="shortcomment cmt">same as in <code>ugen.VDiskIn</code>.</p><div class="fullcomment"><div class="comment cmt"><p>same as in <code>ugen.VDiskIn</code>. Additionally, a value of <code>-1</code> indicates that
+                interpolation should be chosen according to <code>speed</code>. This is useful in conjunction
+                with negative speed values where interpolation might depend on actual SRC.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.graph.VDiskIn">VDiskIn</a> → Stream</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -314,7 +329,7 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.graph.VDiskIn">VDiskIn</a> → Stream</dd></dl></div>
+      <p class="shortcomment cmt">key into the containing object's attribute map, where an <code>AudioCue</code> is to be found.</p><div class="fullcomment"><div class="comment cmt"><p>key into the containing object's attribute map, where an <code>AudioCue</code> is to be found.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.graph.VDiskIn">VDiskIn</a> → Stream</dd></dl></div>
     </li><li name="de.sciss.synth.proc.graph.VDiskIn#loop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="loop:de.sciss.synth.GE"></a>
       <a id="loop:GE"></a>
@@ -333,18 +348,18 @@
     </span>
       
     </li><li name="de.sciss.synth.proc.graph.VDiskIn#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="makeUGen(numChannels:Int,idx:Int,buf:de.sciss.synth.GE,gain:de.sciss.synth.GE):de.sciss.synth.UGenInLike"></a>
-      <a id="makeUGen(Int,Int,GE,GE):UGenInLike"></a>
+      <a id="makeUGen(server:de.sciss.lucre.synth.Server,numChannels:Int,sampleRate:Double,idx:Int,buf:de.sciss.synth.GE,gain:de.sciss.synth.GE):de.sciss.synth.UGenInLike"></a>
+      <a id="makeUGen(lucre.synth.Server,Int,Double,Int,GE,GE):UGenInLike"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">makeUGen</span><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>, <span name="idx">idx: <span class="extype" name="scala.Int">Int</span></span>, <span name="buf">buf: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="gain">gain: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result">: <a href="../../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a></span>
+        <span class="name">makeUGen</span><span class="params">(<span name="server">server: <a href="../../../lucre/synth/Server.html" class="extype" name="de.sciss.lucre.synth.Server">lucre.synth.Server</a></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>, <span name="sampleRate">sampleRate: <span class="extype" name="scala.Double">Double</span></span>, <span name="idx">idx: <span class="extype" name="scala.Int">Int</span></span>, <span name="buf">buf: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="gain">gain: <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>)</span><span class="result">: <a href="../../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#de.sciss.synth.proc.graph.VDiskIn@makeUGen(numChannels:Int,idx:Int,buf:de.sciss.synth.GE,gain:de.sciss.synth.GE):de.sciss.synth.UGenInLike" title="Permalink" target="_top">
+      <a href="../../../../../index.html#de.sciss.synth.proc.graph.VDiskIn@makeUGen(server:de.sciss.lucre.synth.Server,numChannels:Int,sampleRate:Double,idx:Int,buf:de.sciss.synth.GE,gain:de.sciss.synth.GE):de.sciss.synth.UGenInLike" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -386,7 +401,8 @@ expansion
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.graph.VDiskIn">VDiskIn</a> → Stream</dd></dl></div>
+      <p class="shortcomment cmt">maximum expected speed, which will be used in consideration of the buffer size needed.</p><div class="fullcomment"><div class="comment cmt"><p>maximum expected speed, which will be used in consideration of the buffer size needed.
+                if zero (default), and <code>speed</code> is a constant, this will be aligned with <code>speed</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.graph.VDiskIn">VDiskIn</a> → Stream</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -455,7 +471,7 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.proc.graph.VDiskIn">VDiskIn</a> → <a href="../../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></dd></dl></div>
-    </li><li name="de.sciss.synth.proc.graph.VDiskIn#speed" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="de.sciss.synth.proc.graph.VDiskIn#speed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="speed:de.sciss.synth.GE"></a>
       <a id="speed:GE"></a>
       <h4 class="signature">
@@ -471,7 +487,9 @@ expansion
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">speed factor as in <code>ugen.VDiskIn</code>.</p><div class="fullcomment"><div class="comment cmt"><p>speed factor as in <code>ugen.VDiskIn</code>. If a negative constant value is given,
+                the actual factor is <code>BufRateScale.kr * -speed</code>, thus <code>-1</code> indicates playback
+                at correct sample rate.</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

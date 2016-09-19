@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Stepper - SysSon 1.7.1 API - de.sciss.synth.ugen.Stepper</title>
-          <meta name="description" content="Stepper - SysSon 1.7.1 API - de.sciss.synth.ugen.Stepper" />
-          <meta name="keywords" content="Stepper SysSon 1.7.1 API de.sciss.synth.ugen.Stepper" />
+          <title>Stepper - Mellite 1.9.0 API - de.sciss.synth.ugen.Stepper</title>
+          <meta name="description" content="Stepper - Mellite 1.9.0 API - de.sciss.synth.ugen.Stepper" />
+          <meta name="keywords" content="Stepper Mellite 1.9.0 API de.sciss.synth.ugen.Stepper" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -74,7 +74,7 @@ play {
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -87,7 +87,7 @@ play {
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -166,7 +166,7 @@ play {
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ar</span><span class="params">(<span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../../../../scala/package.html">inf</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result">: <a href="Stepper.html" class="extype" name="de.sciss.synth.ugen.Stepper">Stepper</a></span>
+        <span class="name">ar</span><span class="params">(<span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">2147483583</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result">: <a href="Stepper.html" class="extype" name="de.sciss.synth.ugen.Stepper">Stepper</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Stepper$@ar(trig:de.sciss.synth.GE,reset:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,step:de.sciss.synth.GE,resetVal:de.sciss.synth.GE):de.sciss.synth.ugen.Stepper" title="Permalink" target="_top">
@@ -188,7 +188,9 @@ play {
                         value, the counter jumps to <code>hi</code> if it were to fall
                         below <code>lo</code> .</p></dd><dt class="param">hi</dt><dd class="cmt"><p>The maximum value output. For an incremental <code>step</code>
                         value, the counter jumps to <code>lo</code> if it were to rise
-                        beyond <code>hi</code> .</p></dd><dt class="param">step</dt><dd class="cmt"><p>The amount by which the counter increases or decreases
+                        beyond <code>hi</code> . Note that values greater than <code>0x7FFFFFBF</code>
+                        (the default) cause numeric overflow and the UGen to
+                        malfunction.</p></dd><dt class="param">step</dt><dd class="cmt"><p>The amount by which the counter increases or decreases
                         upon receiving triggers. Note that if you use a
                         decremental counter, still <code>lo</code> must be the minimum and
                         <code>hi</code> must be the maximum value output. If <code>lo</code> &gt; <code>hi</code> ,
@@ -359,7 +361,7 @@ play {
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">kr</span><span class="params">(<span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../../../../scala/package.html">inf</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result">: <a href="Stepper.html" class="extype" name="de.sciss.synth.ugen.Stepper">Stepper</a></span>
+        <span class="name">kr</span><span class="params">(<span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="reset">reset: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="lo">lo: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="hi">hi: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">2147483583</a></span></span></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="resetVal">resetVal: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result">: <a href="Stepper.html" class="extype" name="de.sciss.synth.ugen.Stepper">Stepper</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.ugen.Stepper$@kr(trig:de.sciss.synth.GE,reset:de.sciss.synth.GE,lo:de.sciss.synth.GE,hi:de.sciss.synth.GE,step:de.sciss.synth.GE,resetVal:de.sciss.synth.GE):de.sciss.synth.ugen.Stepper" title="Permalink" target="_top">
@@ -381,7 +383,9 @@ play {
                         value, the counter jumps to <code>hi</code> if it were to fall
                         below <code>lo</code> .</p></dd><dt class="param">hi</dt><dd class="cmt"><p>The maximum value output. For an incremental <code>step</code>
                         value, the counter jumps to <code>lo</code> if it were to rise
-                        beyond <code>hi</code> .</p></dd><dt class="param">step</dt><dd class="cmt"><p>The amount by which the counter increases or decreases
+                        beyond <code>hi</code> . Note that values greater than <code>0x7FFFFFBF</code>
+                        (the default) cause numeric overflow and the UGen to
+                        malfunction.</p></dd><dt class="param">step</dt><dd class="cmt"><p>The amount by which the counter increases or decreases
                         upon receiving triggers. Note that if you use a
                         decremental counter, still <code>lo</code> must be the minimum and
                         <code>hi</code> must be the maximum value output. If <code>lo</code> &gt; <code>hi</code> ,

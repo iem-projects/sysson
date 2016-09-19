@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Txn - SysSon 1.7.1 API - de.sciss.lucre.synth.Txn</title>
-          <meta name="description" content="Txn - SysSon 1.7.1 API - de.sciss.lucre.synth.Txn" />
-          <meta name="keywords" content="Txn SysSon 1.7.1 API de.sciss.lucre.synth.Txn" />
+          <title>Txn - Mellite 1.9.0 API - de.sciss.lucre.synth.Txn</title>
+          <meta name="description" content="Txn - Mellite 1.9.0 API - de.sciss.lucre.synth.Txn" />
+          <meta name="keywords" content="Txn Mellite 1.9.0 API de.sciss.lucre.synth.Txn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -47,7 +47,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Txn</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></span>
+        <span class="name">Txn</span><span class="result"> extends <a href="../stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></span>
       </span>
       </h4>
       
@@ -57,10 +57,10 @@ about the underlying system. What the process transaction provides is a package 
 <code>addMessage</code> method for staging OSC messages which are flushed at the end of a successful transaction.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="../../synth/proc/Confluent$$Txn.html" class="extype" name="de.sciss.synth.proc.Confluent.Txn">Txn</a>, <a href="../../synth/proc/Durable$$Txn.html" class="extype" name="de.sciss.synth.proc.Durable.Txn">Txn</a>, <a href="Sys$$Txn.html" class="extype" name="de.sciss.lucre.synth.Sys.Txn">Txn</a>, <a href="InMemory$$Txn.html" class="extype" name="de.sciss.lucre.synth.InMemory.Txn">Txn</a></div>
+            <div class="subClasses hiddenContent"><a href="Sys$$Txn.html" class="extype" name="de.sciss.lucre.synth.Sys.Txn">Txn</a>, <a href="InMemory$$Txn.html" class="extype" name="de.sciss.lucre.synth.InMemory.Txn">Txn</a>, <a href="../../synth/proc/Confluent$$Txn.html" class="extype" name="de.sciss.synth.proc.Confluent.Txn">Txn</a>, <a href="../../synth/proc/Durable$$Txn.html" class="extype" name="de.sciss.synth.proc.Durable.Txn">Txn</a></div>
           </div></div>
         
 
@@ -71,7 +71,7 @@ about the underlying system. What the process transaction provides is a package 
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -84,7 +84,7 @@ about the underlying system. What the process transaction provides is a package 
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -134,7 +134,7 @@ about the underlying system. What the process transaction provides is a package 
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TxnLike</dd></dl></div>
+      <p class="shortcomment cmt">Registers a thunk to be executed after the transaction successfully committed.</p><div class="fullcomment"><div class="comment cmt"><p>Registers a thunk to be executed after the transaction successfully committed.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.TxnLike#peer" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="peer:scala.concurrent.stm.InTxn"></a>
       <a id="peer:InTxn"></a>
@@ -151,7 +151,10 @@ about the underlying system. What the process transaction provides is a package 
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TxnLike</dd></dl></div>
+      <p class="shortcomment cmt">Every transaction has a plain Scala-STM transaction as a peer.</p><div class="fullcomment"><div class="comment cmt"><p>Every transaction has a plain Scala-STM transaction as a peer. This comes handy for
+setting up custom things like <code>TxnLocal</code>, <code>TMap</code>, or calling into the hooks of <code>concurrent.stm.Txn</code>.
+It is also needed when re-wrapping the transaction of one system into another.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -520,7 +523,7 @@ about the underlying system. What the process transaction provides is a package 
 
         <div id="inheritedMembers">
         <div class="parent" name="de.sciss.lucre.stm.TxnLike">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></h3>
+              <h3>Inherited from <a href="../stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

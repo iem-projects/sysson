@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SynthGraph - SysSon 1.7.1 API - de.sciss.synth.SynthGraph</title>
-          <meta name="description" content="SynthGraph - SysSon 1.7.1 API - de.sciss.synth.SynthGraph" />
-          <meta name="keywords" content="SynthGraph SysSon 1.7.1 API de.sciss.synth.SynthGraph" />
+          <title>SynthGraph - Mellite 1.9.0 API - de.sciss.synth.SynthGraph</title>
+          <meta name="description" content="SynthGraph - Mellite 1.9.0 API - de.sciss.synth.SynthGraph" />
+          <meta name="keywords" content="SynthGraph Mellite 1.9.0 API de.sciss.synth.SynthGraph" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -64,7 +64,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -77,7 +77,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -434,6 +434,30 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.SynthGraph#use" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="use[A](builder:de.sciss.synth.SynthGraph.Builder)(body:=&gt;A):A"></a>
+      <a id="use[A](Builder)(⇒A):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">use</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="builder">builder: <a href="SynthGraph$$Builder.html" class="extype" name="de.sciss.synth.SynthGraph.Builder">Builder</a></span>)</span><span class="params">(<span name="body">body: ⇒ <span class="extype" name="de.sciss.synth.SynthGraph.use.A">A</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.synth.SynthGraph.use.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.SynthGraph$@use[A](builder:de.sciss.synth.SynthGraph.Builder)(body:=&gt;A):A" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Installs a custom synth graph builder on the current thread,
+during the invocation of a closure.</p><div class="fullcomment"><div class="comment cmt"><p>Installs a custom synth graph builder on the current thread,
+during the invocation of a closure. This method is typically
+called from other libraries which wish to provide a graph
+builder other than the default.</p><p>When the method returns, the previous graph builder has automatically
+been restored. During the execution of the <code>body</code>, calling
+<code>SynthGraph.builder</code> will return the given <code>builder</code> argument.
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>the result type of the body</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the builder to install on the current thread</p></dd><dt class="param">body</dt><dd class="cmt"><p>the body which is executed with the builder found through <code>SynthGraph.builder</code></p></dd><dt>returns</dt><dd class="cmt"><p>the result of executing the body</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

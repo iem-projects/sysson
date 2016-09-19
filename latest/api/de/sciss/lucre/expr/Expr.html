@@ -1,0 +1,634 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Expr - Mellite 1.9.0 API - de.sciss.lucre.expr.Expr</title>
+          <meta name="description" content="Expr - Mellite 1.9.0 API - de.sciss.lucre.expr.Expr" />
+          <meta name="keywords" content="Expr Mellite 1.9.0 API de.sciss.lucre.expr.Expr" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'de.sciss.lucre.expr.Expr';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="Expr$.html" title="See companion object"><img alt="Trait/Object" src="../../../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.lucre">lucre</a>.<a href="package.html" class="extype" name="de.sciss.lucre.expr">expr</a></p>
+        <h1><a href="Expr$.html" title="See companion object">Expr</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Expr$.html" title="See companion object">object Expr</a>
+            | <a href="package.html" class="extype" name="de.sciss.lucre.expr">package expr</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Expr</span><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>]</span>, <span name="A">+A</span>]</span><span class="result"> extends <a href="../stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>] with <a href="../event/Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>, <span class="extype" name="de.sciss.model.Change">Change</span>[<span class="extype" name="de.sciss.lucre.expr.Expr.A">A</span>]]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An expression is a computation that reduces to a single value of type <code>A</code>.
+Expressions can be understood as dataflow variables. When a tree is
+composed, a change in the root of the tree propagates through to the leaves
+in the form of an emitted <code>Change</code> event that carries the old and new
+value (according to the particular node of the tree).</p><p>Basic expression types are <code>Expr.Const</code> - it simply wraps a constant value
+and thus will never change or fire an event - and <code>Expr.Var</code> which can be
+thought of as a mutable variable carrying a peer expression. When the variable
+assignment changes, the expression currently held is evaluated and propagated
+as an event. Intermediate nodes or expressions might modify the value, such
+as a binary operator (e.g., an integer expression that sums two input
+integer expressions).
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="../stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>], <a href="../stm/Mutable.html" class="extype" name="de.sciss.lucre.stm.Mutable">Mutable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>], <a href="../stm/Identifiable.html" class="extype" name="de.sciss.lucre.stm.Identifiable">Identifiable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span>], <a href="../stm/Elem.html" class="extype" name="de.sciss.lucre.stm.Elem">Elem</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>], <a href="../event/Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>, <span class="extype" name="de.sciss.model.Change">Change</span>[<span class="extype" name="de.sciss.lucre.expr.Expr.A">A</span>]], <a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>], <span class="extype" name="de.sciss.serial.Writable">Writable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="../../synth/proc/AudioCue$$Obj$$Apply.html" class="extype" name="de.sciss.synth.proc.AudioCue.Obj.Apply">Apply</a>, <a href="../artifact/Artifact.html" class="extype" name="de.sciss.lucre.artifact.Artifact">Artifact</a>, <a href="../artifact/ArtifactLocation.html" class="extype" name="de.sciss.lucre.artifact.ArtifactLocation">ArtifactLocation</a>, <a href="BooleanObj.html" class="extype" name="de.sciss.lucre.expr.BooleanObj">BooleanObj</a>, <a href="Expr$$Const.html" class="extype" name="de.sciss.lucre.expr.Expr.Const">Const</a>, <a href="../../synth/proc/CurveObj.html" class="extype" name="de.sciss.synth.proc.CurveObj">CurveObj</a>, <a href="DoubleObj.html" class="extype" name="de.sciss.lucre.expr.DoubleObj">DoubleObj</a>, <a href="DoubleVector.html" class="extype" name="de.sciss.lucre.expr.DoubleVector">DoubleVector</a>, <a href="../../fscape/lucre/GraphObj.html" class="extype" name="de.sciss.fscape.lucre.GraphObj">GraphObj</a>, <a href="IntObj.html" class="extype" name="de.sciss.lucre.expr.IntObj">IntObj</a>, <a href="LongObj.html" class="extype" name="de.sciss.lucre.expr.LongObj">LongObj</a>, <a href="../../synth/proc/AudioCue$$Obj$$LongOpImpl.html" class="extype" name="de.sciss.synth.proc.AudioCue.Obj.LongOpImpl">LongOpImpl</a>, <a href="../artifact/Artifact$$Modifiable.html" class="extype" name="de.sciss.lucre.artifact.Artifact.Modifiable">Modifiable</a>, <a href="../../synth/proc/AudioCue$$Obj.html" class="extype" name="de.sciss.synth.proc.AudioCue.Obj">Obj</a>, <a href="../../synth/proc/FadeSpec$$Obj.html" class="extype" name="de.sciss.synth.proc.FadeSpec.Obj">Obj</a>, <a href="../../synth/proc/Color$$Obj.html" class="extype" name="de.sciss.synth.proc.Color.Obj">Obj</a>, <a href="../../synth/proc/Code$$Obj.html" class="extype" name="de.sciss.synth.proc.Code.Obj">Obj</a>, <a href="../../synth/proc/AudioCue$$Obj$$ReplaceOffset.html" class="extype" name="de.sciss.synth.proc.AudioCue.Obj.ReplaceOffset">ReplaceOffset</a>, <a href="../../synth/proc/AudioCue$$Obj$$Shift.html" class="extype" name="de.sciss.synth.proc.AudioCue.Obj.Shift">Shift</a>, <a href="SpanLikeObj.html" class="extype" name="de.sciss.lucre.expr.SpanLikeObj">SpanLikeObj</a>, <a href="SpanObj.html" class="extype" name="de.sciss.lucre.expr.SpanObj">SpanObj</a>, <a href="StringObj.html" class="extype" name="de.sciss.lucre.expr.StringObj">StringObj</a>, <a href="../../synth/proc/SynthGraphObj.html" class="extype" name="de.sciss.synth.proc.SynthGraphObj">SynthGraphObj</a>, <a href="IntExtensions$$Tuple1.html" class="extype" name="de.sciss.lucre.expr.IntExtensions.Tuple1">Tuple1</a>, <a href="SpanLikeExtensions$$Tuple1.html" class="extype" name="de.sciss.lucre.expr.SpanLikeExtensions.Tuple1">Tuple1</a>, <a href="DoubleExtensions$$Tuple1.html" class="extype" name="de.sciss.lucre.expr.DoubleExtensions.Tuple1">Tuple1</a>, <a href="LongExtensions$$Tuple1.html" class="extype" name="de.sciss.lucre.expr.LongExtensions.Tuple1">Tuple1</a>, <a href="BooleanExtensions$$Tuple1.html" class="extype" name="de.sciss.lucre.expr.BooleanExtensions.Tuple1">Tuple1</a>, <a href="SpanLikeExtensions$$Tuple2.html" class="extype" name="de.sciss.lucre.expr.SpanLikeExtensions.Tuple2">Tuple2</a>, <a href="LongExtensions$$Tuple2.html" class="extype" name="de.sciss.lucre.expr.LongExtensions.Tuple2">Tuple2</a>, <a href="SpanExtensions$$Tuple2.html" class="extype" name="de.sciss.lucre.expr.SpanExtensions.Tuple2">Tuple2</a>, <a href="IntExtensions$$Tuple2.html" class="extype" name="de.sciss.lucre.expr.IntExtensions.Tuple2">Tuple2</a>, <a href="StringExtensions$$Tuple2.html" class="extype" name="de.sciss.lucre.expr.StringExtensions.Tuple2">Tuple2</a>, <a href="BooleanExtensions$$Tuple2.html" class="extype" name="de.sciss.lucre.expr.BooleanExtensions.Tuple2">Tuple2</a>, <a href="DoubleExtensions$$Tuple2.html" class="extype" name="de.sciss.lucre.expr.DoubleExtensions.Tuple2">Tuple2</a>, <a href="Expr$$Var.html" class="extype" name="de.sciss.lucre.expr.Expr.Var">Var</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="de.sciss.lucre.expr.Expr"><span>Expr</span></li><li class="in" name="de.sciss.lucre.stm.Obj"><span>Obj</span></li><li class="in" name="de.sciss.lucre.stm.Mutable"><span>Mutable</span></li><li class="in" name="de.sciss.lucre.stm.Identifiable"><span>Identifiable</span></li><li class="in" name="de.sciss.lucre.stm.Elem"><span>Elem</span></li><li class="in" name="de.sciss.lucre.event.Publisher"><span>Publisher</span></li><li class="in" name="de.sciss.lucre.stm.Disposable"><span>Disposable</span></li><li class="in" name="de.sciss.serial.Writable"><span>Writable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="de.sciss.lucre.event.Publisher#changed" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="changed:de.sciss.lucre.event.EventLike[S,A]"></a>
+      <a id="changed:EventLike[S,Change[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">changed</span><span class="result">: <a href="../event/EventLike.html" class="extype" name="de.sciss.lucre.event.EventLike">EventLike</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>, <span class="extype" name="de.sciss.model.Change">Change</span>[<span class="extype" name="de.sciss.lucre.expr.Expr.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@changed:de.sciss.lucre.event.EventLike[S,A]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../event/Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Disposable#dispose" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="dispose()(implicittx:Tx):Unit"></a>
+      <a id="dispose()(S.Tx):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dispose</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@dispose()(implicittx:Tx):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Identifiable#id" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="id:ID"></a>
+      <a id="id:S.ID"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">id</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@id:ID" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Identifiable.html" class="extype" name="de.sciss.lucre.stm.Identifiable">Identifiable</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Obj#tpe" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="tpe:de.sciss.lucre.stm.Obj.Type"></a>
+      <a id="tpe:stm.Obj.Type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tpe</span><span class="result">: <a href="../stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">stm.Obj.Type</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@tpe:de.sciss.lucre.stm.Obj.Type" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a> → <a href="../stm/Elem.html" class="extype" name="de.sciss.lucre.stm.Elem">Elem</a></dd></dl></div>
+    </li><li name="de.sciss.lucre.expr.Expr#value" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="value(implicittx:S#Tx):A"></a>
+      <a id="value(S.Tx):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">value</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.expr.Expr.A">A</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@value(implicittx:S#Tx):A" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.serial.Writable#write" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="write(out:de.sciss.serial.DataOutput):Unit"></a>
+      <a id="write(DataOutput):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">write</span><span class="params">(<span name="out">out: <span class="extype" name="de.sciss.serial.DataOutput">DataOutput</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@write(out:de.sciss.serial.DataOutput):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Writable</dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@##():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Obj#attr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="attr(implicittx:S#Tx):de.sciss.lucre.stm.Obj.AttrMap[S]"></a>
+      <a id="attr(S.Tx):AttrMap[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">attr</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <a href="../stm/Obj$.html#AttrMap[S&lt;:de.sciss.lucre.stm.Sys[S]]=de.sciss.lucre.event.Map.Modifiable[S,String,de.sciss.lucre.stm.Obj]" class="extmbr" name="de.sciss.lucre.stm.Obj.AttrMap">AttrMap</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@attr(implicittx:S#Tx):de.sciss.lucre.stm.Obj.AttrMap[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Identifiable#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(that:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="that">that: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@equals(that:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Identifiable.html" class="extype" name="de.sciss.lucre.stm.Identifiable">Identifiable</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Identifiable#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Identifiable.html" class="extype" name="de.sciss.lucre.stm.Identifiable">Identifiable</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.lucre.stm.Obj#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@toString():String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.expr.Expr@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="de.sciss.lucre.stm.Obj">
+              <h3>Inherited from <a href="../stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>]</h3>
+            </div><div class="parent" name="de.sciss.lucre.stm.Mutable">
+              <h3>Inherited from <a href="../stm/Mutable.html" class="extype" name="de.sciss.lucre.stm.Mutable">Mutable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</h3>
+            </div><div class="parent" name="de.sciss.lucre.stm.Identifiable">
+              <h3>Inherited from <a href="../stm/Identifiable.html" class="extype" name="de.sciss.lucre.stm.Identifiable">Identifiable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span>]</h3>
+            </div><div class="parent" name="de.sciss.lucre.stm.Elem">
+              <h3>Inherited from <a href="../stm/Elem.html" class="extype" name="de.sciss.lucre.stm.Elem">Elem</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>]</h3>
+            </div><div class="parent" name="de.sciss.lucre.event.Publisher">
+              <h3>Inherited from <a href="../event/Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a>[<span class="extype" name="de.sciss.lucre.expr.Expr.S">S</span>, <span class="extype" name="de.sciss.model.Change">Change</span>[<span class="extype" name="de.sciss.lucre.expr.Expr.A">A</span>]]</h3>
+            </div><div class="parent" name="de.sciss.lucre.stm.Disposable">
+              <h3>Inherited from <a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</h3>
+            </div><div class="parent" name="de.sciss.serial.Writable">
+              <h3>Inherited from <span class="extype" name="de.sciss.serial.Writable">Writable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Txn - SysSon 1.7.1 API - de.sciss.synth.proc.Confluent.Txn</title>
-          <meta name="description" content="Txn - SysSon 1.7.1 API - de.sciss.synth.proc.Confluent.Txn" />
-          <meta name="keywords" content="Txn SysSon 1.7.1 API de.sciss.synth.proc.Confluent.Txn" />
+          <title>Txn - Mellite 1.9.0 API - de.sciss.synth.proc.Confluent.Txn</title>
+          <meta name="description" content="Txn - Mellite 1.9.0 API - de.sciss.synth.proc.Confluent.Txn" />
+          <meta name="keywords" content="Txn Mellite 1.9.0 API de.sciss.synth.proc.Confluent.Txn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -45,13 +45,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Txn</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.confluent.Txn">lucre.confluent.Txn</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>] with <a href="../../lucre/synth/Sys$$Txn.html" class="extype" name="de.sciss.lucre.synth.Sys.Txn">lucre.synth.Sys.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>
+        <span class="name">Txn</span><span class="result"> extends <a href="../../lucre/confluent/Txn.html" class="extype" name="de.sciss.lucre.confluent.Txn">lucre.confluent.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>] with <a href="../../lucre/synth/Sys$$Txn.html" class="extype" name="de.sciss.lucre.synth.Sys.Txn">lucre.synth.Sys.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../lucre/synth/Sys$$Txn.html" class="extype" name="de.sciss.lucre.synth.Sys.Txn">lucre.synth.Sys.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>], <a href="../../lucre/synth/Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">lucre.synth.Txn</a>, <span class="extype" name="de.sciss.lucre.confluent.Txn">lucre.confluent.Txn</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>], <span class="extype" name="de.sciss.lucre.stm.Txn">lucre.stm.Txn</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>], <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../lucre/synth/Sys$$Txn.html" class="extype" name="de.sciss.lucre.synth.Sys.Txn">lucre.synth.Sys.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>], <a href="../../lucre/synth/Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">lucre.synth.Txn</a>, <a href="../../lucre/confluent/Txn.html" class="extype" name="de.sciss.lucre.confluent.Txn">lucre.confluent.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>], <a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">lucre.stm.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>], <a href="../../lucre/stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -62,7 +62,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -75,7 +75,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -125,7 +125,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn → TxnLike</dd></dl></div>
+      <p class="shortcomment cmt">Registers a thunk to be executed after the transaction successfully committed.</p><div class="fullcomment"><div class="comment cmt"><p>Registers a thunk to be executed after the transaction successfully committed.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a> → <a href="../../lucre/stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#attrMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="attrMap(obj:de.sciss.lucre.stm.Obj[S]):de.sciss.lucre.stm.Obj.AttrMap[S]"></a>
       <a id="attrMap(Obj[Confluent]):AttrMap[Confluent]"></a>
@@ -135,14 +135,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">attrMap</span><span class="params">(<span name="obj">obj: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Obj.AttrMap">AttrMap</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>
+        <span class="name">attrMap</span><span class="params">(<span name="obj">obj: <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>)</span><span class="result">: <a href="../../lucre/stm/Obj$.html#AttrMap[S&lt;:de.sciss.lucre.stm.Sys[S]]=de.sciss.lucre.event.Map.Modifiable[S,String,de.sciss.lucre.stm.Obj]" class="extmbr" name="de.sciss.lucre.stm.Obj.AttrMap">AttrMap</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Confluent$$Txn@attrMap(obj:de.sciss.lucre.stm.Obj[S]):de.sciss.lucre.stm.Obj.AttrMap[S]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#beforeCommit" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="beforeCommit(fun:S#Tx=&gt;Unit):Unit"></a>
       <a id="beforeCommit((Tx)⇒Unit):Unit"></a>
@@ -159,7 +159,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.confluent.Txn#durable" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="durable:S#D#Tx"></a>
       <a id="durable:Tx"></a>
@@ -176,7 +176,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/confluent/Txn.html" class="extype" name="de.sciss.lucre.confluent.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#inMemory" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="inMemory:S#I#Tx"></a>
       <a id="inMemory:Tx"></a>
@@ -193,7 +193,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.confluent.Txn#info" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="info:de.sciss.lucre.confluent.VersionInfo.Modifiable"></a>
       <a id="info:Modifiable"></a>
@@ -203,14 +203,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="result">: <span class="extype" name="de.sciss.lucre.confluent.VersionInfo.Modifiable">Modifiable</span></span>
+        <span class="name">info</span><span class="result">: <a href="../../lucre/confluent/VersionInfo$$Modifiable.html" class="extype" name="de.sciss.lucre.confluent.VersionInfo.Modifiable">Modifiable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Confluent$$Txn@info:de.sciss.lucre.confluent.VersionInfo.Modifiable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/confluent/Txn.html" class="extype" name="de.sciss.lucre.confluent.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.confluent.Txn#inputAccess" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="inputAccess:de.sciss.lucre.confluent.Access[S]"></a>
       <a id="inputAccess:Access[Confluent]"></a>
@@ -220,14 +220,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">inputAccess</span><span class="result">: <span class="extype" name="de.sciss.lucre.confluent.Access">Access</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>
+        <span class="name">inputAccess</span><span class="result">: <a href="../../lucre/confluent/Access.html" class="extype" name="de.sciss.lucre.confluent.Access">Access</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Confluent$$Txn@inputAccess:de.sciss.lucre.confluent.Access[S]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/confluent/Txn.html" class="extype" name="de.sciss.lucre.confluent.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.confluent.Txn#isRetroactive" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="isRetroactive:Boolean"></a>
       <a id="isRetroactive:Boolean"></a>
@@ -244,7 +244,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/confluent/Txn.html" class="extype" name="de.sciss.lucre.confluent.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#newBooleanVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="newBooleanVar(id:S#ID,init:Boolean):S#Var[Boolean]"></a>
       <a id="newBooleanVar(Confluent.ID,Boolean):Confluent.Var[Boolean]"></a>
@@ -254,14 +254,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">newBooleanVar</span><span class="params">(<span name="id">id: <a href="Confluent.html#ID=de.sciss.lucre.confluent.Identifier[S]" class="extmbr" name="de.sciss.synth.proc.Confluent.ID">Confluent.ID</a></span>, <span name="init">init: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Confluent.html#Var[A&lt;:&lt;?&gt;]=de.sciss.lucre.confluent.Var[S,A]" class="extmbr" name="de.sciss.synth.proc.Confluent.Var">Confluent.Var</a>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>
+        <span class="name">newBooleanVar</span><span class="params">(<span name="id">id: <a href="Confluent.html#ID=de.sciss.lucre.confluent.Identifier[S]" class="extmbr" name="de.sciss.synth.proc.Confluent.ID">Confluent.ID</a></span>, <span name="init">init: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Confluent.html#Var[A]=de.sciss.lucre.confluent.Var[S,A]" class="extmbr" name="de.sciss.synth.proc.Confluent.Var">Confluent.Var</a>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Confluent$$Txn@newBooleanVar(id:S#ID,init:Boolean):S#Var[Boolean]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#newHandle" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="newHandle[A](value:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):de.sciss.lucre.stm.Source[S#Tx,A]"></a>
       <a id="newHandle[A](A)(Serializer[Tx,Confluent.Acc,A]):Source[Tx,A]"></a>
@@ -271,16 +271,21 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">newHandle</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="de.sciss.lucre.stm.Txn.newHandle.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="serializer">serializer: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<a href="Confluent.html#Tx=de.sciss.synth.proc.Confluent.Txn" class="extmbr" name="de.sciss.synth.proc.Confluent.Tx">Tx</a>, <a href="Confluent.html#Acc=de.sciss.lucre.confluent.Access[S]" class="extmbr" name="de.sciss.synth.proc.Confluent.Acc">Confluent.Acc</a>, <span class="extype" name="de.sciss.lucre.stm.Txn.newHandle.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Source">Source</span>[<a href="Confluent.html#Tx=de.sciss.synth.proc.Confluent.Txn" class="extmbr" name="de.sciss.synth.proc.Confluent.Tx">Tx</a>, <span class="extype" name="de.sciss.lucre.stm.Txn.newHandle.A">A</span>]</span>
+        <span class="name">newHandle</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="de.sciss.lucre.stm.Txn.newHandle.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="serializer">serializer: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<a href="Confluent.html#Tx=de.sciss.synth.proc.Confluent.Txn" class="extmbr" name="de.sciss.synth.proc.Confluent.Tx">Tx</a>, <a href="Confluent.html#Acc=de.sciss.lucre.confluent.Access[S]" class="extmbr" name="de.sciss.synth.proc.Confluent.Acc">Confluent.Acc</a>, <span class="extype" name="de.sciss.lucre.stm.Txn.newHandle.A">A</span>]</span>)</span><span class="result">: <a href="../../lucre/stm/Source.html" class="extype" name="de.sciss.lucre.stm.Source">Source</a>[<a href="Confluent.html#Tx=de.sciss.synth.proc.Confluent.Txn" class="extmbr" name="de.sciss.synth.proc.Confluent.Tx">Tx</a>, <span class="extype" name="de.sciss.lucre.stm.Txn.newHandle.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Confluent$$Txn@newHandle[A](value:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):de.sciss.lucre.stm.Source[S#Tx,A]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <p class="shortcomment cmt">Creates a handle (in-memory) to refresh a stale version of an object, assuming that the future transaction is issued
+from the same cursor that is used to create the handle, except for potentially having advanced.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a handle (in-memory) to refresh a stale version of an object, assuming that the future transaction is issued
+from the same cursor that is used to create the handle, except for potentially having advanced.
+This is a mechanism that can be used in live views to gain valid access to a referenced object
+(e.g. self access).
+</p></div><dl class="paramcmts block"><dt class="param">value</dt><dd class="cmt"><p>the object which will be refreshed when calling <code>get</code> on the returned handle</p></dd><dt class="param">serializer</dt><dd class="cmt"><p>used to write and freshly read the object</p></dd><dt>returns</dt><dd class="cmt"><p>the handle</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.confluent.Txn#newHandleM" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="newHandleM[A&lt;:&lt;?&gt;](value:&lt;?&gt;)(implicitserializer:&lt;?&gt;):de.sciss.lucre.confluent.Source[S,A]"></a>
+      <a id="newHandleM[A](value:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,de.sciss.lucre.confluent.Access[S],A]):de.sciss.lucre.confluent.Source[S,A]"></a>
       <a id="newHandleM[A](A)(Serializer[Tx,Access[Confluent],A]):Source[Confluent,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -288,14 +293,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">newHandleM</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="de.sciss.lucre.confluent.Txn.newHandleM.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="serializer">serializer: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<a href="Confluent.html#Tx=de.sciss.synth.proc.Confluent.Txn" class="extmbr" name="de.sciss.synth.proc.Confluent.Tx">Tx</a>, <span class="extype" name="de.sciss.lucre.confluent.Access">Access</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>], <span class="extype" name="de.sciss.lucre.confluent.Txn.newHandleM.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.confluent.Source">Source</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>, <span class="extype" name="de.sciss.lucre.confluent.Txn.newHandleM.A">A</span>]</span>
+        <span class="name">newHandleM</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="de.sciss.lucre.confluent.Txn.newHandleM.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="serializer">serializer: <span class="extype" name="de.sciss.serial.Serializer">Serializer</span>[<a href="Confluent.html#Tx=de.sciss.synth.proc.Confluent.Txn" class="extmbr" name="de.sciss.synth.proc.Confluent.Tx">Tx</a>, <a href="../../lucre/confluent/Access.html" class="extype" name="de.sciss.lucre.confluent.Access">Access</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>], <span class="extype" name="de.sciss.lucre.confluent.Txn.newHandleM.A">A</span>]</span>)</span><span class="result">: <a href="../../lucre/confluent/Source.html" class="extype" name="de.sciss.lucre.confluent.Source">Source</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>, <span class="extype" name="de.sciss.lucre.confluent.Txn.newHandleM.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Confluent$$Txn@newHandleM[A](value:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,de.sciss.lucre.confluent.Access[S],A]):de.sciss.lucre.confluent.Source[S,A]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <p class="shortcomment cmt">The confluent handle is enhanced with the <code>meld</code> method.</p><div class="fullcomment"><div class="comment cmt"><p>The confluent handle is enhanced with the <code>meld</code> method.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/confluent/Txn.html" class="extype" name="de.sciss.lucre.confluent.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#newID" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="newID():S#ID"></a>
       <a id="newID():Confluent.ID"></a>
@@ -312,7 +317,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#newInMemoryIDMap" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="newInMemoryIDMap[A]:de.sciss.lucre.stm.IdentifierMap[S#ID,S#Tx,A]"></a>
       <a id="newInMemoryIDMap[A]:IdentifierMap[Confluent.ID,Tx,A]"></a>
@@ -322,14 +327,19 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">newInMemoryIDMap</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.IdentifierMap">IdentifierMap</span>[<a href="Confluent.html#ID=de.sciss.lucre.confluent.Identifier[S]" class="extmbr" name="de.sciss.synth.proc.Confluent.ID">Confluent.ID</a>, <a href="Confluent.html#Tx=de.sciss.synth.proc.Confluent.Txn" class="extmbr" name="de.sciss.synth.proc.Confluent.Tx">Tx</a>, <span class="extype" name="de.sciss.lucre.stm.Txn.newInMemoryIDMap.A">A</span>]</span>
+        <span class="name">newInMemoryIDMap</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../../lucre/stm/IdentifierMap.html" class="extype" name="de.sciss.lucre.stm.IdentifierMap">IdentifierMap</a>[<a href="Confluent.html#ID=de.sciss.lucre.confluent.Identifier[S]" class="extmbr" name="de.sciss.synth.proc.Confluent.ID">Confluent.ID</a>, <a href="Confluent.html#Tx=de.sciss.synth.proc.Confluent.Txn" class="extmbr" name="de.sciss.synth.proc.Confluent.Tx">Tx</a>, <span class="extype" name="de.sciss.lucre.stm.Txn.newInMemoryIDMap.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Confluent$$Txn@newInMemoryIDMap[A]:de.sciss.lucre.stm.IdentifierMap[S#ID,S#Tx,A]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <p class="shortcomment cmt">Creates a new in-memory transactional map for storing and retrieving values based on a mutable's identifier
+as key.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a new in-memory transactional map for storing and retrieving values based on a mutable's identifier
+as key. If a system is confluently persistent, the <code>get</code> operation will find the most recent key that
+matches the search key. Objects are not serialized but kept live in memory.</p><p>ID maps can be used by observing views to look up associated view meta data even though they may be
+presented with a more recent access path of the model peer (e.g. when a recent event is fired and observed).
+</p></div><dl class="paramcmts block"><dt class="tparam">A</dt><dd class="cmt"><p>the value type in the map</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#newIntVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="newIntVar(id:S#ID,init:Int):S#Var[Int]"></a>
       <a id="newIntVar(Confluent.ID,Int):Confluent.Var[Int]"></a>
@@ -346,7 +356,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#newLongVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="newLongVar(id:S#ID,init:Long):S#Var[Long]"></a>
       <a id="newLongVar(Confluent.ID,Long):Confluent.Var[Long]"></a>
@@ -363,7 +373,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#newVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="newVar[A](id:S#ID,init:A)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):S#Var[A]"></a>
       <a id="newVar[A](Confluent.ID,A)(Serializer[Tx,Confluent.Acc,A]):Confluent.Var[A]"></a>
@@ -380,7 +390,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#newVarArray" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="newVarArray[A](size:Int):Array[S#Var[A]]"></a>
       <a id="newVarArray[A](Int):Array[Confluent.Var[A]]"></a>
@@ -397,7 +407,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.TxnLike#peer" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="peer:scala.concurrent.stm.InTxn"></a>
       <a id="peer:InTxn"></a>
@@ -414,7 +424,10 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TxnLike</dd></dl></div>
+      <p class="shortcomment cmt">Every transaction has a plain Scala-STM transaction as a peer.</p><div class="fullcomment"><div class="comment cmt"><p>Every transaction has a plain Scala-STM transaction as a peer. This comes handy for
+setting up custom things like <code>TxnLocal</code>, <code>TMap</code>, or calling into the hooks of <code>concurrent.stm.Txn</code>.
+It is also needed when re-wrapping the transaction of one system into another.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#readBooleanVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="readBooleanVar(id:S#ID,in:de.sciss.serial.DataInput):S#Var[Boolean]"></a>
       <a id="readBooleanVar(Confluent.ID,DataInput):Confluent.Var[Boolean]"></a>
@@ -431,7 +444,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#readID" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="readID(in:de.sciss.serial.DataInput,acc:S#Acc):S#ID"></a>
       <a id="readID(DataInput,Confluent.Acc):Confluent.ID"></a>
@@ -448,7 +461,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#readIntVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="readIntVar(id:S#ID,in:de.sciss.serial.DataInput):S#Var[Int]"></a>
       <a id="readIntVar(Confluent.ID,DataInput):Confluent.Var[Int]"></a>
@@ -465,7 +478,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#readLongVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="readLongVar(id:S#ID,in:de.sciss.serial.DataInput):S#Var[Long]"></a>
       <a id="readLongVar(Confluent.ID,DataInput):Confluent.Var[Long]"></a>
@@ -482,7 +495,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#readVar" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="readVar[A](id:S#ID,in:de.sciss.serial.DataInput)(implicitserializer:de.sciss.serial.Serializer[S#Tx,S#Acc,A]):S#Var[A]"></a>
       <a id="readVar[A](Confluent.ID,DataInput)(Serializer[Tx,Confluent.Acc,A]):Confluent.Var[A]"></a>
@@ -499,7 +512,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#system" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="system:S"></a>
       <a id="system:Confluent"></a>
@@ -516,7 +529,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <p class="shortcomment cmt">Back link to the underlying system.</p><div class="fullcomment"><div class="comment cmt"><p>Back link to the underlying system.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li><li name="de.sciss.lucre.stm.Txn#use" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="use[A](context:S#Context)(fun:=&gt;A):A"></a>
       <a id="use[A](Confluent.Context)(⇒A):A"></a>
@@ -533,7 +546,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Txn</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">Txn</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -906,11 +919,11 @@
             </div><div class="parent" name="de.sciss.lucre.synth.Txn">
               <h3>Inherited from <a href="../../lucre/synth/Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">lucre.synth.Txn</a></h3>
             </div><div class="parent" name="de.sciss.lucre.confluent.Txn">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.confluent.Txn">lucre.confluent.Txn</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</h3>
+              <h3>Inherited from <a href="../../lucre/confluent/Txn.html" class="extype" name="de.sciss.lucre.confluent.Txn">lucre.confluent.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</h3>
             </div><div class="parent" name="de.sciss.lucre.stm.Txn">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.Txn">lucre.stm.Txn</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</h3>
+              <h3>Inherited from <a href="../../lucre/stm/Txn.html" class="extype" name="de.sciss.lucre.stm.Txn">lucre.stm.Txn</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</h3>
             </div><div class="parent" name="de.sciss.lucre.stm.TxnLike">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></h3>
+              <h3>Inherited from <a href="../../lucre/stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

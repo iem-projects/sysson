@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>StereoConvolution2L - SysSon 1.7.1 API - de.sciss.synth.ugen.StereoConvolution2L</title>
-          <meta name="description" content="StereoConvolution2L - SysSon 1.7.1 API - de.sciss.synth.ugen.StereoConvolution2L" />
-          <meta name="keywords" content="StereoConvolution2L SysSon 1.7.1 API de.sciss.synth.ugen.StereoConvolution2L" />
+          <title>StereoConvolution2L - Mellite 1.9.0 API - de.sciss.synth.ugen.StereoConvolution2L</title>
+          <meta name="description" content="StereoConvolution2L - Mellite 1.9.0 API - de.sciss.synth.ugen.StereoConvolution2L" />
+          <meta name="keywords" content="StereoConvolution2L Mellite 1.9.0 API de.sciss.synth.ugen.StereoConvolution2L" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -70,7 +70,7 @@ this way one FFT transformation per period is saved.</p><p><b>Warning: This UGen
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -83,7 +83,7 @@ this way one FFT transformation per period is saved.</p><p><b>Warning: This UGen
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -177,10 +177,11 @@ this way one FFT transformation per period is saved.</p><p><b>Warning: This UGen
                         of periods.</p></dd><dt class="param">frameSize</dt><dd class="cmt"><p>size of the kernel. this must be a power of two. the
                         FFT calculated internally by the UGen has a size of
                         twice this value. The maximum allowed <code>frameSize</code> is
-                        16384.</p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
+                        16384. <i>(init-time only)</i></p></dd><dt class="param">fadePeriods</dt><dd class="cmt"><p>fade duration expressed as number of convolved blocks.
                         If the desired duration in seconds is <code>dur</code> , then the
                         number of periods can be calculated as
-                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .</p></dd></dl></div>
+                        <code>fadePeriods = dur * SampleRate.ir / frameSize</code> .
+                        <i>(init-time only)</i></p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

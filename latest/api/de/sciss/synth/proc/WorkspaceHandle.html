@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>WorkspaceHandle - SysSon 1.7.1 API - de.sciss.synth.proc.WorkspaceHandle</title>
-          <meta name="description" content="WorkspaceHandle - SysSon 1.7.1 API - de.sciss.synth.proc.WorkspaceHandle" />
-          <meta name="keywords" content="WorkspaceHandle SysSon 1.7.1 API de.sciss.synth.proc.WorkspaceHandle" />
+          <title>WorkspaceHandle - Mellite 1.9.0 API - de.sciss.synth.proc.WorkspaceHandle</title>
+          <meta name="description" content="WorkspaceHandle - Mellite 1.9.0 API - de.sciss.synth.proc.WorkspaceHandle" />
+          <meta name="keywords" content="WorkspaceHandle Mellite 1.9.0 API de.sciss.synth.proc.WorkspaceHandle" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -47,14 +47,17 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkspaceHandle</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.WorkspaceHandle.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">WorkspaceHandle</span><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.WorkspaceHandle.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
-        </div></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="Workspace$$Confluent.html" class="extype" name="de.sciss.synth.proc.Workspace.Confluent">Confluent</a>, <a href="Workspace$$Durable.html" class="extype" name="de.sciss.synth.proc.Workspace.Durable">Durable</a>, <a href="Workspace$$InMemory.html" class="extype" name="de.sciss.synth.proc.Workspace.InMemory">InMemory</a>, <a href="Workspace.html" class="extype" name="de.sciss.synth.proc.Workspace">Workspace</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -64,7 +67,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -77,7 +80,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -103,7 +106,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addDependent</span><span class="params">(<span name="dep">dep: <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">addDependent</span><span class="params">(<span name="dep">dep: <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="../../lucre/stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@addDependent(dep:de.sciss.lucre.stm.Disposable[S#Tx])(implicittx:de.sciss.lucre.stm.TxnLike):Unit" title="Permalink" target="_top">
@@ -121,7 +124,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">removeDependent</span><span class="params">(<span name="dep">dep: <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">removeDependent</span><span class="params">(<span name="dep">dep: <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="../../lucre/stm/TxnLike.html" class="extype" name="de.sciss.lucre.stm.TxnLike">TxnLike</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.WorkspaceHandle@removeDependent(dep:de.sciss.lucre.stm.Disposable[S#Tx])(implicittx:de.sciss.lucre.stm.TxnLike):Unit" title="Permalink" target="_top">

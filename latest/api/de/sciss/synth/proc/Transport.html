@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Transport - SysSon 1.7.1 API - de.sciss.synth.proc.Transport</title>
-          <meta name="description" content="Transport - SysSon 1.7.1 API - de.sciss.synth.proc.Transport" />
-          <meta name="keywords" content="Transport SysSon 1.7.1 API de.sciss.synth.proc.Transport" />
+          <title>Transport - Mellite 1.9.0 API - de.sciss.synth.proc.Transport</title>
+          <meta name="description" content="Transport - Mellite 1.9.0 API - de.sciss.synth.proc.Transport" />
+          <meta name="keywords" content="Transport Mellite 1.9.0 API de.sciss.synth.proc.Transport" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -47,13 +47,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Transport</span><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">proc.Transport.S.Tx</span>] with <span class="extype" name="de.sciss.lucre.event.Observable">Observable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">proc.Transport.S.Tx</span>, <a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
+        <span class="name">Transport</span><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.Transport.S.Tx</span>] with <a href="../../lucre/event/Observable.html" class="extype" name="de.sciss.lucre.event.Observable">Observable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.Transport.S.Tx</span>, <a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>New reduced definition of a t_(P) transport mechanism.</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="de.sciss.lucre.event.Observable">Observable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]], <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>], <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../lucre/event/Observable.html" class="extype" name="de.sciss.lucre.event.Observable">Observable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>, <a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]], <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>], <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -64,7 +64,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -77,7 +77,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -103,7 +103,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addObject</span><span class="params">(<span name="obj">obj: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">addObject</span><span class="params">(<span name="obj">obj: <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@addObject(obj:de.sciss.lucre.stm.Obj[S])(implicittx:S#Tx):Unit" title="Permalink" target="_top">
@@ -120,7 +120,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contextOption</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="AuralContext.html" class="extype" name="de.sciss.synth.proc.AuralContext">AuralContext</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
+        <span class="name">contextOption</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="AuralContext.html" class="extype" name="de.sciss.synth.proc.AuralContext">AuralContext</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@contextOption(implicittx:S#Tx):Option[de.sciss.synth.proc.AuralContext[S]]" title="Permalink" target="_top">
@@ -137,14 +137,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">dispose</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">dispose</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@dispose()(implicittx:Tx):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Disposable</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a></dd></dl></div>
     </li><li name="de.sciss.synth.proc.Transport#getView" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="getView(obj:de.sciss.lucre.stm.Obj[S])(implicittx:S#Tx):Option[de.sciss.synth.proc.AuralObj[S]]"></a>
       <a id="getView(Obj[S])(S.Tx):Option[AuralObj[S]]"></a>
@@ -154,10 +154,27 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getView</span><span class="params">(<span name="obj">obj: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="AuralObj.html" class="extype" name="de.sciss.synth.proc.AuralObj">AuralObj</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
+        <span class="name">getView</span><span class="params">(<span name="obj">obj: <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="AuralObj.html" class="extype" name="de.sciss.synth.proc.AuralObj">AuralObj</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@getView(obj:de.sciss.lucre.stm.Obj[S])(implicittx:S#Tx):Option[de.sciss.synth.proc.AuralObj[S]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Transport#getViewById" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="getViewById(id:S#ID)(implicittx:S#Tx):Option[de.sciss.synth.proc.AuralObj[S]]"></a>
+      <a id="getViewById(S.ID)(S.Tx):Option[AuralObj[S]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getViewById</span><span class="params">(<span name="id">id: <span class="extype" name="de.sciss.lucre.stm.Sys.ID">S.ID</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="AuralObj.html" class="extype" name="de.sciss.synth.proc.AuralObj">AuralObj</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.Transport@getViewById(id:S#ID)(implicittx:S#Tx):Option[de.sciss.synth.proc.AuralObj[S]]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -171,7 +188,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isPlaying</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isPlaying</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@isPlaying(implicittx:S#Tx):Boolean" title="Permalink" target="_top">
@@ -188,7 +205,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">play</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">play</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@play()(implicittx:S#Tx):Unit" title="Permalink" target="_top">
@@ -205,7 +222,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">position</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+        <span class="name">position</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@position(implicittx:S#Tx):Long" title="Permalink" target="_top">
@@ -222,14 +239,18 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">react</span><span class="params">(<span name="fun">fun: (<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>) ⇒ (<a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>]</span>
+        <span class="name">react</span><span class="params">(<span name="fun">fun: (<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>) ⇒ (<a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@react(fun:Tx=&gt;(A=&gt;Unit))(implicittx:Tx):de.sciss.lucre.stm.Disposable[Tx]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Observable</dd></dl></div>
+      <p class="shortcomment cmt">Registers a live observer with this observable.</p><div class="fullcomment"><div class="comment cmt"><p>Registers a live observer with this observable. The method is called with the
+observing function which receives the observable's update message of type <code>A</code>, and the
+method generates an opaque <code>Disposable</code> instance, which may be used to
+remove the observer eventually (through the <code>dispose</code> method).
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../lucre/event/Observable.html" class="extype" name="de.sciss.lucre.event.Observable">Observable</a></dd></dl></div>
     </li><li name="de.sciss.synth.proc.Transport#removeObject" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="removeObject(obj:de.sciss.lucre.stm.Obj[S])(implicittx:S#Tx):Unit"></a>
       <a id="removeObject(Obj[S])(S.Tx):Unit"></a>
@@ -239,7 +260,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">removeObject</span><span class="params">(<span name="obj">obj: <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">removeObject</span><span class="params">(<span name="obj">obj: <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@removeObject(obj:de.sciss.lucre.stm.Obj[S])(implicittx:S#Tx):Unit" title="Permalink" target="_top">
@@ -273,7 +294,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">seek</span><span class="params">(<span name="position">position: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">seek</span><span class="params">(<span name="position">position: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@seek(position:Long)(implicittx:S#Tx):Unit" title="Permalink" target="_top">
@@ -290,7 +311,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">stop</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">stop</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@stop()(implicittx:S#Tx):Unit" title="Permalink" target="_top">
@@ -307,7 +328,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">views</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="AuralObj.html" class="extype" name="de.sciss.synth.proc.AuralObj">AuralObj</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
+        <span class="name">views</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="AuralObj.html" class="extype" name="de.sciss.synth.proc.AuralObj">AuralObj</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.Transport@views(implicittx:S#Tx):Set[de.sciss.synth.proc.AuralObj[S]]" title="Permalink" target="_top">
@@ -683,9 +704,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="de.sciss.lucre.event.Observable">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.event.Observable">Observable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>, <a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</h3>
+              <h3>Inherited from <a href="../../lucre/event/Observable.html" class="extype" name="de.sciss.lucre.event.Observable">Observable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>, <a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</h3>
             </div><div class="parent" name="de.sciss.lucre.stm.Disposable">
-              <h3>Inherited from <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">S.Tx</span>]</h3>
+              <h3>Inherited from <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">S.Tx</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

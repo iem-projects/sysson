@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Buffer - SysSon 1.7.1 API - de.sciss.lucre.synth.Buffer</title>
-          <meta name="description" content="Buffer - SysSon 1.7.1 API - de.sciss.lucre.synth.Buffer" />
-          <meta name="keywords" content="Buffer SysSon 1.7.1 API de.sciss.lucre.synth.Buffer" />
+          <title>Buffer - Mellite 1.9.0 API - de.sciss.lucre.synth.Buffer</title>
+          <meta name="description" content="Buffer - Mellite 1.9.0 API - de.sciss.lucre.synth.Buffer" />
+          <meta name="keywords" content="Buffer Mellite 1.9.0 API de.sciss.lucre.synth.Buffer" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -64,7 +64,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -77,7 +77,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -326,6 +326,23 @@
       </a>
     </span>
       
+    </li><li name="de.sciss.lucre.synth.Buffer#disposeWithNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="disposeWithNode(buf:de.sciss.lucre.synth.Buffer,nr:de.sciss.lucre.synth.NodeRef):de.sciss.lucre.synth.Resource"></a>
+      <a id="disposeWithNode(Buffer,NodeRef):Resource"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">disposeWithNode</span><span class="params">(<span name="buf">buf: <a href="Buffer.html" class="extype" name="de.sciss.lucre.synth.Buffer">Buffer</a></span>, <span name="nr">nr: <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a></span>)</span><span class="result">: <a href="Resource.html" class="extype" name="de.sciss.lucre.synth.Resource">Resource</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Buffer$@disposeWithNode(buf:de.sciss.lucre.synth.Buffer,nr:de.sciss.lucre.synth.NodeRef):de.sciss.lucre.synth.Resource" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility resource creation that defers buffer disposal until point where node has been freed.</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -605,6 +622,26 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="de.sciss.lucre.synth.Buffer#writeWithNode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="writeWithNode(buf:de.sciss.lucre.synth.Buffer,nr:de.sciss.lucre.synth.NodeRef,artifact:java.io.File)(action:=&gt;Unit)(implicitexec:scala.concurrent.ExecutionContext):de.sciss.lucre.synth.Resource"></a>
+      <a id="writeWithNode(Buffer,NodeRef,File)(⇒Unit)(ExecutionContext):Resource"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeWithNode</span><span class="params">(<span name="buf">buf: <a href="Buffer.html" class="extype" name="de.sciss.lucre.synth.Buffer">Buffer</a></span>, <span name="nr">nr: <a href="NodeRef.html" class="extype" name="de.sciss.lucre.synth.NodeRef">NodeRef</a></span>, <span name="artifact">artifact: <span class="extype" name="java.io.File">File</span></span>)</span><span class="params">(<span name="action">action: ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="exec">exec: <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span></span>)</span><span class="result">: <a href="Resource.html" class="extype" name="de.sciss.lucre.synth.Resource">Resource</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Buffer$@writeWithNode(buf:de.sciss.lucre.synth.Buffer,nr:de.sciss.lucre.synth.NodeRef,artifact:java.io.File)(action:=&gt;Unit)(implicitexec:scala.concurrent.ExecutionContext):de.sciss.lucre.synth.Resource" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Writes the buffer content to a file when the node ends.</p><div class="fullcomment"><div class="comment cmt"><p>Writes the buffer content to a file when the node ends.
+The caller is responsible for eventually freeing the buffer!
+This is because we do not open a transaction after writing completes.
+</p></div></div>
     </li></ol>
             </div>
 

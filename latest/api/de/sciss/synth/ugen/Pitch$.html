@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Pitch - SysSon 1.7.1 API - de.sciss.synth.ugen.Pitch</title>
-          <meta name="description" content="Pitch - SysSon 1.7.1 API - de.sciss.synth.ugen.Pitch" />
-          <meta name="keywords" content="Pitch SysSon 1.7.1 API de.sciss.synth.ugen.Pitch" />
+          <title>Pitch - Mellite 1.9.0 API - de.sciss.synth.ugen.Pitch</title>
+          <meta name="description" content="Pitch - Mellite 1.9.0 API - de.sciss.synth.ugen.Pitch" />
+          <meta name="keywords" content="Pitch Mellite 1.9.0 API de.sciss.synth.ugen.Pitch" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -85,7 +85,7 @@ play {
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -98,7 +98,7 @@ play {
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -333,36 +333,39 @@ play {
       </a>
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>The signal to be analyzed.</p></dd><dt class="param">initFreq</dt><dd class="cmt"><p>The initial value of the <code>freq</code> output, until the first
-                        valid pitch is found.</p></dd><dt class="param">minFreq</dt><dd class="cmt"><p>The minimum frequency in Hertz to be considered for
-                        reporting.</p></dd><dt class="param">maxFreq</dt><dd class="cmt"><p>The maximum frequency in Hertz to be considered for
-                        reporting.</p></dd><dt class="param">execFreq</dt><dd class="cmt"><p>The frequency at which the pitch is estimated. This
+                        valid pitch is found. <i>(init-time only)</i></p></dd><dt class="param">minFreq</dt><dd class="cmt"><p>The minimum frequency in Hertz to be considered for
+                        reporting. <i>(init-time only)</i></p></dd><dt class="param">maxFreq</dt><dd class="cmt"><p>The maximum frequency in Hertz to be considered for
+                        reporting. <i>(init-time only)</i></p></dd><dt class="param">execFreq</dt><dd class="cmt"><p>The frequency at which the pitch is estimated. This
                         will be automatically clipped to be between <code>minFreq</code>
-                        and <code>maxFreq</code> .</p></dd><dt class="param">binsPerOct</dt><dd class="cmt"><p>A value which guides the search for the peak frequency
+                        and <code>maxFreq</code> . <i>(init-time only)</i></p></dd><dt class="param">binsPerOct</dt><dd class="cmt"><p>A value which guides the search for the peak frequency
                         in the first coarse step. Its setting does *not* affect
                         the final pitch resolution; setting it larger will cause
                         the coarse search to take longer, and setting it smaller
-                        will cause the fine search to take longer.</p></dd><dt class="param">median</dt><dd class="cmt"><p>This specifies the length of a median filter applied to
+                        will cause the fine search to take longer. <i>(init-time
+                        only)</i></p></dd><dt class="param">median</dt><dd class="cmt"><p>This specifies the length of a median filter applied to
                         the frequency output estimation. With the default value
                         of <code>1</code> the filter is defeated. Median filtering can help
                         eliminating single spikes and jitter. This will however
-                        add latency to the output.</p></dd><dt class="param">ampThresh</dt><dd class="cmt"><p>The minimum amplitude threshold above which the pitch
+                        add latency to the output. <i>(init-time only)</i></p></dd><dt class="param">ampThresh</dt><dd class="cmt"><p>The minimum amplitude threshold above which the pitch
                         follower operates. An input signal below this threshold
-                        is not analyzed.</p></dd><dt class="param">peakThresh</dt><dd class="cmt"><p>This is a threshold used to find the first peak in the
+                        is not analyzed. <i>(init-time only)</i></p></dd><dt class="param">peakThresh</dt><dd class="cmt"><p>This is a threshold used to find the first peak in the
                         autocorrelation signal which gives the reported
                         frequency. It is a factor of the energy of the signal
                         (autocorrelation coefficient at zero). Set this value
                         higher (e.g. to <code>1</code> ) to eliminate false frequencies
-                        corresponding to overtones.</p></dd><dt class="param">downSample</dt><dd class="cmt"><p>An integer factor by which the input signal is down
+                        corresponding to overtones. <i>(init-time only)</i></p></dd><dt class="param">downSample</dt><dd class="cmt"><p>An integer factor by which the input signal is down
                         sampled to reduce CPU overhead. This will also reduce
                         the pitch resolution. The default value of <code>1</code> means
-                        that the input signal is not down sampled.</p></dd><dt class="param">clarity</dt><dd class="cmt"><p>If the <code>clarity</code> argument is greater than zero (it is
+                        that the input signal is not down sampled. <i>(init-time
+                        only)</i></p></dd><dt class="param">clarity</dt><dd class="cmt"><p>If the <code>clarity</code> argument is greater than zero (it is
                         zero by default) then the <code>hasFreq</code> output is given
                         additional detail. Rather than simply being 1 when a
                         pitch is detected, it is a &quot;clarity&quot; measure in the
                         range between zero and one. (Technically, it's the
                         height of the autocorrelation peak normalised by the
                         height of the zero-lag peak.) It therefore gives a kind
-                        of measure of &quot;purity&quot; of the pitched signal.</p></dd></dl></div>
+                        of measure of &quot;purity&quot; of the pitched signal.
+                        <i>(init-time only)</i></p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

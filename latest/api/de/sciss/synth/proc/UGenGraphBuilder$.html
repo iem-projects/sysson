@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>UGenGraphBuilder - SysSon 1.7.1 API - de.sciss.synth.proc.UGenGraphBuilder</title>
-          <meta name="description" content="UGenGraphBuilder - SysSon 1.7.1 API - de.sciss.synth.proc.UGenGraphBuilder" />
-          <meta name="keywords" content="UGenGraphBuilder SysSon 1.7.1 API de.sciss.synth.proc.UGenGraphBuilder" />
+          <title>UGenGraphBuilder - Mellite 1.9.0 API - de.sciss.synth.proc.UGenGraphBuilder</title>
+          <meta name="description" content="UGenGraphBuilder - Mellite 1.9.0 API - de.sciss.synth.proc.UGenGraphBuilder" />
+          <meta name="keywords" content="UGenGraphBuilder Mellite 1.9.0 API de.sciss.synth.proc.UGenGraphBuilder" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -64,7 +64,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -77,7 +77,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -143,6 +143,23 @@
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.proc.UGenGraphBuilder.IO" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IO[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAnyRef"></a>
+      <a id="IO[S&lt;:Sys[S]]:IO[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenGraphBuilder$$IO.html"><span class="name">IO</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.IO.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$@IO[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.UGenGraphBuilder.Incomplete" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Incomplete[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsUGenGraphBuilder.State[S]"></a>
       <a id="Incomplete[S&lt;:Sys[S]]:Incomplete[S]"></a>
@@ -203,7 +220,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="UGenGraphBuilder$$MissingIn.html"><span class="name">MissingIn</span></a><span class="params">(<span name="input">input: <a href="UGenGraphBuilder$$Input.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Input">Input</a></span>)</span><span class="result"> extends <a href="../../../../scala/package.html#Throwable=Throwable" class="extmbr" name="scala.Throwable">Throwable</a> with <span class="extype" name="scala.util.control.ControlThrowable">ControlThrowable</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="UGenGraphBuilder$$MissingIn.html"><span class="name">MissingIn</span></a><span class="params">(<span name="input">input: <a href="UGenGraphBuilder$$Key.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</a></span>)</span><span class="result"> extends <a href="../../../../scala/package.html#Throwable=Throwable" class="extmbr" name="scala.Throwable">Throwable</a> with <span class="extype" name="scala.util.control.ControlThrowable">ControlThrowable</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$@MissingInextendsThrowablewithControlThrowablewithProductwithSerializable" title="Permalink" target="_top">
@@ -232,25 +249,8 @@ and thereby the <code>timed</code> argument does not become stale.
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.UGenGraphBuilder.ScanKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ScanKeyextendsUGenGraphBuilder.KeywithProductwithSerializable"></a>
-      <a id="ScanKey:ScanKey"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="UGenGraphBuilder$$ScanKey.html"><span class="name">ScanKey</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="UGenGraphBuilder$$Key.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.Key">Key</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$@ScanKeyextendsUGenGraphBuilder.KeywithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A entry in a proc's scan map.</p>
     </li><li name="de.sciss.synth.proc.UGenGraphBuilder.State" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="State[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAnyRef"></a>
+      <a id="State[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsUGenGraphBuilder.IO[S]"></a>
       <a id="State[S&lt;:Sys[S]]:State[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -258,10 +258,10 @@ and thereby the <code>timed</code> argument does not become stale.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="UGenGraphBuilder$$State.html"><span class="name">State</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.State.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="UGenGraphBuilder$$State.html"><span class="name">State</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.State.S">S</span>]</span>]</span><span class="result"> extends <a href="UGenGraphBuilder$$IO.html" class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.IO">IO</a>[<span class="extype" name="de.sciss.synth.proc.UGenGraphBuilder.State.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$@State[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.UGenGraphBuilder$@State[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsUGenGraphBuilder.IO[S]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

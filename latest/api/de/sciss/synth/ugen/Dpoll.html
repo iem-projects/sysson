@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Dpoll - SysSon 1.7.1 API - de.sciss.synth.ugen.Dpoll</title>
-          <meta name="description" content="Dpoll - SysSon 1.7.1 API - de.sciss.synth.ugen.Dpoll" />
-          <meta name="keywords" content="Dpoll SysSon 1.7.1 API de.sciss.synth.ugen.Dpoll" />
+          <title>Dpoll - Mellite 1.9.0 API - de.sciss.synth.ugen.Dpoll</title>
+          <meta name="description" content="Dpoll - Mellite 1.9.0 API - de.sciss.synth.ugen.Dpoll" />
+          <meta name="keywords" content="Dpoll Mellite 1.9.0 API de.sciss.synth.ugen.Dpoll" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -53,7 +53,8 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A demand rate UGen printing the current output value of its input to the
 console when polled.
-</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal you want to poll</p></dd><dt class="param">label</dt><dd class="cmt"><p>a string or symbol to be printed with the polled value</p></dd><dt class="param">run</dt><dd class="cmt"><p>if 1 the polling is active, if 0 it is inactive.</p></dd><dt class="param">trigID</dt><dd class="cmt"><p>if greater then 0, a <code>&quot;/tr&quot;</code> OSC message is sent back
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal you want to poll</p></dd><dt class="param">label</dt><dd class="cmt"><p>a string or symbol to be printed with the polled value
+                        <i>(init-time only)</i></p></dd><dt class="param">run</dt><dd class="cmt"><p>if 1 the polling is active, if 0 it is inactive.</p></dd><dt class="param">trigID</dt><dd class="cmt"><p>if greater then 0, a <code>&quot;/tr&quot;</code> OSC message is sent back
                         to the client (similar to <code>SendTrig</code> )</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="Poll$.html" class="extype" name="de.sciss.synth.ugen.Poll">Poll</a></p></span><span class="cmt"><p><a href="SendTrig$.html" class="extype" name="de.sciss.synth.ugen.SendTrig">SendTrig</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../DemandRated.html" class="extype" name="de.sciss.synth.DemandRated">DemandRated</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
@@ -67,7 +68,7 @@ console when polled.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -80,7 +81,7 @@ console when polled.
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -109,7 +110,8 @@ console when polled.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal you want to poll</p></dd><dt class="param">label</dt><dd class="cmt"><p>a string or symbol to be printed with the polled value</p></dd><dt class="param">run</dt><dd class="cmt"><p>if 1 the polling is active, if 0 it is inactive.</p></dd><dt class="param">trigID</dt><dd class="cmt"><p>if greater then 0, a <code>&quot;/tr&quot;</code> OSC message is sent back
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal you want to poll</p></dd><dt class="param">label</dt><dd class="cmt"><p>a string or symbol to be printed with the polled value
+                        <i>(init-time only)</i></p></dd><dt class="param">run</dt><dd class="cmt"><p>if 1 the polling is active, if 0 it is inactive.</p></dd><dt class="param">trigID</dt><dd class="cmt"><p>if greater then 0, a <code>&quot;/tr&quot;</code> OSC message is sent back
                         to the client (similar to <code>SendTrig</code> )</p></dd></dl></div>
     </li></ol>
             </div>
@@ -318,7 +320,8 @@ console when polled.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">a string or symbol to be printed with the polled value</p>
+      <p class="shortcomment cmt">a string or symbol to be printed with the polled value
+                        <i>(init-time only)</i></p>
     </li><li name="de.sciss.synth.ugen.Dpoll#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):de.sciss.synth.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn]):UGenInLike"></a>

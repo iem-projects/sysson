@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>proc - SysSon 1.7.1 API - de.sciss.synth.proc</title>
-          <meta name="description" content="proc - SysSon 1.7.1 API - de.sciss.synth.proc" />
-          <meta name="keywords" content="proc SysSon 1.7.1 API de.sciss.synth.proc" />
+          <title>proc - Mellite 1.9.0 API - de.sciss.synth.proc</title>
+          <meta name="description" content="proc - Mellite 1.9.0 API - de.sciss.synth.proc" />
+          <meta name="keywords" content="proc Mellite 1.9.0 API de.sciss.synth.proc" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -60,7 +60,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -73,7 +73,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -97,7 +97,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Action.html"><span class="name">Action</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Action.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Action.S">S</span>] with <span class="extype" name="de.sciss.lucre.event.Publisher">Publisher</span>[<span class="extype" name="de.sciss.synth.proc.Action.S">S</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
+        <a href="Action.html"><span class="name">Action</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Action.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Action.S">S</span>] with <a href="../../lucre/event/Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a>[<span class="extype" name="de.sciss.synth.proc.Action.S">S</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Action[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]withPublisher[S,Unit]" title="Permalink" target="_top">
@@ -105,8 +105,43 @@
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.proc.AudioCue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AudioCueextendsProductwithSerializable"></a>
+      <a id="AudioCue:AudioCue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioCue.html"><span class="name">AudioCue</span></a><span class="params">(<span name="artifact">artifact: <a href="../../lucre/artifact/Artifact$.html#Value=java.io.File" class="extmbr" name="de.sciss.lucre.artifact.Artifact.Value">Value</a></span>, <span name="spec">spec: <a href="../io/AudioFileSpec.html" class="extype" name="de.sciss.synth.io.AudioFileSpec">AudioFileSpec</a></span>, <span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>, <span name="gain">gain: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AudioCueextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A chunk of an audio file.</p><div class="fullcomment"><div class="comment cmt"><p>A chunk of an audio file.
+</p></div><dl class="paramcmts block"><dt class="param">artifact</dt><dd class="cmt"><p>the audio file</p></dd><dt class="param">spec</dt><dd class="cmt"><p>the audio file spec, carrying information about duration, sample rate, number of channels</p></dd><dt class="param">offset</dt><dd class="cmt"><p>an offset into the file, <i>using <code>TimeRef.SampleRate</code> as its base</i></p></dd><dt class="param">gain</dt><dd class="cmt"><p>a linear gain factor</p></dd></dl></div>
+    </li><li name="de.sciss.synth.proc.AuralAttribute" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuralAttribute[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAuralView[S,de.sciss.synth.proc.AuralAttribute.Target[S]]"></a>
+      <a id="AuralAttribute[S&lt;:Sys[S]]:AuralAttribute[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AuralAttribute.html"><span class="name">AuralAttribute</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralAttribute.S">S</span>]</span>]</span><span class="result"> extends <a href="AuralView.html" class="extype" name="de.sciss.synth.proc.AuralView">AuralView</a>[<span class="extype" name="de.sciss.synth.proc.AuralAttribute.S">S</span>, <a href="AuralAttribute$$Target.html" class="extype" name="de.sciss.synth.proc.AuralAttribute.Target">Target</a>[<span class="extype" name="de.sciss.synth.proc.AuralAttribute.S">S</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralAttribute[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAuralView[S,de.sciss.synth.proc.AuralAttribute.Target[S]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.AuralContext" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AuralContext[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAnyRef"></a>
+      <a id="AuralContext[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAuxContext[S]"></a>
       <a id="AuralContext[S&lt;:Sys[S]]:AuralContext[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -114,16 +149,33 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="AuralContext.html"><span class="name">AuralContext</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="AuralContext.html"><span class="name">AuralContext</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>]</span><span class="result"> extends <a href="AuxContext.html" class="extype" name="de.sciss.synth.proc.AuxContext">AuxContext</a>[<span class="extype" name="de.sciss.synth.proc.AuralContext.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralContext[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralContext[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAuxContext[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.AuralNode" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuralNode[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsNodeRef.Full[S]"></a>
+      <a id="AuralNode[S&lt;:Sys[S]]:AuralNode[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AuralNode.html"><span class="name">AuralNode</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralNode.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/synth/NodeRef$$Full.html" class="extype" name="de.sciss.lucre.synth.NodeRef.Full">Full</a>[<span class="extype" name="de.sciss.synth.proc.AuralNode.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralNode[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsNodeRef.Full[S]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="de.sciss.synth.proc.AuralObj" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AuralObj[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsObservable[S#Tx,de.sciss.synth.proc.AuralObj.State]withDisposable[S#Tx]"></a>
+      <a id="AuralObj[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAuralView[S,Unit]"></a>
       <a id="AuralObj[S&lt;:Sys[S]]:AuralObj[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -131,27 +183,27 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="AuralObj.html"><span class="name">AuralObj</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralObj.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.event.Observable">Observable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">proc.AuralObj.S.Tx</span>, <a href="AuralObj$$State.html" class="extype" name="de.sciss.synth.proc.AuralObj.State">State</a>] with <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">proc.AuralObj.S.Tx</span>]</span>
+        <a href="AuralObj.html"><span class="name">AuralObj</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralObj.S">S</span>]</span>]</span><span class="result"> extends <a href="AuralView.html" class="extype" name="de.sciss.synth.proc.AuralView">AuralView</a>[<span class="extype" name="de.sciss.synth.proc.AuralObj.S">S</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralObj[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsObservable[S#Tx,de.sciss.synth.proc.AuralObj.State]withDisposable[S#Tx]" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralObj[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAuralView[S,Unit]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.AuralScan" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AuralScan[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAuralScan.Proxy[S]withDisposable[S#Tx]"></a>
-      <a id="AuralScan[S&lt;:Sys[S]]:AuralScan[S]"></a>
+    </li><li name="de.sciss.synth.proc.AuralOutput" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuralOutput[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsDisposable[S#Tx]withObservable[S#Tx,de.sciss.synth.proc.AuralOutput.Update]"></a>
+      <a id="AuralOutput[S&lt;:Sys[S]]:AuralOutput[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="AuralScan.html"><span class="name">AuralScan</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralScan.S">S</span>]</span>]</span><span class="result"> extends <a href="AuralScan$$Proxy.html" class="extype" name="de.sciss.synth.proc.AuralScan.Proxy">Proxy</a>[<span class="extype" name="de.sciss.synth.proc.AuralScan.S">S</span>] with <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">proc.AuralScan.S.Tx</span>]</span>
+        <a href="AuralOutput.html"><span class="name">AuralOutput</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralOutput.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.AuralOutput.S.Tx</span>] with <a href="../../lucre/event/Observable.html" class="extype" name="de.sciss.lucre.event.Observable">Observable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.AuralOutput.S.Tx</span>, <a href="AuralOutput$$Update.html" class="extype" name="de.sciss.synth.proc.AuralOutput.Update">Update</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralScan[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAuralScan.Proxy[S]withDisposable[S#Tx]" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralOutput[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsDisposable[S#Tx]withObservable[S#Tx,de.sciss.synth.proc.AuralOutput.Update]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -176,6 +228,41 @@
 To use an aural system, a client connects via <code>addClient</code>. The client will be notified when the
 server is up and running.
 </p></div></div>
+    </li><li name="de.sciss.synth.proc.AuralView" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuralView[S&lt;:de.sciss.lucre.stm.Sys[S],-Target]extendsObservable[S#Tx,de.sciss.synth.proc.AuralView.State]withDisposable[S#Tx]"></a>
+      <a id="AuralView[S&lt;:Sys[S],-Target]:AuralView[S,Target]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AuralView.html"><span class="name">AuralView</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuralView.S">S</span>]</span>, <span name="Target">-Target</span>]</span><span class="result"> extends <a href="../../lucre/event/Observable.html" class="extype" name="de.sciss.lucre.event.Observable">Observable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.AuralView.S.Tx</span>, <a href="AuralView$$State.html" class="extype" name="de.sciss.synth.proc.AuralView.State">State</a>] with <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.AuralView.S.Tx</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralView[S&lt;:de.sciss.lucre.stm.Sys[S],-Target]extendsObservable[S#Tx,de.sciss.synth.proc.AuralView.State]withDisposable[S#Tx]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A trait that provides a shared structure for <code>AuralObj</code> and <code>AuralAttribute</code>,
+the only difference being the <code>Target</code> context type needed for issuing a play.</p>
+    </li><li name="de.sciss.synth.proc.AuxContext" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuxContext[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef"></a>
+      <a id="AuxContext[S&lt;:Sys[S]]:AuxContext[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AuxContext.html"><span class="name">AuxContext</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.AuxContext.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuxContext[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.Bounce" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Bounce[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsProcessorFactory"></a>
       <a id="Bounce[S&lt;:Sys[S]]:Bounce[S]"></a>
@@ -198,7 +285,7 @@ server is up and running.
       <a id="Code:Code"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">sealed </span>
+        <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
@@ -206,6 +293,23 @@ server is up and running.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@CodeextendsWritable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Color" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ColorextendsAnyRef"></a>
+      <a id="Color:Color"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Color.html"><span class="name">Color</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@ColorextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -219,10 +323,27 @@ server is up and running.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Confluent.html"><span class="name">Confluent</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.confluent.Sys">Sys</span>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>] with <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>
+        <a href="Confluent.html"><span class="name">Confluent</span></a><span class="result"> extends <a href="../../lucre/confluent/Sys.html" class="extype" name="de.sciss.lucre.confluent.Sys">Sys</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>] with <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<a href="Confluent.html" class="extype" name="de.sciss.synth.proc.Confluent">Confluent</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@ConfluentextendsSys[de.sciss.synth.proc.Confluent]withSys[de.sciss.synth.proc.Confluent]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Cursors" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Cursors[S&lt;:de.sciss.lucre.confluent.Sys[S],D&lt;:de.sciss.lucre.stm.Sys[D]]extendsElem[D]withPublisher[D,de.sciss.synth.proc.Cursors.Update[S,D]]withWritable"></a>
+      <a id="Cursors[S&lt;:Sys[S],D&lt;:Sys[D]]:Cursors[S,D]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Cursors.html"><span class="name">Cursors</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/confluent/Sys.html" class="extype" name="de.sciss.lucre.confluent.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Cursors.S">S</span>]</span>, <span name="D">D &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Cursors.D">D</span>]</span>]</span><span class="result"> extends <a href="../../lucre/stm/Elem.html" class="extype" name="de.sciss.lucre.stm.Elem">Elem</a>[<span class="extype" name="de.sciss.synth.proc.Cursors.D">D</span>] with <a href="../../lucre/event/Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a>[<span class="extype" name="de.sciss.synth.proc.Cursors.D">D</span>, <a href="Cursors$$Update.html" class="extype" name="de.sciss.synth.proc.Cursors.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Cursors.S">S</span>, <span class="extype" name="de.sciss.synth.proc.Cursors.D">D</span>]] with <span class="extype" name="de.sciss.serial.Writable">Writable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Cursors[S&lt;:de.sciss.lucre.confluent.Sys[S],D&lt;:de.sciss.lucre.stm.Sys[D]]extendsElem[D]withPublisher[D,de.sciss.synth.proc.Cursors.Update[S,D]]withWritable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -236,7 +357,7 @@ server is up and running.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="CurveObj.html"><span class="name">CurveObj</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.CurveObj.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.expr.Expr">Expr</span>[<span class="extype" name="de.sciss.synth.proc.CurveObj.S">S</span>, <a href="../Curve.html" class="extype" name="de.sciss.synth.Curve">Curve</a>]</span>
+        <a href="CurveObj.html"><span class="name">CurveObj</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.CurveObj.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/expr/Expr.html" class="extype" name="de.sciss.lucre.expr.Expr">Expr</a>[<span class="extype" name="de.sciss.synth.proc.CurveObj.S">S</span>, <a href="../Curve.html" class="extype" name="de.sciss.synth.Curve">Curve</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@CurveObj[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsExpr[S,de.sciss.synth.Curve]" title="Permalink" target="_top">
@@ -253,7 +374,7 @@ server is up and running.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Durable.html"><span class="name">Durable</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.DurableLike">DurableLike</span>[<a href="Durable.html" class="extype" name="de.sciss.synth.proc.Durable">Durable</a>] with <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<a href="Durable.html" class="extype" name="de.sciss.synth.proc.Durable">Durable</a>]</span>
+        <a href="Durable.html"><span class="name">Durable</span></a><span class="result"> extends <a href="../../lucre/stm/DurableLike.html" class="extype" name="de.sciss.lucre.stm.DurableLike">DurableLike</a>[<a href="Durable.html" class="extype" name="de.sciss.synth.proc.Durable">Durable</a>] with <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<a href="Durable.html" class="extype" name="de.sciss.synth.proc.Durable">Durable</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@DurableextendsDurableLike[de.sciss.synth.proc.Durable]withSys[de.sciss.synth.proc.Durable]" title="Permalink" target="_top">
@@ -270,7 +391,7 @@ server is up and running.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Ensemble.html"><span class="name">Ensemble</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Ensemble.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Ensemble.S">S</span>] with <span class="extype" name="de.sciss.lucre.event.Publisher">Publisher</span>[<span class="extype" name="de.sciss.synth.proc.Ensemble.S">S</span>, <a href="Ensemble$$Update.html" class="extype" name="de.sciss.synth.proc.Ensemble.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Ensemble.S">S</span>]]</span>
+        <a href="Ensemble.html"><span class="name">Ensemble</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Ensemble.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Ensemble.S">S</span>] with <a href="../../lucre/event/Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a>[<span class="extype" name="de.sciss.synth.proc.Ensemble.S">S</span>, <a href="Ensemble$$Update.html" class="extype" name="de.sciss.synth.proc.Ensemble.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Ensemble.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Ensemble[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]withPublisher[S,de.sciss.synth.proc.Ensemble.Update[S]]" title="Permalink" target="_top">
@@ -310,7 +431,7 @@ the &quot;seek&quot; position.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Folder.html"><span class="name">Folder</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Folder.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.expr.List.Modifiable">Modifiable</span>[<span class="extype" name="de.sciss.synth.proc.Folder.S">S</span>, <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Folder.S">S</span>]]</span>
+        <a href="Folder.html"><span class="name">Folder</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Folder.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/expr/List$$Modifiable.html" class="extype" name="de.sciss.lucre.expr.List.Modifiable">Modifiable</a>[<span class="extype" name="de.sciss.synth.proc.Folder.S">S</span>, <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Folder.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Folder[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsList.Modifiable[S,de.sciss.lucre.stm.Obj[S]]" title="Permalink" target="_top">
@@ -319,7 +440,7 @@ the &quot;seek&quot; position.
     </span>
       
     </li><li name="de.sciss.synth.proc.Grapheme" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Grapheme[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]withPublisher[S,de.sciss.synth.proc.Grapheme.Update[S]]"></a>
+      <a id="Grapheme[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsBiPin[S,de.sciss.lucre.stm.Obj[S]]"></a>
       <a id="Grapheme[S&lt;:Sys[S]]:Grapheme[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -327,27 +448,61 @@ the &quot;seek&quot; position.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grapheme.html"><span class="name">Grapheme</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.S">S</span>] with <span class="extype" name="de.sciss.lucre.event.Publisher">Publisher</span>[<span class="extype" name="de.sciss.synth.proc.Grapheme.S">S</span>, <a href="Grapheme$$Update.html" class="extype" name="de.sciss.synth.proc.Grapheme.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.S">S</span>]]</span>
+        <a href="Grapheme.html"><span class="name">Grapheme</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/bitemp/BiPin.html" class="extype" name="de.sciss.lucre.bitemp.BiPin">BiPin</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.S">S</span>, <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Grapheme.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@Grapheme[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]withPublisher[S,de.sciss.synth.proc.Grapheme.Update[S]]" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Grapheme[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsBiPin[S,de.sciss.lucre.stm.Obj[S]]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.NodeDependencyBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="NodeDependencyBuilder[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAnyRef"></a>
-      <a id="NodeDependencyBuilder[S&lt;:Sys[S]]:NodeDependencyBuilder[S]"></a>
+    </li><li name="de.sciss.synth.proc.Ops" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OpsextendsOps"></a>
+      <a id="Ops:Ops"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="NodeDependencyBuilder.html"><span class="name">NodeDependencyBuilder</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.NodeDependencyBuilder.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="Ops.html"><span class="name">Ops</span></a><span class="result"> extends <a href="../../lucre/expr/Ops.html" class="extype" name="de.sciss.lucre.expr.Ops">lucre.expr.Ops</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@NodeDependencyBuilder[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@OpsextendsOps" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Output" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Output[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]"></a>
+      <a id="Output[S&lt;:Sys[S]]:Output[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Output.html"><span class="name">Output</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Output.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Output.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Output[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Outputs" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Outputs[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef"></a>
+      <a id="Outputs[S&lt;:Sys[S]]:Outputs[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Outputs.html"><span class="name">Outputs</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Outputs.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Outputs[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -361,7 +516,7 @@ the &quot;seek&quot; position.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Proc.html"><span class="name">Proc</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Proc.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Proc.S">S</span>] with <span class="extype" name="de.sciss.lucre.event.Publisher">Publisher</span>[<span class="extype" name="de.sciss.synth.proc.Proc.S">S</span>, <a href="Proc$$Update.html" class="extype" name="de.sciss.synth.proc.Proc.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Proc.S">S</span>]]</span>
+        <a href="Proc.html"><span class="name">Proc</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Proc.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Proc.S">S</span>] with <a href="../../lucre/event/Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a>[<span class="extype" name="de.sciss.synth.proc.Proc.S">S</span>, <a href="Proc$$Update.html" class="extype" name="de.sciss.synth.proc.Proc.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Proc.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Proc[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]withPublisher[S,de.sciss.synth.proc.Proc.Update[S]]" title="Permalink" target="_top">
@@ -369,48 +524,6 @@ the &quot;seek&quot; position.
       </a>
     </span>
       <p class="shortcomment cmt">The <code>Proc</code> trait is the basic entity representing a sound process.</p>
-    </li><li name="de.sciss.synth.proc.Scan" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Scan[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]withPublisher[S,de.sciss.synth.proc.Scan.Update[S]]"></a>
-      <a id="Scan[S&lt;:Sys[S]]:Scan[S]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Scan.html"><span class="name">Scan</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Scan.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Scan.S">S</span>] with <span class="extype" name="de.sciss.lucre.event.Publisher">Publisher</span>[<span class="extype" name="de.sciss.synth.proc.Scan.S">S</span>, <a href="Scan$$Update.html" class="extype" name="de.sciss.synth.proc.Scan.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Scan.S">S</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@Scan[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsObj[S]withPublisher[S,de.sciss.synth.proc.Scan.Update[S]]" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A <code>Scan</code> represents a real-time signal which can either function as a reader linked to another scan
-which functions as its source or a grapheme, or it functions as a writer sinking into a grapheme
-or another scan.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>Scan</code> represents a real-time signal which can either function as a reader linked to another scan
-which functions as its source or a grapheme, or it functions as a writer sinking into a grapheme
-or another scan. Scans are situated with a process (<code>Proc</code>) and identified by a unique name, also
-known as key. A scan can write to any number of targets, and be synchronised to one or multiple
-source (if the number of sources is greater than one, they are mixed together).</p><p>If not synchronised to a source, the owner process' graph may feed a signal into it, using
-<code>graph.scan.Out</code>.</p><p>A scan's event forwards updates from any of its sources, but does not observe its sinks.
-</p></div></div>
-    </li><li name="de.sciss.synth.proc.Scans" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Scans[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef"></a>
-      <a id="Scans[S&lt;:Sys[S]]:Scans[S]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Scans.html"><span class="name">Scans</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Scans.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@Scans[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="de.sciss.synth.proc.Scheduler" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="Scheduler[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef"></a>
       <a id="Scheduler[S&lt;:Sys[S]]:Scheduler[S]"></a>
@@ -420,7 +533,7 @@ source (if the number of sources is greater than one, they are mixed together).<
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Scheduler.html"><span class="name">Scheduler</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Scheduler.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="Scheduler.html"><span class="name">Scheduler</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Scheduler.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Scheduler[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
@@ -459,7 +572,7 @@ with <code>stm.Source</code>. It can be safely stored in a regular value.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SynthGraphObj.html"><span class="name">SynthGraphObj</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.SynthGraphObj.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.expr.Expr">Expr</span>[<span class="extype" name="de.sciss.synth.proc.SynthGraphObj.S">S</span>, <a href="../SynthGraph.html" class="extype" name="de.sciss.synth.SynthGraph">SynthGraph</a>]</span>
+        <a href="SynthGraphObj.html"><span class="name">SynthGraphObj</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.SynthGraphObj.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/expr/Expr.html" class="extype" name="de.sciss.lucre.expr.Expr">Expr</a>[<span class="extype" name="de.sciss.synth.proc.SynthGraphObj.S">S</span>, <a href="../SynthGraph.html" class="extype" name="de.sciss.synth.SynthGraph">SynthGraph</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@SynthGraphObj[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsExpr[S,de.sciss.synth.SynthGraph]" title="Permalink" target="_top">
@@ -467,30 +580,23 @@ with <code>stm.Source</code>. It can be safely stored in a regular value.
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.TimeRef" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="TimeRefextendsAnyRef"></a>
+    </li><li name="de.sciss.synth.proc.TimeRef" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TimeRefextendsTimeRef.OptionwithProductwithSerializable"></a>
       <a id="TimeRef:TimeRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="TimeRef.html"><span class="name">TimeRef</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="TimeRef.html"><span class="name">TimeRef</span></a><span class="params">(<span name="span">span: <span class="extype" name="de.sciss.span.Span.HasStart">HasStart</span></span>, <span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="TimeRef$$Option.html" class="extype" name="de.sciss.synth.proc.TimeRef.Option">Option</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@TimeRefextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@TimeRefextendsTimeRef.OptionwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A time reference specifies the temporal context
-within which an aural object is invoked.</p><div class="fullcomment"><div class="comment cmt"><p>A time reference specifies the temporal context
-within which an aural object is invoked. It may
-be either undefined (there is no notion of
-pointers in virtual performance time), or
-defined by a span for the invoked object and
-a time frame corresponding to the current position.
-</p></div></div>
+      
     </li><li name="de.sciss.synth.proc.Timeline" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Timeline[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsBiGroup[S,de.sciss.lucre.stm.Obj[S]]"></a>
       <a id="Timeline[S&lt;:Sys[S]]:Timeline[S]"></a>
@@ -500,7 +606,7 @@ a time frame corresponding to the current position.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Timeline.html"><span class="name">Timeline</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.Timeline.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.bitemp.BiGroup">BiGroup</span>[<span class="extype" name="de.sciss.synth.proc.Timeline.S">S</span>, <span class="extype" name="de.sciss.lucre.stm.Obj">Obj</span>[<span class="extype" name="de.sciss.synth.proc.Timeline.S">S</span>]]</span>
+        <a href="Timeline.html"><span class="name">Timeline</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Timeline.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/bitemp/BiGroup.html" class="extype" name="de.sciss.lucre.bitemp.BiGroup">BiGroup</a>[<span class="extype" name="de.sciss.synth.proc.Timeline.S">S</span>, <a href="../../lucre/stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.synth.proc.Timeline.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Timeline[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsBiGroup[S,de.sciss.lucre.stm.Obj[S]]" title="Permalink" target="_top">
@@ -509,7 +615,7 @@ a time frame corresponding to the current position.
     </span>
       
     </li><li name="de.sciss.synth.proc.Transport" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Transport[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsDisposable[S#Tx]withObservable[S#Tx,de.sciss.synth.proc.Transport.Update[S]]"></a>
+      <a id="Transport[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsDisposable[S#Tx]withObservable[S#Tx,de.sciss.synth.proc.Transport.Update[S]]"></a>
       <a id="Transport[S&lt;:Sys[S]]:Transport[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -517,16 +623,16 @@ a time frame corresponding to the current position.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Transport.html"><span class="name">Transport</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/synth/Sys.html" class="extype" name="de.sciss.lucre.synth.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>]</span><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">proc.Transport.S.Tx</span>] with <span class="extype" name="de.sciss.lucre.event.Observable">Observable</span>[<span class="extype" name="de.sciss.lucre.synth.Sys.Tx">proc.Transport.S.Tx</span>, <a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
+        <a href="Transport.html"><span class="name">Transport</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]</span>]</span><span class="result"> extends <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.Transport.S.Tx</span>] with <a href="../../lucre/event/Observable.html" class="extype" name="de.sciss.lucre.event.Observable">Observable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.Transport.S.Tx</span>, <a href="Transport$$Update.html" class="extype" name="de.sciss.synth.proc.Transport.Update">Update</a>[<span class="extype" name="de.sciss.synth.proc.Transport.S">S</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@Transport[S&lt;:de.sciss.lucre.synth.Sys[S]]extendsDisposable[S#Tx]withObservable[S#Tx,de.sciss.synth.proc.Transport.Update[S]]" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Transport[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsDisposable[S#Tx]withObservable[S#Tx,de.sciss.synth.proc.Transport.Update[S]]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">New reduced definition of a t_(P) transport mechanism.</p>
     </li><li name="de.sciss.synth.proc.UGenGraphBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="UGenGraphBuilderextendsUGenGraph.Builder"></a>
+      <a id="UGenGraphBuilderextendsNestedUGenGraphBuilder"></a>
       <a id="UGenGraphBuilder:UGenGraphBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -534,10 +640,27 @@ a time frame corresponding to the current position.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="UGenGraphBuilder.html"><span class="name">UGenGraphBuilder</span></a><span class="result"> extends <a href="../UGenGraph$$Builder.html" class="extype" name="de.sciss.synth.UGenGraph.Builder">Builder</a></span>
+        <a href="UGenGraphBuilder.html"><span class="name">UGenGraphBuilder</span></a><span class="result"> extends <span class="extype" name="de.sciss.synth.NestedUGenGraphBuilder">NestedUGenGraphBuilder</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@UGenGraphBuilderextendsUGenGraph.Builder" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@UGenGraphBuilderextendsNestedUGenGraphBuilder" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Workspace" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Workspace[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsWorkspaceLikewithWorkspaceHandle[S]withDisposable[S#Tx]"></a>
+      <a id="Workspace[S&lt;:Sys[S]]:Workspace[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Workspace.html"><span class="name">Workspace</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.Workspace.S">S</span>]</span>]</span><span class="result"> extends <a href="WorkspaceLike.html" class="extype" name="de.sciss.synth.proc.WorkspaceLike">WorkspaceLike</a> with <a href="WorkspaceHandle.html" class="extype" name="de.sciss.synth.proc.WorkspaceHandle">WorkspaceHandle</a>[<span class="extype" name="de.sciss.synth.proc.Workspace.S">S</span>] with <a href="../../lucre/stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">proc.Workspace.S.Tx</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Workspace[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsWorkspaceLikewithWorkspaceHandle[S]withDisposable[S#Tx]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -551,10 +674,27 @@ a time frame corresponding to the current position.
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="WorkspaceHandle.html"><span class="name">WorkspaceHandle</span></a><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="de.sciss.lucre.stm.Sys">Sys</span>[<span class="extype" name="de.sciss.synth.proc.WorkspaceHandle.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="WorkspaceHandle.html"><span class="name">WorkspaceHandle</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../../lucre/stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.synth.proc.WorkspaceHandle.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@WorkspaceHandle[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.WorkspaceLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WorkspaceLikeextendsAnyRef"></a>
+      <a id="WorkspaceLike:WorkspaceLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="WorkspaceLike.html"><span class="name">WorkspaceLike</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@WorkspaceLikeextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -575,10 +715,44 @@ a time frame corresponding to the current position.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Action$.html"><span class="name">Action</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></span>
+        <a href="Action$.html"><span class="name">Action</span></a><span class="result"> extends <a href="../../lucre/stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Action" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.AudioCue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AudioCue"></a>
+      <a id="AudioCue:AudioCue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioCue$.html"><span class="name">AudioCue</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AudioCue" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.AuralAttribute" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuralAttribute"></a>
+      <a id="AuralAttribute:AuralAttribute"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuralAttribute$.html"><span class="name">AuralAttribute</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralAttribute" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -600,6 +774,23 @@ a time frame corresponding to the current position.
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.proc.AuralNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuralNode"></a>
+      <a id="AuralNode:AuralNode"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuralNode$.html"><span class="name">AuralNode</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralNode" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.AuralObj" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AuralObj"></a>
       <a id="AuralObj:AuralObj"></a>
@@ -617,19 +808,19 @@ a time frame corresponding to the current position.
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.proc.AuralScan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuralScan"></a>
-      <a id="AuralScan:AuralScan"></a>
+    </li><li name="de.sciss.synth.proc.AuralOutput" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuralOutput"></a>
+      <a id="AuralOutput:AuralOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="AuralScan$.html"><span class="name">AuralScan</span></a>
+        <a href="AuralOutput$.html"><span class="name">AuralOutput</span></a>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralScan" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralOutput" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -647,6 +838,40 @@ a time frame corresponding to the current position.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@AuralSystem" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.AuralView" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuralView"></a>
+      <a id="AuralView:AuralView"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuralView$.html"><span class="name">AuralView</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuralView" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.AuxContext" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuxContext"></a>
+      <a id="AuxContext:AuxContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuxContext$.html"><span class="name">AuxContext</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@AuxContext" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -702,6 +927,23 @@ a time frame corresponding to the current position.
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.proc.Color" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Color"></a>
+      <a id="Color:Color"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Color$.html"><span class="name">Color</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Color" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.Compiler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Compiler"></a>
       <a id="Compiler:Compiler"></a>
@@ -732,6 +974,23 @@ a time frame corresponding to the current position.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Confluent" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Cursors" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cursors"></a>
+      <a id="Cursors:Cursors"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Cursors$.html"><span class="name">Cursors</span></a><span class="result"> extends <a href="../../lucre/stm/Elem$$Type.html" class="extype" name="de.sciss.lucre.stm.Elem.Type">Type</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Cursors" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -779,7 +1038,7 @@ a time frame corresponding to the current position.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Ensemble$.html"><span class="name">Ensemble</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></span>
+        <a href="Ensemble$.html"><span class="name">Ensemble</span></a><span class="result"> extends <a href="../../lucre/stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Ensemble" title="Permalink" target="_top">
@@ -813,7 +1072,7 @@ a time frame corresponding to the current position.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Folder$.html"><span class="name">Folder</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></span>
+        <a href="Folder$.html"><span class="name">Folder</span></a><span class="result"> extends <a href="../../lucre/stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Folder" title="Permalink" target="_top">
@@ -830,7 +1089,7 @@ a time frame corresponding to the current position.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Grapheme$.html"><span class="name">Grapheme</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></span>
+        <a href="Grapheme$.html"><span class="name">Grapheme</span></a><span class="result"> extends <a href="../../lucre/stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Grapheme" title="Permalink" target="_top">
@@ -872,6 +1131,40 @@ a time frame corresponding to the current position.
       </a>
     </span>
       
+    </li><li name="de.sciss.synth.proc.Ops" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Ops"></a>
+      <a id="Ops:Ops"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Ops$.html"><span class="name">Ops</span></a><span class="result"> extends <a href="Ops.html" class="extype" name="de.sciss.synth.proc.Ops">Ops</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Ops" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Output" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Output"></a>
+      <a id="Output:Output"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Output$.html"><span class="name">Output</span></a><span class="result"> extends <a href="../../lucre/stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Output" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.proc.Proc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Proc"></a>
       <a id="Proc:Proc"></a>
@@ -881,44 +1174,10 @@ a time frame corresponding to the current position.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Proc$.html"><span class="name">Proc</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></span>
+        <a href="Proc$.html"><span class="name">Proc</span></a><span class="result"> extends <a href="../../lucre/stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Proc" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.proc.Scan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Scan"></a>
-      <a id="Scan:Scan"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Scan$.html"><span class="name">Scan</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@Scan" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="de.sciss.synth.proc.Scans" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Scans"></a>
-      <a id="Scans:Scans"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Scans$.html"><span class="name">Scans</span></a>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.proc.package@Scans" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1000,7 +1259,7 @@ a time frame corresponding to the current position.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="TimeRef$.html"><span class="name">TimeRef</span></a>
+        <a href="TimeRef$.html"><span class="name">TimeRef</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@TimeRef" title="Permalink" target="_top">
@@ -1017,7 +1276,7 @@ a time frame corresponding to the current position.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Timeline$.html"><span class="name">Timeline</span></a><span class="result"> extends <span class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</span></span>
+        <a href="Timeline$.html"><span class="name">Timeline</span></a><span class="result"> extends <a href="../../lucre/stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@Timeline" title="Permalink" target="_top">
@@ -1055,6 +1314,23 @@ a time frame corresponding to the current position.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#de.sciss.synth.proc.package@UGenGraphBuilder" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.proc.Workspace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Workspace"></a>
+      <a id="Workspace:Workspace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Workspace$.html"><span class="name">Workspace</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.synth.proc.package@Workspace" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

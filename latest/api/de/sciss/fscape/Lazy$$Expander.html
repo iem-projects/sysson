@@ -1,0 +1,605 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Expander - Mellite 1.9.0 API - de.sciss.fscape.Lazy.Expander</title>
+          <meta name="description" content="Expander - Mellite 1.9.0 API - de.sciss.fscape.Lazy.Expander" />
+          <meta name="keywords" content="Expander Mellite 1.9.0 API de.sciss.fscape.Lazy.Expander" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'de.sciss.fscape.Lazy$$Expander';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img alt="Trait" src="../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="de">de</a>.<a href="../package.html" class="extype" name="de.sciss">sciss</a>.<a href="package.html" class="extype" name="de.sciss.fscape">fscape</a>.<a href="Lazy$.html" class="extype" name="de.sciss.fscape.Lazy">Lazy</a></p>
+        <h1>Expander</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="Lazy$.html" class="extype" name="de.sciss.fscape.Lazy">package Lazy</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Expander</span><span class="tparams">[<span name="U">+U</span>]</span><span class="result"> extends <a href="Lazy.html" class="extype" name="de.sciss.fscape.Lazy">Lazy</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A convenient implementation of the <code>Lazy</code> trait for elements which typically expand
+to ugens. This will be typically used for elements which do not directly need to
+generate ugens but rather spawn more graph elements. For the direct generation of
+<code>UGen</code>s, use a subtype of <code>UGenSource</code>.</p><p>The constructor body of this trait will call <code>Graph.builder.addLazy</code> to automatically
+register this element when instantiated.
+</p></div><dl class="paramcmts block"><dt class="tparam">U</dt><dd class="cmt"><p>the type to which this element expands, e.g. <code>Unit</code> or <code>UGenInLike</code></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="UGenSource.html" class="extype" name="de.sciss.fscape.UGenSource">de.sciss.fscape.UGenSource</a></p></span></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="Lazy.html" class="extype" name="de.sciss.fscape.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="lucre/graph/Action.html" class="extype" name="de.sciss.fscape.lucre.graph.Action">Action</a>, <a href="lucre/graph/Attribute.html" class="extype" name="de.sciss.fscape.lucre.graph.Attribute">Attribute</a>, <a href="graph/AudioFileIn.html" class="extype" name="de.sciss.fscape.graph.AudioFileIn">AudioFileIn</a>, <a href="lucre/graph/AudioFileIn.html" class="extype" name="de.sciss.fscape.lucre.graph.AudioFileIn">AudioFileIn</a>, <a href="graph/AudioFileOut.html" class="extype" name="de.sciss.fscape.graph.AudioFileOut">AudioFileOut</a>, <a href="lucre/graph/AudioFileOut.html" class="extype" name="de.sciss.fscape.lucre.graph.AudioFileOut">AudioFileOut</a>, <a href="graph/BinaryOp.html" class="extype" name="de.sciss.fscape.graph.BinaryOp">BinaryOp</a>, <a href="graph/BufferDisk.html" class="extype" name="de.sciss.fscape.graph.BufferDisk">BufferDisk</a>, <a href="graph/ChannelProxy.html" class="extype" name="de.sciss.fscape.graph.ChannelProxy">ChannelProxy</a>, <a href="graph/Complex1FFT.html" class="extype" name="de.sciss.fscape.graph.Complex1FFT">Complex1FFT</a>, <a href="graph/Complex1IFFT.html" class="extype" name="de.sciss.fscape.graph.Complex1IFFT">Complex1IFFT</a>, <a href="graph/ComplexBinaryOp.html" class="extype" name="de.sciss.fscape.graph.ComplexBinaryOp">ComplexBinaryOp</a>, <a href="graph/ComplexUnaryOp.html" class="extype" name="de.sciss.fscape.graph.ComplexUnaryOp">ComplexUnaryOp</a>, <a href="graph/Concat.html" class="extype" name="de.sciss.fscape.graph.Concat">Concat</a>, <a href="graph/DC.html" class="extype" name="de.sciss.fscape.graph.DC">DC</a>, <a href="graph/DebugGen.html" class="extype" name="de.sciss.fscape.graph.DebugGen">DebugGen</a>, <a href="graph/DebugOut.html" class="extype" name="de.sciss.fscape.graph.DebugOut">DebugOut</a>, <a href="graph/DebugPoll.html" class="extype" name="de.sciss.fscape.graph.DebugPoll">DebugPoll</a>, <a href="graph/DebugSink.html" class="extype" name="de.sciss.fscape.graph.DebugSink">DebugSink</a>, <a href="graph/DebugTake.html" class="extype" name="de.sciss.fscape.graph.DebugTake">DebugTake</a>, <a href="graph/Done.html" class="extype" name="de.sciss.fscape.graph.Done">Done</a>, <a href="graph/Drop.html" class="extype" name="de.sciss.fscape.graph.Drop">Drop</a>, <a href="graph/Dseq.html" class="extype" name="de.sciss.fscape.graph.Dseq">Dseq</a>, <a href="graph/Elastic.html" class="extype" name="de.sciss.fscape.graph.Elastic">Elastic</a>, <a href="graph/FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a>, <a href="graph/FoldCepstrum.html" class="extype" name="de.sciss.fscape.graph.FoldCepstrum">FoldCepstrum</a>, <a href="graph/Fourier.html" class="extype" name="de.sciss.fscape.graph.Fourier">Fourier</a>, <a href="graph/Gate.html" class="extype" name="de.sciss.fscape.graph.Gate">Gate</a>, <a href="graph/GenWindow.html" class="extype" name="de.sciss.fscape.graph.GenWindow">GenWindow</a>, <a href="graph/GramSchmidtMatrix.html" class="extype" name="de.sciss.fscape.graph.GramSchmidtMatrix">GramSchmidtMatrix</a>, <a href="graph/ImageFileIn.html" class="extype" name="de.sciss.fscape.graph.ImageFileIn">ImageFileIn</a>, <a href="graph/ImageFileOut.html" class="extype" name="de.sciss.fscape.graph.ImageFileOut">ImageFileOut</a>, <a href="graph/ImageFileSeqIn.html" class="extype" name="de.sciss.fscape.graph.ImageFileSeqIn">ImageFileSeqIn</a>, <a href="graph/ImageFileSeqOut.html" class="extype" name="de.sciss.fscape.graph.ImageFileSeqOut">ImageFileSeqOut</a>, <a href="graph/Impulse.html" class="extype" name="de.sciss.fscape.graph.Impulse">Impulse</a>, <a href="GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">Lazy</a>, <a href="graph/Length.html" class="extype" name="de.sciss.fscape.graph.Length">Length</a>, <a href="graph/Line.html" class="extype" name="de.sciss.fscape.graph.Line">Line</a>, <a href="graph/Metro.html" class="extype" name="de.sciss.fscape.graph.Metro">Metro</a>, <a href="UGenSource$$MultiOut.html" class="extype" name="de.sciss.fscape.UGenSource.MultiOut">MultiOut</a>, <a href="lucre/graph/AudioFileIn$$NumFrames.html" class="extype" name="de.sciss.fscape.lucre.graph.AudioFileIn.NumFrames">NumFrames</a>, <a href="graph/OffsetOverlapAdd.html" class="extype" name="de.sciss.fscape.graph.OffsetOverlapAdd">OffsetOverlapAdd</a>, <a href="lucre/graph/OnComplete.html" class="extype" name="de.sciss.fscape.lucre.graph.OnComplete">OnComplete</a>, <a href="graph/OnePole.html" class="extype" name="de.sciss.fscape.graph.OnePole">OnePole</a>, <a href="graph/OnePoleWindow.html" class="extype" name="de.sciss.fscape.graph.OnePoleWindow">OnePoleWindow</a>, <a href="graph/OverlapAdd.html" class="extype" name="de.sciss.fscape.graph.OverlapAdd">OverlapAdd</a>, <a href="graph/PeakCentroid1D.html" class="extype" name="de.sciss.fscape.graph.PeakCentroid1D">PeakCentroid1D</a>, <a href="graph/PeakCentroid2D.html" class="extype" name="de.sciss.fscape.graph.PeakCentroid2D">PeakCentroid2D</a>, <a href="graph/Plot1D.html" class="extype" name="de.sciss.fscape.graph.Plot1D">Plot1D</a>, <a href="graph/Poll.html" class="extype" name="de.sciss.fscape.graph.Poll">Poll</a>, <a href="graph/Progress.html" class="extype" name="de.sciss.fscape.graph.Progress">Progress</a>, <a href="lucre/graph/Reaction.html" class="extype" name="de.sciss.fscape.lucre.graph.Reaction">Reaction</a>, <a href="graph/Real1FFT.html" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a>, <a href="graph/Real1FullFFT.html" class="extype" name="de.sciss.fscape.graph.Real1FullFFT">Real1FullFFT</a>, <a href="graph/Real1FullIFFT.html" class="extype" name="de.sciss.fscape.graph.Real1FullIFFT">Real1FullIFFT</a>, <a href="graph/Real1IFFT.html" class="extype" name="de.sciss.fscape.graph.Real1IFFT">Real1IFFT</a>, <a href="graph/RepeatWindow.html" class="extype" name="de.sciss.fscape.graph.RepeatWindow">RepeatWindow</a>, <a href="graph/Resample.html" class="extype" name="de.sciss.fscape.graph.Resample">Resample</a>, <a href="graph/ResampleWindow.html" class="extype" name="de.sciss.fscape.graph.ResampleWindow">ResampleWindow</a>, <a href="graph/ResizeWindow.html" class="extype" name="de.sciss.fscape.graph.ResizeWindow">ResizeWindow</a>, <a href="graph/ReverseWindow.html" class="extype" name="de.sciss.fscape.graph.ReverseWindow">ReverseWindow</a>, <a href="graph/RunningMax.html" class="extype" name="de.sciss.fscape.graph.RunningMax">RunningMax</a>, <a href="graph/RunningMin.html" class="extype" name="de.sciss.fscape.graph.RunningMin">RunningMin</a>, <a href="graph/RunningSum.html" class="extype" name="de.sciss.fscape.graph.RunningSum">RunningSum</a>, <a href="graph/RunningWindowMax.html" class="extype" name="de.sciss.fscape.graph.RunningWindowMax">RunningWindowMax</a>, <a href="graph/RunningWindowMin.html" class="extype" name="de.sciss.fscape.graph.RunningWindowMin">RunningWindowMin</a>, <a href="graph/RunningWindowSum.html" class="extype" name="de.sciss.fscape.graph.RunningWindowSum">RunningWindowSum</a>, <a href="lucre/graph/AudioFileIn$$SampleRate.html" class="extype" name="de.sciss.fscape.lucre.graph.AudioFileIn.SampleRate">SampleRate</a>, <a href="graph/SinOsc.html" class="extype" name="de.sciss.fscape.graph.SinOsc">SinOsc</a>, <a href="UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a>, <a href="graph/Sliding.html" class="extype" name="de.sciss.fscape.graph.Sliding">Sliding</a>, <a href="UGenSource$$SomeOut.html" class="extype" name="de.sciss.fscape.UGenSource.SomeOut">SomeOut</a>, <a href="graph/Take.html" class="extype" name="de.sciss.fscape.graph.Take">Take</a>, <a href="graph/TakeRight.html" class="extype" name="de.sciss.fscape.graph.TakeRight">TakeRight</a>, <a href="graph/ThresholdConvolution.html" class="extype" name="de.sciss.fscape.graph.ThresholdConvolution">ThresholdConvolution</a>, <a href="graph/Timer.html" class="extype" name="de.sciss.fscape.graph.Timer">Timer</a>, <a href="graph/TransposeMatrix.html" class="extype" name="de.sciss.fscape.graph.TransposeMatrix">TransposeMatrix</a>, <a href="UGenSource.html" class="extype" name="de.sciss.fscape.UGenSource">UGenSource</a>, <a href="graph/UnaryOp.html" class="extype" name="de.sciss.fscape.graph.UnaryOp">UnaryOp</a>, <a href="graph/UnzipWindow.html" class="extype" name="de.sciss.fscape.graph.UnzipWindow">UnzipWindow</a>, <a href="graph/UnzipWindowN.html" class="extype" name="de.sciss.fscape.graph.UnzipWindowN">UnzipWindowN</a>, <a href="graph/WhiteNoise.html" class="extype" name="de.sciss.fscape.graph.WhiteNoise">WhiteNoise</a>, <a href="lucre/graph/Action$$WithRef.html" class="extype" name="de.sciss.fscape.lucre.graph.Action.WithRef">WithRef</a>, <a href="lucre/graph/OnComplete$$WithRef.html" class="extype" name="de.sciss.fscape.lucre.graph.OnComplete.WithRef">WithRef</a>, <a href="UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a>, <a href="graph/ZipWindow.html" class="extype" name="de.sciss.fscape.graph.ZipWindow">ZipWindow</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="de.sciss.fscape.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.fscape.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="scala.Equals#canEqual" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="canEqual(that:Any):Boolean"></a>
+      <a id="canEqual(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">canEqual</span><span class="params">(<span name="that">that: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@canEqual(that:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Equals</dd></dl></div>
+    </li><li name="de.sciss.fscape.Lazy.Expander#makeUGens" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="makeUGens(implicitb:de.sciss.fscape.UGenGraph.Builder):U"></a>
+      <a id="makeUGens(Builder):U"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">makeUGens</span><span class="params">(<span class="implicit">implicit </span><span name="b">b: <a href="UGenGraph$$Builder.html" class="extype" name="de.sciss.fscape.UGenGraph.Builder">Builder</a></span>)</span><span class="result">: <span class="extype" name="de.sciss.fscape.Lazy.Expander.U">U</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@makeUGens(implicitb:de.sciss.fscape.UGenGraph.Builder):U" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Abstract method which must be implemented by creating the actual <code>UGen</code>s
+during expansion.</p><div class="fullcomment"><div class="comment cmt"><p>Abstract method which must be implemented by creating the actual <code>UGen</code>s
+during expansion. This method is at most called once during graph
+expansion
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the expanded object (depending on the type parameter <code>U</code>)</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="scala.Product#productArity" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="productArity:Int"></a>
+      <a id="productArity:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productArity</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@productArity:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li><li name="scala.Product#productElement" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="productElement(n:Int):Any"></a>
+      <a id="productElement(Int):Any"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productElement</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@productElement(n:Int):Any" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Product#productIterator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="productIterator:Iterator[Any]"></a>
+      <a id="productIterator:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productIterator</span><span class="result">: <a href="../../../scala/package.html#Iterator[+A]=Iterator[A]" class="extmbr" name="scala.Iterator">Iterator</a>[<span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@productIterator:Iterator[Any]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li><li name="scala.Product#productPrefix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="productPrefix:String"></a>
+      <a id="productPrefix:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@productPrefix:String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.fscape.Lazy$$Expander@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="de.sciss.fscape.Lazy">
+              <h3>Inherited from <a href="Lazy.html" class="extype" name="de.sciss.fscape.Lazy">Lazy</a></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

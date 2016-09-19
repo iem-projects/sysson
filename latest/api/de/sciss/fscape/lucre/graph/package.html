@@ -1,0 +1,334 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>graph - Mellite 1.9.0 API - de.sciss.fscape.lucre.graph</title>
+          <meta name="description" content="graph - Mellite 1.9.0 API - de.sciss.fscape.lucre.graph" />
+          <meta name="keywords" content="graph Mellite 1.9.0 API de.sciss.fscape.lucre.graph" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'de.sciss.fscape.lucre.graph.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="de">de</a>.<a href="../../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../../package.html" class="extype" name="de.sciss.fscape">fscape</a>.<a href="../package.html" class="extype" name="de.sciss.fscape.lucre">lucre</a></p>
+        <h1>graph</h1><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">graph</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.fscape.lucre.graph.Action" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ActionextendsLazy.Expander[Unit]withProductwithSerializable"></a>
+      <a id="Action:Action"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Action.html"><span class="name">Action</span></a><span class="params">(<span name="trig">trig: <a href="../../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@ActionextendsLazy.Expander[Unit]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that executes an action upon receiving a trigger.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that executes an action upon receiving a trigger.
+</p></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>the trigger input signal</p></dd><dt class="param">key</dt><dd class="cmt"><p>a key into the process' attribute map. the value peer stored
+              at that location should be of type <code>proc.Action</code></p></dd></dl></div>
+    </li><li name="de.sciss.fscape.lucre.graph.Attribute" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AttributeextendsGE.LazywithProductwithSerializable"></a>
+      <a id="Attribute:Attribute"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Attribute.html"><span class="name">Attribute</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="scala.Option">Option</span>[<a href="Attribute$$Default.html" class="extype" name="de.sciss.fscape.lucre.graph.Attribute.Default">Default</a>]</span>, <span name="fixed">fixed: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@AttributeextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.lucre.graph.AudioFileIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AudioFileInextendsGE.LazywithProductwithSerializable"></a>
+      <a id="AudioFileIn:AudioFileIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioFileIn.html"><span class="name">AudioFileIn</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@AudioFileInextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.lucre.graph.AudioFileOut" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AudioFileOutextendsGE.LazywithProductwithSerializable"></a>
+      <a id="AudioFileOut:AudioFileOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioFileOut.html"><span class="name">AudioFileOut</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="in">in: <a href="../../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="fileType">fileType: <a href="../../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../../GE$.html">0</a></span></span></span>, <span name="sampleFormat">sampleFormat: <a href="../../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../../GE$.html">2</a></span></span></span>, <span name="sampleRate">sampleRate: <a href="../../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../../GE$.html">44100.0</a></span></span></span>)</span><span class="result"> extends <a href="../../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@AudioFileOutextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that creates a UGen writing to a file
+designated by an object attribute with a given <code>key</code> and the
+value being an <code>Artifact</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that creates a UGen writing to a file
+designated by an object attribute with a given <code>key</code> and the
+value being an <code>Artifact</code>.</p><p>If the given file-type <code>GE</code> is <code>-1</code>, the type is determined by this
+artifact. For example, if the artifact's path ends in <code>&quot;.aif&quot;</code>, the AIFF
+format will used, if the path ends in <code>&quot;.w64&quot;</code>, then Wave64 will be used.
+The default is AIFF.</p><p>If an <code>AudioCue</code> is found at the key, its spec will override file type,
+sample-format and rate.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>the key into the enclosing object's attribute map,
+                    pointing to an <code>Artifact</code> or <code>AudioCue</code></p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to write</p></dd><dt class="param">fileType</dt><dd class="cmt"><p>a file type id as given by <code>AudioFileOut.id()</code>. The default
+                    is <code>0</code> (AIFF).
+                    Must be resolvable at init time.</p></dd><dt class="param">sampleFormat</dt><dd class="cmt"><p>a sample format id as given by <code>AudioFileOut.id()</code>. The default
+                    is <code>2</code> (32-bit Float).
+                    Must be resolvable at init time.</p></dd><dt class="param">sampleRate</dt><dd class="cmt"><p>the nominal sample-rate of the file. The default is <code>44100</code>.
+                    Must be resolvable at init time.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.lucre.graph.OnComplete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OnCompleteextendsLazy.Expander[Unit]withProductwithSerializable"></a>
+      <a id="OnComplete:OnComplete"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OnComplete.html"><span class="name">OnComplete</span></a><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@OnCompleteextendsLazy.Expander[Unit]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that invokes an action once the surrounding graph has completed.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that invokes an action once the surrounding graph has completed.
+The action is called with a <code>Try[Unit]</code> as its universe <code>value</code>.
+</p></div><dl class="paramcmts block"><dt class="param">key</dt><dd class="cmt"><p>key to the hosting object's attribute map, at which an
+            action is expected to be found.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.lucre.graph.Reaction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ReactionextendsLazy.Expander[Unit]withProductwithSerializable"></a>
+      <a id="Reaction:Reaction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reaction.html"><span class="name">Reaction</span></a><span class="params">(<span name="trig">trig: <a href="../../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="in">in: <a href="../../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@ReactionextendsLazy.Expander[Unit]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A graph element that executes an action upon receiving a trigger,
+sampling the values at that moment and making them available
+in the action through the <code>values</code> method.</p><div class="fullcomment"><div class="comment cmt"><p>A graph element that executes an action upon receiving a trigger,
+sampling the values at that moment and making them available
+in the action through the <code>values</code> method.
+</p></div><dl class="paramcmts block"><dt class="param">trig</dt><dd class="cmt"><p>the trigger input signal</p></dd><dt class="param">in</dt><dd class="cmt"><p>the input signal to sample and pass on to the action</p></dd><dt class="param">key</dt><dd class="cmt"><p>a key into the process' attribute map. the value peer stored
+              at that location should be of type <code>proc.Action</code></p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="de.sciss.fscape.lucre.graph.Action" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Action"></a>
+      <a id="Action:Action"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Action$.html"><span class="name">Action</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@Action" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.lucre.graph.Attribute" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Attribute"></a>
+      <a id="Attribute:Attribute"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Attribute$.html"><span class="name">Attribute</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@Attribute" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.lucre.graph.AudioFileIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AudioFileIn"></a>
+      <a id="AudioFileIn:AudioFileIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioFileIn$.html"><span class="name">AudioFileIn</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@AudioFileIn" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.lucre.graph.AudioFileOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AudioFileOut"></a>
+      <a id="AudioFileOut:AudioFileOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioFileOut$.html"><span class="name">AudioFileOut</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@AudioFileOut" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.lucre.graph.OnComplete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OnComplete"></a>
+      <a id="OnComplete:OnComplete"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OnComplete$.html"><span class="name">OnComplete</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@OnComplete" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.lucre.graph.Ops" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Ops"></a>
+      <a id="Ops:Ops"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Ops$.html"><span class="name">Ops</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#de.sciss.fscape.lucre.graph.package@Ops" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

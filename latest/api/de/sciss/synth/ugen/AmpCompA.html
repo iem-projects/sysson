@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>AmpCompA - SysSon 1.7.1 API - de.sciss.synth.ugen.AmpCompA</title>
-          <meta name="description" content="AmpCompA - SysSon 1.7.1 API - de.sciss.synth.ugen.AmpCompA" />
-          <meta name="keywords" content="AmpCompA SysSon 1.7.1 API de.sciss.synth.ugen.AmpCompA" />
+          <title>AmpCompA - Mellite 1.9.0 API - de.sciss.synth.ugen.AmpCompA</title>
+          <meta name="description" content="AmpCompA - Mellite 1.9.0 API - de.sciss.synth.ugen.AmpCompA" />
+          <meta name="keywords" content="AmpCompA Mellite 1.9.0 API de.sciss.synth.ugen.AmpCompA" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -58,9 +58,11 @@ initialization time only.
 </p></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>the frequency in Hertz for which to determine the
                         compensation factor</p></dd><dt class="param">root</dt><dd class="cmt"><p>the root frequency in Hertz, relative to which the
                         curve is calculated. This is usually lowest expected
-                        frequency.</p></dd><dt class="param">minAmp</dt><dd class="cmt"><p>amplitude at the minimum point of the curve. This is
-                        the factor output when <code>freq</code> is approx. 2512 Hz.</p></dd><dt class="param">rootAmp</dt><dd class="cmt"><p>amplitude at the root frequency of the curve. This is
-                        the factor output when <code>freq == root</code> .</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AmpComp$.html" class="extype" name="de.sciss.synth.ugen.AmpComp">AmpComp</a></p></span></dd></dl><div class="toggleContainer block">
+                        frequency. <i>(init-time only)</i></p></dd><dt class="param">minAmp</dt><dd class="cmt"><p>amplitude at the minimum point of the curve. This is
+                        the factor output when <code>freq</code> is approx. 2512 Hz.
+                        <i>(init-time only)</i></p></dd><dt class="param">rootAmp</dt><dd class="cmt"><p>amplitude at the root frequency of the curve. This is
+                        the factor output when <code>freq == root</code> . <i>(init-time
+                        only)</i></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="AmpComp$.html" class="extype" name="de.sciss.synth.ugen.AmpComp">AmpComp</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -73,7 +75,7 @@ initialization time only.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -86,7 +88,7 @@ initialization time only.
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -118,9 +120,11 @@ initialization time only.
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">freq</dt><dd class="cmt"><p>the frequency in Hertz for which to determine the
                         compensation factor</p></dd><dt class="param">root</dt><dd class="cmt"><p>the root frequency in Hertz, relative to which the
                         curve is calculated. This is usually lowest expected
-                        frequency.</p></dd><dt class="param">minAmp</dt><dd class="cmt"><p>amplitude at the minimum point of the curve. This is
-                        the factor output when <code>freq</code> is approx. 2512 Hz.</p></dd><dt class="param">rootAmp</dt><dd class="cmt"><p>amplitude at the root frequency of the curve. This is
-                        the factor output when <code>freq == root</code> .</p></dd></dl></div>
+                        frequency. <i>(init-time only)</i></p></dd><dt class="param">minAmp</dt><dd class="cmt"><p>amplitude at the minimum point of the curve. This is
+                        the factor output when <code>freq</code> is approx. 2512 Hz.
+                        <i>(init-time only)</i></p></dd><dt class="param">rootAmp</dt><dd class="cmt"><p>amplitude at the root frequency of the curve. This is
+                        the factor output when <code>freq == root</code> . <i>(init-time
+                        only)</i></p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -368,7 +372,8 @@ expansion
       </a>
     </span>
       <p class="shortcomment cmt">amplitude at the minimum point of the curve.</p><div class="fullcomment"><div class="comment cmt"><p>amplitude at the minimum point of the curve. This is
-                        the factor output when <code>freq</code> is approx. 2512 Hz.</p></div></div>
+                        the factor output when <code>freq</code> is approx. 2512 Hz.
+                        <i>(init-time only)</i></p></div></div>
     </li><li name="de.sciss.synth.UGenSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>
@@ -490,7 +495,7 @@ expansion
       <p class="shortcomment cmt">the root frequency in Hertz, relative to which the
                         curve is calculated.</p><div class="fullcomment"><div class="comment cmt"><p>the root frequency in Hertz, relative to which the
                         curve is calculated. This is usually lowest expected
-                        frequency.</p></div></div>
+                        frequency. <i>(init-time only)</i></p></div></div>
     </li><li name="de.sciss.synth.ugen.AmpCompA#rootAmp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rootAmp:de.sciss.synth.GE"></a>
       <a id="rootAmp:GE"></a>
@@ -508,7 +513,8 @@ expansion
       </a>
     </span>
       <p class="shortcomment cmt">amplitude at the root frequency of the curve.</p><div class="fullcomment"><div class="comment cmt"><p>amplitude at the root frequency of the curve. This is
-                        the factor output when <code>freq == root</code> .</p></div></div>
+                        the factor output when <code>freq == root</code> . <i>(init-time
+                        only)</i></p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

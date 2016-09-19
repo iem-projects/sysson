@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>HPZ1 - SysSon 1.7.1 API - de.sciss.synth.ugen.HPZ1</title>
-          <meta name="description" content="HPZ1 - SysSon 1.7.1 API - de.sciss.synth.ugen.HPZ1" />
-          <meta name="keywords" content="HPZ1 SysSon 1.7.1 API de.sciss.synth.ugen.HPZ1" />
+          <title>HPZ1 - Mellite 1.9.0 API - de.sciss.synth.ugen.HPZ1</title>
+          <meta name="description" content="HPZ1 - Mellite 1.9.0 API - de.sciss.synth.ugen.HPZ1" />
+          <meta name="keywords" content="HPZ1 Mellite 1.9.0 API de.sciss.synth.ugen.HPZ1" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -51,7 +51,8 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A two point difference filter UGen. Implements the formula :</p><pre>out(i) = <span class="num">0.5</span> * (in(i) - in(i-<span class="num">1</span>))</pre><h5>Examples</h5><pre><span class="cmt">// engage with mouse button</span>
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A two point difference filter UGen. Implements the formula :</p><pre>out(i) = <span class="num">0.5</span> * (in(i) - in(i-<span class="num">1</span>))</pre><p><code><code> Note: </code></code> the filter's memory is initialized with the first input sample, so
+for <code>HPZ1.ar(DC.ar(x))</code> the output will be zero, even at the beginning.</p><h5>Examples</h5><pre><span class="cmt">// engage with mouse button</span>
 play {
   <span class="kw">val</span> sig = PinkNoise.ar
   <span class="kw">val</span> flt = HPZ1.ar(sig)
@@ -76,7 +77,7 @@ play {
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -89,7 +90,7 @@ play {
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">

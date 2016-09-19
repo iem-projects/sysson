@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>FFTTrigger - SysSon 1.7.1 API - de.sciss.synth.ugen.FFTTrigger</title>
-          <meta name="description" content="FFTTrigger - SysSon 1.7.1 API - de.sciss.synth.ugen.FFTTrigger" />
-          <meta name="keywords" content="FFTTrigger SysSon 1.7.1 API de.sciss.synth.ugen.FFTTrigger" />
+          <title>FFTTrigger - Mellite 1.9.0 API - de.sciss.synth.ugen.FFTTrigger</title>
+          <meta name="description" content="FFTTrigger - Mellite 1.9.0 API - de.sciss.synth.ugen.FFTTrigger" />
+          <meta name="keywords" content="FFTTrigger Mellite 1.9.0 API de.sciss.synth.ugen.FFTTrigger" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -55,8 +55,9 @@
 chains, without doing an actual FFT on a signal. This is useful if you want to
 provide a buffer whose content had already been transformed into the Fourier
 domain.
-</p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use</p></dd><dt class="param">hop</dt><dd class="cmt"><p>the hop size for timing triggers</p></dd><dt class="param">polar</dt><dd class="cmt"><p>whether the complex buffer content is given in
-                        cartesian coordinates (0) or in polar coordinates (1)</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use <i>(init-time only)</i></p></dd><dt class="param">hop</dt><dd class="cmt"><p>the hop size for timing triggers <i>(init-time only)</i></p></dd><dt class="param">polar</dt><dd class="cmt"><p>whether the complex buffer content is given in
+                        cartesian coordinates (0) or in polar coordinates (1)
+                        <i>(init-time only)</i></p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../ControlRated.html" class="extype" name="de.sciss.synth.ControlRated">ControlRated</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.synth.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a>, <a href="../GE$$Lazy.html" class="extype" name="de.sciss.synth.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -69,7 +70,7 @@ domain.
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -82,7 +83,7 @@ domain.
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -111,8 +112,9 @@ domain.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use</p></dd><dt class="param">hop</dt><dd class="cmt"><p>the hop size for timing triggers</p></dd><dt class="param">polar</dt><dd class="cmt"><p>whether the complex buffer content is given in
-                        cartesian coordinates (0) or in polar coordinates (1)</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>the identifier of the buffer to use <i>(init-time only)</i></p></dd><dt class="param">hop</dt><dd class="cmt"><p>the hop size for timing triggers <i>(init-time only)</i></p></dd><dt class="param">polar</dt><dd class="cmt"><p>whether the complex buffer content is given in
+                        cartesian coordinates (0) or in polar coordinates (1)
+                        <i>(init-time only)</i></p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -206,7 +208,7 @@ domain.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">the identifier of the buffer to use</p>
+      <p class="shortcomment cmt">the identifier of the buffer to use <i>(init-time only)</i></p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -303,7 +305,7 @@ domain.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">the hop size for timing triggers</p>
+      <p class="shortcomment cmt">the hop size for timing triggers <i>(init-time only)</i></p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -444,7 +446,8 @@ expansion
       </a>
     </span>
       <p class="shortcomment cmt">whether the complex buffer content is given in
-                        cartesian coordinates (0) or in polar coordinates (1)</p>
+                        cartesian coordinates (0) or in polar coordinates (1)
+                        <i>(init-time only)</i></p>
     </li><li name="de.sciss.synth.ControlRated#rate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rate:de.sciss.synth.Rate"></a>
       <a id="rate:Rate"></a>

@@ -1,0 +1,487 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>event - Mellite 1.9.0 API - de.sciss.lucre.event</title>
+          <meta name="description" content="event - Mellite 1.9.0 API - de.sciss.lucre.event" />
+          <meta name="keywords" content="event Mellite 1.9.0 API de.sciss.lucre.event" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'de.sciss.lucre.event.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.lucre">lucre</a></p>
+        <h1>event</h1><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">event</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="de.sciss.lucre.event"><span>event</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.lucre.event.Caching" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CachingextendsAnyRef"></a>
+      <a id="Caching:Caching"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Caching.html"><span class="name">Caching</span></a><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@CachingextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A marker trait for events that maintain a cache.</p><div class="fullcomment"><div class="comment cmt"><p>A marker trait for events that maintain a cache. Events mixing in this trait are
+guaranteed to participate in the <code>pullUpdate</code> phase, even if no live observer is
+attached to them.
+</p></div></div>
+    </li><li name="de.sciss.lucre.event.Dummy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Dummy[S&lt;:de.sciss.lucre.stm.Sys[S],+A]extendsEventLike[S,A]"></a>
+      <a id="Dummy[S&lt;:Sys[S],+A]:Dummy[S,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Dummy.html"><span class="name">Dummy</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Dummy.S">S</span>]</span>, <span name="A">+A</span>]</span><span class="result"> extends <a href="EventLike.html" class="extype" name="de.sciss.lucre.event.EventLike">EventLike</a>[<span class="extype" name="de.sciss.lucre.event.Dummy.S">S</span>, <span class="extype" name="de.sciss.lucre.event.Dummy.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Dummy[S&lt;:de.sciss.lucre.stm.Sys[S],+A]extendsEventLike[S,A]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Event" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Event[S&lt;:de.sciss.lucre.stm.Sys[S],+A]extendsEventLike[S,A]withWritable"></a>
+      <a id="Event[S&lt;:Sys[S],+A]:Event[S,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Event.html"><span class="name">Event</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Event.S">S</span>]</span>, <span name="A">+A</span>]</span><span class="result"> extends <a href="EventLike.html" class="extype" name="de.sciss.lucre.event.EventLike">EventLike</a>[<span class="extype" name="de.sciss.lucre.event.Event.S">S</span>, <span class="extype" name="de.sciss.lucre.event.Event.A">A</span>] with <span class="extype" name="de.sciss.serial.Writable">Writable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Event[S&lt;:de.sciss.lucre.stm.Sys[S],+A]extendsEventLike[S,A]withWritable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>Event</code> is not sealed in order to allow you define traits inheriting from it, while the concrete
+implementations should extend either of <code>Event.Constant</code> or <code>Event.Node</code> (which itself is sealed and
+split into <code>Event.Invariant</code> and <code>Event.Mutating</code>.</p>
+    </li><li name="de.sciss.lucre.event.EventLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="EventLike[S&lt;:de.sciss.lucre.stm.Sys[S],+A]extendsObservable[S#Tx,A]"></a>
+      <a id="EventLike[S&lt;:Sys[S],+A]:EventLike[S,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="EventLike.html"><span class="name">EventLike</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.EventLike.S">S</span>]</span>, <span name="A">+A</span>]</span><span class="result"> extends <a href="Observable.html" class="extype" name="de.sciss.lucre.event.Observable">Observable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">event.EventLike.S.Tx</span>, <span class="extype" name="de.sciss.lucre.event.EventLike.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@EventLike[S&lt;:de.sciss.lucre.stm.Sys[S],+A]extendsObservable[S#Tx,A]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Map" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Map[S&lt;:de.sciss.lucre.stm.Sys[S],K,Repr[~&lt;:de.sciss.lucre.stm.Sys[~]]&lt;:de.sciss.lucre.stm.Elem[~]]extendsObj[S]withPublisher[S,de.sciss.lucre.event.Map.Update[S,K,Repr]]"></a>
+      <a id="Map[S&lt;:Sys[S],K,Repr[~&lt;:Sys[~]]&lt;:Elem[~]]:Map[S,K,Repr]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Map.html"><span class="name">Map</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Map.S">S</span>]</span>, <span name="K">K</span>, <span name="Repr">Repr<span class="tparams">[<span name="~">~ &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Map.Repr.~">~</span>]</span>]</span> &lt;: <a href="../stm/Elem.html" class="extype" name="de.sciss.lucre.stm.Elem">Elem</a>[<span class="extype" name="de.sciss.lucre.event.Map.Repr.~">~</span>]</span>]</span><span class="result"> extends <a href="../stm/Obj.html" class="extype" name="de.sciss.lucre.stm.Obj">Obj</a>[<span class="extype" name="de.sciss.lucre.event.Map.S">S</span>] with <a href="Publisher.html" class="extype" name="de.sciss.lucre.event.Publisher">Publisher</a>[<span class="extype" name="de.sciss.lucre.event.Map.S">S</span>, <a href="Map$$Update.html" class="extype" name="de.sciss.lucre.event.Map.Update">Update</a>[<span class="extype" name="de.sciss.lucre.event.Map.S">S</span>, <span class="extype" name="de.sciss.lucre.event.Map.K">K</span>, <span class="extype" name="de.sciss.lucre.event.Map.Repr">Repr</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Map[S&lt;:de.sciss.lucre.stm.Sys[S],K,Repr[~&lt;:de.sciss.lucre.stm.Sys[~]]&lt;:de.sciss.lucre.stm.Elem[~]]extendsObj[S]withPublisher[S,de.sciss.lucre.event.Map.Update[S,K,Repr]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Node" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Node[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsElem[S]withMutable[S#ID,S#Tx]"></a>
+      <a id="Node[S&lt;:Sys[S]]:Node[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Node.html"><span class="name">Node</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Node.S">S</span>]</span>]</span><span class="result"> extends <a href="../stm/Elem.html" class="extype" name="de.sciss.lucre.stm.Elem">Elem</a>[<span class="extype" name="de.sciss.lucre.event.Node.S">S</span>] with <a href="../stm/Mutable.html" class="extype" name="de.sciss.lucre.stm.Mutable">Mutable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">event.Node.S.ID</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">event.Node.S.Tx</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Node[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsElem[S]withMutable[S#ID,S#Tx]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> XXX TODO -- this documentation is outdated.</p><div class="fullcomment"><div class="comment cmt"><p> XXX TODO -- this documentation is outdated.</p><p>An <code>Event.Node</code> is most similar to EScala's <code>EventNode</code> class. It represents an observable
+object and can also act as an observer itself. It adds the <code>Reactor</code> functionality in the
+form of a proxy, forwarding to internally stored <code>Targets</code>. It also provides a final
+implementation of the <code>Writable</code> and <code>Disposable</code> traits, asking sub classes to provide
+methods <code>writeData</code> and <code>disposeData</code>. That way it is ensured that the sealed <code>Reactor</code> trait
+is written first as the <code>Targets</code> stub, providing a means for partial deserialization during
+the push phase of event propagation.</p><p>This trait also implements <code>equals</code> and <code>hashCode</code> in terms of the <code>id</code> inherited from the
+targets.
+</p></div></div>
+    </li><li name="de.sciss.lucre.event.Observable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Observable[Tx,+A]extendsAnyRef"></a>
+      <a id="Observable[Tx,+A]:Observable[Tx,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Observable.html"><span class="name">Observable</span></a><span class="tparams">[<span name="Tx">Tx</span>, <span name="A">+A</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Observable[Tx,+A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Observer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Observer[S&lt;:de.sciss.lucre.stm.Sys[S],-A]extendsDisposable[S#Tx]"></a>
+      <a id="Observer[S&lt;:Sys[S],-A]:Observer[S,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Observer.html"><span class="name">Observer</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Observer.S">S</span>]</span>, <span name="A">-A</span>]</span><span class="result"> extends <a href="../stm/Disposable.html" class="extype" name="de.sciss.lucre.stm.Disposable">Disposable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.Tx">event.Observer.S.Tx</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Observer[S&lt;:de.sciss.lucre.stm.Sys[S],-A]extendsDisposable[S#Tx]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Publisher" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Publisher[S&lt;:de.sciss.lucre.stm.Sys[S],+A]extendsAnyRef"></a>
+      <a id="Publisher[S&lt;:Sys[S],+A]:Publisher[S,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Publisher.html"><span class="name">Publisher</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Publisher.S">S</span>]</span>, <span name="A">+A</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Publisher[S&lt;:de.sciss.lucre.stm.Sys[S],+A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Pull" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Pull[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef"></a>
+      <a id="Pull[S&lt;:Sys[S]]:Pull[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Pull.html"><span class="name">Pull</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Pull.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Pull[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.ReactionMap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ReactionMap[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef"></a>
+      <a id="ReactionMap[S&lt;:Sys[S]]:ReactionMap[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ReactionMap.html"><span class="name">ReactionMap</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.ReactionMap.S">S</span>]</span>]</span><span class="result"> extends <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@ReactionMap[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Targets" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Targets[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsMutable[S#ID,S#Tx]"></a>
+      <a id="Targets[S&lt;:Sys[S]]:Targets[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Targets.html"><span class="name">Targets</span></a><span class="tparams">[<span name="S">S &lt;: <a href="../stm/Sys.html" class="extype" name="de.sciss.lucre.stm.Sys">Sys</a>[<span class="extype" name="de.sciss.lucre.event.Targets.S">S</span>]</span>]</span><span class="result"> extends <a href="../stm/Mutable.html" class="extype" name="de.sciss.lucre.stm.Mutable">Mutable</a>[<span class="extype" name="de.sciss.lucre.stm.Sys.ID">event.Targets.S.ID</span>, <span class="extype" name="de.sciss.lucre.stm.Sys.Tx">event.Targets.S.Tx</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Targets[S&lt;:de.sciss.lucre.stm.Sys[S]]extendsMutable[S#ID,S#Tx]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract trait unifying invariant and mutating targets.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract trait unifying invariant and mutating targets. This object is responsible
+for keeping track of the dependents of an event source which is defined as the outer
+object, sharing the same <code>id</code> as its targets. As a <code>Reactor</code>, it has a method to
+<code>propagate</code> a fired event.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="de.sciss.lucre.event.Dummy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Dummy"></a>
+      <a id="Dummy:Dummy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Dummy$.html"><span class="name">Dummy</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Dummy" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Event" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Event"></a>
+      <a id="Event:Event"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Event$.html"><span class="name">Event</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Event" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Map" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Map"></a>
+      <a id="Map:Map"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Map$.html"><span class="name">Map</span></a><span class="result"> extends <a href="../stm/Obj$$Type.html" class="extype" name="de.sciss.lucre.stm.Obj.Type">Type</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Map" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Observer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Observer"></a>
+      <a id="Observer:Observer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Observer$.html"><span class="name">Observer</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Observer" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Push" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Push"></a>
+      <a id="Push:Push"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Push$.html"><span class="name">Push</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Push" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.ReactionMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ReactionMap"></a>
+      <a id="ReactionMap:ReactionMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ReactionMap$.html"><span class="name">ReactionMap</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@ReactionMap" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event.Targets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Targets"></a>
+      <a id="Targets:Targets"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Targets$.html"><span class="name">Targets</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@Targets" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.lucre.event#showLog" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="showLog:Boolean"></a>
+      <a id="showLog:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">showLog</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.lucre.event.package@showLog:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

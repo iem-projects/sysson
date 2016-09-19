@@ -1,0 +1,1776 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>graph - Mellite 1.9.0 API - de.sciss.fscape.graph</title>
+          <meta name="description" content="graph - Mellite 1.9.0 API - de.sciss.fscape.graph" />
+          <meta name="keywords" content="graph Mellite 1.9.0 API de.sciss.fscape.graph" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'de.sciss.fscape.graph.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="de">de</a>.<a href="../../package.html" class="extype" name="de.sciss">sciss</a>.<a href="../package.html" class="extype" name="de.sciss.fscape">fscape</a></p>
+        <h1>graph</h1><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">graph</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="de.sciss.fscape.graph.AudioFileIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AudioFileInextendsUGenSource.MultiOutwithProductwithSerializable"></a>
+      <a id="AudioFileIn:AudioFileIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioFileIn.html"><span class="name">AudioFileIn</span></a><span class="params">(<span name="file">file: <span class="extype" name="de.sciss.file.File">File</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.fscape.UGenSource.MultiOut">MultiOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@AudioFileInextendsUGenSource.MultiOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.AudioFileOut" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AudioFileOutextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="AudioFileOut:AudioFileOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AudioFileOut.html"><span class="name">AudioFileOut</span></a><span class="params">(<span name="file">file: <span class="extype" name="de.sciss.file.File">File</span></span>, <span name="spec">spec: <a href="../../synth/io/AudioFileSpec.html" class="extype" name="de.sciss.synth.io.AudioFileSpec">AudioFileSpec</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@AudioFileOutextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that reads in an audio file.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that reads in an audio file. The output signal
+is the monotonously increasing number of frames written,
+which can be used to monitor progress or determine the
+end of the writing process. The UGen keeps running until
+the <code>in</code> signal ends.
+</p></div><dl class="paramcmts block"><dt class="param">file</dt><dd class="cmt"><p>the file to write to</p></dd><dt class="param">spec</dt><dd class="cmt"><p>the spec for the audio file, including numbers of channels and sample-rate</p></dd><dt class="param">in</dt><dd class="cmt"><p>the signal to write.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.BinaryOp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BinaryOpextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="BinaryOp:BinaryOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BinaryOp.html"><span class="name">BinaryOp</span></a><span class="params">(<span name="op">op: <span class="extype" name="scala.Int">Int</span></span>, <span name="a">a: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="b">b: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@BinaryOpextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A binary operator UGen, for example two sum or multiply two signals.</p><div class="fullcomment"><div class="comment cmt"><p>A binary operator UGen, for example two sum or multiply two signals.
+The left or <code>a</code> input is &quot;hot&quot;, i.e. it keeps the UGen running,
+while the right or <code>b</code> input may close early, and the last value will
+be remembered.
+</p></div><dl class="paramcmts block"><dt class="param">op</dt><dd class="cmt"><p>the identifier of the operator (e.g. <code>BinaryOp.Times.id</code>)</p></dd><dt class="param">a</dt><dd class="cmt"><p>the left operand which determines how long the UGen computes</p></dd><dt class="param">b</dt><dd class="cmt"><p>the right operand.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.BufferDisk" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BufferDiskextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="BufferDisk:BufferDisk"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferDisk.html"><span class="name">BufferDisk</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@BufferDiskextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ChannelProxy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChannelProxyextendsGE.LazywithProductwithSerializable"></a>
+      <a id="ChannelProxy:ChannelProxy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChannelProxy.html"><span class="name">ChannelProxy</span></a><span class="params">(<span name="elem">elem: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="index">index: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ChannelProxyextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Straight outta ScalaCollider.</p>
+    </li><li name="de.sciss.fscape.graph.Complex1FFT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Complex1FFTextendsFFTUGenwithProductwithSerializable"></a>
+      <a id="Complex1FFT:Complex1FFT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Complex1FFT.html"><span class="name">Complex1FFT</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@Complex1FFTextendsFFTUGenwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Complex1IFFT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Complex1IFFTextendsFFTUGenwithProductwithSerializable"></a>
+      <a id="Complex1IFFT:Complex1IFFT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Complex1IFFT.html"><span class="name">Complex1IFFT</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@Complex1IFFTextendsFFTUGenwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ComplexBinaryOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ComplexBinaryOpextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="ComplexBinaryOp:ComplexBinaryOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ComplexBinaryOp.html"><span class="name">ComplexBinaryOp</span></a><span class="params">(<span name="op">op: <span class="extype" name="scala.Int">Int</span></span>, <span name="a">a: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="b">b: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ComplexBinaryOpextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ComplexUnaryOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ComplexUnaryOpextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="ComplexUnaryOp:ComplexUnaryOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ComplexUnaryOp.html"><span class="name">ComplexUnaryOp</span></a><span class="params">(<span name="op">op: <span class="extype" name="scala.Int">Int</span></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ComplexUnaryOpextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Concat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConcatextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Concat:Concat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Concat.html"><span class="name">Concat</span></a><span class="params">(<span name="a">a: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="b">b: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ConcatextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Creates a constant infinite signal.</p>
+    </li><li name="de.sciss.fscape.graph.Constant" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ConstantextendsUGenInwithStreamIn"></a>
+      <a id="Constant:Constant"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Constant.html"><span class="name">Constant</span></a><span class="result"> extends <a href="../UGenIn.html" class="extype" name="de.sciss.fscape.UGenIn">UGenIn</a> with <span class="extype" name="de.sciss.fscape.stream.StreamIn">StreamIn</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ConstantextendsUGenInwithStreamIn" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A scalar constant used as an input to a UGen.</p>
+    </li><li name="de.sciss.fscape.graph.ConstantD" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConstantDextendsConstantwithProductwithSerializable"></a>
+      <a id="ConstantD:ConstantD"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstantD.html"><span class="name">ConstantD</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <a href="Constant.html" class="extype" name="de.sciss.fscape.graph.Constant">Constant</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ConstantDextendsConstantwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ConstantI" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConstantIextendsConstantwithProductwithSerializable"></a>
+      <a id="ConstantI:ConstantI"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstantI.html"><span class="name">ConstantI</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="Constant.html" class="extype" name="de.sciss.fscape.graph.Constant">Constant</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ConstantIextendsConstantwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ConstantL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConstantLextendsConstantwithProductwithSerializable"></a>
+      <a id="ConstantL:ConstantL"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstantL.html"><span class="name">ConstantL</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="Constant.html" class="extype" name="de.sciss.fscape.graph.Constant">Constant</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ConstantLextendsConstantwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.DC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DCextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="DC:DC"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DC.html"><span class="name">DC</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DCextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Creates a constant infinite signal.</p>
+    </li><li name="de.sciss.fscape.graph.DebugGen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DebugGenextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="DebugGen:DebugGen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DebugGen.html"><span class="name">DebugGen</span></a><span class="params">()</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DebugGenextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.DebugOut" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DebugOutextendsUGenSource.ZeroOutwithProductwithSerializable"></a>
+      <a id="DebugOut:DebugOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DebugOut.html"><span class="name">DebugOut</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DebugOutextendsUGenSource.ZeroOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that reads in an audio file.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that reads in an audio file. The output signal
+is the monotonously increasing number of frames written,
+which can be used to monitor progress or determine the
+end of the writing process. The UGen keeps running until
+the <code>in</code> signal ends.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal to write.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.DebugPoll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DebugPollextendsUGenSource.ZeroOutwithProductwithSerializable"></a>
+      <a id="DebugPoll:DebugPoll"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DebugPoll.html"><span class="name">DebugPoll</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="label">label: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;poll&quot;</span></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DebugPollextendsUGenSource.ZeroOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that prints snapshots of its input to the console.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that prints snapshots of its input to the console.
+Note that arguments have different order than in ScalaCollider!
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the input to be pulled. If this is a constant,
+              the UGen will close after polling it. This is to
+              prevent a dangling <code>DebugPoll</code> whose trigger is
+              infinite (such as <code>Impulse</code>). If you want to avoid
+              that, you should wrap the input in a <code>DC</code>.</p></dd><dt class="param">label</dt><dd class="cmt"><p>an identifying label to prepend to the printing.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.DebugSink" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DebugSinkextendsUGenSource.ZeroOutwithProductwithSerializable"></a>
+      <a id="DebugSink:DebugSink"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DebugSink.html"><span class="name">DebugSink</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DebugSinkextendsUGenSource.ZeroOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A debugging UGen that installs a persistent no-op sink,
+allowing the <code>in</code> UGen to remain in the graph even if
+it does not have a side-effect and it is not connected
+to any other graph element.</p><div class="fullcomment"><div class="comment cmt"><p>A debugging UGen that installs a persistent no-op sink,
+allowing the <code>in</code> UGen to remain in the graph even if
+it does not have a side-effect and it is not connected
+to any other graph element.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the element to keep inside the graph</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.DebugTake" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DebugTakeextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="DebugTake:DebugTake"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DebugTake.html"><span class="name">DebugTake</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DebugTakeextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Done" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DoneextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Done:Done"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Done.html"><span class="name">Done</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DoneextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that outputs a single frame of <code>1</code> when the input
+is finished.</p>
+    </li><li name="de.sciss.fscape.graph.Drop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DropextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Drop:Drop"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Drop.html"><span class="name">Drop</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="len">len: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DropextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Dseq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DseqextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Dseq:Dseq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Dseq.html"><span class="name">Dseq</span></a><span class="params">(<span name="seq">seq: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="repeats">repeats: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@DseqextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Elastic" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ElasticextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Elastic:Elastic"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Elastic.html"><span class="name">Elastic</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="num">num: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ElasticextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Insert a buffer into the stream of <code>num</code> blocks.</p>
+    </li><li name="de.sciss.fscape.graph.FFTUGen" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FFTUGenextendsUGenSource.SingleOut"></a>
+      <a id="FFTUGen:FFTUGen"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FFTUGen.html"><span class="name">FFTUGen</span></a><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@FFTUGenextendsUGenSource.SingleOut" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.FoldCepstrum" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FoldCepstrumextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="FoldCepstrum:FoldCepstrum"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FoldCepstrum.html"><span class="name">FoldCepstrum</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="crr">crr: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="cri">cri: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="clr">clr: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="cli">cli: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="ccr">ccr: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="cci">cci: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="car">car: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="cai">cai: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@FoldCepstrumextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Fourier" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FourierextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Fourier:Fourier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Fourier.html"><span class="name">Fourier</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="dir">dir: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0</a></span></span></span>, <span name="mem">mem: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">131072</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@FourierextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Disk-buffered (large) Fourier transform.</p><div class="fullcomment"><div class="comment cmt"><p>Disk-buffered (large) Fourier transform.
+Output windows will have a complex size of <code>(size + padding).nextPowerOfTwo</code>
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to transform. This must be complex (Re, Im interleaved)</p></dd><dt class="param">size</dt><dd class="cmt"><p>the (complex) window size</p></dd><dt class="param">padding</dt><dd class="cmt"><p>the (complex) zero-padding size for each window</p></dd><dt class="param">dir</dt><dd class="cmt"><p>the direction is <code>1</code> for forward and <code>-1</code> for backward transform.
+                other numbers will do funny things.</p></dd><dt class="param">mem</dt><dd class="cmt"><p>the amount of frames (chunk size) to buffer in memory. this should be
+                a power of two.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.Gate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GateextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Gate:Gate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Gate.html"><span class="name">Gate</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="gate">gate: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@GateextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.GenWindow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GenWindowextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="GenWindow:GenWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GenWindow.html"><span class="name">GenWindow</span></a><span class="params">(<span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="shape">shape: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="param">param: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@GenWindowextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.GramSchmidtMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="GramSchmidtMatrixextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="GramSchmidtMatrix:GramSchmidtMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GramSchmidtMatrix.html"><span class="name">GramSchmidtMatrix</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="rows">rows: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="columns">columns: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="normalize">normalize: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@GramSchmidtMatrixextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that orthogonalizes an input matrix
+using the stabilized Gram-Schmidt algorithm.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that orthogonalizes an input matrix
+using the stabilized Gram-Schmidt algorithm.
+It processes the row vectors per matrix by
+making them orthogonal to one another, optionally
+also orthonormal.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the input matrices</p></dd><dt class="param">rows</dt><dd class="cmt"><p>the number of rows of the _input_</p></dd><dt class="param">columns</dt><dd class="cmt"><p>the number of columns of the _input_</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.ImageFileIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ImageFileInextendsUGenSource.MultiOutwithProductwithSerializable"></a>
+      <a id="ImageFileIn:ImageFileIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ImageFileIn.html"><span class="name">ImageFileIn</span></a><span class="params">(<span name="file">file: <span class="extype" name="de.sciss.file.File">File</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.fscape.UGenSource.MultiOut">MultiOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ImageFileInextendsUGenSource.MultiOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ImageFileOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ImageFileOutextendsUGenSource.ZeroOutwithProductwithSerializable"></a>
+      <a id="ImageFileOut:ImageFileOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ImageFileOut.html"><span class="name">ImageFileOut</span></a><span class="params">(<span name="file">file: <span class="extype" name="de.sciss.file.File">File</span></span>, <span name="spec">spec: <a href="ImageFile$$Spec.html" class="extype" name="de.sciss.fscape.graph.ImageFile.Spec">Spec</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ImageFileOutextendsUGenSource.ZeroOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ImageFileSeqIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ImageFileSeqInextendsUGenSource.MultiOutwithProductwithSerializable"></a>
+      <a id="ImageFileSeqIn:ImageFileSeqIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ImageFileSeqIn.html"><span class="name">ImageFileSeqIn</span></a><span class="params">(<span name="template">template: <span class="extype" name="de.sciss.file.File">File</span></span>, <span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span></span>, <span name="indices">indices: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.fscape.UGenSource.MultiOut">MultiOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ImageFileSeqInextendsUGenSource.MultiOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ImageFileSeqOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ImageFileSeqOutextendsUGenSource.ZeroOutwithProductwithSerializable"></a>
+      <a id="ImageFileSeqOut:ImageFileSeqOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ImageFileSeqOut.html"><span class="name">ImageFileSeqOut</span></a><span class="params">(<span name="template">template: <span class="extype" name="de.sciss.file.File">File</span></span>, <span name="spec">spec: <a href="ImageFile$$Spec.html" class="extype" name="de.sciss.fscape.graph.ImageFile.Spec">Spec</a></span>, <span name="indices">indices: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ImageFileSeqOutextendsUGenSource.ZeroOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Impulse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ImpulseextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Impulse:Impulse"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Impulse.html"><span class="name">Impulse</span></a><span class="params">(<span name="freqN">freqN: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="phase">phase: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ImpulseextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Impulse (repeated dirac) generator.</p><div class="fullcomment"><div class="comment cmt"><p>Impulse (repeated dirac) generator.
+For a single impulse that is never repeated,
+use zero.
+</p></div><dl class="paramcmts block"><dt class="param">freqN</dt><dd class="cmt"><p>normalized frequency (reciprocal of frame period)</p></dd><dt class="param">phase</dt><dd class="cmt"><p>phase offset in cycles (0 to 1).</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.Length" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LengthextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Length:Length"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Length.html"><span class="name">Length</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@LengthextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Reports the length of the input as a single value one the input has terminated.</p>
+    </li><li name="de.sciss.fscape.graph.Line" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LineextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Line:Line"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Line.html"><span class="name">Line</span></a><span class="params">(<span name="start">start: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="end">end: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="len">len: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@LineextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A line segment generating UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A line segment generating UGen. The UGen terminates
+when the segment has reached the end.
+</p></div><dl class="paramcmts block"><dt class="param">start</dt><dd class="cmt"><p>starting value</p></dd><dt class="param">end</dt><dd class="cmt"><p>ending value</p></dd><dt class="param">len</dt><dd class="cmt"><p>length of the segment in sample frames</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.Metro" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MetroextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Metro:Metro"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Metro.html"><span class="name">Metro</span></a><span class="params">(<span name="period">period: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="phase">phase: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0L</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@MetroextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Metronome (repeated dirac) generator.</p><div class="fullcomment"><div class="comment cmt"><p>Metronome (repeated dirac) generator.
+For a single impulse that is never repeated,
+use a period of zero. Unlike <code>Impulse</code> which
+uses a frequency and generates fractional phases
+prone to floating point noise, this is UGen is
+useful for exact sample frame spacing. Unlike <code>Impulse</code>,
+the phase cannot be modulated.
+</p></div><dl class="paramcmts block"><dt class="param">period</dt><dd class="cmt"><p>number of frames between impulses. Zero is short-hand
+              for <code>Long.MaxValue</code></p></dd><dt class="param">phase</dt><dd class="cmt"><p>phase offset in frames. Initialization time only!</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.OffsetOverlapAdd" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OffsetOverlapAddextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="OffsetOverlapAdd:OffsetOverlapAdd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OffsetOverlapAdd.html"><span class="name">OffsetOverlapAdd</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="offset">offset: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="minOffset">minOffset: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@OffsetOverlapAddextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.OnePole" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OnePoleextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="OnePole:OnePole"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OnePole.html"><span class="name">OnePole</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="coef">coef: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@OnePoleextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A one pole (IIR) filter UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A one pole (IIR) filter UGen. Implements the formula :</p><pre>out(i) = ((<span class="num">1</span> - abs(coef)) * in(i)) + (coef * out(i-<span class="num">1</span>))</pre></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be processed</p></dd><dt class="param">coef</dt><dd class="cmt"><p>feedback coefficient. Should be between -1 and +1</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.OnePoleWindow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OnePoleWindowextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="OnePoleWindow:OnePoleWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OnePoleWindow.html"><span class="name">OnePoleWindow</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="coef">coef: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@OnePoleWindowextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A one pole (IIR) filter UGen applied to windowed data.</p><div class="fullcomment"><div class="comment cmt"><p>A one pole (IIR) filter UGen applied to windowed data. Implements the formula :</p><pre>out(i) = ((<span class="num">1</span> - abs(coef)) * in(i)) + (coef * out(i-<span class="num">1</span>))</pre><p>This filter runs in parallel for all frames of the window (or matrix).
+That is, in the above formula <code>out</code> is replaced by each window element, and
+<code>i</code> is the window count.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be processed</p></dd><dt class="param">size</dt><dd class="cmt"><p>window size</p></dd><dt class="param">coef</dt><dd class="cmt"><p>feedback coefficient. Should be between -1 and +1</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.OverlapAdd" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OverlapAddextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="OverlapAdd:OverlapAdd"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="OverlapAdd.html"><span class="name">OverlapAdd</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@OverlapAddextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.PeakCentroid1D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PeakCentroid1DextendsGE.LazywithProductwithSerializable"></a>
+      <a id="PeakCentroid1D:PeakCentroid1D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PeakCentroid1D.html"><span class="name">PeakCentroid1D</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="thresh1">thresh1: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.5</a></span></span></span>, <span name="thresh2">thresh2: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.33</a></span></span></span>, <span name="radius">radius: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@PeakCentroid1DextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.PeakCentroid2D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PeakCentroid2DextendsUGenSource.MultiOutwithProductwithSerializable"></a>
+      <a id="PeakCentroid2D:PeakCentroid2D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PeakCentroid2D.html"><span class="name">PeakCentroid2D</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="width">width: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="height">height: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="thresh1">thresh1: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.5</a></span></span></span>, <span name="thresh2">thresh2: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.33</a></span></span></span>, <span name="radius">radius: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.fscape.UGenSource.MultiOut">MultiOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@PeakCentroid2DextendsUGenSource.MultiOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Plot1D" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Plot1DextendsUGenSource.ZeroOutwithProductwithSerializable"></a>
+      <a id="Plot1D:Plot1D"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Plot1D.html"><span class="name">Plot1D</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="label">label: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;plot&quot;</span></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@Plot1DextendsUGenSource.ZeroOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Debugging utility that plots 1D &quot;windows&quot; of the input data.</p>
+    </li><li name="de.sciss.fscape.graph.Poll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PollextendsUGenSource.ZeroOutwithProductwithSerializable"></a>
+      <a id="Poll:Poll"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Poll.html"><span class="name">Poll</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="label">label: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;poll&quot;</span></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@PollextendsUGenSource.ZeroOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that prints snapshots of its input to the console.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that prints snapshots of its input to the console.
+Note that arguments have different order than in ScalaCollider!
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the input to be pulled. If this is a constant,
+              the UGen will close after polling it. This is to
+              prevent a dangling <code>Poll</code> whose trigger is
+              infinite (such as <code>Impulse</code>). If you want to avoid
+              that, you should wrap the input in a <code>DC</code>.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>trigger that causes the UGen to print a snapshot
+              of the input.</p></dd><dt class="param">label</dt><dd class="cmt"><p>an identifying label to prepend to the printing.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.Progress" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ProgressextendsUGenSource.ZeroOutwithProductwithSerializable"></a>
+      <a id="Progress:Progress"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Progress.html"><span class="name">Progress</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="label">label: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;render&quot;</span></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.fscape.UGenSource.ZeroOut">ZeroOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ProgressextendsUGenSource.ZeroOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that contributes to the progress monitoring of a graph.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that contributes to the progress monitoring of a graph.
+It is possible to instantiate multiple instances of this UGen,
+in which cases their individual progress reports will simply
+be added up (and clipped to the range from zero to one).
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>progress fraction from zero to one</p></dd><dt class="param">trig</dt><dd class="cmt"><p>trigger that causes the UGen to submit a snapshot
+              of the progress to the control instance.</p></dd><dt class="param">label</dt><dd class="cmt"><p>the label can be used to distinguish the
+              contributions of different progress UGens</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.Real1FFT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Real1FFTextendsFFTUGenwithProductwithSerializable"></a>
+      <a id="Real1FFT:Real1FFT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Real1FFT.html"><span class="name">Real1FFT</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@Real1FFTextendsFFTUGenwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Real1FullFFT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Real1FullFFTextendsFFTUGenwithProductwithSerializable"></a>
+      <a id="Real1FullFFT:Real1FullFFT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Real1FullFFT.html"><span class="name">Real1FullFFT</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@Real1FullFFTextendsFFTUGenwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Real1FullIFFT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Real1FullIFFTextendsFFTUGenwithProductwithSerializable"></a>
+      <a id="Real1FullIFFT:Real1FullIFFT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Real1FullIFFT.html"><span class="name">Real1FullIFFT</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@Real1FullIFFTextendsFFTUGenwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Real1IFFT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Real1IFFTextendsFFTUGenwithProductwithSerializable"></a>
+      <a id="Real1IFFT:Real1IFFT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Real1IFFT.html"><span class="name">Real1IFFT</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@Real1IFFTextendsFFTUGenwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.RepeatWindow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RepeatWindowextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="RepeatWindow:RepeatWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RepeatWindow.html"><span class="name">RepeatWindow</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>, <span name="num">num: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">2</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@RepeatWindowextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Resample" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ResampleextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Resample:Resample"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Resample.html"><span class="name">Resample</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="factor">factor: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="minFactor">minFactor: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="rollOff">rollOff: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.86</a></span></span></span>, <span name="kaiserBeta">kaiserBeta: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">7.5</a></span></span></span>, <span name="zeroCrossings">zeroCrossings: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">15</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ResampleextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A band-limited resampling UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A band-limited resampling UGen.</p><p>It uses an internal table for the anti-aliasing filter.
+Table resolution is currently fixed at 4096 filter samples per zero crossing and
+linear interpolation in the FIR table, but the total filter length can be specified
+through the <code>zeroCrossings</code> parameter. Note: If filter parameters are changed, the
+table must be recalculated which is very expensive. However, <code>factor</code> modulation
+is efficient.</p><p><u>Note:</u> Unlike most other UGens, all parameters but <code>in</code> are read at &quot;output rate&quot;.
+That is particular important for <code>factor</code> modulation. For each frame output, one
+frame from <code>factor</code> is consumed.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal to resample</p></dd><dt class="param">factor</dt><dd class="cmt"><p>the resampling factor, where values greater than one
+                      mean the signal is stretched (sampling-rate increases or pitch lowers)
+                      and values less than one mean the signal is condensed (sampling-rate decreases
+                      or pitch rises)</p></dd><dt class="param">minFactor</dt><dd class="cmt"><p>the minimum expected resampling factor, which controls
+                      the amount of buffering needed for the input signal. This is used at
+                      initialization time only. The default
+                      value of zero makes the UGen settles on the first <code>factor</code> value encountered.
+                      It is possible to use a value actually higher than the lowest provided
+                      <code>factor</code>, in order to limit the buffer usage. In that case, the FIR anti-aliasing
+                      filter will be truncated.</p></dd><dt class="param">rollOff</dt><dd class="cmt"><p>the FIR anti-aliasing roll-off width</p></dd><dt class="param">kaiserBeta</dt><dd class="cmt"><p>the FIR windowing function's parameter</p></dd><dt class="param">zeroCrossings</dt><dd class="cmt"><p>the number of zero-crossings in the truncated and windowed sinc FIR.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.ResampleWindow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ResampleWindowextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="ResampleWindow:ResampleWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ResampleWindow.html"><span class="name">ResampleWindow</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="factor">factor: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="minFactor">minFactor: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="rollOff">rollOff: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.86</a></span></span></span>, <span name="kaiserBeta">kaiserBeta: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">7.5</a></span></span></span>, <span name="zeroCrossings">zeroCrossings: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">15</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ResampleWindowextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A band-limited resampling UGen for images/matrices.</p><div class="fullcomment"><div class="comment cmt"><p>A band-limited resampling UGen for images/matrices.
+This works like <code>Resample</code> but processes each window cell
+across time. Thus is is not _resampling each window by itself_,
+but each &quot;pixel&quot; or matrix cell in a window across successive windows.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal to resample</p></dd><dt class="param">size</dt><dd class="cmt"><p>the window size. Currently this is only read once upon initialization.</p></dd><dt class="param">factor</dt><dd class="cmt"><p>the resampling factor, where values greater than one
+                      mean the signal is stretched (sampling-rate increases or pitch lowers)
+                      and values less than one mean the signal is condensed (sampling-rate decreases
+                      or pitch rises)</p></dd><dt class="param">minFactor</dt><dd class="cmt"><p>the minimum expected resampling factor, which controls
+                      the amount of buffering needed for the input signal. This is used at
+                      initialization time only. The default
+                      value of zero makes the UGen settles on the first <code>factor</code> value encountered.
+                      It is possible to use a value actually higher than the lowest provided
+                      <code>factor</code>, in order to limit the buffer usage. In that case, the FIR anti-aliasing
+                      filter will be truncated.</p></dd><dt class="param">rollOff</dt><dd class="cmt"><p>the FIR anti-aliasing roll-off width</p></dd><dt class="param">kaiserBeta</dt><dd class="cmt"><p>the FIR windowing function's parameter</p></dd><dt class="param">zeroCrossings</dt><dd class="cmt"><p>the number of zero-crossings in the truncated and windowed sinc FIR.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.ResizeWindow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ResizeWindowextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="ResizeWindow:ResizeWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ResizeWindow.html"><span class="name">ResizeWindow</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="start">start: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="stop">stop: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ResizeWindowextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that resizes the windowed input signal by trimming each
+windows boundaries (if <code>start</code> is greater than zero
+or <code>stop</code> is less than zero) or padding the boundaries
+with zeroes (if <code>start</code> is less than zero or <code>stop</code> is
+greater than zero).</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that resizes the windowed input signal by trimming each
+windows boundaries (if <code>start</code> is greater than zero
+or <code>stop</code> is less than zero) or padding the boundaries
+with zeroes (if <code>start</code> is less than zero or <code>stop</code> is
+greater than zero). The output window size is thus
+<code>size - start + stop</code>.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal to window and resize</p></dd><dt class="param">size</dt><dd class="cmt"><p>the input window size</p></dd><dt class="param">start</dt><dd class="cmt"><p>the delta window size at the output window's beginning</p></dd><dt class="param">stop</dt><dd class="cmt"><p>the delta window size at the output window's ending</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.ReverseWindow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ReverseWindowextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="ReverseWindow:ReverseWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ReverseWindow.html"><span class="name">ReverseWindow</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="clump">clump: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ReverseWindowextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.RunningMax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RunningMaxextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="RunningMax:RunningMax"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RunningMax.html"><span class="name">RunningMax</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@RunningMaxextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.RunningMin" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RunningMinextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="RunningMin:RunningMin"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RunningMin.html"><span class="name">RunningMin</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@RunningMinextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.RunningSum" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RunningSumextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="RunningSum:RunningSum"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RunningSum.html"><span class="name">RunningSum</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@RunningSumextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.RunningWindowMax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RunningWindowMaxextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="RunningWindowMax:RunningWindowMax"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RunningWindowMax.html"><span class="name">RunningWindowMax</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@RunningWindowMaxextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that like <code>RunningMax</code> calculates the maximum observed value of the
+running input.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that like <code>RunningMax</code> calculates the maximum observed value of the
+running input. However, it operates on entire windows, i.e. it outputs
+windows that contain the maximum elements of all the past windows observed.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the windowed signal to monitor</p></dd><dt class="param">size</dt><dd class="cmt"><p>the window size. This should normally be a constant. If modulated,
+              the internal buffer will be re-allocated, essentially causing
+              a reset trigger.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>a trigger signal that clears the internal state. When a trigger
+              is observed, the _currently processed_ window is reset altogether
+              until its end, beginning accumulation again from the successive
+              window. Normally one will thus want to emit a trigger in sync
+              with the _start_ of each window. Emitting multiple triggers per
+              window does not have any effect different from emitting the
+              first trigger in each window.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.RunningWindowMin" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RunningWindowMinextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="RunningWindowMin:RunningWindowMin"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RunningWindowMin.html"><span class="name">RunningWindowMin</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@RunningWindowMinextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that like <code>RunningMin</code> calculates the minimum observed value of the
+running input.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that like <code>RunningMin</code> calculates the minimum observed value of the
+running input. However, it operates on entire windows, i.e. it outputs
+windows that contain the minimum elements of all the past windows observed.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the windowed signal to monitor</p></dd><dt class="param">size</dt><dd class="cmt"><p>the window size. This should normally be a constant. If modulated,
+              the internal buffer will be re-allocated, essentially causing
+              a reset trigger.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>a trigger signal that clears the internal state. When a trigger
+              is observed, the _currently processed_ window is reset altogether
+              until its end, beginning accumulation again from the successive
+              window. Normally one will thus want to emit a trigger in sync
+              with the _start_ of each window. Emitting multiple triggers per
+              window does not have any effect different from emitting the
+              first trigger in each window.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.RunningWindowSum" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RunningWindowSumextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="RunningWindowSum:RunningWindowSum"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RunningWindowSum.html"><span class="name">RunningWindowSum</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@RunningWindowSumextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that like <code>RunningSum</code> calculates the sum of the
+running input.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that like <code>RunningSum</code> calculates the sum of the
+running input. However, it operates on entire windows, i.e. it outputs
+windows that contain the sum elements of all the past windows observed.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the windowed signal to monitor</p></dd><dt class="param">size</dt><dd class="cmt"><p>the window size. This should normally be a constant. If modulated,
+              the internal buffer will be re-allocated, essentially causing
+              a reset trigger.</p></dd><dt class="param">trig</dt><dd class="cmt"><p>a trigger signal that clears the internal state. When a trigger
+              is observed, the _currently processed_ window is reset altogether
+              until its end, beginning accumulation again from the successive
+              window. Normally one will thus want to emit a trigger in sync
+              with the _start_ of each window. Emitting multiple triggers per
+              window does not have any effect different from emitting the
+              first trigger in each window.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.SinOsc" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SinOscextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="SinOsc:SinOsc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SinOsc.html"><span class="name">SinOsc</span></a><span class="params">(<span name="freqN">freqN: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="phase">phase: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@SinOscextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sine oscillator.</p><div class="fullcomment"><div class="comment cmt"><p>Sine oscillator.
+Note that the frequency is not in Hertz but
+the normalized frequency
+as we do not maintained one global sample rate.
+For a frequency in Hertz, <code>freqN</code> would be
+that frequency divided by the assumed sample rate.
+</p></div><dl class="paramcmts block"><dt class="param">freqN</dt><dd class="cmt"><p>normalized frequency (f/sr).</p></dd><dt class="param">phase</dt><dd class="cmt"><p>phase offset in radians</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.Sliding" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SlidingextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Sliding:Sliding"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sliding.html"><span class="name">Sliding</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="step">step: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@SlidingextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.Take" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TakeextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Take:Take"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Take.html"><span class="name">Take</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="len">len: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@TakeextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.TakeRight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TakeRightextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="TakeRight:TakeRight"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TakeRight.html"><span class="name">TakeRight</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="len">len: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@TakeRightextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ThresholdConvolution" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ThresholdConvolutionextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="ThresholdConvolution:ThresholdConvolution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ThresholdConvolution.html"><span class="name">ThresholdConvolution</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="kernel">kernel: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="thresh">thresh: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0.0</a></span></span></span>, <span name="boundary">boundary: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ThresholdConvolutionextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>input signal to be convolved</p></dd><dt class="param">kernel</dt><dd class="cmt"><p>filter kernel (will be read only once)</p></dd><dt class="param">size</dt><dd class="cmt"><p>length of filter kernel (static)</p></dd><dt class="param">thresh</dt><dd class="cmt"><p>threshold for input samples within kernel range.
+                convolution is only applied to those frames
+                whose absolute difference to the centre inter</p></dd><dt class="param">boundary</dt><dd class="cmt"><p>a trigger signal that determines logical
+                &quot;boundaries&quot; in the input signal. The convolution
+                is truncated to the left and right of the boundary
+                positions, making it possible to perform
+                convolutions on windowed signals.</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.Timer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TimerextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="Timer:Timer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Timer.html"><span class="name">Timer</span></a><span class="params">(<span name="trig">trig: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@TimerextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.TransposeMatrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TransposeMatrixextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="TransposeMatrix:TransposeMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TransposeMatrix.html"><span class="name">TransposeMatrix</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="rows">rows: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="columns">columns: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@TransposeMatrixextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGen that transposes 2-dimensional matrices.</p><div class="fullcomment"><div class="comment cmt"><p>A UGen that transposes 2-dimensional matrices.
+This is a 2-dimensional windowed process, where
+each window has length <code>rows * columns</code>. Input
+is assumed to be &quot;left-to-right, top-to-bottom&quot;,
+so the first samples constitute the first row,
+the next samples constitute the second row, etc.</p><p>The output matrix is transposed (rows and columns
+exchanged). So an input of <code>(a, b, c, d, e, f)</code>
+with <code>rows = 2</code> and <code>columns = 3</code> is interpreted
+as <code>((a, b, c), (d, e, f))</code>, transposed as
+<code>((a, d), (b, e), (c, f))</code> and output flat as
+<code>(a, d, b, e, c, f)</code>.</p><p>To rotate an image ninety
+degrees clockwise, you would have <code>rows = height</code>
+and <code>columns = width</code>.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the input matrices</p></dd><dt class="param">rows</dt><dd class="cmt"><p>the number of rows of the _input_</p></dd><dt class="param">columns</dt><dd class="cmt"><p>the number of columns of the _input_</p></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.UGenInGroup" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UGenInGroupextendsUGenInLike"></a>
+      <a id="UGenInGroup:UGenInGroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenInGroup.html"><span class="name">UGenInGroup</span></a><span class="result"> extends <a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@UGenInGroupextendsUGenInLike" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.UGenOutProxy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UGenOutProxyextendsUGenInwithUGenProxywithProductwithSerializable"></a>
+      <a id="UGenOutProxy:UGenOutProxy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenOutProxy.html"><span class="name">UGenOutProxy</span></a><span class="params">(<span name="ugen">ugen: <a href="../UGen$$MultiOut.html" class="extype" name="de.sciss.fscape.UGen.MultiOut">MultiOut</a></span>, <span name="outputIndex">outputIndex: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <a href="../UGenIn.html" class="extype" name="de.sciss.fscape.UGenIn">UGenIn</a> with <a href="UGenProxy.html" class="extype" name="de.sciss.fscape.graph.UGenProxy">UGenProxy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@UGenOutProxyextendsUGenInwithUGenProxywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A UGenOutProxy refers to a particular output of a multi-channel UGen.</p><div class="fullcomment"><div class="comment cmt"><p>A UGenOutProxy refers to a particular output of a multi-channel UGen.
+A sequence of these form the representation of a multi-channel-expanded
+UGen.
+</p></div></div>
+    </li><li name="de.sciss.fscape.graph.UGenProxy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UGenProxyextendsUGenIn"></a>
+      <a id="UGenProxy:UGenProxy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenProxy.html"><span class="name">UGenProxy</span></a><span class="result"> extends <a href="../UGenIn.html" class="extype" name="de.sciss.fscape.UGenIn">UGenIn</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@UGenProxyextendsUGenIn" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.UnaryOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnaryOpextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="UnaryOp:UnaryOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UnaryOp.html"><span class="name">UnaryOp</span></a><span class="params">(<span name="op">op: <span class="extype" name="scala.Int">Int</span></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@UnaryOpextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.UnzipWindow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnzipWindowextendsGE.LazywithProductwithSerializable"></a>
+      <a id="UnzipWindow:UnzipWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UnzipWindow.html"><span class="name">UnzipWindow</span></a><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@UnzipWindowextendsGE.LazywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.UnzipWindowN" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnzipWindowNextendsUGenSource.MultiOutwithProductwithSerializable"></a>
+      <a id="UnzipWindowN:UnzipWindowN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UnzipWindowN.html"><span class="name">UnzipWindowN</span></a><span class="params">(<span name="numOutputs">numOutputs: <span class="extype" name="scala.Int">Int</span></span>, <span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$MultiOut.html" class="extype" name="de.sciss.fscape.UGenSource.MultiOut">MultiOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@UnzipWindowNextendsUGenSource.MultiOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.WhiteNoise" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WhiteNoiseextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="WhiteNoise:WhiteNoise"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="WhiteNoise.html"><span class="name">WhiteNoise</span></a><span class="params">(<span name="mul">mul: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1.0</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@WhiteNoiseextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ZipWindow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ZipWindowextendsUGenSource.SingleOutwithProductwithSerializable"></a>
+      <a id="ZipWindow:ZipWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ZipWindow.html"><span class="name">ZipWindow</span></a><span class="params">(<span name="a">a: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="b">b: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">1</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ZipWindowextendsUGenSource.SingleOutwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="de.sciss.fscape.graph.BinaryOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BinaryOp"></a>
+      <a id="BinaryOp:BinaryOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BinaryOp$.html"><span class="name">BinaryOp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@BinaryOp" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ComplexBinaryOp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ComplexBinaryOp"></a>
+      <a id="ComplexBinaryOp:ComplexBinaryOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ComplexBinaryOp$.html"><span class="name">ComplexBinaryOp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ComplexBinaryOp" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Binary operator assuming operands are complex signals (real and imaginary interleaved).</p><div class="fullcomment"><div class="comment cmt"><p>Binary operator assuming operands are complex signals (real and imaginary interleaved).
+Outputs another complex stream even if the operator yields a purely real-valued result.</p><p>XXX TODO - need more ops such as conjugate, polar-to-cartesian, ...
+</p></div></div>
+    </li><li name="de.sciss.fscape.graph.ComplexUnaryOp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ComplexUnaryOp"></a>
+      <a id="ComplexUnaryOp:ComplexUnaryOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ComplexUnaryOp$.html"><span class="name">ComplexUnaryOp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ComplexUnaryOp" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Unary operator assuming stream is complex signal (real and imaginary interleaved).</p><div class="fullcomment"><div class="comment cmt"><p>Unary operator assuming stream is complex signal (real and imaginary interleaved).
+Outputs another complex stream even if the operator yields a purely real-valued result
+(ex. <code>abs</code>).</p><p>XXX TODO - need more ops such as conjugate, polar-to-cartesian, ...
+</p></div></div>
+    </li><li name="de.sciss.fscape.graph.Constant" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Constant"></a>
+      <a id="Constant:Constant"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Constant$.html"><span class="name">Constant</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@Constant" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ConstantD" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConstantD"></a>
+      <a id="ConstantD:ConstantD"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstantD$.html"><span class="name">ConstantD</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ConstantD" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ConstantI" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConstantI"></a>
+      <a id="ConstantI:ConstantI"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstantI$.html"><span class="name">ConstantI</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ConstantI" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ConstantL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConstantL"></a>
+      <a id="ConstantL:ConstantL"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ConstantL$.html"><span class="name">ConstantL</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ConstantL" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.GenWindow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GenWindow"></a>
+      <a id="GenWindow:GenWindow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="GenWindow$.html"><span class="name">GenWindow</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@GenWindow" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.ImageFile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ImageFile"></a>
+      <a id="ImageFile:ImageFile"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ImageFile$.html"><span class="name">ImageFile</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@ImageFile" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.UGenInGroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UGenInGroup"></a>
+      <a id="UGenInGroup:UGenInGroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UGenInGroup$.html"><span class="name">UGenInGroup</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@UGenInGroup" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.fscape.graph.UnaryOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnaryOp"></a>
+      <a id="UnaryOp:UnaryOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UnaryOp$.html"><span class="name">UnaryOp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.package@UnaryOp" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
