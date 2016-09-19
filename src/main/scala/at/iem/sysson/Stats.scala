@@ -133,19 +133,24 @@ object Stats {
                 num += 1
                 sum += d
                 if (min > d) min = d
-                if (max < d) max = d
+                if (max < d) {
+//                  if (d > 500) {
+//                    val sel0 = sel
+//                    println("AQUI")
+//                  }
+                  max = d
+                }
               }
             }
             val mean    = sum/num
-            var sqrdif  = 0.0
+            var sqrDif  = 0.0
             arr.double1Diterator.foreach { d =>
               if (accept(d)) {
                 val dif = d - mean
-                sqrdif += dif * dif
+                sqrDif += dif * dif
               }
             }
-            // val stddev = math.sqrt(sqrdif/num)
-            Counts(min = min, max = max, sum = sum, sqrdif = sqrdif, num = num, pool = 1)
+            Counts(min = min, max = max, sum = sum, sqrdif = sqrDif, num = num, pool = 1)
           }
 
           val preSlices: Map[String, Vec[Counts]] = dims.map(dim => {
@@ -227,16 +232,16 @@ object Stats {
         val min     = in.readDouble()
         val max     = in.readDouble()
         val sum     = in.readDouble()
-        val sqrdif  = in.readDouble()
+        val sqrDif  = in.readDouble()
         val num     = in.readLong()
         val pool    = in.readInt()
-        Counts(min = min, max = max, sum = sum, sqrdif = sqrdif, num = num, pool = pool)
+        Counts(min = min, max = max, sum = sum, sqrdif = sqrDif, num = num, pool = pool)
       }
     }
   }
 
-  //  case class Counts(min: Double, max: Double, mean: Double, stddev: Double) {
-  //    override def toString = s"$productPrefix(min = ${min.toFloat}, max = ${max.toFloat}, mean = ${mean.toFloat}, stddev = ${stddev.toFloat})"
+  //  case class Counts(min: Double, max: Double, mean: Double, stdDev: Double) {
+  //    override def toString = s"$productPrefix(min = ${min.toFloat}, max = ${max.toFloat}, mean = ${mean.toFloat}, stdDev = ${stdDev.toFloat})"
   //  }
 
   /** Statistics for a given variable or sub-set of a variable.
@@ -253,8 +258,6 @@ object Stats {
     *               this is needed for the pooled standard deviation
     */
   final case class Counts(min: Double, max: Double, sum: Double, sqrdif: Double, num: Long, pool: Int) {
-    // def complete = Counts(min = min, max = max, mean = sum/num, stddev = math.sqrt(sqrdif/num))
-
     def combineWith(that: Counts) = Counts(
       min     = math.min(this.min, that.min),
       max     = math.max(this.max, that.max),
@@ -264,9 +267,9 @@ object Stats {
       pool    = this.pool + that.pool
     )
 
-    def isPooled = pool > 1
-    
-    def mean = sum / num
+    def isPooled: Boolean = pool > 1
+
+    def mean: Double = sum / num
 
     // sum of each sample variance multiplied by its sample size -1, then divided by sum of each sample size -1
     // so we should track the number of samples, because that way it becomes:
@@ -277,7 +280,7 @@ object Stats {
       *
       * See http://en.wikipedia.org/wiki/Pooled_variance
       */
-    def stddev  = math.sqrt(sqrdif / (num - pool))
+    def stddev: Double = math.sqrt(sqrdif / (num - pool))
 
     override def toString = s"$productPrefix(num = $num, min = ${min.toFloat}, max = ${max.toFloat}, " +
       s"mean = ${mean.toFloat}, ${if (isPooled) "pooled " else ""}stddev = ${stddev.toFloat})"

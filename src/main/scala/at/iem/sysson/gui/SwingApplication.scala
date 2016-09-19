@@ -81,12 +81,12 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
 
     LogFrame           .instance    // init
 
-    sys.addShutdownHook {
-      Stats.cacheDir.children { f =>
-        val n = f.name
-        n.startsWith("sysson") || n.endsWith(".cache")
-      } .foreach(_.delete())
-    }
+//    sys.addShutdownHook {
+//      Stats.cacheDir.children { f =>
+//        val n = f.name
+//        n.startsWith("sysson") || n.endsWith(".cache")
+//      } .foreach(_.delete())
+//    }
 
     val melliteFrame = args.contains("--mellite-frame")
 

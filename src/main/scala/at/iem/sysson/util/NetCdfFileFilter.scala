@@ -27,7 +27,8 @@ object NetCdfFileFilter extends (File => Boolean) {
     try {
       if (f.length() < 4) false else {
         val cookie = r.readInt()
-        cookie == 0x43444601 || cookie == 0x43444602
+        // NetCDF ...                                   or HDF
+        cookie == 0x43444601 || cookie == 0x43444602 || cookie == 0x89484446
       }
     } finally {
       r.close()

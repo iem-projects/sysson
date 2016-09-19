@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.9.0"
+lazy val projectVersion = "1.10.0-SNAPSHOT"
 
 lazy val commonSettings = Seq(
   name          := baseName,
@@ -33,7 +33,7 @@ lazy val scalaMainVersion           = "2.11.8"
 
 lazy val melliteVersion             = "2.5.0"
 lazy val soundProcessesVersion      = "3.7.0"
-lazy val lucreMatrixVersion         = "0.12.0"
+lazy val lucreMatrixVersion         = "1.0.0-SNAPSHOT"
 lazy val lucreSwingVersion          = "1.4.0"
 lazy val lucreVersion               = "3.3.1"
 lazy val scalaColliderVersion       = "1.20.1"
@@ -119,7 +119,7 @@ lazy val root = Project(id = baseNameL, base = file("."))
       "de.sciss" %% "scalacolliderswing-core"     % scalaColliderSwingVersion,
       "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
       "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
-      "de.sciss" %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
+      "at.iem.sysson" %% "lucrematrix"            % lucreMatrixVersion,         // reactive matrix component and view
       "de.sciss" %% "lucreswing"                  % lucreSwingVersion,          // reactive widgets
       "de.sciss" %% "lucre-core"                  % lucreVersion,               // object model
       "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
