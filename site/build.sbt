@@ -2,7 +2,7 @@ import UnidocKeys._
 
 lazy val syssonVersion         = "1.9.0"
 lazy val PROJECT_VERSION       = syssonVersion
-lazy val baseName              = "Mellite"
+lazy val baseName              = "SysSon"
 
 lazy val melliteVersion        = "2.5.0"
 lazy val soundProcessesVersion = "3.7.0"
@@ -27,8 +27,8 @@ val scalaCollider      = RootProject(uri(s"git://github.com/Sciss/ScalaCollider.
 val fscape             = RootProject(uri(s"git://github.com/Sciss/FScape-next.git#v${fscapeVersion}"))
 val soundProcesses     = RootProject(uri(s"git://github.com/Sciss/SoundProcesses.git#v${soundProcessesVersion}"))
 val mellite            = RootProject(uri(s"git://github.com/Sciss/Mellite.git#v${melliteVersion}"))
-val lucreMatrix        = RootProject(uri("git://github.com/iem-projects/LucreMatrix.git#v${matrixVersion}"))
-val sysson             = RootProject(uri("git://github.com/iem-projects/sysson.git#v${syssonVersion}"))
+val lucreMatrix        = RootProject(uri(s"git://github.com/iem-projects/LucreMatrix.git#v${matrixVersion}"))
+val sysson             = RootProject(uri(s"git://github.com/iem-projects/sysson.git#v${syssonVersion}"))
 
 val lucreURI           = uri(s"git://github.com/Sciss/Lucre.git#v${lucreVersion}")
 val lucreCore          = ProjectRef(lucreURI, "lucre-core")
@@ -68,7 +68,7 @@ val root = (project in file("."))
         "de.sciss.synth.proc.gui.impl",
         "de.sciss.synth.proc.impl",
         "de.sciss.synth.ugen.impl",
-        "de.sciss.tallin"
+        "de.sciss.tallin",
         "at.iem.sysson.gui.impl", 
         "at.iem.sysson.impl", 
         "at.iem.sysson.legacy",
@@ -81,6 +81,5 @@ val root = (project in file("."))
     ),
     unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject -- inProjects(lucreBdb6)
   )
-  // XXX TODO --- don't know how to exclude bdb5/6 from lucre
   .aggregate(scalaOSC, scalaAudioFile, scalaColliderUGens, scalaCollider, fscape, soundProcesses, lucreCore, lucreExpr, mellite,
     lucreMatrix, sysson)
