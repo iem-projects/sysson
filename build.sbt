@@ -32,7 +32,7 @@ lazy val scalaMainVersion           = "2.11.8"
 // ---- library versions ----
 
 lazy val melliteVersion             = "2.5.0"
-lazy val soundProcessesVersion      = "3.7.0"
+lazy val soundProcessesVersion      = "3.7.1-SNAPSHOT"
 lazy val lucreMatrixVersion         = "1.0.0-SNAPSHOT"
 lazy val lucreSwingVersion          = "1.4.0"
 lazy val lucreVersion               = "3.3.1"

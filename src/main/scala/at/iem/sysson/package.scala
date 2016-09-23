@@ -18,13 +18,13 @@ import java.text.SimpleDateFormat
 import java.util.{Date, Locale}
 
 import at.iem.sysson.sound.{AuralSonification, Sonification}
+import at.iem.sysson.util.DoubleTransform
 import de.sciss.file._
 import de.sciss.lucre.matrix
 import de.sciss.lucre.stm.TxnLike
 import de.sciss.mellite.Mellite
-import de.sciss.nuages.Wolkenpumpe
+import de.sciss.synth
 import de.sciss.synth.proc.Code
-import de.sciss.{mellite, synth}
 import ucar.nc2
 
 import scala.annotation.elidable
@@ -103,6 +103,7 @@ package object sysson {
     Sonification.Source   .init()
     AuralSonification     .init()
     Plot                  .init()
+    DoubleTransform       .init()
     importExtensions
   }
 }
