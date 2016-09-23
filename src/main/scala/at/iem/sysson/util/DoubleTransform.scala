@@ -1,22 +1,20 @@
 package at.iem.sysson.util
 
-import java.util.concurrent.atomic.AtomicInteger
-
 import de.sciss.synth.proc
 import de.sciss.synth.proc.SoundProcesses
 import de.sciss.synth.proc.impl.MemoryClassLoader
 
+import scala.concurrent.stm.{Ref, atomic}
 import scala.concurrent.{Future, Promise, blocking}
-import scala.concurrent.stm.atomic
 
 object DoubleTransform {
-  private val count = new AtomicInteger(0)
+  private val count = Ref(0)
 
   def init(): Unit = Code.init()
 
   def compile(source: Code)(implicit compiler: proc.Code.Compiler): Future[DoubleTransform] = {
     val p       = Promise[DoubleTransform]()
-    val idx     = count.incrementAndGet()
+    val idx     = count.single.transformAndGet(_ + 1)
     val name    = s"DoubleTransform$idx"
     performCompile(p, name, source)
     p.future
@@ -62,6 +60,9 @@ object DoubleTransform {
     def mkCode(source: String): Repr = Code(source)
   }
 
+  /** The source code may access the input argument
+    * via symbol `x`. It must return a `Double`.
+    */
   final case class Code(source: String) extends proc.Code {
     type In     = String
     type Out    = Array[Byte]
