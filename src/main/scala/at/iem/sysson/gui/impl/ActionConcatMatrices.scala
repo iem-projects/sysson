@@ -36,7 +36,7 @@ import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext
 import scala.swing.{Action, Alignment, BorderPanel, Button, GridPanel, Label}
 
-final class ActionConcatMatrices[S <: Sys[S]](view: DataSourceView[S], windowOpt: Option[Window])
+final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: DataSourceView[S])
   extends Action("Concatenate Matrix...") {
 
   def apply(): Unit =

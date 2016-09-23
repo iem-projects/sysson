@@ -44,6 +44,7 @@ object DataSourceFrameImpl {
     private[this] var actionPlotDist  : Action = _
     private[this] var actionAnomalies : Action = _
     private[this] var actionConcat    : Action = _
+    private[this] var actionMap       : Action = _
 
     private def updateState(selected: Option[nc2.Variable]): Unit = {
       import Implicits._
@@ -51,6 +52,7 @@ object DataSourceFrameImpl {
       actionPlotDist  .enabled  = selected.isDefined
       actionAnomalies .enabled  = selected.exists(_.dimensionMap.keySet.exists(_.toLowerCase == "time"))
       actionConcat    .enabled  = selected.isDefined
+      actionMap       .enabled  = selected.isDefined
     }
 
     override protected def initGUI(): Unit = {
@@ -62,11 +64,13 @@ object DataSourceFrameImpl {
           actionPlot1D    = new ActionPlot1D            (sw, selectedVariable)
           actionPlotDist  = new ActionPlotDistribution  (sw, selectedVariable)
           actionAnomalies = new ActionCalculateAnomalies(sw, selectedVariable)
-          actionConcat    = new ActionConcatMatrices    (view, sw)
+          actionConcat    = new ActionConcatMatrices    (sw, view)
+          actionMap       = new ActionMapMatrixElements (sw, view)
           g.add(sw, Menu.Item("plot-1d"          , actionPlot1D   ))
           g.add(sw, Menu.Item("plot-distribution", actionPlotDist ))
           g.add(sw, Menu.Item("create-anomalies" , actionAnomalies))
           g.add(sw, Menu.Item("create-concat"    , actionConcat   ))
+          g.add(sw, Menu.Item("create-map"       , actionMap      ))
 
         case _ => sys.error(s"No menu group for path '$path'")
       }

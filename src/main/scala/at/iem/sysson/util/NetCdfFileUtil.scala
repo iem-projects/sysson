@@ -64,8 +64,20 @@ object NetCdfFileUtil {
     *                   correspond with `inDims`. The function is called repeatedly, iterating
     *                   over all other input dimensions except those in `inDims`.
     */
-  def transform(in: nc2.NetcdfFile, out: File, varName: String,
-                inDims: Vec[String], outDimsSpec: Vec[OutDim])(fun: (Vec[Int], ma2.Array) => ma2.Array): Unit = {
+  def transform(in: nc2.NetcdfFile, out: File, varName: String, inDims: Vec[String], outDimsSpec: Vec[OutDim])
+               (fun: (Vec[Int], ma2.Array) => ma2.Array): Processor[Unit] with Processor.Prepared =
+    new ProcessorImpl[Unit, Processor[Unit]] with Processor[Unit] {
+      protected def body(): Unit = blocking {
+        transformBody(this, in = in, out = out, varName = varName, inDims = inDims, outDimsSpec = outDimsSpec,
+          fun = fun)
+      }
+
+      override def toString = s"$varName-transform"
+    }
+
+  private def transformBody(self: ProcessorImpl[Unit, Processor[Unit]],
+                            in: nc2.NetcdfFile, out: File, varName: String, inDims: Vec[String],
+                            outDimsSpec: Vec[OutDim], fun: (Vec[Int], ma2.Array) => ma2.Array): Unit = {
     val location  = out.path
     val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
 
@@ -99,32 +111,6 @@ object NetCdfFileUtil {
 
     val outVar = writer.addVariable(null, inVar.getShortName, inVar.getDataType, outDims.asJava)
 
-  //    val latDim    = writer.addDimension(null, "lat", 13 /*  64 */)
-  //    val lonDim    = writer.addDimension(null, "lon", 21 /* 128 */)
-  //    val dims      = new ju.ArrayList[nc2.Dimension]()
-  //    dims.add(latDim)
-  //    dims.add(lonDim)
-  //    // use float instead of double, because sysson plot in previous version restricted to float
-  //    val t         = writer.addVariable(null, "temperature", ma2.DataType.FLOAT /* DOUBLE */, dims)
-  //    t.addAttribute(new nc2.Attribute("units", "K"))
-  //    val data      = ma2.Array.factory(classOf[Int], Array(3), Array(1, 2, 3))
-  //    t.addAttribute(new nc2.Attribute("scale", data))
-  //    // add a string-valued variable: char svar(80)
-  //    /* val sVarLen = */ writer.addDimension(null, "svar_len", 80)
-  //    writer.addVariable(null, "svar", ma2.DataType.CHAR, "svar_len")
-  //    // add a 2D string-valued variable: char names(names, 80)
-  //    /* val names = */ writer.addDimension(null, "names", 3)
-  //    writer.addVariable(null, "names", ma2.DataType.CHAR, "names svar_len")
-  //    // add a scalar variable
-  //    writer.addVariable(null, "scalar", ma2.DataType.DOUBLE, new ju.ArrayList[nc2.Dimension]())
-  //    // add global attributes
-  //    writer.addGroupAttribute(null, new nc2.Attribute("yo", "face"))
-  //    writer.addGroupAttribute(null, new nc2.Attribute("versionD", 1.2))
-  //    writer.addGroupAttribute(null, new nc2.Attribute("versionF", 1.2f))
-  //    writer.addGroupAttribute(null, new nc2.Attribute("versionI", 1))
-  //    writer.addGroupAttribute(null, new nc2.Attribute("versionS", 2.toShort))
-  //    writer.addGroupAttribute(null, new nc2.Attribute("versionB", 3.toByte))
-
     // create the file; ends "define mode"
     writer.create()
 
@@ -151,25 +137,50 @@ object NetCdfFileUtil {
       case c: Create  => c.values.size.toInt
     } (breakOut)
 
-    def iter(sec: VariableSection, origin: Vec[Int], rem: Vec[OutDim]): Unit = rem match {
+    def countSteps(rem: Vec[OutDim], sum: Int): Int = rem match {
       case head +: tail =>
         head match {
           case Keep(name) =>
             val dim = keepInDims.find(_.name === name).get
+            var sumOut = sum
+            for (i <- 0 until dim.size) {
+              sumOut = countSteps(tail, sumOut)
+            }
+            sumOut
+
+          case c: Create =>
+            countSteps(tail, sum)
+        }
+
+      case _ => sum + 1
+    }
+
+    val numSteps = countSteps(outDimsSpec, 0)
+
+    def iter(sec: VariableSection, origin: Vec[Int], rem: Vec[OutDim], steps: Int): Int = rem match {
+      case head +: tail =>
+        head match {
+          case Keep(name) =>
+            val dim = keepInDims.find(_.name === name).get
+            var stepsOut = steps
             for (i <- 0 until dim.size) {
               val sec1 = (sec in name).select(i)
-              iter(sec1, origin :+ i, tail)
+              stepsOut = iter(sec1, origin :+ i, tail, steps = stepsOut)
             }
+            stepsOut
           case c: Create =>
-            iter(sec, origin :+ 0, tail)
+            iter(sec, origin :+ 0, tail, steps = steps)
         }
 
       case _ =>
         // `dataInF` has the original rank and dimensional order
         val dataInF = sec.readSafe()
         // `dataInR` removes the dimensions not included in `inDims`
-        val dataInR = (dataInF /: allInDims.zipWithIndex) { case (a, (dim, idx)) =>
-          if (inDims.contains(dim.name)) a else a.reduce(idx)
+        val dataInR = (dataInF /: allInDims.zipWithIndex.reverse) { case (a, (dim, idx)) =>
+          if (inDims.contains(dim.name)) a else {
+            // println(s"Reducing $idx; a.rank = ${a.rank}")
+            a.reduce(idx)
+          }
         }
         // `dataIn` transposes the dimensions to reflect the order in `inDims`
         val dataIn  = dataInR.permute(permutations)
@@ -188,9 +199,14 @@ object NetCdfFileUtil {
         // println(s"Origin: $origin")
         val dataOutR = dataOut.reshapeNoCopy(writeShape)
         writer.write(outVar, origin.toArray, dataOutR)
+
+        val stepsOut = steps + 1
+        self.progress = stepsOut.toDouble / numSteps
+        self.checkAborted()
+        stepsOut
     }
 
-    iter(inVar.selectAll, Vec.empty, outDimsSpec)
+    iter(inVar.selectAll, Vec.empty, outDimsSpec, steps = 0)
 
     writer.close()
   }
