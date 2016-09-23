@@ -32,6 +32,7 @@ import de.sciss.lucre.swing._
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.gui.GUI
+import de.sciss.model.impl.ModelImpl
 import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.swingtree.{ExternalTreeModel, Tree}
 import de.sciss.synth.proc.{ObjKeys, Workspace}
@@ -132,7 +133,7 @@ object DataSourceViewImpl {
   private final class Impl[S <: Sys[S]](sourceH: stm.Source[S#Tx, DataSource[S]],
                                         val file: File, data: nc2.NetcdfFile)
                                        (implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
-    extends DataSourceView[S] with ComponentHolder[Component] {
+    extends DataSourceView[S] with ComponentHolder[Component] with ModelImpl[DataSourceView.Update] {
     impl =>
     
     private var _selVar     = Option.empty[nc2.Variable]
@@ -316,19 +317,22 @@ object DataSourceViewImpl {
 
     def selectedVariable_=(opt: Option[nc2.Variable]): Unit = {
       requireEDT()
-      _selVar = opt
-      val sel = tGroupVars.selection.rows
-      opt match {
-        case Some(vr) =>
-          // the following line is not needed, we only have one group in all
-          // the common files; the problem of `selectGroup` is that it
-          // re-adjusts all the table column widths
-          //  selectGroup(vr.group)
-          val row = mGroupVars.data.indexOf(vr)
-          if (row >= 0 && sel.leadIndex != row) sel += row
+      if (_selVar != opt) {
+        _selVar = opt
+        val sel = tGroupVars.selection.rows
+        opt match {
+          case Some(vr) =>
+            // the following line is not needed, we only have one group in all
+            // the common files; the problem of `selectGroup` is that it
+            // re-adjusts all the table column widths
+            //  selectGroup(vr.group)
+            val row = mGroupVars.data.indexOf(vr)
+            if (row >= 0 && sel.leadIndex != row) sel += row
 
-        case None =>
-          if (sel.size != 0) sel.clear()
+          case None =>
+            if (sel.size != 0) sel.clear()
+        }
+        dispatch(DataSourceView.VariableSelection(opt))
       }
     }
   }

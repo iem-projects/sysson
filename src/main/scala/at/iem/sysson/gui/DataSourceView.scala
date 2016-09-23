@@ -21,6 +21,7 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.View
 import de.sciss.mellite.gui.ViewHasWorkspace
+import de.sciss.model.Model
 import de.sciss.synth.proc.Workspace
 import ucar.nc2
 
@@ -28,8 +29,11 @@ object DataSourceView {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                                 cursor: stm.Cursor[S]): DataSourceView[S] =
     Impl(source)
+
+  sealed trait Update
+  final case class VariableSelection(v: Option[nc2.Variable]) extends Update
 }
-trait DataSourceView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.File {
+trait DataSourceView[S <: Sys[S]] extends ViewHasWorkspace[S] with View.File with Model[DataSourceView.Update] {
   def source(implicit tx: S#Tx): DataSource[S]
   var selectedVariable: Option[nc2.Variable]
 

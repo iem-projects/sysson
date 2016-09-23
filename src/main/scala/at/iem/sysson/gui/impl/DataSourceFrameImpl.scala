@@ -43,7 +43,7 @@ import scala.annotation.tailrec
 import scala.collection.breakOut
 import scala.concurrent.stm.atomic
 import scala.concurrent.{ExecutionContext, Future, blocking}
-import scala.swing.{Alignment, BorderPanel, Button, Component, FlowPanel, GridPanel, Label, Orientation, SplitPane}
+import scala.swing.{Action, Alignment, BorderPanel, Button, Component, FlowPanel, GridPanel, Label, Orientation, SplitPane}
 import scala.util.{Failure, Success}
 import scalax.chart.{Chart, XYChart}
 
@@ -210,94 +210,106 @@ object DataSourceFrameImpl {
           .show(Some(window), title)
       } (fun)
 
-    private def plot1D(): Unit = {
+    private def updateState(selected: Option[nc2.Variable]): Unit = {
       import Implicits._
-      withSelectedVariable(title) { vr =>
-        if (vr.reducedRank != 1) {
-          OptionPane.message(s"Variable ${vr.name} has ${vr.reducedRank} dimensions. Must have one.",
-            OptionPane.Message.Error).show(Some(window), title = "Plot 1D")
-        } else {
-          import at.iem.sysson.Stats.executionContext
-          val futData = Future {
-            blocking {
-              val dataV   = vr.readSafe().float1D
-              val dimName = vr.reducedDimensions.head.name
-              val vd      = vr.file.variableMap(dimName)
-              val dataD   = vd.readSafe().float1D
-              (dataV, dataD)
+      ActionPlot1D    .enabled  = selected.exists(_.reducedRank == 1)
+      ActionPlotDist  .enabled  = selected.isDefined
+      ActionAnomalies .enabled  = selected.exists(_.dimensionMap.keySet.exists(_.toLowerCase == "time"))
+      ActionConcat    .enabled  = selected.isDefined
+    }
+
+    private object ActionPlot1D extends Action("Plot 1D...") {
+      def apply(): Unit = {
+        import Implicits._
+        withSelectedVariable(title) { vr =>
+          if (vr.reducedRank != 1) {
+            OptionPane.message(s"Variable ${vr.name} has ${vr.reducedRank} dimensions. Must have one.",
+              OptionPane.Message.Error).show(Some(window), title = "Plot 1D")
+          } else {
+            import at.iem.sysson.Stats.executionContext
+            val futData = Future {
+              blocking {
+                val dataV   = vr.readSafe().float1D
+                val dimName = vr.reducedDimensions.head.name
+                val vd      = vr.file.variableMap(dimName)
+                val dataD   = vd.readSafe().float1D
+                (dataV, dataD)
+              }
             }
-          }
-          futData.onComplete {
-            case Success((dataV, dataD)) => defer {
-              import scalax.chart.api._
-              val data: Vec[(Float, Float)] = dataD zip dataV
-              val dataCol = data.toXYSeriesCollection(title)
-              val chart   = XYLineChart(dataCol, title = title, legend = false)
-              ChartUtils.printableLook(chart)
-              val plot    = chart.plot
-              val renderer = plot.getRenderer
-              renderer.setSeriesPaint(0, Color.darkGray)
-              mkPlotWindow(mkChartPanel(chart), vr.name)
-            }
-            case Failure(ex) => defer {
-              DialogSource.Exception(ex -> s"Plot of ${vr.name}").show(Some(window))
+            futData.onComplete {
+              case Success((dataV, dataD)) => defer {
+                import scalax.chart.api._
+                val data: Vec[(Float, Float)] = dataD zip dataV
+                val dataCol = data.toXYSeriesCollection(title)
+                val chart   = XYLineChart(dataCol, title = title, legend = false)
+                ChartUtils.printableLook(chart)
+                val plot    = chart.plot
+                val renderer = plot.getRenderer
+                renderer.setSeriesPaint(0, Color.darkGray)
+                mkPlotWindow(mkChartPanel(chart), vr.name)
+              }
+              case Failure(ex) => defer {
+                DialogSource.Exception(ex -> s"Plot of ${vr.name}").show(Some(window))
+              }
             }
           }
         }
       }
     }
 
-    private def plotDist(): Unit = {
-      import Implicits._
-      withSelectedVariable(title) { vr =>
-        val title0 = s"Distribution of ${vr.name}"
+    private object ActionPlotDist extends Action("Plot Distribution...") {
+      def apply(): Unit = {
+        import Implicits._
+        withSelectedVariable(title) { vr =>
+          val title0 = s"Distribution of ${vr.name}"
 
-        import at.iem.sysson.Stats.executionContext
-        val futStats = atomic { implicit tx =>
-          Stats.get(vr.file)
-        }
-        val futHistoStats = futStats.map { case Stats(map) =>
-          val total   = map(vr.name).total
-          val numBins = 400 // XXX TODO -- could be configurable
+          import at.iem.sysson.Stats.executionContext
+          val futStats = atomic { implicit tx =>
+            Stats.get(vr.file)
+          }
+          val futHistoStats = futStats.map { case Stats(map) =>
+            val total   = map(vr.name).total
+            val numBins = 400 // XXX TODO -- could be configurable
           // val bins    = (0 until numBins).linlin(0, numBins - 1, total.min, total.max)
           val histo   = new Array[Int](numBins)
 
-          def loop(rem: Vec[nc2.Dimension], red: VariableSection): Unit = rem match {
-            case head +: (tail @ (_ +: _)) if red.size > 16384 =>   // try to make smart chunks
-              for (i <- 0 until head.size) loop(tail, red.in(head.name).select(i))
-            case _ =>
-              val chunk = red.readSafe().float1D
-              chunk.foreach { d =>
-                import numbers.Implicits._
-                val bin = d.linlin(total.min, total.max, 0, numBins).toInt.min(numBins - 1)
-                histo(bin) += 1
-              }
+            def loop(rem: Vec[nc2.Dimension], red: VariableSection): Unit = rem match {
+              case head +: (tail @ (_ +: _)) if red.size > 16384 =>   // try to make smart chunks
+                for (i <- 0 until head.size) loop(tail, red.in(head.name).select(i))
+              case _ =>
+                val chunk = red.readSafe().float1D
+                chunk.foreach { d =>
+                  import numbers.Implicits._
+                  val bin = d.linlin(total.min, total.max, 0, numBins).toInt.min(numBins - 1)
+                  histo(bin) += 1
+                }
+            }
+            loop(vr.reducedDimensions, vr.selectAll)
+            (histo, total)
           }
-          loop(vr.reducedDimensions, vr.selectAll)
-          (histo, total)
-        }
-        println("Calculating... Please wait...")
+          println("Calculating... Please wait...")
 
-        futHistoStats.onComplete {
-          case Success((histo, total)) => defer {
-            val size      = (0L /: histo)((sum, count) => sum + count)
-            val relative: Vec[Double] = histo.map(count => (count * 100.0)/ size)(breakOut)
-            import kollflitz.Ops._
-            val accum     = relative.integrate
+          futHistoStats.onComplete {
+            case Success((histo, total)) => defer {
+              val size      = (0L /: histo)((sum, count) => sum + count)
+              val relative: Vec[Double] = histo.map(count => (count * 100.0)/ size)(breakOut)
+              import kollflitz.Ops._
+              val accum     = relative.integrate
 
-            //            println("----- HISTO -----")
-            //            histo.zipWithIndex.foreach { case (d, i) =>
-            //                println(f"$i%3d: $d%1.4f")
-            //            }
+              //            println("----- HISTO -----")
+              //            histo.zipWithIndex.foreach { case (d, i) =>
+              //                println(f"$i%3d: $d%1.4f")
+              //            }
 
-            val chartRel    = mkHistoChart(relative , total, title = s"Histogram for ${vr.name}")
-            val chartAccum  = mkHistoChart(accum    , total, title = s"Accumulative Histogram for ${vr.name}")
-            mkPlotWindow(new SplitPane(Orientation.Vertical, mkChartPanel(chartRel  ), mkChartPanel(chartAccum)),
-              title0)
-          }
+              val chartRel    = mkHistoChart(relative , total, title = s"Histogram for ${vr.name}")
+              val chartAccum  = mkHistoChart(accum    , total, title = s"Accumulative Histogram for ${vr.name}")
+              mkPlotWindow(new SplitPane(Orientation.Vertical, mkChartPanel(chartRel  ), mkChartPanel(chartAccum)),
+                title0)
+            }
 
-          case Failure(ex) => defer {
-            DialogSource.Exception(ex -> s"Distribution of ${vr.name}").show(Some(window))
+            case Failure(ex) => defer {
+              DialogSource.Exception(ex -> s"Distribution of ${vr.name}").show(Some(window))
+            }
           }
         }
       }
@@ -342,56 +354,60 @@ object DataSourceFrameImpl {
       chart
     }
 
-    private def createAnomalies(): Unit = {
-      val sw    = Some(window)
-      val title = "Calculate Anomalies"
-      withSelectedVariable(title) { vr =>
-        import Implicits._
+    private object ActionAnomalies extends Action("Calculate Anomalies...") {
+      def apply(): Unit = {
+        val sw    = Some(window)
+        val title = "Calculate Anomalies"
+        withSelectedVariable(title) { vr =>
+          import Implicits._
 
-        val timeNameOpt = vr.dimensionMap.keySet.find(_.toLowerCase == "time")
-        timeNameOpt.fold[Unit] {
-          OptionPane.message("Selected variable must have a dimension named 'time'", OptionPane.Message.Error)
-            .show(sw, title)
-        } { timeName =>
-          val mYears    = new SpinnerNumberModel(30, 1, 10000, 1)
-          val ggYears   = new Spinner(mYears)
-          val pYears    = new FlowPanel(new Label("Average Years:"), ggYears)
-          val lbInfo    = new Label(
-            """<html><body>This process assumes that the time
-              |dimension of the selected variable has a
-              |<b>monthly resolution (12 values per year)</b>
-              |with the first index corresponding to January.
-              |
-              |<b>A sliding window</b> of the size specified below
-              |is used to to calculate the average values
-              |per month and matrix cell. These sliding means
-              |will be subtracted from the input matrix and
-              |yield the "anomalies" output matrix.
-              |</body>""".stripMargin.replace("\n", "<br>"))
-          val pMessage  = new BorderPanel {
-            add(lbInfo, BorderPanel.Position.Center)
-            add(pYears, BorderPanel.Position.South )
-          }
-          val res = OptionPane(message = pMessage, optionType = OptionPane.Options.OkCancel).show(sw, title)
-          import equal.Implicits._
-          if (res === OptionPane.Result.Ok) {
-            withSaveFile(window, "Anomalies Output File") { out =>
-              val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = timeName,
-                windowYears = mYears.getNumber.intValue())
-              import ExecutionContext.Implicits.global
-              proc.monitor(printResult = false)
-              proc.start()
+          val timeNameOpt = vr.dimensionMap.keySet.find(_.toLowerCase == "time")
+          timeNameOpt.fold[Unit] {
+            OptionPane.message("Selected variable must have a dimension named 'time'", OptionPane.Message.Error)
+              .show(sw, title)
+          } { timeName =>
+            val mYears    = new SpinnerNumberModel(30, 1, 10000, 1)
+            val ggYears   = new Spinner(mYears)
+            val pYears    = new FlowPanel(new Label("Average Years:"), ggYears)
+            val lbInfo    = new Label(
+              """<html><body>This process assumes that the time
+                |dimension of the selected variable has a
+                |<b>monthly resolution (12 values per year)</b>
+                |with the first index corresponding to January.
+                |
+                |<b>A sliding window</b> of the size specified below
+                |is used to to calculate the average values
+                |per month and matrix cell. These sliding means
+                |will be subtracted from the input matrix and
+                |yield the "anomalies" output matrix.
+                |</body>""".stripMargin.replace("\n", "<br>"))
+            val pMessage  = new BorderPanel {
+              add(lbInfo, BorderPanel.Position.Center)
+              add(pYears, BorderPanel.Position.South )
+            }
+            val res = OptionPane(message = pMessage, optionType = OptionPane.Options.OkCancel).show(sw, title)
+            import equal.Implicits._
+            if (res === OptionPane.Result.Ok) {
+              withSaveFile(window, "Anomalies Output File") { out =>
+                val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = timeName,
+                  windowYears = mYears.getNumber.intValue())
+                import ExecutionContext.Implicits.global
+                proc.monitor(printResult = false)
+                proc.start()
+              }
             }
           }
         }
       }
     }
 
-    private def concat(): Unit =
-      view.mkSelectedMatrix().foreach { varH =>
-        import view.{cursor, workspace}
-        mkConcatWindow[S](window, varH)
-      }
+    private object ActionConcat extends Action("Concatenate Matrix...") {
+      def apply(): Unit =
+        view.mkSelectedMatrix().foreach { varH =>
+          import view.{cursor, workspace}
+          mkConcatWindow[S](window, varH)
+        }
+    }
 
     override protected def initGUI(): Unit = {
       val root  = window.handler.menuFactory
@@ -399,12 +415,17 @@ object DataSourceFrameImpl {
       root.get(path) match {
         case Some(g: Menu.Group) =>
           val sw = Some(window)
-          g.add(sw, Menu.Item("plot-1d"          )("Plot 1D..."            )(plot1D()))
-          g.add(sw, Menu.Item("plot-distribution")("Plot Distribution..."  )(plotDist()))
-          g.add(sw, Menu.Item("create-anomalies" )("Calculate Anomalies...")(createAnomalies()))
-          g.add(sw, Menu.Item("create-concat"    )("Concatenate Matrix..." )(concat()))
+          g.add(sw, Menu.Item("plot-1d"          , ActionPlot1D))
+          g.add(sw, Menu.Item("plot-distribution", ActionPlotDist))
+          g.add(sw, Menu.Item("create-anomalies" , ActionAnomalies))
+          g.add(sw, Menu.Item("create-concat"    , ActionConcat))
 
         case _ => sys.error(s"No menu group for path '$path'")
+      }
+
+      updateState(view.selectedVariable)
+      view.addListener {
+        case DataSourceView.VariableSelection(v) => updateState(v)
       }
     }
   }
