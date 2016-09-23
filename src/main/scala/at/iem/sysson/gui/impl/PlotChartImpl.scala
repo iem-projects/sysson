@@ -274,7 +274,7 @@ object PlotChartImpl {
         val xNameL    = xName.toLowerCase(Locale.US)
         val yNameL    = yName.toLowerCase(Locale.US)
         import equal.Implicits._
-        isMap         = (xNameL === "lon" || xName === "Longitude") && (yNameL === "lat" || yNameL === "Latitude")
+        isMap         = (xNameL === "lon" || xNameL === "longitude") && (yNameL === "lat" || yNameL === "latitude")
         updateOverlay()
       }
     }

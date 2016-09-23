@@ -130,23 +130,23 @@ QBO and ENSO interact with each other in that strong amplitudes in ENSO (lower a
 Initial problems:
 %
 \begin{itemize}
-\item File selection filter did not know about HDF files (previously only NetCDF files were used); easy to rectify
-\item Heatmap plots somehow fail to gather the statistics of the data. Apparently it is running but very slowly (c. 12 minutes).
-\item After stats finally complete, data is useless because we don't have fill value information, and apparently something different from NaN is used.
-\item Date format not recognised. Time unit is "seconds since 1990-01-01T00:00:00", somehow that is not correctly parsed.
-\item The dimensions "Latitude" and "Longitude" are not correctly recognised, because the map-overlay option is not shown.
+\item File selection filter did not know about HDF files (previously only NetCDF files were used); \textbf{Result: fixed}
+\item Heatmap plots somehow fail to gather the statistics of the data. \textbf{Result: It is just running very slowly (c. 12 minutes).}
+\item After stats finally complete, data is useless because we don't have fill value information, and apparently something different from NaN is used. \textbf{Result: Converted file to use NaNs}
+\item Date format not recognised. Time unit is "seconds since 1990-01-01T00:00:00", somehow that is not correctly parsed. \textbf{Result:  fixed}
+\item The dimensions "Latitude" and "Longitude" are not correctly recognised, because the map-overlay option is not shown. \textbf{Result: fixed}
 \end{itemize}
 %
 We might:
 %
 \begin{itemize}
-\item look into updating the NetCDF library and drop Java 6 support. New artifact is called \Verb!netcdf4! and latest version is 4.6.6. This might improve performance.
-\item introduce a simple table few, so one can quickly browse the data numerically.
+\item look into updating the NetCDF library and drop Java 6 support. New artifact is called \Verb!netcdf4! and latest version is 4.6.6. This might improve performance. \textbf{Result: no speed improvement}
+\item introduce a simple table view, so one can quickly browse the data numerically.
 \item create a preference item to \emph{disable} automatic removal of cache upon application quit.
 \item we also need to be able to adjust the cache size, because the 1.7 GB files produces already a 230 KB stats cache, therefore we will easily transcend the default cache size of 1 MB.
 \end{itemize}
-
-After further inspection, fill values are correctly stored and found as -1e-10. Strangely stats show a max of 2.4e22 and a mean of 5.1e14. For example, for dry temperature those values appear in time index 90 and altitude indices 5 to 8. Here a "spike" of 4.49e23 in altitude index 5 declines towards index 8, and at index 9 the data is in the normal range again. We thus need to first preprocess that file and replace out-of-range values with the defined fill value.
+%
+After further inspection, fill values are correctly stored and found as -1e-10. Strangely stats show a max of 2.4e22 and a mean of 5.1e14. For example, for dry temperature those values appear in time index 90 and altitude indices 5 to 8. Here a "spike" of 4.49e23 in altitude index 5 declines towards index 8, and at index 9 the data is in the normal range again. We thus need to first preprocess that file and replace out-of-range values with the defined fill value. \textbf{Result: fixed by converting data.}
 
 \todo{continue here}
 
