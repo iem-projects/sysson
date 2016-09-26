@@ -27,6 +27,7 @@ import de.sciss.equal
 import de.sciss.icons.raphael
 import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
+import de.sciss.lucre.matrix.gui.DimensionIndex
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Disposable, Sys}
@@ -61,13 +62,13 @@ object PlotChartImpl {
 
   private final val DEBUG = false
 
-  private final class PlotData(val hName: String, val hData: Array[Float],
-                               val vName: String, val vData: Array[Float],
-                               val mName: String, val mData: Array[Array[Float]])
+  private final class PlotData(val hName: String, val mUnits: String, val hData: Array[Float],
+                               val vName: String, val hUnits: String, val vData: Array[Float],
+                               val mName: String, val vUnits: String, val mData: Array[Array[Float]])
 
-  private final class Reader(mName: String, mReader: Matrix.Reader,
-                             hName: String, hReader: Matrix.Reader,
-                             vName: String, vReader: Matrix.Reader)
+  private final class Reader(mName: String, mUnits: String, mReader: Matrix.Reader,
+                             hName: String, hUnits: String, hReader: Matrix.Reader,
+                             vName: String, vUnits: String, vReader: Matrix.Reader)
     extends ProcessorImpl[PlotData, Reader] {
 
     private def readDim(r: Matrix.Reader): Array[Float] = {
@@ -89,7 +90,9 @@ object PlotChartImpl {
       mReader.read(mData, 0, mSz)
       checkAborted()
 
-      new PlotData(hName = hName, hData = hData, vName = vName, vData = vData, mName = mName, mData = mData)
+      new PlotData(hName = hName, hUnits = hUnits, hData = hData,
+                   vName = vName, vUnits = vUnits, vData = vData,
+                   mName = mName, mUnits = mUnits, mData = mData)
     }
   }
 
@@ -102,7 +105,7 @@ object PlotChartImpl {
     private def checkShape1D(shape: Vec[Int], hIdx: Int, vIdx: Int): Boolean =
       shape.zipWithIndex.forall { case (n, i) => n == 1 || i == hIdx || i == vIdx }
 
-    private val readerRef = Ref(new Reader(null, null, null, null, null, null))
+    private val readerRef = Ref(new Reader(null, null, null, null, null, null, null, null, null))
 
 //    private def updateData()(implicit tx: S#Tx): Unit = updateData(plotH())
 
@@ -121,13 +124,22 @@ object PlotChartImpl {
       if (DEBUG) println(s"updateData. hIdx = $hIdx, vIdx = $vIdx, ok? $shapeOk")
 
       if (hIdx >= 0 && vIdx >= 0 && shapeOk) {
+//        println(s"h-unit: ${dims(hIdx).units}")
+//        println(s"v-unit: ${dims(vIdx).units}")
+
         val hKey    = m.getDimensionKey(hIdx, useChannels = false)
         val vKey    = m.getDimensionKey(vIdx, useChannels = false)
         val hReader = hKey.reader[S]()
         val vReader = vKey.reader[S]()
         val mName   = m.name  // or plot-obj attr name?
         val mReader = m.reader(streamDim = hIdx)  // rows = channels, columns = frames
-        val proc    = new Reader(mName = mName, mReader = mReader, hName = hName, hReader = hReader, vName = vName, vReader = vReader)
+        val hDim    = dims(hIdx)
+        val vDim    = dims(vIdx)
+        val mUnits  = m.units
+        val hUnits  = hDim.units
+        val vUnits  = vDim.units
+        val proc    = new Reader(mName = mName, mUnits = mUnits, mReader = mReader,
+          hName = hName, hUnits = hUnits, hReader = hReader, vName = vName, vUnits = vUnits, vReader = vReader)
         val oldProc = readerRef.swap(proc)(tx.peer)
         tx.afterCommit {
           oldProc.abort()
@@ -165,7 +177,7 @@ object PlotChartImpl {
         var j = 0
         while (j < d1.length) {
           val f = d1(j)
-          if (java.lang.Float.isInfinite(f)) sys.error("Unbounded value: " + f)
+          if (java.lang.Float.isInfinite(f)) sys.error(s"Unbounded value: $f")
 
           val isNaN = if (fillIsNaN) f.isNaN else f == fill
           if (!isNaN) {
@@ -226,7 +238,7 @@ object PlotChartImpl {
       if (xChanged) {
         _lastXName  = xName
         _lastXVals  = xVals
-        val xAxis   = createAxis(xName, xVals)
+        val xAxis   = createAxis(xName, data.hUnits, xVals)
         _plot.setDomainAxis(xAxis)
       }
       val yName     = data.vName
@@ -235,7 +247,7 @@ object PlotChartImpl {
       if (yChanged) {
         _lastYName  = yName
         _lastYVals  = yVals
-        val yAxis   = createAxis(yName, yVals)
+        val yAxis   = createAxis(yName, data.vUnits, yVals)
         _plot.setRangeAxis(yAxis)
       }
 
@@ -509,10 +521,25 @@ object PlotChartImpl {
         }
     }
 
-    private def createAxis(name: String, data: Array[Float]): NumberAxis = {
+    private def createAxis(name: String, units: String, data: Array[Float]): NumberAxis = {
+      import DimensionIndex.{mkUnitsString, shouldUseUnitsString, unitsStringFormatter}
       val nameC   = name.capitalize
-      val labels  = data.map(_.toString)
-      val res     = new SymbolAxis(nameC, labels)
+      val lbUnits = shouldUseUnitsString(units)
+      val nameU   = if (lbUnits) nameC else s"$nameC [${mkUnitsString(units)}]"
+      val labels  = if (lbUnits) {
+        val fmt = unitsStringFormatter(units)
+        data.map(fmt(_))
+      } else {
+        data.map(_.toString)
+      }
+      val res = new SymbolAxis(nameU, labels)
+      if (lbUnits) {
+        // they might be long;
+        // a 45 degree angle would be nicer, but requires
+        // overring refreshTicksHorizontal/Vertical, cf. http://stackoverflow.com/questions/7071057
+        res.setVerticalTickLabels(true)
+        // res.setLabelAngle(math.Pi/4)
+      }
       res.setStandardTickUnits(NumberAxis.createIntegerTickUnits())
       res.setLowerMargin(0.0)
       res.setUpperMargin(0.0)
