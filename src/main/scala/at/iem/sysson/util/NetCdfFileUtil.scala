@@ -17,6 +17,7 @@ package util
 
 import de.sciss.equal
 import de.sciss.file._
+import de.sciss.kollflitz
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 import ucar.nc2.constants.CDM
@@ -25,7 +26,7 @@ import ucar.{ma2, nc2}
 import scala.collection.JavaConverters._
 import scala.collection.breakOut
 import scala.collection.immutable.{IndexedSeq => Vec}
-import scala.concurrent.{ExecutionContext, Await, blocking}
+import scala.concurrent.{Await, ExecutionContext, blocking}
 import scala.concurrent.duration.Duration
 import scala.language.implicitConversions
 
@@ -360,10 +361,10 @@ object NetCdfFileUtil {
     val inVar         = in.variableMap(varName)
     val inDims        = inVar.dimensions
     import equal.Implicits._
-    val timeIdx       = inDims  .indexWhere(_.name === timeName)
+    val dimTimeIdx    = inDims  .indexWhere(_.name === timeName)
     // val otherDims     = inDims  .patch(timeIdx, Nil, 1)
     // val otherShape    = inVar.shape.patch(timeIdx, Nil, 1)
-    val numTime       = inDims(timeIdx).size
+    val numTime       = inDims(dimTimeIdx).size
     val otherSize     = (inVar.size / numTime).toInt
     val windowYearsH  = windowYears/2
     val windowMonthsH = windowYearsH * 12
@@ -386,23 +387,46 @@ object NetCdfFileUtil {
       val timeRange = timeLo until timeHi by 12
 
       if (normData(month) == null || normData(month).timeRange != timeRange) {
-        if (useMedian) ???
-        val count = new Array[Int   ](otherSize)
-        val mean  = new Array[Double](otherSize)
-        timeRange.foreach { time =>
-          val sel       = inVar in timeName select time
-          val arrMonth  = sel.readSafe().float1D
-          arrMonth.zipWithIndex.foreach { case (v, i) =>
-            if (!isNaN(v)) {
-              mean (i) += v
-              count(i) += 1
+        val norm = new Array[Double](otherSize)
+
+        if (useMedian) {
+          def loop(sec: VariableSection, rem: Vec[nc2.Dimension], idx: Int): Int = rem match {
+            case dim +: tail =>
+              (idx /: (0 until dim.size)) { case (idx1, j) =>
+                val idx2 = loop(sec.in(dim.name).select(j), tail, idx1)
+                idx2
+              }
+            case _ =>
+              val sel = sec.in(timeName).select(timeRange)
+              val arr = sel.readSafe().float1D
+              assert(arr.size == timeRange.size)
+              import kollflitz.Ops._
+              val m = arr.sortedT.median
+              norm(idx) = m
+              idx + 1
+          }
+
+          val otherDims = inDims.patch(dimTimeIdx, Nil, 1)
+          loop(inVar.selectAll, otherDims, idx = 0)
+
+        } else {
+          val count = new Array[Int](otherSize)
+          timeRange.foreach { time =>
+            val sel       = inVar in timeName select time
+            val arrMonth  = sel.readSafe().float1D
+            arrMonth.zipWithIndex.foreach { case (v, i) =>
+              if (!isNaN(v)) {
+                norm (i) += v
+                count(i) += 1
+              }
             }
           }
+          for (i <- 0 until otherSize) {
+            if (count(i) > 0) norm(i) /= count(i)
+          }
         }
-        for (i <- 0 until otherSize) {
-          if (count(i) > 0) mean(i) /= count(i)
-        }
-        normData(month) = new NormData(timeRange, mean)
+
+        normData(month) = new NormData(timeRange, norm)
       }
 
       assert(data.size == otherSize)
@@ -442,7 +466,7 @@ object NetCdfFileUtil {
       val sec     = (inVar in timeName) select time
       val dataIn  = sec.readSafe()
       val origin  = new Array[Int](inVar.rank)
-      origin(timeIdx) = time
+      origin(dimTimeIdx) = time
       val dataOut = calcNorm(data = dataIn, timeOff = time)
       writer.write(outVar, origin, dataOut)
 

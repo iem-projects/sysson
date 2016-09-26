@@ -22,11 +22,11 @@ import at.iem.sysson.util.NetCdfFileUtil
 import de.sciss.desktop.{FileDialog, OptionPane, Window}
 import de.sciss.equal
 import de.sciss.file._
-import de.sciss.swingplus.Spinner
+import de.sciss.swingplus.{ComboBox, Spinner}
 import ucar.nc2
 
 import scala.concurrent.ExecutionContext
-import scala.swing.{Action, BorderPanel, FlowPanel, Label}
+import scala.swing.{Action, BorderPanel, GridPanel, Label, Swing}
 
 final class ActionCalculateAnomalies(windowOpt: Option[Window], selectedVariable: => Option[nc2.Variable])
   extends Action("Calculate Anomalies...") {
@@ -42,7 +42,14 @@ final class ActionCalculateAnomalies(windowOpt: Option[Window], selectedVariable
       } { timeName =>
         val mYears    = new SpinnerNumberModel(30, 1, 10000, 1)
         val ggYears   = new Spinner(mYears)
-        val pYears    = new FlowPanel(new Label("Average Years:"), ggYears)
+        val ggAvg     = new ComboBox(Seq("Mean", "Median"))
+        val pYears    = new GridPanel(2, 2) {
+          contents += new Label("Average Years:")
+          contents += ggYears
+          contents += new Label("Averaging Mode:")
+          contents += ggAvg
+          border    = Swing.EmptyBorder(8, 0, 8, 0)
+        }
         val lbInfo    = new Label(
           """<html><body>This process assumes that the time
             |dimension of the selected variable has a
@@ -63,7 +70,7 @@ final class ActionCalculateAnomalies(windowOpt: Option[Window], selectedVariable
         if (res === OptionPane.Result.Ok) {
           withSaveFile("Anomalies Output File") { out =>
             val proc = NetCdfFileUtil.anomalies(in = vr.file, out = out, varName = vr.name, timeName = timeName,
-              windowYears = mYears.getNumber.intValue())
+              windowYears = mYears.getNumber.intValue(), useMedian = ggAvg.selection.item === "Median")
             import ExecutionContext.Implicits.global
             proc.monitor(printResult = false)
             proc.start()
