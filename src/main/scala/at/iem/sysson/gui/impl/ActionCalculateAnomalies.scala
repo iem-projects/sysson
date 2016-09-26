@@ -46,8 +46,7 @@ final class ActionCalculateAnomalies(windowOpt: Option[Window], selectedVariable
         val lbInfo    = new Label(
           """<html><body>This process assumes that the time
             |dimension of the selected variable has a
-            |<b>monthly resolution (12 values per year)</b>
-            |with the first index corresponding to January.
+            |<b>monthly resolution (12 values per year)</b>.
             |
             |<b>A sliding window</b> of the size specified below
             |is used to to calculate the average values

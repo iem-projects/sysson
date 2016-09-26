@@ -330,11 +330,11 @@ object NetCdfFileUtil {
     * @param windowYears the number of years to average across
     */
   def anomalies(in: nc2.NetcdfFile, out: File, varName: String, timeName: String = "time",
-                windowYears: Int = 30): Processor[Unit] with Processor.Prepared =
+                windowYears: Int = 30, useMedian: Boolean = false): Processor[Unit] with Processor.Prepared =
     new ProcessorImpl[Unit, Processor[Unit]] with Processor[Unit] {
       protected def body(): Unit = blocking {
         anomaliesBody(this, in = in, out = out, varName = varName, timeName = timeName,
-          windowYears = windowYears)
+          windowYears = windowYears, useMedian = useMedian)
       }
 
       override def toString = s"$varName-anomalies"
@@ -354,7 +354,7 @@ object NetCdfFileUtil {
   }
 
   private def anomaliesBody(self: ProcessorImpl[Unit, Processor[Unit]], in: nc2.NetcdfFile, out: File, varName: String,
-                            timeName: String, windowYears: Int): Unit = {
+                            timeName: String, windowYears: Int, useMedian: Boolean): Unit = {
     import Implicits.{checkNaNFun => _, _}  // must shadow on Scala 2.10
 
     val inVar         = in.variableMap(varName)
@@ -370,33 +370,47 @@ object NetCdfFileUtil {
 
     val isNaN = checkNaNFun(inVar.fillValue.toFloat)
 
+    class NormData(val timeRange: Range, val norm: Array[Double])
+
+    val normData = new Array[NormData](12)
+
     def calcNorm(data: ma2.Array, timeOff: Int): ma2.Array = {
-      val month   = timeOff % 12
-      val timeLo  = math.max(      0, timeOff - windowMonthsH + month)
-      val timeHi  = math.min(numTime, timeOff + windowMonthsH + month)
+      val month     = timeOff % 12
+      val timeLo0   = timeOff - windowMonthsH
+      val timeLo    = if (timeLo0 >= 0) timeLo0 else month
+      val timeHi0   = timeOff + windowMonthsH
+      val timeHi    = if (timeHi0 < numTime) timeHi0 else {
+        val tmp = (numTime - numTime % 12) + month
+        if (tmp < numTime) tmp + 12 else tmp
+      }
+      val timeRange = timeLo until timeHi by 12
 
-      val mean  = new Array[Double](otherSize)
-      val count = new Array[Int   ](otherSize)
-
-      (timeLo until timeHi by 12).foreach { time =>
-        val sel       = inVar in timeName select time
-        val arrMonth  = sel.readSafe().float1D
-        arrMonth.zipWithIndex.foreach { case (v, i) =>
-          if (!isNaN(v)) {
-            mean(i) += v
-            count(i) += 1
+      if (normData(month) == null || normData(month).timeRange != timeRange) {
+        if (useMedian) ???
+        val count = new Array[Int   ](otherSize)
+        val mean  = new Array[Double](otherSize)
+        timeRange.foreach { time =>
+          val sel       = inVar in timeName select time
+          val arrMonth  = sel.readSafe().float1D
+          arrMonth.zipWithIndex.foreach { case (v, i) =>
+            if (!isNaN(v)) {
+              mean (i) += v
+              count(i) += 1
+            }
           }
         }
-      }
-      for (i <- 0 until otherSize) {
-        if (count(i) > 0) mean(i) /= count(i)
+        for (i <- 0 until otherSize) {
+          if (count(i) > 0) mean(i) /= count(i)
+        }
+        normData(month) = new NormData(timeRange, mean)
       }
 
       assert(data.size == otherSize)
       val dataDif = data.copy()
 
+      val norm = normData(month).norm
       for (i <- 0 until otherSize) {
-        dataDif.setFloat(i, dataDif.getFloat(i) - mean(i).toFloat)
+        dataDif.setFloat(i, dataDif.getFloat(i) - norm(i).toFloat)
       }
 
       dataDif
