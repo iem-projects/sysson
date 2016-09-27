@@ -24,6 +24,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[lf]{venturis} %% lf option gives lining figures as default; 
 \usepackage[T1]{fontenc}
+\usepackage{beramono}
 \usepackage{csquotes}
 \usepackage[UKenglish,german]{babel}
 
@@ -104,6 +105,32 @@
 \newcommand{\artefacts}[0]{\textsc{Artefacts:}}
 \newcommand{\assessment}[0]{\textsc{Assessment:}}
 
+\usepackage{listings}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{scala}{
+  frame=tb,
+  language=scala,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=true,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  frame=none,
+  keepspaces=true,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+}
+
 \begin{document}
 % \begin{titlepage}
 \maketitle
@@ -160,7 +187,7 @@ After further inspection, fill values are correctly stored and found as -1e-10. 
 \end{subfigure}
 \begin{subfigure}[b]{1.0\textwidth}%
 \centering
-\includegraphics[scale=0.45,trim=2mm 0 1mm 1mm]{figures/ta_anomalies_median.jpg}
+\includegraphics[scale=0.45,trim=2mm 0 1mm -4mm]{figures/ta_anomalies_median.jpg}
 \caption{Using monthly median}
 \label{fig:anomaly-mean}
 \end{subfigure}
@@ -169,6 +196,93 @@ After further inspection, fill values are correctly stored and found as -1e-10. 
 \end{figure}
 
 Plots: 105 degrees west, 2.5 degrees south.
+
+First model - time is mapped to time. We use a longitude and latitude index, and a slice of the altitudes. Expected periodicity is 28 to 29 months.
+
+Questions:
+%
+\begin{itemize}
+\item How do we ``connect trajectories'' and avoid steps (in time, because the altitude has a fine resolution)?
+\item How do we distinguish too-cold and too-hot? We could in any case project them onto left and right channel, respectively.
+\item Altitude resolution is high, we select roughly 200 bands.
+\end{itemize}
+%
+
+\begin{figure}
+\begin{lstlisting}[style=scala]
+val vr     = Var("anom")
+val dTime  = Dim(vr, "time")
+val dAlt   = Dim(vr, "altitude")
+
+val speed  = UserValue("speed", 1).kr
+val tp     = dTime.play(speed)
+val vp     = vr.play(tp, interp = 2)
+
+val hot    = vp > 1
+val amp    = hot * (vp.min(8) / 8)
+val alt    = vp.axis(dAlt).values
+val altMin = Reduce.min(alt)
+val altMax = Reduce.max(alt)
+
+val freq   = alt.linexp(altMin, altMax, 200, 4000)
+val sin    = Mix.mono(SinOsc.ar(freq) * amp) / dAlt.size
+
+output := Seq(DC.ar(0), sin)
+\end{lstlisting}
+\caption{First sketch; filtering only high temperatures,
+mapping them each to an oscillator.}
+\label{fig:sonif-1-1}
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[style=scala]
+val vr    = Var("anom")
+val dTime = Dim(vr, "time")
+val dAlt  = Dim(vr, "altitude")
+
+val speed = UserValue("speed", 1).kr
+val tp    = dTime.play(speed)
+val vp    = vr.play(tp, interp = 1)
+
+val max   = ArrayMax.ar(vp)
+val freq0 = max.index.linexp(0, dAlt.size - 1, 200, 4000)
+val freq  = Ramp.ar(freq0, 1.0/speed)
+val amp0  = max.value.clip(0, 8) / 8
+val amp   = Ramp.ar(amp0, 1.0/speed)
+val sin   = SinOsc.ar(freq) * amp
+
+output := Seq(DC.ar(0), sin)
+\end{lstlisting}
+\caption{Second sketch; reducing to one oscillator at maximum bin.}
+\label{fig:sonif-1-2}
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[style=scala]
+...
+val max       = ArrayMax.ar(vp)
+val maxIdx    = max.index
+val numAlt    = dAlt.size
+val maskWidth = numAlt / 4
+val mask      = vp * ChannelIndices(vp).absdif(maxIdx) > maskWidth
+val max2      = ArrayMax.ar(mask)
+val maxIdx2   = max2.index
+val freq0     = maxIdx.linexp(0, numAlt - 1, 200, 4000)
+val freq      = Ramp.ar(freq0, 1.0/speed)
+val amp0      = max.value.clip(0, 8) / 8
+val amp       = Ramp.ar(amp0, 1.0/speed)
+val sin       = SinOsc.ar(freq) * amp
+
+val freq02    = maxIdx2.linexp(0, numAlt - 1, 200, 4000)
+val freq2     = Ramp.ar(freq02, 1.0/speed)
+val amp02     = max2.value.clip(0, 8) / 8
+val amp2      = Ramp.ar(amp02, 1.0/speed)
+val sin2      = SinOsc.ar(freq2) * amp2
+...
+\end{lstlisting}
+\caption{Using masking to find multiple ``maxima''}
+\label{fig:sonif-multi-max}
+\end{figure}
 
 %\begin{figure}[h]
 %\centering
