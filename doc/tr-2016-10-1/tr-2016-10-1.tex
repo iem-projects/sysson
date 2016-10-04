@@ -111,6 +111,25 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
+\lstdefinestyle{plain}{
+  frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=true,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  frame=none,
+  keepspaces=true,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+}
+
 \lstdefinestyle{scala}{
   frame=tb,
   language=scala,
@@ -189,7 +208,7 @@ After further inspection, fill values are correctly stored and found as -1e-10. 
 \centering
 \includegraphics[scale=0.45,trim=2mm 0 1mm -4mm]{figures/ta_anomalies_median.jpg}
 \caption{Using monthly median}
-\label{fig:anomaly-mean}
+\label{fig:anomaly-median}
 \end{subfigure}
 \caption{Temperature anomalies calculated with different norms.}
 \label{fig:anomaly-calc}
@@ -282,6 +301,98 @@ val sin2      = SinOsc.ar(freq2) * amp2
 \end{lstlisting}
 \caption{Using masking to find multiple ``maxima''}
 \label{fig:sonif-multi-max}
+\end{figure}
+
+\begin{figure}%
+% \thispagestyle{empty}%
+\begin{lstlisting}[style=scala]
+val numTraj     = 2	// number of trajectories followed
+val numVoices   = numTraj * 2
+val stateIn     = LocalIn.kr(Seq.fill(numVoices * 2)(0))
+var voiceFreq   = Vector.tabulate(numVoices)(i => stateIn \ i): GE
+var voiceOnOff  = Vector.tabulate(numVoices)(i => stateIn \ (i + numVoices)): GE
+val voiceNos    = 0 until numVoices: GE
+Trace(voiceFreq , "vc-freq-in")
+Trace(voiceOnOff, "vc-on  -in")
+val freqIn      = "freq".kr(Vector.fill(numTraj)(0))
+val ampIn       = "amp" .kr(Vector.fill(numTraj)(0))
+Trace(freqIn, "in-freq")
+Trace(ampIn , "in-amp")
+val maxDf       = "max-df".kr(100f)
+var activated   = Vector.fill(numVoices)(0: GE): GE
+
+val noFounds = (0 until numTraj).map { tIdx =>
+  val fIn       = freqIn \ tIdx
+  val aIn       = ampIn  \ tIdx
+  val isOn      = aIn > 0
+  val freqMatch = (maxDf - (voiceFreq absdif fIn)).max(0)
+  val bothOn    = voiceOnOff & isOn
+  val bestIn    = 0 +: (freqMatch * (bothOn & !activated))
+  val best      = ArrayMax.kr(bestIn)
+  val bestIdx   = best.index - 1
+  val bestMask  = voiceNos sig_== bestIdx
+  activated    |= bestMask
+  voiceFreq     = voiceFreq * !bestMask + fIn * bestMask
+  Trace(bestIdx, s"f-match $tIdx")
+  bestIdx sig_== -1
+}
+
+for (tIdx <- 0 until numTraj) {
+  val fIn   = freqIn \ tIdx
+  val aIn   = ampIn  \ tIdx
+  val isOn  = aIn > 0
+  val notFound  = noFounds(tIdx)
+  val startTraj = notFound & isOn
+  val free      = ArrayMax.kr(0 +: (startTraj & !activated))
+  val freeIdx   = free.index - 1
+  val freeMask  = voiceNos sig_== freeIdx
+  activated    |= freeMask
+  voiceFreq     = voiceFreq * !freeMask + fIn * freeMask
+  Trace(freeIdx, s"f-free  $tIdx")
+}
+
+voiceOnOff = activated  // release unused voices
+Trace(voiceFreq , "vc-freq-out")
+Trace(voiceOnOff, "vc-on  -out")
+val stateOut = Flatten(voiceFreq ++ voiceOnOff)
+LocalOut.kr(stateOut)
+\end{lstlisting}%
+\caption{First sketch for voice management}%
+\label{fig:source-voice-traces}%
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[style=plain]
+---------------------------
+control-rate data: 8 frames
+---------------------------
+f-free  0      : -1.0   -1.0   -1.0   -1.0    0.0   -1.0    0.0   -1.0    
+f-free  1      : -1.0   -1.0   -1.0   -1.0   -1.0   -1.0   -1.0   -1.0    
+f-match 0      : -1.0   -1.0   -1.0   -1.0   -1.0    0.0   -1.0    0.0    
+f-match 1      : -1.0   -1.0   -1.0   -1.0   -1.0   -1.0   -1.0   -1.0    
+in-amp      [0]:  0.0    0.0    0.0    0.0    1.0    1.0    1.0    1.0    
+in-amp      [1]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+in-freq     [0]:  0.0    0.0  300.0  300.0  300.0  300.0  500.0  500.0    
+in-freq     [1]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-freq-in  [0]:  0.0    0.0    0.0    0.0    0.0  300.0  300.0  500.0    
+vc-freq-in  [1]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-freq-in  [2]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-freq-in  [3]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-freq-out [0]:  0.0    0.0    0.0    0.0  300.0  300.0  500.0  500.0    
+vc-freq-out [1]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-freq-out [2]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-freq-out [3]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-on  -in  [0]:  0.0    0.0    0.0    0.0    0.0    1.0    1.0    1.0    
+vc-on  -in  [1]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-on  -in  [2]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-on  -in  [3]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-on  -out [0]:  0.0    0.0    0.0    0.0    1.0    1.0    1.0    1.0    
+vc-on  -out [1]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-on  -out [2]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+vc-on  -out [3]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    
+\end{lstlisting}%
+\caption{Trace debug dump for eight control blocks, using the given sequence of values of \emph{in-freq} and \emph{in-amp} for the two trajectories. At the \textbf{fifth} step, the first trajectory's amplitude is set to greater than zero, resulting in an allocation of the first voice. In the \textbf{sixth} step, the frequency matching finds correspondence between first trajectory and first voice, thus preserving the first voice. In the \textbf{seventh}, the first trajectory's frequency jumps from 300\,Hz to 500\,Hz. In the first iteration, no matching trajectory for the first voice is found, making it available again, and thus the \emph{f-free} indicates that it is picked again for the ``new'' trajectory. What we will eventually need is a \emph{release} phase for that voice, before it can be allocated again.}%
+\label{fig:trace-dump-voices}%
 \end{figure}
 
 %\begin{figure}[h]
