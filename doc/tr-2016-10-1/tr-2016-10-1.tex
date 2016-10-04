@@ -194,7 +194,7 @@ We might:
 %
 After further inspection, fill values are correctly stored and found as -1e-10. Strangely stats show a max of 2.4e22 and a mean of 5.1e14. For example, for dry temperature those values appear in time index 90 and altitude indices 5 to 8. Here a "spike" of 4.49e23 in altitude index 5 declines towards index 8, and at index 9 the data is in the normal range again. We thus need to first preprocess that file and replace out-of-range values with the defined fill value. \textbf{Result: fixed by converting data.}
 
-\todo{continue here}
+Intuition was, that because of possibly more slight glitches in the data, using the median instead of the mean for the calculation of anomalies might be better or more robust. We added this option to the anomaly utility of \software{SysSon}. \figref{fig:anomaly-calc} shows the difference between these two variants. It can be observed that using the mean monthly value as a basis results in a smoother plot, whereas using the median gives more pronounced deviations. Overall, the differences are small, though, and probably will not lead to significantly different sounds.
 
 \begin{figure}
 % \centering
@@ -210,13 +210,15 @@ After further inspection, fill values are correctly stored and found as -1e-10. 
 \caption{Using monthly median}
 \label{fig:anomaly-median}
 \end{subfigure}
-\caption{Temperature anomalies calculated with different norms.}
+\caption{Temperature anomalies calculated with different norms. Indices where taken at longitude 105 degrees west, and latitude 2.5 degrees south. The expected periodicity of 28 to 29 months can be clearly seen.}
 \label{fig:anomaly-calc}
 \end{figure}
 
-Plots: 105 degrees west, 2.5 degrees south.
+\subsection{First Sound Models}
 
-First model - time is mapped to time. We use a longitude and latitude index, and a slice of the altitudes. Expected periodicity is 28 to 29 months.
+In the first model, time in the dataset is simply mapped to time in the sonification. We use a longitude and latitude index, and a slice of the altitudes, similar to the selection made in \figref{fig:anomaly-calc}.
+
+\todo{continue here}
 
 Questions:
 %
@@ -302,6 +304,8 @@ val sin2      = SinOsc.ar(freq2) * amp2
 \caption{Using masking to find multiple ``maxima''}
 \label{fig:sonif-multi-max}
 \end{figure}
+
+\subsection{Managing Voices and Trajectories}
 
 \begin{figure}%
 % \thispagestyle{empty}%
@@ -395,12 +399,49 @@ vc-on  -out [3]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
 \label{fig:trace-dump-voices}%
 \end{figure}
 
-%\begin{figure}[h]
-%\centering
-%\includegraphics[scale=0.5]{figures/ta_anomalies_median.jpg}
-%\caption{Temperature anomalies calculated based on monthly median.}
-%\label{fig:anomaly-mean}
-%\end{figure}
+\subsubsection*{Releasing Voices}
+
+We need two signals, the original \Verb!voiceOnOff!, and one that delays the release (transition from one to zero). Options:
+%
+\begin{itemize}
+\item \Verb!Slew! (with infinite rising and limited falling slope)
+\item \Verb!EnvGen! -- perhaps costly, but certainly the most flexible and general
+\item \Verb!TDelay! combined with \Verb!ToggleFF! or \Verb!SetResetFF!
+\item Setting \Verb!voiceOnOff! to the release duration (block count) and decrementing in the feedback loop one by one.
+\end{itemize}
+%
+We will try and implement the \Verb!EnvGen! version. The problem here is that we can only calculate the correct \Verb!gate! parameter after the voice-matching loop, if we don't want to delay the attack. But we need to know the release state already during that loop, so we need another feedback mechanism, unless we decouple envelope generator and ``held-gate''. Detaching them sounds like a smart idea, because we can abstract over the particular envelope generation, and we have no issues with control-vs-audio rate. Then the last idea, counting down in the feedback loop, is perhaps the most straight forward approach to generate a correct dual gate/blocked signal, where 
+%
+\begin{verbatim}
+def gate = voiceOnOff sig_== releaseBlocks
+\end{verbatim}
+%
+On the other hand, an additional \Verb!LocalIn/Out.ar! does not incur much costs, and we can then check:
+%
+\begin{verbatim}
+val envFB = LocalIn.ar(...)
+val busy  = A2K.kr(envFB) > 0
+\end{verbatim}
+%
+This frees us from much counter arithmetic. It incurs the minimal costs of one extra busy cycle at the end when the envelope has actually already declined to zero.
+
+\textbf{Result:} We simply re-used the existing logical control-rate signal \Verb!voiceOnOff! as shown in \figref{fig:voices-release}.
+
+\begin{figure}
+\begin{lstlisting}[style=scala]
+val stateInKr  = LocalIn.kr(Seq.fill(numVoices * 2)(0))
+var voiceOnOff = ... // first channels in stateInKr
+
+val voiceEnv   = Env.asr(attack = atk, release = rls)
+val voiceEG    = EnvGen.ar(voiceEnv, gate = activated)
+val voiceEGOn  = A2K.kr(voiceEG) sig_!= 0
+voiceOnOff     = activated | voiceEGOn
+val stateOutKr = ... // voiceOnOff plus other data
+LocalOut.kr(stateOutKr)
+\end{lstlisting}
+\caption{Mechanism for releasing voices. The only other additional modification is the check for free voices which must now satisfy \texttt{def voiceAvail = !(activated | voiceOnOff)}.}
+\label{fig:voices-release}
+\end{figure}
 
 % \printbibliography
 
