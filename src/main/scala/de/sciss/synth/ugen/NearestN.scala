@@ -15,14 +15,15 @@
 package de.sciss.synth
 package ugen
 
-import collection.immutable.{IndexedSeq => Vec}
+import de.sciss.synth.UGenSource._
 
 object NearestN {
   def kr(buf: GE, in: GE, gate: GE = 1f, num: Int = 1): NearestN = apply(control, buf, in, gate, num)
 }
 final case class NearestN(rate: Rate, buf: GE, in: GE, gate: GE, num: Int) extends UGenSource.MultiOut {
-  protected def makeUGens: UGenInLike = unwrap(Vec(buf.expand, gate.expand, num: UGenIn).++(in.expand.outputs))
+  protected def makeUGens: UGenInLike =
+    unwrap(this, Vector(buf.expand, gate.expand, num: UGenIn).++(in.expand.outputs))
 
-  protected def makeUGen(args: Vec[UGenIn]): UGenInLike =
+  private[synth] def makeUGen(args: Vec[UGenIn]): UGenInLike =
     UGen.MultiOut(name, rate, Vec.fill(num * 3)(rate), args)
 }

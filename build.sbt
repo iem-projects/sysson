@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.10.0-SNAPSHOT"
+lazy val projectVersion = "1.10.0"
 
 lazy val commonSettings = Seq(
   name          := baseName,
@@ -31,14 +31,14 @@ lazy val scalaMainVersion           = "2.11.8"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.5.0"
-lazy val soundProcessesVersion      = "3.7.1-SNAPSHOT"
-lazy val lucreMatrixVersion         = "1.0.0-SNAPSHOT"
+lazy val melliteVersion             = "2.6.0"
+lazy val soundProcessesVersion      = "3.8.0"
+lazy val lucreMatrixVersion         = "1.0.0"
 lazy val lucreSwingVersion          = "1.4.0"
 lazy val lucreVersion               = "3.3.1"
-lazy val scalaColliderVersion       = "1.20.1"
-lazy val scalaColliderSwingVersion  = "1.30.0"
-lazy val ugensVersion               = "1.15.3"
+lazy val scalaColliderVersion       = "1.21.0"
+lazy val scalaColliderSwingVersion  = "1.31.0"
+lazy val ugensVersion               = "1.16.0"
 lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"
@@ -97,6 +97,7 @@ lazy val assemblySettings = Seq(
   //  case "META-INF/MANIFEST.MF" => MergeStrategy.last
     case PathList("javax", "xml", xs @ _*)   => MergeStrategy.first  // conflict xml-apis vs. stax-api
     case PathList("org", "xmlpull", xs @ _*) => MergeStrategy.first  // from xstream I think
+    case PathList("org", "w3c", "dom", "events", xs @ _*) => MergeStrategy.first // bloody Apache Batik
     case x =>
       val oldStrategy = (assemblyMergeStrategy in assembly).value
       oldStrategy(x)
@@ -119,7 +120,7 @@ lazy val root = Project(id = baseNameL, base = file("."))
       "de.sciss" %% "scalacolliderswing-core"     % scalaColliderSwingVersion,
       "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
       "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
-      "at.iem.sysson" %% "lucrematrix"            % lucreMatrixVersion,         // reactive matrix component and view
+      "at.iem"   %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
       "de.sciss" %% "lucreswing"                  % lucreSwingVersion,          // reactive widgets
       "de.sciss" %% "lucre-core"                  % lucreVersion,               // object model
       "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files

@@ -248,7 +248,7 @@ object Session130326 extends SessionLike {
       val env0  = EnvGen.ar(Env.linen(0.02, dur - 0.04, 0.02), doneAction = freeSelf)
       val env   = env0 // DelayN.ar(env0, ControlDur.ir * 2, ControlDur.ir * 2)
       val pan   = Pan2.ar(sig * AMP * env) // Lag.kr(ToggleFF.kr(DelayN.kr(Impulse.kr(0), ControlDur.ir, ControlDur.ir))))
-      WrapOut(pan, fadeTime = None)
+      WrapOut(pan, fadeTime = -1)
     }
 
     val x = Synth(s)
