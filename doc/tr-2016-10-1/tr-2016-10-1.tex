@@ -150,6 +150,26 @@
   tabsize=3,
 }
 
+\lstdefinestyle{scala-small}{
+  frame=tb,
+  language=scala,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=true,
+  columns=flexible,
+  basicstyle={\tiny\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  frame=none,
+  keepspaces=true,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+}
+
 \begin{document}
 % \begin{titlepage}
 \maketitle
@@ -218,8 +238,6 @@ Intuition was, that because of possibly more slight glitches in the data, using 
 
 In the first model, time in the dataset is simply mapped to time in the sonification. We use a longitude and latitude index, and a slice of the altitudes, similar to the selection made in \figref{fig:anomaly-calc}.
 
-\todo{continue here}
-
 Questions:
 %
 \begin{itemize}
@@ -228,6 +246,8 @@ Questions:
 \item Altitude resolution is high, we select roughly 200 bands.
 \end{itemize}
 %
+
+The code for the first sketch is shown in \figref{fig:sketch-1}. There is a simple threshold \Verb!vp > 1! that selects only the too-hot anomalies. Each altitude where this filter applies is represented by a sine oscillator with a frequency corresponding to the altitude (logarithmically scaled from 200 Hz to 4 kHz across the selected altitudes).
 
 \begin{figure}
 \begin{lstlisting}[style=scala]
@@ -248,12 +268,16 @@ val altMax = Reduce.max(alt)
 val freq   = alt.linexp(altMin, altMax, 200, 4000)
 val sin    = Mix.mono(SinOsc.ar(freq) * amp) / dAlt.size
 
-output := Seq(DC.ar(0), sin)
+output := Pan2.ar(sin)
 \end{lstlisting}
 \caption{First sketch; filtering only high temperatures,
 mapping them each to an oscillator.}
-\label{fig:sonif-1-1}
+\label{fig:sketch-1}
 \end{figure}
+
+The sonic result is a dense texture with a metallic timbre. Not much details can be distinguished, but the overall downward glissando is clearly heard. One can also here some irregularities in the movement.
+
+Looking again at the visual plot, it seems useful to reduce the amount of oscillators to capture only the significant properties, such as following the peak of the temperature profile. Without further offline pre-processing, the third-party UGen \Verb!ArrayMax! is a useful building block for detecting the global maximum in a multi-channel signal. In \figref{fig:sketch-2} this is used to produce the frequency of a single oscillator.
 
 \begin{figure}
 \begin{lstlisting}[style=scala]
@@ -275,8 +299,10 @@ val sin   = SinOsc.ar(freq) * amp
 output := Seq(DC.ar(0), sin)
 \end{lstlisting}
 \caption{Second sketch; reducing to one oscillator at maximum bin.}
-\label{fig:sonif-1-2}
+\label{fig:sketch-2}
 \end{figure}
+
+This works principally fine, however there are time slices where the global maximum jumps randomly between two local maxima. The next refinement thus would be to distinguish multiple trajectories and try to keep track of their respective frequencies such that jumps are avoided. A number of local maxima can be calculated, if \Verb!ArrayMax! is applied multiple times to a recursively filtered signal, in each iteration subtracting the last detected peak. This idea is illustrated in \figref{fig:sonif-multi-max}.
 
 \begin{figure}
 \begin{lstlisting}[style=scala]
@@ -306,6 +332,18 @@ val sin2      = SinOsc.ar(freq2) * amp2
 \end{figure}
 
 \subsection{Managing Voices and Trajectories}
+
+In order to manage multiple voices on the server side within one synth definition, the idea is to maintain a state matrix. Each row in the matrix corresponds to a ``pre-allocated'' voice. In order to allow voices to decay with an envelope when the trajectory ends, we need more voices than trajectories. A first approximation would be to allocate twice as many voices as the maximum number of expected trajectories. With the QBO data, we probably will want to track not more than four trajectories per polarity (e.g. two to four for the too-hot data, and two to four for the too-cold data). The matrix columns then carry the state of each voice:
+%
+\begin{itemize}
+\item Whether it is currently enabled (``on-off'').
+\item The last set frequency or trajectory magnitude
+\item The last set amplitude or trajectory strength
+\end{itemize}
+%
+Without writing custom UGens, SuperCollider provides the UGens \Verb!LocalIn! and \Verb!LocalOut! to ``store'' state in a synthesis process. At the beginning of the graph, the previous state is read via \Verb!LocalIn!, at the end of the graph the updated state is written via \Verb!LocalOut!. This feedback mechanism incurs the costs of one control block latency for updated state data to appear earlier in the graph.
+
+\figref{fig:source-voice-traces} shows the mechanism for tracing trajectories. Each voice here has only two state components, frequency and on-off. A first loop uses \Verb!ArrayMax! to find matches between the raw trajectory input data \Verb!freqIn! and \Verb!ampIn! and the current voice state \Verb!voiceFreq! and \Verb!voiceOnOff!. We can see how ``logic'' programming purely with UGens means to combine comparison signals (\Verb!sig_==! and \Verb$sig_!=$) with logical binary operators such as \Verb!|! (OR) and \Verb!&! (AND). At the end of the first loop, we have ``re-activated'' voices that continue an ongoing trajectory, and we have returned a multi-channel signal \Verb!noFounds! for input data that doesn't match voice data, i.e. data for which the distance in frequency is greater than a given threshold \Verb!maxDf!. A second loop then uses this information and assigns unused voices to these ``new'' trajectories. The special graph element \Verb!Trace! was used for debugging and is described further down.
 
 \begin{figure}%
 % \thispagestyle{empty}%
@@ -364,6 +402,8 @@ LocalOut.kr(stateOut)
 \caption{First sketch for voice management}%
 \label{fig:source-voice-traces}%
 \end{figure}
+
+\todo{continue here}
 
 \begin{figure}
 \begin{lstlisting}[style=plain]
@@ -441,6 +481,186 @@ LocalOut.kr(stateOutKr)
 \end{lstlisting}
 \caption{Mechanism for releasing voices. The only other additional modification is the check for free voices which must now satisfy \texttt{def voiceAvail = !(activated | voiceOnOff)}.}
 \label{fig:voices-release}
+\end{figure}
+
+% \begin{figure}
+\begin{lstlisting}[style=scala-small]
+implicit class MyGEOps(private val in: GE) /* extends AnyVal */ {
+  def +: (head: Constant): GE = Flatten(Seq(head, in))
+  def :+ (last: Constant): GE = Flatten(Seq(in, last))
+  def ++ (that: GE      ): GE = Flatten(Seq(in, that))
+  def \  (r: Range      ): GE = r.map(i => in \ i): GE
+}
+
+// ---- matrix ----
+
+val vr    = Var("anom")
+val dTime = Dim(vr, "time")
+val dAlt  = Dim(vr, "altitude")
+
+val speed = UserValue.kr("speed", 6)
+val tp    = dTime.play(speed)
+val vp    = vr.play(tp, interp = 1 /* 2 */)
+
+// ---- configuration ----
+
+// maximum number of trajectories followed
+val numTraj       = 4
+
+// maximum number of concurrently playing voices
+val numVoices     = numTraj * 2
+
+// maximum jump in altitude (normalized - full range equals one) before trajectory is interrupted
+val maxDf         = UserValue.kr("traj-max-dif [0-1]", 0.25)
+
+// trajectory amplitude envelope attack duration
+val egAtk         = UserValue.kr("traj-atk [s]", 0.2)
+
+// trajectory amplitude envelope release duration
+val egRls         = UserValue.kr("traj-rls [s]", 0.5)
+
+// trajectory frequency and amplitude smear time
+val lagTime       = 1.0
+
+// threshold above which temperatures are considered anormal
+val magThresh     = UserValue.kr("mag-thresh [deg]", 1.5)
+
+// maximum magnitude considered for anormal values
+val magMax        = UserValue.kr("mag-max [deg]", 8.0)
+
+// sonification minimum oscillator frequency
+val minFreq       = UserValue.kr("min-freq [Hz]", 200)
+
+// sonification maximum oscillator frequency
+val maxFreq       = UserValue.kr("max-freq [Hz]", 4000)
+
+// ---- state ----
+
+val stateInKr     = LocalIn.kr(Seq.fill(numVoices * 3 * 2)(0))
+
+val voiceNos      = 0 until numVoices: GE
+val numAlt        = dAlt.size
+val maskWidth     = numAlt / 2 // 4
+val vpChanIdx     = ChannelIndices(vp)
+
+def mkSide(isUp: Boolean): (GE, GE) = {
+  // ---- state ----
+  val stateOff      = if (isUp) 0 else 3
+  var voiceFreq     = stateInKr \ ((numVoices * (stateOff+0)) until (numVoices * (stateOff+1)))
+  var voiceAmp      = stateInKr \ ((numVoices * (stateOff+1)) until (numVoices * (stateOff+2)))
+  var voiceOnOff    = stateInKr \ ((numVoices * (stateOff+2)) until (numVoices * (stateOff+3)))
+  
+  // ---- trace trajectories ----
+  
+  def extract(in: GE, res: Seq[(GE, GE)], trjIdx: Int): Seq[(GE, GE)] = 
+    if (trjIdx == numTraj) res else {
+      val (bestIdx, bestVal) = 
+        if (isUp) {
+          val best = ArrayMax.kr(in)
+          best.index -> best.value
+        } else {
+          val best = ArrayMin.kr(in)
+          best.index -> best.value
+        }
+
+      val freq0     = bestIdx / (numAlt - 1) // .linexp(0, numAlt - 1, 200, 4000)
+      val amp0      = if (isUp)
+        bestVal.clip(magThresh, magMax).linlin(magThresh, magMax, 0, 1)
+      else
+        bestVal.clip(-magMax, -magThresh).linlin(-magMax, -magThresh, 1, 0)
+      
+      val mask      = in * vpChanIdx.absdif(bestIdx) > maskWidth
+      extract(in = mask, res = res :+ (freq0 -> amp0), trjIdx = trjIdx + 1)
+    }
+  
+  var activated   = Vector.fill(numVoices)(0: GE): GE
+  
+  val (freqInSq, ampInSq) = extract(in = A2K.kr(vp), res = Vector.empty, trjIdx = 0).unzip
+  val freqIn = freqInSq: GE
+  val ampIn  = ampInSq : GE
+  
+  // for each frequency, find the best past match
+  val noFounds = (0 until numTraj).map { tIdx =>
+    val fIn         = freqIn \ tIdx
+    val aIn         = ampIn  \ tIdx
+    val isOn        = aIn > 0
+  
+    val freqMatch   = (maxDf - (voiceFreq absdif fIn)).max(0)
+    val bothOn      = voiceOnOff & isOn
+    val bestIn      = 0 +: (freqMatch * (bothOn & !activated))
+    val best        = ArrayMax.kr(bestIn)
+    val bestIdx     = best.index - 1
+  
+    val bestMask    = voiceNos sig_== bestIdx
+    activated      |= bestMask
+    val bestMaskN   = !bestMask
+    voiceFreq       = voiceFreq * bestMaskN + fIn * bestMask
+    voiceAmp        = voiceAmp  * bestMaskN + aIn * bestMask
+    
+    bestIdx sig_== -1
+  }
+  
+  for (tIdx <- 0 until numTraj) {
+    val fIn             = freqIn \ tIdx
+    val aIn             = ampIn  \ tIdx
+    val isOn            = aIn > 0
+    val voiceAvail      = !(activated | voiceOnOff)
+  
+    val notFound        = noFounds(tIdx)
+    val startTraj       = notFound & isOn
+    val free            = ArrayMax.kr(0 +: (startTraj & voiceAvail))
+    val freeIdx         = free.index - 1
+    val freeMask        = voiceNos sig_== freeIdx
+    activated          |= freeMask
+    val freeMaskN       = !freeMask
+    voiceFreq           = voiceFreq * freeMaskN + fIn * freeMask
+    voiceAmp            = voiceAmp  * freeMaskN + aIn * freeMask
+  }
+  
+  // ---- voice generation ----
+  val voiceEnv      = Env.asr(attack = egAtk, release = egRls)
+  val voiceEG       = EnvGen.ar(voiceEnv, gate = activated)
+  
+  // ---- state out ----
+  val voiceEGOn = A2K.kr(voiceEG) sig_!= 0
+  voiceOnOff    = activated | voiceEGOn
+  
+  val stateOutKr  = voiceFreq ++ voiceAmp ++ voiceOnOff
+  
+  // ---- sound generation ----
+  
+  // gate so attack doesn't lag
+  val lagTimeGt = (activated sig_== Delay1.kr(activated)) * lagTime
+  val ampScale  = voiceAmp.linexp(0, 1, -20.dbamp, 0.dbamp)
+  val ampLag    = Lag.ar(voiceAmp , time = lagTimeGt)
+  val freqScale = voiceFreq.linexp(0, 1, minFreq, maxFreq)
+  val freqLag   = Lag.ar(freqScale, time = lagTimeGt)
+  val sines     = SinOsc.ar(freqLag) * voiceEG * ampLag
+  val mix       = Mix(sines)
+  (mix -> stateOutKr)
+}
+
+val (left , leftState)  = mkSide(true )
+val (right, rightState) = mkSide(false)
+
+LocalOut.kr(leftState ++ rightState)
+
+val mix   = Limiter.ar(Seq(/* DC.ar(0) */ left, right))
+
+output := mix
+\end{lstlisting}
+% \end{figure}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{figures/sonif-3-bounce-sonogram.jpg}
+\caption{Sonogram from the bounce of sonification-3. Time elapses from left-to-right (duration 30 seconds), frequencies from bottom-to-top (lowest excited frequency is 200 Hz, highest excited frequency is 4 kHz. Top half shows left channel, corresponding to too-hot anomalies. Bottom half shows right channel, corresponding to too-cold anomalies.}
+\label{fig:sonif-3-bounce-sonogram}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{figures/sonif-3-editor-shot.jpg}
+\caption{Matrix selection and parameter settings for sonification-3.}
+\label{fig:sonif-3-editor-shot.jpg}
 \end{figure}
 
 % \printbibliography
