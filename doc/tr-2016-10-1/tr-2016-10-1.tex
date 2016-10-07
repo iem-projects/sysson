@@ -403,7 +403,21 @@ LocalOut.kr(stateOut)
 \label{fig:source-voice-traces}%
 \end{figure}
 
-\todo{continue here}
+\subsubsection*{Tracing UGens}
+
+During the course of the development of the voice management as outlined in the previous section, it became important to be able to precisely trace the values of several UGens over multiple audio frames or control blocks at the boundaries of crucial events. Using a simple built-in mechanism of SuperCollider such as the \Verb!Poll! UGen proved insufficient, because
+%
+\begin{itemize}
+\item the ordering of poll prints depends on the final UGen graph topology
+\item comparing multiple successive values is difficult, because each poll is written to a new line and interleaved with other poll instances.
+\item the maximum resolution for triggers is Nyquist (for audio rate signals) or one per two control blocks (for control rate signals), because \Verb!Poll! uses a trigger input and not a gate.
+\end{itemize}
+%
+In order to deal with this deficiency, and because the development of the voice structure was halted to due to bugs that were difficult to trace, a small library \software{ScalaCollider-Trace} was developed: \url{https://github.com/iem-projects/ScalaCollider-Trace}.
+
+In its initial release, it has a simple mechanism for capturing a graph function, \Verb!traceGraph!, and for recording a trace via \Verb!playFor!. Traces are obtained by way of subjecting interesting UGens to a special \Verb!Trace! graph element. The result of a trace run is a future data matrix, and there is a simple pretty-print formatting that produces a tabular text view. The library is described in more detail on its project page.
+
+The voice management we've come up with in \figref{fig:source-voice-traces} was developed using the tracing. The labels of the \Verb!Trace! elements can be directly found in the print-out that is shown in \figref{fig:trace-dump-voices}. The caption explains what is going on here and demonstrates the use of the trace mechanism to better understand the signal processing of a structure such as the voice management, which becomes arguably complex due to the way logical signals have to be represented in UGens.
 
 \begin{figure}
 \begin{lstlisting}[style=plain]
@@ -441,7 +455,7 @@ vc-on  -out [3]:  0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
 
 \subsubsection*{Releasing Voices}
 
-We need two signals, the original \Verb!voiceOnOff!, and one that delays the release (transition from one to zero). Options:
+In order to allow for voices to ``decay'', we need two signals, the original \Verb!voiceOnOff!, and one that delays the release (transition from one to zero). Options:
 %
 \begin{itemize}
 \item \Verb!Slew! (with infinite rising and limited falling slope)
@@ -483,6 +497,10 @@ LocalOut.kr(stateOutKr)
 \label{fig:voices-release}
 \end{figure}
 
+\subsubsection*{First Complete Sonification}
+
+The first complete implementation of the voice structure with the multiple-stage local-maxima search is shown in the following program:
+%
 % \begin{figure}
 \begin{lstlisting}[style=scala-small]
 implicit class MyGEOps(private val in: GE) /* extends AnyVal */ {
@@ -650,6 +668,14 @@ val mix   = Limiter.ar(Seq(/* DC.ar(0) */ left, right))
 output := mix
 \end{lstlisting}
 % \end{figure}
+%
+The settings for the test data set are shown in \figref{fig:sonif-3-editor-shot.jpg}. A bounce of the audio output was made, a sonogram of which is shown in \figref{fig:sonif-3-bounce-sonogram}.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{figures/sonif-3-editor-shot.jpg}
+\caption{Matrix selection and parameter settings for sonification-3.}
+\label{fig:sonif-3-editor-shot.jpg}
+\end{figure}
 
 \begin{figure}
 \includegraphics[width=\textwidth]{figures/sonif-3-bounce-sonogram.jpg}
@@ -657,11 +683,7 @@ output := mix
 \label{fig:sonif-3-bounce-sonogram}
 \end{figure}
 
-\begin{figure}
-\includegraphics[width=\textwidth]{figures/sonif-3-editor-shot.jpg}
-\caption{Matrix selection and parameter settings for sonification-3.}
-\label{fig:sonif-3-editor-shot.jpg}
-\end{figure}
+\paragraph{Discussion:} The perceived sound strongly depends on the parameters, the trajectory coherence fraction \Verb!maxDf!, the oscillator frequency range \Verb!minFreq! and \Verb!maxFreq!, and the envelope release time \Verb!egRls!. We are projecting the positive anomalies to the left channel, and the negative anomalies to the right channel. While the glissandi can be heard individually on both channels, the rhythmic regularity and shift against each other is still difficult to perceive. Possible routes from here are the use of different frequency registers (as was done in the SysSon workshop), or the decoupling of frequency and altitude altogether.
 
 % \printbibliography
 
