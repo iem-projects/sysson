@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.10.0"
+lazy val projectVersion = "1.10.1"
 
 lazy val commonSettings = Seq(
   name          := baseName,

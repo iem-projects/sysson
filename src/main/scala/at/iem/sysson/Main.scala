@@ -14,7 +14,6 @@
 
 package at.iem.sysson
 
-import at.iem.sysson
 import at.iem.sysson.gui.SwingApplication
 
 import scala.util.control.NonFatal
@@ -32,7 +31,7 @@ object Main {
   }
 
   def main(args: Array[String]): Unit = {
-    logInfo(s"Welcome to $name v$version")
+    // logInfo(s"Welcome to $name v$version")
 
     SwingApplication.main(args)
   }

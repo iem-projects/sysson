@@ -74,7 +74,7 @@ package object sysson {
 
   private lazy val logHeader = new SimpleDateFormat("[d MMM yyyy, HH:mm''ss.SSS] 'SysSon'", Locale.US)
 
-  var showLog = true // false
+  var showLog = false
 
   @elidable(CONFIG)  private[sysson] def logDebug(what: => String): Unit = log("debug", what)
   @elidable(INFO)    private[sysson] def logInfo (what: => String): Unit = log("info" , what)
