@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LocalOut - SysSon 1.9.0 API - de.sciss.synth.ugen.LocalOut</title>
-          <meta name="description" content="LocalOut - SysSon 1.9.0 API - de.sciss.synth.ugen.LocalOut" />
-          <meta name="keywords" content="LocalOut SysSon 1.9.0 API de.sciss.synth.ugen.LocalOut" />
+          <title>LocalOut - SysSon 1.10.0 API - de.sciss.synth.ugen.LocalOut</title>
+          <meta name="description" content="LocalOut - SysSon 1.10.0 API - de.sciss.synth.ugen.LocalOut" />
+          <meta name="keywords" content="LocalOut SysSon 1.10.0 API de.sciss.synth.ugen.LocalOut" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -60,7 +60,7 @@ uses a feedback processing loop.</p><p>In a synth, there can be only each one co
 <code>ControlDur</code> .</p><p>For more examples, see <code>LocalIn</code>.</p><h5>Examples</h5><pre><span class="cmt">// ping-pong delay with feedback</span>
 play {
   <span class="kw">val</span> src = Decay.ar(Impulse.ar(<span class="num">0.3</span>), <span class="num">0.1</span>) * WhiteNoise.ar(<span class="num">0.2</span>)
-  <span class="kw">val</span> in  = LocalIn.ar(<span class="num">2</span>) + <span class="std">Seq</span>[GE](src, <span class="num">0</span>) <span class="cmt">// read feedback, add source to left chan</span>
+  <span class="kw">val</span> in  = LocalIn.ar(<span class="std">Seq</span>(<span class="num">0</span>, <span class="num">0</span>)) + <span class="std">Seq</span>[GE](src, <span class="num">0</span>) <span class="cmt">// read feedback, add source to left chan</span>
   <span class="kw">val</span> dly = DelayN.ar(in, <span class="num">0.2</span>, <span class="num">0.2</span>)         <span class="cmt">// delay sound</span>
   <span class="kw">val</span> att = dly * <span class="num">0.8</span>                       <span class="cmt">// apply decay factor</span>
 

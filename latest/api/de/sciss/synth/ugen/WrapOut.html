@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>WrapOut - SysSon 1.9.0 API - de.sciss.synth.ugen.WrapOut</title>
-          <meta name="description" content="WrapOut - SysSon 1.9.0 API - de.sciss.synth.ugen.WrapOut" />
-          <meta name="keywords" content="WrapOut SysSon 1.9.0 API de.sciss.synth.ugen.WrapOut" />
+          <title>WrapOut - SysSon 1.10.0 API - de.sciss.synth.ugen.WrapOut</title>
+          <meta name="description" content="WrapOut - SysSon 1.10.0 API - de.sciss.synth.ugen.WrapOut" />
+          <meta name="keywords" content="WrapOut SysSon 1.10.0 API de.sciss.synth.ugen.WrapOut" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -47,7 +47,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">WrapOut</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="fadeTime">fadeTime: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Float">Float</span>] = <span class="symbol"><span class="name"><a href="../../../../scala/package.html">Some(0.02f)</a></span></span></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a> with <a href="../WritesBus.html" class="extype" name="de.sciss.synth.WritesBus">WritesBus</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">WrapOut</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="fadeTime">fadeTime: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.02</span></span>)</span><span class="result"> extends <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a> with <a href="../WritesBus.html" class="extype" name="de.sciss.synth.WritesBus">WritesBus</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -55,7 +55,7 @@
 This is automatically added when using the <code>play { ... }</code> syntax. If the fade time is
 given, an envelope is added with a control named <code>&quot;gate&quot;</code> which can be used to release
 the synth. The bus is given by a control named <code>&quot;out&quot;</code> and defaults to zero.
-</p></div><div class="toggleContainer block">
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal to play to the default output</p></dd><dt class="param">fadeTime</dt><dd class="cmt"><p>the fade in time; use a negative number for no fading</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../WritesBus.html" class="extype" name="de.sciss.synth.WritesBus">WritesBus</a>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -94,8 +94,8 @@ the synth. The bus is given by a control named <code>&quot;out&quot;</code> and 
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.synth.ugen.WrapOut#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(in:de.sciss.synth.GE,fadeTime:Option[Float]):de.sciss.synth.ugen.WrapOut"></a>
+              <ol><li name="de.sciss.synth.ugen.WrapOut#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(in:de.sciss.synth.GE,fadeTime:Double):de.sciss.synth.ugen.WrapOut"></a>
       <a id="&lt;init&gt;:WrapOut"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -103,14 +103,14 @@ the synth. The bus is given by a control named <code>&quot;out&quot;</code> and 
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">WrapOut</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="fadeTime">fadeTime: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Float">Float</span>] = <span class="symbol"><span class="name"><a href="../../../../scala/package.html">Some(0.02f)</a></span></span></span>)</span>
+        <span class="name">WrapOut</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a></span>, <span name="fadeTime">fadeTime: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.02</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.WrapOut@&lt;init&gt;(in:de.sciss.synth.GE,fadeTime:Option[Float]):de.sciss.synth.ugen.WrapOut" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.WrapOut@&lt;init&gt;(in:de.sciss.synth.GE,fadeTime:Double):de.sciss.synth.ugen.WrapOut" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the signal to play to the default output</p></dd><dt class="param">fadeTime</dt><dd class="cmt"><p>the fade in time; use a negative number for no fading</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -229,22 +229,22 @@ the synth. The bus is given by a control named <code>&quot;out&quot;</code> and 
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="de.sciss.synth.ugen.WrapOut#fadeTime" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fadeTime:Option[Float]"></a>
-      <a id="fadeTime:Option[Float]"></a>
+      <a id="fadeTime:Double"></a>
+      <a id="fadeTime:Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">fadeTime</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Float">Float</span>]</span>
+        <span class="name">fadeTime</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.WrapOut@fadeTime:Option[Float]" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.WrapOut@fadeTime:Double" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the fade in time; use a negative number for no fading</p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -301,7 +301,7 @@ the synth. The bus is given by a control named <code>&quot;out&quot;</code> and 
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the signal to play to the default output</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -319,23 +319,6 @@ the synth. The bus is given by a control named <code>&quot;out&quot;</code> and 
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.WrapOut#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="makeUGen(ins:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):Unit"></a>
-      <a id="makeUGen(IndexedSeq[UGenIn]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">makeUGen</span><span class="params">(<span name="ins">ins: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.WrapOut@makeUGen(ins:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.ugen.WrapOut">WrapOut</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.WrapOut#makeUGens" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGens:Unit"></a>
       <a id="makeUGens:Unit"></a>
@@ -425,23 +408,6 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.UGenSource.ZeroOut#rewrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):Unit"></a>
-      <a id="rewrap(IndexedSeq[UGenInLike],Int):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">rewrap</span><span class="params">(<span name="args">args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</span>, <span name="exp">exp: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.WrapOut@rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -459,23 +425,6 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
-      <a id="unwrap(IndexedSeq[UGenInLike]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unwrap</span><span class="params">(<span name="args">args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.WrapOut@unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

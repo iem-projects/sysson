@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>OverlapAdd - SysSon 1.9.0 API - de.sciss.fscape.graph.OverlapAdd</title>
-          <meta name="description" content="OverlapAdd - SysSon 1.9.0 API - de.sciss.fscape.graph.OverlapAdd" />
-          <meta name="keywords" content="OverlapAdd SysSon 1.9.0 API de.sciss.fscape.graph.OverlapAdd" />
+          <title>OverlapAdd - SysSon 1.10.0 API - de.sciss.fscape.graph.OverlapAdd</title>
+          <meta name="description" content="OverlapAdd - SysSon 1.10.0 API - de.sciss.fscape.graph.OverlapAdd" />
+          <meta name="keywords" content="OverlapAdd SysSon 1.10.0 API de.sciss.fscape.graph.OverlapAdd" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -49,7 +49,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A UGen that performs overlap-and-add operation on a stream of input windows.
+The <code>size</code> and <code>step</code> parameters are demand-rate, polled once per (input) window.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the non-overlapped input</p></dd><dt class="param">size</dt><dd class="cmt"><p>the window size in the input</p></dd><dt class="param">step</dt><dd class="cmt"><p>the step between successive windows in the output.
+              when smaller than <code>size</code>, the overlapping portions are summed together.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.fscape.UGenSource.SomeOut">SomeOut</a>[<span class="extype" name="de.sciss.fscape.stream.StreamOut">StreamOut</span>], <a href="../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.fscape.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a>, <span class="extype" name="de.sciss.fscape.stream.StreamOut">StreamOut</span>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.fscape.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -88,7 +91,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.fscape.graph.OverlapAdd#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.fscape.graph.OverlapAdd#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(in:de.sciss.fscape.GE,size:de.sciss.fscape.GE,step:de.sciss.fscape.GE):de.sciss.fscape.graph.OverlapAdd"></a>
       <a id="&lt;init&gt;:OverlapAdd"></a>
       <h4 class="signature">
@@ -104,7 +107,8 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the non-overlapped input</p></dd><dt class="param">size</dt><dd class="cmt"><p>the window size in the input</p></dd><dt class="param">step</dt><dd class="cmt"><p>the step between successive windows in the output.
+              when smaller than <code>size</code>, the overlapping portions are summed together.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -278,7 +282,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the non-overlapped input</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -435,8 +439,8 @@ expansion
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="de.sciss.fscape.graph.OverlapAdd#step" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">the window size in the input</p>
+    </li><li name="de.sciss.fscape.graph.OverlapAdd#step" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="step:de.sciss.fscape.GE"></a>
       <a id="step:GE"></a>
       <h4 class="signature">
@@ -452,7 +456,8 @@ expansion
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the step between successive windows in the output.</p><div class="fullcomment"><div class="comment cmt"><p>the step between successive windows in the output.
+              when smaller than <code>size</code>, the overlapping portions are summed together.</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

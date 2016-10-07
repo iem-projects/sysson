@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Out - SysSon 1.9.0 API - de.sciss.synth.ugen.Out</title>
-          <meta name="description" content="Out - SysSon 1.9.0 API - de.sciss.synth.ugen.Out" />
-          <meta name="keywords" content="Out SysSon 1.9.0 API de.sciss.synth.ugen.Out" />
+          <title>Out - SysSon 1.10.0 API - de.sciss.synth.ugen.Out</title>
+          <meta name="description" content="Out - SysSon 1.10.0 API - de.sciss.synth.ugen.Out" />
+          <meta name="keywords" content="Out SysSon 1.10.0 API de.sciss.synth.ugen.Out" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -64,7 +64,8 @@ summed), wrap this expression in a <code>Mix(...)</code> before passing it to th
 UGen.
 </p></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>bus index to write to. For an audio-rate UGen, this is
                         an audio-bus, for a control-rate UGen, this is a
-                        control-bus.</p></dd><dt class="param">in</dt><dd class="cmt"><p>signal to write to the bus. If the UGen is audio-rate,
+                        control-bus. <b>Note</b> that the bus index can only be
+                        modulated at control-rate.</p></dd><dt class="param">in</dt><dd class="cmt"><p>signal to write to the bus. If the UGen is audio-rate,
                         the input must also be audio-rate.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../Bus.html" class="extype" name="de.sciss.synth.Bus">Bus</a></p></span><span class="cmt"><p><a href="LocalOut$.html" class="extype" name="de.sciss.synth.ugen.LocalOut">LocalOut</a></p></span><span class="cmt"><p><a href="XOut$.html" class="extype" name="de.sciss.synth.ugen.XOut">XOut</a></p></span><span class="cmt"><p><a href="ReplaceOut$.html" class="extype" name="de.sciss.synth.ugen.ReplaceOut">ReplaceOut</a></p></span><span class="cmt"><p><a href="PhysicalOut$.html" class="extype" name="de.sciss.synth.ugen.PhysicalOut">PhysicalOut</a></p></span><span class="cmt"><p><a href="In$.html" class="extype" name="de.sciss.synth.ugen.In">In</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../IsIndividual.html" class="extype" name="de.sciss.synth.IsIndividual">IsIndividual</a>, <a href="../HasSideEffect.html" class="extype" name="de.sciss.synth.HasSideEffect">HasSideEffect</a>, <a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.synth.Lazy.Expander">Expander</a>[<span class="extype" name="scala.Unit">Unit</span>], <a href="../Lazy.html" class="extype" name="de.sciss.synth.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
@@ -122,7 +123,8 @@ UGen.
     </span>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bus</dt><dd class="cmt"><p>bus index to write to. For an audio-rate UGen, this is
                         an audio-bus, for a control-rate UGen, this is a
-                        control-bus.</p></dd><dt class="param">in</dt><dd class="cmt"><p>signal to write to the bus. If the UGen is audio-rate,
+                        control-bus. <b>Note</b> that the bus index can only be
+                        modulated at control-rate.</p></dd><dt class="param">in</dt><dd class="cmt"><p>signal to write to the bus. If the UGen is audio-rate,
                         the input must also be audio-rate.</p></dd></dl></div>
     </li></ol>
             </div>
@@ -219,7 +221,8 @@ UGen.
     </span>
       <p class="shortcomment cmt">bus index to write to.</p><div class="fullcomment"><div class="comment cmt"><p>bus index to write to. For an audio-rate UGen, this is
                         an audio-bus, for a control-rate UGen, this is a
-                        control-bus.</p></div></div>
+                        control-bus. <b>Note</b> that the bus index can only be
+                        modulated at control-rate.</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -335,23 +338,6 @@ UGen.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.synth.ugen.Out#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):Unit"></a>
-      <a id="makeUGen(IndexedSeq[UGenIn]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">makeUGen</span><span class="params">(<span name="_args">_args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Out@makeUGen(_args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenIn]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.synth.ugen.Out">Out</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.Out#makeUGens" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGens:Unit"></a>
       <a id="makeUGens:Unit"></a>
@@ -458,23 +444,6 @@ expansion
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.UGenSource.ZeroOut#rewrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):Unit"></a>
-      <a id="rewrap(IndexedSeq[UGenInLike],Int):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">rewrap</span><span class="params">(<span name="args">args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</span>, <span name="exp">exp: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Out@rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike],exp:Int):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -492,23 +461,6 @@ expansion
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U"></a>
-      <a id="unwrap(IndexedSeq[UGenInLike]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unwrap</span><span class="params">(<span name="args">args: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<a href="../UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.Out@unwrap(args:scala.collection.immutable.IndexedSeq[de.sciss.synth.UGenInLike]):U" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../UGenSource.html" class="extype" name="de.sciss.synth.UGenSource">UGenSource</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

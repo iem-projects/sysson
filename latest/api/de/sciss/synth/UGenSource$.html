@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>UGenSource - SysSon 1.9.0 API - de.sciss.synth.UGenSource</title>
-          <meta name="description" content="UGenSource - SysSon 1.9.0 API - de.sciss.synth.UGenSource" />
-          <meta name="keywords" content="UGenSource SysSon 1.9.0 API de.sciss.synth.UGenSource" />
+          <title>UGenSource - SysSon 1.10.0 API - de.sciss.synth.UGenSource</title>
+          <meta name="description" content="UGenSource - SysSon 1.10.0 API - de.sciss.synth.UGenSource" />
+          <meta name="keywords" content="UGenSource SysSon 1.10.0 API de.sciss.synth.UGenSource" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -126,7 +126,7 @@
       </a>
     </span>
       
-    </li><li name="de.sciss.synth.UGenSource.SomeOut" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+    </li><li name="de.sciss.synth.UGenSource.SomeOut" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SomeOutextendsUGenSource[de.sciss.synth.UGenInLike]withGE.Lazy"></a>
       <a id="SomeOut:SomeOut"></a>
       <h4 class="signature">
@@ -142,7 +142,24 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      
+    </li><li name="de.sciss.synth.UGenSource.Vec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vec[+A]=scala.collection.immutable.IndexedSeq[A]"></a>
+      <a id="Vec[+A]:Vec[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Vec</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> = <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="de.sciss.synth.UGenSource.Vec.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@Vec[+A]=scala.collection.immutable.IndexedSeq[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="de.sciss.synth.UGenSource.ZeroOut" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ZeroOutextendsUGenSource[Unit]"></a>
       <a id="ZeroOut:ZeroOut"></a>
@@ -218,6 +235,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSource#Vec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vec:collection.immutable.IndexedSeq.type"></a>
+      <a id="Vec:IndexedSeq.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Vec</span><span class="result">: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@Vec:collection.immutable.IndexedSeq.type" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -349,6 +383,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSource#inf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="inf:Float(Infinity)"></a>
+      <a id="inf:Float(Infinity)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inf</span><span class="result">: Float(Infinity)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@inf:Float(Infinity)" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -366,6 +417,60 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSource#matchRate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="matchRate(ins:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn],idx:Int,target:de.sciss.synth.Rate):de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn]"></a>
+      <a id="matchRate(Vec[UGenIn],Int,Rate):Vec[UGenIn]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">matchRate</span><span class="params">(<span name="ins">ins: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>, <span name="idx">idx: <span class="extype" name="scala.Int">Int</span></span>, <span name="target">target: <a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>)</span><span class="result">: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@matchRate(ins:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn],idx:Int,target:de.sciss.synth.Rate):de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSource#matchRateFrom" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="matchRateFrom(ins:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn],idx:Int,target:de.sciss.synth.Rate):de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn]"></a>
+      <a id="matchRateFrom(Vec[UGenIn],Int,Rate):Vec[UGenIn]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">matchRateFrom</span><span class="params">(<span name="ins">ins: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>, <span name="idx">idx: <span class="extype" name="scala.Int">Int</span></span>, <span name="target">target: <a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>)</span><span class="result">: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@matchRateFrom(ins:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn],idx:Int,target:de.sciss.synth.Rate):de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@tailrec</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSource#matchRateT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="matchRateT(ins:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn],idx:Int,target:de.sciss.synth.Rate):de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn]"></a>
+      <a id="matchRateT(Vec[UGenIn],Int,Rate):Vec[UGenIn]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">matchRateT</span><span class="params">(<span name="ins">ins: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>, <span name="idx">idx: <span class="extype" name="scala.Int">Int</span></span>, <span name="target">target: <a href="Rate.html" class="extype" name="de.sciss.synth.Rate">Rate</a></span>)</span><span class="result">: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@matchRateT(ins:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn],idx:Int,target:de.sciss.synth.Rate):de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -417,6 +522,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSource#stringArg" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="stringArg(s:String):de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn]"></a>
+      <a id="stringArg(String):Vec[UGenIn]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stringArg</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenIn.html" class="extype" name="de.sciss.synth.UGenIn">UGenIn</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@stringArg(s:String):de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenIn]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -451,6 +573,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unwrap(source:de.sciss.synth.UGenSource.ZeroOut,args:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenInLike]):Unit"></a>
+      <a id="unwrap(ZeroOut,Vec[UGenInLike]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unwrap</span><span class="params">(<span name="source">source: <a href="UGenSource$$ZeroOut.html" class="extype" name="de.sciss.synth.UGenSource.ZeroOut">ZeroOut</a></span>, <span name="args">args: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@unwrap(source:de.sciss.synth.UGenSource.ZeroOut,args:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenInLike]):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="de.sciss.synth.UGenSource#unwrap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unwrap(source:de.sciss.synth.UGenSource.SomeOut,args:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenInLike]):de.sciss.synth.UGenInLike"></a>
+      <a id="unwrap(SomeOut,Vec[UGenInLike]):UGenInLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unwrap</span><span class="params">(<span name="source">source: <a href="UGenSource$$SomeOut.html" class="extype" name="de.sciss.synth.UGenSource.SomeOut">SomeOut</a></span>, <span name="args">args: <a href="#Vec[+A]=scala.collection.immutable.IndexedSeq[A]" class="extmbr" name="de.sciss.synth.UGenSource.Vec">Vec</a>[<a href="UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a>]</span>)</span><span class="result">: <a href="UGenInLike.html" class="extype" name="de.sciss.synth.UGenInLike">UGenInLike</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#de.sciss.synth.UGenSource$@unwrap(source:de.sciss.synth.UGenSource.SomeOut,args:de.sciss.synth.UGenSource.Vec[de.sciss.synth.UGenInLike]):de.sciss.synth.UGenInLike" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

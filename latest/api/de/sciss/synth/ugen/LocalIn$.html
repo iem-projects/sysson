@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>LocalIn - SysSon 1.9.0 API - de.sciss.synth.ugen.LocalIn</title>
-          <meta name="description" content="LocalIn - SysSon 1.9.0 API - de.sciss.synth.ugen.LocalIn" />
-          <meta name="keywords" content="LocalIn SysSon 1.9.0 API de.sciss.synth.ugen.LocalIn" />
+          <title>LocalIn - SysSon 1.10.0 API - de.sciss.synth.ugen.LocalIn</title>
+          <meta name="description" content="LocalIn - SysSon 1.10.0 API - de.sciss.synth.ugen.LocalIn" />
+          <meta name="keywords" content="LocalIn SysSon 1.10.0 API de.sciss.synth.ugen.LocalIn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -57,10 +57,13 @@ are more convenient for the implementation of a self contained effect that uses
 a feedback processing loop.</p><p>In a synth, there can be only each one control-rate and audio-rate <code>LocalIn</code> /
 <code>LocalOut</code> pair. The signal written to a <code>LocalOut</code> will not be read by the
 <code>LocalIn</code> until the next control block cycle, introducing a delay of
-<code>ControlDur</code> .</p><h5>Examples</h5><pre><span class="cmt">// ping-pong delay with feedback</span>
+<code>ControlDur</code> .</p><p><b>Warning</b>: The argument has been changed <code>numChannels: Int</code> in version
+1.15.3 to <code>init: GE</code> in version 1.16.0. The previous version was incompatible
+with SuperCollider 3.6.x. A previous usage such as <code>LocalIn.ar(2)</code> to create two
+channels must now be expressed as <code>LocalIn.ar(Seq(0, 0))</code> !</p><h5>Examples</h5><pre><span class="cmt">// ping-pong delay with feedback</span>
 play {
   <span class="kw">val</span> src = Decay.ar(Impulse.ar(<span class="num">0.3</span>), <span class="num">0.1</span>) * WhiteNoise.ar(<span class="num">0.2</span>)
-  <span class="kw">val</span> in  = LocalIn.ar(<span class="num">2</span>) + <span class="std">Seq</span>[GE](src, <span class="num">0</span>) <span class="cmt">// read feedback, add source to left chan</span>
+  <span class="kw">val</span> in  = LocalIn.ar(<span class="std">Seq</span>(<span class="num">0</span>, <span class="num">0</span>)) + <span class="std">Seq</span>[GE](src, <span class="num">0</span>) <span class="cmt">// read feedback, add source to left chan</span>
   <span class="kw">val</span> dly = DelayN.ar(in, <span class="num">0.2</span>, <span class="num">0.2</span>)         <span class="cmt">// delay sound</span>
   <span class="kw">val</span> att = dly * <span class="num">0.8</span>                       <span class="cmt">// apply decay factor</span>
 
@@ -81,7 +84,7 @@ play {
     AllpassN.ar(z, <span class="num">0.03</span>, <span class="std">Seq</span>.fill(<span class="num">2</span>)(Rand(<span class="num">0.005</span>,<span class="num">0.02</span>)), <span class="num">1</span>)
   }
 
-  <span class="kw">val</span> in  = LocalIn.ar(<span class="num">2</span>) * <span class="num">0.98</span>
+  <span class="kw">val</span> in  = LocalIn.ar(<span class="std">Seq</span>(<span class="num">0</span>, <span class="num">0</span>)) * <span class="num">0.98</span>
   <span class="kw">val</span> flt = OnePole.ar(in, <span class="num">0.5</span>)
 
   <span class="kw">val</span> pan = Rotate2.ar(flt \ <span class="num">0</span>, flt \ <span class="num">1</span>, <span class="num">0.23</span>)
@@ -95,7 +98,7 @@ play {
   sig
 }</pre><pre><span class="cmt">// resonator</span>
 play {
-  <span class="kw">val</span> imp  = Impulse.ar(<span class="num">1</span>)
+  <span class="kw">val</span> imp  = Impulse.ar
   <span class="kw">val</span> in   = LocalIn.ar
   <span class="kw">val</span> feed = imp + in * <span class="num">0.995</span>
   <span class="cmt">// must subtract block-size for correct tuning</span>
@@ -204,23 +207,23 @@ play {
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LocalIn#ar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ar(numChannels:Int):de.sciss.synth.ugen.LocalIn"></a>
-      <a id="ar(Int):LocalIn"></a>
+      <a id="ar(init:de.sciss.synth.GE):de.sciss.synth.ugen.LocalIn"></a>
+      <a id="ar(GE):LocalIn"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ar</span><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span><span class="result">: <a href="LocalIn.html" class="extype" name="de.sciss.synth.ugen.LocalIn">LocalIn</a></span>
+        <span class="name">ar</span><span class="params">(<span name="init">init: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result">: <a href="LocalIn.html" class="extype" name="de.sciss.synth.ugen.LocalIn">LocalIn</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.LocalIn$@ar(numChannels:Int):de.sciss.synth.ugen.LocalIn" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.LocalIn$@ar(init:de.sciss.synth.GE):de.sciss.synth.ugen.LocalIn" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to be read from synth-local bus.
-                        This should match with the number of channels actually
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">init</dt><dd class="cmt"><p>the initial state of the UGen. The number of channels
+                        of this signal should match with the number of channels
                         written via <code>LocalOut</code> .</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LocalIn#ar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ar:de.sciss.synth.ugen.LocalIn"></a>
@@ -388,23 +391,23 @@ play {
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LocalIn#kr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="kr(numChannels:Int):de.sciss.synth.ugen.LocalIn"></a>
-      <a id="kr(Int):LocalIn"></a>
+      <a id="kr(init:de.sciss.synth.GE):de.sciss.synth.ugen.LocalIn"></a>
+      <a id="kr(GE):LocalIn"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">kr</span><span class="params">(<span name="numChannels">numChannels: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span><span class="result">: <a href="LocalIn.html" class="extype" name="de.sciss.synth.ugen.LocalIn">LocalIn</a></span>
+        <span class="name">kr</span><span class="params">(<span name="init">init: <a href="../GE.html" class="extype" name="de.sciss.synth.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result">: <a href="LocalIn.html" class="extype" name="de.sciss.synth.ugen.LocalIn">LocalIn</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.synth.ugen.LocalIn$@kr(numChannels:Int):de.sciss.synth.ugen.LocalIn" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.synth.ugen.LocalIn$@kr(init:de.sciss.synth.GE):de.sciss.synth.ugen.LocalIn" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">numChannels</dt><dd class="cmt"><p>number of channels to be read from synth-local bus.
-                        This should match with the number of channels actually
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">init</dt><dd class="cmt"><p>the initial state of the UGen. The number of channels
+                        of this signal should match with the number of channels
                         written via <code>LocalOut</code> .</p></dd></dl></div>
     </li><li name="de.sciss.synth.ugen.LocalIn#kr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="kr:de.sciss.synth.ugen.LocalIn"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Synth - SysSon 1.9.0 API - de.sciss.lucre.synth.Synth</title>
-          <meta name="description" content="Synth - SysSon 1.9.0 API - de.sciss.lucre.synth.Synth" />
-          <meta name="keywords" content="Synth SysSon 1.9.0 API de.sciss.lucre.synth.Synth" />
+          <title>Synth - SysSon 1.10.0 API - de.sciss.lucre.synth.Synth</title>
+          <meta name="description" content="Synth - SysSon 1.10.0 API - de.sciss.lucre.synth.Synth" />
+          <meta name="keywords" content="Synth SysSon 1.10.0 API de.sciss.lucre.synth.Synth" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -452,22 +452,25 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Node.html" class="extype" name="de.sciss.lucre.synth.Node">Node</a></dd></dl></div>
     </li><li name="de.sciss.lucre.synth.Node#release" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="release(releaseTime:de.sciss.optional.Optional[Double])(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
-      <a id="release(Optional[Double])(Txn):Unit"></a>
+      <a id="release(releaseTime:Double)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
+      <a id="release(Double)(Txn):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">release</span><span class="params">(<span name="releaseTime">releaseTime: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<span class="extype" name="scala.Double">Double</span>] = <span class="symbol"><span class="name"><a href="../../../../scala/package.html">None</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">release</span><span class="params">(<span name="releaseTime">releaseTime: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1.0</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="tx">tx: <a href="Txn.html" class="extype" name="de.sciss.lucre.synth.Txn">Txn</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.lucre.synth.Synth@release(releaseTime:de.sciss.optional.Optional[Double])(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.lucre.synth.Synth@release(releaseTime:Double)(implicittx:de.sciss.lucre.synth.Txn):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Node.html" class="extype" name="de.sciss.lucre.synth.Node">Node</a></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">releaseTime</dt><dd class="cmt"><p>the optional release time in seconds within which the synth should fade out,
+                     or <code>-1</code> (default) if the envelope should be released at its nominal release time.
+                     If the <code>EnvGen</code> has a <code>doneAction</code> of <code>freeSelf</code>, the synth will be freed after
+                     the release phase.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Node.html" class="extype" name="de.sciss.lucre.synth.Node">Node</a></dd></dl></div>
     </li><li name="de.sciss.lucre.synth.Node#run" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="run(state:Boolean)(implicittx:de.sciss.lucre.synth.Txn):Unit"></a>
       <a id="run(Boolean)(Txn):Unit"></a>

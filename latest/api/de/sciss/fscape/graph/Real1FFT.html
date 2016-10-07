@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Real1FFT - SysSon 1.9.0 API - de.sciss.fscape.graph.Real1FFT</title>
-          <meta name="description" content="Real1FFT - SysSon 1.9.0 API - de.sciss.fscape.graph.Real1FFT" />
-          <meta name="keywords" content="Real1FFT SysSon 1.9.0 API de.sciss.fscape.graph.Real1FFT" />
+          <title>Real1FFT - SysSon 1.10.0 API - de.sciss.fscape.graph.Real1FFT</title>
+          <meta name="description" content="Real1FFT - SysSon 1.10.0 API - de.sciss.fscape.graph.Real1FFT" />
+          <meta name="keywords" content="Real1FFT SysSon 1.10.0 API de.sciss.fscape.graph.Real1FFT" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -45,13 +45,34 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Real1FFT</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Real1FFT</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="mode">mode: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span><span class="result"> extends <a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Forward short-time Fourier transform UGen for a real-valued input signal.
+The FFT size is equal to <code>size + padding</code>. The output is a succession
+of complex half-spectra, i.e. from DC to Nyquist. Depending on <code>mode</code>,
+the output window size is either <code>size + padding</code> or <code>size + padding + 2</code>.
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the real signal to transform. If overlapping windows
+                are desired, a <code>Sliding</code> should already have been applied
+                to this signal, as well as multiplication with a window function.</p></dd><dt class="param">size</dt><dd class="cmt"><p>the input window size</p></dd><dt class="param">padding</dt><dd class="cmt"><p>amount of zero padding for each input window.</p></dd><dt class="param">mode</dt><dd class="cmt"><p>packing mode.
+                <code>0</code> (default) is standard &quot;packed&quot; mode,
+                whereby the real part of the bin at Nyquist is stored in the imaginary
+                slot of the DC. This mode allows perfect reconstruction with a
+                <code>Real1IFFT</code> using the same mode.
+                <code>1</code> is &quot;unpacked&quot; mode,
+                whereby the output windows are made two samples longer,
+                so that the Nyquist bin is included in the very end. By
+                definition, the imaginary parts of DC and Nyquist are zero.
+                This mode allows perfect reconstruction with a
+                <code>Real1IFFT</code> using the same mode.
+                <code>2</code> is &quot;discarded&quot; mode,
+                whereby the Nyquist bin is omitted. While it doesn't allow
+                a perfect reconstruction, this mode is useful for analysis,
+                because the output window size is equal to the fft-size,
+                and the imaginary part of DC is correctly zero'ed.</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.fscape.UGenSource.SomeOut">SomeOut</a>[<span class="extype" name="de.sciss.fscape.stream.StreamOut">StreamOut</span>], <a href="../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.fscape.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a>, <span class="extype" name="de.sciss.fscape.stream.StreamOut">StreamOut</span>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.fscape.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.fscape.UGenSource.SomeOut">SomeOut</a>[<span class="extype" name="de.sciss.fscape.stream.StreamOut">StreamOut</span>], <a href="../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.fscape.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a>, <span class="extype" name="de.sciss.fscape.stream.StreamOut">StreamOut</span>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.fscape.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -69,7 +90,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="de.sciss.fscape.graph.Real1FFT"><span>Real1FFT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="de.sciss.fscape.graph.FFTUGen"><span>FFTUGen</span></li><li class="in" name="de.sciss.fscape.UGenSource.SingleOut"><span>SingleOut</span></li><li class="in" name="de.sciss.fscape.UGenSource.SomeOut"><span>SomeOut</span></li><li class="in" name="de.sciss.fscape.GE.Lazy"><span>Lazy</span></li><li class="in" name="de.sciss.fscape.GE"><span>GE</span></li><li class="in" name="de.sciss.fscape.UGenSource"><span>UGenSource</span></li><li class="in" name="de.sciss.fscape.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.fscape.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="de.sciss.fscape.graph.Real1FFT"><span>Real1FFT</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="de.sciss.fscape.graph.FFTHalfUGen"><span>FFTHalfUGen</span></li><li class="in" name="de.sciss.fscape.UGenSource.SingleOut"><span>SingleOut</span></li><li class="in" name="de.sciss.fscape.UGenSource.SomeOut"><span>SomeOut</span></li><li class="in" name="de.sciss.fscape.GE.Lazy"><span>Lazy</span></li><li class="in" name="de.sciss.fscape.GE"><span>GE</span></li><li class="in" name="de.sciss.fscape.UGenSource"><span>UGenSource</span></li><li class="in" name="de.sciss.fscape.Lazy.Expander"><span>Expander</span></li><li class="in" name="de.sciss.fscape.Lazy"><span>Lazy</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,8 +109,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.fscape.graph.Real1FFT#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(in:de.sciss.fscape.GE,size:de.sciss.fscape.GE,padding:de.sciss.fscape.GE):de.sciss.fscape.graph.Real1FFT"></a>
+              <ol><li name="de.sciss.fscape.graph.Real1FFT#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(in:de.sciss.fscape.GE,size:de.sciss.fscape.GE,padding:de.sciss.fscape.GE,mode:de.sciss.fscape.GE):de.sciss.fscape.graph.Real1FFT"></a>
       <a id="&lt;init&gt;:Real1FFT"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,14 +118,31 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Real1FFT</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span>
+        <span class="name">Real1FFT</span><span class="params">(<span name="in">in: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="size">size: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>, <span name="padding">padding: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>, <span name="mode">mode: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a> = <span class="symbol"><span class="name"><a href="../GE$.html">0</a></span></span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.fscape.graph.Real1FFT@&lt;init&gt;(in:de.sciss.fscape.GE,size:de.sciss.fscape.GE,padding:de.sciss.fscape.GE):de.sciss.fscape.graph.Real1FFT" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.fscape.graph.Real1FFT@&lt;init&gt;(in:de.sciss.fscape.GE,size:de.sciss.fscape.GE,padding:de.sciss.fscape.GE,mode:de.sciss.fscape.GE):de.sciss.fscape.graph.Real1FFT" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>the real signal to transform. If overlapping windows
+                are desired, a <code>Sliding</code> should already have been applied
+                to this signal, as well as multiplication with a window function.</p></dd><dt class="param">size</dt><dd class="cmt"><p>the input window size</p></dd><dt class="param">padding</dt><dd class="cmt"><p>amount of zero padding for each input window.</p></dd><dt class="param">mode</dt><dd class="cmt"><p>packing mode.
+                <code>0</code> (default) is standard &quot;packed&quot; mode,
+                whereby the real part of the bin at Nyquist is stored in the imaginary
+                slot of the DC. This mode allows perfect reconstruction with a
+                <code>Real1IFFT</code> using the same mode.
+                <code>1</code> is &quot;unpacked&quot; mode,
+                whereby the output windows are made two samples longer,
+                so that the Nyquist bin is included in the very end. By
+                definition, the imaginary parts of DC and Nyquist are zero.
+                This mode allows perfect reconstruction with a
+                <code>Real1IFFT</code> using the same mode.
+                <code>2</code> is &quot;discarded&quot; mode,
+                whereby the Nyquist bin is omitted. While it doesn't allow
+                a perfect reconstruction, this mode is useful for analysis,
+                because the output window size is equal to the fft-size,
+                and the imaginary part of DC is correctly zero'ed.</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -166,22 +204,22 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="de.sciss.fscape.graph.Real1FFT#apply" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(in:de.sciss.fscape.stream.OutD,size:de.sciss.fscape.stream.OutI,padding:de.sciss.fscape.stream.OutI)(implicitb:de.sciss.fscape.stream.Builder):de.sciss.fscape.stream.OutD"></a>
-      <a id="apply(OutD,OutI,OutI)(Builder):OutD"></a>
+      <a id="apply(in:de.sciss.fscape.stream.OutD,size:de.sciss.fscape.stream.OutI,padding:de.sciss.fscape.stream.OutI,mode:de.sciss.fscape.stream.OutI)(implicitb:de.sciss.fscape.stream.Builder):de.sciss.fscape.stream.OutD"></a>
+      <a id="apply(OutD,OutI,OutI,OutI)(Builder):OutD"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="in">in: <span class="extype" name="de.sciss.fscape.stream.OutD">OutD</span></span>, <span name="size">size: <span class="extype" name="de.sciss.fscape.stream.OutI">OutI</span></span>, <span name="padding">padding: <span class="extype" name="de.sciss.fscape.stream.OutI">OutI</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="b">b: <span class="extype" name="de.sciss.fscape.stream.Builder">Builder</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.fscape.stream.OutD">OutD</span></span>
+        <span class="name">apply</span><span class="params">(<span name="in">in: <span class="extype" name="de.sciss.fscape.stream.OutD">OutD</span></span>, <span name="size">size: <span class="extype" name="de.sciss.fscape.stream.OutI">OutI</span></span>, <span name="padding">padding: <span class="extype" name="de.sciss.fscape.stream.OutI">OutI</span></span>, <span name="mode">mode: <span class="extype" name="de.sciss.fscape.stream.OutI">OutI</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="b">b: <span class="extype" name="de.sciss.fscape.stream.Builder">Builder</span></span>)</span><span class="result">: <span class="extype" name="de.sciss.fscape.stream.OutD">OutD</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#de.sciss.fscape.graph.Real1FFT@apply(in:de.sciss.fscape.stream.OutD,size:de.sciss.fscape.stream.OutI,padding:de.sciss.fscape.stream.OutI)(implicitb:de.sciss.fscape.stream.Builder):de.sciss.fscape.stream.OutD" title="Permalink" target="_top">
+      <a href="../../../../index.html#de.sciss.fscape.graph.Real1FFT@apply(in:de.sciss.fscape.stream.OutD,size:de.sciss.fscape.stream.OutI,padding:de.sciss.fscape.stream.OutI,mode:de.sciss.fscape.stream.OutI)(implicitb:de.sciss.fscape.stream.Builder):de.sciss.fscape.stream.OutD" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -295,7 +333,9 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a></dd></dl></div>
+      <p class="shortcomment cmt">the real signal to transform.</p><div class="fullcomment"><div class="comment cmt"><p>the real signal to transform. If overlapping windows
+                are desired, a <code>Sliding</code> should already have been applied
+                to this signal, as well as multiplication with a window function.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -313,7 +353,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="de.sciss.fscape.graph.FFTUGen#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="de.sciss.fscape.graph.FFTHalfUGen#makeUGen" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGen(args:scala.collection.immutable.IndexedSeq[de.sciss.fscape.UGenIn])(implicitb:de.sciss.fscape.UGenGraph.Builder):de.sciss.fscape.UGenInLike"></a>
       <a id="makeUGen(IndexedSeq[UGenIn])(Builder):UGenInLike"></a>
       <h4 class="signature">
@@ -329,8 +369,8 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.fscape.UGenSource">UGenSource</a></dd></dl></div>
-    </li><li name="de.sciss.fscape.graph.FFTUGen#makeUGens" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a> → <a href="../UGenSource.html" class="extype" name="de.sciss.fscape.UGenSource">UGenSource</a></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.FFTHalfUGen#makeUGens" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="makeUGens(implicitb:de.sciss.fscape.UGenGraph.Builder):de.sciss.fscape.UGenInLike"></a>
       <a id="makeUGens(Builder):UGenInLike"></a>
       <h4 class="signature">
@@ -350,7 +390,39 @@
 during expansion.</p><div class="fullcomment"><div class="comment cmt"><p>Abstract method which must be implemented by creating the actual <code>UGen</code>s
 during expansion. This method is at most called once during graph
 expansion
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the expanded object (depending on the type parameter <code>U</code>)</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a> → <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the expanded object (depending on the type parameter <code>U</code>)</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a> → <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a></dd></dl></div>
+    </li><li name="de.sciss.fscape.graph.Real1FFT#mode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mode:de.sciss.fscape.GE"></a>
+      <a id="mode:GE"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mode</span><span class="result">: <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#de.sciss.fscape.graph.Real1FFT@mode:de.sciss.fscape.GE" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">packing mode.</p><div class="fullcomment"><div class="comment cmt"><p>packing mode.
+                <code>0</code> (default) is standard &quot;packed&quot; mode,
+                whereby the real part of the bin at Nyquist is stored in the imaginary
+                slot of the DC. This mode allows perfect reconstruction with a
+                <code>Real1IFFT</code> using the same mode.
+                <code>1</code> is &quot;unpacked&quot; mode,
+                whereby the output windows are made two samples longer,
+                so that the Nyquist bin is included in the very end. By
+                definition, the imaginary parts of DC and Nyquist are zero.
+                This mode allows perfect reconstruction with a
+                <code>Real1IFFT</code> using the same mode.
+                <code>2</code> is &quot;discarded&quot; mode,
+                whereby the Nyquist bin is omitted. While it doesn't allow
+                a perfect reconstruction, this mode is useful for analysis,
+                because the output window size is equal to the fft-size,
+                and the imaginary part of DC is correctly zero'ed.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a></dd></dl></div>
     </li><li name="de.sciss.fscape.UGenSource#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>
@@ -435,7 +507,7 @@ expansion
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a></dd></dl></div>
+      <p class="shortcomment cmt">amount of zero padding for each input window.</p><div class="fullcomment"><div class="comment cmt"><p>amount of zero padding for each input window.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a></dd></dl></div>
     </li><li name="de.sciss.fscape.UGenSource.SomeOut#rewrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.fscape.UGenInLike],exp:Int)(implicitb:de.sciss.fscape.UGenGraph.Builder):de.sciss.fscape.UGenInLike"></a>
       <a id="rewrap(IndexedSeq[UGenInLike],Int)(Builder):UGenInLike"></a>
@@ -469,7 +541,7 @@ expansion
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a></dd></dl></div>
+      <p class="shortcomment cmt">the input window size</p><div class="fullcomment"><div class="comment cmt"><p>the input window size</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="de.sciss.fscape.graph.Real1FFT">Real1FFT</a> → <a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -586,8 +658,8 @@ expansion
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="de.sciss.fscape.graph.FFTUGen">
-              <h3>Inherited from <a href="FFTUGen.html" class="extype" name="de.sciss.fscape.graph.FFTUGen">FFTUGen</a></h3>
+            </div><div class="parent" name="de.sciss.fscape.graph.FFTHalfUGen">
+              <h3>Inherited from <a href="FFTHalfUGen.html" class="extype" name="de.sciss.fscape.graph.FFTHalfUGen">FFTHalfUGen</a></h3>
             </div><div class="parent" name="de.sciss.fscape.UGenSource.SingleOut">
               <h3>Inherited from <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a></h3>
             </div><div class="parent" name="de.sciss.fscape.UGenSource.SomeOut">

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SinOsc - SysSon 1.9.0 API - de.sciss.synth.ugen.SinOsc</title>
-          <meta name="description" content="SinOsc - SysSon 1.9.0 API - de.sciss.synth.ugen.SinOsc" />
-          <meta name="keywords" content="SinOsc SysSon 1.9.0 API de.sciss.synth.ugen.SinOsc" />
+          <title>SinOsc - SysSon 1.10.0 API - de.sciss.synth.ugen.SinOsc</title>
+          <meta name="description" content="SinOsc - SysSon 1.10.0 API - de.sciss.synth.ugen.SinOsc" />
+          <meta name="keywords" content="SinOsc SysSon 1.10.0 API de.sciss.synth.ugen.SinOsc" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -52,7 +52,9 @@
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A sinusoidal (sine tone) oscillator UGen. This is the same as <code>Osc</code> except that
-it uses a built-in interpolating sine table of 8192 entries.
+it uses a built-in interpolating sine table of 8192 entries.</p><p><b>Note</b> that currently (SC 3.7.x), the first frame generated is not zero
+(i.e. the value of the sine oscillation at time zero) but the value at time
+<code>1 / SampleRate.ir</code> .
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="FSinOsc$.html" class="extype" name="de.sciss.synth.ugen.FSinOsc">FSinOsc</a></p></span><span class="cmt"><p><a href="Osc$.html" class="extype" name="de.sciss.synth.ugen.Osc">Osc</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>

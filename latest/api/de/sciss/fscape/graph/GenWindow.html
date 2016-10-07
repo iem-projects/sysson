@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>GenWindow - SysSon 1.9.0 API - de.sciss.fscape.graph.GenWindow</title>
-          <meta name="description" content="GenWindow - SysSon 1.9.0 API - de.sciss.fscape.graph.GenWindow" />
-          <meta name="keywords" content="GenWindow SysSon 1.9.0 API de.sciss.fscape.graph.GenWindow" />
+          <title>GenWindow - SysSon 1.10.0 API - de.sciss.fscape.graph.GenWindow</title>
+          <meta name="description" content="GenWindow - SysSon 1.10.0 API - de.sciss.fscape.graph.GenWindow" />
+          <meta name="keywords" content="GenWindow SysSon 1.10.0 API de.sciss.fscape.graph.GenWindow" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -51,7 +51,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A repeated window generator UGen. It repeats the
+same window again and again (unless parameters are modulated).
+The parameters are demand-rate, polled once per window.
+</p></div><dl class="paramcmts block"><dt class="param">size</dt><dd class="cmt"><p>the window size</p></dd><dt class="param">shape</dt><dd class="cmt"><p>the identifier of the window shape, such as <code>GenWindow.Hann</code>.</p></dd><dt class="param">param</dt><dd class="cmt"><p>parameter used by some window shapes, such as <code>GenWindow.Kaiser</code></p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="../UGenSource$$SingleOut.html" class="extype" name="de.sciss.fscape.UGenSource.SingleOut">SingleOut</a>, <a href="../UGenSource$$SomeOut.html" class="extype" name="de.sciss.fscape.UGenSource.SomeOut">SomeOut</a>[<span class="extype" name="de.sciss.fscape.stream.StreamOut">StreamOut</span>], <a href="../GE$$Lazy.html" class="extype" name="de.sciss.fscape.GE.Lazy">GE.Lazy</a>, <a href="../GE.html" class="extype" name="de.sciss.fscape.GE">GE</a>, <a href="../UGenSource.html" class="extype" name="de.sciss.fscape.UGenSource">UGenSource</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a>, <span class="extype" name="de.sciss.fscape.stream.StreamOut">StreamOut</span>], <a href="../Lazy$$Expander.html" class="extype" name="de.sciss.fscape.Lazy.Expander">Expander</a>[<a href="../UGenInLike.html" class="extype" name="de.sciss.fscape.UGenInLike">UGenInLike</a>], <a href="../Lazy.html" class="extype" name="de.sciss.fscape.Lazy">Lazy</a>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -90,7 +93,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="de.sciss.fscape.graph.GenWindow#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="de.sciss.fscape.graph.GenWindow#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(size:de.sciss.fscape.GE,shape:de.sciss.fscape.GE,param:de.sciss.fscape.GE):de.sciss.fscape.graph.GenWindow"></a>
       <a id="&lt;init&gt;:GenWindow"></a>
       <h4 class="signature">
@@ -106,7 +109,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">size</dt><dd class="cmt"><p>the window size</p></dd><dt class="param">shape</dt><dd class="cmt"><p>the identifier of the window shape, such as <code>GenWindow.Hann</code>.</p></dd><dt class="param">param</dt><dd class="cmt"><p>parameter used by some window shapes, such as <code>GenWindow.Kaiser</code></p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -403,7 +406,7 @@ expansion
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">parameter used by some window shapes, such as <code>GenWindow.Kaiser</code></p>
     </li><li name="de.sciss.fscape.UGenSource.SomeOut#rewrap" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rewrap(args:scala.collection.immutable.IndexedSeq[de.sciss.fscape.UGenInLike],exp:Int)(implicitb:de.sciss.fscape.UGenGraph.Builder):de.sciss.fscape.UGenInLike"></a>
       <a id="rewrap(IndexedSeq[UGenInLike],Int)(Builder):UGenInLike"></a>
@@ -437,7 +440,7 @@ expansion
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the identifier of the window shape, such as <code>GenWindow.Hann</code>.</p>
     </li><li name="de.sciss.fscape.graph.GenWindow#size" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="size:de.sciss.fscape.GE"></a>
       <a id="size:GE"></a>
@@ -454,7 +457,7 @@ expansion
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the window size</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

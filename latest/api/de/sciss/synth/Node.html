@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Node - SysSon 1.9.0 API - de.sciss.synth.Node</title>
-          <meta name="description" content="Node - SysSon 1.9.0 API - de.sciss.synth.Node" />
-          <meta name="keywords" content="Node SysSon 1.9.0 API de.sciss.synth.Node" />
+          <title>Node - SysSon 1.10.0 API - de.sciss.synth.Node</title>
+          <meta name="description" content="Node - SysSon 1.10.0 API - de.sciss.synth.Node" />
+          <meta name="keywords" content="Node SysSon 1.10.0 API de.sciss.synth.Node" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -689,18 +689,18 @@ If it was written before, no delay is introduced, otherwise a delay of one contr
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>ModelImpl</dd></dl></div>
     </li><li name="de.sciss.synth.Node#releaseMsg" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="releaseMsg(releaseTime:de.sciss.optional.Optional[Double]):de.sciss.synth.message.NodeSet"></a>
-      <a id="releaseMsg(Optional[Double]):NodeSet"></a>
+      <a id="releaseMsg(releaseTime:Double):de.sciss.synth.message.NodeSet"></a>
+      <a id="releaseMsg(Double):NodeSet"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">releaseMsg</span><span class="params">(<span name="releaseTime">releaseTime: <span class="extype" name="de.sciss.optional.Optional">Optional</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="message/NodeSet.html" class="extype" name="de.sciss.synth.message.NodeSet">NodeSet</a></span>
+        <span class="name">releaseMsg</span><span class="params">(<span name="releaseTime">releaseTime: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1.0</span></span>)</span><span class="result">: <a href="message/NodeSet.html" class="extype" name="de.sciss.synth.message.NodeSet">NodeSet</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#de.sciss.synth.Node@releaseMsg(releaseTime:de.sciss.optional.Optional[Double]):de.sciss.synth.message.NodeSet" title="Permalink" target="_top">
+      <a href="../../../index.html#de.sciss.synth.Node@releaseMsg(releaseTime:Double):de.sciss.synth.message.NodeSet" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -708,8 +708,9 @@ If it was written before, no delay is introduced, otherwise a delay of one contr
 argument is modified to correspond with the interpretation of the <code>gate</code> argument in
 an <code>EnvGen</code> UGen. This is the case for synths created with the package method <code>play</code>.
 </p></div><dl class="paramcmts block"><dt class="param">releaseTime</dt><dd class="cmt"><p>the optional release time in seconds within which the synth should fade out,
-                     or <code>None</code> if the envelope should be released at its nominal release time. If the <code>EnvGen</code>
-                     has a <code>doneAction</code> of <code>freeSelf</code>, the synth will be freed after the release phase.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="message/NodeSet.html" class="extype" name="de.sciss.synth.message.NodeSet">de.sciss.synth.message.NodeSet</a></p></span><span class="cmt"><p><a href="ugen/EnvGen.html" class="extype" name="de.sciss.synth.ugen.EnvGen">de.sciss.synth.ugen.EnvGen</a></p></span></dd></dl></div>
+                     or <code>-1</code> (default) if the envelope should be released at its nominal release time.
+                     If the <code>EnvGen</code> has a <code>doneAction</code> of <code>freeSelf</code>, the synth will be freed after
+                     the release phase.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="message/NodeSet.html" class="extype" name="de.sciss.synth.message.NodeSet">de.sciss.synth.message.NodeSet</a></p></span><span class="cmt"><p><a href="ugen/EnvGen.html" class="extype" name="de.sciss.synth.ugen.EnvGen">de.sciss.synth.ugen.EnvGen</a></p></span></dd></dl></div>
     </li><li name="de.sciss.model.impl.ModelImpl#removeListener" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="removeListener(pf:de.sciss.model.Model.Listener[U]):Unit"></a>
       <a id="removeListener(Listener[NodeChange]):Unit"></a>
