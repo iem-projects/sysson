@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/iem-projects/sysson.svg?branch=master)](https://travis-ci.org/iem-projects/sysson)
 
-SysSon is a sonification platform developed at the Institute of Electronic Music and Acoustics (IEM) Graz. SysSon stands for a systematic procedure to develop sonifications. SySon was created with funding by the Austrian Science Fund FWF ([project SysSon, P 24159](http://sysson.kug.ac.at/)). Further development funded by the Austrian Knowledge Transfer Centre (WTZ Süd).
+SysSon is a sonification platform developed at the Institute of Electronic Music and Acoustics (IEM) Graz. SysSon stands for a systematic procedure to develop sonifications. SysSon was created with funding by the Austrian Science Fund FWF ([project SysSon, P 24159](http://sysson.kug.ac.at/)). Further development funded by the Austrian Knowledge Transfer Centre (WTZ Süd).
 
 SysSon is (C)opyright 2013&ndash;2016 by the Institute of Electronic Music and Acoustics (IEM), Graz. Written by Hanns Holger Rutz. This software is published under the GNU General Public License v3+.
 
