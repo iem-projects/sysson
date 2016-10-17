@@ -2,12 +2,12 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.10.1"
+lazy val projectVersion = "1.10.2"
 
 lazy val commonSettings = Seq(
   name          := baseName,
   version       := projectVersion,
-  organization  := "at.iem.sysson",
+  organization  := "at.iem",
   description   := "Sonification platform of the IEM SysSon project",
   homepage      := Some(url(s"https://github.com/iem-projects/$baseNameL")),
   licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")),
@@ -31,14 +31,14 @@ lazy val scalaMainVersion           = "2.11.8"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.6.0"
-lazy val soundProcessesVersion      = "3.8.0"
+lazy val melliteVersion             = "2.6.1"
+lazy val soundProcessesVersion      = "3.8.1"
 lazy val lucreMatrixVersion         = "1.0.0"
-lazy val lucreSwingVersion          = "1.4.0"
+lazy val lucreSwingVersion          = "1.4.2"
 lazy val lucreVersion               = "3.3.1"
 lazy val scalaColliderVersion       = "1.21.0"
 lazy val scalaColliderSwingVersion  = "1.31.0"
-lazy val ugensVersion               = "1.16.0"
+lazy val ugensVersion               = "1.16.1"
 lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"

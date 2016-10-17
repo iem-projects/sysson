@@ -3,6 +3,7 @@
 # SysSon
 
 [![Build Status](https://travis-ci.org/iem-projects/sysson.svg?branch=master)](https://travis-ci.org/iem-projects/sysson)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/at.iem/sysson_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/at.iem/sysson_2.11)
 
 SysSon is a sonification platform developed at the Institute of Electronic Music and Acoustics (IEM) Graz. SysSon stands for a systematic procedure to develop sonifications. SysSon was created with funding by the Austrian Science Fund FWF ([project SysSon, P 24159](http://sysson.kug.ac.at/)). Further development funded by the Austrian Knowledge Transfer Centre (WTZ Süd).
 
@@ -40,3 +41,10 @@ Building Debian installer package:
 ### API Docs
 
 The latest API docs are available here: https://iem-projects.github.io/sysson/latest/api/
+
+### Linking
+
+We are now publishing artifacts to Maven Central:
+
+    "at.iem" %% "sysson" % "1.10.2"
+
