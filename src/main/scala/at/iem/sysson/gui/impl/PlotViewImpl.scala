@@ -47,19 +47,32 @@ object PlotViewImpl {
   private val DEBUG = false
 
   def apply[S <: Sys[S]](plot: Plot[S], parent: SonificationView[S])(implicit tx: S#Tx, workspace: Workspace[S],
-                                            cursor: stm.Cursor[S]): PlotView[S] = mk(plot, Some(parent))
+                                                                     cursor: stm.Cursor[S]): PlotView[S] =
+    mkPlotView(plot, Some(parent))
 
   def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, workspace: Workspace[S],
-                                            cursor: stm.Cursor[S]): PlotView[S] = mk(plot, None)
+                                        cursor: stm.Cursor[S]): PlotView[S] =
+    mkPlotView(plot, None)
 
-  private def mk[S <: Sys[S]](plot: Plot[S], parentOpt: Option[SonificationView[S]])
+  private def mkPlotView[S <: Sys[S]](plot: Plot[S], parentOpt: Option[SonificationView[S]])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] = {
-    implicit val undoMgr    = new UndoManagerImpl
-    val isEditable          = Matrix.Var.unapply(plot.matrix).isDefined
-    val plotMatrixView      = new PlotMatrixView(canSetMatrix = isEditable, parentOpt = parentOpt).init(plot)
-    val statsView           = PlotStatsView(plot)
-    val chartView           = PlotChartImpl(plot, statsView)
-    val res                 = new Impl(chartView, plotMatrixView, statsView).init()
+    implicit val undoMgr = new UndoManagerImpl
+    val isEditable       = Matrix.Var.unapply(plot.matrix).isDefined
+    val plotMatrixView   = new PlotMatrixView(canSetMatrix = isEditable, parentOpt = parentOpt).init(plot)
+    val statsView        = PlotStatsView(plot)
+    val chartView        = PlotChartImpl(plot, statsView)
+    val res              = new Impl(chartView, plotMatrixView, statsView).init()
+    res
+  }
+
+  def mkTableView[S <: Sys[S]](plot: Plot[S], parentOpt: Option[SonificationView[S]])
+                              (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] = {
+    implicit val undoMgr = new UndoManagerImpl
+    val isEditable       = Matrix.Var.unapply(plot.matrix).isDefined
+    val plotMatrixView   = new PlotMatrixView(canSetMatrix = isEditable, parentOpt = parentOpt).init(plot)
+    val statsView        = PlotStatsView(plot)
+    val chartView        = PlotChartImpl(plot, statsView)
+    val res              = new Impl(chartView, plotMatrixView, statsView).init()
     res
   }
 
