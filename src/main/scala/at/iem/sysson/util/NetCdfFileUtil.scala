@@ -34,14 +34,27 @@ object NetCdfFileUtil {
   object OutDim {
     implicit def byName(name: String): OutDim = Keep(name)
   }
-  sealed trait OutDim { def isCopy: Boolean }
+  sealed trait OutDim { def isCopy: Boolean; def name: String }
+
+  /** The dimension is copied from input and will be
+    * traversed as indices during transformation.
+    */
   final case class Keep(name: String) extends OutDim { def isCopy = true }
 
   object Create { def apply(name: String, units: Option[String], values: ma2.Array): Create =
     new Create(name, units, values)
   }
+  /** The dimension is created anew during transformation.
+    */
   final class Create(val name: String, val units: Option[String], val values: ma2.Array)
     extends OutDim { def isCopy = false }
+
+  /** The dimension is copied from input, but will not be indexed
+    * during traversal but instead the transformation function
+    * takes and outputs that dimension.
+    */
+  final case class Recreate(name: String) extends OutDim { def isCopy = false }
+
 
   // cf. http://www.unidata.ucar.edu/software/thredds/current/netcdf-java/tutorial/NetcdfWriting.html
 
@@ -56,7 +69,9 @@ object NetCdfFileUtil {
     * @param inDims     the dimensions of the variable to transform. these will be removed
     *                   from the target variable
     * @param outDimsSpec the dimensions of the output variable. each spec can either
-    *                   indicate a verbatim copy (`Keep`) or the result of the transformation (`Create`)
+    *                   indicate a verbatim copy (`Keep`) or the result of the transformation (`Create`).
+    *                   If the type is `Recreate`, the dimension appears as part of the array shape
+    *                   given to the function and must be output as such.
     * @param fun        a function that will transform the variable's data matrix. It is passed the origin
     *                   in the kept dimensions (origin of the output shape minus the created dimensions)
     *                   and an object
@@ -95,19 +110,28 @@ object NetCdfFileUtil {
       (outDim, outVarD)
     } .unzip
 
-    val (alterOutDims, alterOutDimsD, alterOutDimsV) = outDimsSpec.collect {
-      case c: Create =>
-        val outDim  = writer.addDimension(null, c.name, c.values.size.toInt)
-        val dt      = ma2.DataType.getType(c.values.getElementType)
-        val outVarD = writer.addVariable(null, c.name, dt, Seq(outDim).asJava)
-        c.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
-        (outDim, c.values, outVarD)
-    } .unzip3
+    val (alterOutDims: Vec[nc2.Dimension], alterOutDimsD: Vec[ma2.Array], alterOutDimsV: Vec[nc2.Variable]) =
+      outDimsSpec.collect {
+        case c: Create =>
+          val outDim  = writer.addDimension(null, c.name, c.values.size.toInt)
+          val dt      = ma2.DataType.getType(c.values.getElementType)
+          val outVarD = writer.addVariable(null, c.name, dt, Seq(outDim).asJava)
+          c.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+          (outDim, c.values, outVarD)
+        case r: Recreate =>
+          val inDim   = alterInDims.find(_.name == r.name).get
+          val inVar   = in.variableMap(r.name)
+          val dimVals = inVar.read()
+          val outDim  = writer.addDimension(null, r.name, inDim.size)
+          val outVarD = dupVar(writer, inVar, Seq(outDim))
+          (outDim, dimVals, outVarD)
+
+      } .unzip3
 
     import equal.Implicits._
     val outDims = outDimsSpec.map {
       case Keep(name) => keepOutDims .find(_.name ===   name).getOrElse(sys.error(s"No dimension '$name'"))
-      case c: Create  => alterOutDims.find(_.name === c.name).getOrElse(sys.error(s"No dimension '${c.name}'"))
+      case c          => alterOutDims.find(_.name === c.name).getOrElse(sys.error(s"No dimension '${c.name}'"))
     }
 
     val outVar = writer.addVariable(null, inVar.getShortName, inVar.getDataType, outDims.asJava)
@@ -118,24 +142,21 @@ object NetCdfFileUtil {
     (keepInDims zip keepOutDimsV).foreach { case (inDim, outDimV) =>
       val inVar   = in.variableMap(inDim.name)
       val dimData = inVar.read()
-      // val outVarD = writer.addVariable(null, inVar.getShortName, inVar.dataType, Seq(outDim).asJava)
       writer.write(outDimV, dimData)
     }
 
     (alterOutDimsD zip alterOutDimsV).foreach { case (dimData, outVarD) =>
-      // val dt      = ma2.DataType.getType(dimData.getElementType)
-      // val outVarD = writer.addVariable(null, dimName, dt, Seq(outDim).asJava)
       writer.write(outVarD, dimData)
     }
 
-    // val transformShape: Vec[Int] = inDims.map(name => in.dimensionMap(name).size)
     val permutations: Array[Int] = inDims.map(name => alterInDims.indexWhere(_.name === name))(breakOut)
 
     val expectedRank  = alterOutDimsD.size
     val expectedSize  = alterOutDimsD.map(_.size).product
     val writeShape: Array[Int] = outDimsSpec.map {
-      case Keep(_)    => 1
-      case c: Create  => c.values.size.toInt
+      case Keep(_)      => 1
+      case c: Create    => c.values.size.toInt
+      case r: Recreate  => allInDims.find(_.name == r.name).get.size
     } (breakOut)
 
     def countSteps(rem: Vec[OutDim], sum: Int): Int = rem match {
@@ -149,7 +170,7 @@ object NetCdfFileUtil {
             }
             sumOut
 
-          case c: Create =>
+          case _ =>
             countSteps(tail, sum)
         }
 
@@ -169,7 +190,7 @@ object NetCdfFileUtil {
               stepsOut = iter(sec1, origin :+ i, tail, steps = stepsOut)
             }
             stepsOut
-          case c: Create =>
+          case _ =>
             iter(sec, origin :+ 0, tail, steps = steps)
         }
 
@@ -207,7 +228,7 @@ object NetCdfFileUtil {
         stepsOut
     }
 
-    iter(inVar.selectAll, Vec.empty, outDimsSpec, steps = 0)
+    iter(inVar.selectAll, Vector.empty, outDimsSpec, steps = 0)
 
     writer.close()
   }
