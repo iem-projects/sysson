@@ -157,7 +157,7 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends View[S] with ComponentHolder[Com
     implicit val stringEx   = StringObj
     implicit val doubleEx   = DoubleObj
 
-    updateData(plot)
+    updateData(plot)  // XXX TODO --- might this be too early for sub-classes?
 
     _observers ::= plot.changed.react { implicit tx => u =>
       if (DEBUG) println("plot changed")

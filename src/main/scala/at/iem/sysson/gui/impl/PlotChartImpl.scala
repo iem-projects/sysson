@@ -22,22 +22,19 @@ import java.awt.{Color, Graphics, Paint, Rectangle, Shape, TexturePaint}
 import java.util.Locale
 import javax.swing.Icon
 
+import at.iem.sysson.gui.impl.AbstractPlotViewImpl.PlotData
 import de.sciss.desktop.UndoManager
 import de.sciss.equal
 import de.sciss.icons.raphael
-import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
+import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.matrix.gui.DimensionIndex
-import de.sciss.lucre.matrix.{DataSource, Matrix}
-import de.sciss.lucre.stm
-import de.sciss.lucre.stm.{Disposable, Sys}
-import de.sciss.lucre.swing.impl.ComponentHolder
+import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.{BooleanCheckBoxView, CellView, DoubleSpinnerView, View, defer, deferTx}
+import de.sciss.lucre.stm
 import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.model.Model
-import de.sciss.processor.Processor
-import de.sciss.processor.impl.ProcessorImpl
 import de.sciss.swingplus.{ComboBox, ListView, OverlayPanel}
 import de.sciss.synth.proc.Workspace
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
@@ -49,7 +46,6 @@ import org.jfree.chart.{ChartPanel, JFreeChart}
 import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
 
 import scala.concurrent.Future
-import scala.concurrent.stm.{Ref, TMap}
 import scala.swing.{Alignment, BorderPanel, Component, FlowPanel, Graphics2D, Label, Swing}
 
 object PlotChartImpl {
@@ -60,109 +56,10 @@ object PlotChartImpl {
     new Impl[S](stats).init(plot)
   }
 
-  private final val DEBUG = false
-
-  private final class PlotData(val hName: String, val mUnits: String, val hData: Array[Float],
-                               val vName: String, val hUnits: String, val vData: Array[Float],
-                               val mName: String, val vUnits: String, val mData: Array[Array[Float]])
-
-  private final class Reader(mName: String, mUnits: String, mReader: Matrix.Reader,
-                             hName: String, hUnits: String, hReader: Matrix.Reader,
-                             vName: String, vUnits: String, vReader: Matrix.Reader)
-    extends ProcessorImpl[PlotData, Reader] {
-
-    private def readDim(r: Matrix.Reader): Array[Float] = {
-      assert(r.numChannels == 1)
-      val sz    = r.numFrames.toInt
-      val res   = new Array[Float](sz)
-      r.read(Array(res), 0, sz)
-      checkAborted()
-      res
-    }
-
-    protected def body(): PlotData = {
-      val hData = readDim(hReader)
-      val vData = readDim(vReader)
-
-      val mCh   = mReader.numChannels
-      val mSz   = mReader.numFrames.toInt
-      val mData = Array.ofDim[Float](mCh, mSz)
-      mReader.read(mData, 0, mSz)
-      checkAborted()
-
-      new PlotData(hName = hName, hUnits = hUnits, hData = hData,
-                   vName = vName, vUnits = vUnits, vData = vData,
-                   mName = mName, mUnits = mUnits, mData = mData)
-    }
-  }
-
   private final class Impl[S <: Sys[S]](statsView: PlotStatsView[S])(implicit val cursor: stm.Cursor[S],
                                                                      val undoManager: UndoManager,
-                                                                     resolver: DataSource.Resolver[S])
-    extends View.Editable[S] with ComponentHolder[Component] {
-
-    // checks if the shape is reducible in all but the provided dimensions
-    private def checkShape1D(shape: Vec[Int], hIdx: Int, vIdx: Int): Boolean =
-      shape.zipWithIndex.forall { case (n, i) => n == 1 || i == hIdx || i == vIdx }
-
-    private val readerRef = Ref(new Reader(null, null, null, null, null, null, null, null, null))
-
-//    private def updateData()(implicit tx: S#Tx): Unit = updateData(plotH())
-
-    private def updateData(plot: Plot[S])(implicit tx: S#Tx): Unit = {
-      val m       = plot.matrix
-      val dimMap  = plot.dims
-      val dims    = m.dimensions
-      val hName   = dimMap.get(Plot.HKey).map(_.value).getOrElse("?")
-      val vName   = dimMap.get(Plot.VKey).map(_.value).getOrElse("?")
-      import equal.Implicits._
-      val hIdx    = dims.indexWhere(_.name === hName)
-      val vIdx    = dims.indexWhere(_.name === vName)
-      val mShape  = m.shape
-      val shapeOk = checkShape1D(mShape, hIdx, vIdx)
-
-      if (DEBUG) println(s"updateData. hIdx = $hIdx, vIdx = $vIdx, ok? $shapeOk")
-
-      if (hIdx >= 0 && vIdx >= 0 && shapeOk) {
-//        println(s"h-unit: ${dims(hIdx).units}")
-//        println(s"v-unit: ${dims(vIdx).units}")
-
-        val hKey    = m.getDimensionKey(hIdx, useChannels = false)
-        val vKey    = m.getDimensionKey(vIdx, useChannels = false)
-        val hReader = hKey.reader[S]()
-        val vReader = vKey.reader[S]()
-        val mName   = m.name  // or plot-obj attr name?
-        val mReader = m.reader(streamDim = hIdx)  // rows = channels, columns = frames
-        val hDim    = dims(hIdx)
-        val vDim    = dims(vIdx)
-        val mUnits  = m.units
-        val hUnits  = hDim.units
-        val vUnits  = vDim.units
-        val proc    = new Reader(mName = mName, mUnits = mUnits, mReader = mReader,
-          hName = hName, hUnits = hUnits, hReader = hReader, vName = vName, vUnits = vUnits, vReader = vReader)
-        val oldProc = readerRef.swap(proc)(tx.peer)
-        tx.afterCommit {
-          oldProc.abort()
-          import scala.concurrent.ExecutionContext.Implicits.global
-          if (!proc.aborted) {
-            proc.start()
-            proc.foreach { plotData =>
-              defer {
-                if (DEBUG) println(s"X-Axis: ${plotData.hName}; ${plotData.hData.take(144).mkString(",")}")
-                if (DEBUG) println(s"Y-Axis: ${plotData.vName}; ${plotData.vData.take(144).mkString(",")}")
-                updatePlot(plotData)
-              }
-            }
-            proc.onFailure {
-              case Processor.Aborted() =>
-              case ex =>
-                Console.err.println("Matrix reader failed:")
-                ex.printStackTrace()
-            }
-          }
-        }
-      }
-    }
+                                                                     protected val resolver: DataSource.Resolver[S])
+    extends AbstractPlotViewImpl[S] with View.Editable[S] {
 
     private val dataset = new MatrixSeriesCollection
 
@@ -221,14 +118,13 @@ object PlotChartImpl {
     private var _lastXVals: Array[Float] = new Array[Float](0)  // we use `sameElements`, so ensure it's not null
     private var _lastYVals: Array[Float] = _lastXVals           // dito
 
-
     private var _plotData: PlotData = _
 
     // called on EDT
     private def rescalePlot(): Unit = if (_plotData != null) updatePlot(_plotData)
 
     // called on EDT
-    private def updatePlot(data: PlotData): Unit = {
+    protected def updatePlot(data: PlotData): Unit = {
       _plotData = data
 
       dataset.removeAllSeries()
@@ -300,8 +196,6 @@ object PlotChartImpl {
 
     // ----
 
-    private var observers       = List.empty[Disposable[S#Tx]]
-
     private var viewOverlay     : BooleanCheckBoxView[S] = _
     private var overlayEmpty    : Component = _
     private var cellPalette     : CellView.Var[S, Option[String]] = _
@@ -310,16 +204,14 @@ object PlotChartImpl {
     private var maxView         : DoubleSpinnerView.Optional[S] = _
     private var normalizeView   : BooleanCheckBoxView[S] = _
 
-    private var plotH: stm.Source[S#Tx, Plot[S]] = _
-
     // called on the EDT
     private def updateOverlay(): Unit = {
       overlayEmpty.visible  = isMap
       mapOverlay.enabled    = isMap && viewOverlay.component.selected
     }
 
-    def init(plot: Plot[S])(implicit tx: S#Tx): this.type = {
-      plotH = tx.newHandle(plot)
+    override def init(plot: Plot[S])(implicit tx: S#Tx): this.type = {
+      super.init(plot)
 
       implicit val booleanEx  = BooleanObj
       implicit val stringEx   = StringObj
@@ -328,13 +220,13 @@ object PlotChartImpl {
       val plotAttr    = plot.attr
       val cellOverlay = AttrCellView[S, Boolean, BooleanObj](plotAttr, Plot.attrShowOverlay)
       viewOverlay     = BooleanCheckBoxView.optional(cellOverlay, name = "Map Overlay", default = false)
-      observers     ::= cellOverlay.react { implicit tx => _ => deferTx(updateOverlay()) }
+      addObserver(cellOverlay.react { implicit tx => _ => deferTx(updateOverlay()) })
       cellPalette     = AttrCellView[S, String, StringObj](plotAttr, Plot.attrPalette)
-      observers     ::= cellPalette.react { implicit tx => nameOpt =>
+      addObserver(cellPalette.react { implicit tx => nameOpt =>
         deferTx {
           setPalette(nameOpt)
         }
-      }
+      })
 
       val cellMin   = AttrCellView[S, Double , DoubleObj ](plotAttr, Plot.attrMin      )
       val cellMax   = AttrCellView[S, Double , DoubleObj ](plotAttr, Plot.attrMax      )
@@ -343,20 +235,20 @@ object PlotChartImpl {
       maxView       = DoubleSpinnerView  .optional(cellMax , name = "Maximum")
       normalizeView = BooleanCheckBoxView.optional(cellNorm, name = "Normalize", default = true)
 
-      observers ::= cellMin.react { implicit tx => value => deferTx {
+      addObserver(cellMin.react { implicit tx => value => deferTx {
         minOpt = value
         rescalePlot()
-      }}
+      }})
 
-      observers ::= cellMax.react { implicit tx => value => deferTx {
+      addObserver(cellMax.react { implicit tx => value => deferTx {
         maxOpt = value
         rescalePlot()
-      }}
+      }})
 
-      observers ::= cellNorm.react { implicit tx => value => deferTx {
+      addObserver(cellNorm.react { implicit tx => value => deferTx {
         normalize = value.getOrElse(true)
         rescalePlot()
-      }}
+      }})
 
       val paletteValue0 = cellPalette()
       val minVal0       = cellMin()
@@ -364,51 +256,13 @@ object PlotChartImpl {
       val norm0         = cellNorm().getOrElse(true)
 
       deferTx(guiInit(paletteValue0 = paletteValue0, minVal0 = minVal0, maxVal0 = maxVal0, norm0 = norm0))
-      updateData(plot)
-
-      observers ::= plot.changed.react { implicit tx => u =>
-        if (DEBUG) println("plot changed")
-        updateData(u.plot)
-        u.changes.foreach {
-          case Plot.DimsChange(mu) => mu.changes.foreach {
-            case evt.Map.Added   (key, value) => addPlotDim   (key, value)
-            case evt.Map.Removed (key, value) => removePlotDim(key, value)
-            case evt.Map.Replaced(key, before, now) =>
-              removePlotDim(key, before)
-              addPlotDim   (key, now   )
-          }
-          case _ =>
-        }
-      }
-
-      plot.dims.iterator.foreach { case (key, value) => addPlotDim(key, value) }
 
       this
     }
 
-    private val plotDimObs = TMap.empty[String, Disposable[S#Tx]]
-
-    private def addPlotDim(key: String, value: StringObj[S])(implicit tx: S#Tx): Unit = {
-      implicit val ptx = tx.peer
-      val obs = value.changed.react { implicit tx => _ =>
-        updateData(plotH())
-      }
-      plotDimObs.put(key, obs)
-    }
-
-    private def removePlotDim(key: String, value: StringObj[S])(implicit tx: S#Tx): Unit = {
-      implicit val ptx = tx.peer
-      plotDimObs.remove(key).foreach(_.dispose())
-    }
-
-    def dispose()(implicit tx: S#Tx): Unit = {
-      implicit val ptx = tx.peer
-      observers.foreach(_.dispose())
-      val p = readerRef.get(tx.peer)
-      plotDimObs.foreach(_._2.dispose())
-      plotDimObs.clear()
+    override def dispose()(implicit tx: S#Tx): Unit = {
+      super.dispose()
       deferTx {
-        p.abort()
         statsView.removeListener(statsListener)
       }
     }
