@@ -23,6 +23,7 @@ import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, defer, deferTx}
 import de.sciss.lucre.{stm, event => evt}
+import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 
@@ -67,7 +68,7 @@ object AbstractPlotViewImpl {
     }
   }
 }
-trait AbstractPlotViewImpl[S <: Sys[S]] extends View[S] with ComponentHolder[Component] {
+trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with ComponentHolder[Component] {
   import AbstractPlotViewImpl._
 
   // ---- abstract ----
@@ -75,9 +76,9 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends View[S] with ComponentHolder[Com
   // called on EDT
   protected def updatePlot(data: PlotData): Unit
 
-  implicit protected def resolver: DataSource.Resolver[S]
-
   // ---- impl ----
+
+  implicit private[this] val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
   // checks if the shape is reducible in all but the provided dimensions
   private def checkShape1D(shape: Vec[Int], hIdx: Int, vIdx: Int): Boolean =

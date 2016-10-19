@@ -136,17 +136,43 @@ object DataSourceViewImpl {
     extends DataSourceView[S] with ComponentHolder[Component] with ModelImpl[DataSourceView.Update] {
     impl =>
     
-    private var _selVar     = Option.empty[nc2.Variable]
+    private[this] var _selVar     = Option.empty[nc2.Variable]
 
-    private var mGroupAttrs = new AttrsModel(Vec.empty)
-    private var mGroupVars  = new VarsModel (Vec.empty)
+    private[this] var mGroupAttrs = new AttrsModel(Vec.empty)
+    private[this] var mGroupVars  = new VarsModel (Vec.empty)
 
-    private var tGroupAttrs: Table = _
-    private var tGroupVars : Table = _
+    private[this] var tGroupAttrs: Table = _
+    private[this] var tGroupVars : Table = _
 
-    private var tGroups    : Tree[nc2.Group]  = _
+    private[this] var tGroups    : Tree[nc2.Group]  = _
 
     def source(implicit tx: S#Tx): DataSource[S] = sourceH()
+
+    private def performPlot(prefix: String)(fun: S#Tx => Plot[S] => Unit): Unit =
+      selectedVariable.foreach { vr =>
+        cursor.step { implicit tx =>
+          val key     = vr.name
+          val attrKey = s"$prefix-$key"
+          val src     = source
+          val srcAttr = src.attr
+          val plotOpt = srcAttr.$[Plot](attrKey) // .flatMap(Plot.Obj.unapply)
+          val plot    = plotOpt.orElse {
+            mkMatrix(vr).map { mr =>
+              val p         = Plot[S](mr)
+              val varName   = key: StringObj[S]
+              val plotName  = srcAttr.$[StringObj](ObjKeys.attrName).fold(varName) { srcName =>
+                import expr.Ops._
+                srcName ++ " > " ++ varName
+              }
+              p.attr.put(ObjKeys.attrName, plotName)
+              val po  = p // Obj(Plot.Elem(p))
+              src.attr.put(attrKey, po)
+              po
+            }
+          }
+          plot.foreach(fun(tx)(_))
+        }
+      }
 
     def guiInit(): Unit = {
       requireEDT()
@@ -211,37 +237,13 @@ object DataSourceViewImpl {
         })
       }
 
-      val actionPlot = Action("Plot") {
-        selectedVariable.foreach { vr =>
-          cursor.step { implicit tx =>
-            val key     = vr.name
-            val attrKey = s"plot-$key"
-            val src     = source
-            val srcAttr = src.attr
-            val plotOpt = srcAttr.$[Plot](attrKey) // .flatMap(Plot.Obj.unapply)
-            // val mr      = findRoot(m)
-            val plot    = plotOpt.orElse {
-              mkMatrix(vr).map { mr =>
-                val p         = Plot[S](mr)
-                val varName   = key: StringObj[S]
-                val plotName  = srcAttr.$[StringObj](ObjKeys.attrName).fold(varName) { srcName =>
-                  import expr.Ops._
-                  srcName ++ " > " ++ varName
-                }
-                p.attr.put(ObjKeys.attrName, plotName)
-                val po  = p // Obj(Plot.Elem(p))
-                src.attr.put(attrKey, po)
-                po
-              }
-            }
-            plot.foreach(PlotFrame(_))
-          }
-        }
-      }
+      val actionPlot   = Action("Plot" )(performPlot("plot" ) { implicit tx => plot => PlotFrame            (plot) })
+      val actionSpread = Action("Table")(performPlot("table") { implicit tx => plot => PlotFrame.spreadsheet(plot) })
 
       tGroups.selectInterval(0, 0)
 
-      val ggPlot  = GUI.toolButton(actionPlot, raphael.Shapes.LineChart)
+      val ggPlot    = GUI.toolButton(actionPlot  , raphael.Shapes.LineChart, tooltip = "Create 2D Plot")
+      val ggSpread  = GUI.toolButton(actionSpread, Shapes.Spreadsheet, tooltip = "Open Data Table")
       tGroupAttrs.preferredViewportSize = tGroupAttrs.preferredSize // WTF? why do we even have to do this explicitly?
       tGroupVars .preferredViewportSize = tGroupVars .preferredSize // WTF? why do we even have to do this explicitly?
       val ggSplit = new SplitPane(Orientation.Horizontal, new ScrollPane(tGroupAttrs), new ScrollPane(tGroupVars))
@@ -253,13 +255,9 @@ object DataSourceViewImpl {
           add(new ScrollPane(tGroups), BorderPanel.Position.North)
         }
         add(ggSplit, BorderPanel.Position.Center)
-        // new ScrollPane(tGroupAttrs),
-        // new ScrollPane(tGroupVars),
-        // new BoxPanel(Orientation.Horizontal) {
-        //  contents += ggPlot
-        // }
         add(new BoxPanel(Orientation.Horizontal) {
           contents += HGlue
+          contents += ggSpread
           contents += ggPlot
           contents += HGlue
         }, BorderPanel.Position.South)

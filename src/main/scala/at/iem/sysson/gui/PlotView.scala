@@ -30,6 +30,10 @@ object PlotView {
   def apply[S <: Sys[S]](plot: Plot[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] =
     Impl(plot)
+
+  def spreadsheet[S <: Sys[S]](plot: Plot[S], parent: Option[SonificationView[S]])
+                              (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] =
+    Impl.mkTableView(plot, parent)
 }
 trait PlotView[S <: Sys[S]]
   extends ViewHasWorkspace[S]

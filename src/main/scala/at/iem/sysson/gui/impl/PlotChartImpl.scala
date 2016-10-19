@@ -27,11 +27,10 @@ import de.sciss.desktop.UndoManager
 import de.sciss.equal
 import de.sciss.icons.raphael
 import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
-import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.matrix.gui.DimensionIndex
+import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.{BooleanCheckBoxView, CellView, DoubleSpinnerView, View, defer, deferTx}
-import de.sciss.lucre.stm
 import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.model.Model
@@ -52,16 +51,15 @@ object PlotChartImpl {
   def apply[S <: Sys[S]](plot: Plot[S], stats: PlotStatsView[S])(implicit tx: S#Tx, cursor: stm.Cursor[S],
                                                                  undoManager: UndoManager,
                                                                  workspace: Workspace[S]): View.Editable[S] = {
-    implicit val resolver = WorkspaceResolver[S]
     new Impl[S](stats).init(plot)
   }
 
   private final class Impl[S <: Sys[S]](statsView: PlotStatsView[S])(implicit val cursor: stm.Cursor[S],
                                                                      val undoManager: UndoManager,
-                                                                     protected val resolver: DataSource.Resolver[S])
+                                                                     val workspace: Workspace[S])
     extends AbstractPlotViewImpl[S] with View.Editable[S] {
 
-    private val dataset = new MatrixSeriesCollection
+    private[this] val dataset = new MatrixSeriesCollection
 
     private def calcMinMax(d: Array[Array[Float]], fill: Float): (Float, Float) = {
       var min  = Float.MaxValue
@@ -113,12 +111,12 @@ object PlotChartImpl {
       res
     }
 
-    private var _lastXName: String       = _
-    private var _lastYName: String       = _
-    private var _lastXVals: Array[Float] = new Array[Float](0)  // we use `sameElements`, so ensure it's not null
-    private var _lastYVals: Array[Float] = _lastXVals           // dito
+    private[this] var _lastXName: String       = _
+    private[this] var _lastYName: String       = _
+    private[this] var _lastXVals: Array[Float] = new Array[Float](0)  // we use `sameElements`, so ensure it's not null
+    private[this] var _lastYVals: Array[Float] = _lastXVals           // dito
 
-    private var _plotData: PlotData = _
+    private[this] var _plotData: PlotData = _
 
     // called on EDT
     private def rescalePlot(): Unit = if (_plotData != null) updatePlot(_plotData)
@@ -189,20 +187,20 @@ object PlotChartImpl {
 
     // ---- gui values ----
 
-    private var isMap     = false
-    private var minOpt    = Option.empty[Double]
-    private var maxOpt    = Option.empty[Double]
-    private var normalize = true
+    private[this] var isMap     = false
+    private[this] var minOpt    = Option.empty[Double]
+    private[this] var maxOpt    = Option.empty[Double]
+    private[this] var normalize = true
 
     // ----
 
-    private var viewOverlay     : BooleanCheckBoxView[S] = _
-    private var overlayEmpty    : Component = _
-    private var cellPalette     : CellView.Var[S, Option[String]] = _
+    private[this] var viewOverlay     : BooleanCheckBoxView[S] = _
+    private[this] var overlayEmpty    : Component = _
+    private[this] var cellPalette     : CellView.Var[S, Option[String]] = _
 
-    private var minView         : DoubleSpinnerView.Optional[S] = _
-    private var maxView         : DoubleSpinnerView.Optional[S] = _
-    private var normalizeView   : BooleanCheckBoxView[S] = _
+    private[this] var minView         : DoubleSpinnerView.Optional[S] = _
+    private[this] var maxView         : DoubleSpinnerView.Optional[S] = _
+    private[this] var normalizeView   : BooleanCheckBoxView[S] = _
 
     // called on the EDT
     private def updateOverlay(): Unit = {
@@ -267,7 +265,7 @@ object PlotChartImpl {
       }
     }
 
-    private lazy val nanPaint: Paint = {
+    private[this] lazy val nanPaint: Paint = {
       val nanImg = new BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB)
       nanImg.setRGB(0, 0, 0xFF000000)
       nanImg.setRGB(0, 1, 0xFFFFFFFF)
@@ -298,7 +296,7 @@ object PlotChartImpl {
       }
     }
 
-    private object mapOverlay extends AbstractOverlay with Overlay {
+    private[this] object mapOverlay extends AbstractOverlay with Overlay {
       import scala.concurrent.ExecutionContext.Implicits.global
 
       private var _enabled = false
@@ -400,14 +398,14 @@ object PlotChartImpl {
       res
     }
 
-    private var _plot: XYPlot = _
-    private var _main: ChartPanel = _
-    private var blockRenderer: XYBlockRenderer = _
+    private[this] var _plot: XYPlot = _
+    private[this] var _main: ChartPanel = _
+    private[this] var blockRenderer: XYBlockRenderer = _
 
     private def setPalette(name: Option[String]): Unit =
       blockRenderer.setPaintScale(mkScale(name.getOrElse("panoply")))
 
-    private val statsListener: Model.Listener[Stats.Variable] = { case stats =>
+    private[this] val statsListener: Model.Listener[Stats.Variable] = { case stats =>
       updateMinMaxDefaults(stats)
       if (normalize) rescalePlot()
     }

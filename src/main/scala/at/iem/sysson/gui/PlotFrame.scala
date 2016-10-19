@@ -29,6 +29,10 @@ object PlotFrame {
   def apply[S <: Sys[S]](plot: Plot[S], parent: SonificationView[S])
                         (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotFrame[S] =
     Impl(plot, parent)
+
+  def spreadsheet[S <: Sys[S]](plot: Plot[S], parent: Option[SonificationView[S]] = None)
+                              (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotFrame[S] =
+    Impl.spreadsheet(plot, parent)
 }
 trait PlotFrame[S <: Sys[S]] extends Window[S] {
   def view: PlotView[S]

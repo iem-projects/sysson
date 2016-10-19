@@ -71,7 +71,7 @@ object PlotViewImpl {
     val isEditable       = Matrix.Var.unapply(plot.matrix).isDefined
     val plotMatrixView   = new PlotMatrixView(canSetMatrix = isEditable, parentOpt = parentOpt).init(plot)
     val statsView        = PlotStatsView(plot)
-    val chartView        = PlotChartImpl(plot, statsView)
+    val chartView        = SpreadsheetViewImpl(plot, statsView)
     val res              = new Impl(chartView, plotMatrixView, statsView).init()
     res
   }

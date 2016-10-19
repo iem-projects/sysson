@@ -36,6 +36,12 @@ object PlotFrameImpl {
     mk(obj, view)
   }
 
+  def spreadsheet[S <: Sys[S]](obj: Plot[S], parent: Option[SonificationView[S]])
+                              (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotFrame[S] = {
+    val view = PlotView.spreadsheet(obj, parent)
+    mk(obj, view)
+  }
+
   private def mk[S <: Sys[S]](obj: Plot[S], view: PlotView[S])(implicit tx: S#Tx): PlotFrame[S] = {
     val name  = AttrCellView.name(obj)
     val res   = new Impl(view, name)
