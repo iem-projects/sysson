@@ -41,7 +41,11 @@ object NetCdfFileUtil {
     new Create(name, units, values)
   }
   final class Create(val name: String, val units: Option[String], val values: ma2.Array)
-    extends OutDim { def isCopy = false }
+    extends OutDim {
+
+    def isCopy      = false
+    var description = Option.empty[String]
+  }
 
   // cf. http://www.unidata.ucar.edu/software/thredds/current/netcdf-java/tutorial/NetcdfWriting.html
 
@@ -69,22 +73,38 @@ object NetCdfFileUtil {
                (fun: (Vec[Int], ma2.Array) => ma2.Array): Processor[Unit] with Processor.Prepared =
     new ProcessorImpl[Unit, Processor[Unit]] with Processor[Unit] {
       protected def body(): Unit = blocking {
-        transformBody(this, in = in, out = out, varName = varName, inDims = inDims, outDimsSpec = outDimsSpec,
+        import Implicits._
+        transformBody(this, in = in, out = out, varSec = in.variableMap(varName).selectAll,
+          inDims = inDims, outDimsSpec = outDimsSpec,
           fun = fun)
       }
 
       override def toString = s"$varName-transform"
     }
 
+  def transformSelection(in: nc2.NetcdfFile, out: File, sel: VariableSection, inDims: Vec[String], outDimsSpec: Vec[OutDim])
+               (fun: (Vec[Int], ma2.Array) => ma2.Array): Processor[Unit] with Processor.Prepared =
+    new ProcessorImpl[Unit, Processor[Unit]] with Processor[Unit] {
+      protected def body(): Unit = blocking {
+        transformBody(this, in = in, out = out, varSec = sel, inDims = inDims, outDimsSpec = outDimsSpec,
+          fun = fun)
+      }
+
+      override def toString = {
+        import Implicits._
+        s"${sel.variable.name}-transform"
+      }
+    }
+
   private def transformBody(self: ProcessorImpl[Unit, Processor[Unit]],
-                            in: nc2.NetcdfFile, out: File, varName: String, inDims: Vec[String],
+                            in: nc2.NetcdfFile, out: File, varSec: VariableSection, inDims: Vec[String],
                             outDimsSpec: Vec[OutDim], fun: (Vec[Int], ma2.Array) => ma2.Array): Unit = {
     val location  = out.path
     val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
 
     import Implicits._
 
-    val inVar     = in.variableMap(varName)
+    val inVar     = varSec.variable // in.variableMap(varName)
     val allInDims = inVar.dimensions
     val (alterInDims, keepInDims) = allInDims.partition(d => inDims.contains(d.name))
 
@@ -100,7 +120,8 @@ object NetCdfFileUtil {
         val outDim  = writer.addDimension(null, c.name, c.values.size.toInt)
         val dt      = ma2.DataType.getType(c.values.getElementType)
         val outVarD = writer.addVariable(null, c.name, dt, Seq(outDim).asJava)
-        c.units.foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+        c.units      .foreach(units => outVarD.addAttribute(new nc2.Attribute(CDM.UNITS, units)))
+        c.description.foreach(descr => outVarD.addAttribute(new nc2.Attribute(CDM.DESCRIPTION, descr)))
         (outDim, c.values, outVarD)
     } .unzip3
 
@@ -138,13 +159,18 @@ object NetCdfFileUtil {
       case c: Create  => c.values.size.toInt
     } (breakOut)
 
+    def close(o: OpenRange, size: Int): Range = o.toClosedRange(0, size)
+
     def countSteps(rem: Vec[OutDim], sum: Int): Int = rem match {
       case head +: tail =>
         head match {
           case Keep(name) =>
-            val dim = keepInDims.find(_.name === name).get
-            var sumOut = sum
-            for (i <- 0 until dim.size) {
+            val dim       = keepInDims.find     (_.name === name).get
+            val inDimIdx  = allInDims.indexWhere(_.name === name)
+            val dimRangeO = varSec.section(inDimIdx)
+            val dimRange  = close(dimRangeO, dim.size)
+            var sumOut    = sum
+            for (i <- dimRange) {
               sumOut = countSteps(tail, sumOut)
             }
             sumOut
@@ -162,9 +188,12 @@ object NetCdfFileUtil {
       case head +: tail =>
         head match {
           case Keep(name) =>
-            val dim = keepInDims.find(_.name === name).get
-            var stepsOut = steps
-            for (i <- 0 until dim.size) {
+            val dim       = keepInDims.find     (_.name === name).get
+            val inDimIdx  = allInDims.indexWhere(_.name === name)
+            val dimRangeO = varSec.section(inDimIdx)
+            val dimRange  = close(dimRangeO, dim.size)
+            var stepsOut  = steps
+            for (i <- dimRange) {
               val sec1 = (sec in name).select(i)
               stepsOut = iter(sec1, origin :+ i, tail, steps = stepsOut)
             }
@@ -207,7 +236,7 @@ object NetCdfFileUtil {
         stepsOut
     }
 
-    iter(inVar.selectAll, Vec.empty, outDimsSpec, steps = 0)
+    iter(varSec, Vector.empty, outDimsSpec, steps = 0)
 
     writer.close()
   }
