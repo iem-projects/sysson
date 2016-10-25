@@ -1,13 +1,44 @@
-package de.sciss.synth.ugen
+/*
+ *  Voices.scala
+ *  (SysSon)
+ *
+ *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
+ *
+ *	This software is published under the GNU General Public License v3+
+ *
+ *
+ *	For further information, please contact Hanns Holger Rutz at
+ *	contact@sciss.de
+ */
 
-import de.sciss.synth.{ControlRated, GE, UGenInLike}
+package de.sciss.synth
+package ugen
+
+trait VoicesExample {
+  val freqIn  = ??? : GE
+  val ampIn   = ??? : GE
+  val maxDf   = ??? : GE
+  val lagTime = ??? : GE
+
+  val vcs     = Voices.T2(4)
+  val an      = vcs.analyze(freqIn, ampIn)((vcs.in1 absdif freqIn) < maxDf)
+  val env     = Env.asr()
+  val eg      = EnvGen.ar(env, gate = an.active)
+  val active  = A2K.kr(eg) sig_!= 0
+  an.close(active)
+  val lag     = an.activated * lagTime
+  val freq    = Lag.ar(an.out1, lag)
+  val osc     = SinOsc.ar(freq) * an.out2 * eg
+  Out.ar(0, osc)
+}
 
 /**
   * Example:
   *
   * {{{
   *   val vcs     = Voices.T2(4)
-  *   val an      = vcs.analyze(freqIn, ampIn, cmp = (vcs.in1 absdif freqIn) < maxDf)
+  *   val an      = vcs.analyze(freqIn, ampIn)((vcs.in1 absdif freqIn) < maxDf)
   *   val env     = Env.asr(attack = egAtk, release = egRls)
   *   val eg      = EnvGen.ar(env, gate = an.active)
   *   val active  = A2K.kr(eg) sig_!= 0
@@ -20,16 +51,21 @@ import de.sciss.synth.{ControlRated, GE, UGenInLike}
   * }}}
   */
 object Voices {
-  case class T1(num: Int, global0: GE = List.empty[GE]) extends Voices {
-    private[synth] def expand: UGenInLike = {
-      LocalIn.kr(Seq.fill[Constant](num * numFeatures)(0) ++ global0.expand.outputs)
-    }
-
+  case class T1(num: Int) extends Voices {
     def numFeatures = 1
 
-    def global = ??? : GE
+    def in1: GE = ???
 
     def analyze(in0: GE)(cmp: GE): A1 = ???
+  }
+
+  case class T2(num: Int) extends Voices {
+    def numFeatures = 2
+
+    def in1: GE = ???
+    def in2: GE = ???
+
+    def analyze(in0: GE, in1: GE)(cmp: GE): A2 = ???
   }
 
   case class A1(in: T1, cmp: GE) extends Analysis {
@@ -76,23 +112,33 @@ object Voices {
       ???
     }
 
-    def active    : GE = ???
-    def activated : GE = ???
     def out       : GE = ???
+  }
+
+  case class A2(in: T1, cmp: GE) extends Analysis {
+    private[synth] def expand: UGenInLike = ???
+
+    def out1      : GE = ???
+    def out2      : GE = ???
   }
 
   trait Analysis extends GE with ControlRated {
     def in        : Voices
     def cmp       : GE
 
-    def active    : GE
-    def activated : GE
+    def active    : GE = ???
+    def activated : GE = ???
+
+    def close(active: GE = 0): Unit = ???
   }
 
-  case class Out(a: Analysis, active: GE = 0, global: GE = List.empty[GE])
+  case class Out(a: Analysis, active: GE = 0)
 }
 trait Voices extends GE with ControlRated {
   def num: Int
-  def global: GE
   def numFeatures: Int
+
+  private[synth] def expand: UGenInLike = {
+    LocalIn.kr(Seq.fill[Constant](num * numFeatures)(0))
+  }
 }
