@@ -46,6 +46,7 @@ lazy val kollFlitzVersion           = "0.2.0"
 lazy val fscapeJobsVersion          = "1.5.0"
 lazy val sheetVersion               = "0.1.1"
 lazy val slfVersion                 = "1.7.21"
+lazy val voicesVersion              = "0.1.0-SNAPSHOT"
 
 // ---- test libraries ----
 
@@ -121,6 +122,7 @@ lazy val root = Project(id = baseNameL, base = file("."))
       "de.sciss" %% "scalacolliderswing-core"     % scalaColliderSwingVersion,
       "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
       "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
+      "at.iem"   %% "scalacollider-voices"        % voicesVersion,              // polyphony management
       "at.iem"   %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
       "de.sciss" %% "lucreswing"                  % lucreSwingVersion,          // reactive widgets
       "de.sciss" %% "lucre-core"                  % lucreVersion,               // object model
