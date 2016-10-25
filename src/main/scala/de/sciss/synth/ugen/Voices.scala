@@ -16,10 +16,10 @@ package de.sciss.synth
 package ugen
 
 trait VoicesExample {
-  val freqIn  = ??? : GE
-  val ampIn   = ??? : GE
-  val maxDf   = ??? : GE
-  val lagTime = ??? : GE
+  val freqIn  : GE = Seq(123, 345, 0)
+  val ampIn   : GE = Seq(0.2, 0.3, 0.0)
+  val maxDf   : GE = 50.0
+  val lagTime : GE = 1.0
 
   val vcs     = Voices.T2(4)
   val an      = vcs.analyze(freqIn, ampIn)((vcs.in1 absdif freqIn) < maxDf)
@@ -33,7 +33,8 @@ trait VoicesExample {
   Out.ar(0, osc)
 }
 
-/**
+/** Building blocks for polyphony (voice) management.
+  *
   * Example:
   *
   * {{{
@@ -52,23 +53,23 @@ trait VoicesExample {
   */
 object Voices {
   case class T1(num: Int) extends Voices {
-    def numFeatures = 1
+    def features = 1
 
-    def in1: GE = ???
+    def in: GE = featureIn(0)
 
-    def analyze(in0: GE)(cmp: GE): A1 = ???
+    def analyze(in: GE)(cmp: GE): A1 = A1(this, in = in, cmp = cmp)
   }
 
   case class T2(num: Int) extends Voices {
-    def numFeatures = 2
+    def features = 2
 
-    def in1: GE = ???
-    def in2: GE = ???
+    def in1: GE = featureIn(0)
+    def in2: GE = featureIn(1)
 
-    def analyze(in0: GE, in1: GE)(cmp: GE): A2 = ???
+    def analyze(in1: GE, in2: GE)(cmp: GE): A2 = A2(this, in1 = in1, in2 = in2, cmp = cmp)
   }
 
-  case class A1(in: T1, cmp: GE) extends Analysis {
+  case class A1(voices: T1, in: GE, cmp: GE) extends Analysis {
     private[synth] def expand: UGenInLike = {
 //      var activated   = Vector.fill(numVoices)(0: GE): GE
 //      val noFounds = (0 until numTraj).map { tIdx =>
@@ -112,33 +113,75 @@ object Voices {
       ???
     }
 
-    def out       : GE = ???
+    def out: GE = featureOut(0)
   }
 
-  case class A2(in: T1, cmp: GE) extends Analysis {
+  case class A2(voices: T2, in1: GE, in2: GE, cmp: GE) extends Analysis {
     private[synth] def expand: UGenInLike = ???
 
-    def out1      : GE = ???
-    def out2      : GE = ???
+    def out1      : GE = featureOut(0)
+    def out2      : GE = featureOut(1)
   }
 
   trait Analysis extends GE with ControlRated {
-    def in        : Voices
+    val voices    : Voices
     def cmp       : GE
 
-    def active    : GE = ???
-    def activated : GE = ???
+    def active    : GE = featureOut(voices.features)
+    def activated : GE = active & !voices.active
+    def sustained : GE = active &  voices.active
 
-    def close(active: GE = 0): Unit = ???
+    def close(active: GE = 0): Unit = Out(this, active = active)
+
+    /*
+
+
+     */
+
+    final def featureOut(idx: Int): GE =
+      ChannelRangeProxy(this, from = idx * voices.num, until = (idx + 1) * voices.num)
   }
 
-  case class Out(a: Analysis, active: GE = 0)
+  case class Out(analysis: Analysis, active: GE = 0) extends Lazy.Expander[Unit] {
+    protected def makeUGens: Unit = {
+      val newActive   = analysis.activated | active
+      import analysis.voices.{features, num}
+      val newFeatures = ChannelRangeProxy(analysis, from = 0, until = features * num)
+      val combined    = Flatten(Seq(newFeatures, newActive))
+      LocalOut.kr(combined)
+    }
+  }
 }
 trait Voices extends GE with ControlRated {
+  /** Number of voices allocated. */
   def num: Int
-  def numFeatures: Int
 
-  private[synth] def expand: UGenInLike = {
-    LocalIn.kr(Seq.fill[Constant](num * numFeatures)(0))
-  }
+  /** Number of features (graph element components) per voice. */
+  def features: Int
+
+  /*
+      organization of the channels - features are joined together (this is an arbitrary decision):
+
+      [vc0_feat0, vc1_feat0, ... vcN_feat0, vc0_feat1, vc1_feat1, ... vcN_feat1,
+       ..., vc0_featM, vc1_featM, ..., vcN_featM]
+
+      thus
+
+         def get(vcIdx: Int, featIdx: Int) = ChannelProxy(this, featIdx * num + vcIdx)
+         def get(featIdx: Int) = ChannelRangeProxy(this, from = featIdx * num, until = featIdx * num + num)
+
+      Apart from the nominal number of features, `features`, there is an additional
+      "feature" which is the on-off state of the voice. Thus we use
+      `(num + 1) * features` channels for the local-in/out, and we can
+      use `featureIn(features)` to obtain the on-off vector.
+
+   */
+
+  final def featureIn(idx: Int): GE =
+    ChannelRangeProxy(this, from = idx * num, until = (idx + 1) * num)
+
+  def active: GE = featureIn(features)
+
+  private[synth] def expand: UGenInLike =
+    LocalIn.kr(Seq.fill[Constant]((num + 1) * features)(0))
 }
