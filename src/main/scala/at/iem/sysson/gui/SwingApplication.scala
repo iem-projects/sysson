@@ -23,7 +23,6 @@ import javax.swing.plaf.ColorUIResource
 import at.iem.sysson
 import de.sciss.desktop.impl.{SwingApplicationImpl, WindowHandlerImpl}
 import de.sciss.desktop.{Menu, WindowHandler}
-import de.sciss.file._
 import de.sciss.mellite
 import de.sciss.mellite.gui.LogFrame
 import de.sciss.mellite.gui.impl.document.DocumentHandlerImpl
@@ -56,6 +55,7 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
     //    de.sciss.synth.proc.showAuralLog      = true
     //    de.sciss.synth.proc.showTransportLog  = true
     // de.sciss.synth.proc.impl.BounceImpl.DEBUG = true
+    // UGenGraphBuilderLike.DEBUG = true
 
     // ---- look and feel ----
 

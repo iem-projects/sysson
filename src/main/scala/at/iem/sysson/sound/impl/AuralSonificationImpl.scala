@@ -150,7 +150,7 @@ object AuralSonificationImpl {
     private def addSpec(req: UGB.Input, st: UGB.IO[S], spec: MatrixPrepare.Spec): MatrixPrepare.Value =
       MatrixPrepare.Value(oldMatrixSpecs(req, st) :+ spec)
 
-    override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.IO[S])
+    override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.Requester[S])
                                   (implicit tx: S#Tx): Res = req match {
       case _: graph.UserValue | _: graph.Dim.Size | _: graph.Var.Size | _: graph.Elapsed => UGB.Unit
 
