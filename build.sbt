@@ -32,14 +32,14 @@ lazy val scalaMainVersion           = "2.11.8"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.7.0"
-lazy val soundProcessesVersion      = "3.9.1"
+lazy val melliteVersion             = "2.7.1"
+lazy val soundProcessesVersion      = "3.9.2"
 lazy val lucreMatrixVersion         = "1.0.0"
 lazy val lucreSwingVersion          = "1.4.2"
 lazy val lucreVersion               = "3.3.1"
-lazy val scalaColliderVersion       = "1.22.0"
+lazy val scalaColliderVersion       = "1.22.1"
 lazy val scalaColliderSwingVersion  = "1.32.0"
-lazy val ugensVersion               = "1.16.1"
+lazy val ugensVersion               = "1.16.2"
 lazy val fileCacheVersion           = "0.3.3"
 lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"
@@ -49,7 +49,7 @@ lazy val slfVersion                 = "1.7.21"
 
 // ---- test libraries ----
 
-lazy val scalaTestVersion           = "3.0.0"
+lazy val scalaTestVersion           = "3.0.1"
 
 // ---- other global constants
 
