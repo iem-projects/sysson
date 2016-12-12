@@ -18,6 +18,7 @@ package impl
 
 import at.iem.sysson.graph.UserValue
 import de.sciss.equal
+import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.stm
@@ -84,10 +85,12 @@ object AuralSonificationImpl {
     def initSonif(obj: Sonification[S])(implicit tx: S#Tx): this.type = {
       _obj = tx.newHandle(obj)
       val ctls = obj.controls
-//      ctls.changed.react { implicit tx => upd => upd.changes.foreach {
-//        case evt.Map.Added  (key, value) =>
-//        case evt.Map.Removed(key, value) =>
-//      }}
+      val obsCtl = ctls.changed.react { implicit tx => upd => upd.changes.foreach {
+        case evt.Map.Added   (key, value)       => ctlAdded  (key, value)
+        case evt.Map.Removed (key, value)       => ctlRemoved(key, value)
+        case evt.Map.Replaced(key, before, now) => ctlChange (key, Some(now.value))
+      }}
+      addObserver(obsCtl)
       ctls.iterator.foreach { case (key, value) =>
         mkCtlObserver(key, value)
       }
@@ -96,36 +99,34 @@ object AuralSonificationImpl {
 
     // ---- attr events ----
 
-//    private def ctlAdded(key: String, value: DoubleObj[S])(implicit tx: S#Tx): Unit = {
-//      // logA(s"AttrAdded   to   ${procCached()} ($key)")
-//      for {
-//        n <- nodeOption
-//        v <- state.acceptedInputs.get(UGB.AttributeKey(key))
-//      } attrNodeSet1(n, key, v, value)
-//
-//      mkCtlObserver(key, value)
-//    }
+    private def ctlAdded(key: String, value: DoubleObj[S])(implicit tx: S#Tx): Unit = {
+      mkCtlObserver(key, value)
+      ctlChange(key, Some(value.value))
+    }
 
     private def mkCtlObserver(key: String, value: DoubleObj[S])(implicit tx: S#Tx): Unit = {
       // XXX TODO -- should have smarter observers that pull the changed
       // values directly
-      val obs = value.changed.react { implicit tx => _ => ctlChange(key) }
+      val obs = value.changed.react { implicit tx => upd => ctlChange(key, Some(upd.now)) }
       ctlMap.put(key, obs)(tx.peer)
     }
 
-//    private def ctlRemoved(key: String, value: DoubleObj[S])(implicit tx: S#Tx): Unit = {
-//      // logA(s"AttrRemoved from ${procCached()} ($key)")
-//      for {
-//        n <- nodeOption
-//        _ <- state.acceptedInputs.get(UGB.AttributeKey(key))
-//      } attrNodeUnset1(n, key)
-//
-//      attrMap.remove(key)(tx.peer)
-//    }
+    private def ctlRemoved(key: String, value: DoubleObj[S])(implicit tx: S#Tx): Unit = {
+      implicit val ptx = tx.peer
+      ctlMap.remove(key).foreach(_.dispose())
+      ctlChange(key, None)
+    }
 
-    private def ctlChange(key: String)(implicit tx: S#Tx): Unit = nodeOption match {
+    private def ctlChange(key: String, valueOpt: Option[Double])(implicit tx: S#Tx): Unit = nodeOption match {
       case Some(n: NodeRef.Full[S]) =>
-        sonifCached().controls.get(key).foreach { value =>
+        val valueOpt1: Option[Double] = valueOpt.orElse {
+          val m = buildState.acceptedInputs.getOrElse(UserValue.Key(key), Map.empty)
+          m.collectFirst {
+            case (UserValue(_, default), _) => default
+          }
+        }
+
+        valueOpt1 /* sonifCached().controls.get(key) */ .foreach { value =>
           ctlNodeSet1(n, key, value)
         }
       case _ =>
@@ -133,10 +134,8 @@ object AuralSonificationImpl {
 
     private def ctlNodeSet1(n: NodeRef.Full[S], key: String, expr: DoubleObj[S])
                             (implicit tx: S#Tx): Unit = {
-      val b       = n // new SynthUpdater(procCached(), n.node, key, n)
       val ctlName = UserValue.controlName(key)
-      b.addControl(ctlName -> expr.value)
-      // b.finish()
+      n.addControl(ctlName -> expr.value)
     }
 
     private def oldMatrixSpecs(req: UGB.Input, st: UGB.IO[S]): Vec[MatrixPrepare.Spec] =

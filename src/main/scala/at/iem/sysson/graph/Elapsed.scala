@@ -62,7 +62,7 @@ object Elapsed {
     protected def makeUGens: UGenInLike = {
       val b         = UGB.get
       b.requestInput(peer)
-      val reportID  = 0 // proc.graph.Attribute.ir(key)
+      val reportID  = 0 // key.ir
       import synth._
       import synth.ugen._
       val frame     = Sweep(rate, 0, in.freq) // speed = increment _per second_
