@@ -282,8 +282,10 @@ object Stats {
       */
     def stddev: Double = math.sqrt(sqrdif / (num - pool))
 
-    override def toString = s"$productPrefix(num = $num, min = ${min.toFloat}, max = ${max.toFloat}, " +
-      s"mean = ${mean.toFloat}, ${if (isPooled) "pooled " else ""}stddev = ${stddev.toFloat})"
+    override def toString: String = {
+      val s1 = s"mean = ${mean.toFloat}, ${if (isPooled) "pooled " else ""}stddev = ${stddev.toFloat})"
+      s"$productPrefix(num = $num, min = ${min.toFloat}, max = ${max.toFloat}, $s1"
+    }
   }
 
   object Variable {

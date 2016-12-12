@@ -59,9 +59,10 @@ object SonificationViewImpl {
     val p = sonification.proc
 
     val res = new Impl[S, workspace.I](sonifH, /* TTT transport, */ nameView)(workspace, undoMgr, cursor) {
-      val graphObserver = p.graph.changed.react { implicit tx => upd =>
-        updateGraph(upd.now)
-      }
+      val graphObserver: Disposable[S#Tx] =
+        p.graph.changed.react { implicit tx => upd =>
+          updateGraph(upd.now)
+        }
     }
     // val sonifState = sonifView.state
     deferTx {

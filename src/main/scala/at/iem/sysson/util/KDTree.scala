@@ -66,9 +66,11 @@ object KDTree {
   final case class Node[K, V](point: Point[K], value: V, left: KDTree[K, V], right: KDTree[K, V])
     extends KDTree[K, V] {
 
-    override def toString = s"KDTree.Node(${point.mkString("<", ",", ">")}, $value, " +
-      s"L = ${left  match { case Node(lp, _, _, _) => lp.mkString("<", ",", ">"); case _ => "Nil"}}, " +
-      s"R = ${right match { case Node(rp, _, _, _) => rp.mkString("<", ",", ">"); case _ => "Nil"}})"
+    override def toString: String = {
+      val s1 = s"L = ${left  match { case Node(lp, _, _, _) => lp.mkString("<", ",", ">"); case _ => "Nil"}}"
+      val s2 = s"R = ${right match { case Node(rp, _, _, _) => rp.mkString("<", ",", ">"); case _ => "Nil"}}"
+      s"KDTree.Node(${point.mkString("<", ",", ">")}, $value, $s1, $s2)"
+    }
   }
 
   case object Nil extends KDTree[Nothing, Nothing]

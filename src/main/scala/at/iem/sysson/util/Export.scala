@@ -34,7 +34,7 @@ object Export {
     val w   = new OutputStreamWriter(fos, "UTF-8")
 
     implicit class RichString(s: String) {
-      def escape = {
+      def escape: String = {
         val s1 = s .replaceAll("\"", "\\\"")
         val s2 = s1.replaceAll("\t", "\\t")
         val s3 = s2.replaceAll("\n", "\\n")

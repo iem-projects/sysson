@@ -20,7 +20,7 @@ import java.awt.datatransfer.Transferable
 import java.awt.event.{MouseAdapter, MouseEvent}
 import javax.swing.TransferHandler.TransferSupport
 import javax.swing.undo.UndoableEdit
-import javax.swing.{JComponent, TransferHandler}
+import javax.swing.{JComponent, JPanel, TransferHandler}
 
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.desktop.UndoManager
@@ -105,9 +105,9 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
               val m0  = impl.matrix(source)
               val m   = Matrix.Var.unapply(m0).getOrElse(m0)
               val drag = new MatrixDrag {
-                type S1       = S
-                val workspace = impl.workspace
-                val matrix    = tx.newHandle(m)
+                type S1                                       = S
+                val workspace : Workspace[S1]                 = impl.workspace
+                val matrix    : stm.Source[S1#Tx, Matrix[S1]] = tx.newHandle(m)
               }
               DragAndDrop.Transferable(DragAndDrop.MatrixFlavor)(drag)
             }
@@ -213,8 +213,8 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
     }
 
     component = new BoxPanel(Orientation.Horizontal) {
-      override lazy val peer = {
-        val p = new javax.swing.JPanel with SuperMixin {
+      override lazy val peer: JPanel with SuperMixin = {
+        val p = new JPanel with SuperMixin {
           // cf. http://stackoverflow.com/questions/11726739/use-getbaselineint-w-int-h-of-a-child-component-in-the-parent-container
           override def getBaseline(w: Int, h: Int): Int = {
             val gg   = ggDataName

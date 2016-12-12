@@ -104,7 +104,7 @@ final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: D
       ggProcess.enabled = ok
     }
 
-    import view.workspace
+    import view.workspace // XXX IntelliJ highlighting bug; this is needed!
     lazy val but1 = new ConcatButtonImpl(updateState())
     lazy val but2 = new ConcatButtonImpl(updateState())
 

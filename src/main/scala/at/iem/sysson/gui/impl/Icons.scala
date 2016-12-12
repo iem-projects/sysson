@@ -37,8 +37,8 @@ object Icons /* extends swing.SimpleSwingApplication */ {
   private final class TargetIcon(extent: Int, enabled: Boolean) extends Icon {
     private val scale = extent.toDouble / 48   // natural size: 48x48
 
-    def getIconWidth  = extent
-    def getIconHeight = extent
+    def getIconWidth  : Int = extent
+    def getIconHeight : Int = extent
 
     def paintIcon(c: java.awt.Component, g0: Graphics, x: Int, y: Int): Unit = {
       val g = g0.asInstanceOf[Graphics2D]

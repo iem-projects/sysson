@@ -18,5 +18,5 @@ import de.sciss.synth.{HasSideEffect, Lazy}
 
 /** Indicates a graph element that provides a user interface element. */
 trait UserInteraction extends Lazy.Expander[Unit] with HasSideEffect {
-  protected final def makeUGens = ()
+  protected final def makeUGens: Unit = ()
 }

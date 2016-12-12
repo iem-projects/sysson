@@ -57,12 +57,14 @@ trait VariableLike extends Any with HasDimensions {
     (0 until rank).filter(sh(_) > 1)
   }
 
-  def reducedRank   = shape.count(_ > 1)
-  def reducedShape  = shape.filter(_ > 1)
+  def reducedRank : Int       = shape.count (_ > 1)
+  def reducedShape: Vec[Int]  = shape.filter(_ > 1)
+
   def reducedDimensions: Vec[nc2.Dimension] = {
     val dim = dimensions
     effectiveDimIndices.map(dim.apply)
   }
+
   def reducedRanges: Vec[Range] = {
     val r = ranges
     effectiveDimIndices.map(r.apply)

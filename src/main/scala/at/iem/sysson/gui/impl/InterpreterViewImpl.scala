@@ -19,7 +19,10 @@ package impl
 import java.io.{File, FileInputStream, IOException}
 
 import de.sciss.desktop
+import de.sciss.desktop.WindowHandler
 import de.sciss.scalainterpreter.{CodePane, Interpreter, InterpreterPane}
+
+import scala.swing.Component
 
 private[gui] object InterpreterViewImpl {
   def apply(): InterpreterView = new Impl
@@ -27,7 +30,7 @@ private[gui] object InterpreterViewImpl {
   private final class Impl extends InterpreterView {
     impl =>
 
-    val intp = {
+    val intp: InterpreterPane = {
       val codeCfg = CodePane.Config()
 
       val file = new File( /* new File( "" ).getAbsoluteFile.getParentFile, */ "interpreter.txt" )
@@ -64,13 +67,13 @@ private[gui] object InterpreterViewImpl {
       InterpreterPane(interpreterConfig = intpCfg, codePaneConfig = codeCfg)
     }
 
-    val component = intp.component
+    val component: Component = intp.component
 
     val f = new desktop.impl.WindowImpl {
       frame =>
 
       // override def style = desktop.Window.Auxiliary
-      def handler = SwingApplication.windowHandler
+      def handler: WindowHandler = SwingApplication.windowHandler
 
       title     = "Interpreter"
       contents  = impl.component

@@ -268,7 +268,7 @@ object SonificationImpl {
       //      attributeMap.dispose()
     }
 
-    override def toString() = "Sonification" + id
+    override def toString = s"Sonification$id"
   }
 
   // import HasAttributes.attributeEntryInfo
@@ -280,14 +280,10 @@ object SonificationImpl {
     extends Impl[S]
 
   private final class New[S <: Sys[S]](implicit tx0: S#Tx) extends Impl[S] {
-    protected val targets       = evt.Targets[S](tx0)
-    // val patch                   = Obj(Patch.Elem(Patch[S]))
-    val proc                    = Proc[S]
-    val sources                 = evt.Map.Modifiable[S, String, Source]
-    val controls                = {
-      // implicit val ser = DoubleObj.serializer[S]
-      evt.Map.Modifiable[S, String, DoubleObj]
-    }
+    protected val targets: Targets[S]                       = Targets(tx0)
+    val proc: Proc[S]                                       = Proc[S]
+    val sources : evt.Map[S, String, Sonification.Source]   = evt.Map.Modifiable.apply
+    val controls: evt.Map[S, String, DoubleObj]             = evt.Map.Modifiable.apply
   }
 
   private final class Read[S <: Sys[S]](in: DataInput, access: S#Acc, protected val targets: evt.Targets[S])
@@ -299,11 +295,11 @@ object SonificationImpl {
       if (serVer != SER_VERSION) sys.error(s"Incompatible serialized (found $serVer, required $SER_VERSION)")
     }
 
-    val proc        = Proc.read(in, access)
-    val sources     = evt.Map.read[S, String, Source](in, access)
-    val controls    = {
+    val proc: Proc[S] = Proc.read(in, access)
+    val sources : evt.Map[S, String, Sonification.Source]  = evt.Map.read(in, access)
+    val controls: evt.Map[S, String, DoubleObj] = {
       implicit val ser = DoubleObj.serializer[S]
-      evt.Map.read[S, String, DoubleObj](in, access)
+      evt.Map.read(in, access)
     }
 
     //    protected val attributeMap  = SkipList.Map.read[S, String, AttributeEntry](in, access)

@@ -15,6 +15,8 @@
 package at.iem.sysson.gui
 package impl
 
+import javax.swing.Icon
+
 import at.iem.sysson.Plot
 import de.sciss.desktop
 import de.sciss.desktop.OptionPane
@@ -25,7 +27,7 @@ import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.lucre.{matrix, stm}
-import de.sciss.mellite.gui.ListObjView
+import de.sciss.mellite.gui.{ListObjView, ObjView}
 import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.synth.proc.Implicits._
 import de.sciss.synth.proc.Workspace
@@ -33,12 +35,12 @@ import de.sciss.synth.proc.Workspace
 import scala.swing.{Component, Label}
 
 object PlotObjView extends ListObjView.Factory {
-  type E[S <: Sys[S]] = Plot[S]
-  final val prefix  = "Plot"
-  def humanName     = prefix
-  final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.LineChart)
-  final val typeID  = Plot.typeID
-  def category      = SwingApplication.categSonification
+  type E[S <: Sys[S]]   = Plot[S]
+  final val prefix      = "Plot"
+  def humanName: String = prefix
+  final val icon: Icon  = ObjViewImpl.raphaelIcon(raphael.Shapes.LineChart)
+  final val typeID: Int = Plot.typeID
+  def category: String  = SwingApplication.categSonification
 
   def hasMakeDialog: Boolean = true
 
@@ -87,8 +89,8 @@ object PlotObjView extends ListObjView.Factory {
     with ListObjViewImpl.NonEditable[S]
     with ListObjView[S] {
 
-    def factory = PlotObjView
-    def prefix  = PlotObjView.prefix
+    def factory: ObjView.Factory  = PlotObjView
+    def prefix: String            = PlotObjView.prefix
 
     def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = false   // XXX TODO -- track matrix name
 

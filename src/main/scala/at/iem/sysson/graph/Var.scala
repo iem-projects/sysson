@@ -20,7 +20,7 @@ import at.iem.sysson.sound.impl.MatrixPrepare.ShapeAndIndex
 import de.sciss.equal
 import de.sciss.synth
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
-import de.sciss.synth.{ScalarRated, UGenInLike}
+import de.sciss.synth.{GE, ScalarRated, UGenInLike}
 
 object Var {
   object Play {
@@ -33,11 +33,11 @@ object Var {
     override def productPrefix  = s"Var$$Play"
     override def toString       = s"$variable.play($time)"
 
-    type Key    = Dim
-    def  key    = time.dim
+    type Key      = Dim
+    def  key: Key = time.dim
 
-    protected def freq = time.freq
-    def maxFreq = time.maxFreq
+    protected def freq: GE  = time.freq
+    def maxFreq: Double     = time.maxFreq
 
     private[sysson] def dimOption: Option[Dim] = Some(time.dim)
 
@@ -63,8 +63,8 @@ object Var {
     override def productPrefix  = s"Var$$Values"
     override def toString       = s"$variable.values"
 
-    type Key    = Var
-    def  key    = variable
+    type Key      = Var
+    def  key: Key = variable
 
     private[sysson] def dimOption: Option[Dim] = None
   }

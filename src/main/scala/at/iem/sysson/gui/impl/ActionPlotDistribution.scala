@@ -100,7 +100,9 @@ final class ActionPlotDistribution(windowOpt: Option[Window], selectedVariable: 
     } (breakOut)
     val dataCol = data.toXYSeriesCollection(title)
     // val chart   = XYBarChart(dataCol, title = title, legend = false)
-    val chart   = XYLineChart(dataCol, title = title, legend = false)
+    val chart   = XYLineChart(dataCol)
+    chart.title = title
+    chart.subtitles.clear() // remove legend
     ChartUtils.printableLook(chart)
     val plot    = chart.plot
     // val rangeX  = plot.getDomainAxis.asInstanceOf[NumberAxis]

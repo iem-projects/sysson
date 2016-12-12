@@ -101,7 +101,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
                                        units: Option[String], dim0: Option[VarDef], dim1: Option[VarDef])
     extends VarDef {
 
-    def rank = if (rows.isEmpty || cols.isEmpty) 0 else if (rows.size == 1 || cols.size == 1) 1 else 2
+    def rank: Int = if (rows.isEmpty || cols.isEmpty) 0 else if (rows.size == 1 || cols.size == 1) 1 else 2
     def size: Long = rows.size.toLong * cols.size
 
     def dimMap: Map[Int, VarDef] = {
@@ -110,7 +110,7 @@ object ActionConvertSpreadsheet extends Action("Spreadsheet To NetCDF...") {
       m2
     }
 
-    override def toString = {
+    override def toString: String = {
       val shape = selectionToShape(rows, cols)
       val dim0N = dim0.map(_.name)
       val dim1N = dim1.map(_.name)

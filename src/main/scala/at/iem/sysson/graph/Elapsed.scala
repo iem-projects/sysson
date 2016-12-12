@@ -54,7 +54,7 @@ object Elapsed {
     import peer.in
 
     override def productPrefix  = s"Elapsed$$GE"
-    override def toString       = {
+    override def toString: String = {
       val suffix = if (terminate) "(terminate = true)" else ""
       s"Elapsed($in).${rate.methodName}$suffix"
     }

@@ -16,6 +16,8 @@ package at.iem.sysson
 package gui
 package impl
 
+import javax.swing.Icon
+
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop
 import de.sciss.desktop.OptionPane
@@ -27,16 +29,16 @@ import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.mellite.gui.impl.timeline.TimelineObjViewBasicImpl
 import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
-import de.sciss.mellite.gui.{ListObjView, TimelineObjView}
+import de.sciss.mellite.gui.{ListObjView, ObjView, TimelineObjView}
 import de.sciss.synth.proc.{FadeSpec, ObjKeys, Workspace}
 
 object SonificationObjView extends ListObjView.Factory with TimelineObjView.Factory {
-  type E[S <: Sys[S]] = Sonification[S]
-  final val prefix  = "Sonification"
-  def humanName     = prefix
-  final val icon    = ObjViewImpl.raphaelIcon(raphael.Shapes.Feed)
-  final val typeID  = Sonification.typeID
-  def category      = SwingApplication.categSonification
+  type E[S <: Sys[S]]   = Sonification[S]
+  final val prefix      = "Sonification"
+  def humanName: String = prefix
+  final val icon: Icon  = ObjViewImpl.raphaelIcon(raphael.Shapes.Feed)
+  final val typeID: Int = Sonification.typeID
+  def category: String  = SwingApplication.categSonification
 
   def tpe: Obj.Type = Sonification
 
@@ -108,8 +110,8 @@ object SonificationObjView extends ListObjView.Factory with TimelineObjView.Fact
 
     override def obj(implicit tx: S#Tx): Sonification[S] = objH()
 
-    def factory = SonificationObjView
-    def prefix  = SonificationObjView.prefix
+    def factory: ObjView.Factory  = SonificationObjView
+    def prefix: String            = SonificationObjView.prefix
 
     //    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = update match {
     //      case Sonification.Update(_, ch) => false

@@ -18,7 +18,7 @@ package impl
 
 import java.awt.Color
 import java.awt.datatransfer.Transferable
-import javax.swing.TransferHandler
+import javax.swing.{JPanel, TransferHandler}
 import javax.swing.TransferHandler.TransferSupport
 import javax.swing.undo.UndoableEdit
 
@@ -111,9 +111,9 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
     def exportInt(x: IntObj[S])(implicit tx: S#Tx): Option[Transferable] = {
       val drag = new IntDrag {
         type S1 = S
-        val workspace = impl.workspace
-        val source    = tx.newHandle(x) // (IntEx.serializer)
-        val value     = x.value
+        val workspace : Workspace[S1]                 = impl.workspace
+        val source    : stm.Source[S1#Tx, IntObj[S1]] = tx.newHandle(x)
+        val value     : Int                           = x.value
       }
       val t = DragAndDrop.Transferable(IntFlavor)(drag)
       Some(t)
@@ -195,8 +195,8 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
     }
 
     component = new BoxPanel(Orientation.Vertical) {
-      override lazy val peer = {
-        val p = new javax.swing.JPanel with SuperMixin {
+      override lazy val peer: JPanel with SuperMixin = {
+        val p = new JPanel with SuperMixin {
           // cf. http://stackoverflow.com/questions/11726739/use-getbaselineint-w-int-h-of-a-child-component-in-the-parent-container
           override def getBaseline(w: Int, h: Int): Int = {
             val gg   = ButtonImpl.component

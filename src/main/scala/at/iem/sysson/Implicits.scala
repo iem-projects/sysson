@@ -24,7 +24,7 @@ import scala.annotation.tailrec
 import scala.collection.breakOut
 
 object Implicits {
-  final val all = OpenRange.all
+  final val all: OpenRange = OpenRange.all
 
   object end    // used in expressions such as 1 to end
   object start {
@@ -202,13 +202,13 @@ object Implicits {
       val it = peer.getIndexIterator
       if (isFloat)
         new Iterator[Float] {
-          def hasNext = it.hasNext
-          def next()  = it.getFloatNext
+          def hasNext: Boolean  = it.hasNext
+          def next() : Float    = it.getFloatNext
         }
       else if (isDouble)
         new Iterator[Float] {
-          def hasNext = it.hasNext
-          def next()  = it.getDoubleNext.toFloat
+          def hasNext: Boolean  = it.hasNext
+          def next() : Float    = it.getDoubleNext.toFloat
         }
       else sys.error(s"Data type is neither Float nor Double")
     }
@@ -217,13 +217,13 @@ object Implicits {
       val it = peer.getIndexIterator
       if (isFloat)
         new Iterator[Double] {
-          def hasNext = it.hasNext
-          def next()  = it.getFloatNext.toDouble
+          def hasNext: Boolean  = it.hasNext
+          def next() : Double   = it.getFloatNext.toDouble
         }
       else if (isDouble)
         new Iterator[Double] {
-          def hasNext = it.hasNext
-          def next()  = it.getDoubleNext
+          def hasNext: Boolean  = it.hasNext
+          def next() : Double   = it.getDoubleNext
         }
       else sys.error(s"Data type is neither Float nor Double")
     }

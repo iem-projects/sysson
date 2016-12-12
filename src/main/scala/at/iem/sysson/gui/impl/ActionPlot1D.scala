@@ -55,7 +55,9 @@ final class ActionPlot1D(windowOpt: Option[Window], selectedVariable: => Option[
             import scalax.chart.api._
             val data: Vec[(Float, Float)] = dataD zip dataV
             val dataCol = data.toXYSeriesCollection(title)
-            val chart   = XYLineChart(dataCol, title = title, legend = false)
+            val chart   = XYLineChart(dataCol)
+            chart.title = title
+            chart.subtitles.clear() // remove legend
             ChartUtils.printableLook(chart)
             val plot    = chart.plot
             val renderer = plot.getRenderer

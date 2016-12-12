@@ -21,7 +21,7 @@ import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{View, defer, deferTx}
+import de.sciss.lucre.swing.{defer, deferTx}
 import de.sciss.lucre.{stm, event => evt}
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.processor.Processor

@@ -45,7 +45,7 @@ object DragAndDrop {
   //    def node: stm.Source[S1#Tx, Either[Library.Branch[S1], Library.Leaf[S1]]]
   //  }
 
-  val DataSourceFlavor = internalFlavor[DataSourceDrag]
+  val DataSourceFlavor: Flavor[DataSourceDrag] = internalFlavor
 
   trait DataSourceDrag {
     type S1 <: Sys[S1]
@@ -53,7 +53,7 @@ object DragAndDrop {
     def source: stm.Source[S1#Tx, DataSource[S1]]
   }
 
-  val MatrixFlavor = internalFlavor[MatrixDrag]
+  val MatrixFlavor: Flavor[MatrixDrag] = internalFlavor
 
   trait MatrixDrag {
     type S1 <: Sys[S1]
@@ -61,8 +61,8 @@ object DragAndDrop {
     def matrix: stm.Source[S1#Tx, Matrix[S1]]
   }
 
-  val SonificationSourceMappingFlavor = internalFlavor[SonificationSourceMappingDrag]
-  val PlotMappingFlavor               = internalFlavor[PlotMappingDrag]
+  val SonificationSourceMappingFlavor: Flavor[SonificationSourceMappingDrag] = internalFlavor
+  val PlotMappingFlavor              : Flavor[PlotMappingDrag]               = internalFlavor
 
   trait MappingDrag {
     type S1 <: Sys[S1]

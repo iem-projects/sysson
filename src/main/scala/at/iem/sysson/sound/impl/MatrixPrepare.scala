@@ -16,7 +16,7 @@ package at.iem.sysson
 package sound
 package impl
 
-import at.iem.sysson.graph.MatrixTooLargeException
+import at.iem.sysson.graph.{MatrixTooLargeException, Var}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.synth.{Buffer, NodeRef, Server, Sys}
@@ -72,8 +72,8 @@ object MatrixPrepare {
 
     protected def dim: graph.Dim
 
-    final def key       = dim
-    final def variable  = dim.variable
+    final def key: Key      = dim
+    final def variable: Var = dim.variable
 
     private[sysson] final def isDimension = true
     private[sysson] final def dimOption: Option[graph.Dim] = Some(key)
@@ -106,7 +106,7 @@ object MatrixPrepare {
     //      */
     //    def isEmpty: Boolean = interp == 0
 
-    def isStreaming = streamDim >= 0
+    def isStreaming: Boolean = streamDim >= 0
 
     override def toString = s"$productPrefix(numChannels = $numChannels, elem = $elem, streamDim = $streamDim)"
 
@@ -309,11 +309,11 @@ object MatrixPrepare {
                                             protected val cache: Future[AudioFileCache.Value])
     extends Impl[S] with ModelImpl[Processor.Update[Product, AsyncResource[S]]] with FutureProxy[Product] {
 
-    protected def peerFuture = cache
+    protected def peerFuture: Future[AudioFileCache.Value] = cache
 
     def progress: Double = 1.0
 
-    def abort() = ()
+    def abort(): Unit = ()
   }
 
   private final class AsyncImpl[S <: Sys[S]](protected val config: Config,

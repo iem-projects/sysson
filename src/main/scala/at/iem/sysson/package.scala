@@ -38,7 +38,7 @@ package object sysson {
   /** The SysSon base directory is determined by the environment variable `SYSSON_HOME`. See the
     * `README.md` for more information.
     */
-  val syssonDir   = sys.env.get("SYSSON_HOME") match {
+  val syssonDir: File = sys.env.get("SYSSON_HOME") match {
     case Some(path) => file(path)
     case _ =>
       // Console.err.println("WARNING: Environment variable SYSSON_HOME not set. Cannot access default data files.")
@@ -47,10 +47,10 @@ package object sysson {
       res
   }
   /** The `data` directory inside the SysSon base directory contains common NetCDF files. */
-  val dataDir       = syssonDir / "data"
+  val dataDir: File = syssonDir / "data"
 
-  def defaultFile   = dataDir / "RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc"
-  def defaultFile2  = dataDir / "201211" / "gcm" / "RCP45" /
+  def defaultFile : File  = dataDir / "RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc"
+  def defaultFile2: File  = dataDir / "201211" / "gcm" / "RCP45" /
     "MetOffUK_HadGEM2-ES/25_ta_Amon_HadGEM2-ES_rcp45_r1i1p1_200512-210012.nc"
 
   /** Opens `RO-MultiSatelliteClimatologies-SEremoved_plevData_months_012002-122010.nc` */

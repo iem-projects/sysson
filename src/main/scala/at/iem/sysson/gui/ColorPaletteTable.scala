@@ -145,7 +145,7 @@ object ColorPaletteTable {
     */
   final case class Segment(lowValue: Double, lowColor: Int, highValue: Double, highColor: Int) {
 
-    override def toString = {
+    override def toString: String = {
       val lowHex  = (lowColor  + 0x1000000).toHexString.substring(1)
       val highHex = (highColor + 0x1000000).toHexString.substring(1)
       s"$productPrefix(lowValue = $lowValue, lowColor = 0x$lowHex, highValue = $highValue, highColor = 0x$highHex"

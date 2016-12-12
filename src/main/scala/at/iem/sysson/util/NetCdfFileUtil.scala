@@ -90,7 +90,7 @@ object NetCdfFileUtil {
           fun = fun)
       }
 
-      override def toString = {
+      override def toString: String = {
         import Implicits._
         s"${sel.variable.name}-transform"
       }

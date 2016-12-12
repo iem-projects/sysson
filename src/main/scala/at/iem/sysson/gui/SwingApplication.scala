@@ -39,9 +39,7 @@ import scala.util.control.NonFatal
   */
 object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Application {
   override lazy val windowHandler: WindowHandler = new WindowHandlerImpl(this, menuFactory) {
-    override lazy val usesInternalFrames = {
-      false // XXX TODO: eventually a preferences entry
-    }
+    override lazy val usesInternalFrames = false // XXX TODO: eventually a preferences entry
 
     override def usesNativeDecoration: Boolean = Prefs.nativeWindowDecoration.getOrElse(true)
   }

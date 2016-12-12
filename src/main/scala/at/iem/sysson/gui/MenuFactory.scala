@@ -27,6 +27,7 @@ import de.sciss.lucre.synth.Txn
 import de.sciss.mellite.Mellite
 import de.sciss.mellite.gui.{ActionCloseAllWorkspaces, ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
 import de.sciss.osc
+import de.sciss.synth.Server
 
 import scala.concurrent.stm.TxnExecutor
 import scala.language.existentials
@@ -58,6 +59,14 @@ object MenuFactory {
       } catch {
         case NonFatal(e) => "?"
       }
+      val sConfig = Server.Config()
+      Mellite.applyAudioPrefs(sConfig, useDevice = true, pickPort = true)
+      val scVersion = Server.version(sConfig).toOption.fold {
+        "Unknown SuperCollider version"
+      } { case (v, b) =>
+        val bs = if (b.isEmpty) b else s" ($b)"
+        s"SuperCollider v$v$bs"
+      }
 
       val html =
         s"""<html><center>
@@ -77,8 +86,9 @@ object MenuFactory {
            |<a href="$url">$addr</a>
            |<p><br><hr>
            |<i>Scala v$scalaVersion<i><br>
-           |<i>$jreInfo<i>
-           |""".stripMargin
+           |<i>$jreInfo<br>
+           |$scVersion
+           |</i>""".stripMargin
       val lb = new Label(html) {
         // cf. http://stackoverflow.com/questions/527719/how-to-add-hyperlink-in-jlabel
         // There is no way to directly register a HyperlinkListener, despite hyper links

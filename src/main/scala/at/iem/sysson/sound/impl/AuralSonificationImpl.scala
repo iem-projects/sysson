@@ -319,7 +319,7 @@ object AuralSonificationImpl {
   private final class Impl[S <: SSys[S]]
     extends AuralSonification[S] with ObservableImpl[S, AuralView.State] {
 
-    def typeID = Sonification.typeID
+    def typeID: Int = Sonification.typeID
 
     private var procViewL: Disposable[S#Tx] = _
 

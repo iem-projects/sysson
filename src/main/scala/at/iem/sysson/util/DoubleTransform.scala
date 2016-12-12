@@ -66,7 +66,7 @@ object DoubleTransform {
   final case class Code(source: String) extends proc.Code {
     type In     = String
     type Out    = Array[Byte]
-    def id      = Code.id
+    def id: Int = Code.id
 
     def compileBody()(implicit compiler: proc.Code.Compiler): Future[Unit] =
       proc.Code.future(blocking { execute("Unnamed"); () })
@@ -95,9 +95,9 @@ object DoubleTransform {
       compiler.compile(source)
     }
 
-    def contextName = Code.name
+    def contextName: String = Code.name
 
-    def updateSource(newText: String) = copy(source = newText)
+    def updateSource(newText: String): Code = copy(source = newText)
   }
 }
 trait DoubleTransform {

@@ -26,7 +26,7 @@ object AuralSonification extends AuralObj.Factory {
 
   def init(): Unit = _init
 
-  def typeID = Sonification.typeID
+  def typeID: Int = Sonification.typeID
 
   type Repr[S <: Sys[S]] = Sonification[S]
 
