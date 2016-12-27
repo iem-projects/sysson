@@ -2,8 +2,8 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.12.0-SNAPSHOT"
-lazy val mimaVersion    = "1.11.0"
+lazy val projectVersion = "1.12.0"
+lazy val mimaVersion    = "1.12.0"
 
 lazy val commonSettings = Seq(
   name          := baseName,
@@ -33,7 +33,7 @@ lazy val scalaMainVersion           = "2.11.8"
 // ---- library versions ----
 
 lazy val melliteVersion             = "2.8.0"
-lazy val soundProcessesVersion      = "3.10.1-SNAPSHOT"
+lazy val soundProcessesVersion      = "3.10.1"
 lazy val lucreMatrixVersion         = "1.0.0"
 lazy val lucreSwingVersion          = "1.4.2"
 lazy val lucreVersion               = "3.3.1"
@@ -45,7 +45,7 @@ lazy val swingTreeVersion           = "0.1.1"
 lazy val kollFlitzVersion           = "0.2.0"
 lazy val fscapeJobsVersion          = "1.5.0"
 lazy val sheetVersion               = "0.1.1"
-lazy val slfVersion                 = "1.7.21"
+lazy val slfVersion                 = "1.7.22"
 
 // ---- test libraries ----
 

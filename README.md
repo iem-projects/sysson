@@ -46,5 +46,5 @@ The latest API docs are available here: https://iem-projects.github.io/sysson/la
 
 We are now publishing artifacts to Maven Central:
 
-    "at.iem" %% "sysson" % "1.10.2"
+    "at.iem" %% "sysson" % "1.12.0"
 
