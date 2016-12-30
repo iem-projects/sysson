@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.12.0"
+lazy val projectVersion = "1.13.0-SNAPSHOT"
 lazy val mimaVersion    = "1.12.0"
 
 lazy val commonSettings = Seq(
@@ -14,7 +14,7 @@ lazy val commonSettings = Seq(
   licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")),
   // ---- scala compiler settings and libraries ----
   scalaVersion  := scalaMainVersion,
-  crossScalaVersions := Seq(scalaMainVersion, "2.10.6"),
+  crossScalaVersions := Seq(scalaMainVersion, "2.11.8", "2.10.6"),
   // maven repository for NetCDF library
   resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases",
   // maven repository for Oracle BDB JE
@@ -28,23 +28,22 @@ lazy val commonSettings = Seq(
   }
 )
 
-lazy val scalaMainVersion           = "2.11.8"
+lazy val scalaMainVersion           = "2.12.1"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.8.0"
-lazy val soundProcessesVersion      = "3.10.1"
-lazy val lucreMatrixVersion         = "1.0.0"
-lazy val lucreSwingVersion          = "1.4.2"
-lazy val lucreVersion               = "3.3.1"
-lazy val scalaColliderVersion       = "1.22.2"
-lazy val scalaColliderSwingVersion  = "1.32.1"
-lazy val ugensVersion               = "1.16.3"
-lazy val fileCacheVersion           = "0.3.3"
-lazy val swingTreeVersion           = "0.1.1"
-lazy val kollFlitzVersion           = "0.2.0"
-lazy val fscapeJobsVersion          = "1.5.0"
-lazy val sheetVersion               = "0.1.1"
+lazy val melliteVersion             = "2.9.0-SNAPSHOT"
+lazy val soundProcessesVersion      = "3.10.2"
+lazy val lucreMatrixVersion         = "1.0.1"
+lazy val lucreSwingVersion          = "1.4.3"
+lazy val lucreVersion               = "3.3.2"
+lazy val scalaColliderVersion       = "1.22.3"
+lazy val scalaColliderSwingVersion  = "1.32.2"
+lazy val ugensVersion               = "1.16.4"
+lazy val fileCacheVersion           = "0.3.4"
+lazy val swingTreeVersion           = "0.1.2"
+lazy val kollFlitzVersion           = "0.2.1"
+lazy val sheetVersion               = "0.1.2"
 lazy val slfVersion                 = "1.7.22"
 
 // ---- test libraries ----
@@ -128,7 +127,6 @@ lazy val root = Project(id = baseNameL, base = file("."))
       "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
       "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
       "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
-      "de.sciss" %% "fscapejobs"                  % fscapeJobsVersion,
       "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
       "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
     ),
