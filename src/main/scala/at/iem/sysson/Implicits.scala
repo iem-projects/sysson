@@ -2,8 +2,8 @@
  *  Implicits.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -14,14 +14,15 @@
 
 package at.iem.sysson
 
-import ucar.{nc2, ma2}
-import collection.JavaConversions
-import de.sciss.synth
-import synth.ugen
 import java.io.File
-import scala.concurrent.{Await, Future}
+
+import de.sciss.synth
+import de.sciss.synth.ugen
+import ucar.{ma2, nc2}
+
 import scala.annotation.tailrec
-import scala.collection.breakOut
+import scala.collection.{JavaConverters, breakOut}
+import scala.concurrent.{Await, Future}
 
 object Implicits {
   final val all: OpenRange = OpenRange.all
@@ -50,12 +51,12 @@ object Implicits {
   implicit class SyRichNetcdfFile(val peer: nc2.NetcdfFile)
     extends AnyVal with impl.HasDimensions with impl.HasAttributes with impl.HasVariables {
 
-    import JavaConversions._
+    import JavaConverters._
     def path       : String             = peer.getLocation
-    def dimensions : Vec[nc2.Dimension] = peer.getDimensions.toIndexedSeq
-    def attributes : Vec[nc2.Attribute] = peer.getGlobalAttributes.toIndexedSeq
+    def dimensions : Vec[nc2.Dimension] = peer.getDimensions      .asScala.toIndexedSeq
+    def attributes : Vec[nc2.Attribute] = peer.getGlobalAttributes.asScala.toIndexedSeq
     def rootGroup  : nc2.Group          = peer.getRootGroup
-    def variables  : Vec[nc2.Variable]  = peer.getVariables.toIndexedSeq
+    def variables  : Vec[nc2.Variable]  = peer.getVariables       .asScala.toIndexedSeq
     def file       : File               = new File(path)
 
     def exportAsCSV(file: File, delimiter: Char = ','): Unit = util.Export.netcdfToCSV(file, peer, delimiter)
@@ -69,12 +70,12 @@ object Implicits {
   }
 
   implicit class SyRichGroup(val peer: nc2.Group) extends AnyVal with impl.HasDimensions with impl.HasAttributes {
-    import JavaConversions._
+    import JavaConverters._
     def name       : String             = peer.getFullName  // getName
-    def attributes : Vec[nc2.Attribute] = peer.getAttributes.toIndexedSeq
-    def dimensions : Vec[nc2.Dimension] = peer.getDimensions.toIndexedSeq
-    def variables  : Vec[nc2.Variable]  = peer.getVariables.toIndexedSeq
-    def children   : Vec[nc2.Group]     = peer.getGroups.toIndexedSeq
+    def attributes : Vec[nc2.Attribute] = peer.getAttributes.asScala.toIndexedSeq
+    def dimensions : Vec[nc2.Dimension] = peer.getDimensions.asScala.toIndexedSeq
+    def variables  : Vec[nc2.Variable]  = peer.getVariables .asScala.toIndexedSeq
+    def children   : Vec[nc2.Group]     = peer.getGroups    .asScala.toIndexedSeq
     def parentOption: Option[nc2.Group] = Option(peer.getParentGroup)
   }
 
@@ -93,7 +94,7 @@ object Implicits {
   implicit class SyRichVariable(val peer: nc2.Variable)
     extends AnyVal with impl.HasDimensions with impl.HasAttributes with impl.VariableLike {
 
-    import JavaConversions._
+    import JavaConverters._
     def fullName   : String             = peer.getFullName
     def name       : String             = peer.getShortName
     def dataType   : ma2.DataType       = peer.getDataType
@@ -101,11 +102,11 @@ object Implicits {
     /** Reports the total number of elements within the variable's matrix */
     def size       : Long               = peer.getSize
     def rank       : Int                = peer.getRank
-    def attributes : Vec[nc2.Attribute] = peer.getAttributes.toIndexedSeq
+    def attributes : Vec[nc2.Attribute] = peer.getAttributes.asScala.toIndexedSeq
     def description: Option[String]     = Option(peer.getDescription)
     def group      : nc2.Group          = peer.getParentGroup
-    def dimensions : Vec[nc2.Dimension] = peer.getDimensions.toIndexedSeq
-    def ranges     : Vec[Range]         = peer.getRanges.map {
+    def dimensions : Vec[nc2.Dimension] = peer.getDimensions.asScala.toIndexedSeq
+    def ranges     : Vec[Range]         = peer.getRanges.asScala.map {
       ma => Range.inclusive(ma.first(), ma.last(), ma.stride())
     } (breakOut)
 

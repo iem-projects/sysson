@@ -2,8 +2,8 @@
  *  AbstractPlotViewImpl.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -29,6 +29,7 @@ import de.sciss.processor.impl.ProcessorImpl
 
 import scala.concurrent.stm.{Ref, TMap}
 import scala.swing.Component
+import scala.util.{Failure, Success}
 
 object AbstractPlotViewImpl {
   private final val DEBUG = false
@@ -123,16 +124,16 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
         import scala.concurrent.ExecutionContext.Implicits.global
         if (!proc.aborted) {
           proc.start()
-          proc.foreach { plotData =>
-            defer {
-              if (DEBUG) println(s"X-Axis: ${plotData.hName}; ${plotData.hData.take(144).mkString(",")}")
-              if (DEBUG) println(s"Y-Axis: ${plotData.vName}; ${plotData.vData.take(144).mkString(",")}")
-              updatePlot(plotData)
-            }
-          }
-          proc.onFailure {
-            case Processor.Aborted() =>
-            case ex =>
+          proc.onComplete {
+            case Success(plotData) =>
+              defer {
+                if (DEBUG) println(s"X-Axis: ${plotData.hName}; ${plotData.hData.take(144).mkString(",")}")
+                if (DEBUG) println(s"Y-Axis: ${plotData.vName}; ${plotData.vData.take(144).mkString(",")}")
+                updatePlot(plotData)
+              }
+
+            case Failure(Processor.Aborted()) =>
+            case Failure(ex) =>
               Console.err.println("Matrix reader failed:")
               ex.printStackTrace()
           }
@@ -147,7 +148,7 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
 
   protected final def addObserver(obs: Disposable[S#Tx]): Unit = _observers ::= obs
 
-  private[this] var _plotH: stm.Source[S#Tx, Plot[S]] = _
+  private[this] var  _plotH: stm.Source[S#Tx, Plot[S]] = _
 
   protected final def plotH: stm.Source[S#Tx, Plot[S]] = _plotH
 

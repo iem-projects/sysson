@@ -12,5 +12,5 @@ Sonification
 	- time indicator
 
 Aural System
-	- main volume control, panik/mute
+	- main volume control, panic/mute
 	- master bus recorder

@@ -2,8 +2,8 @@
  *  Var.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -33,7 +33,7 @@ object Var {
     override def productPrefix  = s"Var$$Play"
     override def toString       = s"$variable.play($time)"
 
-    type Key      = Dim
+    type      Key = Dim
     def  key: Key = time.dim
 
     protected def freq: GE  = time.freq
@@ -63,7 +63,7 @@ object Var {
     override def productPrefix  = s"Var$$Values"
     override def toString       = s"$variable.values"
 
-    type Key      = Var
+    type      Key = Var
     def  key: Key = variable
 
     private[sysson] def dimOption: Option[Dim] = None
@@ -97,7 +97,7 @@ object Var {
   object Axis {
     final case class Key(stream: Dim, axis: String) extends UGB.Key {
       override def productPrefix = "Var.Axis.Key"
-      override def toString = s"$productPrefix(stream = $stream, axis = $axis)"
+      override def toString      = s"$productPrefix(stream = $stream, axis = $axis)"
     }
     object Values {
       def apply(axis: Var.Axis): Values = apply(axis = axis, maxSize = 1000)
@@ -107,9 +107,9 @@ object Var {
 
       override def productPrefix = s"Var$$Axis$$Values"
 
-      override def toString = s"$axis.values"
+      override def toString      = s"$axis.values"
 
-      type Key = Axis.Key
+      type     Key = Axis.Key
       def key: Key = Axis.Key(stream = axis.variable.time.dim, axis = axis.dim)
 
       type Value = ShapeAndIndex
@@ -196,7 +196,7 @@ final case class Var(name: String, higherRank: Boolean = true) extends UserInter
   // def ir: Var.GE
   // def kr: Var.GE
 
-  def values: Var.Values = Var.Values(this)
+  def values              : Var.Values = Var.Values(this)
   def values(maxSize: Int): Var.Values = Var.Values(this, maxSize = maxSize)
 
   /** A special sectioning which unrolls one of the variable dimensions in time. */

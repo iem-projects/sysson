@@ -2,8 +2,8 @@
  *  VariableSection.scala
  *  (SysSon)
  *
- *  Copyright (c) 2013-2016 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2016 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
+ *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -17,7 +17,7 @@ package at.iem.sysson
 import at.iem.sysson.Implicits._
 import ucar.{ma2, nc2}
 
-import scala.collection.{JavaConversions, breakOut}
+import scala.collection.{JavaConverters, breakOut}
 import scala.concurrent.Future
 import scala.concurrent.stm.InTxn
 
@@ -74,8 +74,8 @@ final case class VariableSection(variable: nc2.Variable, section: Vec[OpenRange]
   }
 
   def ranges: Vec[Range] = {
-    import JavaConversions._
-    toSection.getRanges.map { ma =>
+    import JavaConverters._
+    toSection.getRanges.asScala.map { ma =>
       Range.inclusive(ma.first(), ma.last(), ma.stride())
     } (breakOut)
   }
