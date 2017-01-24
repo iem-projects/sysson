@@ -46,6 +46,7 @@ import org.jfree.data.xy.{MatrixSeries, MatrixSeriesCollection}
 
 import scala.concurrent.Future
 import scala.swing.{Alignment, BorderPanel, Component, FlowPanel, Graphics2D, Label, Swing}
+import scala.util.{Failure, Success}
 
 object PlotChartImpl {
   def apply[S <: Sys[S]](plot: Plot[S], stats: PlotStatsView[S])(implicit tx: S#Tx, cursor: stm.Cursor[S],
@@ -309,11 +310,9 @@ object PlotChartImpl {
 
       private lazy val shapeFut: Future[Shape] = {
         val res = WorldMapOverlay()
-        res.onSuccess {
-          case _ => defer(fireOverlayChanged())
-        }
-        res.onFailure {
-          case ex => ex.printStackTrace()
+        res.onComplete {
+          case Success(_)  => defer(fireOverlayChanged())
+          case Failure(ex) => ex.printStackTrace()
         }
         res
       }

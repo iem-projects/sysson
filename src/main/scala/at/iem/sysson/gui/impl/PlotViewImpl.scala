@@ -183,7 +183,7 @@ object PlotViewImpl {
         tx.afterCommit {
           import at.iem.sysson.Stats.executionContext
           val fut = Future {
-            reader.read(buf, 0, len)
+            reader.readFloat2D(buf, 0, len)
             buf(0)
           }
           p.completeWith(fut)

@@ -82,8 +82,8 @@ final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: D
                   varName = v1.name, dimName = dimName)
                 import ExecutionContext.Implicits.global
                 proc.monitor(printResult = false)
-                proc.onSuccess {
-                  case _ => defer {
+                proc.foreach { _ =>
+                  defer {
                     cursor.step { implicit tx => win.dispose() }
                   }
                 }

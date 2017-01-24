@@ -47,7 +47,7 @@ object AbstractPlotViewImpl {
       assert(r.numChannels == 1)
       val sz    = r.numFrames.toInt
       val res   = new Array[Float](sz)
-      r.read(Array(res), 0, sz)
+      r.readFloat2D(Array(res), 0, sz)
       checkAborted()
       res
     }
@@ -59,7 +59,7 @@ object AbstractPlotViewImpl {
       val mCh   = mReader.numChannels
       val mSz   = mReader.numFrames.toInt
       val mData = Array.ofDim[Float](mCh, mSz)
-      mReader.read(mData, 0, mSz)
+      mReader.readFloat2D(mData, 0, mSz)
       checkAborted()
 
       new PlotData(
