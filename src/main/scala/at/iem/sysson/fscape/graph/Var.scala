@@ -16,19 +16,19 @@ package at.iem.sysson
 package fscape
 package graph
 
-import de.sciss.fscape.{GE, UGenGraph, UGenInLike}
+import de.sciss.fscape.lucre.UGenGraphBuilder
+import de.sciss.fscape.{GE, Lazy, UGenGraph, UGenInLike}
 
 object Var {
   final case class PlayLinear(variable: Var) extends GE.Lazy {
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
+      val ub = UGenGraphBuilder.get(b)
       ???
     }
   }
 }
-final case class Var(name: String) extends GE.Lazy {
-  protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
-    ???
-  }
+final case class Var(name: String) extends Lazy.Expander[Unit] {
+  protected def makeUGens(implicit b: UGenGraph.Builder): Unit = ()
 
   /** Unrolls all dimensions in time. */
   def playLinear(): Var.PlayLinear = Var.PlayLinear(this)
