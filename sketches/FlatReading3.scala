@@ -205,3 +205,47 @@ damit bleibt die floor region identisch
 
 //////////////////////////////////////////////
 
+def calcIndices(off: Int, shape: Vector[Int]): Vector[Int] = {
+  val modsDivs = shape zip shape.scanRight(1)(_ * _).tail
+  modsDivs.map { case (mod, div) =>
+    (off / div) % mod
+  }
+}
+
+def calcPOI(a: Vector[Int], b: Vector[Int]): Int = {
+  val res = (a zip b).indexWhere { case (ai, bi) => ai != bi }
+  if (res < 0) a.size else res
+}
+
+def zipToRange(a: Vector[Int], b: Vector[Int]): Vector[Range] =
+  (a, b).zipped.map { (ai, bi) =>
+    require (ai <= bi)
+    ai to bi
+  } 
+
+def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
+  val rank  = shape.size
+  val rankM = rank - 1
+
+  def loop(start: Int, stop: Int, res: List[Vector[Range]]): List[Vector[Range]] =
+    if (start == stop) res else {
+      val s0   = calcIndices(off , shape)
+      val s1   = calcIndices(stop, shape)
+      val poi  = calcPOI(s0, s1)
+      if (poi < rankM) { // have to split
+        
+      
+        ???
+      } else {
+        val s1m = calcIndices(stop - 1, shape)
+        zipToRange(s0, s1m) :: res
+      }
+    }
+  
+  loop(off, off + len, Nil).reverse
+}
+
+def partSize(in: List[Vector[Range]]): Int = in.map(_.map(_.size).product).sum
+
+val x0 = partition(shape = sz, 0, len = 120)
+assert(partSize(x0) == 120)
