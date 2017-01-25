@@ -47,7 +47,15 @@ trait ChunkReader[A] {
 }
 
 def test(c: ChunkReader[Int]): Unit =
-  assert((1 to 4).map(c.read(5)) ++ c.read(4) == Vec(1 to 24: _*))
+  assert((1 to 4).map(c.read(5)) ++ c.read(4) == Vec(
+    157, 158, 159, 160, 
+    165, 166, 167, 168, 
+    173, 174, 175, 176, 
+
+    221, 222, 223, 224, 
+    229, 230, 231, 232, 
+    237, 238, 239, 240
+  ))
 
 // test(???)
 
@@ -156,3 +164,107 @@ Vector(1, 2, 0)
 Vector(1, 2, 1)
 Vector(1, 2, 2)
 Vector(1, 2, 3)
+
+// let's find a case that requires three reads
+
+(5 to 12).map(i => calcInSection(i, selSome)).foreach(println)
+
+// first read
+Vector(0, 1, 1)
+Vector(0, 1, 2)
+Vector(0, 1, 3)
+
+// second read
+Vector(0, 2, 0)
+Vector(0, 2, 1)
+Vector(0, 2, 2)
+Vector(0, 2, 3)
+
+// third read
+Vector(1, 0, 0)
+
+// it would thus seem that the worst case is N reads where N = rank of variable
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+def sampleRange(in: Range, by: Range): Range = {
+  val drop  = by.start
+  val stepM = by.step
+  require(drop >= 0 && stepM > 0)
+  val in1 = in.drop(drop)
+  val in2 = if (stepM == 1)
+    in1
+  else if (in1.isInclusive)  // copy-method is protected
+    new Range.Inclusive(start = in1.start, end = in1.end, step = in1.step * stepM)
+  else
+    new Range(start = in1.start, end = in1.end, step = in1.step * stepM)
+  in2.take(by.size)
+}
+
+class Impl[A](v: Variable[A], in: Vec[Range]) 
+  extends ChunkReader[A] {
+
+  require(v.shape.size == sections.size)
+
+  private var pos: Int = 0  // advanced by readNext
+
+  val size: Int = in.map(_.size).product
+  
+  def reset(): Unit = pos = 0
+  
+  def read(chunkSize: Int): Vec[A] = {
+    require (chunkSize >= 0)
+    if (chunkSize == 0) return Vec.empty
+    
+    val stop = pos + chunkSize
+    
+    var stats = 0
+    
+    def flush(s0: Vec[Int], s1: Vec[Int], res: Vec[A]): Vec[A] = {
+      val by      = (s0, s1).zipped.map(_ to _)
+      val sampled = (in, by).zipped.map(sampleRange(_, _))
+      val r       = v.read(sampled)
+      stats += 1
+      res ++ r
+    }
+    
+    @annotation.tailrec
+    def loop(s0: Vec[Int], s1: Vec[Int], p: Int, res: Vec[A]): Vec[A] =
+      if (p == stop) flush(s0, s1, res)
+      else {
+        val s2 = calcInSection(p, in)
+        val ok = (s0, s2).zipped.forall(_ <= _)
+        println(s"s2  = $s2; ok = $ok")
+        if (ok) loop(s0, s2, p + 1, res)
+        else    loop(s2, s2, p + 1, flush(s0, s1, res))
+      }
+    
+    val s00 = calcInSection(pos, in)
+    println(s"s00 = $s00")
+    val res = loop(s00, s00, pos + 1, Vec.empty)
+    pos = stop
+    println(s"# of reads: $stats")
+    res
+  }
+}
+
+val i = new Impl(v, selSome)
+i.read(5) // wrong
+
+/////////////////////////////////////////////////
+// the above doesn't take the ending into account
+// ; does it?
+/////////////////////////////////////////////////
+
+// "empirically":
+(0 to 4).map(i => calcInSection(i, selSome)).foreach(println)
+
+// first
+Vector(0, 0, 0)
+Vector(0, 0, 1)
+Vector(0, 0, 2)
+Vector(0, 0, 3)
+
+// second
+Vector(0, 1, 0)
