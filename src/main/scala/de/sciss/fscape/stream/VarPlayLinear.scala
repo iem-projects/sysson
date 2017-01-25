@@ -19,7 +19,6 @@ import akka.stream.stage.OutHandler
 import akka.stream.{Attributes, SourceShape}
 import de.sciss.fscape.stream.impl.{BlockingGraphStage, NodeImpl}
 import de.sciss.lucre.matrix.Matrix
-import de.sciss.synth.io
 
 object VarPlayLinear {
   def apply(matrix: Matrix.Reader)(implicit b: Builder): OutD = {
@@ -44,75 +43,25 @@ object VarPlayLinear {
   private final class Logic(shape: Shape, matrix: Matrix.Reader)(implicit ctrl: Control)
     extends NodeImpl(s"$name($matrix)", shape) with OutHandler {
 
-    private[this] var af        : io.AudioFile  = _
-    private[this] var buf       : io.Frames     = _
-    private[this] var bufSize   : Int           = _
+    private[this] val bufSize: Int = ctrl.blockSize
 
     private[this] var framesRead  = 0L
 
-    shape.outlets.foreach(setHandler(_, this))
+    setHandler(shape.out, this)
 
-    override def preStart(): Unit = {
-//      logStream(s"preStart() $this")
-//      af          = io.AudioFile.openRead(f)
-//      if (af.numChannels != numChannels) {
-//        Console.err.println(s"Warning: DiskIn - channel mismatch (file has ${af.numChannels}, UGen has $numChannels)")
-//      }
-//      bufSize     = ctrl.blockSize
-//      buf         = af.buffer(bufSize)
-      ???
-    }
-
-    override protected def stopped(): Unit = {
-      logStream(s"postStop() $this")
-      buf = null
-      //      try {
-      af.close()
-      //      } catch {
-      //        case NonFatal(ex) =>  // XXX TODO -- what with this?
-      //      }
-    }
-
-    override def onDownstreamFinish(): Unit =
-      if (shape.outlets.forall(out => isClosed(out))) {
-        logStream(s"completeStage() $this")
-        completeStage()
-      }
-
-    override def onPull(): Unit =
-      ??? // if (numChannels == 1 || shape.outlets.forall(out => isClosed(out) || isAvailable(out))) process()
+    def onPull(): Unit = process()
 
     private def process(): Unit = {
-      val chunk = math.min(bufSize, af.numFrames - framesRead).toInt
+      val chunk = math.min(bufSize, matrix.size - framesRead).toInt
       if (chunk == 0) {
         logStream(s"completeStage() $this")
         completeStage()
       } else {
-        af.read(buf, 0, chunk)
+        val bufOut = ctrl.borrowBufD()
+        matrix.readDouble1D(bufOut.buf, 0, chunk)
+        bufOut.size = chunk   // IntelliJ highlight bug
         framesRead += chunk
-        var ch = 0
-        ???
-//        while (ch < numChannels) {
-//          val out = shape.out(ch)
-//          if (!isClosed(out)) {
-//            val bufOut = ctrl.borrowBufD()
-//            val b = bufOut.buf
-//            if (ch < buf.length) {
-//              val a = buf(ch)
-//              var i = 0
-//              while (i < chunk) {
-//                b(i) = a(i).toDouble
-//                i += 1
-//              }
-//            } else {
-//              Util.clear(b, 0, chunk)
-//            }
-//            bufOut.size = chunk
-//            //            println(s"disk   : ${bufOut.hashCode.toHexString} - ${bufOut.buf.toVector.hashCode.toHexString}")
-//            push(out, bufOut)
-//          }
-//          ch += 1
-//        }
+        push(shape.out, bufOut)
       }
     }
   }
