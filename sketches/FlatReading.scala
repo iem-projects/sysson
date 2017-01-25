@@ -113,3 +113,46 @@ assert(expected.size == expected.distinct.size)
 
 // e.g. (2, 3, 4) --> 4 + 3 * 8 + 2 * 64   + 1 = 157 OK
 // e.g. (3, 5, 7) --> 7 + 5 * 8 + 3 * 64   + 1 = 240 OK
+
+// let's look at a hypothetical four dimensional example to understand
+// whether might need up to N instead of up to three reads:
+
+s0 := [1 1 1 1]
+s1 := [2 2 2 2]
+
+// "normalized" "floor-s1"
+// last read would be ("s1f to s1")
+
+s1f := [2 0 0 0]
+
+// "empirically":
+
+(10 to 14).map(i => calcInSection(i, selSome)).foreach(println)
+
+Vector(0, 2, 2)
+Vector(0, 2, 3)
+Vector(1, 0, 0)
+Vector(1, 0, 1)
+Vector(1, 0, 2)
+
+// we can chunk this up into contiguous blocks as long as no element "decreases"
+// with respect to the initial element; hence:
+
+// first read:
+Vector(0, 2, 2)
+Vector(0, 2, 3)
+
+// second read:
+Vector(1, 0, 0)
+Vector(1, 0, 1)
+Vector(1, 0, 2)
+
+//
+
+(20 to 23).map(i => calcInSection(i, selSome)).foreach(println)
+
+// first and only read
+Vector(1, 2, 0)
+Vector(1, 2, 1)
+Vector(1, 2, 2)
+Vector(1, 2, 3)
