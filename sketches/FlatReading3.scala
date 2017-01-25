@@ -250,14 +250,17 @@ def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
   
   def loopLo(start: Int, stop: Int, res0: List[Vector[Range]]): List[Vector[Range]] =
     if (start == stop) res0 else {
-      val s0   = calcIndices(off , shape)
-      val s1   = calcIndices(stop, shape)
+      assert(start <= stop, "[lo] start > stop")
+      
+      val s0   = calcIndices(start, shape)
+      val s1   = calcIndices(stop , shape)
       val poi  = calcPOI(s0, s1)
       val ceil = indexCeil(s0, poi)
       println(f"[lo] start = $start%3d, stop = $stop%3d, s0 = ${indexStr(s0)}; s1 = ${indexStr(s1)} --> poi = $poi, ceil  = ${indexStr(ceil)}")
       
       if (ceil != s1) { // have to split
         val ceilOff = calcOff(ceil, shape)
+        assert(ceilOff < stop, "ceilOff == stop")
         val res1    = loopLo(start, ceilOff, res0)
         loopHi(ceilOff, stop, res1)
       } else {
@@ -269,8 +272,10 @@ def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
   
   def loopHi(start: Int, stop: Int, res0: List[Vector[Range]]): List[Vector[Range]] =
     if (start == stop) res0 else {
-      val s0   = calcIndices(off , shape)
-      val s1   = calcIndices(stop, shape)
+      assert(start <= stop, "[hi] start > stop")
+
+      val s0   = calcIndices(start, shape)
+      val s1   = calcIndices(stop , shape)
       val poi  = calcPOI(s0, s1)
       val floor= indexFloor(s1, poi)
       println(f"[hi] start = $start%3d, stop = $stop%3d, s0 = ${indexStr(s0)}; s1 = ${indexStr(s1)} --> poi = $poi, floor = ${indexStr(floor)}")
@@ -280,6 +285,7 @@ def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
         val fm = calcIndices(floorOff - 1, shape)
         println(s"read from ${indexStr(s0)} to ${indexStr(fm)}")
         val res1 = zipToRange(s0, fm) :: res0
+        assert(floorOff > start, "floorOff == start")
         loopHi(floorOff, stop, res1)
 
       } else {
@@ -294,7 +300,12 @@ def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
 
 def partSize(in: List[Vector[Range]]): Int = in.map(_.map(_.size).product).sum
 
-val x0 = partition(shape = sz, 0, len = 120)
+val sz = Vector(2, 3, 4, 5)
+val x0 = partition(shape = sz, off = 0, len = 120)
 assert(partSize(x0) == 120)
 
-val x1 = partition(shape = sz, 0, len = 6)
+val x1 = partition(shape = sz, off = 0, len = 6)
+assert(partSize(x1) == 6)
+
+val x2 = partition(shape = sz, off = 6, len = 16)
+assert(partSize(x2) == 16) // boom :-(
