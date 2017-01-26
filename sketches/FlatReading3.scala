@@ -212,9 +212,9 @@ def calcIndices(off: Int, shape: Vector[Int]): Vector[Int] = {
   }
 }
 
-def calcPOI(a: Vector[Int], b: Vector[Int]): Int = {
-  val res = (a zip b).indexWhere { case (ai, bi) => ai != bi }
-  if (res < 0) a.size else res
+def calcPOI(a: Vector[Int], b: Vector[Int], min: Int): Int = {
+  val res = (a.drop(min) zip b.drop(min)).indexWhere { case (ai, bi) => ai != bi }
+  if (res < 0) a.size else res + min
 }
 
 def zipToRange(a: Vector[Int], b: Vector[Int]): Vector[Range] =
@@ -238,8 +238,6 @@ def indexFloor(a: Vector[Int], poi: Int): Vector[Int] =
     if (i <= poi) ai else 0
   }
 
-// indexFloor(Vector(0, 1, 1, 1), 2)
-
 def indexStr(a: Vector[Int]): String = a.mkString("[", ", ", "]")
 
 def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
@@ -248,21 +246,22 @@ def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
 
   val modsDivs = shape zip shape.scanRight(1)(_ * _).tail
   
-  def loopLo(start: Int, stop: Int, res0: List[Vector[Range]]): List[Vector[Range]] =
+  def loopLo(start: Int, stop: Int, res0: List[Vector[Range]], poiMin: Int): List[Vector[Range]] =
     if (start == stop) res0 else {
       assert(start <= stop, "[lo] start > stop")
       
       val s0   = calcIndices(start, shape)
       val s1   = calcIndices(stop , shape)
-      val poi  = calcPOI(s0, s1)
-      val ceil = indexCeil(s0, poi)
+      val poi  = calcPOI(s0, s1, poiMin)
+//       val ceil = indexCeil(s0, poi)
+      val ceil = if (poi < rankM) indexCeil(s0, poi) else s1
       println(f"[lo] start = $start%3d, stop = $stop%3d, s0 = ${indexStr(s0)}; s1 = ${indexStr(s1)} --> poi = $poi, ceil  = ${indexStr(ceil)}")
       
       if (ceil != s1) { // have to split
         val ceilOff = calcOff(ceil, shape)
         assert(ceilOff < stop, "ceilOff == stop")
-        val res1    = loopLo(start, ceilOff, res0)
-        loopHi(ceilOff, stop, res1)
+        val res1    = loopLo(start, ceilOff, res0, poiMin = poi + 1)
+        loopHi(ceilOff, stop, res1, poiMin = poi)
       } else {
         val s1m = calcIndices(stop - 1, shape)
         println(s"read from ${indexStr(s0)} to ${indexStr(s1m)}")
@@ -270,13 +269,13 @@ def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
       }
     }
   
-  def loopHi(start: Int, stop: Int, res0: List[Vector[Range]]): List[Vector[Range]] =
+  def loopHi(start: Int, stop: Int, res0: List[Vector[Range]], poiMin: Int): List[Vector[Range]] =
     if (start == stop) res0 else {
       assert(start <= stop, "[hi] start > stop")
 
       val s0   = calcIndices(start, shape)
       val s1   = calcIndices(stop , shape)
-      val poi  = calcPOI(s0, s1)
+      val poi  = calcPOI(s0, s1, poiMin)
       val floor= indexFloor(s1, poi)
       println(f"[hi] start = $start%3d, stop = $stop%3d, s0 = ${indexStr(s0)}; s1 = ${indexStr(s1)} --> poi = $poi, floor = ${indexStr(floor)}")
       
@@ -286,7 +285,7 @@ def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
         println(s"read from ${indexStr(s0)} to ${indexStr(fm)}")
         val res1 = zipToRange(s0, fm) :: res0
         assert(floorOff > start, "floorOff == start")
-        loopHi(floorOff, stop, res1)
+        loopHi(floorOff, stop, res1, poiMin = poi + 1)
 
       } else {
         val s1m = calcIndices(stop - 1, shape)
@@ -295,7 +294,7 @@ def partition(shape: Vector[Int], off: Int, len: Int): List[Vector[Range]] = {
       }
     }
 
-  loopLo(off, off + len, Nil).reverse
+  loopLo(off, off + len, Nil, poiMin = 0).reverse
 }
 
 def partSize(in: List[Vector[Range]]): Int = in.map(_.map(_.size).product).sum
@@ -308,4 +307,7 @@ val x1 = partition(shape = sz, off = 0, len = 6)
 assert(partSize(x1) == 6)
 
 val x2 = partition(shape = sz, off = 6, len = 16)
-assert(partSize(x2) == 16) // boom :-(
+assert(partSize(x2) == 16)
+
+val x3 = partition(shape = sz, off = 6, len = 21)
+assert(partSize(x3) == 21)
