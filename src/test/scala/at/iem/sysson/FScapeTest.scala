@@ -52,11 +52,15 @@ object FScapeTest extends App {
       import de.sciss.fscape.lucre.graph._
       1.poll(0, label = "rendering")
       val v     = Var("var")
-      val value = v.playLinear()
+      val v0    = v.playLinear()
+      val value = Gate(v0, v0 < 1000 & v0 > -1000)   // cheesy way drop NaNs. By the way, we need a Drop UGen!
       val mx    = RunningMax(value).last
-      MkDouble("out", mx)
+      val mn    = RunningMin(value).last
+      MkDouble("max", mx)
+      MkDouble("min", mn)
     }
-    val out = f.outputs.add("out", DoubleObj)
+    val outMx = f.outputs.add("max", DoubleObj)
+    val outMn = f.outputs.add("min", DoubleObj)
     f.graph() = g
     f.attr.put("var", mat)
 
@@ -65,7 +69,8 @@ object FScapeTest extends App {
     implicit val genCtx = GenContext[S]
 
     def mkView(out: Output[S], total: Int = 1): GenView[S] = {
-      val view = GenView(out)
+      val view  = GenView(out)
+      val key   = out.key
 
       import de.sciss.lucre.stm.TxnLike.peer
       view.reactNow { implicit tx => upd =>
@@ -73,9 +78,9 @@ object FScapeTest extends App {
           view.value.foreach { value =>
             value match {
               case Success(v)  =>
-                println(s"Value is now $v")
+                println(s"Value for $key is now $v")
               case Failure(ex) =>
-                println("Value failed:")
+                println(s"Value for $key failed:")
                 ex.printStackTrace()
             }
             if (count.transformAndGet(_ + 1) == total) tx.afterCommit(sys.exit())
@@ -85,7 +90,8 @@ object FScapeTest extends App {
       view
     }
 
-    val view1 = mkView(out)
+    mkView(outMx, 2)
+    mkView(outMn, 2)
 
     new Thread {
       override def run(): Unit = Thread.sleep(Long.MaxValue)

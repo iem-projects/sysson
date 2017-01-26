@@ -1,16 +1,16 @@
 type Vec[+A] = collection.immutable.Vector[A]
 val  Vec     = collection.immutable.Vector
 
-class Variable[A](data: Vec[A], val shape: Vec[Int]) {
+class Variable[A](val data: Vector[A], val shape: Vector[Int]) {
   require(data.size == shape.product)
   
-  def read(sections: Vec[Range]): Vec[A] = {
+  def read(sections: Vector[Range]): Vector[A] = {
     require(sections.size == shape.size)
     require(sections.zipWithIndex.forall { case (r, ri) => r.forall(i => i >= 0 && i < shape(ri)) })
     
     val sz  = if (sections.isEmpty) 0 else (1 /: sections)(_ * _.size)
     val zip = (shape zip sections).reverse
-    Vec.tabulate(sz) { i =>
+    Vector.tabulate(sz) { i =>
       val (j, _, _) = ((0, 1, 1) /: zip) { case ((res, m, n), (dim, r)) =>
         val add = r((i / n) % r.size) * m
         (res + add, m * dim, n * r.size)
@@ -20,19 +20,19 @@ class Variable[A](data: Vec[A], val shape: Vec[Int]) {
   }
 }
 
-val v = new Variable[Int](Vec(1 to 512: _*), Vec(8, 8, 8))
-    
-assert(v.read(Vec(0 until 0, 0 until 0, 0 until 0)) == Vec())
-assert(v.read(Vec(0 to 0, 0 to 0, 0 to 2)) == Vec(1, 2, 3))
-assert(v.read(Vec(1 to 1, 1 to 1, 0 to 2)) == Vec(73, 74, 75))
+val v = new Variable[Int](Vector(1 to 512: _*), Vector(8, 8, 8))
 
-val selSome = Vec(
+assert(v.read(Vector(0 until 0, 0 until 0, 0 until 0)) == Vector())
+assert(v.read(Vector(0 to 0, 0 to 0, 0 to 2)) == Vector(1, 2, 3))
+assert(v.read(Vector(1 to 1, 1 to 1, 0 to 2)) == Vector(73, 74, 75))
+
+val selSome = Vector(
   2 until 4,  // size 2
   3 until 6,  // size 3
   4 until 8   // size 4
 )
 
-assert(v.read(selSome) == Vec(
+assert(v.read(selSome) == Vector(
   157, 158, 159, 160, 
   165, 166, 167, 168, 
   173, 174, 175, 176, 
@@ -43,11 +43,11 @@ assert(v.read(selSome) == Vec(
 ))
 
 trait ChunkReader[A] {
-  def read(chunkSize: Int): Vec[A]
+  def read(chunkSize: Int): Vector[A]
 }
 
 def test(c: ChunkReader[Int]): Unit =
-  assert((1 to 4).map(c.read(5)) ++ c.read(4) == Vec(
+  assert((1 to 4).map(c.read(5)) ++ c.read(4) == Vector(
     157, 158, 159, 160, 
     165, 166, 167, 168, 
     173, 174, 175, 176, 
@@ -59,7 +59,7 @@ def test(c: ChunkReader[Int]): Unit =
 
 // test(???)
 
-def calcInSection(pos: Int, sections: Vec[Range]): Vec[Int] = {
+def calcInSection(pos: Int, sections: Vector[Range]): Vector[Int] = {
   val sizes    = sections.map(_.size)
   val modsDivs = sizes zip sizes.scanRight(1)(_ * _).tail
   modsDivs.map { case (mod, div) =>
@@ -74,7 +74,7 @@ calcInSection(1, selAll)
 
 //////////////////////////////////////////////
 
-val selSome = Vec(
+val selSome = Vector(
   2 until 4,  // size 2
   3 until 6,  // size 3
   4 until 8   // size 4
@@ -268,3 +268,4 @@ Vector(0, 0, 3)
 
 // second
 Vector(0, 1, 0)
+ 
