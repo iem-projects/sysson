@@ -16,6 +16,7 @@ package at.iem.sysson
 package fscape
 
 import at.iem.sysson.fscape.graph.Var
+import at.iem.sysson.sound.AuralSonification
 import de.sciss.fscape.lucre.FScape.{Output, Rendering}
 import de.sciss.fscape.lucre.UGenGraphBuilder.{IO, Input, MissingIn}
 import de.sciss.fscape.lucre.impl.{RenderingImpl, UGenGraphBuilderContextImpl}
@@ -40,9 +41,17 @@ object GenViewFactory {
 
     override def requestInput[Res](req: Input {type Value = Res}, io: IO[S])(implicit tx: S#Tx): Res = req match {
       case Var.PlayLinear(vr) =>
-        val f   = fscape
-        val m   = f.attr.$[Matrix](vr.name).getOrElse(throw MissingIn(vr.name))
-        val res = new Var.PlayLinear.Value {
+        val f       = fscape
+        val vrName  = vr.name
+        val mOpt0   = f.attr.$[Matrix](vrName)
+        val mOpt    = mOpt0.orElse {
+          for {
+            sonif  <- AuralSonification.find[S]()
+            source <- sonif.sources.get(vrName)
+          } yield source.matrix
+        }
+        val m     = mOpt.getOrElse(throw MissingIn(vrName))
+        val res   = new Var.PlayLinear.Value {
           val matrix: Matrix.Key = m.getKey(-1) // reader(-1)
 
           // XXX TODO: `reader` is called from non-txn

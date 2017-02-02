@@ -22,7 +22,7 @@ import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.Disposable
+import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.synth.{NodeRef, Sys => SSys}
 import de.sciss.numbers
 import de.sciss.synth.proc.AuralView.State
@@ -34,15 +34,21 @@ import scala.concurrent.stm.{TMap, TxnLocal}
 import scala.util.control.NonFatal
 
 object AuralSonificationImpl {
+  private[this] val auralSonifLoc = TxnLocal[Sonification[_]]()
+
+  def find[S <: Sys[S]]()(implicit tx: S#Tx): Option[Sonification[S]] = {
+    Option(auralSonifLoc.get(tx.peer).asInstanceOf[Sonification[S]])
+  }
+
   def apply[S <: SSys[S]](obj: Sonification[S])(implicit tx: S#Tx, context: AuralContext[S]): AuralSonification[S] = {
     logDebugTx(s"AuralSonification($obj)")
     val objH      = tx.newHandle(obj)
     val res       = new Impl[S]
-    // val proc      = obj.proc
-    // val procData  = context.acquire[AuralObj.ProcData[S]](proc)(new ProcDataImpl[S].initSonif(obj))
-    val procView  = new ProcImpl(res, context).initSonif(obj)
-    // val procView  = new ProcImpl[S](res).init(procData)
+    val procView  = new ProcImpl(res, context)
+    // order is crucial:
     res.init(objH, procView)
+    procView.initSonif(obj)
+    res
   }
 
   private def findSource[S <: SSys[S]](obj: Sonification[S], variable: graph.Var)
@@ -64,26 +70,14 @@ object AuralSonificationImpl {
     dimIdx
   }
 
-    private final class ProcImpl[S <: SSys[S]](sonifData: Impl[S], context0: AuralContext[S])
-      extends AuralProcImpl.Impl[S]()(context0) {
-
-    private val sonifLoc = TxnLocal[Sonification[S]]() // cache-only purpose
-    private var _obj: stm.Source[S#Tx, Sonification[S]] = _
+  private final class ProcImpl[S <: SSys[S]](sonifData: Impl[S], context0: AuralContext[S])
+    extends AuralProcImpl.Impl[S]()(context0) {
 
     private val ctlMap = TMap.empty[String, Disposable[S#Tx]]
 
-    private def sonifCached()(implicit tx: S#Tx): Sonification[S] = {
-      implicit val itx = tx.peer
-      if (sonifLoc.isInitialized) sonifLoc.get
-      else {
-        val sonif = _obj()
-        sonifLoc.set(sonif)
-        sonif
-      }
-    }
+    import sonifData.sonification
 
     def initSonif(obj: Sonification[S])(implicit tx: S#Tx): this.type = {
-      _obj = tx.newHandle(obj)
       val ctls = obj.controls
       val obsCtl = ctls.changed.react { implicit tx => upd => upd.changes.foreach {
         case evt.Map.Added   (key, value)       => ctlAdded  (key, value)
@@ -159,7 +153,7 @@ object AuralSonificationImpl {
         addSpec(req, st, newSpec)
 
       case dv: graph.Dim.Values =>
-        val sonif     = sonifCached()
+        val sonif     = sonification
         val dimElem   = dv.dim
         val source    = findSource  (sonif , dv.variable)
         val dimIdx    = findDimIndex(source, dimElem)
@@ -168,7 +162,7 @@ object AuralSonificationImpl {
         addSpec(req, st, newSpec)
 
       case vp: graph.Var.Play =>
-        val sonif     = sonifCached()
+        val sonif     = sonification
         val dimElem   = vp.time.dim
         val source    = findSource  (sonif , vp.variable)
         val dimIdx    = findDimIndex(source, dimElem)
@@ -179,7 +173,7 @@ object AuralSonificationImpl {
         addSpec(req, st, newSpec)
 
       case vv: graph.Var.Values =>
-        val sonif     = sonifCached()
+        val sonif     = sonification
         val source    = findSource(sonif, vv.variable)
         val numChL    = source.matrix.size
         if (numChL > 0xFFFF) sys.error(s"$vv - matrix too large ($numChL cells)")
@@ -188,14 +182,17 @@ object AuralSonificationImpl {
         addSpec(req, st, newSpec)
 
       case av: graph.Var.Axis.Values =>
-        val sonif     = sonifCached()
+        val sonif     = sonification
         val source    = findSource(sonif, av.variable)
         val streamIdx = findDimIndex(source, av.axis.variable.time.dim)
         val axisIdx   = findDimIndex(source, av.axis.asDim)
         val m         = source.matrix
         MatrixPrepare.ShapeAndIndex(shape = m.shape, streamIndex = streamIdx, axisIndex = axisIdx)
 
-      case _ => super.requestInput(req, st)
+      case _ =>
+        val sonif     = sonification
+        auralSonifLoc.set(sonif)(tx.peer) // XXX TODO -- dirty hack, store txn-local here
+        super.requestInput(req, st)
     }
 
     override def dispose()(implicit tx: S#Tx): Unit = {
@@ -220,7 +217,7 @@ object AuralSonificationImpl {
     override protected def buildSyncInput(b: NodeRef.Full[S], timeRef: TimeRef, keyW: UGB.Key, value: UGB.Value)
                                          (implicit tx: S#Tx): Unit = keyW match {
       case UserValue.Key(key) =>
-        val sonif = sonifCached() // .elem.peer
+        val sonif = sonification // .elem.peer
         sonif.controls.get(key).foreach { expr =>
           val ctlName = UserValue.controlName(key)
           b.addControl(ctlName -> expr.value)
@@ -228,7 +225,7 @@ object AuralSonificationImpl {
         }
 
       case sz: graph.Dim.Size =>
-        val sonif     = sonifCached()
+        val sonif     = sonification
         val dimElem   = sz.dim
         val source    = findSource  (sonif , sz.dim.variable)
         val dimIdx    = findDimIndex(source, dimElem)
@@ -238,7 +235,7 @@ object AuralSonificationImpl {
 //        b.setMap += ctlName -> value
 
       case sz: graph.Var.Size =>
-        val sonif     = sonifCached()
+        val sonif     = sonification
         val source    = findSource  (sonif , sz.variable)
         val value     = source.matrix.size
         val ctlName   = sz.ctlName
@@ -274,7 +271,7 @@ object AuralSonificationImpl {
       import spec.{elem, streamDim}
       implicit val resolver = WorkspaceResolver[S]
 
-      val source  = findSource(sonifCached(), elem.variable)
+      val source  = findSource(sonification, elem.variable)
       val full    = source.matrix
       //      val matrix  = if (isDim) {
       //        val dimIdx  = findDimIndex(source, elem)
@@ -345,7 +342,7 @@ object AuralSonificationImpl {
       this
     }
 
-    def sonifCached()(implicit tx: S#Tx): Sonification[S] = {
+    def sonification(implicit tx: S#Tx): Sonification[S] = {
       implicit val itx = tx.peer
       if (sonifLoc.isInitialized) sonifLoc.get
       else {

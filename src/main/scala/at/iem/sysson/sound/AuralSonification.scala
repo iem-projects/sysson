@@ -26,6 +26,8 @@ object AuralSonification extends AuralObj.Factory {
 
   def init(): Unit = _init
 
+  def find[S <: Sys[S]]()(implicit tx: S#Tx): Option[Sonification[S]] = Impl.find()
+
   def typeID: Int = Sonification.typeID
 
   type Repr[S <: Sys[S]] = Sonification[S]
@@ -41,5 +43,7 @@ object AuralSonification extends AuralObj.Factory {
   case class PlayFailed(cause: Throwable) extends Update
 }
 trait AuralSonification[S <: SSys[S]] extends AuralObj[S] {
+  def sonification(implicit tx: S#Tx): Sonification[S]
+
   def status: evt.Observable[S#Tx, AuralSonification.Update /* [S] */]
 }
