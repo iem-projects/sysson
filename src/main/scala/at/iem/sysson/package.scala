@@ -17,6 +17,7 @@ package at.iem
 import java.text.SimpleDateFormat
 import java.util.{Date, Locale}
 
+import at.iem.sysson.fscape.GenViewFactory
 import at.iem.sysson.sound.{AuralSonification, Sonification}
 import at.iem.sysson.util.DoubleTransform
 import de.sciss.file._
@@ -104,6 +105,7 @@ package object sysson {
     AuralSonification     .init()
     Plot                  .init()
     DoubleTransform       .init()
+    GenViewFactory        .install()
     importExtensions
   }
 }
