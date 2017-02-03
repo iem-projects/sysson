@@ -15,7 +15,7 @@
 package at.iem.sysson
 package fscape
 
-import at.iem.sysson.fscape.graph.Var
+import at.iem.sysson.fscape.graph.{Dim, Var}
 import at.iem.sysson.sound.AuralSonification
 import de.sciss.fscape.lucre.FScape.{Output, Rendering}
 import de.sciss.fscape.lucre.UGenGraphBuilder.{IO, Input, MissingIn}
@@ -33,24 +33,73 @@ object GenViewFactory {
   def install(config: Control.Config = Control.Config()): Unit =
     GenView.addFactory(apply(config))
 
+  def render[S <: Sys[S]](fscape: FScape[S], config: Control.Config = Control.Config())
+                         (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
+    val ugbCtx = new ContextImpl(fscape)
+    RenderingImpl(fscape, ugbCtx, config, force = false)
+  }
+
   private final class ContextImpl[S <: Sys[S]](protected val fscape: FScape[S])(implicit context: GenContext[S])
     extends UGenGraphBuilderContextImpl[S] {
 
     implicit protected def cursor    : stm.Cursor[S]       = context.cursor
     implicit protected def workspace : WorkspaceHandle[S]  = context.workspaceHandle
 
+    private def findMatrix(vr: Var)(implicit tx: S#Tx): Matrix[S] = {
+      val f       = fscape
+      val vrName  = vr.name
+      val mOpt0   = f.attr.$[Matrix](vrName)
+      val mOpt    = mOpt0.orElse {
+        for {
+          sonif  <- AuralSonification.find[S]()
+          source <- sonif.sources.get(vrName)
+        } yield source.matrix
+      }
+      val m     = mOpt.getOrElse(throw MissingIn(vrName))
+      m
+    }
+
+    private def requestDimInfo(i: Dim.InfoGE)(implicit tx: S#Tx): Dim.Info = {
+      val f       = fscape
+      val vrName  = i.dim.variable.name
+      val dimNameL= i.dim.name
+      val mOpt0   = f.attr.$[Matrix](vrName)
+      val mOpt    = mOpt0.fold {
+        for {
+          sonif   <- AuralSonification.find[S]()
+          source  <- sonif.sources.get(vrName)
+          dimName <- source.dims.get(dimNameL)
+          m        = source.matrix
+          dimIdx   = m.dimensions.indexWhere(_.name == dimName)
+          if dimIdx >= 0
+        } yield (m, dimIdx)
+      } { _m =>
+        val dimIdx = _m.dimensions.indexWhere(_.name == dimNameL)
+        if (dimIdx < 0) None else Some((_m, dimIdx))
+      }
+      val (m, dimIdx) = mOpt.getOrElse(throw MissingIn(vrName))
+      val d = m.dimensions.apply(dimIdx)
+
+      val res: Dim.Info = new Dim.Info {
+        val variable: Var.Info    = new Var.Info {
+          val matrix  : Matrix.Key  = m.getKey(-1)
+          val shape   : Vec[Int]    = m.shape
+          val name    : String      = m.name
+          val units   : String      = m.units
+        }
+
+        val index   : Int         = dimIdx
+        val matrix  : Matrix.Key  = m.getDimensionKey(dimIdx, useChannels = false)
+        val shape   : Vec[Int]    = d.shape
+        val name    : String      = d.name
+        val units   : String      = d.units
+      }
+      res
+    }
+
     override def requestInput[Res](req: Input {type Value = Res}, io: IO[S])(implicit tx: S#Tx): Res = req match {
       case Var.PlayLinear(vr) =>
-        val f       = fscape
-        val vrName  = vr.name
-        val mOpt0   = f.attr.$[Matrix](vrName)
-        val mOpt    = mOpt0.orElse {
-          for {
-            sonif  <- AuralSonification.find[S]()
-            source <- sonif.sources.get(vrName)
-          } yield source.matrix
-        }
-        val m     = mOpt.getOrElse(throw MissingIn(vrName))
+        val m     = findMatrix(vr)
         val res   = new Var.PlayLinear.Value {
           val matrix: Matrix.Key = m.getKey(-1) // reader(-1)
 
@@ -66,6 +115,9 @@ object GenViewFactory {
           }
         }
         res
+
+      case i: Dim.Size      => requestDimInfo(i)
+      case i: Dim.SuccSize  => requestDimInfo(i)
 
       case _ => super.requestInput(req, io)
     }

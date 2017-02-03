@@ -36,6 +36,15 @@ import scala.util.control.NonFatal
 object AuralSonificationImpl {
   private[this] val auralSonifLoc = TxnLocal[Sonification[_]]()
 
+  def use[S <: Sys[S], A](sonification: Sonification[S])(body: => A)(implicit tx: S#Tx): A = {
+    val old = auralSonifLoc.swap(sonification)(tx.peer)
+    try {
+      body
+    } finally {
+      auralSonifLoc.set(old)(tx.peer)
+    }
+  }
+
   def find[S <: Sys[S]]()(implicit tx: S#Tx): Option[Sonification[S]] = {
     Option(auralSonifLoc.get(tx.peer).asInstanceOf[Sonification[S]])
   }

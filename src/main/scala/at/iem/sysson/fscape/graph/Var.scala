@@ -21,7 +21,7 @@ import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
 import de.sciss.fscape.stream.{StreamIn, StreamOut, VarPlayLinear, Builder => SBuilder}
 import de.sciss.fscape.{GE, Lazy, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource}
 import de.sciss.lucre.matrix.Matrix
-import de.sciss.serial.DataOutput
+import de.sciss.serial.{DataOutput, ImmutableSerializer}
 
 object Var {
   object PlayLinear {
@@ -29,7 +29,7 @@ object Var {
       def matrix: Matrix.Key
       def reader: Matrix.Reader
 
-      def write(out: DataOutput): Unit = {
+      final def write(out: DataOutput): Unit = {
         out.writeByte(100)
         matrix.write(out)
       }
@@ -44,8 +44,7 @@ object Var {
         UGen.SingleOut(this, args, aux = ref :: Nil)
 
       def makeStream(args: Vec[StreamIn])(implicit b: SBuilder): StreamOut = {
-        val in      = args.map(_.toDouble)
-        val reader  = ref.reader
+        val reader = ref.reader
         VarPlayLinear(matrix = reader)
       }
 
@@ -68,8 +67,83 @@ object Var {
     }
   }
 
-  final case class Spec() {
-    def drop(d: Dim): Spec = ???
+  object Op {
+    final case class Drop(dim: Dim) extends Op {
+      override def productPrefix: String  = getClass.getName
+      override def toString               = s"Drop($dim)"
+    }
+  }
+  sealed trait Op
+
+  object Spec {
+    trait Dim extends Aux {
+      def values: Vec[Double]
+      def name  : String
+      def units : String
+
+      final def write(out: DataOutput): Unit = {
+        out.writeByte(103)
+        out.writeUTF(name )
+        out.writeUTF(units)
+        ImmutableSerializer.indexedSeq[Double].write(values, out)
+      }
+    }
+
+    trait Value extends UGB.Value with Aux {
+      def name  : String
+      def units : String
+
+      def dimensions: Vec[Spec.Dim]
+
+      final lazy val shape : Vec[Int]  = dimensions.map(_.values.size)
+      final lazy val rank  : Int       = shape.size
+      final lazy val size  : Long      = if (shape.isEmpty) 0L else (1L /: shape)(_ * _)
+
+      def write(out: DataOutput): Unit = {
+        out.writeByte(102)
+        out.writeUTF(name )
+        out.writeUTF(units)
+        out.writeShort(dimensions.size)
+        dimensions.foreach(_.write(out))
+      }
+    }
+  }
+  final case class Spec(variable: Var, ops: Vec[Op]) extends UGB.Input with UGB.Key {
+    type Key    = Spec
+    type Value  = Spec.Value
+
+    def key: Key = this
+
+    def drop(dim: Dim): Spec = copy(ops = ops :+ Op.Drop(dim))
+
+    private def unCapitalize(s: String): String =
+      if (s.isEmpty || s.charAt(0).isLower) s
+      else {
+        val chars = s.toCharArray
+        chars(0) = chars(0).toLower
+        new String(chars)
+      }
+
+    override def productPrefix: String  = getClass.getName
+    override def toString     : String  = (s"$variable.spec" /: ops)((res, op) => s"$res.${unCapitalize(op.toString)}")
+  }
+
+  trait InfoLike {
+    def matrix: Matrix.Key
+
+    def shape : Vec[Int]
+    def name  : String
+    def units : String
+
+    final def rank: Int   = shape.size
+    final def size: Long  = if (shape.isEmpty) 0L else (1L /: shape)(_ * _)
+  }
+
+  trait Info extends InfoLike with UGB.Value with Aux {
+    final def write(out: DataOutput): Unit = {
+      out.writeByte(101)
+      matrix.write(out)
+    }
   }
 }
 final case class Var(name: String) extends Lazy.Expander[Unit] with UGB.Key {
@@ -78,5 +152,5 @@ final case class Var(name: String) extends Lazy.Expander[Unit] with UGB.Key {
   /** Unrolls all dimensions in time. */
   def playLinear(): Var.PlayLinear = Var.PlayLinear(this)
 
-  def spec: Var.Spec = ???
+  def spec: Var.Spec = Var.Spec(this, Vector.empty)
 }

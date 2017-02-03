@@ -15,8 +15,11 @@
 package at.iem.sysson
 package fscape.graph
 
+import de.sciss.fscape.UGen.Aux
+import de.sciss.fscape.graph.ConstantL
 import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
 import de.sciss.fscape.{GE, Lazy, UGenGraph, UGenInLike}
+import de.sciss.serial.DataOutput
 
 object Dim {
   object Values {
@@ -28,45 +31,64 @@ object Dim {
     private[sysson] def maxNumChannels = maxSize
 
     type Key    = Dim
-    type Value  = Nothing  // XXX TODO
+    type Value  = Var.PlayLinear.Value
 
     def key: Key = dim
 
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = ???
 
-    override def productPrefix  = s"Dim$$Values"
-    override def toString       = s"$dim.values"
+    override def productPrefix: String  = classOf[Values].getName
+    override def toString               = s"$dim.values"
   }
 
-  final case class Size(dim: Dim)
-    extends GE.Lazy with UGB.Input with UGB.Key {
+  sealed trait InfoGE extends GE.Lazy with UGB.Input with UGB.Key {
+    type Key      = InfoGE
+    type Value    = Info
 
-    override def productPrefix  = s"Dim$$Size"
-    override def toString       = s"Dim.Size($dim)"
+    def dim: Dim
 
-    type Key      = Size
-    type Value    = UGB.Unit
-    def key: Key  = this
+    final def key: Key  = this
+  }
+
+  final case class Size(dim: Dim) extends InfoGE {
+
+    override def productPrefix: String  = classOf[Size].getName
+    override def toString               = s"$dim.size"
 
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
-      val ub = UGB.get(b)
-      ???
+      val ub    = UGB.get(b)
+      val value = ub.requestInput(this)
+      ConstantL(value.size)
     }
   }
 
-  final case class SuccSize(dim: Dim)
-    extends GE.Lazy with UGB.Input with UGB.Key {
+  final case class SuccSize(dim: Dim) extends InfoGE {
 
-    override def productPrefix  = s"Dim$$SuccSize"
-    override def toString       = s"Dim.SuccSize($dim)"
-
-    type Key      = SuccSize
-    type Value    = UGB.Unit
-    def key: Key  = this
+    override def productPrefix: String  = classOf[SuccSize].getName
+    override def toString               = s"$dim.succSize"
 
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
-      val ub = UGB.get(b)
-      ???
+      val ub    = UGB.get(b)
+      val value = ub.requestInput(this)
+      val succ  = value.variable.shape.drop(value.index + 1)
+      val sz    = (1L /: succ)(_ * _)
+      ConstantL(sz)
+    }
+  }
+
+  trait Info extends Var.InfoLike with UGB.Value with Aux {
+    def variable: Var.Info
+    def index   : Int
+
+    // final def shape: Vec[Int] = Vector(variable.shape(index))
+
+    final def write(out: DataOutput): Unit = {
+      // we don't need to write our own `matrix` key
+      // because that information is redundant wrt
+      // `variable`. We only need to write the index
+      out.writeByte(104)
+      variable.write(out)
+      out.writeShort(index)
     }
   }
 }

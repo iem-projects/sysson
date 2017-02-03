@@ -1,6 +1,5 @@
 package at.iem.sysson
 
-import at.iem.sysson.fscape.GenViewFactory
 import at.iem.sysson.sound.Sonification
 import de.sciss.file._
 import de.sciss.filecache.Limit
@@ -19,8 +18,6 @@ object FScapeIndirectTest extends App {
   type S              = InMemory
 
   initTypes()
-//  FScape.init()
-//  GenViewFactory.install()
   val folder = userHome / "Documents" / "temp" / "fscape_test"
   folder.mkdir()
   Cache.init(folder = folder, capacity = Limit())

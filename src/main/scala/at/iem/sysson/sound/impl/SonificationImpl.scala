@@ -38,21 +38,6 @@ object SonificationImpl {
     new SourceImpl(targets, matrix, dims).connect()
   }
 
-//  def mkCopy()(implicit tx: S#Tx): Sonification.Elem[S] = {
-//    val Proc.Obj(proc) = Obj.copy(peer.proc)
-//    val sources = expr.Map.Modifiable[S, String, Sonification.Source[S], Sonification.Source.Update[S]]
-//    peer.sources.iterator.foreach { case (key, value) =>
-//      sources.put(key, value.mkCopy())
-//    }
-//    val controls = expr.Map.Modifiable[S, String, Expr[S, Double], model.Change[Double]]
-//    peer.controls.iterator.foreach {
-//      case (key, DoubleObj.Var(vr))  => controls.put(key, DoubleObj.newVar(vr()))
-//      case (key, value)         => controls.put(key, value)
-//    }
-//    val sonif = SonificationImpl.copy[S](proc, sources, controls)
-//    Sonification.Elem(sonif)
-//  }
-
   // ---- internals ----
 
   private val anySourceSer = new SourceSer[NoSys]

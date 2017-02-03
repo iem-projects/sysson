@@ -15,14 +15,18 @@
 package at.iem.sysson
 package sound
 
-import at.iem.sysson.sound.impl.{SonificationImpl => Impl}
+import at.iem.sysson.fscape.GenViewFactory
+import at.iem.sysson.sound.impl.{AuralSonificationImpl, SonificationImpl => Impl}
+import de.sciss.fscape.lucre.FScape
+import de.sciss.fscape.stream.Control
 import de.sciss.lucre.event.Publisher
 import de.sciss.lucre.expr.{DoubleObj, StringObj}
 import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.{event => evt}
+import de.sciss.optional.Optional
 import de.sciss.serial.{DataInput, Serializer}
-import de.sciss.synth.proc.Proc
+import de.sciss.synth.proc.{GenContext, Proc}
 
 object Sonification extends Obj.Type {
   final val typeID = 0x30004
@@ -84,28 +88,17 @@ object Sonification extends Obj.Type {
     // def mkCopy()(implicit tx: S#Tx): Source[S]
   }
 
-  // ---- element ----
+//  def use[S <: Sys[S], A](sonification: Sonification[S])(body: => A)(implicit tx: S#Tx): A = {
+//    AuralSonificationImpl.use(sonification)
+//  }
 
-//  object Elem {
-//    def apply[S <: Sys[S]](peer: Sonification[S])(implicit tx: S#Tx): Sonification.Elem[S] =
-//      Impl.SonificationElemImpl(peer)
-//
-//    implicit def serializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Sonification.Elem[S]] =
-//      Impl.SonificationElemImpl.serializer
-//  }
-//  trait Elem[S <: Sys[S]] extends proc.Elem[S] {
-//    type Peer       = Sonification[S]
-//    type PeerUpdate = Sonification.Update[S]
-//    type This       = Elem[S]
-//  }
-//
-//  object Obj {
-//    def unapply[S <: Sys[S]](obj: Obj[S]): Option[Sonification.Obj[S]] =
-//      if (obj.elem.isInstanceOf[Sonification.Elem[S]]) Some(obj.asInstanceOf[Sonification.Obj[S]])
-//      else None
-//  }
-//
-//  type Obj[S <: Sys[S]] = proc.Obj.T[S, Sonification.Elem]
+  def render[S <: Sys[S]](fscape: FScape[S], sonification: Optional[Sonification[S]] = None,
+                          config: Control.Config = Control.Config())
+                         (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
+    def render(): FScape.Rendering[S] = GenViewFactory.render(fscape, config)
+
+    sonification.fold(render())(AuralSonificationImpl.use(_)(render()))
+  }
 }
 /** A sonification pairs a sound process with a map to data sources and user controls. */
 trait Sonification[S <: Sys[S]] extends Obj[S] with Publisher[S, Sonification.Update[S]] {
