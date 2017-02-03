@@ -36,7 +36,7 @@ object GenViewFactory {
   def render[S <: Sys[S]](fscape: FScape[S], config: Control.Config = Control.Config())
                          (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
     val ugbCtx = new ContextImpl(fscape)
-    RenderingImpl(fscape, ugbCtx, config, force = false)
+    RenderingImpl(fscape, ugbCtx, config, force = true)
   }
 
   private final class ContextImpl[S <: Sys[S]](protected val fscape: FScape[S])(implicit context: GenContext[S])

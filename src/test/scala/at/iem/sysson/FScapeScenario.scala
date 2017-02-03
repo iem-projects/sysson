@@ -10,6 +10,8 @@ import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth.proc.{GenContext, WorkspaceHandle}
 
+import scala.util.{Failure, Success}
+
 // transform an input matrix by
 // averaging over a specified dimension
 object FScapeScenario extends App {
@@ -69,9 +71,16 @@ object FScapeScenario extends App {
 
     val r = Sonification.render[S](f)
     r.reactNow { implicit tx => state => if (state.isComplete) {
-      val res = r.result.get
-       println(s"Result: $res")
-       sys.exit(if (res.isSuccess) 0 else 1)
+      r.result.get match {
+        case Success(_) =>
+          println("Success.")
+          sys.exit(1)
+
+        case Failure(ex) =>
+          println("Failure:")
+          ex.printStackTrace()
+          sys.exit(1)
+      }
     }}
 
     new Thread {
