@@ -62,7 +62,7 @@ object FScapeScenario extends App {
     f.graph() = g
 
     val locOut  = ArtifactLocation.newConst[S](userHome / "Documents" / "temp")
-    val artOut  = Artifact(locIn, Artifact.Child("avg.nc"))
+    val artOut  = Artifact(locOut, Artifact.Child("avg.nc"))
 
     f.attr.put("var" , mat)
     f.attr.put("file", artOut)
