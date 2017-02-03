@@ -67,10 +67,16 @@ object Var {
       PlayLinear.WithRef(value)
     }
   }
+
+  final case class Spec() {
+    def drop(d: Dim): Spec = ???
+  }
 }
 final case class Var(name: String) extends Lazy.Expander[Unit] with UGB.Key {
   protected def makeUGens(implicit b: UGenGraph.Builder): Unit = ()
 
   /** Unrolls all dimensions in time. */
   def playLinear(): Var.PlayLinear = Var.PlayLinear(this)
+
+  def spec: Var.Spec = ???
 }
