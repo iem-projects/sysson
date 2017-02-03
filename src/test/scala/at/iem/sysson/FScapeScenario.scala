@@ -52,26 +52,22 @@ object FScapeScenario extends App {
       val isOk    = p >= 0 & p < 1000 // XXX TODO --- we need a isFillValue function
       val flt     = p * isOk
       val dSz     = d.size
-      dSz.poll(0, "dim-size")
       val tSz     = d.succSize  // good name?
-      tSz.poll(0, "succ-size")
       val cSz     = dSz * tSz
       val m       = Metro(cSz)
       val sum     = RunningWindowSum(flt , tSz, m)
       val count   = RunningWindowSum(isOk, tSz, m)
-      val sumTrunc= ResizeWindow(sum  , size = cSz, start = cSz - dSz)
-      val cntTrunc= ResizeWindow(count, size = cSz, start = cSz - dSz)
+      val sumTrunc= ResizeWindow(sum  , size = cSz, start = cSz - tSz)
+      val cntTrunc= ResizeWindow(count, size = cSz, start = cSz - tSz)
       val dataOut = sumTrunc / cntTrunc
-      val mn      = RunningMin(dataOut).last
-      val mx      = RunningMax(dataOut).last
-      mn.poll(0, "min")
-      mx.poll(0, "max")
+//      val mn      = RunningMin(dataOut).last
+//      val mx      = RunningMax(dataOut).last
+//      mn.poll(0, "min")
+//      mx.poll(0, "max")
       val specIn  = v.spec
       val specOut = specIn.drop(d)
-//      val frames  = VarOut("file", specOut, in = dataOut)
-//      frames.poll(Metro(tSz), "frames")
-      val frames = Frames(dataOut)
-      frames.last.poll(0, "num-frames")
+      val frames  = VarOut("file", specOut, in = dataOut)
+      (frames / tSz).roundTo(1).poll(Metro(tSz), "time-frame")
     }
     f.graph() = g
 
