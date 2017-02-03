@@ -59,10 +59,10 @@ object GenViewFactory {
       m
     }
 
-    private def requestDimInfo(i: Dim.InfoGE)(implicit tx: S#Tx): Dim.Info = {
+    private def requestDim(dim: Dim)(implicit tx: S#Tx): (Matrix[S], Int) = {
       val f       = fscape
-      val vrName  = i.dim.variable.name
-      val dimNameL= i.dim.name
+      val vrName  = dim.variable.name
+      val dimNameL= dim.name
       val mOpt0   = f.attr.$[Matrix](vrName)
       val mOpt    = mOpt0.fold {
         for {
@@ -77,7 +77,11 @@ object GenViewFactory {
         val dimIdx = _m.dimensions.indexWhere(_.name == dimNameL)
         if (dimIdx < 0) None else Some((_m, dimIdx))
       }
-      val (m, dimIdx) = mOpt.getOrElse(throw MissingIn(vrName))
+      mOpt.getOrElse(throw MissingIn(vrName))
+    }
+
+    private def requestDimInfo(i: Dim.InfoGE)(implicit tx: S#Tx): Dim.Info = {
+      val (m, dimIdx) = requestDim(i.dim)
       val d = m.dimensions.apply(dimIdx)
 
       val res: Dim.Info = new Dim.Info {
@@ -95,6 +99,38 @@ object GenViewFactory {
         val units   : String      = d.units
       }
       res
+    }
+
+    private def requestVarSpec(i: Var.Spec)(implicit tx: S#Tx): Var.Spec.Value = {
+      val m = findMatrix(i.variable)
+
+      implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
+
+      val dims0 = m.dimensions.map { dim =>
+        val reader: Matrix.Reader = dim.reader(-1)
+        val lenL  = reader.size
+        require(lenL <= 0x7FFFFFFF)
+        val len   = lenL.toInt
+        val buf   = new Array[Double](len)
+        reader.readDouble1D(buf, 0, len)
+        Var.Spec.Dim(dim.name, dim.units, buf.toIndexedSeq)
+      }
+      val spec0 = Var.Spec.Value(m.name, m.units, dims0)
+
+      val spec = (spec0 /: i.ops) {
+        case (specIn, Var.Op.Drop(dimRef)) =>
+          require(dimRef.variable == i.variable)
+          // N.B. Because we may drop multiple times,
+          // we have to "relocate" the dimensional index,
+          // simply by looking up its name
+          val (m0, dimIdx0) = requestDim(dimRef)
+          val dimName       = m0.dimensions.apply(dimIdx0).name
+          val dimIdx        = specIn.dimensions.indexWhere(_.name == dimName)
+          require(dimIdx >= 0)
+          specIn.copy(dimensions = specIn.dimensions.patch(dimIdx, Nil, 1))
+      }
+
+      spec
     }
 
     override def requestInput[Res](req: Input {type Value = Res}, io: IO[S])(implicit tx: S#Tx): Res = req match {
@@ -118,6 +154,7 @@ object GenViewFactory {
 
       case i: Dim.Size      => requestDimInfo(i)
       case i: Dim.SuccSize  => requestDimInfo(i)
+      case i: Var.Spec      => requestVarSpec(i)
 
       case _ => super.requestInput(req, io)
     }

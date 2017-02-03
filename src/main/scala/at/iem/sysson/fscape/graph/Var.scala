@@ -76,12 +76,8 @@ object Var {
   sealed trait Op
 
   object Spec {
-    trait Dim extends Aux {
-      def values: Vec[Double]
-      def name  : String
-      def units : String
-
-      final def write(out: DataOutput): Unit = {
+    final case class Dim(name: String, units: String, values: Vec[Double]) extends Aux {
+      def write(out: DataOutput): Unit = {
         out.writeByte(103)
         out.writeUTF(name )
         out.writeUTF(units)
@@ -89,15 +85,12 @@ object Var {
       }
     }
 
-    trait Value extends UGB.Value with Aux {
-      def name  : String
-      def units : String
+    final case class Value(name: String, units: String, dimensions: Vec[Spec.Dim])
+      extends UGB.Value with Aux {
 
-      def dimensions: Vec[Spec.Dim]
-
-      final lazy val shape : Vec[Int]  = dimensions.map(_.values.size)
-      final lazy val rank  : Int       = shape.size
-      final lazy val size  : Long      = if (shape.isEmpty) 0L else (1L /: shape)(_ * _)
+      lazy val shape : Vec[Int]  = dimensions.map(_.values.size)
+      lazy val rank  : Int       = shape.size
+      lazy val size  : Long      = if (shape.isEmpty) 0L else (1L /: shape)(_ * _)
 
       def write(out: DataOutput): Unit = {
         out.writeByte(102)
