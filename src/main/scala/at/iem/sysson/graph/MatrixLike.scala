@@ -20,14 +20,14 @@ import at.iem.sysson.sound.impl.MatrixPrepare.ShapeAndIndex
 import de.sciss.equal
 import de.sciss.synth
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
-import de.sciss.synth.{GE, ScalarRated, UGenInLike}
+import de.sciss.synth.{GE, Lazy, ScalarRated, UGenInLike}
 
 object Var {
   object Play {
-    def apply(variable: Var, time: Dim.Play, interp: Int): Play =
+    def apply(variable: MatrixLike, time: Dim.Play, interp: Int): Play =
       apply(variable = variable, time = time, interp = interp, maxNumChannels = 1000)
   }
-  final case class Play(variable: Var, time: Dim.Play, interp: Int, maxNumChannels: Int)
+  final case class Play(variable: MatrixLike, time: Dim.Play, interp: Int, maxNumChannels: Int)
     extends MatrixPrepare.VarGE with MatrixPrepare.PlayGE with UGB.Input {
 
     override def productPrefix  = s"Var$$Play"
@@ -53,9 +53,9 @@ object Var {
   }
 
   object Values {
-    def apply(variable: Var): Values = apply(variable = variable, maxSize = 1000)
+    def apply(variable: MatrixLike): Values = apply(variable = variable, maxSize = 1000)
   }
-  final case class Values(variable: Var, maxSize: Int)
+  final case class Values(variable: MatrixLike, maxSize: Int)
     extends MatrixPrepare.VarGE with MatrixPrepare.ValuesGE with UGB.Input {
 
     private[sysson] def maxNumChannels = maxSize
@@ -63,13 +63,13 @@ object Var {
     override def productPrefix  = s"Var$$Values"
     override def toString       = s"$variable.values"
 
-    type      Key = Var
+    type      Key = MatrixLike
     def  key: Key = variable
 
     private[sysson] def dimOption: Option[Dim] = None
   }
 
-  final case class Size(variable: Var)
+  final case class Size(variable: MatrixLike)
     extends synth.GE.Lazy with UGB.Input with ScalarRated with UGB.Key {
 
     override def productPrefix  = s"Var$$Size"
@@ -114,7 +114,7 @@ object Var {
 
       type Value = ShapeAndIndex
 
-      def variable: Var = axis.variable.variable
+      def variable: MatrixLike = axis.variable.variable
 
       private[sysson] def maxNumChannels = maxSize
 
@@ -181,12 +181,9 @@ object Var {
   //    def play(time: Dim.Play, interp: Int): Var.Play = Var.Play(this, time, interp)
   //  }
 }
-// XXX TODO - remove obsolete `higherRank` argument, once we don't need session compatibility
-final case class Var(name: String, higherRank: Boolean = true) extends UserInteraction with UGB.Key {
-  //  /** Logical name by which the source is referred to */
-  //  def name: String
 
-  override def toString = s"""$productPrefix("$name")"""
+sealed trait MatrixLike extends UGB.Key {
+  def name: String
 
   def dim(name: String): Dim = Dim(this, name)
 
@@ -204,4 +201,13 @@ final case class Var(name: String, higherRank: Boolean = true) extends UserInter
     Var.Play(this, time = time, interp = interp, maxNumChannels = maxNumChannels)
 
   def size: Var.Size = Var.Size(this)
+}
+
+final case class Matrix(name: String) extends MatrixLike with Lazy.Expander[Unit] {
+  protected def makeUGens: Unit = ()
+}
+
+// XXX TODO - remove obsolete `higherRank` argument, once we don't need session compatibility
+final case class Var(name: String, higherRank: Boolean = true) extends MatrixLike with UserInteraction {
+  override def toString = s"""$productPrefix("$name")"""
 }

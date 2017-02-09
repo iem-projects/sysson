@@ -16,7 +16,7 @@ package at.iem.sysson
 package sound
 package impl
 
-import at.iem.sysson.graph.{MatrixTooLargeException, Var}
+import at.iem.sysson.graph.{MatrixLike, MatrixTooLargeException}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.synth.{Buffer, NodeRef, Server, Sys}
@@ -42,7 +42,7 @@ object MatrixPrepare {
   sealed trait IsStreaming
 
   trait GE extends synth.GE.Lazy with UGB.Input {
-    def variable: graph.Var
+    def variable: graph.MatrixLike
   }
 
   sealed trait InputGE extends GE  {
@@ -73,7 +73,7 @@ object MatrixPrepare {
     protected def dim: graph.Dim
 
     final def key: Key      = dim
-    final def variable: Var = dim.variable
+    final def variable: MatrixLike = dim.variable
 
     private[sysson] final def isDimension = true
     private[sysson] final def dimOption: Option[graph.Dim] = Some(key)

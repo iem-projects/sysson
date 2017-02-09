@@ -23,7 +23,7 @@ import de.sciss.fscape.stream.{StreamIn, StreamOut}
 import de.sciss.fscape.{GE, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource, stream}
 
 object VarOut {
-  final case class WithRef(file: File, ref: Var.Spec.Value, in: GE) extends UGenSource.SingleOut {
+  final case class WithRef(file: File, ref: Matrix.Spec.Value, in: GE) extends UGenSource.SingleOut {
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
       val out = outputs(expand(in))
       require(out.size == 1)
@@ -40,7 +40,7 @@ object VarOut {
     }
   }
 }
-final case class VarOut(key: String, spec: Var.Spec, in: GE) extends GE.Lazy {
+final case class VarOut(key: String, spec: Matrix.Spec, in: GE) extends GE.Lazy {
   protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
     val ub = UGB.get(b)
     val f  = ub.requestInput(UGB.Input.Attribute(key)).peer.fold[File] {

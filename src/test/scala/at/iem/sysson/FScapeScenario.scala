@@ -46,7 +46,7 @@ object FScapeScenario extends App {
       import de.sciss.fscape._
       import de.sciss.fscape.graph._
       1.poll(0, label = "rendering")
-      val v       = Var("var")
+      val v       = Matrix("var")
       val d       = Dim(v, dName /* "dim" */)
       val p       = v.playLinear()
       val isOk    = p >= 0 & p < 1000 // XXX TODO --- we need a isFillValue function

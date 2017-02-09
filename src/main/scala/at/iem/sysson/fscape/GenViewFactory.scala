@@ -15,14 +15,14 @@
 package at.iem.sysson
 package fscape
 
-import at.iem.sysson.fscape.graph.{Dim, Var}
+import at.iem.sysson.fscape.graph.{Dim, Matrix}
 import at.iem.sysson.sound.AuralSonification
 import de.sciss.fscape.lucre.FScape.{Output, Rendering}
 import de.sciss.fscape.lucre.UGenGraphBuilder.{IO, Input, MissingIn}
 import de.sciss.fscape.lucre.impl.{RenderingImpl, UGenGraphBuilderContextImpl}
 import de.sciss.fscape.lucre.{FScape, OutputGenView}
 import de.sciss.fscape.stream.Control
-import de.sciss.lucre.matrix.{DataSource, Matrix}
+import de.sciss.lucre.matrix.{DataSource, Matrix => LMatrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.synth.proc.{GenContext, GenView, WorkspaceHandle}
@@ -45,10 +45,10 @@ object GenViewFactory {
     implicit protected def cursor    : stm.Cursor[S]       = context.cursor
     implicit protected def workspace : WorkspaceHandle[S]  = context.workspaceHandle
 
-    private def findMatrix(vr: Var)(implicit tx: S#Tx): Matrix[S] = {
+    private def findMatrix(vr: Matrix)(implicit tx: S#Tx): LMatrix[S] = {
       val f       = fscape
       val vrName  = vr.name
-      val mOpt0   = f.attr.$[Matrix](vrName)
+      val mOpt0   = f.attr.$[LMatrix](vrName)
       val mOpt    = mOpt0.orElse {
         for {
           sonif  <- AuralSonification.find[S]()
@@ -59,11 +59,11 @@ object GenViewFactory {
       m
     }
 
-    private def requestDim(dim: Dim)(implicit tx: S#Tx): (Matrix[S], Int) = {
+    private def requestDim(dim: Dim)(implicit tx: S#Tx): (LMatrix[S], Int) = {
       val f       = fscape
       val vrName  = dim.variable.name
       val dimNameL= dim.name
-      val mOpt0   = f.attr.$[Matrix](vrName)
+      val mOpt0   = f.attr.$[LMatrix](vrName)
       val mOpt    = mOpt0.fold {
         for {
           sonif   <- AuralSonification.find[S]()
@@ -85,15 +85,15 @@ object GenViewFactory {
       val d = m.dimensions.apply(dimIdx)
 
       val res: Dim.Info = new Dim.Info {
-        val variable: Var.Info    = new Var.Info {
-          val matrix  : Matrix.Key  = m.getKey(-1)
+        val variable: Matrix.Info    = new Matrix.Info {
+          val matrix  : LMatrix.Key = m.getKey(-1)
           val shape   : Vec[Int]    = m.shape
           val name    : String      = m.name
           val units   : String      = m.units
         }
 
         val index   : Int         = dimIdx
-        val matrix  : Matrix.Key  = m.getDimensionKey(dimIdx, useChannels = false)
+        val matrix  : LMatrix.Key = m.getDimensionKey(dimIdx, useChannels = false)
         val shape   : Vec[Int]    = d.shape
         val name    : String      = d.name
         val units   : String      = d.units
@@ -101,24 +101,24 @@ object GenViewFactory {
       res
     }
 
-    private def requestVarSpec(i: Var.Spec)(implicit tx: S#Tx): Var.Spec.Value = {
+    private def requestVarSpec(i: Matrix.Spec)(implicit tx: S#Tx): Matrix.Spec.Value = {
       val m = findMatrix(i.variable)
 
       implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
       val dims0 = m.dimensions.map { dim =>
-        val reader: Matrix.Reader = dim.reader(-1)
+        val reader: LMatrix.Reader = dim.reader(-1)
         val lenL  = reader.size
         require(lenL <= 0x7FFFFFFF)
         val len   = lenL.toInt
         val buf   = new Array[Double](len)
         reader.readDouble1D(buf, 0, len)
-        Var.Spec.Dim(dim.name, dim.units, buf.toIndexedSeq)
+        Matrix.Spec.Dim(dim.name, dim.units, buf.toIndexedSeq)
       }
-      val spec0 = Var.Spec.Value(m.name, m.units, dims0)
+      val spec0 = Matrix.Spec.Value(m.name, m.units, dims0)
 
       val spec = (spec0 /: i.ops) {
-        case (specIn, Var.Op.Drop(dimRef)) =>
+        case (specIn, Matrix.Op.Drop(dimRef)) =>
           require(dimRef.variable == i.variable)
           // N.B. Because we may drop multiple times,
           // we have to "relocate" the dimensional index,
@@ -134,10 +134,10 @@ object GenViewFactory {
     }
 
     override def requestInput[Res](req: Input {type Value = Res}, io: IO[S])(implicit tx: S#Tx): Res = req match {
-      case Var.PlayLinear(vr) =>
+      case Matrix.PlayLinear(vr) =>
         val m     = findMatrix(vr)
-        val res   = new Var.PlayLinear.Value {
-          val matrix: Matrix.Key = m.getKey(-1) // reader(-1)
+        val res   = new Matrix.PlayLinear.Value {
+          val matrix: LMatrix.Key = m.getKey(-1) // reader(-1)
 
           // XXX TODO: `reader` is called from non-txn
           // and thus we need to create it early here. This is not
@@ -145,7 +145,7 @@ object GenViewFactory {
           // if just the cache is validated. We should perhaps change
           // in LucreMatrix the API to use `TxnLike` (what workspace-addDependent uses)
           // instead of `S#Tx`, so we can insert a cheap single txn here
-          val /* def */ reader: Matrix.Reader = {
+          val /* def */ reader: LMatrix.Reader = {
             implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
             matrix.reader()
           }
@@ -154,7 +154,7 @@ object GenViewFactory {
 
       case i: Dim.Size      => requestDimInfo(i)
       case i: Dim.SuccSize  => requestDimInfo(i)
-      case i: Var.Spec      => requestVarSpec(i)
+      case i: Matrix.Spec   => requestVarSpec(i)
 
       case _ => super.requestInput(req, io)
     }

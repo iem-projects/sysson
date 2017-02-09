@@ -60,7 +60,7 @@ object AuralSonificationImpl {
     res
   }
 
-  private def findSource[S <: SSys[S]](obj: Sonification[S], variable: graph.Var)
+  private def findSource[S <: SSys[S]](obj: Sonification[S], variable: graph.MatrixLike)
                                      (implicit tx: S#Tx): Sonification.Source[S] = {
     val sonif   = obj // .elem.peer
     val varKey  = variable.name

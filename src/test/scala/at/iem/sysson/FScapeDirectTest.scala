@@ -48,7 +48,7 @@ object FScapeDirectTest extends App {
       import de.sciss.fscape.graph._
       import de.sciss.fscape.lucre.graph._
       1.poll(0, label = "rendering")
-      val v     = Var("var")
+      val v     = Matrix("var")
       val v0    = v.playLinear()
       val value = Gate(v0, v0 < 1000 & v0 > -1000)   // cheesy way drop NaNs. By the way, we need a Drop UGen!
       val mx    = RunningMax(value).last

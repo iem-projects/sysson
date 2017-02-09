@@ -31,7 +31,7 @@ object Dim {
     private[sysson] def maxNumChannels = maxSize
 
     type Key    = Dim
-    type Value  = Var.PlayLinear.Value
+    type Value  = Matrix.PlayLinear.Value
 
     def key: Key = dim
 
@@ -76,8 +76,8 @@ object Dim {
     }
   }
 
-  trait Info extends Var.InfoLike with UGB.Value with Aux {
-    def variable: Var.Info
+  trait Info extends Matrix.InfoLike with UGB.Value with Aux {
+    def variable: Matrix.Info
     def index   : Int
 
     // final def shape: Vec[Int] = Vector(variable.shape(index))
@@ -97,7 +97,7 @@ object Dim {
   * @param variable Data source to which this dimension refers
   * @param name     Logical name by which the dimension is referred to
   */
-final case class Dim(variable: Var, name: String)
+final case class Dim(variable: Matrix, name: String)
   extends Lazy.Expander[Unit] /* UserInteraction */ with UGB.Key {
 
   def values              : Dim.Values = Dim.Values(this)

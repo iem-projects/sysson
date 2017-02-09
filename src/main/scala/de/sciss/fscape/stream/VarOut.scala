@@ -19,17 +19,17 @@ import java.util
 
 import akka.stream.stage.{InHandler, OutHandler}
 import akka.stream.{Attributes, FlowShape}
-import at.iem.sysson.fscape.graph.Var
+import at.iem.sysson.fscape.graph.Matrix
 import de.sciss.file._
 import de.sciss.fscape.stream.impl.{BlockingGraphStage, NodeImpl}
 import de.sciss.lucre.matrix.impl.ReaderImpl
 import ucar.ma2.DataType
-import ucar.{ma2, nc2}
 import ucar.nc2.NetcdfFileWriter
 import ucar.nc2.constants.CDM
+import ucar.{ma2, nc2}
 
 object VarOut {
-  def apply(file: File, spec: Var.Spec.Value, in: OutD)(implicit b: Builder): OutL = {
+  def apply(file: File, spec: Matrix.Spec.Value, in: OutD)(implicit b: Builder): OutL = {
     val source  = new Stage(file, spec)
     val stage   = b.add(source)
     b.connect(in, stage.in)
@@ -40,7 +40,7 @@ object VarOut {
 
   private type Shape = FlowShape[BufD, BufL]
 
-  private final class Stage(file: File, spec: Var.Spec.Value)(implicit ctrl: Control)
+  private final class Stage(file: File, spec: Matrix.Spec.Value)(implicit ctrl: Control)
     extends BlockingGraphStage[Shape](s"$name($file)") {
 
     val shape = FlowShape(InD(s"$name.in"), OutL(s"$name.out"))
@@ -49,7 +49,7 @@ object VarOut {
       new Logic(shape, file, spec)
   }
 
-  private final class Logic(shape: Shape, file: File, spec: Var.Spec.Value)(implicit ctrl: Control)
+  private final class Logic(shape: Shape, file: File, spec: Matrix.Spec.Value)(implicit ctrl: Control)
     extends NodeImpl(s"$name($file)", shape) with InHandler with OutHandler {
 
     private[this] var framesRead  = 0L

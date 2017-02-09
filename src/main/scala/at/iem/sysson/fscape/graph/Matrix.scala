@@ -20,14 +20,14 @@ import de.sciss.fscape.UGen.Aux
 import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
 import de.sciss.fscape.stream.{StreamIn, StreamOut, VarPlayLinear, Builder => SBuilder}
 import de.sciss.fscape.{GE, Lazy, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource}
-import de.sciss.lucre.matrix.Matrix
+import de.sciss.lucre.matrix.{Matrix => LMatrix}
 import de.sciss.serial.{DataOutput, ImmutableSerializer}
 
-object Var {
+object Matrix {
   object PlayLinear {
     trait Value extends UGB.Value with Aux {
-      def matrix: Matrix.Key
-      def reader: Matrix.Reader
+      def matrix: LMatrix.Key
+      def reader: LMatrix.Reader
 
       final def write(out: DataOutput): Unit = {
         out.writeByte(100)
@@ -51,8 +51,8 @@ object Var {
       override def productPrefix: String = classOf[WithRef].getName
     }
   }
-  final case class PlayLinear(variable: Var) extends GE.Lazy with UGB.Input {
-    type Key    = Var
+  final case class PlayLinear(variable: Matrix) extends GE.Lazy with UGB.Input {
+    type Key    = Matrix
     type Value  = PlayLinear.Value
 
     def key: Key = variable
@@ -101,7 +101,7 @@ object Var {
       }
     }
   }
-  final case class Spec(variable: Var, ops: Vec[Op]) extends UGB.Input with UGB.Key {
+  final case class Spec(variable: Matrix, ops: Vec[Op]) extends UGB.Input with UGB.Key {
     type Key    = Spec
     type Value  = Spec.Value
 
@@ -122,7 +122,7 @@ object Var {
   }
 
   trait InfoLike {
-    def matrix: Matrix.Key
+    def matrix: LMatrix.Key
 
     def shape : Vec[Int]
     def name  : String
@@ -139,11 +139,11 @@ object Var {
     }
   }
 }
-final case class Var(name: String) extends Lazy.Expander[Unit] with UGB.Key {
+final case class Matrix(name: String) extends Lazy.Expander[Unit] with UGB.Key {
   protected def makeUGens(implicit b: UGenGraph.Builder): Unit = ()
 
   /** Unrolls all dimensions in time. */
-  def playLinear(): Var.PlayLinear = Var.PlayLinear(this)
+  def playLinear(): Matrix.PlayLinear = Matrix.PlayLinear(this)
 
-  def spec: Var.Spec = Var.Spec(this, Vector.empty)
+  def spec: Matrix.Spec = Matrix.Spec(this, Vector.empty)
 }

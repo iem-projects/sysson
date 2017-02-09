@@ -69,7 +69,7 @@ object Dim {
   * @param variable Data source to which this dimension refers
   * @param name     Logical name by which the dimension is referred to
   */
-final case class Dim(variable: Var, name: String)
+final case class Dim(variable: MatrixLike, name: String)
   extends UserInteraction with UGB.Key {
 
   /** Produces a graph element which unrolls the selected range in time, using the dimension's domain value.

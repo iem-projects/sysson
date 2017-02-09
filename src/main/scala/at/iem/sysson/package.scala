@@ -21,6 +21,7 @@ import at.iem.sysson.fscape.GenViewFactory
 import at.iem.sysson.sound.{AuralSonification, Sonification}
 import at.iem.sysson.util.DoubleTransform
 import de.sciss.file._
+import de.sciss.fscape.lucre.{FScape => LFScape}
 import de.sciss.lucre.matrix
 import de.sciss.lucre.stm.TxnLike
 import de.sciss.mellite.Mellite
@@ -94,8 +95,10 @@ package object sysson {
 
   // ---- types ----
 
-  private lazy val importExtensions: Unit =
+  private lazy val importExtensions: Unit = {
     Code.registerImports(Code.SynthGraph.id, Seq("at.iem.sysson.graph._"))
+    Code.registerImports(LFScape.Code   .id, Seq("at.iem.sysson.fscape.graph._"))
+  }
 
   def initTypes(): Unit = {
     Mellite               .initTypes()
