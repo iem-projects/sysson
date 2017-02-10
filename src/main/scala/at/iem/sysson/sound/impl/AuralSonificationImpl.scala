@@ -17,18 +17,15 @@ package sound
 package impl
 
 import at.iem.sysson.graph.UserValue
-import de.sciss.equal
-import de.sciss.lucre.{event => evt}
 import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.expr.DoubleObj
-import de.sciss.lucre.stm
-import de.sciss.lucre.stm.{Disposable, Sys}
+import de.sciss.lucre.matrix.{Matrix => LMatrix}
+import de.sciss.lucre.stm.{Disposable, Obj, Sys}
 import de.sciss.lucre.synth.{NodeRef, Sys => SSys}
-import de.sciss.numbers
-import de.sciss.synth.proc.AuralView.State
-import de.sciss.synth.proc.UGenGraphBuilder.Complete
+import de.sciss.lucre.{stm, event => evt}
 import de.sciss.synth.proc.impl.{AsyncProcBuilder, AuralProcImpl}
-import de.sciss.synth.proc.{AuralContext, AuralObj, AuralView, TimeRef, UGenGraphBuilder => UGB}
+import de.sciss.synth.proc.{AuralContext, AuralObj, AuralView, Gen, TimeRef, UGenGraphBuilder => UGB}
+import de.sciss.{equal, numbers}
 
 import scala.concurrent.stm.{TMap, TxnLocal}
 import scala.util.control.NonFatal
@@ -62,16 +59,15 @@ object AuralSonificationImpl {
 
   private def findSource[S <: SSys[S]](obj: Sonification[S], variable: graph.MatrixLike)
                                      (implicit tx: S#Tx): Sonification.Source[S] = {
-    val sonif   = obj // .elem.peer
     val varKey  = variable.name
-    val source  = sonif.sources.get(varKey).getOrElse(sys.error(s"Missing source for key '$varKey'"))
+    val source  = obj.sources.get(varKey).getOrElse(sys.error(s"Missing source for key '$varKey'"))
     source
   }
 
   private def findDimIndex[S <: SSys[S]](source: Sonification.Source[S], dimElem: graph.Dim)
                                        (implicit tx: S#Tx): Int = {
     val dimKey  = dimElem.name
-    val dimName = source.dims  .get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key '$dimKey'")).value
+    val dimName = source.dims.get(dimKey).getOrElse(sys.error(s"Missing dimension mapping for key '$dimKey'")).value
     val full    = source.matrix
     import equal.Implicits._
     val dimIdx  = full.dimensions.indexWhere(_.name === dimName)
@@ -87,20 +83,23 @@ object AuralSonificationImpl {
     import sonifData.sonification
 
     def initSonif(obj: Sonification[S])(implicit tx: S#Tx): this.type = {
-      val ctls = obj.controls
-      val obsCtl = ctls.changed.react { implicit tx => upd => upd.changes.foreach {
+      val controls = obj.controls
+      val obsCtl = controls.changed.react { implicit tx => upd => upd.changes.foreach {
         case evt.Map.Added   (key, value)       => ctlAdded  (key, value)
         case evt.Map.Removed (key, value)       => ctlRemoved(key, value)
         case evt.Map.Replaced(key, before, now) => ctlChange (key, Some(now.value))
       }}
       addObserver(obsCtl)
-      ctls.iterator.foreach { case (key, value) =>
+      controls.iterator.foreach { case (key, value) =>
         mkCtlObserver(key, value)
       }
       init(obj.proc)
     }
 
     // ---- attr events ----
+
+    override protected def invokeRetry(state: UGB.Incomplete[S])(implicit tx: S#Tx): UGB.State[S] =
+      use(sonification)(super.invokeRetry(state))
 
     private def ctlAdded(key: String, value: DoubleObj[S])(implicit tx: S#Tx): Unit = {
       mkCtlObserver(key, value)
@@ -152,6 +151,50 @@ object AuralSonificationImpl {
     private def addSpec(req: UGB.Input, st: UGB.IO[S], spec: MatrixPrepare.Spec): MatrixPrepare.Value =
       MatrixPrepare.Value(oldMatrixSpecs(req, st) :+ spec)
 
+    private def findMatrixAndDimIndex(variable: graph.MatrixLike,
+                                      dimElem: graph.Dim)(implicit tx: S#Tx): (LMatrix[S], Int) = {
+      val sonif     = sonification
+      val varKey    = variable.name
+      val varKey2   = dimElem.variable.name
+      val direct    = varKey == varKey2
+      val directOpt = sonif.sources.get(varKey)
+      val sourceOpt = directOpt.orElse {
+        // if the variable differs from the dimension variable,
+        // we assume that the program wants to find the equivalent
+        // dimension in it, referring to a matrix that is stored
+        // in the proc's attribute map.
+        if (direct) None else sonif.sources.get(varKey2)
+      }
+      val source    = sourceOpt.getOrElse(sys.error(s"Missing source for key '$varKey2'"))
+      val dimIdx    = findDimIndex(source, dimElem)
+      val sourceMat = source.matrix
+
+      if (direct) {
+        sourceMat -> dimIdx
+      } else {
+        val dimName = sourceMat.dimensions.apply(dimIdx).name
+
+        def resolveValue(v: Obj[S]): (LMatrix[S], Int) = v match {
+          case mat: LMatrix[S] =>
+            val dimIdx = mat.dimensions.indexWhere(_.name == dimName)
+            if (dimIdx < 0) sys.error(s"Cannot find dimension '${dimElem.name}' -> '$dimName' in ${mat.name}")
+            mat -> dimIdx
+
+          case a: Gen[S] =>
+            val genView   = mkGenView(a, varKey)
+            val tryValue  = genView.value.getOrElse(throw UGB.MissingIn(UGB.AttributeKey(varKey)))
+            val newValue  = tryValue.get
+            resolveValue(newValue)
+
+          case a => throw new IllegalStateException(s"Unsupported matrix input $a")
+        }
+
+        val proc    = procCached()
+        val attrVal = proc.attr.get(varKey).getOrElse(sys.error(s"Missing source for key '$varKey'"))
+        resolveValue(attrVal)
+      }
+    }
+
     override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.Requester[S])
                                   (implicit tx: S#Tx): Res = req match {
       case _: graph.UserValue | _: graph.Dim.Size | _: graph.Var.Size | _: graph.Elapsed => UGB.Unit
@@ -171,11 +214,14 @@ object AuralSonificationImpl {
         addSpec(req, st, newSpec)
 
       case vp: graph.Var.Play =>
-        val sonif     = sonification
+//        val sonif     = sonification
         val dimElem   = vp.time.dim
-        val source    = findSource  (sonif , vp.variable)
-        val dimIdx    = findDimIndex(source, dimElem)
-        val shape     = source.matrix.shape
+        val (mat, dimIdx) = findMatrixAndDimIndex(vp.variable, dimElem)
+
+//        val source    = findSource  (sonif , vp.variable)
+//        val mat       = source.matrix
+//        val dimIdx    = findDimIndex(source, dimElem)
+        val shape     = mat.shape
         val numCh     = ((1L /: shape)(_ * _) / shape(dimIdx)).toInt
         logDebug(s"graph.Var.Play - numChannels = $numCh")
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = vp, streamDim = dimIdx)
@@ -213,7 +259,7 @@ object AuralSonificationImpl {
 
     // A nasty override to be able to catch `IndexOutOfBoundsException`
     // thrown when `UGenGraph` expansion exceed maximum number of wire buffers
-    override protected def launch(ugen: Complete[S], timeRef: TimeRef)(implicit tx: S#Tx): Unit = try {
+    override protected def launch(ugen: UGB.Complete[S], timeRef: TimeRef)(implicit tx: S#Tx): Unit = try {
       super.launch(ugen, timeRef)
     } catch {
       case NonFatal(e) =>
@@ -376,7 +422,7 @@ object AuralSonificationImpl {
       _procView.stop()
     }
 
-    def state(implicit tx: S#Tx): State = {
+    def state(implicit tx: S#Tx): AuralView.State = {
       _procView.state
     }
 

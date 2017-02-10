@@ -17,6 +17,7 @@ package fscape
 
 import at.iem.sysson.fscape.graph.{Dim, Matrix}
 import at.iem.sysson.sound.AuralSonification
+import de.sciss.equal.Implicits._
 import de.sciss.fscape.lucre.FScape.{Output, Rendering}
 import de.sciss.fscape.lucre.UGenGraphBuilder.{IO, Input, MissingIn}
 import de.sciss.fscape.lucre.impl.{RenderingImpl, UGenGraphBuilderContextImpl}
@@ -66,15 +67,16 @@ object GenViewFactory {
       val mOpt0   = f.attr.$[LMatrix](vrName)
       val mOpt    = mOpt0.fold {
         for {
-          sonif   <- AuralSonification.find[S]()
-          source  <- sonif.sources.get(vrName)
-          dimName <- source.dims.get(dimNameL)
-          m        = source.matrix
-          dimIdx   = m.dimensions.indexWhere(_.name == dimName)
+          sonif     <- AuralSonification.find[S]()
+          source    <- sonif.sources.get(vrName)
+          dimNameEx <- source.dims.get(dimNameL)
+          dimName    = dimNameEx.value
+          m          = source.matrix
+          dimIdx     = m.dimensions.indexWhere(_.name === dimName)
           if dimIdx >= 0
         } yield (m, dimIdx)
       } { _m =>
-        val dimIdx = _m.dimensions.indexWhere(_.name == dimNameL)
+        val dimIdx = _m.dimensions.indexWhere(_.name === dimNameL)
         if (dimIdx < 0) None else Some((_m, dimIdx))
       }
       mOpt.getOrElse(throw MissingIn(vrName))
@@ -126,13 +128,13 @@ object GenViewFactory {
 
       val spec = (spec0 /: i.ops) {
         case (specIn, Matrix.Op.Drop(dimRef)) =>
-          require(dimRef.variable == i.variable)
+          require(dimRef.variable === i.variable)
           // N.B. Because we may drop multiple times,
           // we have to "relocate" the dimensional index,
           // simply by looking up its name
           val (m0, dimIdx0) = requestDim(dimRef)
           val dimName       = m0.dimensions.apply(dimIdx0).name
-          val dimIdx        = specIn.dimensions.indexWhere(_.name == dimName)
+          val dimIdx        = specIn.dimensions.indexWhere(_.name === dimName)
           require(dimIdx >= 0)
           specIn.copy(dimensions = specIn.dimensions.patch(dimIdx, Nil, 1))
       }

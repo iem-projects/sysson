@@ -50,9 +50,7 @@ object MkMatrix {
     override protected def stopped(): Unit = {
       super.stopped()
       if (isSuccess) ref.complete(new Output.Writer {
-        def write(out: DataOutput): Unit = {
-          out.writeUTF(file.path)
-        }
+        def write(out: DataOutput): Unit = out.writeUTF(file.path)
       })
     }
   }

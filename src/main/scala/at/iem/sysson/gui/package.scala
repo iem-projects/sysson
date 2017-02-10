@@ -14,12 +14,13 @@
 
 package at.iem.sysson
 
-import at.iem.sysson.gui.impl.{PlotObjView, SonificationObjView, DataSourceObjView}
+import at.iem.sysson.gui.impl.{DataSourceObjView, MatrixObjView, PlotObjView, SonificationObjView}
 
 package object gui {
   def registerViews(): Unit = {
-    DataSourceObjView         .init()
-    SonificationObjView       .init()
-    PlotObjView               .init()
+    DataSourceObjView  .init()
+    SonificationObjView.init()
+    PlotObjView        .init()
+    MatrixObjView      .init()
   }
 }
