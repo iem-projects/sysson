@@ -1,5 +1,5 @@
 /*
- *  VarOut.scala
+ *  MatrixOut.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
@@ -22,7 +22,7 @@ import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
 import de.sciss.fscape.stream.{StreamIn, StreamOut}
 import de.sciss.fscape.{GE, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource, stream}
 
-object VarOut {
+object MatrixOut {
   final case class WithRef(file: File, ref: Matrix.Spec.Value, in: GE) extends UGenSource.SingleOut {
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
       val out = outputs(expand(in))
@@ -36,11 +36,13 @@ object VarOut {
 
     def makeStream(args: Vec[StreamIn])(implicit b: stream.Builder): StreamOut = {
       assert(args.size == 1)
-      stream.VarOut(file = file, spec = ref, in = args.head.toDouble)
+      stream.MatrixOut(file = file, spec = ref, in = args.head.toDouble)
     }
+
+    override def productPrefix: String = s"MatrixOut$$WithRef"
   }
 }
-final case class VarOut(key: String, spec: Matrix.Spec, in: GE) extends GE.Lazy {
+final case class MatrixOut(key: String, spec: Matrix.Spec, in: GE) extends GE.Lazy {
   protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
     val ub = UGB.get(b)
     val f  = ub.requestInput(UGB.Input.Attribute(key)).peer.fold[File] {
@@ -50,6 +52,6 @@ final case class VarOut(key: String, spec: Matrix.Spec, in: GE) extends GE.Lazy 
       case other    => sys.error(s"$this - requires Artifact value, found $other")
     }
     val ref = ub.requestInput(spec)
-    VarOut.WithRef(f, ref = ref, in = in)
+    MatrixOut.WithRef(f, ref = ref, in = in)
   }
 }

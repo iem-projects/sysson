@@ -16,14 +16,16 @@ package at.iem.sysson.gui.impl
 
 import java.awt.Color
 
-import scala.swing.{Alignment, Insets, Graphics2D, Label}
+import de.sciss.mellite.Mellite
+
+import scala.swing.{Alignment, Graphics2D, Insets, Label}
 
 class ElapsedBar extends Label {
-  private var _value    = 0f
-  private var _painted  = 0
-  private var _textPercent = null: String
+  private[this] var _value    = 0f
+  private[this] var _painted  = 0
+  private[this] var _textPercent = null: String
 
-  private var _textVisible = true
+  private[this] var _textVisible = true
 
   def textVisible: Boolean = _textVisible
   def textVisible_=(value: Boolean): Unit = if (_textVisible != value) {
@@ -53,7 +55,7 @@ class ElapsedBar extends Label {
   }
 
   // private var innerWidth  = 0
-  private val in          = new Insets(0, 0, 0, 0)
+  private[this] val in = new Insets(0, 0, 0, 0)
 
   private def valuePix: Int = {
     peer.getInsets(in)
@@ -66,9 +68,12 @@ class ElapsedBar extends Label {
     if (i == 0 || i == 100) null else s"$i%"
   }
 
+  // private[this] val colrOutline = if (Mellite.isDarkSkin) Color.lightGray else Color.gray
+  private[this] val colrFill    = if (Mellite.isDarkSkin) Color.darkGray  else Color.lightGray
+
   override protected def paintComponent(g: Graphics2D): Unit = {
     _painted = valuePix
-    g.setColor(Color.lightGray)
+    g.setColor(colrFill)
     val h = peer.getHeight - (in.top + in.bottom)
     g.fillRect(in.left, in.top, _painted, h)
     if (_painted > 0) {

@@ -1,5 +1,5 @@
 /*
- *  VarOut.scala
+ *  MatrixOut.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
@@ -17,7 +17,7 @@ package stream
 
 import java.util
 
-import akka.stream.stage.{InHandler, OutHandler}
+import akka.stream.stage.{GraphStageLogic, InHandler, OutHandler}
 import akka.stream.{Attributes, FlowShape}
 import at.iem.sysson.fscape.graph.Matrix
 import de.sciss.file._
@@ -28,7 +28,7 @@ import ucar.nc2.NetcdfFileWriter
 import ucar.nc2.constants.CDM
 import ucar.{ma2, nc2}
 
-object VarOut {
+object MatrixOut {
   def apply(file: File, spec: Matrix.Spec.Value, in: OutD)(implicit b: Builder): OutL = {
     val source  = new Stage(file, spec)
     val stage   = b.add(source)
@@ -36,7 +36,7 @@ object VarOut {
     stage.out
   }
 
-  private final val name = "VarOut"
+  private final val name = "MatrixOut"
 
   private type Shape = FlowShape[BufD, BufL]
 
@@ -49,12 +49,22 @@ object VarOut {
       new Logic(shape, file, spec)
   }
 
-  private final class Logic(shape: Shape, file: File, spec: Matrix.Spec.Value)(implicit ctrl: Control)
-    extends NodeImpl(s"$name($file)", shape) with InHandler with OutHandler {
+  private final class Logic(shape: Shape, protected val file: File, protected val spec: Matrix.Spec.Value)
+                           (implicit ctrl: Control)
+    extends NodeImpl(s"$name($file)", shape) with AbstractLogic
+
+  trait AbstractLogic extends Node with InHandler with OutHandler { logic: GraphStageLogic =>
+    // ---- abstract ----
+
+    protected def file : File
+    protected def spec : Matrix.Spec.Value
+    protected def shape: Shape
+
+    // ---- impl ----
 
     private[this] var framesRead  = 0L
     private[this] val numFrames   = spec.size
-    private[this] var completed   = false
+    private[this] var _isSuccess  = false
     private[this] val matShape    = spec.shape.toArray
     private[this] val rank        = matShape.length
     private[this] val arrShape    = new Array[Int](rank)
@@ -66,8 +76,10 @@ object VarOut {
     setHandler(shape.in , this)
     setHandler(shape.out, this)
 
-    def onPull(): Unit = if (isAvailable(shape.in )) process()
-    def onPush(): Unit = if (isAvailable(shape.out)) process()
+    protected final def isSuccess     : Boolean  = _isSuccess
+
+    final def onPull(): Unit = if (isAvailable(shape.in )) process()
+    final def onPush(): Unit = if (isAvailable(shape.out)) process()
 
     override def preStart(): Unit = {
       writer      = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, file.path, null)
@@ -100,12 +112,12 @@ object VarOut {
     }
 
     override protected def stopped(): Unit = {
-      if (!completed) writer.abort()
+      if (!_isSuccess) writer.abort()
       super.stopped()
     }
 
     private def process(): Unit = {
-      val bufOut  = ctrl.borrowBufL()
+      val bufOut  = control.borrowBufL()
       val bufIn   = grab(shape.in)
       tryPull(shape.in)
       val chunk = math.min(bufIn.size, numFrames - framesRead).toInt
@@ -148,7 +160,7 @@ object VarOut {
       }
       if (framesRead == numFrames) {
         logStream(s"completeStage() $this")
-        completed = true
+        _isSuccess = true
         completeStage()
       }
     }

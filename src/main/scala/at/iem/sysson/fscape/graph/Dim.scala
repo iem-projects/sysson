@@ -31,13 +31,13 @@ object Dim {
     private[sysson] def maxNumChannels = maxSize
 
     type Key    = Dim
-    type Value  = Matrix.PlayLinear.Value
+    type Value  = Matrix.ValueSeq.Value
 
     def key: Key = dim
 
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = ???
 
-    override def productPrefix: String  = classOf[Values].getName
+    override def productPrefix: String  = s"Dim$$Values"
     override def toString               = s"$dim.values"
   }
 
@@ -52,7 +52,7 @@ object Dim {
 
   final case class Size(dim: Dim) extends InfoGE {
 
-    override def productPrefix: String  = classOf[Size].getName
+    override def productPrefix: String  = s"Dim$$Size"
     override def toString               = s"$dim.size"
 
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
@@ -64,7 +64,7 @@ object Dim {
 
   final case class SuccSize(dim: Dim) extends InfoGE {
 
-    override def productPrefix: String  = classOf[SuccSize].getName
+    override def productPrefix: String  = s"Dim$$SuccSize"
     override def toString               = s"$dim.succSize"
 
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {

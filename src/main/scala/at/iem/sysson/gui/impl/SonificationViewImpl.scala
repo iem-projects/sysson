@@ -339,10 +339,12 @@ object SonificationViewImpl {
         contents += Separator()
         contents += pControls
       }
+      val scroll = new ScrollPane(box)
+      scroll.peer.putClientProperty("styleId", "undecorated")
       component = new BoxPanel(Orientation.Vertical) {
         contents += pHeader
         contents += Separator()
-        contents += new ScrollPane(box) { border = null }
+        contents += scroll
         contents += Separator()
         contents += pTransport
       }

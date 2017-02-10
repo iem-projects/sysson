@@ -1,5 +1,5 @@
 /*
- *  Var.scala
+ *  Matrix.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
@@ -17,14 +17,15 @@ package fscape
 package graph
 
 import de.sciss.fscape.UGen.Aux
+import de.sciss.fscape.graph.{ConstantI, ConstantL}
 import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
-import de.sciss.fscape.stream.{StreamIn, StreamOut, VarPlayLinear, Builder => SBuilder}
+import de.sciss.fscape.stream.{StreamIn, StreamOut, MatrixValueSeq, Builder => SBuilder}
 import de.sciss.fscape.{GE, Lazy, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource}
 import de.sciss.lucre.matrix.{Matrix => LMatrix}
 import de.sciss.serial.{DataOutput, ImmutableSerializer}
 
 object Matrix {
-  object PlayLinear {
+  object ValueSeq {
     trait Value extends UGB.Value with Aux {
       def matrix: LMatrix.Key
       def reader: LMatrix.Reader
@@ -45,31 +46,35 @@ object Matrix {
 
       def makeStream(args: Vec[StreamIn])(implicit b: SBuilder): StreamOut = {
         val reader = ref.reader
-        VarPlayLinear(matrix = reader)
+        // println(s"makeStream. size = ${reader.size}")
+        MatrixValueSeq(matrix = reader)
       }
 
-      override def productPrefix: String = classOf[WithRef].getName
+      override def productPrefix: String = s"Matrix$$PlayLinear$$WithRef"
     }
   }
-  final case class PlayLinear(variable: Matrix) extends GE.Lazy with UGB.Input {
+  final case class ValueSeq(variable: Matrix) extends GE.Lazy with UGB.Input {
     type Key    = Matrix
-    type Value  = PlayLinear.Value
+    type Value  = ValueSeq.Value
 
     def key: Key = variable
 
-    override def productPrefix: String  = classOf[PlayLinear].getName
-    override def toString               = s"$variable.playLinear()"
+    override def productPrefix: String  = s"Matrix$$ValueSeq"
+    override def toString               = s"$variable.valueSeq"
+
+    def isFill: GE = IsFill(variable, this)
 
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
       val ub    = UGB.get(b)
       val value = ub.requestInput(this)
-      PlayLinear.WithRef(value)
+      // println(s"streamDim = ${value.matrix.streamDim}")
+      ValueSeq.WithRef(value)
     }
   }
 
   object Op {
     final case class Drop(dim: Dim) extends Op {
-      override def productPrefix: String  = getClass.getName
+      override def productPrefix: String  = s"Matrix$$Op$$Drop"
       override def toString               = s"Drop($dim)"
     }
   }
@@ -117,7 +122,7 @@ object Matrix {
         new String(chars)
       }
 
-    override def productPrefix: String  = getClass.getName
+    override def productPrefix: String  = s"Matrix$$Spec"
     override def toString     : String  = (s"$variable.spec" /: ops)((res, op) => s"$res.${unCapitalize(op.toString)}")
   }
 
@@ -138,12 +143,48 @@ object Matrix {
       matrix.write(out)
     }
   }
+
+  sealed trait InfoGE extends GE.Lazy with UGB.Input with UGB.Key {
+    type Key      = InfoGE
+    type Value    = Info
+
+    def variable: Matrix
+
+    final def key: Key  = this
+  }
+
+  final case class Size(variable: Matrix) extends InfoGE {
+
+    override def productPrefix: String  = s"Matrix$$Size"
+    override def toString               = s"$variable.size"
+
+    protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
+      val ub    = UGB.get(b)
+      val value = ub.requestInput(this)
+      ConstantL(value.size)
+    }
+  }
+
+  final case class Rank(variable: Matrix) extends InfoGE {
+
+    override def productPrefix: String  = s"Matrix$$Rank"
+    override def toString               = s"$variable.size"
+
+    protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
+      val ub    = UGB.get(b)
+      val value = ub.requestInput(this)
+      ConstantI(value.rank)
+    }
+  }
 }
 final case class Matrix(name: String) extends Lazy.Expander[Unit] with UGB.Key {
   protected def makeUGens(implicit b: UGenGraph.Builder): Unit = ()
 
+  def size: Matrix.Size = Matrix.Size(this)
+  def rank: Matrix.Rank = Matrix.Rank(this)
+
   /** Unrolls all dimensions in time. */
-  def playLinear(): Matrix.PlayLinear = Matrix.PlayLinear(this)
+  def valueSeq: Matrix.ValueSeq = Matrix.ValueSeq(this)
 
   def spec: Matrix.Spec = Matrix.Spec(this, Vector.empty)
 }

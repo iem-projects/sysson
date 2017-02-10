@@ -85,13 +85,7 @@ object GenViewFactory {
       val d = m.dimensions.apply(dimIdx)
 
       val res: Dim.Info = new Dim.Info {
-        val variable: Matrix.Info    = new Matrix.Info {
-          val matrix  : LMatrix.Key = m.getKey(-1)
-          val shape   : Vec[Int]    = m.shape
-          val name    : String      = m.name
-          val units   : String      = m.units
-        }
-
+        val variable: Matrix.Info = mkMatrixInfo(m)
         val index   : Int         = dimIdx
         val matrix  : LMatrix.Key = m.getDimensionKey(dimIdx, useChannels = false)
         val shape   : Vec[Int]    = d.shape
@@ -100,6 +94,19 @@ object GenViewFactory {
       }
       res
     }
+
+    private def requestMatrixInfo(i: Matrix.InfoGE)(implicit tx: S#Tx): Matrix.Info = {
+      val m = findMatrix(i.variable)
+      mkMatrixInfo(m)
+    }
+
+    private def mkMatrixInfo(m: LMatrix[S])(implicit tx: S#Tx): Matrix.Info =
+      new Matrix.Info {
+        val matrix  : LMatrix.Key = m.getKey(-1)
+        val shape   : Vec[Int]    = m.shape
+        val name    : String      = m.name
+        val units   : String      = m.units
+      }
 
     private def requestVarSpec(i: Matrix.Spec)(implicit tx: S#Tx): Matrix.Spec.Value = {
       val m = findMatrix(i.variable)
@@ -134,9 +141,9 @@ object GenViewFactory {
     }
 
     override def requestInput[Res](req: Input {type Value = Res}, io: IO[S])(implicit tx: S#Tx): Res = req match {
-      case Matrix.PlayLinear(vr) =>
+      case Matrix.ValueSeq(vr) =>
         val m     = findMatrix(vr)
-        val res   = new Matrix.PlayLinear.Value {
+        val res   = new Matrix.ValueSeq.Value {
           val matrix: LMatrix.Key = m.getKey(-1) // reader(-1)
 
           // XXX TODO: `reader` is called from non-txn
@@ -152,8 +159,10 @@ object GenViewFactory {
         }
         res
 
-      case i: Dim.Size      => requestDimInfo(i)
-      case i: Dim.SuccSize  => requestDimInfo(i)
+      case i: Dim.Size      => requestDimInfo   (i)
+      case i: Dim.SuccSize  => requestDimInfo   (i)
+      case i: Matrix.Size   => requestMatrixInfo(i)
+      case i: Matrix.Rank   => requestMatrixInfo(i)
       case i: Matrix.Spec   => requestVarSpec(i)
 
       case _ => super.requestInput(req, io)

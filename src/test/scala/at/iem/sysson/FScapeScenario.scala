@@ -48,7 +48,7 @@ object FScapeScenario extends App {
       1.poll(0, label = "rendering")
       val v       = Matrix("var")
       val d       = Dim(v, dName /* "dim" */)
-      val p       = v.playLinear()
+      val p       = v.valueSeq
       val isOk    = p >= 0 & p < 1000 // XXX TODO --- we need a isFillValue function
       val flt     = p * isOk
       val dSz     = d.size
@@ -66,7 +66,7 @@ object FScapeScenario extends App {
 //      mx.poll(0, "max")
       val specIn  = v.spec
       val specOut = specIn.drop(d)
-      val frames  = VarOut("file", specOut, in = dataOut)
+      val frames  = MatrixOut("file", specOut, in = dataOut)
       (frames / tSz).roundTo(1).poll(Metro(tSz), "time-frame")
     }
     f.graph() = g

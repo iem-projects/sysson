@@ -1,5 +1,5 @@
 /*
- *  VarPlayLinear.scala
+ *  MatrixValueSeq.scala
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
@@ -20,14 +20,14 @@ import akka.stream.{Attributes, SourceShape}
 import de.sciss.fscape.stream.impl.{BlockingGraphStage, NodeImpl}
 import de.sciss.lucre.matrix.Matrix
 
-object VarPlayLinear {
+object MatrixValueSeq {
   def apply(matrix: Matrix.Reader)(implicit b: Builder): OutD = {
     val source  = new Stage(matrix)
     val stage   = b.add(source)
     stage.out
   }
 
-  private final val name = "VarPlayLinear"
+  private final val name = "MatrixValueSeq"
 
   private type Shape = SourceShape[BufD]
 
