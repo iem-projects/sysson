@@ -115,13 +115,21 @@ object GenViewFactory {
 
       implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
-      val dims0 = m.dimensions.map { dim =>
-        val reader: LMatrix.Reader = dim.reader(-1)
+      val dimsIn  = m.dimensions
+//      val SHAPE   = m.shape
+//      val SIZE    = m.size
+//      val ranges  = m.ranges
+      val rank    = dimsIn.size // m.rank
+      val dims0   = Vector.tabulate(rank) { dimIdx =>
+        val dimKey  = m.getDimensionKey(dimIdx, useChannels = false)
+//        val reader: LMatrix.Reader = dim.reader(-1)
+        val reader: LMatrix.Reader = dimKey.reader()
         val lenL  = reader.size
         require(lenL <= 0x7FFFFFFF)
         val len   = lenL.toInt
         val buf   = new Array[Double](len)
         reader.readDouble1D(buf, 0, len)
+        val dim   = dimsIn(dimIdx)
         Matrix.Spec.Dim(dim.name, dim.units, buf.toIndexedSeq)
       }
       val spec0 = Matrix.Spec.Value(m.name, m.units, dims0)

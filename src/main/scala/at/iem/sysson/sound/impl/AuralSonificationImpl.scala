@@ -151,6 +151,30 @@ object AuralSonificationImpl {
     private def addSpec(req: UGB.Input, st: UGB.IO[S], spec: MatrixPrepare.Spec): MatrixPrepare.Value =
       MatrixPrepare.Value(oldMatrixSpecs(req, st) :+ spec)
 
+    private def findMatrix(variable: graph.MatrixLike)(implicit tx: S#Tx): LMatrix[S] = {
+      val sonif     = sonification
+      val varKey    = variable.name
+      val directOpt = sonif.sources.get(varKey)
+      directOpt.fold[LMatrix[S]] {
+        def resolveValue(v: Obj[S]): LMatrix[S] = v match {
+          case mat: LMatrix[S] => mat
+          case a: Gen[S] =>
+            val genView   = mkGenView(a, varKey)
+            val tryValue  = genView.value.getOrElse(throw UGB.MissingIn(UGB.AttributeKey(varKey)))
+            val newValue  = tryValue.get
+            resolveValue(newValue)
+
+          case a => throw new IllegalStateException(s"Unsupported matrix input $a")
+        }
+        val proc    = procCached()
+        val attrVal = proc.attr.get(varKey).getOrElse(sys.error(s"Missing source for key '$varKey'"))
+        resolveValue(attrVal)
+
+      } { source =>
+        source.matrix
+      }
+    }
+
     private def findMatrixAndDimIndex(variable: graph.MatrixLike,
                                       dimElem: graph.Dim)(implicit tx: S#Tx): (LMatrix[S], Int) = {
       val sonif     = sonification
@@ -326,8 +350,6 @@ object AuralSonificationImpl {
       import spec.{elem, streamDim}
       implicit val resolver = WorkspaceResolver[S]
 
-      val source  = findSource(sonification, elem.variable)
-      val full    = source.matrix
       //      val matrix  = if (isDim) {
       //        val dimIdx  = findDimIndex(source, elem)
       //        full.getDimensionKey(dimIdx, useChannels = streamDim < 0)
@@ -336,10 +358,13 @@ object AuralSonificationImpl {
       //      }
       val matrix = elem match {
         case dimGE: MatrixPrepare.DimGE =>
+          val source  = findSource(sonification, elem.variable)
+          val full    = source.matrix
           val dimIdx = findDimIndex(source, dimGE.key)
           full.getDimensionKey(dimIdx, useChannels = streamDim < 0)
 
         case _ =>
+          val full    = findMatrix(elem.variable)
           full.getKey(streamDim)
       }
 
