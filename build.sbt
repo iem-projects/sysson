@@ -32,9 +32,9 @@ lazy val scalaMainVersion           = "2.12.1"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.9.0-SNAPSHOT"
-lazy val soundProcessesVersion      = "3.11.0-SNAPSHOT"
-lazy val lucreMatrixVersion         = "1.1.0-SNAPSHOT"
+lazy val melliteVersion             = "2.9.0"
+lazy val soundProcessesVersion      = "3.11.0"
+lazy val lucreMatrixVersion         = "1.1.0"
 lazy val lucreSwingVersion          = "1.4.3"
 lazy val lucreVersion               = "3.3.2"
 lazy val scalaColliderVersion       = "1.22.3"
@@ -44,8 +44,8 @@ lazy val fileCacheVersion           = "0.3.4"
 lazy val swingTreeVersion           = "0.1.2"
 lazy val kollFlitzVersion           = "0.2.1"
 lazy val sheetVersion               = "0.1.2"
-lazy val slfVersion                 = "1.7.22"
-lazy val fscapeVersion              = "2.6.0-SNAPSHOT"
+lazy val slfVersion                 = "1.7.23"
+lazy val fscapeVersion              = "2.6.0"
 
 // ---- test libraries ----
 
