@@ -19,7 +19,7 @@ import de.sciss.fscape.UGen.Aux
 import de.sciss.fscape.graph.ConstantL
 import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
 import de.sciss.fscape.{GE, Lazy, UGenGraph, UGenInLike}
-import de.sciss.serial.DataOutput
+import de.sciss.serial.{DataOutput, ImmutableSerializer}
 
 object Dim {
   object Values {
@@ -90,6 +90,21 @@ object Dim {
       variable.write(out)
       out.writeShort(index)
     }
+  }
+
+//  type Def = Matrix.Spec.Dim
+//  val  Def = Matrix.Spec.Dim
+
+  final case class Def(name: String, units: String = "", values: GE) /* extends Aux */ {
+    override def productPrefix: String  = s"Dim$$Def"
+    override def toString               = s"Dim.Def($name, units = $units, values = $values)"
+
+//    def write(out: DataOutput): Unit = {
+//      out.writeByte(103)
+//      out.writeUTF(name )
+//      out.writeUTF(units)
+//      ImmutableSerializer.indexedSeq[Double].write(values, out)
+//    }
   }
 }
 /** Specification of a data source dimension

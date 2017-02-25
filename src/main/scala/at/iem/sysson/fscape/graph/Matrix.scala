@@ -72,16 +72,76 @@ object Matrix {
     }
   }
 
+  object ValueWindow {
+    type Value = ValueSeq.Value
+//    trait Value extends UGB.Value with Aux {
+//      def matrix: LMatrix.Key
+//      def reader: LMatrix.Reader
+//
+//      final def write(out: DataOutput): Unit = {
+//        out.writeByte(100)
+//        matrix.write(out)
+//      }
+//    }
+
+    final case class WithRef(ref: Value) extends UGenSource.SingleOut {
+
+      protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike =
+        makeUGen(Vector.empty)
+
+      protected def makeUGen(args: Vec[UGenIn])(implicit b: UGenGraph.Builder): UGenInLike =
+        UGen.SingleOut(this, args, aux = ref :: Nil)
+
+      def makeStream(args: Vec[StreamIn])(implicit b: SBuilder): StreamOut = {
+        val reader = ref.reader
+        // println(s"makeStream. size = ${reader.size}")
+        ??? // MatrixValueWindow(matrix = reader)
+      }
+
+      override def productPrefix: String = s"Matrix$$PlayLinear$$WithRef"
+    }
+  }
+  final case class ValueWindow(variable: Matrix, dims: Vec[Dim]) extends GE.Lazy with UGB.Input {
+    type Key    = Matrix
+    type Value  = ValueWindow.Value
+
+    def key: Key = variable
+
+    override def productPrefix: String  = s"Matrix$$ValueWindow"
+    override def toString               = s"$variable.valueWindow(${dims.mkString(", ")})"
+
+    def isFill: GE = IsFill(variable, this)
+
+    protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
+      val ub    = UGB.get(b)
+      val value = ub.requestInput(this)
+      ValueWindow.WithRef(value)
+    }
+  }
+
   object Op {
     final case class Drop(dim: Dim) extends Op {
       override def productPrefix: String  = s"Matrix$$Op$$Drop"
       override def toString               = s"Drop($dim)"
+    }
+
+    final case class MoveLast(dim: Dim) extends Op {
+      override def productPrefix: String  = s"Matrix$$Op$$MoveLast"
+      override def toString               = s"MoveLast($dim)"
+    }
+
+    final case class Append(dim: Dim.Def) extends Op {
+      override def productPrefix: String  = s"Matrix$$Op$$Append"
+      override def toString               = s"Append($dim)"
     }
   }
   sealed trait Op
 
   object Spec {
     final case class Dim(name: String, units: String, values: Vec[Double]) extends Aux {
+      override def productPrefix: String  = s"Matrix$$Spec$$Dim"
+      override def toString               = s"Dim($name, units = $units, values = $values)"
+
       def write(out: DataOutput): Unit = {
         out.writeByte(103)
         out.writeUTF(name )
@@ -112,7 +172,9 @@ object Matrix {
 
     def key: Key = this
 
-    def drop(dim: Dim): Spec = copy(ops = ops :+ Op.Drop(dim))
+    def drop    (dim: Dim    ): Spec = copy(ops = ops :+ Op.Drop    (dim))
+    def moveLast(dim: Dim    ): Spec = copy(ops = ops :+ Op.MoveLast(dim))
+    def append  (dim: Dim.Def): Spec = copy(ops = ops :+ Op.Append  (dim))
 
     private def unCapitalize(s: String): String =
       if (s.isEmpty || s.charAt(0).isLower) s
@@ -185,6 +247,8 @@ final case class Matrix(name: String) extends Lazy.Expander[Unit] with UGB.Key {
 
   /** Unrolls all dimensions in time. */
   def valueSeq: Matrix.ValueSeq = Matrix.ValueSeq(this)
+  
+  def valueWindow(dims: Dim*): Matrix.ValueSeq = Matrix.ValueSeq(this)
 
   def spec: Matrix.Spec = Matrix.Spec(this, Vector.empty)
 }

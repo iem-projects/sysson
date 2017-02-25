@@ -21,7 +21,7 @@ import de.sciss.equal.Implicits._
 import de.sciss.fscape.lucre.FScape.{Output, Rendering}
 import de.sciss.fscape.lucre.UGenGraphBuilder.{IO, Input, MissingIn}
 import de.sciss.fscape.lucre.impl.{RenderingImpl, UGenGraphBuilderContextImpl}
-import de.sciss.fscape.lucre.{FScape, OutputGenView}
+import de.sciss.fscape.lucre.{FScape, OutputGenView, UGenGraphBuilder}
 import de.sciss.fscape.stream.Control
 import de.sciss.lucre.matrix.{DataSource, Matrix => LMatrix}
 import de.sciss.lucre.stm
@@ -110,7 +110,8 @@ object GenViewFactory {
         val units   : String      = m.units
       }
 
-    private def requestVarSpec(i: Matrix.Spec)(implicit tx: S#Tx): Matrix.Spec.Value = {
+    private def requestVarSpec(i: Matrix.Spec, io: IO[S] with UGenGraphBuilder)
+                              (implicit tx: S#Tx): Matrix.Spec.Value = {
       val m = findMatrix(i.variable)
 
       implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
@@ -134,23 +135,45 @@ object GenViewFactory {
       }
       val spec0 = Matrix.Spec.Value(m.name, m.units, dims0)
 
+      def resolveDimIdx(specIn: Matrix.Spec.Value, dimRef: Dim): Int = {
+        require(dimRef.variable === i.variable)
+        // N.B. Because we may drop multiple times,
+        // we have to "relocate" the dimensional index,
+        // simply by looking up its name
+        val (m0, dimIdx0) = requestDim(dimRef)
+        val dimName       = m0.dimensions.apply(dimIdx0).name
+        val dimIdx        = specIn.dimensions.indexWhere(_.name === dimName)
+        require(dimIdx >= 0)
+        dimIdx
+      }
+
       val spec = (spec0 /: i.ops) {
         case (specIn, Matrix.Op.Drop(dimRef)) =>
-          require(dimRef.variable === i.variable)
-          // N.B. Because we may drop multiple times,
-          // we have to "relocate" the dimensional index,
-          // simply by looking up its name
-          val (m0, dimIdx0) = requestDim(dimRef)
-          val dimName       = m0.dimensions.apply(dimIdx0).name
-          val dimIdx        = specIn.dimensions.indexWhere(_.name === dimName)
-          require(dimIdx >= 0)
+          val dimIdx = resolveDimIdx(specIn, dimRef)
           specIn.copy(dimensions = specIn.dimensions.patch(dimIdx, Nil, 1))
+
+        case (specIn, Matrix.Op.MoveLast(dimRef)) =>
+          val dimIdx = resolveDimIdx(specIn, dimRef)
+          val dims0 = specIn.dimensions
+          val dim   = dims0(dimIdx)
+          specIn.copy(dimensions = dims0.patch(dimIdx, Nil, 1) :+ dim)
+
+        case (specIn, Matrix.Op.Append(dimDef)) =>
+          val dims0   = specIn.dimensions
+          val valuesC = UGenGraphBuilder.resolveSeq(dimDef.values, io) match {
+            case Right(xs) => xs
+            case Left(msg) => throw new Exception(msg)
+          }
+          val values  = valuesC.map(_.doubleValue)
+          val dim     = Matrix.Spec.Dim(name = dimDef.name, units = dimDef.units, values = values)
+          specIn.copy(dimensions = dims0 :+ dim)
       }
 
       spec
     }
 
-    override def requestInput[Res](req: Input {type Value = Res}, io: IO[S])(implicit tx: S#Tx): Res = req match {
+    override def requestInput[Res](req: Input {type Value = Res}, io: IO[S] with UGenGraphBuilder)
+                                  (implicit tx: S#Tx): Res = req match {
       case Matrix.ValueSeq(vr) =>
         val m     = findMatrix(vr)
         val res   = new Matrix.ValueSeq.Value {
@@ -173,7 +196,7 @@ object GenViewFactory {
       case i: Dim.SuccSize  => requestDimInfo   (i)
       case i: Matrix.Size   => requestMatrixInfo(i)
       case i: Matrix.Rank   => requestMatrixInfo(i)
-      case i: Matrix.Spec   => requestVarSpec(i)
+      case i: Matrix.Spec   => requestVarSpec   (i, io)
 
       case _ => super.requestInput(req, io)
     }
