@@ -15,8 +15,9 @@
 package de.sciss.fscape
 package stream
 
+import akka.stream.stage.InHandler
 import akka.stream.{Attributes, FanInShape11}
-import de.sciss.fscape.stream.impl.{DemandChunkImpl, DemandFilterLogic, DemandInOutImpl, NodeImpl, Out1DoubleImpl, Out1LogicImpl, StageImpl}
+import de.sciss.fscape.stream.impl.{DemandAuxInHandler, DemandChunkImpl, DemandFilterLogic, DemandInOutImpl, DemandProcessInHandler, NodeImpl, Out1DoubleImpl, Out1LogicImpl, ProcessOutHandlerImpl, StageImpl}
 
 object BlobVoices {
   def apply(in: OutD, width: OutI, height: OutI, minWidth: OutI, minHeight: OutI, voices: OutI,
@@ -80,10 +81,10 @@ object BlobVoices {
     private[this] var mul               = 0.0
     private[this] var add               = 0.0
 
-    private[this] var writeToWinOff     = 0L
-    private[this] var writeToWinRemain  = 0L
-    private[this] var readFromWinOff    = 0L
-    private[this] var readFromWinRemain = 0L
+    private[this] var writeToWinOff     = 0
+    private[this] var writeToWinRemain  = 0
+    private[this] var readFromWinOff    = 0
+    private[this] var readFromWinRemain = 0
     private[this] var isNextWindow      = true
 
     protected     var bufIn0 : BufD = _ // in
@@ -101,15 +102,65 @@ object BlobVoices {
 
     protected def in0: InD = shape.in0
 
-    private[this] var _mainCanRead  = false
-    private[this] var _auxCanRead   = false
-    private[this] var _mainInValid  = false
-    private[this] var _auxInValid   = false
-    private[this] var _inValid      = false
+    private[this] var _mainCanRead      = false
+    private[this] var _auxCanRead       = false
+    private[this] var _mainInValid      = false
+    private[this] var _auxInValid       = false
+    private[this] var _inValid          = false
+
+    private[this] var _blobNumCanRead   = false
+    private[this] var _blobDataCanRead  = false
+
+    private[this] var blobNumOff        = 0
+    private[this] var blobNumRemain     = 0
+    private[this] var blobDataOff       = 0
+    private[this] var bloDataRemain     = 0
+
+    private object BlobNumInHandler extends InHandler {
+      def onPush(): Unit =
+        if (canReadBlobNum) {
+          readBlobNumIn()
+          process()
+        }
+
+      override def onUpstreamFinish(): Unit = {
+        if (canReadBlobNum) readBlobNumIn()
+        process()
+      }
+    }
+
+    private final class BlobDataInHandler(in: InI) extends InHandler {
+      def onPush(): Unit = {
+        ???
+      }
+
+      override def onUpstreamFinish(): Unit = {
+        ???
+        super.onUpstreamFinish()
+      }
+
+      setInHandler(in, this)
+    }
+
+    new DemandProcessInHandler(shape.in0 , this)
+    new DemandAuxInHandler    (shape.in1 , this)
+    new DemandAuxInHandler    (shape.in2 , this)
+    new DemandAuxInHandler    (shape.in3 , this)
+    new DemandAuxInHandler    (shape.in4 , this)
+    new DemandAuxInHandler    (shape.in5 , this)
+    setInHandler(shape.in6, BlobNumInHandler)
+    new BlobDataInHandler     (shape.in7 )
+    new BlobDataInHandler     (shape.in8 )
+    new BlobDataInHandler     (shape.in9 )
+    new BlobDataInHandler     (shape.in10)
+    new ProcessOutHandlerImpl (shape.out , this)
 
     @inline
-    private[this] def canWriteToWindow  = readFromWinRemain == 0 && inValid
-    
+    private[this] def canWriteToWindow = readFromWinRemain == 0 && inValid
+
+    @inline
+    private[this] def canReadBlobNum = blobNumRemain == 0 && isAvailable(shape.in6)
+
     protected def out0: OutD = shape.out
 
     def mainCanRead : Boolean = _mainCanRead
@@ -195,9 +246,20 @@ object BlobVoices {
       sz
     }
 
+    private def readBlobNumIn(): Unit = {
+      require(blobNumRemain == 0)
+      freeBlobNumInBuffer()
+      bufIn6        = grab(shape.in6)
+      blobNumOff    = 0
+      blobNumRemain = bufIn6.size
+      tryPull(shape.in6)
+    }
+
     private def freeInputBuffers(): Unit = {
       freeMainInBuffers()
       freeAuxInBuffers()
+      freeBlobNumInBuffer()
+      freeBlobDataInBuffers()
     }
 
     private def freeMainInBuffers(): Unit =
@@ -229,6 +291,31 @@ object BlobVoices {
       }
     }
 
+    private def freeBlobNumInBuffer(): Unit =
+      if (bufIn6 != null) {
+        bufIn6.release()
+        bufIn6 = null
+      }
+
+    private def freeBlobDataInBuffers(): Unit = {
+      if (bufIn7 != null) {
+        bufIn7.release()
+        bufIn7 = null
+      }
+      if (bufIn8 != null) {
+        bufIn8.release()
+        bufIn8 = null
+      }
+      if (bufIn9 != null) {
+        bufIn9.release()
+        bufIn9 = null
+      }
+      if (bufIn10 != null) {
+        bufIn10.release()
+        bufIn10 = null
+      }
+    }
+
     protected def freeOutputBuffers(): Unit =
       if (bufOut0 != null) {
         bufOut0.release()
@@ -248,6 +335,16 @@ object BlobVoices {
         ((isClosed(sh.in5) && _auxInValid) || isAvailable(sh.in5))
     }
 
+    private def updateBlobNumCanRead(): Unit =
+      _blobNumCanRead = isAvailable(shape.in6)
+
+    private def updateBlobDataCanRead(): Unit =
+      _blobDataCanRead =
+        isAvailable(shape.in7) &&
+        isAvailable(shape.in8) &&
+        isAvailable(shape.in9) &&
+        isAvailable(shape.in10)
+
     protected def processChunk(): Boolean = {
       var stateChange = false
 
@@ -260,7 +357,7 @@ object BlobVoices {
           // logStream(s"startNextWindow(); writeToWinRemain = $writeToWinRemain")
         }
 
-        val chunk     = math.min(writeToWinRemain, mainInRemain).toInt
+        val chunk     = math.min(writeToWinRemain, mainInRemain) // .toInt
         val flushIn   = flushIn0 && writeToWinOff > 0
         if (chunk > 0 || flushIn) {
           // logStream(s"writeToWindow(); inOff = $inOff, writeToWinOff = $writeToWinOff, chunk = $chunk")
@@ -287,7 +384,7 @@ object BlobVoices {
       }
 
       if (readFromWinRemain > 0) {
-        val chunk = math.min(readFromWinRemain, outRemain).toInt
+        val chunk = math.min(readFromWinRemain, outRemain) // .toInt
         if (chunk > 0) {
           // logStream(s"readFromWindow(); readFromWinOff = $readFromWinOff, outOff = $outOff, chunk = $chunk")
           copyWindowToOutput(readFromWinOff = readFromWinOff, outOff = outOff, chunk = chunk)
@@ -304,7 +401,7 @@ object BlobVoices {
 
     protected def shouldComplete(): Boolean = inputsEnded && writeToWinOff == 0 && readFromWinRemain == 0
 
-    private def startNextWindow(): Long = {
+    private def startNextWindow(): Int = {
       val oldSize = winSize
       val inOff   = auxInOff
       if (bufIn1 != null && inOff < bufIn1.size) {
@@ -328,10 +425,10 @@ object BlobVoices {
       winSize
     }
 
-    private def copyInputToWindow(writeToWinOff: Long, chunk: Int): Unit =
-      Util.copy(bufIn0.buf, mainInOff, winBuf, writeToWinOff.toInt, chunk)
+    private def copyInputToWindow(writeToWinOff: Int, chunk: Int): Unit =
+      Util.copy(bufIn0.buf, mainInOff, winBuf, writeToWinOff, chunk)
 
-    private def copyWindowToOutput(readFromWinOff: Long, outOff: Int, chunk: Int): Unit = {
+    private def copyWindowToOutput(readFromWinOff: Int, outOff: Int, chunk: Int): Unit = {
       val _add  = add
       val _mul  = mul
       val a     = winBuf
@@ -348,7 +445,7 @@ object BlobVoices {
       }
     }
 
-    private def processWindow(writeToWinOff: Long): Long = {
+    private def processWindow(writeToWinOff: Int): Int = {
       val writeOffI = writeToWinOff.toInt
       if (writeOffI == 0) return writeToWinOff
 
