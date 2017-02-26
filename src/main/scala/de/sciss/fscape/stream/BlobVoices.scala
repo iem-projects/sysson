@@ -16,52 +16,50 @@ package de.sciss.fscape
 package stream
 
 import akka.stream.stage.InHandler
-import akka.stream.{Attributes, FanInShape11}
+import akka.stream.{Attributes, FanInShape10, FanInShape11}
 import de.sciss.fscape.stream.impl.{DemandAuxInHandler, DemandChunkImpl, DemandFilterLogic, DemandInOutImpl, DemandProcessInHandler, NodeImpl, Out1DoubleImpl, Out1LogicImpl, ProcessOutHandlerImpl, StageImpl}
 
 object BlobVoices {
   def apply(in: OutD, width: OutI, height: OutI, minWidth: OutI, minHeight: OutI, voices: OutI,
-            numBlobs: OutI, xMin: OutI, xMax: OutI, yMin: OutI, yMax: OutI)(implicit b: Builder): OutD = {
+            numBlobs: OutI, bounds: OutD, numVertices: OutI, vertices: OutD)(implicit b: Builder): OutD = {
     val stage0  = new Stage
     val stage   = b.add(stage0)
-    b.connect(in       , stage.in0 )
-    b.connect(width    , stage.in1 )
-    b.connect(height   , stage.in2 )
-    b.connect(minWidth , stage.in3 )
-    b.connect(minHeight, stage.in4 )
-    b.connect(voices   , stage.in5 )
-    b.connect(numBlobs , stage.in6 )
-    b.connect(xMin     , stage.in7 )
-    b.connect(xMax     , stage.in8 )
-    b.connect(yMin     , stage.in9 )
-    b.connect(yMax     , stage.in10)
+    b.connect(in         , stage.in0 )
+    b.connect(width      , stage.in1 )
+    b.connect(height     , stage.in2 )
+    b.connect(minWidth   , stage.in3 )
+    b.connect(minHeight  , stage.in4 )
+    b.connect(voices     , stage.in5 )
+    b.connect(numBlobs   , stage.in6 )
+    b.connect(bounds     , stage.in7 )
+    b.connect(numVertices, stage.in8 )
+    b.connect(vertices   , stage.in9 )
     stage.out
   }
 
   private final val name = "BlobVoices"
 
-  private type Shape = FanInShape11[BufD, BufI, BufI, BufI, BufI, BufI, BufI, BufI, BufI, BufI, BufI, BufD]
+  private type Shape = FanInShape10[BufD, BufI, BufI, BufI, BufI, BufI, BufI, BufD, BufI, BufD, BufD]
 
   private final class Stage(implicit ctrl: Control) extends StageImpl[Shape](name) {
-    val shape = new FanInShape11(
-      in0  = InD (s"$name.in"       ),
-      in1  = InI (s"$name.width"    ),
-      in2  = InI (s"$name.height"   ),
-      in3  = InI (s"$name.minWidth" ),
-      in4  = InI (s"$name.minHeight"),
-      in5  = InI (s"$name.voices"   ),
-      in6  = InI (s"$name.numBlobs" ),
-      in7  = InI (s"$name.xMin"     ),
-      in8  = InI (s"$name.xMax"     ),
-      in9  = InI (s"$name.yMin"     ),
-      in10 = InI (s"$name.yMax"     ),
-      out  = OutD(s"$name.out"      )
+    val shape = new FanInShape10(
+      in0  = InD (s"$name.in"         ),
+      in1  = InI (s"$name.width"      ),
+      in2  = InI (s"$name.height"     ),
+      in3  = InI (s"$name.minWidth"   ),
+      in4  = InI (s"$name.minHeight"  ),
+      in5  = InI (s"$name.voices"     ),
+      in6  = InI (s"$name.numBlobs"   ),
+      in7  = InD (s"$name.bounds"     ),
+      in8  = InI (s"$name.numVertices"),
+      in9  = InD (s"$name.vertices"   ),
+      out  = OutD(s"$name.out"        )
     )
 
     def createLogic(attr: Attributes) = new Logic(shape)
   }
 
-  private final case class BlobData(xMin: Int, xMax: Int, yMin: Int, yMax: Int)
+  private final case class BlobBounds(xMin: Int, xMax: Int, yMin: Int, yMax: Int)
 
   private final class Logic(shape: Shape)(implicit ctrl: Control)
     extends NodeImpl(name, shape)
@@ -92,30 +90,37 @@ object BlobVoices {
     private[this] var bufIn4 : BufI = _ // minHeight
     private[this] var bufIn5 : BufI = _ // voices
     private[this] var bufIn6 : BufI = _ // numBlobs
-    private[this] var bufIn7 : BufI = _ // xMin
-    private[this] var bufIn8 : BufI = _ // xMax
-    private[this] var bufIn9 : BufI = _ // yMin
-    private[this] var bufIn10: BufI = _ // yMax
+    private[this] var bufIn7 : BufD = _ // bounds
+    private[this] var bufIn8 : BufI = _ // numVertices
+    private[this] var bufIn9 : BufD = _ // vertices
     protected     var bufOut0: BufD = _
 
     protected def in0: InD = shape.in0
 
-    private[this] var _mainCanRead      = false
-    private[this] var _auxCanRead       = false
-    private[this] var _mainInValid      = false
-    private[this] var _auxInValid       = false
-    private[this] var _inValid          = false
+    private[this] var _mainCanRead            = false
+    private[this] var _auxCanRead             = false
+    private[this] var _mainInValid            = false
+    private[this] var _auxInValid             = false
+    private[this] var _inValid                = false
 
-    private[this] var _blobNumCanRead   = false
-    private[this] var _blobDataCanRead  = false
+    private[this] var _blobNumCanRead         = false
+    private[this] var _blobBoundsCanRead      = false
+    private[this] var _blobNumVerticesCanRead = false
+    private[this] var _blobVerticesCanRead    = false
 
-    private[this] var blobNumOff        = 0
-    private[this] var blobNumRemain     = 0
-    private[this] var blobDataOff       = 0
-    private[this] var blobDataRemain    = 0
+    private[this] var blobNumOff              = 0
+    private[this] var blobNumRemain           = 0
+    private[this] var blobBoundsOff           = 0
+    private[this] var blobBoundsRemain        = 0
+    private[this] var blobNumVerticesOff      = 0
+    private[this] var blobNumVerticesRemain   = 0
+    private[this] var blobVerticesOff         = 0
+    private[this] var blobVerticesRemain      = 0
 
-    private[this] var blobData: Array[BlobData] = _
-    private[this] var blobsRead         = 0
+    private[this] var blobData: Array[BlobBounds] = _
+    private[this] var blobsBoundsRead         = 0
+    private[this] var blobsNumVerticesRead    = 0
+    private[this] var blobsVerticesRead       = 0
 
     private object BlobNumInHandler extends InHandler {
       def onPush(): Unit =
@@ -130,19 +135,43 @@ object BlobVoices {
       }
     }
 
-    private final class BlobDataInHandler(in: InI) extends InHandler {
+    private object BlobBoundsInHandler extends InHandler {
       def onPush(): Unit =
-        if (canReadBlobData) {
-          readBlobDataIn()
+        if (canReadBlobBounds) {
+          readBlobBoundsIn()
           process()
         }
 
       override def onUpstreamFinish(): Unit = {
-        if (canReadBlobData) readBlobDataIn()
+        if (canReadBlobBounds) readBlobBoundsIn()
         process()
       }
+    }
 
-      setInHandler(in, this)
+    private object BlobNumVerticesInHandler extends InHandler {
+      def onPush(): Unit =
+        if (canReadBlobNumVertices) {
+          readBlobNumVerticesIn()
+          process()
+        }
+
+      override def onUpstreamFinish(): Unit = {
+        if (canReadBlobNumVertices) readBlobNumVerticesIn()
+        process()
+      }
+    }
+
+    private object BlobVerticesInHandler extends InHandler {
+      def onPush(): Unit =
+        if (canReadBlobVertices) {
+          readBlobVerticesIn()
+          process()
+        }
+
+      override def onUpstreamFinish(): Unit = {
+        if (canReadBlobVertices) readBlobVerticesIn()
+        process()
+      }
     }
 
     new DemandProcessInHandler(shape.in0 , this)
@@ -151,35 +180,22 @@ object BlobVoices {
     new DemandAuxInHandler    (shape.in3 , this)
     new DemandAuxInHandler    (shape.in4 , this)
     new DemandAuxInHandler    (shape.in5 , this)
-    setInHandler(shape.in6, BlobNumInHandler)
-    new BlobDataInHandler     (shape.in7 )
-    new BlobDataInHandler     (shape.in8 )
-    new BlobDataInHandler     (shape.in9 )
-    new BlobDataInHandler     (shape.in10)
+    setInHandler(shape.in6, BlobNumInHandler        )
+    setInHandler(shape.in7, BlobBoundsInHandler     )
+    setInHandler(shape.in8, BlobNumVerticesInHandler)
+    setInHandler(shape.in9, BlobVerticesInHandler   )
     new ProcessOutHandlerImpl (shape.out , this)
 
-    @inline
-    private[this] def canWriteToWindow = readFromWinRemain == 0 && inValid
+    @inline private[this] def canWriteToWindow        = readFromWinRemain     == 0 && inValid
+    @inline private[this] def canReadBlobNum          = blobNumRemain         == 0 && isAvailable(shape.in6)
+    @inline private[this] def canReadBlobBounds       = blobBoundsRemain      == 0 && isAvailable(shape.in7)
+    @inline private[this] def canReadBlobNumVertices  = blobNumVerticesRemain == 0 && isAvailable(shape.in8)
+    @inline private[this] def canReadBlobVertices     = blobVerticesRemain    == 0 && isAvailable(shape.in9)
 
-    @inline
-    private[this] def canReadBlobNum = blobNumRemain == 0 && isAvailable(shape.in6)
-
-    @inline
-    private[this] def blobNumEnded = !isAvailable(shape.in6) && isClosed(shape.in6)
-
-    @inline
-    private[this] def blobDataEnded =
-      (!isAvailable(shape.in7 ) && isClosed(shape.in7 )) ||
-      (!isAvailable(shape.in8 ) && isClosed(shape.in8 )) ||
-      (!isAvailable(shape.in9 ) && isClosed(shape.in9 )) ||
-      (!isAvailable(shape.in10) && isClosed(shape.in10))
-
-    @inline
-    private[this] def canReadBlobData = blobDataRemain == 0 &&
-      isAvailable(shape.in7) &&
-      isAvailable(shape.in8) &&
-      isAvailable(shape.in9) &&
-      isAvailable(shape.in10)
+    @inline private[this] def blobNumEnded            = !isAvailable(shape.in6) && isClosed(shape.in6)
+    @inline private[this] def blobBoundsEnded         = !isAvailable(shape.in7) && isClosed(shape.in7)
+    @inline private[this] def blobNumVerticesEnded    = !isAvailable(shape.in8) && isClosed(shape.in8)
+    @inline private[this] def blobVerticesEnded       = !isAvailable(shape.in9) && isClosed(shape.in9)
 
     protected def out0: OutD = shape.out
 
@@ -201,7 +217,6 @@ object BlobVoices {
       pull(sh.in7)
       pull(sh.in8)
       pull(sh.in9)
-      pull(sh.in10)
     }
 
     override protected def stopped(): Unit = {
@@ -270,43 +285,46 @@ object BlobVoices {
     private def readBlobNumIn(): Unit = {
       require(blobNumRemain == 0)
       freeBlobNumInBuffer()
-      bufIn6        = grab(shape.in6)
-      blobNumOff    = 0
-      blobNumRemain = bufIn6.size
+      bufIn6                = grab(shape.in6)
+      blobNumOff            = 0
+      blobNumRemain         = bufIn6.size
       tryPull(shape.in6)
     }
 
-    private def readBlobDataIn(): Unit = {
-      require(blobDataRemain == 0)
-      freeBlobDataInBuffers()
-      var sz = Int.MaxValue
-      val sh = shape
+    private def readBlobBoundsIn(): Unit = {
+      require(blobBoundsRemain == 0)
+      freeBlobBoundsInBuffer()
+      bufIn7                = grab(shape.in7)
+      blobBoundsOff         = 0
+      blobBoundsRemain      = bufIn7.size
+      tryPull(shape.in7)
+    }
 
-      bufIn7  = grab(sh.in7)
-      sz      = math.min(sz, bufIn1.size)
-      tryPull(sh.in7)
+    private def readBlobNumVerticesIn(): Unit = {
+      require(blobNumVerticesRemain == 0)
+      freeBlobNumVerticesInBuffer()
+      bufIn8                = grab(shape.in8)
+      blobNumVerticesOff    = 0
+      blobNumVerticesRemain = bufIn8.size
+      tryPull(shape.in8)
+    }
 
-      bufIn8  = grab(sh.in8)
-      sz      = math.min(sz, bufIn2.size)
-      tryPull(sh.in2)
-
-      bufIn9  = grab(sh.in9)
-      sz      = math.min(sz, bufIn9.size)
-      tryPull(sh.in9)
-
-      bufIn9  = grab(sh.in9)
-      sz      = math.min(sz, bufIn9.size)
-      tryPull(sh.in9)
-
-      blobDataOff     = 0
-      blobDataRemain  = sz
+    private def readBlobVerticesIn(): Unit = {
+      require(blobVerticesRemain == 0)
+      freeBlobVerticesInBuffer()
+      bufIn9                = grab(shape.in9)
+      blobVerticesOff       = 0
+      blobVerticesRemain    = bufIn9.size
+      tryPull(shape.in9)
     }
 
     private def freeInputBuffers(): Unit = {
       freeMainInBuffers()
       freeAuxInBuffers()
       freeBlobNumInBuffer()
-      freeBlobDataInBuffers()
+      freeBlobBoundsInBuffer()
+      freeBlobNumVerticesInBuffer()
+      freeBlobVerticesInBuffer()
     }
 
     private def freeMainInBuffers(): Unit =
@@ -344,24 +362,23 @@ object BlobVoices {
         bufIn6 = null
       }
 
-    private def freeBlobDataInBuffers(): Unit = {
+    private def freeBlobBoundsInBuffer(): Unit =
       if (bufIn7 != null) {
         bufIn7.release()
         bufIn7 = null
       }
+
+    private def freeBlobNumVerticesInBuffer(): Unit =
       if (bufIn8 != null) {
         bufIn8.release()
         bufIn8 = null
       }
+
+    private def freeBlobVerticesInBuffer(): Unit =
       if (bufIn9 != null) {
         bufIn9.release()
         bufIn9 = null
       }
-      if (bufIn10 != null) {
-        bufIn10.release()
-        bufIn10 = null
-      }
-    }
 
     protected def freeOutputBuffers(): Unit =
       if (bufOut0 != null) {
@@ -382,23 +399,20 @@ object BlobVoices {
         ((isClosed(sh.in5) && _auxInValid) || isAvailable(sh.in5))
     }
 
-    private def updateBlobNumCanRead(): Unit =
-      _blobNumCanRead = isAvailable(shape.in6)
+    @inline private def updateBlobNumCanRead        (): Unit = _blobNumCanRead          = isAvailable(shape.in6)
+    @inline private def updateBlobBoundsCanRead     (): Unit = _blobBoundsCanRead       = isAvailable(shape.in7)
+    @inline private def updateBlobNumVerticesCanRead(): Unit = _blobNumVerticesCanRead  = isAvailable(shape.in8)
+    @inline private def updateBlobVerticesCanRead   (): Unit = _blobVerticesCanRead     = isAvailable(shape.in9)
 
-    private def updateBlobDataCanRead(): Unit =
-      _blobDataCanRead =
-        isAvailable(shape.in7) &&
-        isAvailable(shape.in8) &&
-        isAvailable(shape.in9) &&
-        isAvailable(shape.in10)
+    private[this] var _stateReadBlobNum         = false
+    private[this] var _stateReadBlobBounds      = false
+    private[this] var _stateReadBlobNumVertices = false
+    private[this] var _stateReadBlobVertices    = false
+    private[this] var _stateProcessBlobs        = false
 
-    private[this] var _stateReadBlobNum   = false
-    private[this] var _stateReadBlobData  = false
-    private[this] var _stateProcessBlobs  = false
+    private[this] var _stateComplete            = false
 
-    private[this] var _stateComplete      = false
-
-    private[this] var numBlobs            = 0
+    private[this] var numBlobs                  = 0
 
     protected def processChunk(): Boolean = {
       var stateChange = false
@@ -438,48 +452,57 @@ object BlobVoices {
         if (blobNumRemain > 0) {
           numBlobs            = bufIn6.buf(blobNumOff)
           if (blobData == null || blobData.length < numBlobs) {
-            blobData = new Array[BlobData](numBlobs)
+            blobData = new Array[BlobBounds](numBlobs)
           }
-          blobNumRemain      -= 1
-          blobNumOff         += 1
-          blobsRead           = 0
-          _stateReadBlobNum   = false
-          _stateReadBlobData  = true
-          stateChange         = true
+          blobNumRemain        -= 1
+          blobNumOff           += 1
+          blobsBoundsRead       = 0
+          _stateReadBlobNum     = false
+          _stateReadBlobBounds  = true
+          stateChange           = true
         } else if (blobNumEnded) {
-          _stateComplete      = true
+          _stateComplete        = true
           return stateChange
         }
       }
 
-      if (_stateReadBlobData) {
-        if (canReadBlobData) readBlobDataIn()
-        val chunk = math.min(blobDataRemain, numBlobs - blobsRead)
+      if (_stateReadBlobBounds) {
+        if (canReadBlobBounds) readBlobBoundsIn()
+        val chunk = math.min(blobBoundsRemain, numBlobs * 4 - blobsBoundsRead)
         if (chunk > 0) {
           var i = 0
           while (i < chunk) {
-            val xMin         = bufIn7 .buf(blobDataOff)
-            val xMax         = bufIn8 .buf(blobDataOff)
-            val yMin         = bufIn9 .buf(blobDataOff)
-            val yMax         = bufIn10.buf(blobDataOff)
-            val blob         = BlobData(xMin = xMin, xMax = xMax, yMin = yMin, yMax = yMax)
-            blobData(blobsRead) = blob
-            blobDataRemain  -= 1
-            blobDataOff     += 1
-            blobsRead       += 1
+            ???
+//            val xMin         = bufIn7 .buf(blobDataOff)
+//            val xMax         = bufIn8 .buf(blobDataOff)
+//            val yMin         = bufIn9 .buf(blobDataOff)
+//            val yMax         = bufIn10.buf(blobDataOff)
+//            val blob         = BlobBounds(xMin = xMin, xMax = xMax, yMin = yMin, yMax = yMax)
+//            blobData(blobsRead) = blob
+//            blobDataRemain  -= 1
+//            blobDataOff     += 1
+//            blobsRead       += 1
             i += 1
           }
           stateChange = true
         }
-        if (blobsRead == numBlobs) {
-          _stateReadBlobData  = false
-          _stateProcessBlobs  = true
-          stateChange         = true
+        if (blobsBoundsRead == numBlobs * 4) {
+          _stateReadBlobBounds      = false
+          _stateReadBlobNumVertices = true
+          stateChange               = true
 
-        } else if (blobDataRemain == 0 && blobDataEnded) {
-          _stateComplete      = true
+        } else if (blobBoundsRemain == 0 && blobBoundsEnded) {
+          _stateComplete            = true
           return stateChange
         }
+      }
+
+      if (_stateReadBlobNumVertices) {
+        ???
+      }
+
+      if (_stateReadBlobVertices) {
+        ???
       }
 
       if (_stateProcessBlobs) {

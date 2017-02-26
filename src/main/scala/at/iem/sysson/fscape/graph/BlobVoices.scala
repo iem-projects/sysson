@@ -66,19 +66,23 @@ final case class BlobVoices(in: GE, width: GE, height: GE, blobs: Blobs2D, minWi
     unwrap(this, Vector(
       expand(in),
       expand(width)     , expand(height),
-      expand(blobs.numBlobs),
-      expand(blobs.xMin), expand(blobs.xMax),
-      expand(blobs.yMin), expand(blobs.yMax),
       expand(minWidth)  , expand(minHeight),
-      expand(voices)))
+      expand(voices),
+      expand(blobs.numBlobs),
+      expand(blobs.bounds),
+      expand(blobs.numVertices),
+      expand(blobs.vertices)
+    ))
 
   protected def makeUGen(args: Vec[UGenIn])(implicit b: UGenGraph.Builder): UGenInLike =
     UGen.SingleOut(this, args)
 
   def makeStream(args: Vec[StreamIn])(implicit b: stream.Builder): StreamOut = {
-    val Vec(in, width, height, numBlobs, xMin, xMax, yMin, yMax, minWidth, minHeight, voices) = args
+    val Vec(in, width, height, minWidth, minHeight, voices, numBlobs, bounds, numVertices, vertices) = args
     stream.BlobVoices(in = in.toDouble, width = width.toInt, height = height.toInt,
-       numBlobs = numBlobs.toInt, xMin = xMin.toInt, xMax = xMax.toInt, yMin = yMin.toInt, yMax = yMax.toInt,
-       minWidth = minWidth.toInt, minHeight = minHeight.toInt, voices = voices.toInt)
+      minWidth = minWidth.toInt, minHeight = minHeight.toInt, voices = voices.toInt,
+      numBlobs = numBlobs.toInt, bounds = bounds.toDouble,
+      numVertices = numVertices.toInt, vertices = vertices.toDouble
+    )
   }
 }
