@@ -61,6 +61,8 @@ object BlobVoices {
     def createLogic(attr: Attributes) = new Logic(shape)
   }
 
+  private final case class BlobData(xMin: Int, xMax: Int, yMin: Int, yMax: Int)
+
   private final class Logic(shape: Shape)(implicit ctrl: Control)
     extends NodeImpl(name, shape)
       with DemandFilterLogic[BufD, Shape]
@@ -70,16 +72,12 @@ object BlobVoices {
       with Out1DoubleImpl   [Shape] {
 
     private[this] var winSize           = 0
-    private[this] var lo                = 0.0
-    private[this] var hi                = 0.0
-    private[this] var lag               = 0.0
     private[this] var winBuf: Array[Double] = _
-
-    private[this] var init              = true
-    private[this] var minMem            = 0.0
-    private[this] var maxMem            = 0.0
-    private[this] var mul               = 0.0
-    private[this] var add               = 0.0
+    private[this] var width             = 0
+    private[this] var height            = 0
+    private[this] var minWidth          = 0
+    private[this] var minHeight         = 0
+    private[this] var voices            = 0
 
     private[this] var writeToWinOff     = 0
     private[this] var writeToWinRemain  = 0
@@ -114,7 +112,10 @@ object BlobVoices {
     private[this] var blobNumOff        = 0
     private[this] var blobNumRemain     = 0
     private[this] var blobDataOff       = 0
-    private[this] var bloDataRemain     = 0
+    private[this] var blobDataRemain    = 0
+
+    private[this] var blobData: Array[BlobData] = _
+    private[this] var blobsRead         = 0
 
     private object BlobNumInHandler extends InHandler {
       def onPush(): Unit =
@@ -130,13 +131,15 @@ object BlobVoices {
     }
 
     private final class BlobDataInHandler(in: InI) extends InHandler {
-      def onPush(): Unit = {
-        ???
-      }
+      def onPush(): Unit =
+        if (canReadBlobData) {
+          readBlobDataIn()
+          process()
+        }
 
       override def onUpstreamFinish(): Unit = {
-        ???
-        super.onUpstreamFinish()
+        if (canReadBlobData) readBlobDataIn()
+        process()
       }
 
       setInHandler(in, this)
@@ -160,6 +163,23 @@ object BlobVoices {
 
     @inline
     private[this] def canReadBlobNum = blobNumRemain == 0 && isAvailable(shape.in6)
+
+    @inline
+    private[this] def blobNumEnded = !isAvailable(shape.in6) && isClosed(shape.in6)
+
+    @inline
+    private[this] def blobDataEnded =
+      (!isAvailable(shape.in7 ) && isClosed(shape.in7 )) ||
+      (!isAvailable(shape.in8 ) && isClosed(shape.in8 )) ||
+      (!isAvailable(shape.in9 ) && isClosed(shape.in9 )) ||
+      (!isAvailable(shape.in10) && isClosed(shape.in10))
+
+    @inline
+    private[this] def canReadBlobData = blobDataRemain == 0 &&
+      isAvailable(shape.in7) &&
+      isAvailable(shape.in8) &&
+      isAvailable(shape.in9) &&
+      isAvailable(shape.in10)
 
     protected def out0: OutD = shape.out
 
@@ -187,7 +207,8 @@ object BlobVoices {
     override protected def stopped(): Unit = {
       freeInputBuffers()
       freeOutputBuffers()
-      winBuf = null
+      winBuf    = null
+      blobData  = null
     }
 
     protected def readMainIns(): Int = {
@@ -253,6 +274,32 @@ object BlobVoices {
       blobNumOff    = 0
       blobNumRemain = bufIn6.size
       tryPull(shape.in6)
+    }
+
+    private def readBlobDataIn(): Unit = {
+      require(blobDataRemain == 0)
+      freeBlobDataInBuffers()
+      var sz = Int.MaxValue
+      val sh = shape
+
+      bufIn7  = grab(sh.in7)
+      sz      = math.min(sz, bufIn1.size)
+      tryPull(sh.in7)
+
+      bufIn8  = grab(sh.in8)
+      sz      = math.min(sz, bufIn2.size)
+      tryPull(sh.in2)
+
+      bufIn9  = grab(sh.in9)
+      sz      = math.min(sz, bufIn9.size)
+      tryPull(sh.in9)
+
+      bufIn9  = grab(sh.in9)
+      sz      = math.min(sz, bufIn9.size)
+      tryPull(sh.in9)
+
+      blobDataOff     = 0
+      blobDataRemain  = sz
     }
 
     private def freeInputBuffers(): Unit = {
@@ -345,6 +392,14 @@ object BlobVoices {
         isAvailable(shape.in9) &&
         isAvailable(shape.in10)
 
+    private[this] var _stateReadBlobNum   = false
+    private[this] var _stateReadBlobData  = false
+    private[this] var _stateProcessBlobs  = false
+
+    private[this] var _stateComplete      = false
+
+    private[this] var numBlobs            = 0
+
     protected def processChunk(): Boolean = {
       var stateChange = false
 
@@ -371,16 +426,71 @@ object BlobVoices {
           }
 
           if (writeToWinRemain == 0 || flushIn) {
-            readFromWinRemain = processWindow(writeToWinOff = writeToWinOff) // , flush = flushIn)
-            writeToWinOff     = 0
-            readFromWinOff    = 0
-            isNextWindow      = true
+            _stateReadBlobNum = true
             stateChange       = true
-            auxInOff         += 1
-            auxInRemain      -= 1
             // logStream(s"processWindow(); readFromWinRemain = $readFromWinRemain")
           }
         }
+      }
+
+      if (_stateReadBlobNum) {
+        if (canReadBlobNum) readBlobNumIn()
+        if (blobNumRemain > 0) {
+          numBlobs            = bufIn6.buf(blobNumOff)
+          if (blobData == null || blobData.length < numBlobs) {
+            blobData = new Array[BlobData](numBlobs)
+          }
+          blobNumRemain      -= 1
+          blobNumOff         += 1
+          blobsRead           = 0
+          _stateReadBlobNum   = false
+          _stateReadBlobData  = true
+          stateChange         = true
+        } else if (blobNumEnded) {
+          _stateComplete      = true
+          return stateChange
+        }
+      }
+
+      if (_stateReadBlobData) {
+        if (canReadBlobData) readBlobDataIn()
+        val chunk = math.min(blobDataRemain, numBlobs - blobsRead)
+        if (chunk > 0) {
+          var i = 0
+          while (i < chunk) {
+            val xMin         = bufIn7 .buf(blobDataOff)
+            val xMax         = bufIn8 .buf(blobDataOff)
+            val yMin         = bufIn9 .buf(blobDataOff)
+            val yMax         = bufIn10.buf(blobDataOff)
+            val blob         = BlobData(xMin = xMin, xMax = xMax, yMin = yMin, yMax = yMax)
+            blobData(blobsRead) = blob
+            blobDataRemain  -= 1
+            blobDataOff     += 1
+            blobsRead       += 1
+            i += 1
+          }
+          stateChange = true
+        }
+        if (blobsRead == numBlobs) {
+          _stateReadBlobData  = false
+          _stateProcessBlobs  = true
+          stateChange         = true
+
+        } else if (blobDataRemain == 0 && blobDataEnded) {
+          _stateComplete      = true
+          return stateChange
+        }
+      }
+
+      if (_stateProcessBlobs) {
+        readFromWinRemain   = processWindow(writeToWinOff = writeToWinOff) // , flush = flushIn)
+        writeToWinOff       = 0
+        readFromWinOff      = 0
+        isNextWindow        = true
+        auxInOff           += 1
+        auxInRemain        -= 1
+        _stateProcessBlobs  = false
+        stateChange         = true
       }
 
       if (readFromWinRemain > 0) {
@@ -399,26 +509,28 @@ object BlobVoices {
       stateChange
     }
 
-    protected def shouldComplete(): Boolean = inputsEnded && writeToWinOff == 0 && readFromWinRemain == 0
+    protected def shouldComplete(): Boolean =
+      _stateComplete || (inputsEnded && writeToWinOff == 0 && readFromWinRemain == 0)
 
     private def startNextWindow(): Int = {
       val oldSize = winSize
       val inOff   = auxInOff
       if (bufIn1 != null && inOff < bufIn1.size) {
-        winSize = math.max(1, bufIn1.buf(inOff))
+        width = math.max(1, bufIn1.buf(inOff))
       }
       if (bufIn2 != null && inOff < bufIn2.size) {
-        lo = bufIn2.buf(inOff)
+        height = bufIn2.buf(inOff)
       }
       if (bufIn3 != null && inOff < bufIn3.size) {
-        hi = bufIn3.buf(inOff)
+        minWidth = bufIn3.buf(inOff)
       }
       if (bufIn4 != null && inOff < bufIn4.size) {
-        lag = bufIn4.buf(inOff)
+        minHeight = bufIn4.buf(inOff)
       }
       if (bufIn5 != null && inOff < bufIn5.size) {
-        lag = bufIn5.buf(inOff)
+        voices = bufIn5.buf(inOff)
       }
+      winSize = width * height
       if (winSize != oldSize) {
         winBuf = new Array[Double](winSize)
       }
@@ -428,56 +540,16 @@ object BlobVoices {
     private def copyInputToWindow(writeToWinOff: Int, chunk: Int): Unit =
       Util.copy(bufIn0.buf, mainInOff, winBuf, writeToWinOff, chunk)
 
-    private def copyWindowToOutput(readFromWinOff: Int, outOff: Int, chunk: Int): Unit = {
-      val _add  = add
-      val _mul  = mul
-      val a     = winBuf
-      val b     = bufOut0.buf
-      var ai    = readFromWinOff.toInt
-      var bi    = outOff
-      val stop  = ai + chunk
-      while (ai < stop) {
-        val x0 = a(ai)
-        val y1 = x0 * _mul + _add
-        b(bi)  = y1
-        ai += 1
-        bi += 1
-      }
-    }
+    private def copyWindowToOutput(readFromWinOff: Int, outOff: Int, chunk: Int): Unit =
+      Util.copy(winBuf, readFromWinOff, bufOut0.buf, outOff, chunk)
 
     private def processWindow(writeToWinOff: Int): Int = {
       val writeOffI = writeToWinOff.toInt
       if (writeOffI == 0) return writeToWinOff
 
-      val b         = winBuf
-      var min       = b(0)
-      var max       = b(0)
-      var i         = 1
-      while (i < writeOffI) {
-        val x = b(i)
-        if      (x > max) max = x
-        else if (x < min) min = x
-        i += 1
-      }
+      ???
 
-      if (init) {
-        init = false
-        minMem = min
-        maxMem = max
-      } else {
-        val cy = lag
-        val cx = 1.0 - math.abs(cy)
-        minMem = minMem * cy + min * cx
-        maxMem = maxMem * cy + max * cx
-      }
-
-      if (minMem == maxMem) {
-        mul = 0
-        add = lo
-      } else {
-        mul = (hi - lo) / (maxMem - minMem)
-        add = lo - minMem * mul
-      }
+      val b = winBuf
 
       writeToWinOff
     }
