@@ -795,7 +795,10 @@ object BlobVoices {
 //            val sliceMean = sliceSum / boxHeight
 //            sliceCenter   = (sliceCenter / sliceSum).clip(boxTop, boxBottom - 1)
             val sliceMean = sliceSum / boxWidth
-            sliceCenter   = (sliceCenter / sliceSum).clip(boxLeft, boxRight - 1)
+            sliceCenter   = if (sliceSum > 0)
+              (sliceCenter / sliceSum).clip(boxLeft, boxRight - 1)
+            else
+              (boxLeft + boxRight) / 2    // XXX TODO --- what else could we do?
 
 //            y = boxTop
             x = boxLeft
@@ -808,7 +811,7 @@ object BlobVoices {
               }
               x /* y */ += 1
             }
-            if (sliceCnt > 0) sliceStdDev = math.sqrt(sliceStdDev / (sliceCnt - 1))
+            if (sliceCnt > 1 /* 0 */) sliceStdDev = math.sqrt(sliceStdDev / (sliceCnt - 1))
 
             val slice = BlobSlice(
               boxLeft       = boxLeft /* boxTop */,
