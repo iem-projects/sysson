@@ -72,7 +72,8 @@ object FScapeBlobTest extends App {
       val height    = 180 // d1.size
       val winSzIn   = width * height
 
-      printRange(win0, 0, winSzIn, "first-win")
+//      printRange(win0, 0, winSzIn, "first-win")
+//      printRange(win0, winSzIn, winSzIn * 2, "second-win")
 
       val taLo      = 0.0
       val taHi      = 3.5
@@ -84,14 +85,18 @@ object FScapeBlobTest extends App {
       val blobs     = Blobs2D(in = win, width = width, height = height, thresh = 0.265)
       val minWidth  = 10.0 / width    // XXX TODO --- make user selectable
       val minHeight =  3.0 / height   // XXX TODO --- make user selectable
-      // val el        = (winSzIn / ControlBlockSize()).ceil
-      val winEl     = BufferDisk(win) // win.elastic(el * 2)
-      val mOut      = BlobVoices(in = winEl, width = width, height = height, blobs = blobs,
-        minWidth = minWidth, minHeight = minHeight, voices = voices)
-      val winSzOut  = blobSz * height
 
-      val frames = MatrixOut("out", specOut, mOut)
-      frames.poll(Metro(winSzOut).tail, "matrix-written")
+      Frames(win).poll(Metro(winSzIn).tail, "win-read")
+      printRange(blobs.numBlobs, 0, 9999, "num-blobs")
+
+//      // val el        = (winSzIn / ControlBlockSize()).ceil
+//      val winEl     = BufferDisk(win) // win.elastic(el * 2)
+//      val mOut      = BlobVoices(in = winEl, width = width, height = height, blobs = blobs,
+//        minWidth = minWidth, minHeight = minHeight, voices = voices)
+//      val winSzOut  = blobSz * height
+//
+//      val frames = MatrixOut("out", specOut, mOut)
+//      frames.poll(Metro(winSzOut).tail, "matrix-written")
     }
     f.graph() = g
 

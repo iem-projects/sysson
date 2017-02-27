@@ -19,8 +19,8 @@ package graph
 import de.sciss.fscape.UGen.Aux
 import de.sciss.fscape.graph.{ConstantI, ConstantL}
 import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
-import de.sciss.fscape.stream.{StreamIn, StreamOut, MatrixValueSeq, Builder => SBuilder}
-import de.sciss.fscape.{GE, Lazy, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource}
+import de.sciss.fscape.stream.{StreamIn, StreamOut, Builder => SBuilder}
+import de.sciss.fscape.{GE, Lazy, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource, stream}
 import de.sciss.lucre.matrix.{Matrix => LMatrix}
 import de.sciss.serial.{DataOutput, ImmutableSerializer}
 
@@ -47,7 +47,7 @@ object Matrix {
       def makeStream(args: Vec[StreamIn])(implicit b: SBuilder): StreamOut = {
         val reader = ref.reader
         // println(s"makeStream. size = ${reader.size}")
-        MatrixValueSeq(matrix = reader)
+        stream.MatrixValueSeq(matrix = reader)
       }
 
       override def productPrefix: String = s"Matrix$$PlayLinear$$WithRef"
@@ -73,16 +73,21 @@ object Matrix {
   }
 
   object ValueWindow {
-    type Value = ValueSeq.Value
-//    trait Value extends UGB.Value with Aux {
-//      def matrix: LMatrix.Key
-//      def reader: LMatrix.Reader
-//
-//      final def write(out: DataOutput): Unit = {
-//        out.writeByte(100)
-//        matrix.write(out)
-//      }
-//    }
+    trait Value extends UGB.Value with Aux {
+      def matrix  : LMatrix.Key
+      def reader  : LMatrix.Reader
+      def winSize : Long
+      def dims    : List[Int]
+
+      final def write(out: DataOutput): Unit = {
+        out.writeByte(105)
+        matrix.write(out)
+        out.writeLong(winSize)
+        val sz = dims.size
+        out.writeShort(dims.size)
+        dims.foreach(out.writeShort)
+      }
+    }
 
     final case class WithRef(ref: Value) extends UGenSource.SingleOut {
 
@@ -95,7 +100,9 @@ object Matrix {
       def makeStream(args: Vec[StreamIn])(implicit b: SBuilder): StreamOut = {
         val reader = ref.reader
         // println(s"makeStream. size = ${reader.size}")
-        ??? // MatrixValueWindow(matrix = reader)
+        require (ref.winSize < 0x7FFFFFFF, s"Matrix.ValueWindow - window too large (${ref.winSize} exceeds 32-bit)")
+        val winSizeI = ref.winSize.toInt
+        stream.MatrixValueWindow(matrix = reader, winSize = winSizeI, dims = ref.dims)
       }
 
       override def productPrefix: String = s"Matrix$$PlayLinear$$WithRef"
@@ -246,9 +253,8 @@ final case class Matrix(name: String) extends Lazy.Expander[Unit] with UGB.Key {
   def rank: Matrix.Rank = Matrix.Rank(this)
 
   /** Unrolls all dimensions in time. */
-  def valueSeq: Matrix.ValueSeq = Matrix.ValueSeq(this)
-  
-  def valueWindow(dims: Dim*): Matrix.ValueSeq = Matrix.ValueSeq(this)
+  def valueSeq               : Matrix.ValueSeq    = Matrix.ValueSeq   (this)
+  def valueWindow(dims: Dim*): Matrix.ValueWindow = Matrix.ValueWindow(this, dims.toIndexedSeq)
 
   def spec: Matrix.Spec = Matrix.Spec(this, Vector.empty)
 }
