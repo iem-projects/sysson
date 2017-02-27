@@ -16,10 +16,10 @@ package at.iem.sysson
 package fscape.graph
 
 import de.sciss.fscape.UGen.Aux
-import de.sciss.fscape.graph.ConstantL
+import de.sciss.fscape.graph.{ConstantI, ConstantL}
 import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
 import de.sciss.fscape.{GE, Lazy, UGenGraph, UGenInLike}
-import de.sciss.serial.DataOutput
+import de.sciss.serial.{DataOutput, ImmutableSerializer}
 
 object Dim {
   object Values {
@@ -58,7 +58,8 @@ object Dim {
     protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike = {
       val ub    = UGB.get(b)
       val value = ub.requestInput(this)
-      ConstantL(value.size)
+      val sz    = value.variable.shape(value.index)
+      ConstantI(sz /* value.size */)
     }
   }
 
