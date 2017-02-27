@@ -16,8 +16,10 @@ package de.sciss.fscape
 package stream
 
 import akka.stream.stage.InHandler
-import akka.stream.{Attributes, FanInShape10, FanInShape11}
+import akka.stream.{Attributes, FanInShape10}
 import de.sciss.fscape.stream.impl.{DemandAuxInHandler, DemandChunkImpl, DemandFilterLogic, DemandInOutImpl, DemandProcessInHandler, NodeImpl, Out1DoubleImpl, Out1LogicImpl, ProcessOutHandlerImpl, StageImpl}
+
+import scala.annotation.switch
 
 object BlobVoices {
   def apply(in: OutD, width: OutI, height: OutI, minWidth: OutI, minHeight: OutI, voices: OutI,
@@ -59,7 +61,16 @@ object BlobVoices {
     def createLogic(attr: Attributes) = new Logic(shape)
   }
 
-  private final case class BlobBounds(xMin: Int, xMax: Int, yMin: Int, yMax: Int)
+  private final class Blob {
+    var xMin        = 0.0
+    var xMax        = 0.0
+    var yMin        = 0.0
+    var yMax        = 0.0
+
+    var numVertices = 0
+    var vertexX: Array[Double] = _
+    var vertexY: Array[Double] = _
+  }
 
   private final class Logic(shape: Shape)(implicit ctrl: Control)
     extends NodeImpl(name, shape)
@@ -117,10 +128,12 @@ object BlobVoices {
     private[this] var blobVerticesOff         = 0
     private[this] var blobVerticesRemain      = 0
 
-    private[this] var blobData: Array[BlobBounds] = _
+    private[this] var blobs: Array[Blob] = _
     private[this] var blobsBoundsRead         = 0
     private[this] var blobsNumVerticesRead    = 0
-    private[this] var blobsVerticesRead       = 0
+    private[this] var blobsVerticesMissing    = 0
+    private[this] var blobsVerticesBlobIdx    = 0
+    private[this] var blobsVerticesVertexIdx  = 0
 
     private object BlobNumInHandler extends InHandler {
       def onPush(): Unit =
@@ -186,7 +199,7 @@ object BlobVoices {
     setInHandler(shape.in9, BlobVerticesInHandler   )
     new ProcessOutHandlerImpl (shape.out , this)
 
-    @inline private[this] def canWriteToWindow        = readFromWinRemain     == 0 && inValid
+    @inline private[this] def canWriteToWindow        = readFromWinRemain     == 0 && inValid && !_statePrepareProcess
     @inline private[this] def canReadBlobNum          = blobNumRemain         == 0 && isAvailable(shape.in6)
     @inline private[this] def canReadBlobBounds       = blobBoundsRemain      == 0 && isAvailable(shape.in7)
     @inline private[this] def canReadBlobNumVertices  = blobNumVerticesRemain == 0 && isAvailable(shape.in8)
@@ -223,7 +236,7 @@ object BlobVoices {
       freeInputBuffers()
       freeOutputBuffers()
       winBuf    = null
-      blobData  = null
+      blobs  = null
     }
 
     protected def readMainIns(): Int = {
@@ -404,6 +417,7 @@ object BlobVoices {
     @inline private def updateBlobNumVerticesCanRead(): Unit = _blobNumVerticesCanRead  = isAvailable(shape.in8)
     @inline private def updateBlobVerticesCanRead   (): Unit = _blobVerticesCanRead     = isAvailable(shape.in9)
 
+    private[this] var _statePrepareProcess      = false
     private[this] var _stateReadBlobNum         = false
     private[this] var _stateReadBlobBounds      = false
     private[this] var _stateReadBlobNumVertices = false
@@ -440,8 +454,9 @@ object BlobVoices {
           }
 
           if (writeToWinRemain == 0 || flushIn) {
-            _stateReadBlobNum = true
-            stateChange       = true
+            _statePrepareProcess  = true
+            _stateReadBlobNum     = true
+            stateChange           = true
             // logStream(s"processWindow(); readFromWinRemain = $readFromWinRemain")
           }
         }
@@ -451,17 +466,22 @@ object BlobVoices {
         if (canReadBlobNum) readBlobNumIn()
         if (blobNumRemain > 0) {
           numBlobs            = bufIn6.buf(blobNumOff)
-          if (blobData == null || blobData.length < numBlobs) {
-            blobData = new Array[BlobBounds](numBlobs)
+          if (blobs == null || blobs.length < numBlobs) {
+            blobs = Array.fill[Blob](numBlobs)(new Blob)
           }
-          blobNumRemain        -= 1
-          blobNumOff           += 1
-          blobsBoundsRead       = 0
-          _stateReadBlobNum     = false
-          _stateReadBlobBounds  = true
-          stateChange           = true
+          blobNumRemain            -= 1
+          blobNumOff               += 1
+          blobsBoundsRead           = 0
+          blobsVerticesMissing      = 0
+          blobsVerticesBlobIdx      = 0
+          blobsVerticesVertexIdx    = 0
+          _stateReadBlobNum         = false
+          _stateReadBlobBounds      = true
+          _stateReadBlobNumVertices = true
+          _stateReadBlobVertices    = true
+          stateChange               = true
         } else if (blobNumEnded) {
-          _stateComplete        = true
+          _stateComplete            = true
           return stateChange
         }
       }
@@ -470,25 +490,31 @@ object BlobVoices {
         if (canReadBlobBounds) readBlobBoundsIn()
         val chunk = math.min(blobBoundsRemain, numBlobs * 4 - blobsBoundsRead)
         if (chunk > 0) {
-          var i = 0
-          while (i < chunk) {
-            ???
-//            val xMin         = bufIn7 .buf(blobDataOff)
-//            val xMax         = bufIn8 .buf(blobDataOff)
-//            val yMin         = bufIn9 .buf(blobDataOff)
-//            val yMax         = bufIn10.buf(blobDataOff)
-//            val blob         = BlobBounds(xMin = xMin, xMax = xMax, yMin = yMin, yMax = yMax)
-//            blobData(blobsRead) = blob
-//            blobDataRemain  -= 1
-//            blobDataOff     += 1
-//            blobsRead       += 1
-            i += 1
+          var _boundsOff  = blobBoundsOff
+          var _boundsRead = blobsBoundsRead
+          val _buf        = bufIn7.buf
+          val stop        = _boundsOff + chunk
+          while (_boundsOff < stop) {
+            val blobIdx = _boundsRead / 4
+            val blob    = blobs(blobIdx)
+            val coord   = _buf(_boundsOff)
+            (_boundsRead % 4: @switch) match {
+              case 0 => blob.xMin = coord
+              case 1 => blob.xMax = coord
+              case 2 => blob.yMin = coord
+              case 3 => blob.yMax = coord
+            }
+            _boundsOff  += 1
+            _boundsRead += 1
           }
-          stateChange = true
+          blobBoundsOff     = _boundsOff
+          blobBoundsRemain -= chunk
+          blobsBoundsRead   = _boundsRead
+          stateChange       = true
         }
         if (blobsBoundsRead == numBlobs * 4) {
           _stateReadBlobBounds      = false
-          _stateReadBlobNumVertices = true
+          _stateProcessBlobs        = !(_stateReadBlobNumVertices || _stateReadBlobVertices)
           stateChange               = true
 
         } else if (blobBoundsRemain == 0 && blobBoundsEnded) {
@@ -498,22 +524,95 @@ object BlobVoices {
       }
 
       if (_stateReadBlobNumVertices) {
-        ???
+        if (canReadBlobNumVertices) readBlobNumVerticesIn()
+        val chunk = math.min(blobNumVerticesRemain, numBlobs - blobsNumVerticesRead)
+        if (chunk > 0) {
+          var _numVerticesOff   = blobNumVerticesOff
+          var _numVerticesRead  = blobsNumVerticesRead
+          val _buf              = bufIn8.buf
+          val stop              = _numVerticesOff + chunk
+          while (_numVerticesOff < stop) {
+            val blobIdx       = _numVerticesRead
+            val blob          = blobs(_numVerticesRead)
+            val num           = _buf(_numVerticesOff)
+            blob.numVertices  = num
+            blob.vertexX      = new Array[Double](num)
+            blob.vertexY      = new Array[Double](num)
+            blobsVerticesMissing += num * 2
+            _numVerticesOff  += 1
+            _numVerticesRead += 1
+          }
+          blobNumVerticesOff    = _numVerticesOff
+          blobNumVerticesRemain -= chunk
+          blobsNumVerticesRead  = _numVerticesRead
+          stateChange           = true
+        }
+        if (blobsNumVerticesRead == numBlobs) {
+          _stateReadBlobNumVertices = false
+          _stateProcessBlobs        = !(_stateReadBlobBounds || _stateReadBlobVertices)
+          stateChange               = true
+
+        } else if (blobNumVerticesRemain == 0 && blobNumVerticesEnded) {
+          _stateComplete            = true
+          return stateChange
+        }
       }
 
       if (_stateReadBlobVertices) {
-        ???
+        if (canReadBlobVertices) readBlobVerticesIn()
+        val chunk = math.min(blobVerticesRemain, blobsVerticesMissing)
+        if (chunk > 0) {
+          var _verticesOff    = blobVerticesOff
+          val _buf            = bufIn9.buf
+          var _blobIdx        = blobsVerticesBlobIdx
+          var _vIdx           = blobsVerticesVertexIdx
+          val stop            = _verticesOff + chunk
+          while (_verticesOff < stop) {
+            val blob    = blobs(_blobIdx)
+            val num     = blob.numVertices
+            val chunk2  = math.min(num * 2 - _vIdx, stop - _verticesOff)
+            if (chunk2 > 0) {
+              val stop2 = _verticesOff + chunk2
+              while (_verticesOff < stop2) {
+                val coord     = _buf(_verticesOff)
+                val table     = if (_vIdx % 2 == 0) blob.vertexX else blob.vertexY
+                table(_vIdx / 2) = coord
+                _verticesOff += 1
+                _vIdx        += 1
+              }
+            } else {
+              _blobIdx += 1
+              _vIdx     = 0
+            }
+          }
+          blobsVerticesBlobIdx    = _blobIdx
+          blobsVerticesVertexIdx  = _vIdx
+          blobsVerticesMissing   -= chunk
+          blobVerticesOff         = _verticesOff
+          blobVerticesRemain     -= chunk
+          stateChange             = true
+        }
+        if (blobsVerticesMissing == 0 && !_stateReadBlobNumVertices) {
+          _stateReadBlobVertices    = false
+          _stateProcessBlobs        = !_stateReadBlobBounds
+          stateChange               = true
+
+        } else if (blobVerticesRemain == 0 && blobVerticesEnded) {
+          _stateComplete            = true
+          return stateChange
+        }
       }
 
       if (_stateProcessBlobs) {
-        readFromWinRemain   = processWindow(writeToWinOff = writeToWinOff) // , flush = flushIn)
-        writeToWinOff       = 0
-        readFromWinOff      = 0
-        isNextWindow        = true
-        auxInOff           += 1
-        auxInRemain        -= 1
-        _stateProcessBlobs  = false
-        stateChange         = true
+        readFromWinRemain     = processWindow(writeToWinOff = writeToWinOff) // , flush = flushIn)
+        writeToWinOff         = 0
+        readFromWinOff        = 0
+        isNextWindow          = true
+        auxInOff             += 1
+        auxInRemain          -= 1
+        _stateProcessBlobs    = false
+        _statePrepareProcess  = false
+        stateChange           = true
       }
 
       if (readFromWinRemain > 0) {
@@ -570,7 +669,7 @@ object BlobVoices {
       val writeOffI = writeToWinOff.toInt
       if (writeOffI == 0) return writeToWinOff
 
-      ???
+      println("TODO: BlobVoices.processWindow")
 
       val b = winBuf
 
