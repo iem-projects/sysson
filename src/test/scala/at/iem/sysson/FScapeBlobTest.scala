@@ -84,9 +84,9 @@ object FScapeBlobTest extends App {
 //      height.poll(0, "height")
 //      // val el        = (winSzIn / ControlBlockSize()).ceil
       val winEl     = BufferDisk(win) // win.elastic(el * 2)
-      val blobs     = Blobs2D(in = win, width = width, height = height, thresh = 0.265)
-      val minWidth  = 10.0 / width    // XXX TODO --- make user selectable
-      val minHeight =  3.0 / height   // XXX TODO --- make user selectable
+      val blobs     = Blobs2D(in = win, width = width, height = height, thresh = 0.13 /* 0.265 */)
+      val minWidth  = 10.0 // / width    // XXX TODO --- make user selectable
+      val minHeight =  3.0 // / height   // XXX TODO --- make user selectable
 
 //      Frames(win).poll(Metro(winSzIn).tail, "win-read")
 //      printRange(blobs.numBlobs, 0, 9999, "num-blobs")
@@ -97,14 +97,13 @@ object FScapeBlobTest extends App {
 
 //      Frames(mOut).poll(Metro(winSzOut).tail, "voices-out")
 
-
       val frames = MatrixOut("out", specOut, mOut)
-      frames.poll(Metro(winSzOut).tail, "matrix-written")
+      frames.poll(Metro(winSzOut).tail, "advance")
     }
     f.graph() = g
 
     val locOut  = ArtifactLocation.newConst[S](dirOut)
-    val artOut  = Artifact(locOut, Artifact.Child("blobs.nc"))
+    val artOut  = Artifact(locOut, Artifact.Child("blobs3.nc"))
 
     f.attr.put("var", red /* mat */)
     f.attr.put("out", artOut)
