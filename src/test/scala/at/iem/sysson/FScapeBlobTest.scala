@@ -23,20 +23,22 @@ object FScapeBlobTest extends App {
   folder.mkdir()
   Cache.init(folder = folder, capacity = Limit())
 
-  val dir   = userHome / "sysson" / "nc"
-  val mName = "5x30-climatology_2001-05-01_2016-05-01_ta_anom.nc"
-  val inF   = dir / mName
+  val dirIn   = userHome / "sysson" / "nc"
+  val mName   = "5x30-climatology_2001-05-01_2016-05-01_ta_anom.nc"
+  val inF     = dirIn / mName
   require(inF.isFile)
-  val vName = "Temperature"
+  val vName   = "Temperature"
+  val dirOut  = userHome / "Documents" / "temp" / "fscape_test"
+  dirOut.mkdirs()
 
   import WorkspaceHandle.Implicits.dummy
   implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
   cursor.step { implicit tx =>
-    val loc = ArtifactLocation.newConst[S](dir)
-    val art = Artifact(loc, Artifact.Child(mName))
-    val ds  = DataSource(art)
-    val mat = ds.variables.find(_.name == vName).getOrElse(sys.error(s"No variable '$vName' in nc file"))
+    val locIn = ArtifactLocation.newConst[S](dirIn)
+    val artIn = Artifact(locIn, Artifact.Child(mName))
+    val ds    = DataSource(artIn)
+    val mat   = ds.variables.find(_.name == vName).getOrElse(sys.error(s"No variable '$vName' in nc file"))
 
     val f   = FScape[S]
     val g = Graph {
@@ -54,13 +56,20 @@ object FScapeBlobTest extends App {
       val s1        = specIn.moveLast(d1)
       val s2        = s1    .drop    (d2)
       val specOut   = s2    .append  (d3)
-      val win       = mIn.valueWindow(d2, d1)  // row-dim, col-dim
-      val width     = d1.size
-      val height    = d2.size
+      val win0      = mIn.valueWindow(d1, d2)  // row-dim, col-dim
+      val taLo      = 0.0
+      val taHi      = 3.5
+      val win1      = win0.max(taLo).min(taHi) / taHi
+      val win       = Gate(win1, !win1.isNaN)
+      win.poll(win.isNaN, "NaN!")
+      val width     = d2.size
+      val height    = d1.size
       val winSize   = width * height
+      width .poll(0, "width")
+      height.poll(0, "height")
       val blobs     = Blobs2D(in = win, width = width, height = height, thresh = 0.265)
-      val minWidth  =  3.0 / width    // XXX TODO --- make user selectable
-      val minHeight = 10.0 / height   // XXX TODO --- make user selectable
+      val minWidth  = 10.0 / width    // XXX TODO --- make user selectable
+      val minHeight =  3.0 / height   // XXX TODO --- make user selectable
       val el        = (winSize / ControlBlockSize()).ceil
       val mOut      = BlobVoices(in = win.elastic(el), width = width, height = height, blobs = blobs,
         minWidth = minWidth, minHeight = minHeight, voices = voices)
@@ -69,7 +78,7 @@ object FScapeBlobTest extends App {
     }
     f.graph() = g
 
-    val locOut  = ArtifactLocation.newConst[S](userHome / "Documents" / "temp")
+    val locOut  = ArtifactLocation.newConst[S](dirOut)
     val artOut  = Artifact(locOut, Artifact.Child("blobs.nc"))
 
     f.attr.put("var", mat)
