@@ -55,11 +55,13 @@ import de.sciss.fscape.{GE, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource, str
   *                   read as one element per matrix.
   * @param minHeight  the minimum blob height to be considered.
   *                   read as one element per matrix.
+  * @param thresh     threshold in `in` for elements to be counted
+  *                   in the slices
   * @param voices     the maximum number of parallel voices.
   *                   read at initialization time only.
   */
 final case class BlobVoices(in: GE, width: GE, height: GE, blobs: Blobs2D, minWidth: GE = 0, minHeight: GE = 0,
-                            voices: GE = 4)
+                            thresh: GE = 0.0, voices: GE = 4)
   extends UGenSource.SingleOut {
 
   protected def makeUGens(implicit b: UGenGraph.Builder): UGenInLike =
@@ -67,7 +69,7 @@ final case class BlobVoices(in: GE, width: GE, height: GE, blobs: Blobs2D, minWi
       expand(in),
       expand(width)     , expand(height),
       expand(minWidth)  , expand(minHeight),
-      expand(voices),
+      expand(thresh)    , expand(voices),
       expand(blobs.numBlobs),
       expand(blobs.bounds),
       expand(blobs.numVertices),
@@ -78,9 +80,9 @@ final case class BlobVoices(in: GE, width: GE, height: GE, blobs: Blobs2D, minWi
     UGen.SingleOut(this, args)
 
   def makeStream(args: Vec[StreamIn])(implicit b: stream.Builder): StreamOut = {
-    val Vec(in, width, height, minWidth, minHeight, voices, numBlobs, bounds, numVertices, vertices) = args
+    val Vec(in, width, height, minWidth, minHeight, thresh, voices, numBlobs, bounds, numVertices, vertices) = args
     stream.BlobVoices(in = in.toDouble, width = width.toInt, height = height.toInt,
-      minWidth = minWidth.toInt, minHeight = minHeight.toInt, voices = voices.toInt,
+      minWidth = minWidth.toInt, minHeight = minHeight.toInt, thresh = thresh.toDouble, voices = voices.toInt,
       numBlobs = numBlobs.toInt, bounds = bounds.toDouble,
       numVertices = numVertices.toInt, vertices = vertices.toDouble
     )
