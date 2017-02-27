@@ -17,7 +17,6 @@ package fscape
 package graph
 
 import de.sciss.fscape.UGenSource.{expand, unwrap}
-import de.sciss.fscape.graph.Blobs2D
 import de.sciss.fscape.stream.{StreamIn, StreamOut}
 import de.sciss.fscape.{GE, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource, stream}
 
@@ -48,22 +47,26 @@ import de.sciss.fscape.{GE, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource, str
   * constant, and the box and slice values vary over time. Blobs are always
   * guaranteed to coherently occupying the same voice.
   *
-  * @param in         the input matrices
-  * @param width      the number of columns in the input matrices.
-  *                   read as one element per matrix.
-  * @param height     the number of rows in the input matrices.
-  *                   read as one element per matrix.
-  * @param blobs      the output from the blob detection
-  * @param minWidth   the minimum blob width to be considered.
-  *                   read as one element per matrix.
-  * @param minHeight  the minimum blob height to be considered.
-  *                   read as one element per matrix.
-  * @param thresh     threshold in `in` for elements to be counted
-  *                   in the slices
-  * @param voices     the maximum number of parallel voices.
-  *                   read at initialization time only.
+  * @param in           the input matrices
+  * @param width        the number of columns in the input matrices.
+  *                     read as one element per matrix.
+  * @param height       the number of rows in the input matrices.
+  *                     read as one element per matrix.
+  * @param numBlobs     the `numBlobs` output from the blob detection
+  * @param bounds       the `bounds` output from the blob detection
+  * @param numVertices  the `numVertices` output from the blob detection
+  * @param vertices     the `vertices` output from the blob detection
+  * @param minWidth     the minimum blob width to be considered.
+  *                     read as one element per matrix.
+  * @param minHeight    the minimum blob height to be considered.
+  *                     read as one element per matrix.
+  * @param thresh       threshold in `in` for elements to be counted
+  *                     in the slices
+  * @param voices       the maximum number of parallel voices.
+  *                     read at initialization time only.
   */
-final case class BlobVoices(in: GE, width: GE, height: GE, blobs: Blobs2D, minWidth: GE = 0, minHeight: GE = 0,
+final case class BlobVoices(in: GE, width: GE, height: GE, numBlobs: GE, bounds: GE,
+                            numVertices: GE, vertices: GE, minWidth: GE = 0, minHeight: GE = 0,
                             thresh: GE = 0.0, voices: GE = 4)
   extends UGenSource.SingleOut {
 
@@ -73,10 +76,10 @@ final case class BlobVoices(in: GE, width: GE, height: GE, blobs: Blobs2D, minWi
       expand(width)     , expand(height),
       expand(minWidth)  , expand(minHeight),
       expand(thresh)    , expand(voices),
-      expand(blobs.numBlobs),
-      expand(blobs.bounds),
-      expand(blobs.numVertices),
-      expand(blobs.vertices)
+      expand(numBlobs),
+      expand(bounds),
+      expand(numVertices),
+      expand(vertices)
     ))
 
   protected def makeUGen(args: Vec[UGenIn])(implicit b: UGenGraph.Builder): UGenInLike =

@@ -808,7 +808,11 @@ object BlobVoices {
             import de.sciss.numbers.Implicits._
 //            val sliceMean = sliceSum / boxHeight
 //            sliceCenter   = (sliceCenter / sliceSum).clip(boxTop, boxBottom - 1)
-            val sliceMean = sliceSum / boxWidth
+            val sliceMean = if (sliceCnt > 0)
+              sliceSum / sliceCnt
+            else
+              _bufIn((boxLeft + boxRight) / 2 + offY)   // XXX TODO --- what else could we do?
+
             sliceCenter   = if (sliceSum > 0)
               (sliceCenter / sliceSum).clip(boxLeft, boxRight - 1)
             else

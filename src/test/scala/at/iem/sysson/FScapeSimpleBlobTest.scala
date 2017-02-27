@@ -40,7 +40,9 @@ object FScapeSimpleBlobTest extends App {
       val blobs   = Blobs2D   (in = in , width = width, height = height, thresh = 0.3)
       val inE     = mkImageIn()
       val voices  = 4
-      val blobVc  = BlobVoices(in = inE, width = width, height = height, blobs = blobs, voices = voices)
+      val blobVc  = BlobVoices(in = inE, width = width, height = height,
+        numBlobs = blobs.numBlobs, bounds = blobs.bounds, numVertices = blobs.numVertices,
+        vertices = blobs.vertices, voices = voices)
 
       def printAll(sig: GE, label: String): Unit = {
         val dup = sig zip sig // ResizeWindow(sig, 1, 0, 1)

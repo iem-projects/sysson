@@ -24,7 +24,8 @@ object FScapeBlobTest extends App {
   Cache.init(folder = folder, capacity = Limit())
 
   val dirIn   = userHome / "sysson" / "nc"
-  val mName   = "5x30-climatology_2001-05-01_2016-05-01_ta_anom.nc"
+//  val mName   = "5x30-climatology_2001-05-01_2016-05-01_ta_anom.nc"
+  val mName   = "5x30-climatology_2001-05-01_2016-05-01_ta_anom2.nc"
   val inF     = dirIn / mName
   require(inF.isFile)
   val vName   = "Temperature"
@@ -79,31 +80,53 @@ object FScapeBlobTest extends App {
       val taHi      = 3.5
       val win1      = win0.max(taLo).min(taHi) / taHi
       val win       = Gate(win1, !win1.isNaN)
+//      val widthPad  = width  + 2
+//      val heightPad = height + 2
+
+//      val border    = AffineTransform2D.translate(win,
+//        widthIn = width, heightIn = height, widthOut = widthPad, heightOut = heightPad,
+//        tx = 1, ty = 1)
+
+//      val border0 = ResizeWindow(win    , size = width            , start = -1       , stop = +1       )
+//      val border  = ResizeWindow(border0, size = widthPad * height, start = -widthPad, stop = +widthPad)
+      val border = win
+
       // win.poll(win.isNaN, "NaN!")
 //      width .poll(0, "width")
 //      height.poll(0, "height")
 //      // val el        = (winSzIn / ControlBlockSize()).ceil
-      val winEl     = BufferDisk(win) // win.elastic(el * 2)
-      val blobs     = Blobs2D(in = win, width = width, height = height, thresh = 0.13 /* 0.265 */)
+      val thresh    = 0.21 // 0.26
+      val winEl     = BufferDisk(border /* win */) // win.elastic(el * 2)
+      val blobs     = Blobs2D(in = border /* win */, width = width, height = height,
+        thresh = thresh /* 0.265 */, pad = 1)
       val minWidth  = 10.0 // / width    // XXX TODO --- make user selectable
-      val minHeight =  3.0 // / height   // XXX TODO --- make user selectable
+      val minHeight =  4.0 // / height   // XXX TODO --- make user selectable
 
 //      Frames(win).poll(Metro(winSzIn).tail, "win-read")
 //      printRange(blobs.numBlobs, 0, 9999, "num-blobs")
 
-      val mOut      = BlobVoices(in = winEl, width = width, height = height, blobs = blobs,
+      val numBlobs    = blobs.numBlobs    //     .elastic(1024)
+      val bounds      = blobs.bounds      // - 1
+      val numVertices = blobs.numVertices //     .elastic(1024)
+      val vertices    = blobs.vertices    // - 1
+      val mOut0       = BlobVoices(in = winEl, width = width, height = height,
+        numBlobs = numBlobs, bounds = bounds, numVertices = numVertices, vertices = vertices,
         minWidth = minWidth, minHeight = minHeight, voices = voices)
       val winSzOut  = blobSz * height
+
+      val mOut    = mOut0 // .drop(blobSz)
 
 //      Frames(mOut).poll(Metro(winSzOut).tail, "voices-out")
 
       val frames = MatrixOut("out", specOut, mOut)
       frames.poll(Metro(winSzOut).tail, "advance")
+
+      RunningSum(numBlobs).last.poll(0, "total-blobs")
     }
     f.graph() = g
 
     val locOut  = ArtifactLocation.newConst[S](dirOut)
-    val artOut  = Artifact(locOut, Artifact.Child("blobs3.nc"))
+    val artOut  = Artifact(locOut, Artifact.Child("blobs12.nc"))
 
     f.attr.put("var", red /* mat */)
     f.attr.put("out", artOut)
