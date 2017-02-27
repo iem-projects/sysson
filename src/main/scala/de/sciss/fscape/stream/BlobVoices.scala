@@ -15,11 +15,14 @@
 package de.sciss.fscape
 package stream
 
+import java.awt.Rectangle
+import java.awt.geom.{Area, Path2D}
+
 import akka.stream.stage.InHandler
 import akka.stream.{Attributes, FanInShape10}
 import de.sciss.fscape.stream.impl.{DemandAuxInHandler, DemandChunkImpl, DemandFilterLogic, DemandInOutImpl, DemandProcessInHandler, NodeImpl, Out1DoubleImpl, Out1LogicImpl, ProcessOutHandlerImpl, StageImpl}
 
-import scala.annotation.switch
+import scala.annotation.{switch, tailrec}
 
 object BlobVoices {
   def apply(in: OutD, width: OutI, height: OutI, minWidth: OutI, minHeight: OutI, voices: OutI,
@@ -67,6 +70,9 @@ object BlobVoices {
     var yMin        = 0.0
     var yMax        = 0.0
 
+    def width : Double = xMax - xMin
+    def height: Double = yMax - yMin
+
     var numVertices = 0
     var vertexX: Array[Double] = _
     var vertexY: Array[Double] = _
@@ -80,8 +86,10 @@ object BlobVoices {
       with DemandInOutImpl  [Shape]
       with Out1DoubleImpl   [Shape] {
 
-    private[this] var winSize           = 0
-    private[this] var winBuf: Array[Double] = _
+    private[this] var winSizeIn         = 0
+    private[this] var winSizeOut        = 0
+    private[this] var winBufIn : Array[Double] = _
+    private[this] var winBufOut: Array[Double] = _
     private[this] var width             = 0
     private[this] var height            = 0
     private[this] var minWidth          = 0
@@ -235,8 +243,9 @@ object BlobVoices {
     override protected def stopped(): Unit = {
       freeInputBuffers()
       freeOutputBuffers()
-      winBuf    = null
-      blobs  = null
+      winBufIn    = null
+      winBufOut   = null
+      blobs       = null
     }
 
     protected def readMainIns(): Int = {
@@ -635,13 +644,14 @@ object BlobVoices {
       _stateComplete || (inputsEnded && writeToWinOff == 0 && readFromWinRemain == 0)
 
     private def startNextWindow(): Int = {
-      val oldSize = winSize
-      val inOff   = auxInOff
+      val oldWinSzIn  = winSizeIn
+      val oldWinSzOut = winSizeOut
+      val inOff       = auxInOff
       if (bufIn1 != null && inOff < bufIn1.size) {
         width = math.max(1, bufIn1.buf(inOff))
       }
       if (bufIn2 != null && inOff < bufIn2.size) {
-        height = bufIn2.buf(inOff)
+        height = math.max(1, bufIn2.buf(inOff))
       }
       if (bufIn3 != null && inOff < bufIn3.size) {
         minWidth = bufIn3.buf(inOff)
@@ -650,30 +660,280 @@ object BlobVoices {
         minHeight = bufIn4.buf(inOff)
       }
       if (bufIn5 != null && inOff < bufIn5.size) {
-        voices = bufIn5.buf(inOff)
+        voices = math.max(1, bufIn5.buf(inOff))
       }
-      winSize = width * height
-      if (winSize != oldSize) {
-        winBuf = new Array[Double](winSize)
+      winSizeIn = width * height
+      if (winSizeIn != oldWinSzIn) {
+        winBufIn = new Array[Double](winSizeIn)
       }
-      winSize
+      val blobDimSz = BlobVoice.totalNumField * voices
+      winSizeOut = blobDimSz * width
+      if (winSizeOut != oldWinSzOut) {
+        winBufOut = new Array[Double](winSizeOut)
+      }
+      winSizeIn
     }
 
     private def copyInputToWindow(writeToWinOff: Int, chunk: Int): Unit =
-      Util.copy(bufIn0.buf, mainInOff, winBuf, writeToWinOff, chunk)
+      Util.copy(bufIn0.buf, mainInOff, winBufIn, writeToWinOff, chunk)
 
     private def copyWindowToOutput(readFromWinOff: Int, outOff: Int, chunk: Int): Unit =
-      Util.copy(winBuf, readFromWinOff, bufOut0.buf, outOff, chunk)
+      Util.copy(winBufOut, readFromWinOff, bufOut0.buf, outOff, chunk)
+
+    // ---- the fun bit ----
+    // this is mostly the translation from sysson-experiments/AnomaliesBlobs.scala
 
     private def processWindow(writeToWinOff: Int): Int = {
-      val writeOffI = writeToWinOff.toInt
-      if (writeOffI == 0) return writeToWinOff
+      // if (writeToWinOff == 0) return writeToWinOff
 
-      println("TODO: BlobVoices.processWindow")
+      val _blobs      = blobs
+      val _width      = width
+      val _height     = height
+      val _minWidth   = minWidth
+      val _minHeight  = minHeight
+      val _numBlobs   = numBlobs
+      val _bufIn      = winBufIn
+      val _thresh     = 1.0   // XXX TODO --- user customizable
 
-      val b = winBuf
+      val blobsAllB = Vector.newBuilder[BlobVoice]
+      blobsAllB.sizeHint(_numBlobs)
 
-      writeToWinOff
+      val path  = new Path2D.Double
+      val rect  = new Rectangle
+      val area  = new Area
+
+      var blobIdx = 0
+      while (blobIdx < _numBlobs) {
+        val blob  = _blobs(blobIdx)
+        val ok    = blob.width >= _minWidth && blob.height >= _minHeight
+        if (ok) {
+          path.reset()
+          var vIdx = 0
+          while (vIdx < blob.numVertices) {
+            val x = blob.vertexX(vIdx)
+            val y = blob.vertexY(vIdx)
+            if (vIdx == 0) {
+              path.moveTo(x, y)
+            } else {
+              path.lineTo(x, y)
+            }
+            vIdx += 1
+          }
+          path.closePath()
+
+          area.reset()
+          val br          = path.getBounds
+          val blobLeft    = math.max(0, br.x /* - 1 */)
+          val blobWidth   = math.min(_width - blobLeft, br.width)
+          val blobRight   = blobLeft + blobWidth
+          val blobTop     = math.max(0, br.y /* - 1 */)
+          val blobHeight  = math.min(_height  - blobTop , br.height)
+          val blobBottom  = blobTop + blobHeight
+
+          val slices      = new Array[BlobSlice](blobWidth)
+
+          var x           = blobLeft
+          var sliceIdx    = 0
+          while (x < blobRight) {
+            rect.x             = x /* + 1 */
+            rect.y             = 0
+            rect.width         = 1
+            rect.height        = height
+            val a           = new Area(path)
+            a.intersect(new Area(rect))
+            val b           = a.getBounds2D
+            area.add(new Area(b))
+            val boxTop      = math.max(blobTop   , math.floor(b.getMinY).toInt)
+            val boxBottom   = math.min(blobBottom, math.ceil (b.getMaxY).toInt)
+            val boxHeight   = boxBottom - boxTop
+            var y           = boxTop
+            var sliceSum    = 0.0
+            var sliceCenter = 0.0
+            var sliceCnt    = 0
+            while (y < boxBottom) {
+//              val value = _bufIn(x * _height + y)
+              val value = _bufIn(x + _width * y)
+              if (value > _thresh) {
+                sliceSum    += value
+                sliceCenter += value * y
+                sliceCnt    += 1
+              }
+              y += 1
+            }
+            import de.sciss.numbers.Implicits._
+            val sliceMean = sliceSum / boxHeight
+            sliceCenter   = (sliceCenter / sliceSum).clip(boxTop, boxBottom - 1)
+
+            y = boxTop
+            var sliceStdDev = 0.0
+            while (y < boxBottom) {
+//              val value  = _bufIn(x * _height + y)
+              val value = _bufIn(x + _width * y)
+              if (value > _thresh) {
+              val d = value - sliceMean
+                sliceStdDev += d * d
+              }
+              y += 1
+            }
+            if (sliceCnt > 0) sliceStdDev = math.sqrt(sliceStdDev / (sliceCnt - 1))
+
+            val slice = BlobSlice(
+              boxTop        = boxTop,
+              boxHeight     = boxHeight,
+              sliceMean     = sliceMean,
+              sliceStdDev   = sliceStdDev,
+              sliceCenter   = sliceCenter
+            )
+
+            slices(sliceIdx) = slice
+            x  += 1
+            sliceIdx += 1
+          }
+          // bloody floating point ops and rounding can lead to difference here
+          //        val ri = out.getBounds
+          //        assert(ri == br, s"ri = $ri; br = $br")
+
+          val bv = BlobVoice(
+            id          = -1,
+            blobLeft    = blobLeft,
+            blobTop     = blobTop,
+            blobWidth   = blobWidth,
+            blobHeight  = blobHeight,
+            slices      = slices
+          )
+          blobsAllB += bv
+        }
+        blobIdx += 1
+      }
+
+      val blobsAll: Vector[BlobVoice] = blobsAllB.result()
+      val _voices = voices
+
+      // call with shapes sorted by size in ascending order!
+      @tailrec def filterOverlaps(rem: Vector[BlobVoice], out: Vector[BlobVoice], id: Int): Vector[BlobVoice] =
+      rem match {
+        case head +: tail =>
+          val numOverlap = tail.count(_.overlaps(head))
+          val idNext  = if (numOverlap > _voices) id  else id + 1
+          val outNext = if (numOverlap > _voices) out else out :+ head.copy(id = id)
+          filterOverlaps(rem = tail, out = outNext, id = idNext)
+
+        case _ => out
+      }
+
+      val blobFlt = filterOverlaps(blobsAll.sortBy(_.blobSize), out = Vector.empty, id = 1)
+        .sortBy(b => (b.blobLeft, b.blobTop))
+
+      val blobDimSz = BlobVoice.totalNumField * _voices
+      val _bufOut   = winBufOut // Array.ofDim[Double](_width, blobDimSz)
+
+      val idIndices = 0 until blobDimSz by BlobVoice.totalNumField
+
+      @tailrec def mkArray(x: Int, activeBefore: Vector[BlobVoice], rem: Vector[BlobVoice]): Unit =
+        if (x < _width) {
+          val active1   = activeBefore .filterNot(_.blobRight == x)
+          val (activeAdd, remRem) = rem.partition(_.blobLeft  == x)
+          val activeNow = active1 ++ activeAdd
+          val (activeOld, activeNew) = activeNow.partition(activeBefore.contains)
+          if (activeOld.nonEmpty) {
+            val xM = x - 1
+            activeOld.foreach { blob =>
+              val sliceIdx  = x - blob.blobLeft
+              val outY      = idIndices.find { y =>
+                _bufOut(xM + y * _width) == blob.id
+              } .get  // same slot as before
+              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + outY * _width, scan = _width)
+            }
+          }
+          if (activeNew.nonEmpty) {
+            activeNew.foreach { blob =>
+              val sliceIdx  = x - blob.blobLeft
+              val outY      = idIndices.find { y =>
+                _bufOut(x + y * _width) == 0
+              } .get  // empty slot
+              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + outY * _width, scan = _width)
+            }
+          }
+          mkArray(x = x + 1, activeBefore = activeNow, rem = remRem)
+        } else {
+          assert(rem.isEmpty)
+        }
+
+      Util.clear(_bufOut, 0, winSizeOut)
+      mkArray(0, Vector.empty, blobFlt)
+
+      winSizeOut
+    }
+  }
+
+  private object BlobSlice {
+    final val numFields: Int = BlobSlice(0, 0, 0, 0, 0).productArity
+  }
+
+  private final case class BlobSlice(boxTop: Int, boxHeight: Int, sliceMean: Double, sliceStdDev: Double,
+                                     sliceCenter: Double) {
+
+    def boxBottom: Int = boxTop + boxHeight
+
+//    def toArray: Array[Float] =
+//      Array[Float](boxTop, boxHeight, sliceMean.toFloat, sliceStdDev.toFloat, sliceCenter.toFloat)
+
+    def fill(out: Array[Double], off: Int, scan: Int): Unit = {
+      var _off = off
+      out(_off) = boxTop       ; _off += scan
+      out(_off) = boxHeight    ; _off += scan
+      out(_off) = sliceMean    ; _off += scan
+      out(_off) = sliceStdDev  ; _off += scan
+      out(_off) = sliceCenter  ; _off += scan
+    }
+  }
+
+  private object BlobVoice {
+    final val numBaseFields: Int = BlobVoice(0, 0, 0, 0, 0, Array.empty).productArity - 1
+    final val totalNumField: Int = numBaseFields + BlobSlice.numFields
+  }
+  /* @param id           unique blob identifier, positive. if zero, blob data is invalid
+   * @param blobLeft     blob beginning in time frames ("horizontally")
+   * @param blobTop      blob beginning within time slice (vertically)
+   * @param blobWidth    blob duration in time frames
+   * @param blobHeight   blob extent within time slice
+   * @param slices       blob form
+   */
+  private final case class BlobVoice(id: Int, blobLeft: Int, blobTop: Int, blobWidth: Int, blobHeight: Int,
+                                     slices: Array[BlobSlice]) {
+
+    def blobRight   : Int = blobLeft  + blobWidth
+    def blobBottom  : Int = blobTop   + blobHeight
+    def blobSize    : Int = blobWidth * blobHeight
+
+    def overlaps(that: BlobVoice): Boolean =
+      this.blobLeft < that.blobRight  && this.blobRight  > that.blobLeft &&
+      this.blobTop  < that.blobBottom && this.blobBottom > that.blobTop && {
+        val left  = math.max(this.blobLeft , that.blobLeft )
+        val right = math.min(this.blobRight, that.blobRight)
+        var idx   = left
+        var found = false
+        while (idx < right) {
+          val thisSlice = this.slices(idx - this.blobLeft)
+          val thatSlice = that.slices(idx - that.blobLeft)
+          found = thisSlice.boxTop < thatSlice.boxBottom && thisSlice.boxBottom > thatSlice.boxTop
+          idx += 1
+        }
+        found
+      }
+
+//    def toArray(sliceIdx: Int): Array[Float] =
+//      Array[Float](id, blobLeft, blobTop, blobWidth, blobHeight) ++ slices(sliceIdx).toArray
+
+    def fillSlice(sliceIdx: Int, out: Array[Double], off: Int, scan: Int): Unit = {
+      var _off = off
+      out(_off) = id          ; _off += scan
+      out(_off) = blobLeft    ; _off += scan
+      out(_off) = blobTop     ; _off += scan
+      out(_off) = blobWidth   ; _off += scan
+      out(_off) = blobHeight  ; _off += scan
+      val slice = slices(sliceIdx)
+      slice.fill(out, off = _off, scan = scan)
     }
   }
 }
