@@ -499,6 +499,7 @@ object BlobVoices {
           blobNumRemain            -= 1
           blobNumOff               += 1
           blobsBoundsRead           = 0
+          blobsNumVerticesRead      = 0
           blobsVerticesMissing      = 0
           blobsVerticesBlobIdx      = 0
           blobsVerticesVertexIdx    = 0
@@ -709,6 +710,7 @@ object BlobVoices {
 
     private def processWindow(writeToWinOff: Int): Int = {
       // if (writeToWinOff == 0) return writeToWinOff
+//      println("BlobVoices.processWindow")
 
       val _blobs      = blobs
       val _width      = width
