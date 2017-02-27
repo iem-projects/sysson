@@ -686,7 +686,8 @@ object BlobVoices {
         winBufIn = new Array[Double](winSizeIn)
       }
       val blobDimSz = BlobVoice.totalNumField * voices
-      winSizeOut = blobDimSz * width
+//      winSizeOut = blobDimSz * width
+      winSizeOut = blobDimSz * height
       if (winSizeOut != oldWinSzOut) {
         winBufOut = new Array[Double](winSizeOut)
       }
@@ -749,63 +750,76 @@ object BlobVoices {
           val blobHeight  = math.min(_height  - blobTop , br.height)
           val blobBottom  = blobTop + blobHeight
 
-          val slices      = new Array[BlobSlice](blobWidth)
+          val slices      = new Array[BlobSlice](blobHeight /* blobWidth */)
 
-          var x           = blobLeft
+//          var x           = blobLeft
+          var y           = blobTop
           var sliceIdx    = 0
-          while (x < blobRight) {
-            rect.x             = x /* + 1 */
-            rect.y             = 0
-            rect.width         = 1
-            rect.height        = height
+          while (y < blobBottom /* x < blobRight */) {
+//            rect.x             = x
+//            rect.y             = 0
+//            rect.width         = 1
+//            rect.height        = height
+            rect.x             = 0
+            rect.y             = y
+            rect.width         = width
+            rect.height        = 1
             val a           = new Area(path)
             a.intersect(new Area(rect))
             val b           = a.getBounds2D
             area.add(new Area(b))
-            val boxTop      = math.max(blobTop   , math.floor(b.getMinY).toInt)
-            val boxBottom   = math.min(blobBottom, math.ceil (b.getMaxY).toInt)
-            val boxHeight   = boxBottom - boxTop
-            var y           = boxTop
+//            val boxTop      = math.max(blobTop   , math.floor(b.getMinY).toInt)
+//            val boxBottom   = math.min(blobBottom, math.ceil (b.getMaxY).toInt)
+//            val boxHeight   = boxBottom - boxTop
+//            var y           = boxTop
+            val boxLeft     = math.max(blobLeft , math.floor(b.getMinX).toInt)
+            val boxRight    = math.min(blobRight, math.ceil (b.getMaxX).toInt)
+            val boxWidth    = boxRight - boxLeft
+            var x           = boxLeft
             var sliceSum    = 0.0
             var sliceCenter = 0.0
             var sliceCnt    = 0
-            while (y < boxBottom) {
-//              val value = _bufIn(x * _height + y)
-              val value = _bufIn(x + _width * y)
+            val offY        = y * _width
+            while (x < boxRight /* y < boxBottom */) {
+              val value = _bufIn(x + offY /* _width * y */)
               if (value > _thresh) {
                 sliceSum    += value
-                sliceCenter += value * y
+//                sliceCenter += value * y
+                sliceCenter += value * x
                 sliceCnt    += 1
               }
-              y += 1
+//              y += 1
+              x += 1
             }
             import de.sciss.numbers.Implicits._
-            val sliceMean = sliceSum / boxHeight
-            sliceCenter   = (sliceCenter / sliceSum).clip(boxTop, boxBottom - 1)
+//            val sliceMean = sliceSum / boxHeight
+//            sliceCenter   = (sliceCenter / sliceSum).clip(boxTop, boxBottom - 1)
+            val sliceMean = sliceSum / boxWidth
+            sliceCenter   = (sliceCenter / sliceSum).clip(boxLeft, boxRight - 1)
 
-            y = boxTop
+//            y = boxTop
+            x = boxLeft
             var sliceStdDev = 0.0
-            while (y < boxBottom) {
-//              val value  = _bufIn(x * _height + y)
-              val value = _bufIn(x + _width * y)
+            while (x < boxRight /* y < boxBottom */) {
+              val value = _bufIn(x + offY /* _width * y */)
               if (value > _thresh) {
               val d = value - sliceMean
                 sliceStdDev += d * d
               }
-              y += 1
+              x /* y */ += 1
             }
             if (sliceCnt > 0) sliceStdDev = math.sqrt(sliceStdDev / (sliceCnt - 1))
 
             val slice = BlobSlice(
-              boxTop        = boxTop,
-              boxHeight     = boxHeight,
+              boxTop        = boxLeft /* boxTop */,
+              boxHeight     = boxWidth /* boxHeight */,
               sliceMean     = sliceMean,
               sliceStdDev   = sliceStdDev,
               sliceCenter   = sliceCenter
             )
 
             slices(sliceIdx) = slice
-            x  += 1
+            y /* x */ += 1
             sliceIdx += 1
           }
           // bloody floating point ops and rounding can lead to difference here
@@ -841,39 +855,57 @@ object BlobVoices {
       }
 
       val blobFlt = filterOverlaps(blobsAll.sortBy(_.blobSize), out = Vector.empty, id = 1)
-        .sortBy(b => (b.blobLeft, b.blobTop))
+//        .sortBy(b => (b.blobLeft, b.blobTop))
+        .sortBy(b => (b.blobTop, b.blobLeft))
 
       val blobDimSz = BlobVoice.totalNumField * _voices
       val _bufOut   = winBufOut // Array.ofDim[Double](_width, blobDimSz)
 
       val idIndices = 0 until blobDimSz by BlobVoice.totalNumField
 
-      @tailrec def mkArray(x: Int, activeBefore: Vector[BlobVoice], rem: Vector[BlobVoice]): Unit =
-        if (x < _width) {
-          val active1   = activeBefore .filterNot(_.blobRight == x)
-          val (activeAdd, remRem) = rem.partition(_.blobLeft  == x)
+      @tailrec def mkArray(y /* x */: Int, activeBefore: Vector[BlobVoice], rem: Vector[BlobVoice]): Unit =
+        if (y < _height /* x < _width */) {
+          val offY = y * blobDimSz
+//          val active1   = activeBefore .filterNot(_.blobRight == x)
+//          val (activeAdd, remRem) = rem.partition(_.blobLeft  == x)
+          val active1   = activeBefore .filterNot(_.blobBottom == y)
+          val (activeAdd, remRem) = rem.partition(_.blobTop    == y)
           val activeNow = active1 ++ activeAdd
           val (activeOld, activeNew) = activeNow.partition(activeBefore.contains)
           if (activeOld.nonEmpty) {
-            val xM = x - 1
+//            val xM = x - 1
+            val yM    = y - 1
+            val offYM = yM * blobDimSz
             activeOld.foreach { blob =>
-              val sliceIdx  = x - blob.blobLeft
-              val outY      = idIndices.find { y =>
-                _bufOut(xM + y * _width) == blob.id
+//              val sliceIdx  = x - blob.blobLeft
+//              val outY      = idIndices.find { y =>
+//                _bufOut(xM + y * _width) == blob.id
+//              } .get  // same slot as before
+//              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + outY * _width, scan = _width)
+
+              val sliceIdx  = y - blob.blobTop
+              val outX      = idIndices.find { x =>
+                _bufOut(x + offYM /* yM * _width */) == blob.id
               } .get  // same slot as before
-              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + outY * _width, scan = _width)
+              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = outX + offY, scan = 1)
             }
           }
           if (activeNew.nonEmpty) {
             activeNew.foreach { blob =>
-              val sliceIdx  = x - blob.blobLeft
-              val outY      = idIndices.find { y =>
-                _bufOut(x + y * _width) == 0
+//              val sliceIdx  = x - blob.blobLeft
+//              val outY      = idIndices.find { y =>
+//                _bufOut(x + y * _width) == 0
+//              } .get  // empty slot
+//              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + outY * _width, scan = _width)
+
+              val sliceIdx  = y - blob.blobTop
+              val outX      = idIndices.find { x =>
+                _bufOut(x + offY) == 0
               } .get  // empty slot
-              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + outY * _width, scan = _width)
+              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = outX + offY, scan = 1)
             }
           }
-          mkArray(x = x + 1, activeBefore = activeNow, rem = remRem)
+          mkArray(y = y + 1 /* x = x + 1 */, activeBefore = activeNow, rem = remRem)
         } else {
           assert(rem.isEmpty)
         }

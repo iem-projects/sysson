@@ -23,9 +23,10 @@ import de.sciss.fscape.{GE, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource, str
 
 /** A UGen that translates blob detection output into a continuous
   * signal suitable for writing as a managed-voices matrix.
-  * The output will be two dimensional matrices with `width`
-  * number of columns, and `voices * 10` number of rows
-  * (that is, the `height` is replaced by the blob voices).
+  * The output will be two dimensional matrices with the original
+  * number of columns replaced by `voices * 10` number of columns.
+  * (that is, for input matrix `[a][b]`, the output will be `[a][voices*10]`).
+  *
   * For each voice, the following ten values will be emitted
   * per column:
   *

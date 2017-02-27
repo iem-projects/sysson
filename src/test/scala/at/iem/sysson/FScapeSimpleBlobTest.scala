@@ -51,7 +51,7 @@ object FScapeSimpleBlobTest extends App {
         sig.poll(0, label)
       }
 
-      val dimTime = Matrix.Op.Append(Dim.Def("time", values = ArithmSeq(length = width)))
+      val dimTime = Matrix.Op.Append(Dim.Def("time", values = ArithmSeq(length = height)))
       val dimBlob = Matrix.Op.Append(Dim.Def("blob", values = ArithmSeq(length = voices * 10)))
       val spec    = Matrix.Spec(null, Vector(dimTime, dimBlob))
       MatrixOut("out", spec, in = blobVc)
