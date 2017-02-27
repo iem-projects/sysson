@@ -89,10 +89,10 @@ object FScapeDirectTest extends App {
 
     mkView(outMx, 2)
     mkView(outMn, 2)
+  }
 
-    new Thread {
-      override def run(): Unit = Thread.sleep(Long.MaxValue)
-      start()
-    }
+  new Thread {
+    override def run(): Unit = Thread.sleep(Long.MaxValue)
+    start()
   }
 }

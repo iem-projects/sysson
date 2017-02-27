@@ -112,28 +112,30 @@ object GenViewFactory {
 
     private def requestVarSpec(i: Matrix.Spec, io: IO[S] with UGenGraphBuilder)
                               (implicit tx: S#Tx): Matrix.Spec.Value = {
-      val m = findMatrix(i.variable)
+      val mRef = i.variable
+      val spec0: Matrix.Spec.Value = if (mRef != null) /* XXX TODO --- dirty hack */  {
+        val m = findMatrix(mRef)
 
-      implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
+        implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
-      val dimsIn  = m.dimensions
-//      val SHAPE   = m.shape
-//      val SIZE    = m.size
-//      val ranges  = m.ranges
-      val rank    = dimsIn.size // m.rank
-      val dims0   = Vector.tabulate(rank) { dimIdx =>
-        val dimKey  = m.getDimensionKey(dimIdx, useChannels = false)
-//        val reader: LMatrix.Reader = dim.reader(-1)
-        val reader: LMatrix.Reader = dimKey.reader()
-        val lenL  = reader.size
-        require(lenL <= 0x7FFFFFFF)
-        val len   = lenL.toInt
-        val buf   = new Array[Double](len)
-        reader.readDouble1D(buf, 0, len)
-        val dim   = dimsIn(dimIdx)
-        Matrix.Spec.Dim(dim.name, dim.units, buf.toIndexedSeq)
+        val dimsIn  = m.dimensions
+        val rank    = dimsIn.size // m.rank
+        val dims0: Vec[Matrix.Spec.Dim] = Vector.tabulate(rank) { dimIdx =>
+          val dimKey  = m.getDimensionKey(dimIdx, useChannels = false)
+  //        val reader: LMatrix.Reader = dim.reader(-1)
+          val reader: LMatrix.Reader = dimKey.reader()
+          val lenL  = reader.size
+          require(lenL <= 0x7FFFFFFF)
+          val len   = lenL.toInt
+          val buf   = new Array[Double](len)
+          reader.readDouble1D(buf, 0, len)
+          val dim   = dimsIn(dimIdx)
+          Matrix.Spec.Dim(dim.name, dim.units, buf.toIndexedSeq)
+        }
+        Matrix.Spec.Value(name = m.name, units = m.units, dimensions = dims0)
+      } else {
+        Matrix.Spec.Value(name = "test", units = "", dimensions = Vector.empty)
       }
-      val spec0 = Matrix.Spec.Value(m.name, m.units, dims0)
 
       def resolveDimIdx(specIn: Matrix.Spec.Value, dimRef: Dim): Int = {
         require(dimRef.variable === i.variable)
