@@ -78,6 +78,8 @@ object BlobVoices {
     var numVertices = 0
     var vertexX: Array[Double] = _
     var vertexY: Array[Double] = _
+
+    override def toString = f"Blob(xMin = $xMin%g, xMax = $xMax%g, yMin = $yMin%g, yMax = $yMax%g, numVertices = $numVertices)"
   }
 
   private final class Logic(shape: Shape)(implicit ctrl: Control)
@@ -703,6 +705,8 @@ object BlobVoices {
     // ---- the fun bit ----
     // this is mostly the translation from sysson-experiments/AnomaliesBlobs.scala
 
+    private[this] var WARNED_EXHAUSTED = false // XXX TODO --- should offer better fallback if running out of voices
+
     private def processWindow(writeToWinOff: Int): Int = {
       // if (writeToWinOff == 0) return writeToWinOff
 
@@ -724,9 +728,17 @@ object BlobVoices {
 
       var blobIdx = 0
       while (blobIdx < _numBlobs) {
-        val blob  = _blobs(blobIdx)
-        val ok    = blob.width >= _minWidth && blob.height >= _minHeight
+        val blob      = _blobs(blobIdx)
+        val bigEnough = blob.width >= _minWidth && blob.height >= _minHeight
+        val hasShape  = blob.numVertices > 1
+//        if (!hasShape) {
+//          println(s"EMPTY: $blob")
+//        } else {
+//          println(s"-----: $blob")
+//        }
+        val ok = bigEnough && hasShape
         if (ok) {
+          // require(blob.numVertices > 1, blob.toString + s" ; minWidth = ${_minWidth}, minHeight = ${_minHeight}")
           path.reset()
           var vIdx = 0
           while (vIdx < blob.numVertices) {
@@ -887,10 +899,10 @@ object BlobVoices {
 //              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + outY * _width, scan = _width)
 
               val sliceIdx  = y - blob.blobTop
-              val outX      = idIndices.find { x =>
-                _bufOut(x + offYM /* yM * _width */) == blob.id
-              } .get  // same slot as before
-              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = outX + offY, scan = 1)
+              /* val opt = */ idIndices.collectFirst {
+                case x if _bufOut(x + offYM /* yM * _width */) == blob.id =>  // same slot as before
+                  blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + offY, scan = 1)
+              }
             }
           }
           if (activeNew.nonEmpty) {
@@ -902,10 +914,14 @@ object BlobVoices {
 //              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + outY * _width, scan = _width)
 
               val sliceIdx  = y - blob.blobTop
-              val outX      = idIndices.find { x =>
-                _bufOut(x + offY) == 0
-              } .get  // empty slot
-              blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = outX + offY, scan = 1)
+              val opt = idIndices.collectFirst {
+                case x if _bufOut(x + offY) == 0 =>  // empty slot
+                  blob.fillSlice(sliceIdx = sliceIdx, out = _bufOut, off = x + offY, scan = 1)
+              }
+              if (opt.isEmpty && !WARNED_EXHAUSTED) {
+                Console.err.println(s"Warning: BlobVoices - ran out of voices")
+                WARNED_EXHAUSTED = true
+              }
             }
           }
           mkArray(y = y + 1 /* x = x + 1 */, activeBefore = activeNow, rem = remRem)

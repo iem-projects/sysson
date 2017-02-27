@@ -7,7 +7,7 @@ import de.sciss.filecache.Limit
 import de.sciss.fscape.Graph
 import de.sciss.fscape.lucre.{Cache, FScape}
 import de.sciss.lucre.artifact.{Artifact, ArtifactLocation}
-import de.sciss.lucre.matrix.DataSource
+import de.sciss.lucre.matrix.{DataSource, Dimension, Reduce}
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth.proc.{GenContext, WorkspaceHandle}
 
@@ -31,6 +31,8 @@ object FScapeBlobTest extends App {
   val dirOut  = userHome / "Documents" / "temp" / "fscape_test"
   dirOut.mkdirs()
 
+  val altRange  = 210 to 360 // 390
+
   import WorkspaceHandle.Implicits.dummy
   implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
@@ -39,13 +41,20 @@ object FScapeBlobTest extends App {
     val artIn = Artifact(locIn, Artifact.Child(mName))
     val ds    = DataSource(artIn)
     val mat   = ds.variables.find(_.name == vName).getOrElse(sys.error(s"No variable '$vName' in nc file"))
+    val red   = Reduce(mat, Dimension.Selection.Name[S]("Altitude"), Reduce.Op.Slice[S](altRange.head, altRange.last))
 
     val f   = FScape[S]
     val g = Graph {
       import at.iem.sysson.fscape.graph._
       import de.sciss.fscape._
       import de.sciss.fscape.graph._
-      1.poll(0, label = "rendering")
+//      1.poll(0, label = "rendering")
+
+      def printRange(in: GE, start: Int, stop: Int, label: String): Unit = {
+        val slice = in.drop(start).take(stop - start)
+        (slice zip slice).poll(Metro(2), label)
+      }
+
       val mIn       = Matrix("var")
       val d1        = Dim(mIn, "Time")
       val d2        = Dim(mIn, "Altitude")
@@ -57,31 +66,39 @@ object FScapeBlobTest extends App {
       val s2        = s1    .drop    (d2)
       val specOut   = s2    .append  (d3)
       val win0      = mIn.valueWindow(d1, d2)  // row-dim, col-dim
+
+      // XXX TODO
+      val width     = altRange.size // d2.size
+      val height    = 180 // d1.size
+      val winSzIn   = width * height
+
+      printRange(win0, 0, winSzIn, "first-win")
+
       val taLo      = 0.0
       val taHi      = 3.5
       val win1      = win0.max(taLo).min(taHi) / taHi
       val win       = Gate(win1, !win1.isNaN)
-      win.poll(win.isNaN, "NaN!")
-      val width     = d2.size
-      val height    = d1.size
-      val winSize   = width * height
-      width .poll(0, "width")
-      height.poll(0, "height")
+      // win.poll(win.isNaN, "NaN!")
+//      width .poll(0, "width")
+//      height.poll(0, "height")
       val blobs     = Blobs2D(in = win, width = width, height = height, thresh = 0.265)
       val minWidth  = 10.0 / width    // XXX TODO --- make user selectable
       val minHeight =  3.0 / height   // XXX TODO --- make user selectable
-      val el        = (winSize / ControlBlockSize()).ceil
-      val mOut      = BlobVoices(in = win.elastic(el), width = width, height = height, blobs = blobs,
+      // val el        = (winSzIn / ControlBlockSize()).ceil
+      val winEl     = BufferDisk(win) // win.elastic(el * 2)
+      val mOut      = BlobVoices(in = winEl, width = width, height = height, blobs = blobs,
         minWidth = minWidth, minHeight = minHeight, voices = voices)
+      val winSzOut  = blobSz * height
 
-      MatrixOut("out", specOut, mOut)
+      val frames = MatrixOut("out", specOut, mOut)
+      frames.poll(Metro(winSzOut).tail, "matrix-written")
     }
     f.graph() = g
 
     val locOut  = ArtifactLocation.newConst[S](dirOut)
     val artOut  = Artifact(locOut, Artifact.Child("blobs.nc"))
 
-    f.attr.put("var", mat)
+    f.attr.put("var", red /* mat */)
     f.attr.put("out", artOut)
 
     implicit val genCtx = GenContext[S]
