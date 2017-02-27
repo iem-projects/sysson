@@ -160,6 +160,7 @@ object MatrixOut {
       }
       if (framesRead == numFrames) {
         logStream(s"completeStage() $this")
+        writer.close()
         _isSuccess = true
         completeStage()
       }

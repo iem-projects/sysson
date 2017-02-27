@@ -811,8 +811,8 @@ object BlobVoices {
             if (sliceCnt > 0) sliceStdDev = math.sqrt(sliceStdDev / (sliceCnt - 1))
 
             val slice = BlobSlice(
-              boxTop        = boxLeft /* boxTop */,
-              boxHeight     = boxWidth /* boxHeight */,
+              boxLeft       = boxLeft /* boxTop */,
+              boxWidth      = boxWidth /* boxHeight */,
               sliceMean     = sliceMean,
               sliceStdDev   = sliceStdDev,
               sliceCenter   = sliceCenter
@@ -846,7 +846,7 @@ object BlobVoices {
       @tailrec def filterOverlaps(rem: Vector[BlobVoice], out: Vector[BlobVoice], id: Int): Vector[BlobVoice] =
       rem match {
         case head +: tail =>
-          val numOverlap = tail.count(_.overlaps(head))
+          val numOverlap = tail.count(_.overlapsV(head))
           val idNext  = if (numOverlap > _voices) id  else id + 1
           val outNext = if (numOverlap > _voices) out else out :+ head.copy(id = id)
           filterOverlaps(rem = tail, out = outNext, id = idNext)
@@ -921,21 +921,21 @@ object BlobVoices {
     final val numFields: Int = BlobSlice(0, 0, 0, 0, 0).productArity
   }
 
-  private final case class BlobSlice(boxTop: Int, boxHeight: Int, sliceMean: Double, sliceStdDev: Double,
+  private final case class BlobSlice(boxLeft: Int, boxWidth: Int, sliceMean: Double, sliceStdDev: Double,
                                      sliceCenter: Double) {
 
-    def boxBottom: Int = boxTop + boxHeight
+    def boxRight: Int = boxLeft + boxWidth
 
 //    def toArray: Array[Float] =
 //      Array[Float](boxTop, boxHeight, sliceMean.toFloat, sliceStdDev.toFloat, sliceCenter.toFloat)
 
     def fill(out: Array[Double], off: Int, scan: Int): Unit = {
       var _off = off
-      out(_off) = boxTop       ; _off += scan
-      out(_off) = boxHeight    ; _off += scan
-      out(_off) = sliceMean    ; _off += scan
-      out(_off) = sliceStdDev  ; _off += scan
-      out(_off) = sliceCenter  ; _off += scan
+      out(_off) = boxLeft     ; _off += scan
+      out(_off) = boxWidth    ; _off += scan
+      out(_off) = sliceMean   ; _off += scan
+      out(_off) = sliceStdDev ; _off += scan
+      out(_off) = sliceCenter ; _off += scan
     }
   }
 
@@ -957,17 +957,33 @@ object BlobVoices {
     def blobBottom  : Int = blobTop   + blobHeight
     def blobSize    : Int = blobWidth * blobHeight
 
-    def overlaps(that: BlobVoice): Boolean =
+//    def overlapsH(that: BlobVoice): Boolean =
+//      this.blobLeft < that.blobRight  && this.blobRight  > that.blobLeft &&
+//      this.blobTop  < that.blobBottom && this.blobBottom > that.blobTop  && {
+//        val left  = math.max(this.blobLeft , that.blobLeft )
+//        val right = math.min(this.blobRight, that.blobRight)
+//        var idx   = left
+//        var found = false
+//        while (idx < right) {
+//          val thisSlice = this.slices(idx - this.blobLeft)
+//          val thatSlice = that.slices(idx - that.blobLeft)
+//          found = thisSlice.boxTop < thatSlice.boxBottom && thisSlice.boxBottom > thatSlice.boxTop
+//          idx += 1
+//        }
+//        found
+//      }
+
+    def overlapsV(that: BlobVoice): Boolean =
       this.blobLeft < that.blobRight  && this.blobRight  > that.blobLeft &&
-      this.blobTop  < that.blobBottom && this.blobBottom > that.blobTop && {
-        val left  = math.max(this.blobLeft , that.blobLeft )
-        val right = math.min(this.blobRight, that.blobRight)
-        var idx   = left
-        var found = false
-        while (idx < right) {
-          val thisSlice = this.slices(idx - this.blobLeft)
-          val thatSlice = that.slices(idx - that.blobLeft)
-          found = thisSlice.boxTop < thatSlice.boxBottom && thisSlice.boxBottom > thatSlice.boxTop
+      this.blobTop  < that.blobBottom && this.blobBottom > that.blobTop  && {
+        val top     = math.max(this.blobTop   , that.blobTop   )
+        val bottom  = math.min(this.blobBottom, that.blobBottom)
+        var idx     = top
+        var found   = false
+        while (idx < bottom) {
+          val thisSlice = this.slices(idx - this.blobTop)
+          val thatSlice = that.slices(idx - that.blobTop)
+          found = thisSlice.boxLeft < thatSlice.boxRight && thisSlice.boxRight > thatSlice.boxLeft
           idx += 1
         }
         found

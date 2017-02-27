@@ -28,15 +28,17 @@ import de.sciss.fscape.{GE, UGen, UGenGraph, UGenIn, UGenInLike, UGenSource, str
   * (that is, for input matrix `[a][b]`, the output will be `[a][voices*10]`).
   *
   * For each voice, the following ten values will be emitted
-  * per column:
+  * per column (we give interpretation in 'time' and 'altitude' if
+  * the input matrix is `[time][altitude]`, and [y][x] if the input
+  * matrix is an image):
   *
-  * - 0 - `id`
-  * - 1 - `blobLeft`
-  * - 2 - `blobTop`
-  * - 3 - `blobWidth`
-  * - 4 - `blobHeight`
-  * - 5 - `boxTop`
-  * - 6 - `boxHeight`
+  * - 0 - `id`          (zero for empty or no blob, greater than zero for voice id)
+  * - 1 - `blobLeft`    (start altitude)
+  * - 2 - `blobTop`     (start time)
+  * - 3 - `blobWidth`   (altitude span)
+  * - 4 - `blobHeight`  (time span)
+  * - 5 - `boxLeft`     (start altitude of slice)
+  * - 6 - `boxWidth`    (altitude span of slice)
   * - 7 - `sliceMean`
   * - 8 - `sliceStdDev`
   * - 9 - `sliceCenter`
