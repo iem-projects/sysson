@@ -497,7 +497,7 @@ object PlotChartImpl {
         new Label("Min:"), minView.component, new Label("Max:"), maxView.component,
         normalizeView.component)
 
-      _main = new ChartPanel(chart, false)  // XXX TODO: useBuffer = false only during PDF export
+      _main = new ChartPanel(chart /* , false */)  // XXX TODO: useBuffer = false only during PDF export
       component = new BorderPanel {
         add(Component.wrap(_main), BorderPanel.Position.Center)
         add(topPanel             , BorderPanel.Position.South )

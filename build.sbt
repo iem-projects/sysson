@@ -46,6 +46,7 @@ lazy val kollFlitzVersion           = "0.2.1"
 lazy val sheetVersion               = "0.1.2"
 lazy val slfVersion                 = "1.7.23"
 lazy val fscapeVersion              = "2.6.1-SNAPSHOT"
+lazy val orsonpdfVersion            = "1.7"
 
 // ---- test libraries ----
 
@@ -130,6 +131,7 @@ lazy val root = Project(id = baseNameL, base = file("."))
       "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
       "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
       "de.sciss" %% "fscape-lucre"                % fscapeVersion,              // Offline processing
+      "com.orsonpdf" % "orsonpdf"                 % orsonpdfVersion,  // silly JFreeChart doesn't support iText PDF
       "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
     ),
     libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test",
