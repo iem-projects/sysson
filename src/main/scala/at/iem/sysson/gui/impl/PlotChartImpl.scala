@@ -493,7 +493,7 @@ object PlotChartImpl {
       maxOpt    = maxVal0
       normalize = norm0
 
-      val topPanel = new FlowPanel(panelOverlay, Swing.HStrut(8), new Label("Palette:"), ggColorTable,
+      val topPanel = new FlowPanel(panelOverlay, Swing.HStrut(8)  , new Label("Palette:"), ggColorTable,
         new Label("Min:"), minView.component, new Label("Max:"), maxView.component,
         normalizeView.component)
 
