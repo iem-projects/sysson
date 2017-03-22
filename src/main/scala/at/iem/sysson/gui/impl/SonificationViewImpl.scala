@@ -16,8 +16,6 @@ package at.iem.sysson
 package gui
 package impl
 
-import java.awt.Color
-
 import at.iem.sysson.sound.{AuralSonification, Sonification}
 import de.sciss.audiowidgets.{TimelineModel, Transport => GUITransport}
 import de.sciss.desktop.impl.UndoManagerImpl
@@ -32,9 +30,10 @@ import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{CellView, DoubleSpinnerView, StringFieldView, deferTx}
 import de.sciss.lucre.synth.Sys
+import de.sciss.mellite
+import de.sciss.mellite.Mellite
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.mellite.gui.{ActionBounceTimeline, AttrMapFrame, CodeFrame, GUI}
-import de.sciss.mellite.Mellite
 import de.sciss.model.impl.ModelImpl
 import de.sciss.span.Span
 import de.sciss.swingplus.{GroupPanel, Separator}
@@ -122,7 +121,7 @@ object SonificationViewImpl {
       val elapsedOpt = t.getView(sonif).collect {
         case as: AuralSonification[S] =>
           as.status.react { implicit tx => {
-            case e @ AuralSonification.Elapsed(_, ratio, dimValue) =>
+            case e @ AuralSonification.Elapsed(_, ratio, _ /* dimValue */) =>
               status() = e
               deferTx {
                 ggElapsed.value = ratio
@@ -294,7 +293,7 @@ object SonificationViewImpl {
 
       transportButtons = GUITransport.makeButtonStrip {
         import de.sciss.audiowidgets.Transport._
-        Seq(/* GoToBegin(tGotToBegin()), */ Stop(tStop()), /* Pause(tPause()), */ Play(tPlay()) /*, Loop(tLoop()) */)
+        Seq(/* GoToBegin(tGotToBegin()), */ Stop(tStop()), Pause(tPause()), Play(tPlay()) /*, Loop(tLoop()) */)
       }
       timerPrepare = new javax.swing.Timer(100, Swing.ActionListener { _ =>
         val ggPlay      = transportButtons.button(GUITransport.Play).get
@@ -305,6 +304,7 @@ object SonificationViewImpl {
       ggElapsed = new ElapsedBar
 
       // XXX TODO - should be regular button, and has to listen to model changes
+//      ggMute = GUI.toolButton(Action(null){}, mellite.gui.Shapes.Mute, "Mute")
       ggMute = new ToggleButton(null) { me =>
         listenTo(this)
         reactions += {
@@ -324,15 +324,15 @@ object SonificationViewImpl {
             undoManager.add(edit)
         }
         focusable = false
-        icon          = raphael.Icon(extent = 20, fill = raphael.TexturePaint(24), shadow = raphael.WhiteShadow)(raphael.Shapes.Mute)
-        disabledIcon  = raphael.Icon(extent = 20, fill = new Color(0, 0, 0, 0x7F), shadow = raphael.WhiteShadow)(raphael.Shapes.Mute)
+        icon          = GUI.iconNormal  (mellite.gui.Shapes.Mute)
+        disabledIcon  = GUI.iconDisabled(mellite.gui.Shapes.Mute)
         tooltip       = "Mute"
       }
 
       // auralChange(initState)
 
       val pTransport = new FlowPanel(Swing.HStrut(101), transportButtons, ggMute, ggElapsed)
-      pTransport.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Transport")
+      // pTransport.border = Swing.TitledBorder(Swing.EmptyBorder(4), "Transport")
 
       val box = new BoxPanel(Orientation.Vertical) {
         contents += pMapping
@@ -377,7 +377,7 @@ object SonificationViewImpl {
     private def stopAndDisposeTransport()(implicit tx: S#Tx): Unit =
       transportRef.swap(None)(tx.peer).foreach(_.dispose())
 
-//    private def tPause(): Unit = {
+    private def tPause(): Unit = {
 //      val ggPause   = transportButtons.button(GUITransport.Pause).get
 //      val isPausing = !ggPause.selected
 //      val isPlaying = cursor.step { implicit tx =>
@@ -387,7 +387,7 @@ object SonificationViewImpl {
 //        p
 //      }
 //      if (isPlaying) ggPause.selected = isPausing
-//    }
+    }
 
     private def tPlay(): Unit = cursor.step { implicit tx =>
       try {
