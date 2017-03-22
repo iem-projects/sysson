@@ -252,7 +252,7 @@ object MatrixPrepare {
 
     protected def cache: Future[AudioFileCache.Value]
 
-    final def install(b: NodeRef.Full[S])(implicit tx: S#Tx): Unit = {
+    final def install(nr: NodeRef.Full[S])(implicit tx: S#Tx): Unit = {
       val value         = cache.value.get.get
       val numFrames     = value.spec.numFrames
       val numChannels   = value.spec.numChannels
@@ -262,7 +262,7 @@ object MatrixPrepare {
       val buf           = Buffer(server)(numFrames = bufSize1, numChannels = numChannels)
       val path          = value.file.getAbsolutePath
       val ctlName       = mkCtlName(key = key, idx = index, isStreaming = isStreaming)
-      val syn           = b.node /* b.synth */
+      val syn           = nr.node /* b.synth */
       if (isStreaming) {
         // XXX TODO - dirty workaround for Turbulence. Generally enable loop. Read start frame
         val startFrame = 0L
@@ -284,16 +284,15 @@ object MatrixPrepare {
 
         val trig  = new StreamBuffer(key = key, idx = index, synth = syn, buf = buf,
           path = path, fileFrames = numFrames, interp = 1, startFrame = startFrame, loop = true, resetFrame = 0L)
-        b.addUser(trig) // XXX TODO --- CORRECT?
+        nr.addUser(trig) // XXX TODO --- CORRECT?
         // b.users ::= trig // NOT: b.addUser(trig) -- which is keyed!
         // trig.install()
       } else {
         buf.read(path)
       }
-      b.addControl(ctlName -> buf.id)  // XXX TODO --- CORRECT?
-      // b.setMap         += ctlName -> buf.id
-      b.addResource(buf) // XXX TODO --- CORRECT?
-      // b.dependencies  ::= buf
+      nr.addControl(ctlName -> buf.id)
+      val late = Buffer.disposeWithNode(buf, nr)
+      nr.addResource(late)
       syn.onEndTxn { implicit tx =>
         AudioFileCache.release(config.matrix)
       }
