@@ -45,7 +45,7 @@ lazy val swingTreeVersion           = "0.1.2"
 lazy val kollFlitzVersion           = "0.2.1"
 lazy val sheetVersion               = "0.1.2"
 lazy val slfVersion                 = "1.7.25"
-lazy val fscapeVersion              = "2.6.2"
+lazy val fscapeVersion              = "2.6.3"
 lazy val orsonpdfVersion            = "1.7"
 lazy val webLaFVersion              = "2.1.3"
 
