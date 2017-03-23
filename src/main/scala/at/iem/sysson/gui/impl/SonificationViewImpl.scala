@@ -119,7 +119,10 @@ object SonificationViewImpl {
       val aObsR = Ref(Option.empty[Disposable[S#Tx]])
       val aStatR= Ref(Option.empty[Disposable[S#Tx]])
 
-      def viewState(state: AuralView.State)(implicit tx: S#Tx): Unit = deferTx(auralChange(state))
+      def viewState(state: AuralView.State)(implicit tx: S#Tx): Unit = {
+        val tp = t.isPlaying
+        deferTx(auralChange(state, transportPlaying = tp))
+      }
 
       def viewAdded(view: AuralObj[S])(implicit tx: S#Tx): Unit = {
         val aObs = view.react { implicit tx => viewState(_)(tx) }
@@ -159,14 +162,14 @@ object SonificationViewImpl {
       def update(u: AuralSonification.Update)(implicit tx: S#Tx): Unit = fire(u)
     }
 
-    private def auralChange(state: AuralView.State): Unit = {
+    private def auralChange(state: AuralView.State, transportPlaying: Boolean): Unit = {
 //      println(s"STATE $state")
       val ggStop      = transportButtons.button(GUITransport.Stop).get
       val ggPlay      = transportButtons.button(GUITransport.Play).get
       import equal.Implicits._
       val stopped     = state === AuralView.Stopped // upd.isInstanceOf[Transport.Stop[S]]
-      val preparing   = state === AuralView.Preparing
       val playing     = state === AuralView.Playing
+      val preparing   = !playing && transportPlaying // state === AuralView.Preparing
       ggStop.selected = stopped
       ggPlay.selected = playing
       if (preparing) timerPrepare.restart() else timerPrepare.stop()
@@ -348,7 +351,7 @@ object SonificationViewImpl {
       val scroll = new ScrollPane(box)
       scroll.peer.putClientProperty("styleId", "undecorated")
 
-      auralChange(AuralView.Stopped)
+      auralChange(AuralView.Stopped, transportPlaying = false)
 
       component = new BoxPanel(Orientation.Vertical) {
         contents += pHeader
@@ -377,7 +380,7 @@ object SonificationViewImpl {
         stopAndDisposeTransport()
         if (isPausing) runGroup(state = true)
       }
-      auralChange(AuralView.Stopped)
+      auralChange(AuralView.Stopped, transportPlaying = false)
     }
 
     private def stopAndDisposeTransport()(implicit tx: S#Tx): Unit =

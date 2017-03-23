@@ -32,9 +32,9 @@ lazy val scalaMainVersion           = "2.12.1"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.10.2-SNAPSHOT"
-lazy val soundProcessesVersion      = "3.11.1-SNAPSHOT"
-lazy val lucreMatrixVersion         = "1.2.1-SNAPSHOT"
+lazy val melliteVersion             = "2.10.2"
+lazy val soundProcessesVersion      = "3.11.0"
+lazy val lucreMatrixVersion         = "1.2.1"
 lazy val lucreSwingVersion          = "1.4.3"
 lazy val lucreVersion               = "3.3.3"
 lazy val scalaColliderVersion       = "1.22.3"
@@ -45,7 +45,7 @@ lazy val swingTreeVersion           = "0.1.2"
 lazy val kollFlitzVersion           = "0.2.1"
 lazy val sheetVersion               = "0.1.2"
 lazy val slfVersion                 = "1.7.25"
-lazy val fscapeVersion              = "2.6.2-SNAPSHOT"
+lazy val fscapeVersion              = "2.6.2"
 lazy val orsonpdfVersion            = "1.7"
 lazy val webLaFVersion              = "2.1.3"
 
@@ -131,7 +131,7 @@ lazy val root = Project(id = baseNameL, base = file("."))
       "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
       "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
       "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
-      "de.sciss" %% "fscape-lucre"                % fscapeVersion,              // Offline processing
+      "de.sciss" %% "fscape"                      % fscapeVersion,              // Offline processing
       "de.sciss" %  "weblaf-core"                 % webLaFVersion,              // look-and-feel
       "com.orsonpdf" % "orsonpdf"                 % orsonpdfVersion,  // silly JFreeChart doesn't support iText PDF
       "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
