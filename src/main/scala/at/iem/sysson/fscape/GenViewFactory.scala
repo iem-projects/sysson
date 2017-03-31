@@ -15,7 +15,7 @@
 package at.iem.sysson
 package fscape
 
-import at.iem.sysson.fscape.graph.{Dim, Matrix}
+import at.iem.sysson.fscape.graph.{Dim, Matrix, UserValue}
 import at.iem.sysson.sound.AuralSonification
 import de.sciss.equal.Implicits._
 import de.sciss.fscape.lucre.FScape.{Output, Rendering}
@@ -220,6 +220,16 @@ object GenViewFactory {
       res
     }
 
+    private def requestUserValue(req: UserValue)(implicit tx: S#Tx): UserValue.Value = {
+      val key    = req.name
+      val valOpt = for {
+        sonif  <- AuralSonification.find[S]()
+        source <- sonif.controls.get(key)
+      } yield source.value
+      
+      UserValue.Value(valOpt)
+    }
+
     override def requestInput[Res](req: Input {type Value = Res}, io: IO[S] with UGenGraphBuilder)
                                   (implicit tx: S#Tx): Res = req match {
       case Matrix.ValueSeq    (vr)       => requestMatrixValueSeq   (vr)
@@ -229,6 +239,7 @@ object GenViewFactory {
       case i: Matrix.Size                => requestMatrixInfo(i)
       case i: Matrix.Rank                => requestMatrixInfo(i)
       case i: Matrix.Spec                => requestVarSpec   (i, io)
+      case i: UserValue                  => requestUserValue (i)
 
       case _ => super.requestInput(req, io)
     }
