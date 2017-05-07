@@ -311,7 +311,7 @@ object SonificationViewImpl {
       }
       timerPrepare = new javax.swing.Timer(100, Swing.ActionListener { _ =>
         val ggPlay      = transportButtons.button(GUITransport.Play).get
-        ggPlay.selected = !ggPlay.selected  // flash button at 10 Hz while preparing sonification playback
+        ggPlay.selected = !ggPlay.selected  // flash button at 5 Hz while preparing sonification playback
       })
       timerPrepare.setRepeats(true)
 
