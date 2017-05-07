@@ -16,7 +16,7 @@ package at.iem.sysson
 package sound
 package impl
 
-import at.iem.sysson.graph.UserValue
+import at.iem.sysson.graph.{Dim, UserValue}
 import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.matrix.{Matrix => LMatrix}
@@ -229,22 +229,18 @@ object AuralSonificationImpl {
         addSpec(req, st, newSpec)
 
       case dv: graph.Dim.Values =>
-        val sonif     = sonification
+//        val sonif     = sonification
         val dimElem   = dv.dim
-        val source    = findSource  (sonif , dv.variable)
-        val dimIdx    = findDimIndex(source, dimElem)
-        val numCh     = source.matrix.shape.apply(dimIdx)
+//        val source    = findSource  (sonif , dv.variable)
+//        val dimIdx    = findDimIndex(source, dimElem)
+        val (mat, dimIdx) = findMatrixAndDimIndex(dv.variable, dimElem)
+        val numCh     = mat.shape.apply(dimIdx)
         val newSpec   = MatrixPrepare.Spec(numChannels = numCh, elem = dv, streamDim = -1)
         addSpec(req, st, newSpec)
 
       case vp: graph.Var.Play =>
-//        val sonif     = sonification
         val dimElem   = vp.time.dim
         val (mat, dimIdx) = findMatrixAndDimIndex(vp.variable, dimElem)
-
-//        val source    = findSource  (sonif , vp.variable)
-//        val mat       = source.matrix
-//        val dimIdx    = findDimIndex(source, dimElem)
         val shape     = mat.shape
         val numCh     = ((1L /: shape)(_ * _) / shape(dimIdx)).toInt
         logDebug(s"graph.Var.Play - numChannels = $numCh")
@@ -261,12 +257,11 @@ object AuralSonificationImpl {
         addSpec(req, st, newSpec)
 
       case av: graph.Var.Axis.Values =>
-        val sonif     = sonification
-        val source    = findSource(sonif, av.variable)
-        val streamIdx = findDimIndex(source, av.axis.variable.time.dim)
-        val axisIdx   = findDimIndex(source, av.axis.asDim)
-        val m         = source.matrix
-        MatrixPrepare.ShapeAndIndex(shape = m.shape, streamIndex = streamIdx, axisIndex = axisIdx)
+        val timeDim           = av.axis.variable.time.dim
+        val axisDim           = av.axis.asDim // Dim(timeDim.variable, av.axis.dim)
+        val (mat, streamIdx)  = findMatrixAndDimIndex(av.variable, timeDim)
+        val (_  , axisIdx  )  = findMatrixAndDimIndex(av.variable, axisDim)
+        MatrixPrepare.ShapeAndIndex(shape = mat.shape, streamIndex = streamIdx, axisIndex = axisIdx)
 
       case _ =>
         val sonif     = sonification

@@ -46,8 +46,8 @@ object Var {
     //        freq = time.freq, interp = interp)
 
     def axis(dim: Dim): Var.Axis = {
-      import equal.Implicits._
-      require (dim.variable === variable, s"Dimension ${dim.name} does not belong to variable $variable")
+//      import equal.Implicits._
+//      require (dim.variable === variable, s"Dimension ${dim.name} does not belong to variable $variable")
       Var.Axis(this, dim.name)
     }
   }
@@ -161,7 +161,10 @@ object Var {
     // def startValue: synth.GE = ...
     // def endValue  : synth.GE = ...
 
-    def asDim: Dim = Dim(variable.variable, dim)
+//    def asDim: Dim = Dim(variable.variable, dim)
+
+    // XXX TODO --- super tricky re-wiring the variable from the `play` dimension
+    def asDim: Dim = Dim(variable.time.variable, dim)
   }
 
   //  // -------- VarImpl --------
