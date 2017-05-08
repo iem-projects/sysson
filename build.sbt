@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.14.1-SNAPSHOT"
+lazy val projectVersion = "1.14.1"
 lazy val mimaVersion    = "1.14.0"
 
 lazy val commonSettings = Seq(
@@ -98,12 +98,12 @@ lazy val assemblySettings = Seq(
   mainClass in Compile := Some(mainClazz),
   assemblyMergeStrategy in assembly := {
   //  case "META-INF/MANIFEST.MF" => MergeStrategy.last
-    case PathList("javax", "xml", xs @ _*)   => MergeStrategy.first  // conflict xml-apis vs. stax-api
-    case PathList("org", "xmlpull", xs @ _*) => MergeStrategy.first  // from xstream I think
-    case PathList("org", "w3c", "dom", "events", xs @ _*) => MergeStrategy.first // bloody Apache Batik
-    case x =>
+    case PathList("javax", "xml"                 , _ @ _*) => MergeStrategy.first  // conflict xml-apis vs. stax-api
+    case PathList("org"  , "xmlpull"             , _ @ _*) => MergeStrategy.first  // from xstream I think
+    case PathList("org"  , "w3c", "dom", "events", _ @ _*) => MergeStrategy.first  // bloody Apache Batik
+    case other =>
       val oldStrategy = (assemblyMergeStrategy in assembly).value
-      oldStrategy(x)
+      oldStrategy(other)
   }
 )
 
@@ -137,6 +137,7 @@ lazy val root = Project(id = baseNameL, base = file("."))
       "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
     ),
     libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test",
+    mimaPreviousArtifacts := Set("at.iem" %% baseNameL % mimaVersion),
     // ---- runtime settings ----
     initialCommands in console :=
     """import at.iem.sysson._

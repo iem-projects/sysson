@@ -17,7 +17,6 @@ package graph
 
 import at.iem.sysson.sound.impl.MatrixPrepare
 import at.iem.sysson.sound.impl.MatrixPrepare.ShapeAndIndex
-import de.sciss.equal
 import de.sciss.synth
 import de.sciss.synth.proc.{UGenGraphBuilder => UGB}
 import de.sciss.synth.{GE, Lazy, ScalarRated, UGenInLike}
