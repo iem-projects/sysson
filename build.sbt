@@ -2,8 +2,8 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.14.1"
-lazy val mimaVersion    = "1.14.0"
+lazy val projectVersion = "1.15.0-SNAPSHOT"
+lazy val mimaVersion    = "1.15.0"
 
 lazy val commonSettings = Seq(
   name          := baseName,
@@ -14,7 +14,7 @@ lazy val commonSettings = Seq(
   licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")),
   // ---- scala compiler settings and libraries ----
   scalaVersion  := scalaMainVersion,
-  crossScalaVersions := Seq(scalaMainVersion, "2.11.8" /* , "2.10.6" */),
+  crossScalaVersions := Seq(scalaMainVersion, "2.11.11" /* , "2.10.6" */),
   // maven repository for NetCDF library
   resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases",
   // maven repository for Oracle BDB JE
@@ -28,15 +28,15 @@ lazy val commonSettings = Seq(
   }
 )
 
-lazy val scalaMainVersion           = "2.12.1"
+lazy val scalaMainVersion           = "2.12.2"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.11.0"
-lazy val soundProcessesVersion      = "3.11.0"
-lazy val lucreMatrixVersion         = "1.2.1"
-lazy val lucreSwingVersion          = "1.4.3"
-lazy val lucreVersion               = "3.3.3"
+lazy val melliteVersion             = "2.12.0"
+lazy val soundProcessesVersion      = "3.12.0"
+lazy val lucreMatrixVersion         = "1.3.0"
+lazy val lucreSwingVersion          = "1.5.0"
+lazy val lucreVersion               = "3.4.0"
 lazy val scalaColliderVersion       = "1.22.3"
 lazy val scalaColliderSwingVersion  = "1.32.2"
 lazy val ugensVersion               = "1.16.4"
@@ -45,7 +45,7 @@ lazy val swingTreeVersion           = "0.1.2"
 lazy val kollFlitzVersion           = "0.2.1"
 lazy val sheetVersion               = "0.1.2"
 lazy val slfVersion                 = "1.7.25"
-lazy val fscapeVersion              = "2.6.4"
+lazy val fscapeVersion              = "2.7.0"
 lazy val orsonpdfVersion            = "1.7"
 lazy val webLaFVersion              = "2.1.3"
 
