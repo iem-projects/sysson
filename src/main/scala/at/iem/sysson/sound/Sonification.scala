@@ -99,6 +99,9 @@ object Sonification extends Obj.Type {
 
     sonification.fold(render())(AuralSonificationImpl.use(_)(render()))
   }
+
+  /** Key for help `Markdown` value in the attribute map. */
+  val attrHelp = "help"
 }
 /** A sonification pairs a sound process with a map to data sources and user controls. */
 trait Sonification[S <: Sys[S]] extends Obj[S] with Publisher[S, Sonification.Update[S]] {

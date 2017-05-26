@@ -72,7 +72,7 @@ object MatrixObjView extends ListObjView.Factory {
     def factory: ObjView.Factory  = MatrixObjView
     def prefix: String            = MatrixObjView.prefix
 
-    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = false   // XXX TODO -- track matrix name and shape
+//    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = ...  // track matrix name and shape
 
     def isViewable = false
 

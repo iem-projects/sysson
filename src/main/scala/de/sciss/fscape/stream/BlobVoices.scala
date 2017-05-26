@@ -128,10 +128,10 @@ object BlobVoices {
     private[this] var _auxInValid             = false
     private[this] var _inValid                = false
 
-    private[this] var _blobNumCanRead         = false
-    private[this] var _blobBoundsCanRead      = false
-    private[this] var _blobNumVerticesCanRead = false
-    private[this] var _blobVerticesCanRead    = false
+//    private[this] var _blobNumCanRead         = false
+//    private[this] var _blobBoundsCanRead      = false
+//    private[this] var _blobNumVerticesCanRead = false
+//    private[this] var _blobVerticesCanRead    = false
 
     private[this] var blobNumOff              = 0
     private[this] var blobNumRemain           = 0
@@ -439,10 +439,10 @@ object BlobVoices {
         ((isClosed(sh.in6) && _auxInValid) || isAvailable(sh.in6))
     }
 
-    @inline private def updateBlobNumCanRead        (): Unit = _blobNumCanRead          = isAvailable(shape.in7)
-    @inline private def updateBlobBoundsCanRead     (): Unit = _blobBoundsCanRead       = isAvailable(shape.in8)
-    @inline private def updateBlobNumVerticesCanRead(): Unit = _blobNumVerticesCanRead  = isAvailable(shape.in9)
-    @inline private def updateBlobVerticesCanRead   (): Unit = _blobVerticesCanRead     = isAvailable(shape.in10)
+//    @inline private def updateBlobNumCanRead        (): Unit = _blobNumCanRead          = isAvailable(shape.in7)
+//    @inline private def updateBlobBoundsCanRead     (): Unit = _blobBoundsCanRead       = isAvailable(shape.in8)
+//    @inline private def updateBlobNumVerticesCanRead(): Unit = _blobNumVerticesCanRead  = isAvailable(shape.in9)
+//    @inline private def updateBlobVerticesCanRead   (): Unit = _blobVerticesCanRead     = isAvailable(shape.in10)
 
     private[this] var _statePrepareProcess      = false
     private[this] var _stateReadBlobNum         = false
@@ -560,7 +560,7 @@ object BlobVoices {
           val _buf              = bufIn9.buf
           val stop              = _numVerticesOff + chunk
           while (_numVerticesOff < stop) {
-            val blobIdx       = _numVerticesRead
+//            val blobIdx       = _numVerticesRead
             val blob          = blobs(_numVerticesRead)
             val num           = _buf(_numVerticesOff)
             blob.numVertices  = num

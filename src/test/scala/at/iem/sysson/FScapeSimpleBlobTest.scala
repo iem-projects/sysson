@@ -3,9 +3,8 @@ package at.iem.sysson
 import at.iem.sysson.fscape.GenViewFactory
 import de.sciss.file._
 import de.sciss.fscape.lucre.FScape
-import de.sciss.fscape.{GE, Graph, stream}
+import de.sciss.fscape.{Graph, stream}
 import de.sciss.lucre.artifact.{Artifact, ArtifactLocation}
-import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth.proc.{GenContext, WorkspaceHandle}
 
@@ -29,7 +28,7 @@ object FScapeSimpleBlobTest extends App {
 
     val f   = FScape[S]
     import WorkspaceHandle.Implicits.dummy
-    implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
+//    implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
     val g = Graph {
       import at.iem.sysson.fscape.graph._
@@ -44,14 +43,14 @@ object FScapeSimpleBlobTest extends App {
         numBlobs = blobs.numBlobs, bounds = blobs.bounds, numVertices = blobs.numVertices,
         vertices = blobs.vertices, voices = voices)
 
-      def printAll(sig: GE, label: String): Unit = {
-        val dup = sig zip sig // ResizeWindow(sig, 1, 0, 1)
-        dup.poll(Metro(2), label)
-      }
-
-      def printOne(sig: GE, label: String): Unit = {
-        sig.poll(0, label)
-      }
+//      def printAll(sig: GE, label: String): Unit = {
+//        val dup = sig zip sig // ResizeWindow(sig, 1, 0, 1)
+//        dup.poll(Metro(2), label)
+//      }
+//
+//      def printOne(sig: GE, label: String): Unit = {
+//        sig.poll(0, label)
+//      }
 
       val dimTime = Matrix.Op.Append(Dim.Def("time", values = ArithmSeq(length = height)))
       val dimBlob = Matrix.Op.Append(Dim.Def("blob", values = ArithmSeq(length = voices * 10)))

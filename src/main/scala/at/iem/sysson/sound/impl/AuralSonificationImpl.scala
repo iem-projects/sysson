@@ -16,7 +16,7 @@ package at.iem.sysson
 package sound
 package impl
 
-import at.iem.sysson.graph.{Dim, UserValue}
+import at.iem.sysson.graph.UserValue
 import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.matrix.{Matrix => LMatrix}

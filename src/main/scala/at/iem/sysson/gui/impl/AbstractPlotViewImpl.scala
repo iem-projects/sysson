@@ -17,7 +17,7 @@ package gui
 package impl
 
 import de.sciss.equal
-import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
+import de.sciss.lucre.expr.StringObj
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
@@ -155,9 +155,9 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
   def init(plot: Plot[S])(implicit tx: S#Tx): this.type = {
     _plotH = tx.newHandle(plot)
 
-    implicit val booleanEx  = BooleanObj
-    implicit val stringEx   = StringObj
-    implicit val doubleEx   = DoubleObj
+//    implicit val booleanEx  = BooleanObj
+//    implicit val stringEx   = StringObj
+//    implicit val doubleEx   = DoubleObj
 
     updateData(plot)  // XXX TODO --- might this be too early for sub-classes?
 

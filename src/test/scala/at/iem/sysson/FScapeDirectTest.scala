@@ -65,7 +65,7 @@ object FScapeDirectTest extends App {
 
     implicit val genCtx = GenContext[S]
 
-    def mkView(out: Output[S], total: Int = 1): GenView[S] = {
+    def mkView(out: Output[S], total: Int): GenView[S] = {
       val view  = GenView(out)
       val key   = out.key
 

@@ -22,7 +22,7 @@ object Session130326 extends SessionLike {
 
   def test1(): Unit = {
     val numTime = f.dimensionMap("time").size
-    val numPlev = f.dimensionMap("plev").size
+//    val numPlev = f.dimensionMap("plev").size
 
     val timeIdxs = Seq.tabulate(10) { i => (i.toDouble / 10 * numTime).toInt }
     val plevIdx = 5
@@ -33,7 +33,7 @@ object Session130326 extends SessionLike {
   }
 
   def test2(): Unit = {
-    val numTime = f.dimensionMap("time").size
+//    val numTime = f.dimensionMap("time").size
     val numPlev = f.dimensionMap("plev").size
 
     val timeIdxs = 0 :: Nil
@@ -45,8 +45,8 @@ object Session130326 extends SessionLike {
   }
 
   def test3(): Unit = {
-    val numTime = f.dimensionMap("time").size
-    val numPlev = f.dimensionMap("plev").size
+//    val numTime = f.dimensionMap("time").size
+//    val numPlev = f.dimensionMap("plev").size
 
     val timeIdxs = 0 :: Nil
     val plevIdxs = 5 :: Nil // (0 until numPlev by 2)
@@ -57,7 +57,7 @@ object Session130326 extends SessionLike {
   }
 
   def test4(): Unit = {
-    val numTime = f.dimensionMap("time").size
+//    val numTime = f.dimensionMap("time").size
     val numPlev = f.dimensionMap("plev").size
 
     val timeIdxs = 0 :: Nil

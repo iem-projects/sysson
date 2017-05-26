@@ -50,10 +50,10 @@ object FScapeBlobTest extends App {
       import de.sciss.fscape._
       import de.sciss.fscape.graph._
 
-      def printRange(in: GE, start: Int, stop: Int, label: String): Unit = {
-        val slice = in.drop(start).take(stop - start)
-        (slice zip slice).poll(Metro(2), label)
-      }
+//      def printRange(in: GE, start: Int, stop: Int, label: String): Unit = {
+//        val slice = in.drop(start).take(stop - start)
+//        (slice zip slice).poll(Metro(2), label)
+//      }
 
       val mIn       = Matrix("var")
       val d1        = Dim(mIn, "Time")
@@ -69,7 +69,7 @@ object FScapeBlobTest extends App {
 
       val width     = d2.size
       val height    = d1.size
-      val winSzIn   = width * height
+//      val winSzIn   = width * height
 
       val taLo      = 0.0
       val taHi      = 3.5

@@ -136,7 +136,7 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
   }
 
   private def guiInit(): Unit = {
-    type A      = DragAndDrop.MappingDrag
+//    type A      = DragAndDrop.MappingDrag
     val lb      = new Label("nnnnn")
     lb.icon = raphael.Icon(extent = 24)(raphael.Shapes.Clip) // .Disconnect)
     desktop.Util.fixSize(lb)

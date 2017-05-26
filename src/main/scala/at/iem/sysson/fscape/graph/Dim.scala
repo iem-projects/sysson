@@ -19,7 +19,7 @@ import de.sciss.fscape.UGen.Aux
 import de.sciss.fscape.graph.{ConstantI, ConstantL}
 import de.sciss.fscape.lucre.{UGenGraphBuilder => UGB}
 import de.sciss.fscape.{GE, Lazy, UGenGraph, UGenInLike}
-import de.sciss.serial.{DataOutput, ImmutableSerializer}
+import de.sciss.serial.DataOutput
 
 object Dim {
   object Values {

@@ -29,7 +29,6 @@ import de.sciss.mellite.gui.impl.document.DocumentHandlerImpl
 import de.sciss.mellite.{Application, Mellite, Prefs}
 
 import scala.collection.immutable.{Seq => ISeq}
-import scala.language.existentials
 import scala.util.control.NonFatal
 
 /** The main entry point for the desktop Swing application.

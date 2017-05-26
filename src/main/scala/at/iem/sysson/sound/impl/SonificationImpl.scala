@@ -32,7 +32,7 @@ object SonificationImpl {
   def sourceSerializer[S <: Sys[S]]: Serializer[S#Tx, S#Acc, Source[S]] = anySourceSer.asInstanceOf[SourceSer[S]]
 
   def applySource[S <: Sys[S]](matrix: Matrix[S])(implicit tx: S#Tx): Source[S] = {
-    implicit val str = StringObj.serializer[S]
+//    implicit val str = StringObj.serializer[S]
     val targets = evt.Targets[S]
     val dims    = evt.Map.Modifiable[S, String, StringObj]
     new SourceImpl(targets, matrix, dims).connect()
@@ -283,7 +283,7 @@ object SonificationImpl {
     val proc: Proc[S] = Proc.read(in, access)
     val sources : evt.Map[S, String, Sonification.Source]  = evt.Map.read(in, access)
     val controls: evt.Map[S, String, DoubleObj] = {
-      implicit val ser = DoubleObj.serializer[S]
+//      implicit val ser = DoubleObj.serializer[S]
       evt.Map.read(in, access)
     }
 

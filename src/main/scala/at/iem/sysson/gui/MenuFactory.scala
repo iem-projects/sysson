@@ -20,9 +20,6 @@ import java.net.{URI, URL}
 import at.iem.sysson.gui.impl.ActionConvertSpreadsheet
 import at.iem.sysson.gui.{SwingApplication => App}
 import de.sciss.desktop.{Desktop, KeyStrokes, Menu, OptionPane}
-import de.sciss.file._
-import de.sciss.lucre.stm.Durable
-import de.sciss.lucre.stm.store.BerkeleyDB
 import de.sciss.lucre.synth.Txn
 import de.sciss.mellite.Mellite
 import de.sciss.mellite.gui.{ActionCloseAllWorkspaces, ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
@@ -30,7 +27,6 @@ import de.sciss.osc
 import de.sciss.synth.Server
 
 import scala.concurrent.stm.TxnExecutor
-import scala.language.existentials
 import scala.swing.Label
 import scala.swing.event.{Key, MouseClicked}
 import scala.util.control.NonFatal
@@ -57,7 +53,7 @@ object MenuFactory {
         val m     = clazz.getMethod("scalaVersion")
         m.invoke(null).toString
       } catch {
-        case NonFatal(e) => "?"
+        case NonFatal(_) => "?"
       }
       val sConfig = Server.Config()
       Mellite.applyAudioPrefs(sConfig, useDevice = true, pickPort = true)
@@ -198,11 +194,12 @@ object MenuFactory {
 
   def openInterpreter(): Unit = InterpreterView()
 
-  private type S = Durable
-  private implicit lazy val system: S = {
-    val store = BerkeleyDB.factory(dir = syssonDir / "library")
-    Durable(store)
-  }
+//  private type S = Durable
+
+//  private implicit lazy val system: S = {
+//    val store = BerkeleyDB.factory(dir = syssonDir / "library")
+//    Durable(store)
+//  }
 
   private var dumpMode: osc.Dump = osc.Dump.Off
 

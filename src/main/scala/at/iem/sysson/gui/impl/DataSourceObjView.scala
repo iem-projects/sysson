@@ -110,7 +110,7 @@ object DataSourceObjView extends ListObjView.Factory {
     def factory: ObjView.Factory  = DataSourceObjView
     def prefix: String            = DataSourceObjView.prefix
 
-    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = false
+//    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = false
 
     def isViewable = true
 

@@ -34,12 +34,12 @@ import de.sciss.lucre.synth.Sys
 import de.sciss.mellite
 import de.sciss.mellite.Mellite
 import de.sciss.mellite.gui.edit.EditAttrMap
-import de.sciss.mellite.gui.{ActionBounceTimeline, AttrMapFrame, CodeFrame, GUI}
+import de.sciss.mellite.gui.{ActionBounceTimeline, AttrMapFrame, CodeFrame, GUI, MarkdownRenderFrame}
 import de.sciss.model.impl.ModelImpl
 import de.sciss.span.Span
 import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{AuralObj, AuralView, ObjKeys, TimeRef, Timeline, Transport, Workspace}
+import de.sciss.synth.proc.{AuralObj, AuralView, Markdown, ObjKeys, TimeRef, Timeline, Transport, Workspace}
 
 import scala.concurrent.stm.Ref
 import scala.swing.event.{ButtonClicked, Key}
@@ -56,9 +56,10 @@ object SonificationViewImpl {
       StringFieldView(expr, "Name")
     }
 
-    val p = sonification.proc
+    val p       = sonification.proc
+    val hasHelp = sonification.attr.contains(Sonification.attrHelp)
 
-    val res = new Impl[S, workspace.I](sonifH, /* TTT transport, */ nameView)(workspace, undoMgr, cursor) {
+    val res = new Impl[S, workspace.I](sonifH, nameView, hasHelp = hasHelp)(workspace, undoMgr, cursor) {
       val graphObserver: Disposable[S#Tx] =
         p.graph.changed.react { implicit tx => upd =>
           updateGraph(upd.now)
@@ -92,9 +93,10 @@ object SonificationViewImpl {
   }
 
   private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Sonification[S]],
-                                        nameView: Option[StringFieldView[S]])(implicit val workspace: Workspace[S] { type I = I1 },
-                                                                              val undoManager: UndoManager,
-                                                                              val cursor: stm.Cursor[S])
+                                                          nameView: Option[StringFieldView[S]], hasHelp: Boolean)
+                                                         (implicit val workspace: Workspace[S] { type I = I1 },
+                                                          val undoManager: UndoManager,
+                                                          val cursor: stm.Cursor[S])
     extends SonificationView[S] with ComponentHolder[Component] with ModelImpl[SonificationView.Update] {
 
     impl =>
@@ -273,14 +275,14 @@ object SonificationViewImpl {
 
     final def guiInit(/* initState: AuralSonificationOLD.Update */): Unit = {
       // ---- Header ----
-      val actionEditProcAttr = new Action(null) {
-        def apply(): Unit = cursor.step { implicit tx =>
+      val actionEditProcAttr = Action(null) {
+        cursor.step { implicit tx =>
           val sonif = sonifH()
           AttrMapFrame(sonif.proc)
         }
       }
-      val actionEditProcGraph = new Action(null) {
-        def apply(): Unit = cursor.step { implicit tx =>
+      val actionEditProcGraph = Action(null) {
+        cursor.step { implicit tx =>
           val sonif = sonifH()
           import de.sciss.mellite.Mellite.compiler
           CodeFrame.proc(sonif.proc)
@@ -289,8 +291,20 @@ object SonificationViewImpl {
 
       val ggEditProcAttr  = GUI.toolButton(actionEditProcAttr , raphael.Shapes.Wrench, tooltip = "Edit Proc Attributes")
       val ggEditProcGraph = GUI.toolButton(actionEditProcGraph, raphael.Shapes.Edit  , tooltip = "Edit Synth Graph"    )
-      val cHead           = nameView.fold(Vec.empty[Component])(view => Vec(new Label("Name:"), view.component))
-      val pHeader         = new FlowPanel(cHead :+ ggEditProcAttr :+ ggEditProcGraph: _*)
+      val cHead0          = nameView.fold(Vec.empty[Component])(view => Vec(new Label("Name:"), view.component))
+      val cHead           = if (!hasHelp) cHead0 else {
+        val actionHelp = Action(null) {
+          cursor.step { implicit tx =>
+            val sonif = sonifH()
+            sonif.attr.$[Markdown](Sonification.attrHelp).foreach { md =>
+              MarkdownRenderFrame(md)
+            }
+          }
+        }
+        val ggHelp = GUI.toolButton(actionHelp, raphael.Shapes.Help  , tooltip = "View Documentation"  )
+        cHead0 :+ ggHelp
+      }
+      val pHeader = new FlowPanel(cHead :+ ggEditProcAttr :+ ggEditProcGraph: _*)
 
       // ---- Mapping ----
 

@@ -84,7 +84,7 @@ object Matrix {
         matrix.write(out)
         out.writeLong(winSize)
         val sz = dims.size
-        out.writeShort(dims.size)
+        out.writeShort(sz)
         dims.foreach(out.writeShort)
       }
     }

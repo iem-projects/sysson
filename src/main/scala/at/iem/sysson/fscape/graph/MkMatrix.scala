@@ -64,9 +64,6 @@ object MkMatrix {
 final case class MkMatrix(key: String, spec: Matrix.Spec, in: GE)
   extends GE.Lazy with Output.Reader {
 
-  private def fail(arg: String, detail: String): Nothing =
-    throw new IllegalArgumentException(s"$productPrefix.$arg cannot be resolved at initialization time: $detail")
-
   def tpe: Obj.Type = LMatrix
 
   def readOutput[S <: Sys[S]](in: DataInput)(implicit tx: S#Tx, workspace: WorkspaceHandle[S]): Obj[S] = {

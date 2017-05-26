@@ -92,7 +92,7 @@ object PlotObjView extends ListObjView.Factory {
     def factory: ObjView.Factory  = PlotObjView
     def prefix: String            = PlotObjView.prefix
 
-    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = false   // XXX TODO -- track matrix name
+//    def isUpdateVisible(update: Any)(implicit tx: S#Tx): Boolean = ...   // track matrix name
 
     def isViewable = true
 
