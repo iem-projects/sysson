@@ -16,9 +16,10 @@ package at.iem.sysson
 package sound
 
 import de.sciss.file._
+import de.sciss.lucre.matrix
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm.{Sys, TxnLike}
-import de.sciss.lucre.{matrix, stm}
+import de.sciss.synth.proc.GenContext
 
 import scala.concurrent.Future
 
@@ -32,9 +33,9 @@ object AudioFileCache {
 
   type Value = matrix.AudioFileCache.Value
 
-  def acquire[S <: Sys[S]](key: Matrix.Key)(implicit tx: S#Tx, resolver: DataSource.Resolver[S],
-                                            cursor: stm.Cursor[S]): Future[Value] =
-    instance.acquire(key)
+  def acquire[S <: Sys[S]](factory: Matrix.ReaderFactory[S])(implicit tx: S#Tx, resolver: DataSource.Resolver[S],
+                                                             context: GenContext[S]): Future[Value] =
+    instance.acquire(factory)
 
   def release(key: Matrix.Key)(implicit tx: TxnLike): Unit = instance.release(key)
 }

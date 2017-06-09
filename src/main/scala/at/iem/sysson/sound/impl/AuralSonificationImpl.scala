@@ -351,16 +351,16 @@ object AuralSonificationImpl {
       //      } else {
       //        full.getKey(streamDim)
       //      }
-      val matrix: LMatrix.Key = elem match {
+      val matrix: LMatrix.ReaderFactory[S] = elem match {
         case dimGE: MatrixPrepare.DimGE =>
           val source  = findSource(sonification, elem.variable)
           val full    = source.matrix
           val dimIdx = findDimIndex(source, dimGE.key)
-          full.getDimensionKey(dimIdx, useChannels = streamDim < 0)
+          full.prepareDimensionReader(dimIdx, useChannels = streamDim < 0)
 
         case _ =>
           val full    = findMatrix(elem.variable)
-          full.getKey(streamDim)
+          full.prepareReader(streamDim)
       }
 
       // val ctlName     = de.sciss.synth.proc.graph.stream.controlName(key, idx)
@@ -382,6 +382,7 @@ object AuralSonificationImpl {
 
       val key = MatrixPrepare.mkKey(elem) // mkKeyOLD(dimElem, isDim = isDim) // graph.Dim.key(dimElem)
       val cfg = MatrixPrepare.Config(matrix = matrix, server = server, key = key, index = idx, bufSize = bufSize)
+      import context.gen
       val res = MatrixPrepare(cfg)
       b.resources ::= res
     }

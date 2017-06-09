@@ -26,6 +26,7 @@ import de.sciss.lucre.{stm, event => evt}
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
+import de.sciss.synth.proc.GenContext
 
 import scala.concurrent.stm.{Ref, TMap}
 import scala.swing.Component
@@ -81,6 +82,8 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
 
   implicit private[this] val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
+  implicit protected def genContext: GenContext[S] = ??? // RRR
+
   // checks if the shape is reducible in all but the provided dimensions
   private def checkShape1D(shape: Vec[Int], hIdx: Int, vIdx: Int): Boolean =
     shape.zipWithIndex.forall { case (n, i) => n == 1 || i == hIdx || i == vIdx }
@@ -105,10 +108,12 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
       //        println(s"h-unit: ${dims(hIdx).units}")
       //        println(s"v-unit: ${dims(vIdx).units}")
 
-      val hKey    = m.getDimensionKey(hIdx, useChannels = false)
-      val vKey    = m.getDimensionKey(vIdx, useChannels = false)
-      val hReader = hKey.reader[S]()
-      val vReader = vKey.reader[S]()
+      import scala.concurrent.ExecutionContext.Implicits.global
+
+      val hKey    = m.prepareDimensionReader(hIdx, useChannels = false)
+      val vKey    = m.prepareDimensionReader(vIdx, useChannels = false)
+      val hReader = hKey.reader()
+      val vReader = vKey.reader()
       val mName   = m.name  // or plot-obj attr name?
       val mReader = m.reader(streamDim = hIdx)  // rows = channels, columns = frames
       val hDim    = dims(hIdx)
@@ -116,12 +121,12 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
       val mUnits  = m.units
       val hUnits  = hDim.units
       val vUnits  = vDim.units
-      val proc    = new Reader(mName = mName, mUnits = mUnits, mReader = mReader,
-        hName = hName, hUnits = hUnits, hReader = hReader, vName = vName, vUnits = vUnits, vReader = vReader)
+      val proc    = new Reader(mName = mName, mUnits = mUnits, mReader = ??? /* RRR mReader */,
+        hName = hName, hUnits = hUnits, hReader = ??? /* RRR hReader */, vName = vName, vUnits = vUnits,
+        vReader = ??? /* RRR vReader */)
       val oldProc = readerRef.swap(proc)(tx.peer)
       tx.afterCommit {
         oldProc.abort()
-        import scala.concurrent.ExecutionContext.Implicits.global
         if (!proc.aborted) {
           proc.start()
           proc.onComplete {

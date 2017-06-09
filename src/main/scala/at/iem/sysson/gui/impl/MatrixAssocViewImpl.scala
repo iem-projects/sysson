@@ -32,7 +32,7 @@ import de.sciss.lucre.stm.{Sys, TxnLike}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.serial.Serializer
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.{GenContext, Workspace}
 
 import scala.concurrent.stm.{Ref, TxnExecutor}
 import scala.language.higherKinds
@@ -133,6 +133,9 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
   def init()(implicit tx: S#Tx): this.type = {
     implicit val resolver = WorkspaceResolver[S]
     import at.iem.sysson.Stats.executionContext
+
+    implicit val context: GenContext[S] = ??? // RRR
+
     _matrixView = MatrixView[S](Some(TH))
     _matrixView.nameVisible = false
     ButtonImpl.init()

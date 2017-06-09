@@ -18,14 +18,13 @@ package impl
 
 import at.iem.sysson.graph.{MatrixLike, MatrixTooLargeException}
 import de.sciss.lucre.matrix.{DataSource, Matrix}
-import de.sciss.lucre.stm
 import de.sciss.lucre.synth.{Buffer, NodeRef, Server, Sys}
 import de.sciss.model.impl.ModelImpl
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.{FutureProxy, ProcessorImpl}
 import de.sciss.synth
 import de.sciss.synth.proc.impl.{AsyncResource, StreamBuffer}
-import de.sciss.synth.proc.{SoundProcesses, UGenGraphBuilder => UGB}
+import de.sciss.synth.proc.{GenContext, SoundProcesses, UGenGraphBuilder => UGB}
 import de.sciss.synth.{AudioRated, ScalarRated, UGenInLike, proc}
 
 import scala.concurrent.duration.Duration
@@ -151,8 +150,8 @@ object MatrixPrepare {
     val spec      = info.specs.last
 
     import synth._
-    import ugen._
     import Ops.stringToControl
+    import ugen._
 
     val idx     = /* if (spec.isEmpty) 0 else */ info.specs.size - 1
     val key     = mkKey(in)
@@ -227,11 +226,11 @@ object MatrixPrepare {
     * @param bufSize      the desired size for the resulting streaming buffer. If not-streaming, this value
     *                     is ignored, and should be set to zero
     */
-  case class Config(matrix: Matrix.Key, server: Server, key: String, index: Int, bufSize: Int)
+  case class Config[S <: Sys[S]](matrix: Matrix.ReaderFactory[S], server: Server, key: String, index: Int, bufSize: Int)
 
   /** Creates and launches the process. */
-  def apply[S <: Sys[S]](config: Config)(implicit tx: S#Tx, resolver: DataSource.Resolver[S],
-                                         cursor: stm.Cursor[S]): AsyncResource[S] = {
+  def apply[S <: Sys[S]](config: Config[S])(implicit tx: S#Tx, resolver: DataSource.Resolver[S],
+                                            context: GenContext[S]): AsyncResource[S] = {
     import config._
     logDebugTx(s"MatrixPrepare($config)")
     val cache = AudioFileCache.acquire(matrix)
@@ -246,7 +245,7 @@ object MatrixPrepare {
   }
 
   private abstract class Impl[S <: Sys[S]] extends AsyncResource[S] {
-    protected val config: Config
+    protected val config: Config[S]
 
     override def toString = s"MatrixPrepare(${config.matrix})@${hashCode().toHexString}"
 
@@ -257,7 +256,7 @@ object MatrixPrepare {
       val numFrames     = value.spec.numFrames
       val numChannels   = value.spec.numChannels
       import config.{bufSize, index, key, matrix, server}
-      val isStreaming   = matrix.isStreaming
+      val isStreaming   = matrix.key.isStreaming
       val bufSize1      = if (isStreaming) bufSize else numFrames.toInt
       val buf           = Buffer(server)(numFrames = bufSize1, numChannels = numChannels)
       val path          = value.file.getAbsolutePath
@@ -294,17 +293,17 @@ object MatrixPrepare {
       val late = Buffer.disposeWithNode(buf, nr)
       nr.addResource(late)
       syn.onEndTxn { implicit tx =>
-        AudioFileCache.release(config.matrix)
+        AudioFileCache.release(config.matrix.key)
       }
     }
 
     def dispose()(implicit tx: S#Tx): Unit = {
       tx.afterCommit(abort())
-      AudioFileCache.release(config.matrix)
+      AudioFileCache.release(config.matrix.key)
     }
   }
 
-  private final class SyncImpl[S <: Sys[S]](protected val config: Config,
+  private final class SyncImpl[S <: Sys[S]](protected val config: Config[S],
                                             protected val cache: Future[AudioFileCache.Value])
     extends Impl[S] with ModelImpl[Processor.Update[Product, AsyncResource[S]]] with FutureProxy[Product] {
 
@@ -315,7 +314,7 @@ object MatrixPrepare {
     def abort(): Unit = ()
   }
 
-  private final class AsyncImpl[S <: Sys[S]](protected val config: Config,
+  private final class AsyncImpl[S <: Sys[S]](protected val config: Config[S],
                                              protected val cache: Future[AudioFileCache.Value])
     extends Impl[S] with ProcessorImpl[AudioFileCache.Value, AsyncResource[S]] {
 

@@ -34,7 +34,7 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.{GenContext, Workspace}
 
 import scala.annotation.tailrec
 import scala.concurrent.stm.Ref
@@ -174,15 +174,16 @@ object PlotViewImpl {
       val dimIdx = r.in.dimensions.indexWhere(_.name == mDim)
       if (DEBUG) println(s"readElapsedData ${r.id}, $mDim, dimIdx = $dimIdx")
       if (dimIdx >= 0) {
-        val dimKey  = r.in.getDimensionKey(dimIdx, useChannels = false)
+        val dimKey  = r.in.prepareDimensionReader(dimIdx, useChannels = false)
         implicit val resolver = WorkspaceResolver[S]
-        val reader  = dimKey.reader[S]()
-        val len     = reader.numFrames.toInt
-        val buf     = Array.ofDim[Float](1, len)
-        val p       = Promise[Array[Float]]()
+        implicit val context: GenContext[S] = ??? // RRR
+        import at.iem.sysson.Stats.executionContext
+        val readerFut = dimKey.reader()
+        val p         = Promise[Array[Float]]()
         tx.afterCommit {
-          import at.iem.sysson.Stats.executionContext
-          val fut = Future {
+          val fut = readerFut.map { reader =>
+            val len = reader.numFrames.toInt
+            val buf = Array.ofDim[Float](1, len)
             reader.readFloat2D(buf, 0, len)
             buf(0)
           }

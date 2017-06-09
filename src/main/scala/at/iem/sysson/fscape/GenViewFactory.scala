@@ -36,10 +36,10 @@ object GenViewFactory {
 
   def render[S <: Sys[S]](fscape: FScape[S], config: Control.Config = Control.Config())
                          (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
-    val ugbCtx = new ContextImpl(fscape)
+    val ugbCtx: UGenGraphBuilder.Context[S] = ??? // RRR new ContextImpl(fscape)
     RenderingImpl(fscape, ugbCtx, config, force = true)
   }
-
+/*
   private final class ContextImpl[S <: Sys[S]](protected val fscape: FScape[S])(implicit context: GenContext[S])
     extends UGenGraphBuilderContextImpl[S] {
 
@@ -244,7 +244,7 @@ object GenViewFactory {
       case _ => super.requestInput(req, io)
     }
   }
-
+*/
   private final class Impl(config: Control.Config) extends GenView.Factory {
     def typeID: Int = Output.typeID
 
@@ -253,7 +253,7 @@ object GenViewFactory {
     def apply[S <: Sys[S]](output: Output[S])(implicit tx: S#Tx, context: GenContext[S]): GenView[S] = {
       val _fscape = output.fscape
       val fscView = context.acquire[Rendering[S]](_fscape) {
-        val ugbCtx = new ContextImpl(_fscape)
+        val ugbCtx: UGenGraphBuilder.Context[S] = ??? // RRR new ContextImpl(_fscape)
         RenderingImpl(_fscape, ugbCtx, config, force = false)
       }
       OutputGenView(config, output, fscView)
