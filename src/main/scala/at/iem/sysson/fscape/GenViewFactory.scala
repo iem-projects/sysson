@@ -29,10 +29,8 @@ import de.sciss.lucre.stm.Sys
 import de.sciss.synth.proc.{GenContext, GenView, WorkspaceHandle}
 
 object GenViewFactory {
-  def apply(config: Control.Config = Control.Config()): GenView.Factory = new Impl(config)
-
-  def install(config: Control.Config = Control.Config()): Unit =
-    GenView.addFactory(apply(config))
+  def apply  (config: Control.Config = Control.Config()): GenView.Factory = new Impl(config)
+  def install(config: Control.Config = Control.Config()): Unit            = GenView.addFactory(apply(config))
 
   def render[S <: Sys[S]](fscape: FScape[S], config: Control.Config = Control.Config())
                          (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
