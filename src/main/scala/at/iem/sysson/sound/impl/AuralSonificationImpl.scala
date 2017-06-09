@@ -87,7 +87,7 @@ object AuralSonificationImpl {
       val obsCtl = controls.changed.react { implicit tx => upd => upd.changes.foreach {
         case evt.Map.Added   (key, value)       => ctlAdded  (key, value)
         case evt.Map.Removed (key, value)       => ctlRemoved(key, value)
-        case evt.Map.Replaced(key, before, now) => ctlChange (key, Some(now.value))
+        case evt.Map.Replaced(key, _ /* before */, now) => ctlChange (key, Some(now.value))
       }}
       addObserver(obsCtl)
       controls.iterator.foreach { case (key, value) =>
@@ -351,7 +351,7 @@ object AuralSonificationImpl {
       //      } else {
       //        full.getKey(streamDim)
       //      }
-      val matrix = elem match {
+      val matrix: LMatrix.Key = elem match {
         case dimGE: MatrixPrepare.DimGE =>
           val source  = findSource(sonification, elem.variable)
           val full    = source.matrix
