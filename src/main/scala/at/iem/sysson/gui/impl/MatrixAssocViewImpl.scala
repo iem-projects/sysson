@@ -132,9 +132,8 @@ abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
 
   def init()(implicit tx: S#Tx): this.type = {
     implicit val resolver = WorkspaceResolver[S]
-    import at.iem.sysson.Stats.executionContext
-
-    implicit val context: GenContext[S] = ??? // RRR
+    import Stats.executionContext
+    implicit val gen = GenContext[S]
 
     _matrixView = MatrixView[S](Some(TH))
     _matrixView.nameVisible = false

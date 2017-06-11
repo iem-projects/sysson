@@ -82,8 +82,6 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
 
   implicit private[this] val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
-  implicit protected def genContext: GenContext[S] = ??? // RRR
-
   // checks if the shape is reducible in all but the provided dimensions
   private def checkShape1D(shape: Vec[Int], hIdx: Int, vIdx: Int): Boolean =
     shape.zipWithIndex.forall { case (n, i) => n == 1 || i == hIdx || i == vIdx }
@@ -109,6 +107,7 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
       //        println(s"v-unit: ${dims(vIdx).units}")
 
       import scala.concurrent.ExecutionContext.Implicits.global
+      implicit val context = GenContext[S]
 
       val hKey    = m.prepareDimensionReader(hIdx, useChannels = false)
       val vKey    = m.prepareDimensionReader(vIdx, useChannels = false)

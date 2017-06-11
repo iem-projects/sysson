@@ -340,7 +340,6 @@ object AuralSonificationImpl {
     private def addMatrixStream(b: AsyncProcBuilder[S], spec: MatrixPrepare.Spec, idx: Int)
                                (implicit tx: S#Tx): Unit = {
       // note: info-only graph elems not yet supported (or existent)
-      import context.scheduler.cursor
       import context.workspaceHandle
       import spec.{elem, streamDim}
       implicit val resolver = WorkspaceResolver[S]

@@ -376,23 +376,23 @@ object SonificationViewImpl {
       }
     }
 
-    private def runGroup(state: Boolean)(implicit tx: S#Tx): Unit = {
-      println("TODO: runGroup")
-      //      sonifView.auralPresentation.group(workspace.inMemoryBridge(tx)).foreach { g =>
-      //        g.run(audible = true, state = state)
-      //      }
-    }
+//    private def runGroup(state: Boolean)(implicit tx: S#Tx): Unit = {
+//      println("TODO: runGroup")
+//      //      sonifView.auralPresentation.group(workspace.inMemoryBridge(tx)).foreach { g =>
+//      //        g.run(audible = true, state = state)
+//      //      }
+//    }
 
     private val transportRef = Ref(Option.empty[TransportRef[S]])
 
     private def tStop(): Unit = {
       // val ggPause   = transportButtons.button(GUITransport.Pause).get
-      val isPausing = false // ggPause.selected
+//      val isPausing = false // ggPause.selected
       cursor.step { implicit tx =>
         // TTT
         // transport.stop()
         stopAndDisposeTransport()
-        if (isPausing) runGroup(state = true)
+//        if (isPausing) runGroup(state = true)
       }
       auralChange(AuralView.Stopped, transportPlaying = false)
     }
