@@ -117,7 +117,7 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
       val mReader = m.reader(streamDim = hIdx)  // rows = channels, columns = frames
       val hDim    = dims(hIdx)
       val vDim    = dims(vIdx)
-      val mUnits  = m.units
+      val mUnits  = m   .units
       val hUnits  = hDim.units
       val vUnits  = vDim.units
       val proc    = new Reader(mName = mName, mUnits = mUnits, mReader = ??? /* RRR mReader */,

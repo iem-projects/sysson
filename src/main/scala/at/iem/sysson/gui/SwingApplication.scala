@@ -53,6 +53,8 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
     //    de.sciss.synth.proc.showTransportLog  = true
     // de.sciss.synth.proc.impl.BounceImpl.DEBUG = true
     // UGenGraphBuilderLike.DEBUG = true
+    // de.sciss.fscape.showStreamLog = true
+    // de.sciss.lucre.matrix.impl.ReaderFactoryImpl.DEBUG = true
 
     // ---- look and feel ----
 

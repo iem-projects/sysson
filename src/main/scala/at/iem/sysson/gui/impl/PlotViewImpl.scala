@@ -174,9 +174,9 @@ object PlotViewImpl {
       val dimIdx = r.in.dimensions.indexWhere(_.name == mDim)
       if (DEBUG) println(s"readElapsedData ${r.id}, $mDim, dimIdx = $dimIdx")
       if (dimIdx >= 0) {
-        val dimKey  = r.in.prepareDimensionReader(dimIdx, useChannels = false)
+        val dimKey = r.in.prepareDimensionReader(dimIdx, useChannels = false)
         implicit val resolver = WorkspaceResolver[S]
-        implicit val context: GenContext[S] = ??? // RRR
+        implicit val context  = GenContext       [S]
         import at.iem.sysson.Stats.executionContext
         val readerFut = dimKey.reader()
         val p         = Promise[Array[Float]]()
