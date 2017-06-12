@@ -26,7 +26,7 @@ import de.sciss.lucre.{stm, event => evt}
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
-import de.sciss.synth.proc.GenContext
+import de.sciss.synth.proc.{GenContext, SoundProcesses}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -114,6 +114,9 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
       //        println(s"v-unit: ${dims(vIdx).units}")
 
       import scala.concurrent.ExecutionContext.Implicits.global
+
+      // this locks:
+//      import SoundProcesses.executionContext
       implicit val context = GenContext[S]
 
       val hKey    = m.prepareDimensionReader(hIdx, useChannels = false)

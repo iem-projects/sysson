@@ -22,7 +22,6 @@ import at.iem.sysson.sound.{AuralSonification, Sonification}
 import at.iem.sysson.util.DoubleTransform
 import de.sciss.file._
 import de.sciss.fscape.lucre.{FScape => LFScape}
-import de.sciss.fscape.stream.Control
 import de.sciss.lucre.matrix
 import de.sciss.lucre.stm.TxnLike
 import de.sciss.mellite.Mellite
@@ -103,9 +102,9 @@ package object sysson {
 
   def initTypes(): Unit = {
     // must come before Mellite.initTypes
-    val ctlConf = Control.Config()
-    ctlConf.terminateActors = false
-    GenViewFactory.install(ctlConf)
+//    val ctlConf = Control.Config()
+//    ctlConf.terminateActors = false
+    GenViewFactory.install()
 
     Mellite               .initTypes()
     matrix                .initTypes()

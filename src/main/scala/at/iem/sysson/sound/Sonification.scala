@@ -93,7 +93,7 @@ object Sonification extends Obj.Type {
 //  }
 
   def render[S <: Sys[S]](fscape: FScape[S], sonification: Optional[Sonification[S]] = None,
-                          config: Control.Config = Control.Config())
+                          config: Control.Config = FScape.defaultConfig)
                          (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
     def render(): FScape.Rendering[S] = GenViewFactory.render(fscape, config)
 

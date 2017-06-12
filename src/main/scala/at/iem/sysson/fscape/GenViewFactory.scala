@@ -31,10 +31,10 @@ import de.sciss.synth.proc.{GenContext, GenView}
 import scala.concurrent.ExecutionContext
 
 object GenViewFactory {
-  def apply  (config: Control.Config = Control.Config()): GenView.Factory = new Impl(config)
-  def install(config: Control.Config = Control.Config()): Unit            = GenView.addFactory(apply(config))
+  def apply  (config: Control.Config = FScape.defaultConfig): GenView.Factory = new Impl(config)
+  def install(config: Control.Config = FScape.defaultConfig): Unit            = GenView.addFactory(apply(config))
 
-  def render[S <: Sys[S]](fscape: FScape[S], config: Control.Config = Control.Config())
+  def render[S <: Sys[S]](fscape: FScape[S], config: Control.Config = FScape.defaultConfig)
                          (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
     import config.executionContext
     val ugbCtx: UGenGraphBuilder.Context[S] = new ContextImpl(fscape)
