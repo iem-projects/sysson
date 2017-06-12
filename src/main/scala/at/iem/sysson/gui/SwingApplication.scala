@@ -53,8 +53,11 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
     //    de.sciss.synth.proc.showTransportLog  = true
     // de.sciss.synth.proc.impl.BounceImpl.DEBUG = true
     // UGenGraphBuilderLike.DEBUG = true
-    // de.sciss.fscape.showStreamLog = true
-    // de.sciss.lucre.matrix.impl.ReaderFactoryImpl.DEBUG = true
+//    de.sciss.fscape.showStreamLog = true
+//    de.sciss.lucre.matrix.impl.ReaderFactoryImpl.DEBUG = true
+//    de.sciss.lucre.matrix.impl.ReaderFactoryImpl.GUI_DEBUG = true
+//    de.sciss.fscape.lucre.impl.RenderingImpl.DEBUG = true
+//    de.sciss.fscape.showControlLog = true
 
     // ---- look and feel ----
 
@@ -78,7 +81,7 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
     sysson.initTypes()
     sysson.gui.registerViews()
 
-    LogFrame           .instance    // init
+    LogFrame.instance    // init
 
 //    sys.addShutdownHook {
 //      Stats.cacheDir.children { f =>
@@ -104,11 +107,13 @@ object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Appl
   def topLevelObjects: ISeq[String] =
     List("Folder", "DataSource", "Sonification", "Plot")
 
-  // XXX TODO --- can remove elements through preferences "novice user" switch
-  lazy val objectFilter: String => Boolean = {
-    case "Nuages" | "Recursion" => false
-    case _ => true
-  }
+//  // --- can remove elements through preferences "novice user" switch
+//  lazy val objectFilter: String => Boolean = {
+//    case "Nuages" | "Recursion" => false
+//    case _ => true
+//  }
+
+  lazy val objectFilter: String => Boolean = _ => true
 
   def categSonification = "Sonification"
 }

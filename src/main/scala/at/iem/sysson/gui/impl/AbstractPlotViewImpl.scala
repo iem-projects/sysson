@@ -16,6 +16,8 @@ package at.iem.sysson
 package gui
 package impl
 
+import java.util.concurrent.TimeUnit
+
 import de.sciss.equal
 import de.sciss.lucre.expr.StringObj
 import de.sciss.lucre.matrix.{DataSource, Matrix}
@@ -26,11 +28,11 @@ import de.sciss.lucre.{stm, event => evt}
 import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
-import de.sciss.synth.proc.{GenContext, SoundProcesses}
+import de.sciss.synth.proc.GenContext
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
 import scala.concurrent.stm.{Ref, TMap}
+import scala.concurrent.{Await, Future}
 import scala.swing.Component
 import scala.util.{Failure, Success}
 
@@ -57,9 +59,10 @@ object AbstractPlotViewImpl {
 
     protected def body(): PlotData = {
       // XXX TODO --- await is not good; should be able to flat-map processes
-      val hReader = Await.result(hReaderF, Duration.Inf)
-      val vReader = Await.result(vReaderF, Duration.Inf)
-      val mReader = Await.result(mReaderF, Duration.Inf)
+      val maxDur = Duration(30, TimeUnit.SECONDS)
+      val hReader = Await.result(hReaderF, maxDur /* Duration.Inf */)
+      val vReader = Await.result(vReaderF, maxDur /* Duration.Inf */)
+      val mReader = Await.result(mReaderF, maxDur /* Duration.Inf */)
 
       val hData = readDim(hReader)
       val vData = readDim(vReader)
