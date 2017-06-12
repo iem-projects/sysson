@@ -28,6 +28,8 @@ import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 import de.sciss.synth.proc.GenContext
 
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 import scala.concurrent.stm.{Ref, TMap}
 import scala.swing.Component
 import scala.util.{Failure, Success}
@@ -39,9 +41,9 @@ object AbstractPlotViewImpl {
                        val vName: String, val hUnits: String, val vData: Array[Float],
                        val mName: String, val vUnits: String, val mData: Array[Array[Float]])
 
-  private final class Reader(mName: String, mUnits: String, mReader: Matrix.Reader,
-                             hName: String, hUnits: String, hReader: Matrix.Reader,
-                             vName: String, vUnits: String, vReader: Matrix.Reader)
+  private final class Reader(mName: String, mUnits: String, mReaderF: Future[Matrix.Reader],
+                             hName: String, hUnits: String, hReaderF: Future[Matrix.Reader],
+                             vName: String, vUnits: String, vReaderF: Future[Matrix.Reader])
     extends ProcessorImpl[PlotData, Reader] {
 
     private def readDim(r: Matrix.Reader): Array[Float] = {
@@ -54,6 +56,11 @@ object AbstractPlotViewImpl {
     }
 
     protected def body(): PlotData = {
+      // XXX TODO --- await is not good; should be able to flat-map processes
+      val hReader = Await.result(hReaderF, Duration.Inf)
+      val vReader = Await.result(vReaderF, Duration.Inf)
+      val mReader = Await.result(mReaderF, Duration.Inf)
+
       val hData = readDim(hReader)
       val vData = readDim(vReader)
 
@@ -120,9 +127,9 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
       val mUnits  = m   .units
       val hUnits  = hDim.units
       val vUnits  = vDim.units
-      val proc    = new Reader(mName = mName, mUnits = mUnits, mReader = ??? /* RRR mReader */,
-        hName = hName, hUnits = hUnits, hReader = ??? /* RRR hReader */, vName = vName, vUnits = vUnits,
-        vReader = ??? /* RRR vReader */)
+      val proc    = new Reader(mName = mName, mUnits = mUnits, mReaderF = mReader,
+        hName = hName, hUnits = hUnits, hReaderF = hReader, vName = vName, vUnits = vUnits,
+        vReaderF = vReader)
       val oldProc = readerRef.swap(proc)(tx.peer)
       tx.afterCommit {
         oldProc.abort()
