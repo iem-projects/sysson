@@ -26,8 +26,7 @@ import ucar.{ma2, nc2}
 import scala.collection.JavaConverters._
 import scala.collection.breakOut
 import scala.collection.immutable.{IndexedSeq => Vec}
-import scala.concurrent.{Await, ExecutionContext, blocking}
-import scala.concurrent.duration.Duration
+import scala.concurrent.blocking
 import scala.language.implicitConversions
 
 object NetCdfFileUtil {
@@ -170,12 +169,12 @@ object NetCdfFileUtil {
             val dimRangeO = varSec.section(inDimIdx)
             val dimRange  = close(dimRangeO, dim.size)
             var sumOut    = sum
-            for (i <- dimRange) {
+            for (_ <- dimRange) {
               sumOut = countSteps(tail, sumOut)
             }
             sumOut
 
-          case c: Create =>
+          case _: Create =>
             countSteps(tail, sum)
         }
 
@@ -198,7 +197,7 @@ object NetCdfFileUtil {
               stepsOut = iter(sec1, origin :+ i, tail, steps = stepsOut)
             }
             stepsOut
-          case c: Create =>
+          case _: Create =>
             iter(sec, origin :+ 0, tail, steps = steps)
         }
 
@@ -241,12 +240,12 @@ object NetCdfFileUtil {
     writer.close()
   }
 
-  def concatAndWait(in1: nc2.NetcdfFile, in2: nc2.NetcdfFile, out: File, varName: String, dimName: String = "time"): Unit = {
-    val proc = concat(in1 = in1, in2 = in2, out = out, varName = varName, dimName = dimName)
-    import ExecutionContext.Implicits.global
-    proc.start()
-    Await.result(proc, Duration.Inf)
-  }
+//  def concatAndWait(in1: nc2.NetcdfFile, in2: nc2.NetcdfFile, out: File, varName: String, dimName: String = "time"): Unit = {
+//    val proc = concat(in1 = in1, in2 = in2, out = out, varName = varName, dimName = dimName)
+//    import ExecutionContext.Implicits.global
+//    proc.start()
+//    Await.result(proc, Duration.Inf)
+//  }
 
   /** Creates a new NetCDF file that contains one variable resulting from the concatenation
     * of that variable present in two input files.
@@ -485,7 +484,7 @@ object NetCdfFileUtil {
     writer.create()
 
     // copy dimension data
-    (inDims zip outDimsV).zipWithIndex.foreach { case ((inDim, outDimV), dimIdx0) =>
+    (inDims zip outDimsV).zipWithIndex.foreach { case ((inDim, outDimV), _ /* dimIdx0 */) =>
       val inVar1    = in.variableMap(inDim.name)
       val dimData1  = inVar1.read()
       writer.write(outDimV, dimData1)

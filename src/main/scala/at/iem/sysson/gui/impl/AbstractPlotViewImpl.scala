@@ -16,11 +16,10 @@ package at.iem.sysson
 package gui
 package impl
 
-import java.util.concurrent.TimeUnit
-
 import de.sciss.equal
 import de.sciss.lucre.expr.StringObj
 import de.sciss.lucre.matrix.{DataSource, Matrix}
+import de.sciss.lucre.stm.TxnLike.peer
 import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx}
@@ -30,11 +29,10 @@ import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 import de.sciss.synth.proc.GenContext
 
-import scala.concurrent.duration.Duration
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.stm.{Ref, TMap}
-import scala.concurrent.{Await, Future}
 import scala.swing.Component
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 object AbstractPlotViewImpl {
   private final val DEBUG = false
@@ -43,9 +41,9 @@ object AbstractPlotViewImpl {
                        val vName: String, val hUnits: String, val vData: Array[Float],
                        val mName: String, val vUnits: String, val mData: Array[Array[Float]])
 
-  private final class Reader(mName: String, mUnits: String, mReaderF: Future[Matrix.Reader],
-                             hName: String, hUnits: String, hReaderF: Future[Matrix.Reader],
-                             vName: String, vUnits: String, vReaderF: Future[Matrix.Reader])
+  private final class Reader(mName: String, mUnits: String, mReader: Matrix.Reader,
+                             hName: String, hUnits: String, hReader: Matrix.Reader,
+                             vName: String, vUnits: String, vReader: Matrix.Reader)
     extends ProcessorImpl[PlotData, Reader] {
 
     private def readDim(r: Matrix.Reader): Array[Float] = {
@@ -58,11 +56,11 @@ object AbstractPlotViewImpl {
     }
 
     protected def body(): PlotData = {
-      // XXX TODO --- await is not good; should be able to flat-map processes
-      val maxDur = Duration(30, TimeUnit.SECONDS)
-      val hReader = Await.result(hReaderF, maxDur /* Duration.Inf */)
-      val vReader = Await.result(vReaderF, maxDur /* Duration.Inf */)
-      val mReader = Await.result(mReaderF, maxDur /* Duration.Inf */)
+//      // XXX TODO --- await is not good; should be able to flat-map processes
+//      val maxDur = Duration(30, TimeUnit.SECONDS)
+//      val hReader = Await.result(hReaderF, maxDur /* Duration.Inf */)
+//      val vReader = Await.result(vReaderF, maxDur /* Duration.Inf */)
+//      val mReader = Await.result(mReaderF, maxDur /* Duration.Inf */)
 
       val hData = readDim(hReader)
       val vData = readDim(vReader)
@@ -92,13 +90,27 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
 
   implicit private[this] val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
+  private[this] var _observers  = List.empty[Disposable[S#Tx]]
+  private[this] var  _plotH: stm.Source[S#Tx, Plot[S]] = _
+  private[this] val plotDimObs  = TMap.empty[String, Disposable[S#Tx]]
+
+  private[this] val readerRef   = Ref(new Reader(null, null, null, null, null, null, null, null, null))
+
+  private[this] val isReading   = Ref(false)
+  private[this] val isDirty     = Ref(false)
+  private[this] val isDisposed  = Ref(false)
+
   // checks if the shape is reducible in all but the provided dimensions
   private def checkShape1D(shape: Vec[Int], hIdx: Int, vIdx: Int): Boolean =
     shape.zipWithIndex.forall { case (n, i) => n == 1 || i == hIdx || i == vIdx }
 
-  private[this] val readerRef = Ref(new Reader(null, null, null, null, null, null, null, null, null))
+  private def updateData(plot: Plot[S])(implicit tx: S#Tx): Unit =
+    if (!isDisposed()) {
+      if (!isReading()) updateData1(plot)
+      else isDirty() = true
+    }
 
-  private def updateData(plot: Plot[S])(implicit tx: S#Tx): Unit = {
+  private def updateData1(plot: Plot[S])(implicit tx: S#Tx): Unit = {
     val m       = plot.matrix
     val dimMap  = plot.dims
     val dims    = m.dimensions
@@ -122,50 +134,76 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
 //      import SoundProcesses.executionContext
       implicit val context = GenContext[S]
 
-      val hKey    = m.prepareDimensionReader(hIdx, useChannels = false)
-      val vKey    = m.prepareDimensionReader(vIdx, useChannels = false)
-      val hReader = hKey.reader()
-      val vReader = vKey.reader()
-      val mName   = m.name  // or plot-obj attr name?
-      val mReader = m.reader(streamDim = hIdx)  // rows = channels, columns = frames
-      val hDim    = dims(hIdx)
-      val vDim    = dims(vIdx)
-      val mUnits  = m   .units
-      val hUnits  = hDim.units
-      val vUnits  = vDim.units
-      val proc    = new Reader(mName = mName, mUnits = mUnits, mReaderF = mReader,
-        hName = hName, hUnits = hUnits, hReaderF = hReader, vName = vName, vUnits = vUnits,
-        vReaderF = vReader)
-      val oldProc = readerRef.swap(proc)(tx.peer)
+      val hKey      = m.prepareDimensionReader(hIdx, useChannels = false)
+      val vKey      = m.prepareDimensionReader(vIdx, useChannels = false)
+      val hReaderF  = hKey.reader()
+      val vReaderF  = vKey.reader()
+      val mName     = m.name  // or plot-obj attr name?
+      val mReaderF  = m.reader(streamDim = hIdx)  // rows = channels, columns = frames
+      val hDim      = dims(hIdx)
+      val vDim      = dims(vIdx)
+      val mUnits    = m   .units
+      val hUnits    = hDim.units
+      val vUnits    = vDim.units
+      isReading()   = true
       tx.afterCommit {
-        oldProc.abort()
-        if (!proc.aborted) {
-          proc.start()
-          proc.onComplete {
-            case Success(plotData) =>
-              defer {
-                if (DEBUG) println(s"X-Axis: ${plotData.hName}; ${plotData.hData.take(144).mkString(",")}")
-                if (DEBUG) println(s"Y-Axis: ${plotData.vName}; ${plotData.vData.take(144).mkString(",")}")
-                updatePlot(plotData)
-              }
-
-            case Failure(Processor.Aborted()) =>
-            case Failure(ex) =>
-              Console.err.println("Matrix reader failed:")
-              ex.printStackTrace()
-          }
-        }
+        if (DEBUG) println("createReader")
+        createReader(
+          mName = mName, mUnits = mUnits, mReaderF = mReaderF,
+          hName = hName, hUnits = hUnits, hReaderF = hReaderF,
+          vName = vName, vUnits = vUnits, vReaderF = vReaderF)
       }
     }
   }
 
+  private def createReader(mName: String, mUnits: String, mReaderF: Future[Matrix.Reader],
+                           hName: String, hUnits: String, hReaderF: Future[Matrix.Reader],
+                           vName: String, vUnits: String, vReaderF: Future[Matrix.Reader])
+                          (implicit exec: ExecutionContext): Unit =
+    for {
+      mReader <- mReaderF
+      hReader <- hReaderF
+      vReader <- vReaderF
+    } {
+      if (DEBUG) println("create processor")
+      val proc = new Reader(mName = mName, mUnits = mUnits, mReader = mReader,
+        hName = hName, hUnits = hUnits, hReader = hReader, vName = vName, vUnits = vUnits,
+        vReader = vReader)
+      val oldProc = readerRef.single.swap(proc)
+
+      oldProc.abort()
+      if (!proc.aborted && !isDisposed.single()) {
+        if (DEBUG) println("start processor")
+        proc.start()
+        proc.onComplete(readComplete)
+      }
+    }
+
+  private def readComplete(tr: Try[PlotData]): Unit = {
+    isReading.single() = false
+    tr match {
+      case Success(plotData) =>
+        defer {
+          if (DEBUG) println(s"X-Axis: ${plotData.hName}; ${plotData.hData.take(144).mkString(",")}")
+          if (DEBUG) println(s"Y-Axis: ${plotData.vName}; ${plotData.vData.take(144).mkString(",")}")
+          updatePlot(plotData)
+        }
+      case Failure(Processor.Aborted()) =>
+      case Failure(ex) =>
+        Console.err.println("Matrix reader failed:")
+        ex.printStackTrace()
+    }
+    val repeat = isDirty.single.swap(false)
+    if (DEBUG) println(s"readComplete. repeat = $repeat")
+    if (repeat)
+      cursor.step { implicit tx =>
+        updateData(plotH())
+      }
+  }
+
   // ----
 
-  private[this] final var _observers = List.empty[Disposable[S#Tx]]
-
   protected final def addObserver(obs: Disposable[S#Tx]): Unit = _observers ::= obs
-
-  private[this] var  _plotH: stm.Source[S#Tx, Plot[S]] = _
 
   protected final def plotH: stm.Source[S#Tx, Plot[S]] = _plotH
 
@@ -198,23 +236,17 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
     this
   }
 
-  private[this] val plotDimObs = TMap.empty[String, Disposable[S#Tx]]
-
   private def addPlotDim(key: String, value: StringObj[S])(implicit tx: S#Tx): Unit = {
-    implicit val ptx = tx.peer
     val obs = value.changed.react { implicit tx => _ =>
       updateData(_plotH())
     }
     plotDimObs.put(key, obs)
   }
 
-  private def removePlotDim(key: String, value: StringObj[S])(implicit tx: S#Tx): Unit = {
-    implicit val ptx = tx.peer
+  private def removePlotDim(key: String, value: StringObj[S])(implicit tx: S#Tx): Unit =
     plotDimObs.remove(key).foreach(_.dispose())
-  }
 
-  def dispose()(implicit tx: S#Tx): Unit = {
-    implicit val ptx = tx.peer
+  def dispose()(implicit tx: S#Tx): Unit = if (!isDisposed.swap(true)) {
     _observers.foreach(_.dispose())
     val p = readerRef.get(tx.peer)
     plotDimObs.foreach(_._2.dispose())
