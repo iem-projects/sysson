@@ -18,14 +18,12 @@ package gui
 import at.iem.sysson.gui.impl.{SonificationViewImpl => Impl}
 import at.iem.sysson.sound.{AuralSonification, Sonification}
 import de.sciss.lucre.stm.Sys
-import de.sciss.lucre.{stm, event => evt}
 import de.sciss.lucre.swing.View
 import de.sciss.lucre.synth.{Sys => SSys}
-import de.sciss.mellite.gui.ViewHasWorkspace
+import de.sciss.lucre.{stm, event => evt}
+import de.sciss.mellite.gui.{CanBounce, ViewHasWorkspace}
 import de.sciss.model.Model
 import de.sciss.synth.proc.Workspace
-
-import scala.swing.Action
 
 object SonificationView {
   def apply[S <: SSys[S]](sonification: Sonification[S])
@@ -38,11 +36,9 @@ object SonificationView {
 trait SonificationView[S <: Sys[S]]
   extends ViewHasWorkspace[S]
   with View.Editable[S]
-  with Model[SonificationView.Update] {
+  with Model[SonificationView.Update] with CanBounce {
 
   def sonification(implicit tx: S#Tx): Sonification[S]
 
   def status: evt.Observable[S#Tx, AuralSonification.Update /* [S] */]
-
-  def actionBounce: Action
 }

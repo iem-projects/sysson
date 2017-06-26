@@ -22,7 +22,7 @@ import at.iem.sysson.gui.{SwingApplication => App}
 import de.sciss.desktop.{Desktop, KeyStrokes, Menu, OptionPane}
 import de.sciss.lucre.synth.Txn
 import de.sciss.mellite.Mellite
-import de.sciss.mellite.gui.{ActionCloseAllWorkspaces, ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
+import de.sciss.mellite.gui.{ActionBounceTimeline, ActionCloseAllWorkspaces, ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
 import de.sciss.osc
 import de.sciss.synth.Server
 
@@ -31,6 +31,7 @@ import scala.swing.Label
 import scala.swing.event.{Key, MouseClicked}
 import scala.util.control.NonFatal
 
+// XXX TODO --- remind me again, why do we need to copy Mellite's one?
 object MenuFactory {
   def root: Menu.Root = _root
 
@@ -139,7 +140,7 @@ object MenuFactory {
       .add(Item("close" , proxy("Close" -> (menu1 + Key.W))))
       .add(Item("close-all", ActionCloseAllWorkspaces))
       .add(Item("save"  , proxy("Save" -> (menu1 + Key.S))))
-      .add(Item("bounce", proxy(("Bounce...", menu1 + Key.B))))
+      .add(Item("bounce", proxy((s"${ActionBounceTimeline.title}...", menu1 + Key.B))))
 
     if (itQuit.visible) gFile.addLine().add(itQuit)
 

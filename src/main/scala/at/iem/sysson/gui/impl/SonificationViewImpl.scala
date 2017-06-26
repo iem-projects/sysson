@@ -17,32 +17,30 @@ package gui
 package impl
 
 import at.iem.sysson.sound.{AuralSonification, Sonification}
-import de.sciss.audiowidgets.{TimelineModel, Transport => GUITransport}
+import de.sciss.audiowidgets.{Transport => GUITransport}
 import de.sciss.desktop.impl.UndoManagerImpl
-import de.sciss.desktop.{KeyStrokes, OptionPane, UndoManager, Window}
-import de.sciss.equal
+import de.sciss.desktop.{OptionPane, UndoManager, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.impl.ObservableImpl
-import de.sciss.lucre.expr.{BooleanObj, DoubleObj, SpanLikeObj, StringObj}
+import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{CellView, DoubleSpinnerView, StringFieldView, deferTx}
 import de.sciss.lucre.synth.Sys
-import de.sciss.mellite
+import de.sciss.{equal, mellite}
 import de.sciss.mellite.Mellite
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.mellite.gui.{ActionBounceTimeline, AttrMapFrame, CodeFrame, GUI, MarkdownRenderFrame}
 import de.sciss.model.impl.ModelImpl
-import de.sciss.span.Span
 import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{AuralObj, AuralView, Markdown, ObjKeys, TimeRef, Timeline, Transport, Workspace}
+import de.sciss.synth.proc.{AuralObj, AuralView, Markdown, ObjKeys, Transport, Workspace}
 
 import scala.concurrent.stm.Ref
-import scala.swing.event.{ButtonClicked, Key}
+import scala.swing.event.ButtonClicked
 import scala.swing.{Action, Alignment, BoxPanel, Component, FlowPanel, Label, Orientation, ScrollPane, Swing, ToggleButton}
 import scala.util.control.NonFatal
 
@@ -440,52 +438,28 @@ object SonificationViewImpl {
       stopAndDisposeTransport()
 
       graphObserver.dispose()
-      graphDisposables.swap(Vec.empty)(tx.peer).foreach(_.dispose())
+      graphDisposables.swap(Vector.empty)(tx.peer).foreach(_.dispose())
       nameView.foreach(_.dispose())
       deferTx {
         timerPrepare.stop()
       }
     }
 
-    object actionBounce extends Action("Export as Audio File...") {
-      import ActionBounceTimeline.{DurationSelection, QuerySettings, performGUI, query1}
+    object actionBounce extends ActionBounceTimeline(this, sonifH) {
+      import ActionBounceTimeline.{DurationSelection, Selection}
 
-      private var settings = QuerySettings[S](
-        realtime = true, span = Span(0L, (TimeRef.SampleRate * 10).toLong), channels = Vector(0 to 1)
-      )
+      override protected def selectionType  : Selection = DurationSelection
 
-      accelerator = Some(KeyStrokes.menu1 + Key.B)
+      override protected def defaultRealtime(implicit tx: S#Tx): Boolean = true
 
-      def apply(): Unit = {
-        val window  = Window.find(component)
-        val setUpd  = if (settings.file.isDefined) settings else {
-          settings.copy(file = nameView.map { v =>
-            val name  = v.component.text
-            val ext   = settings.spec.fileType.extension
-            val child = s"$name.$ext"
-            val parentOption = workspace.folder.flatMap(_.parentOption)
-            parentOption.fold(file(child))(_ / child)
-          })
+      override protected def defaultFile(implicit tx: S#Tx): File =
+        nameView.fold(super.defaultFile) { v =>
+          val name  = v.component.text
+//          val ext   = settings.spec.fileType.extension
+          val child = name // s"$name.$ext" -- note: recallSettings will automatically replace the extension
+          val parentOption = workspace.folder.flatMap(_.parentOption)
+          parentOption.fold(file(child))(_ / child)
         }
-        val timelineModel = TimelineModel(Span(0L, (TimeRef.SampleRate * 10000).toLong), TimeRef.SampleRate)
-        val (_settings, ok) = query1(setUpd, workspace, timelineModel, window = window,
-          showImport = false, showTransform = false, showSelection = DurationSelection)
-        settings = _settings
-        _settings.file match {
-          case Some(file) if ok =>
-            // XXX TODO -- not cool having to create a throw away object (perhaps persistent)
-            val groupEH = cursor.step { implicit tx =>
-              val tl    = Timeline[S]
-              val span  = _settings.span
-              tl.add(SpanLikeObj.newConst(span), sonifH())
-              val tlObj = tl // Obj(Timeline.Elem(tl))
-              tx.newHandle(tlObj)
-            }
-            import Mellite.compiler
-            performGUI(workspace, _settings, groupEH, file, window = window)
-          case _ =>
-        }
-      }
     }
   }
 }
