@@ -40,7 +40,7 @@ object MenuFactory {
     import de.sciss.desktop.Menu._
 
     def funAbout(): Unit = {
-      val addr    = "sysson.kug.ac.at"
+      val addr    = "sysson.iem.at"
       val url     = s"http://$addr/"
       val name    = Main.name
       val version = Main.version
@@ -70,7 +70,7 @@ object MenuFactory {
            |<font size=+1><b>About $name</b></font><p>
            |Version $version<p>
            |<p>
-           |Copyright (c) 2013&ndash;2016 Institute of Electronic Music and Acoustics, Graz.<p>
+           |Copyright (c) 2013&ndash;2017 Institute of Electronic Music and Acoustics, Graz.<p>
            |Written by Hanns Holger Rutz.<p>
            |This software is published under the GNU General Public License v3+<p>
            |<p>
@@ -182,7 +182,7 @@ object MenuFactory {
     if (itAbout.visible) gHelp.add(itAbout)
     gHelp
       .add(Item("index")("Online Documentation")(
-        Desktop.browseURI(new URI("https://github.com/iem-projects/sysson/wiki/Table-of-Contents"))))
+        Desktop.browseURI(new URI("https://sysson.iem.at/documentation.html"))))
       .add(Item("issues")("Report a Bug")(
         Desktop.browseURI(new URI("https://github.com/iem-projects/sysson/issues"))))
 
