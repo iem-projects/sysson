@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.15.0"
+lazy val projectVersion = "1.15.1-SNAPSHOT"
 lazy val mimaVersion    = "1.15.0"
 
 lazy val commonSettings = Seq(
@@ -133,8 +133,8 @@ lazy val root = Project(id = baseNameL, base = file("."))
       "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
       "de.sciss" %% "fscape"                      % fscapeVersion,              // Offline processing
       "de.sciss" %  "weblaf-core"                 % webLaFVersion,              // look-and-feel
-      "com.orsonpdf" % "orsonpdf"                 % orsonpdfVersion,  // silly JFreeChart doesn't support iText PDF
-      "org.slf4j" % "slf4j-simple"                % slfVersion                  // logging (used by netcdf)
+      "com.orsonpdf" % "orsonpdf"                 % orsonpdfVersion,            // silly JFreeChart doesn't support iText PDF
+      "org.slf4j" % "slf4j-simple"                % slfVersion                   // logging (used by netcdf)
     ),
     libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test",
     mimaPreviousArtifacts := Set("at.iem" %% baseNameL % mimaVersion),

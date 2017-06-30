@@ -20,6 +20,7 @@ import de.sciss.file._
 import de.sciss.kollflitz
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
+import ucar.nc2.NetcdfFileWriter.Version
 import ucar.nc2.constants.CDM
 import ucar.{ma2, nc2}
 
@@ -30,6 +31,10 @@ import scala.concurrent.blocking
 import scala.language.implicitConversions
 
 object NetCdfFileUtil {
+  // note: only this version works without a fucked up non-cross-platform C library
+  // ; that means 64-bit longs cannot be used thanks to UCAR not supporting Java properly
+  private val version: Version = Version.netcdf3
+
   object OutDim {
     implicit def byName(name: String): OutDim = Keep(name)
   }
@@ -99,7 +104,7 @@ object NetCdfFileUtil {
                             in: nc2.NetcdfFile, out: File, varSec: VariableSection, inDims: Vec[String],
                             outDimsSpec: Vec[OutDim], fun: (Vec[Int], ma2.Array) => ma2.Array): Unit = {
     val location  = out.path
-    val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
+    val writer    = nc2.NetcdfFileWriter.createNew(version, location, null)
 
     import Implicits._
 
@@ -269,7 +274,7 @@ object NetCdfFileUtil {
   private def concatBody(self: ProcessorImpl[Unit, Processor[Unit]], in1: nc2.NetcdfFile, in2: nc2.NetcdfFile,
                          out: File, varName: String, dimName: String): Unit = {
     val location  = out.path
-    val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
+    val writer    = nc2.NetcdfFileWriter.createNew(version, location, null)
 
     import Implicits._
 
@@ -377,7 +382,14 @@ object NetCdfFileUtil {
 
   private def dupVar(writer: nc2.NetcdfFileWriter, in: nc2.Variable, dims: Seq[nc2.Dimension]): nc2.Variable = {
     import Implicits._
-    val out = writer.addVariable(null, in.getShortName, in.dataType, dims.asJava)
+    val dtIn  = in.dataType
+    val name  = in.getShortName
+    // netcdf3 doesn't support 64-bit longs
+    val dtOut = if (dtIn == ma2.DataType.LONG) {
+      Console.err.println(s"Warning: variable '$name' - netcdf3 does not support 64-bit long data type. Falling back to 64-bit double.")
+      ma2.DataType.DOUBLE
+    } else dtIn
+    val out = writer.addVariable(null, name, dtOut, dims.asJava)
     copyAttr(in = in, out = out)
     out
   }
@@ -469,7 +481,7 @@ object NetCdfFileUtil {
     }
 
     val location  = out.path
-    val writer    = nc2.NetcdfFileWriter.createNew(nc2.NetcdfFileWriter.Version.netcdf3, location, null)
+    val writer    = nc2.NetcdfFileWriter.createNew(version, location, null)
     val (outDims, outDimsV) = inDims.map { inDim =>
       val size    = inDim.size
       val outDim  = writer.addDimension(null, inDim.name, size)

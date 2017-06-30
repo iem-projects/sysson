@@ -27,7 +27,7 @@ object Main {
     val m     = clazz.getMethod(key)
     m.invoke(null).toString
   } catch {
-    case NonFatal(e) => "?"
+    case NonFatal(_) => "?"
   }
 
   def main(args: Array[String]): Unit = {

@@ -163,6 +163,7 @@ object Implicits {
     def isFloat    : Boolean            = peer.getElementType == classOf[Float ]
     def isDouble   : Boolean            = peer.getElementType == classOf[Double]
     def isInt      : Boolean            = peer.getElementType == classOf[Int   ]
+    def isLong     : Boolean            = peer.getElementType == classOf[Long  ]
 
     private def requireFloat(): Unit =
       require(isFloat, s"Wrong element type (${peer.getElementType}); required: Float")
@@ -211,7 +212,17 @@ object Implicits {
           def hasNext: Boolean  = it.hasNext
           def next() : Float    = it.getDoubleNext.toFloat
         }
-      else sys.error(s"Data type is neither Float nor Double")
+      else if (isInt)
+        new Iterator[Float] {
+          def hasNext: Boolean  = it.hasNext
+          def next() : Float    = it.getIntNext.toFloat
+        }
+      else if (isLong)
+        new Iterator[Float] {
+          def hasNext: Boolean  = it.hasNext
+          def next() : Float    = it.getLongNext.toFloat
+        }
+      else sys.error(s"Data type is neither Float, Double, Int, Long")
     }
 
     def double1Diterator: Iterator[Double] = {
@@ -226,7 +237,17 @@ object Implicits {
           def hasNext: Boolean  = it.hasNext
           def next() : Double   = it.getDoubleNext
         }
-      else sys.error(s"Data type is neither Float nor Double")
+      else if (isInt)
+        new Iterator[Double] {
+          def hasNext: Boolean  = it.hasNext
+          def next() : Double   = it.getIntNext.toDouble
+        }
+      else if (isLong)
+        new Iterator[Double] {
+          def hasNext: Boolean  = it.hasNext
+          def next() : Double   = it.getLongNext.toDouble
+        }
+      else sys.error(s"Data type is neither Float, Double, Int, Long")
     }
 
     private def float1DIter: ma2.IndexIterator = {
