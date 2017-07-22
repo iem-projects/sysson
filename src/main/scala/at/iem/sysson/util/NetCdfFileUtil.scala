@@ -357,18 +357,23 @@ object NetCdfFileUtil {
     * cell is the difference between the input cell and the normal value for that
     * cell at that time.
     *
-    * @param in         the input  file to process
-    * @param out        the output file to create
-    * @param varName    the variable to process
-    * @param timeName   the time dimension in the variable
-    * @param windowYears the number of years to average across
+    * @param in           the input  file to process
+    * @param out          the output file to create
+    * @param varName      the variable to process
+    * @param timeName     the time dimension in the variable
+    * @param windowYears  the number of years to average across
+    * @param timeRangeOpt restriction for the time range to use for calculating the normal
+    *                     values; a tuple with `_1` being the start (inclusive) and `_2`
+    *                     being the stop (exclusive)
     */
   def anomalies(in: nc2.NetcdfFile, out: File, varName: String, timeName: String = "time",
-                windowYears: Int = 30, useMedian: Boolean = false): Processor[Unit] with Processor.Prepared =
+                windowYears: Int = 30, useMedian: Boolean = false,
+                timeRangeOpt: Option[(Int, Int)] = None,
+               ): Processor[Unit] with Processor.Prepared =
     new ProcessorImpl[Unit, Processor[Unit]] with Processor[Unit] {
       protected def body(): Unit = blocking {
         anomaliesBody(this, in = in, out = out, varName = varName, timeName = timeName,
-          windowYears = windowYears, useMedian = useMedian)
+          windowYears = windowYears, useMedian = useMedian, timeRangeOpt = timeRangeOpt)
       }
 
       override def toString = s"$varName-anomalies"
@@ -395,7 +400,7 @@ object NetCdfFileUtil {
   }
 
   private def anomaliesBody(self: ProcessorImpl[Unit, Processor[Unit]], in: nc2.NetcdfFile, out: File, varName: String,
-                            timeName: String, windowYears: Int, useMedian: Boolean): Unit = {
+                            timeName: String, windowYears: Int, useMedian: Boolean, timeRangeOpt: Option[(Int, Int)]): Unit = {
     import Implicits._
 
     val inVar         = in.variableMap(varName)
@@ -405,6 +410,10 @@ object NetCdfFileUtil {
     // val otherDims     = inDims  .patch(timeIdx, Nil, 1)
     // val otherShape    = inVar.shape.patch(timeIdx, Nil, 1)
     val numTime       = inDims(dimTimeIdx).size
+    val timeAbsLo     = timeRangeOpt.fold(0      )(_._1)
+    val timeAbsLoJ    = timeAbsLo - (timeAbsLo % 12)
+    val timeAbsHi     = timeRangeOpt.fold(numTime)(_._2)
+    val timeAbsHiJ    = timeAbsHi - (timeAbsHi % 12)
     val otherSize     = (inVar.size / numTime).toInt
     val windowYearsH  = windowYears/2
     val windowMonthsH = windowYearsH * 12
@@ -418,13 +427,17 @@ object NetCdfFileUtil {
     def calcNorm(data: ma2.Array, timeOff: Int): ma2.Array = {
       val month     = timeOff % 12
       val timeLo0   = timeOff - windowMonthsH
-      val timeLo    = if (timeLo0 >= 0) timeLo0 else month
-      val timeHi0   = timeOff + windowMonthsH
-      val timeHi    = if (timeHi0 < numTime) timeHi0 else {
-        val tmp = (numTime - numTime % 12) + month
-        if (tmp < numTime) tmp + 12 else tmp
+      val timeLo    = if (timeLo0 >= timeAbsLo) timeLo0 else {
+        val tmp = timeAbsLoJ + month
+        if (tmp >= timeAbsLo) tmp else tmp + 12
       }
-      val timeRange = timeLo until timeHi by 12
+      val timeHi0   = timeOff + windowMonthsH
+      val timeHi    = if (timeHi0 < timeAbsHi) timeHi0 else {
+        val tmp = timeAbsHiJ + month
+        if (tmp < timeAbsHi) tmp + 12 else tmp
+      }
+      val timeRange0  = timeLo until timeHi by 12
+      val timeRange   = timeRange0
 
       if (normData(month) == null || normData(month).timeRange != timeRange) {
         val norm = new Array[Double](otherSize)

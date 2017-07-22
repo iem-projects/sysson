@@ -30,12 +30,14 @@ object DataSourceFrameImpl {
   def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
                                                 cursor: stm.Cursor[S]): DataSourceFrame[S] = {
     val view  = DataSourceView(source)
-    val res   = new Impl(view)
+    val s: S  = tx.system
+    type I    = s.I
+    val res   = new Impl[S, I](view)(s.inMemory)
     res.init()
     res
   }
 
-  private final class Impl[S <: Sys[S]](val view: DataSourceView[S])
+  private final class Impl[S <: Sys[S], I <: Sys[I]](val view: DataSourceView[S])(implicit cursor: stm.Cursor[I])
     extends WindowImpl[S] with DataSourceFrame[S] {
 
     import view.selectedVariable
@@ -61,11 +63,11 @@ object DataSourceFrameImpl {
       root.get(path) match {
         case Some(g: Menu.Group) =>
           val sw = Some(window)
-          actionPlot1D    = new ActionPlot1D            (sw, selectedVariable)
-          actionPlotDist  = new ActionPlotDistribution  (sw, selectedVariable)
-          actionAnomalies = new ActionCalculateAnomalies(sw, selectedVariable)
-          actionConcat    = new ActionConcatMatrices    (sw, view)
-          actionMap       = new ActionMapMatrixElements (sw, view)
+          actionPlot1D    = new ActionPlot1D               (sw, selectedVariable)
+          actionPlotDist  = new ActionPlotDistribution     (sw, selectedVariable)
+          actionAnomalies = new ActionCalculateAnomalies[I](sw, selectedVariable)
+          actionConcat    = new ActionConcatMatrices       (sw, view)
+          actionMap       = new ActionMapMatrixElements    (sw, view)
           g.add(sw, Menu.Item("plot-1d"          , actionPlot1D   ))
           g.add(sw, Menu.Item("plot-distribution", actionPlotDist ))
           g.add(sw, Menu.Item("create-anomalies" , actionAnomalies))
