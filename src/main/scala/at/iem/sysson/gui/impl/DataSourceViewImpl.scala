@@ -27,7 +27,7 @@ import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.expr.StringObj
 import de.sciss.lucre.matrix.{DataSource, Matrix}
-import de.sciss.lucre.stm.Sys
+import de.sciss.lucre.stm.{Source, Sys}
 import de.sciss.lucre.swing._
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.{expr, stm}
@@ -76,17 +76,17 @@ object DataSourceViewImpl {
 
   private trait TableModel[A] extends AbstractTableModel {
     def data: Vec[A]
-    def getRowCount = data.size
+    def getRowCount: Int = data.size
   }
 
   private final class AttrsModel(val data: Vec[nc2.Attribute]) extends TableModel[nc2.Attribute] {
     def getColumnCount  = 2 // name, value representation
-    override def getColumnName(col: Int) = col match {
+    override def getColumnName(col: Int): String = col match {
       case 0 => "Name"
       case 1 => "Value"
     }
 
-    def getValueAt(row: Int, col: Int) = {
+    def getValueAt(row: Int, col: Int): String = {
       val attr = data(row)
       col match {
         case 0 => attr.name
@@ -103,7 +103,7 @@ object DataSourceViewImpl {
 
   private final class VarsModel(val data: Vec[nc2.Variable]) extends TableModel[nc2.Variable] {
     def getColumnCount = 5 // name, /* full-name, */ description, data-type, shape /* , size */
-    override def getColumnName(col: Int) = (col: @switch) match {
+    override def getColumnName(col: Int): String = (col: @switch) match {
       case 0 => "Name"
       case 1 => "Description"
       case 2 => "Data Type"
@@ -111,7 +111,7 @@ object DataSourceViewImpl {
       case 4 => "Units"
     }
 
-    def getValueAt(row: Int, col: Int) = {
+    def getValueAt(row: Int, col: Int): AnyRef = {
       val vr = data(row)
       (col: @switch) match {
         case 0 => vr.name
@@ -228,8 +228,8 @@ object DataSourceViewImpl {
               DragAndDrop.Transferable(DragAndDrop.MatrixFlavor) {
                 new MatrixDrag {
                   type S1 = S
-                  val workspace = impl.workspace
-                  val matrix  = varH
+                  val workspace : Workspace[S]            = impl.workspace
+                  val matrix    : Source[S#Tx, Matrix[S]] = varH
                 }
               }
             } .orNull
@@ -280,7 +280,7 @@ object DataSourceViewImpl {
       dsvOpt
     }
 
-    def dispose()(implicit tx: S#Tx) = () // : Unit = GUI.fromTx(disposeGUI())
+    def dispose()(implicit tx: S#Tx): Unit = () // : Unit = GUI.fromTx(disposeGUI())
 
     private def groupSelected(g: nc2.Group): Unit = {
       mGroupAttrs       = new AttrsModel(g.attributes)

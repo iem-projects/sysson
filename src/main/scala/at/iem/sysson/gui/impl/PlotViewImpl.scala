@@ -201,7 +201,7 @@ object PlotViewImpl {
     private def mkElapsedObservation(sonifView: SonificationView[S])(implicit tx: S#Tx): Disposable[S#Tx] =
       sonifView.status.react { implicit tx =>
         upd => if (synced.get(tx.peer)) upd match {
-          case AuralSonification.Elapsed(dim, ratio, dimValue) =>
+          case AuralSonification.Elapsed(dim, _ /* ratio */, dimValue) =>
             matrixView.matrix.foreach { m =>
               val sonif = sonifView.sonification
               sonif.sources.get(dim.variable.name).foreach { source =>
@@ -270,7 +270,7 @@ object PlotViewImpl {
       }
 
     override protected def mkTopComponent(c: Component): Component = {
-      parentOpt.fold(c) { sonifView =>
+      parentOpt.fold(c) { _ /* sonifView */ =>
         val ggSync          = new ToggleButton(null)
         val iconFun         = raphael.Shapes.Movie _
         ggSync.icon         = GUI.iconNormal  (iconFun)

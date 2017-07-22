@@ -103,7 +103,7 @@ object Elapsed {
     private val Name    = replyName // (key)
     private val NodeID  = synth.peer.id
     private val trigResp = message.Responder(synth.server.peer) {
-      case m @ osc.Message(Name, NodeID, 0, ratio: Float, dimValue: Float) =>
+      case osc.Message(Name, NodeID, 0, ratio: Float, dimValue: Float) =>
         import context.scheduler.cursor
         SoundProcesses.atomic { implicit tx: S#Tx =>
           // println(f"elapsed - ${ratio * 100}%1.1f - $dimValue%1.3f")

@@ -39,11 +39,13 @@ object AbstractPlotViewImpl {
 
   final class PlotData(val hName: String, val mUnits: String, val hData: Array[Float],
                        val vName: String, val hUnits: String, val vData: Array[Float],
-                       val mName: String, val vUnits: String, val mData: Array[Array[Float]])
+                       val mName: String, val vUnits: String, val mData: Array[Array[Float]],
+                       val is1D: Boolean)
 
   private final class Reader(mName: String, mUnits: String, mReader: Matrix.Reader,
                              hName: String, hUnits: String, hReader: Matrix.Reader,
-                             vName: String, vUnits: String, vReader: Matrix.Reader)
+                             vName: String, vUnits: String, vReader: Matrix.Reader,
+                             is1D: Boolean)
     extends ProcessorImpl[PlotData, Reader] {
 
     private def readDim(r: Matrix.Reader): Array[Float] = {
@@ -74,7 +76,8 @@ object AbstractPlotViewImpl {
       new PlotData(
         hName = hName, hUnits = hUnits, hData = hData,
         vName = vName, vUnits = vUnits, vData = vData,
-        mName = mName, mUnits = mUnits, mData = mData)
+        mName = mName, mUnits = mUnits, mData = mData,
+        is1D = is1D)
     }
   }
 }
@@ -94,7 +97,7 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
   private[this] var  _plotH: stm.Source[S#Tx, Plot[S]] = _
   private[this] val plotDimObs  = TMap.empty[String, Disposable[S#Tx]]
 
-  private[this] val readerRef   = Ref(new Reader(null, null, null, null, null, null, null, null, null))
+  private[this] val readerRef   = Ref(new Reader(null, null, null, null, null, null, null, null, null, is1D = false))
 
   private[this] val isReading   = Ref(false)
   private[this] val isDirty     = Ref(false)
@@ -117,14 +120,14 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
     val hName   = dimMap.get(Plot.HKey).map(_.value).getOrElse("?")
     val vName   = dimMap.get(Plot.VKey).map(_.value).getOrElse("?")
     import equal.Implicits._
-    val hIdx    = dims.indexWhere(_.name === hName)
-    val vIdx    = dims.indexWhere(_.name === vName)
+    val hIdx0   = dims.indexWhere(_.name === hName)
+    val vIdx0   = dims.indexWhere(_.name === vName)
     val mShape  = m.shape
-    val shapeOk = checkShape1D(mShape, hIdx, vIdx)
+    val shapeOk = checkShape1D(mShape, hIdx0, vIdx0)
 
-    if (DEBUG) println(s"updateData. hIdx = $hIdx, vIdx = $vIdx, ok? $shapeOk")
+    if (DEBUG) println(s"updateData. hIdx = $hIdx0, vIdx = $vIdx0, ok? $shapeOk")
 
-    if (hIdx >= 0 && vIdx >= 0 && shapeOk) {
+    if (shapeOk) {
       //        println(s"h-unit: ${dims(hIdx).units}")
       //        println(s"v-unit: ${dims(vIdx).units}")
 
@@ -133,6 +136,10 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
       // this locks:
 //      import SoundProcesses.executionContext
       implicit val context = GenContext[S]
+
+      val hIdx      = if (hIdx0 >= 0) hIdx0 else if (vIdx0 >= 0) vIdx0 else 0
+      val vIdx      = if (vIdx0 >= 0) vIdx0 else if (hIdx0 >= 0) hIdx0 else 0
+      val is1D      = hIdx == vIdx
 
       val hKey      = m.prepareDimensionReader(hIdx, useChannels = false)
       val vKey      = m.prepareDimensionReader(vIdx, useChannels = false)
@@ -151,14 +158,16 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
         createReader(
           mName = mName, mUnits = mUnits, mReaderF = mReaderF,
           hName = hName, hUnits = hUnits, hReaderF = hReaderF,
-          vName = vName, vUnits = vUnits, vReaderF = vReaderF)
+          vName = vName, vUnits = vUnits, vReaderF = vReaderF,
+          is1D = is1D)
       }
     }
   }
 
   private def createReader(mName: String, mUnits: String, mReaderF: Future[Matrix.Reader],
                            hName: String, hUnits: String, hReaderF: Future[Matrix.Reader],
-                           vName: String, vUnits: String, vReaderF: Future[Matrix.Reader])
+                           vName: String, vUnits: String, vReaderF: Future[Matrix.Reader],
+                           is1D: Boolean)
                           (implicit exec: ExecutionContext): Unit =
     for {
       mReader <- mReaderF
@@ -168,7 +177,7 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
       if (DEBUG) println("create processor")
       val proc = new Reader(mName = mName, mUnits = mUnits, mReader = mReader,
         hName = hName, hUnits = hUnits, hReader = hReader, vName = vName, vUnits = vUnits,
-        vReader = vReader)
+        vReader = vReader, is1D = is1D)
       val oldProc = readerRef.single.swap(proc)
 
       oldProc.abort()

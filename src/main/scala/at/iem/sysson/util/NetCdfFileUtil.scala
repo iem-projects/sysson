@@ -396,7 +396,7 @@ object NetCdfFileUtil {
 
   private def anomaliesBody(self: ProcessorImpl[Unit, Processor[Unit]], in: nc2.NetcdfFile, out: File, varName: String,
                             timeName: String, windowYears: Int, useMedian: Boolean): Unit = {
-    import Implicits.{checkNaNFun => _, _}  // must shadow on Scala 2.10
+    import Implicits._
 
     val inVar         = in.variableMap(varName)
     val inDims        = inVar.dimensions

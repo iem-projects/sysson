@@ -282,7 +282,7 @@ object SonificationViewImpl {
         cursor.step { implicit tx =>
           val sonif = sonifH()
           import de.sciss.mellite.Mellite.compiler
-          CodeFrame.proc(sonif.proc)
+          CodeFrame.proc(sonif.proc)(tx, workspace, cursor, compiler)
         }
       }
 

@@ -50,7 +50,7 @@ object SpreadsheetViewImpl {
     }
 
     private[this] var _plotData = new PlotData(
-      "", "", new Array[Float](0), "", "", new Array[Float](0), "", "", new Array[Array[Float]](0))
+      "", "", new Array[Float](0), "", "", new Array[Float](0), "", "", new Array[Array[Float]](0), is1D = false)
 
     // called on EDT
     protected def updatePlot(data: PlotData): Unit = {
@@ -72,16 +72,52 @@ object SpreadsheetViewImpl {
 
     private[this] object mTable extends AbstractTableModel {
       def getRowCount   : Int = _plotData.vData.length
-      def getColumnCount: Int = _plotData.hData.length
+      def getColumnCount: Int = if (_plotData.is1D) 1 else _plotData.hData.length
 
       def getValueAt(rowIdx: Int, colIdx: Int): AnyRef = {
-        val f = _plotData.mData(rowIdx)(colIdx)
+//        val f = if (_plotData.mData.length > rowIdx) {
+//          val row = _plotData.mData(rowIdx)
+//          if (row.length > colIdx) row(colIdx) else Float.NaN
+//        } else Float.NaN
+        val f = if (_plotData.is1D) _plotData.mData(0)(rowIdx) else _plotData.mData(rowIdx)(colIdx)
         f.toString  // XXX TODO
       }
     }
 
     private[this] object mTableColumn extends DefaultTableColumnModel {
-      def updateHeader(): Unit = {
+      def updateHeader(): Unit =
+        if (_plotData.is1D) updateHeader1D() else updateHeader2D()
+
+      private def mkColumn(colIdx: Int, name: String): Unit = {
+        val col = new TableColumn(colIdx)
+        col.setHeaderValue("")
+        col.setMinWidth      (80)
+        col.setPreferredWidth(80)
+        addColumn(col)
+      }
+
+      private def updateHeader1D(): Unit = {
+        val oldNum  = getColumnCount
+        val newNum  = 1
+        val stop1   = math.min(oldNum, newNum)
+        var colIdx  = 0
+        while (colIdx < stop1) {
+          val col = getColumn(colIdx)
+          col.setHeaderValue("")
+          colIdx += 1
+        }
+        while (colIdx < newNum) {
+          mkColumn(colIdx, "")
+          colIdx += 1
+        }
+        while (colIdx < oldNum) {
+          val col = getColumn(newNum)
+          removeColumn(col)
+          colIdx += 1
+        }
+      }
+
+      private def updateHeader2D(): Unit = {
         import DimensionIndex.{shouldUseUnitsString, unitsStringFormatter}
         val units   = _plotData.hUnits
         val lbUnits = shouldUseUnitsString(units)
@@ -103,11 +139,7 @@ object SpreadsheetViewImpl {
           colIdx += 1
         }
         while (colIdx < newNum) {
-          val col = new TableColumn(colIdx)
-          col.setHeaderValue(labels(colIdx))
-          col.setMinWidth      (80)
-          col.setPreferredWidth(80)
-          addColumn(col)
+          mkColumn(colIdx, labels(colIdx))
           colIdx += 1
         }
         while (colIdx < oldNum) {

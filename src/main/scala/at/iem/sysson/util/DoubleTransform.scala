@@ -36,7 +36,7 @@ object DoubleTransform {
       //  println("Instantiating...")
       val fun = clazz.newInstance().asInstanceOf[Double => Double]
       new Impl(fun)
-    }
+    } (executionContext)
     p.completeWith(tFut)
   }
 

@@ -1,3 +1,0 @@
-- for each channel 0 <= i < N we have dominant sensor 0 <= j < M
-- we define V maximum number of concurrent voices
-
