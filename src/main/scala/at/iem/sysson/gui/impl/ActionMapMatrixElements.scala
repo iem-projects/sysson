@@ -29,7 +29,7 @@ import de.sciss.mellite.gui.impl.WindowImpl
 import de.sciss.synth.proc.Code
 import ucar.{ma2, nc2}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.swing.{Action, BorderPanel, Button}
 import scala.util.{Failure, Success}
 
@@ -89,8 +89,10 @@ final class ActionMapMatrixElements[S <: Sys[S]](windowOpt: Option[Window], view
             _codeView.dispose()
           }
 
-          override protected def performClose(): Unit =
+          override protected def performClose(): Future[Unit] = {
             cursor.step { implicit tx => dispose() } // yes, ugly. because we don't give a `View.Cursor
+            Future.successful(())
+          }
         }
         _win.init()
         _win
@@ -135,7 +137,7 @@ final class ActionMapMatrixElements[S <: Sys[S]](windowOpt: Option[Window], view
       val inDims = /* ( allDimsIn.map(_.name) */ Vector(dimIter.name) /* inDims0.map(_.name) */
       val proc = NetCdfFileUtil.transform(in = vr.file, out = out, varName = vr.name,
         inDims = inDims,
-        outDimsSpec = outDims /* Vector(outDim) */) { case (origin, arr) =>
+        outDimsSpec = outDims /* Vector(outDim) */) { case (_ /* origin */, arr) =>
         val ja: Array[_] = if (arr.isFloat) {
           arr.float1Diterator.map { f =>
             doubleFun(f.toDouble).toFloat

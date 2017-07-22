@@ -36,7 +36,7 @@ import scala.util.control.NonFatal
   * but you should always invoke `at.iem.sysson.Main`, because it first
   * initializes some type extensions that would be missing otherwise.
   */
-object SwingApplication extends SwingApplicationImpl("SysSon") with mellite.Application {
+object SwingApplication extends SwingApplicationImpl[Application.Document]("SysSon") with mellite.Application {
   override lazy val windowHandler: WindowHandler = new WindowHandlerImpl(this, menuFactory) {
     override lazy val usesInternalFrames = false // XXX TODO: eventually a preferences entry
 

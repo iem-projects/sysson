@@ -33,7 +33,7 @@ import de.sciss.synth.proc.Workspace
 import ucar.nc2
 
 import scala.annotation.tailrec
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.swing.{Action, Alignment, BorderPanel, Button, GridPanel, Label}
 
 final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: DataSourceView[S])
@@ -134,8 +134,11 @@ final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: D
           but2.dispose()
         }
 
-        override protected def performClose(): Unit =
+
+        override protected def performClose(): Future[Unit] = {
           cursor.step { implicit tx => dispose() } // yes, ugly. because we don't give a `View.Cursor
+          Future.successful(())
+        }
       }
       _win.init()
       _win
