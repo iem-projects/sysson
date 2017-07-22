@@ -129,7 +129,7 @@ final class ActionCalculateAnomalies[I <: Sys[I]](windowOpt: Option[Window], sel
         val pYears = new GroupPanel {
           horizontal = Seq(
             Par(lbTimeRange, lbYears, lbAvg),
-            Par(ggTimeRange, ggYears, Seq(ggAvg, Gap.Spring())),  // XXX TODO --- not exactly what we want
+            Par(ggTimeRange, ggYears, Seq(ggAvg, Gap.Spring()))  // XXX TODO --- not exactly what we want
           )
 
           vertical = Seq(
