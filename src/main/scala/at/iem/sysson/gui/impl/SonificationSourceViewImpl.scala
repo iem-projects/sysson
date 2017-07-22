@@ -63,8 +63,8 @@ object SonificationSourceViewImpl {
       sourceObserver = map.changed.react { implicit tx => upd =>
         // println(s"OBSERVE CHANGES $upd")
         upd.changes.foreach {
-          case evt.Map.Added  (`key`, source) => updateSource(Some(source)) // .data.file.base))
-          case evt.Map.Removed(`key`, source) => updateSource(None)
+          case evt.Map.Added  (`key`,      source   ) => updateSource(Some(source)) // .data.file.base))
+          case evt.Map.Removed(`key`, _ /* source */) => updateSource(None)
           // case evt.Map.Element(`key`, source, sourceUpdate) =>
           // XXX TODO -- this is not seen yet somehow
 

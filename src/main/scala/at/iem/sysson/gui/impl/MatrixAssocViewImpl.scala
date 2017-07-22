@@ -47,9 +47,9 @@ object MatrixAssocViewImpl {
   }
   private val IntFlavor = DragAndDrop.internalFlavor[IntDrag]
 }
-abstract class MatrixAssocViewImpl [S <: Sys[S]](keys: Vec[String])
-                                                (implicit workspace: Workspace[S], undoManager: UndoManager,
-                                                 cursor: stm.Cursor[S])
+abstract class MatrixAssocViewImpl[S <: Sys[S]](keys: Vec[String])
+                                               (implicit workspace: Workspace[S], undoManager: UndoManager,
+                                                cursor: stm.Cursor[S])
   extends View[S] with ComponentHolder[Component] {
   impl =>
 
