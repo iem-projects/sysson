@@ -30,7 +30,7 @@ object Calendar {
     /** Similar to conventions of `java.text.SimpleDateFormat` */
     protected def timeBase: Char
 
-    protected def hasModulo: Boolean
+    protected def modulo: Int
 
     private[sysson] def ctlName: String = {
       val dim = time.dim
@@ -42,23 +42,20 @@ object Calendar {
       import Ops.stringToControl
       val b = UGB.get
       b.requestInput(this)
-      if (hasModulo) {
-        val ctl = ctlName.ir(Vector(0f, 1f, 1f))    // add, mul, mod
-        val add = ctl \ 0
-        val mul = ctl \ 1
-        val mod = ctl \ 2
-        ((time + add) * mul) % mod
 
-      } else {
-        val ctl = ctlName.ir(Vector(0f, 1f))        // add, mul
-        val add = ctl \ 0
-        val mul = ctl \ 1
-        (time + add) * mul
-      }
+      val ctl = ctlName.ir(Vector(1f, 0f, 1f))    // mul1, add, mul2
+      val mul1  = ctl \ 0
+      val add   = ctl \ 1
+      val mul2  = ctl \ 2
+      val sig   = (time * mul1 + add) * mul2
+
+      if (modulo == 0) sig else sig % modulo
     }
   }
 
-  /** Year */
+  /** Year. This is an absolute fractional value, such as 1990.2,
+    * which can be truncated using `.floor`.
+    */
   final case class Year(time: Dim.Play) extends GE {
 
     override def productPrefix = s"Calendar$$Year"
@@ -66,10 +63,13 @@ object Calendar {
     override def toString = s"Calendar.Year($time)"
 
     protected def timeBase  = 'y'
-    protected def hasModulo = false
+    protected def modulo = 0
   }
 
-  /** Month in year */
+  /** Month in year. __Note:__ this counts from zero (January) to eleven (December).
+    * This is a fractional value, such as 2.54,
+    * which can be truncated using `.floor`.
+    */
   final case class Month(time: Dim.Play) extends GE {
 
     override def productPrefix = s"Calendar$$Month"
@@ -77,6 +77,6 @@ object Calendar {
     override def toString = s"Calendar.Month($time)"
 
     protected def timeBase  = 'M'
-    protected def hasModulo = true
+    protected def modulo = 12
   }
 }

@@ -336,31 +336,42 @@ object AuralSonificationImpl {
         val secPerDay   = 86400
         val ctlName     = cal.ctlName
 
-        if (units.startsWith("days since")) {
+        val (calDate, factor) = if (units.startsWith("days since")) {
           val date  = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(11))
-          cal match {
-            case _: graph.Calendar.Month =>
-              ???
-            case _: graph.Calendar.Year  =>
-              val dateT   = date.truncate(CalendarPeriod.Field.Year)
-              val offYear = dateT.getFieldValue(CalendarPeriod.Field.Year)
-              val offDays = offYear * daysPerYear
-              val diffMs  = date.getDifferenceInMsecs(dateT)
-              val diffSec = diffMs * 0.001
-              val diffDay = (diffSec / secPerDay) + (366 - daysPerYear)
-              val add     = diffDay + offDays
-              val mul     = 1.0 / daysPerYear
-              b.addControl(ctlName -> Vector(add.toFloat, mul.toFloat))
-          }
-
+          (date, 1)
         } else if (units.startsWith("hours since")) {
           val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(12))
-          ???
+          (date, 24)
 
         } else if (units.startsWith("seconds since")) {
           val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(14))
-          ???
+          (date, 24 * 60 * 60)
+
+        } else {
+          val message = if (units.isEmpty) "without units" else s"from units '$units'"
+          sys.error(s"Cannot deduce calendar $message")
         }
+
+        val dateT   = calDate.truncate   (CalendarPeriod.Field.Year)
+        val offYear = dateT.getFieldValue(CalendarPeriod.Field.Year)
+        val diffMs  = calDate.getDifferenceInMsecs(dateT)
+        val diffSec = diffMs * 0.001
+        val diffDay = (diffSec / secPerDay) + (366 - daysPerYear)
+
+        val (_add, _mul2) = cal match {
+          case _: graph.Calendar.Month =>
+            val add     = diffDay
+            val mul2    = 12.0 / daysPerYear
+            (add, mul2)
+
+          case _: graph.Calendar.Year  =>
+            val offDays = offYear * daysPerYear
+            val add     = diffDay + offDays
+            val mul2    = 1.0 / daysPerYear
+            (add, mul2)
+        }
+        val mul1    = 1.0 / factor
+        b.addControl(ctlName -> Vector(mul1.toFloat, _add.toFloat, _mul2.toFloat))
 
       case _: graph.Var.Axis.Key =>   // nothing to be done
 
