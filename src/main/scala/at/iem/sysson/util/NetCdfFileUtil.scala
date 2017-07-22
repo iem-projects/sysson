@@ -368,7 +368,7 @@ object NetCdfFileUtil {
     */
   def anomalies(in: nc2.NetcdfFile, out: File, varName: String, timeName: String = "time",
                 windowYears: Int = 30, useMedian: Boolean = false,
-                timeRangeOpt: Option[(Int, Int)] = None,
+                timeRangeOpt: Option[(Int, Int)] = None
                ): Processor[Unit] with Processor.Prepared =
     new ProcessorImpl[Unit, Processor[Unit]] with Processor[Unit] {
       protected def body(): Unit = blocking {
