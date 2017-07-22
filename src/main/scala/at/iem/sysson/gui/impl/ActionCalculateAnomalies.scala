@@ -140,7 +140,7 @@ final class ActionCalculateAnomalies[I <: Sys[I]](windowOpt: Option[Window], sel
 
           border = Swing.EmptyBorder(8, 0, 8, 0)
         }
-        
+
         val lbInfo    = new Label(
           """<html><body>This process assumes that the time dimension
             |of the selected variable has a <b>monthly resolution
