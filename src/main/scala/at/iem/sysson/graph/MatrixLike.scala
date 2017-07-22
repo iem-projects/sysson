@@ -78,7 +78,7 @@ object Var {
     type Value    = UGB.Unit
     def key: Key  = this
 
-    private[sysson] def ctlName: String = s"$$sz_var_$variable.name}"
+    private[sysson] def ctlName: String = s"$$sz_var_${variable.name}"
 
     protected def makeUGens: UGenInLike = {
       import synth._

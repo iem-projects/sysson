@@ -26,6 +26,7 @@ import de.sciss.lucre.{stm, event => evt}
 import de.sciss.synth.proc.impl.{AsyncProcBuilder, AuralProcImpl}
 import de.sciss.synth.proc.{AuralContext, AuralObj, AuralView, Gen, TimeRef, UGenGraphBuilder => UGB}
 import de.sciss.{equal, numbers}
+import ucar.nc2.time.{CalendarDateFormatter, CalendarPeriod}
 
 import scala.concurrent.stm.{TMap, TxnLocal}
 import scala.util.control.NonFatal
@@ -221,7 +222,8 @@ object AuralSonificationImpl {
 
     override def requestInput[Res](req: UGB.Input { type Value = Res }, st: UGB.Requester[S])
                                   (implicit tx: S#Tx): Res = req match {
-      case _: graph.UserValue | _: graph.Dim.Size | _: graph.Var.Size | _: graph.Elapsed => UGB.Unit
+      case _: graph.UserValue | _: graph.Dim.Size | _: graph.Var.Size | _: graph.Elapsed | _: graph.Calendar.GE =>
+        UGB.Unit
 
       case dp: graph.Dim.Play  =>
         val numCh     = 1 // a streaming dimension is always monophonic
@@ -301,7 +303,7 @@ object AuralSonificationImpl {
       case sz: graph.Dim.Size =>
         val sonif     = sonification
         val dimElem   = sz.dim
-        val source    = findSource  (sonif , sz.dim.variable)
+        val source    = findSource  (sonif , dimElem.variable)
         val dimIdx    = findDimIndex(source, dimElem)
         val value     = source.matrix.shape.apply(dimIdx)
         val ctlName   = sz.ctlName
@@ -321,6 +323,44 @@ object AuralSonificationImpl {
         // println("ADD ELAPSED RESPONDER USER")
 //        b.users ::= resp
         b.addUser(resp)
+
+      case cal: graph.Calendar.GE =>
+        val sonif       = sonification
+        val dimElem     = cal.time.dim
+        val source      = findSource  (sonif , dimElem.variable)
+        val dimIdx      = findDimIndex(source, dimElem)
+        val dimMat      = source.matrix.dimensions.apply(dimIdx)
+        val units       = dimMat.units
+
+        val daysPerYear = 365.2422  // average according to NASA
+        val secPerDay   = 86400
+        val ctlName     = cal.ctlName
+
+        if (units.startsWith("days since")) {
+          val date  = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(11))
+          cal match {
+            case _: graph.Calendar.Month =>
+              ???
+            case _: graph.Calendar.Year  =>
+              val dateT   = date.truncate(CalendarPeriod.Field.Year)
+              val offYear = dateT.getFieldValue(CalendarPeriod.Field.Year)
+              val offDays = offYear * daysPerYear
+              val diffMs  = date.getDifferenceInMsecs(dateT)
+              val diffSec = diffMs * 0.001
+              val diffDay = (diffSec / secPerDay) + (366 - daysPerYear)
+              val add     = diffDay + offDays
+              val mul     = 1.0 / daysPerYear
+              b.addControl(ctlName -> Vector(add.toFloat, mul.toFloat))
+          }
+
+        } else if (units.startsWith("hours since")) {
+          val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(12))
+          ???
+
+        } else if (units.startsWith("seconds since")) {
+          val date = CalendarDateFormatter.isoStringToCalendarDate(null, units.substring(14))
+          ???
+        }
 
       case _: graph.Var.Axis.Key =>   // nothing to be done
 
