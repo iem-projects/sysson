@@ -16,7 +16,7 @@ package at.iem.sysson
 package gui
 package impl
 
-import java.awt.Color
+import java.awt.{Color, Graphics}
 
 import de.sciss.desktop.{DialogSource, Window, WindowHandler}
 import de.sciss.lucre.swing.defer
@@ -29,6 +29,7 @@ import ucar.nc2
 import scala.collection.breakOut
 import scala.concurrent.stm.atomic
 import scala.swing.{Action, Component, Orientation, SplitPane}
+import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 import scalax.chart.{Chart, XYChart}
 
@@ -55,7 +56,8 @@ final class ActionPlotDistribution(windowOpt: Option[Window], selectedVariable: 
           case head +: (tail @ (_ +: _)) if red.size > 16384 =>   // try to make smart chunks
             for (i <- 0 until head.size) loop(tail, red.in(head.name).select(i))
           case _ =>
-            val chunk = red.readSafe().float1D
+            red.variable.fillValue
+            val chunk = red.readSafe().double1D.dropNaNs(red.variable.fillValue)
             chunk.foreach { d =>
               import numbers.Implicits._
               val bin = d.linlin(total.min, total.max, 0, numBins).toInt.min(numBins - 1)
@@ -80,7 +82,7 @@ final class ActionPlotDistribution(windowOpt: Option[Window], selectedVariable: 
           //            }
 
           val chartRel  = mkHistoChart(relative , total, title = s"Histogram for ${vr.name}")
-          val chartAcc  = mkHistoChart(acc    , total, title = s"Accumulative Histogram for ${vr.name}")
+          val chartAcc  = mkHistoChart(acc      , total, title = s"Accumulative Histogram for ${vr.name}")
           mkPlotWindow(new SplitPane(Orientation.Vertical, mkChartPanel(chartRel  ), mkChartPanel(chartAcc)),
             title0)
         }
@@ -120,7 +122,21 @@ final class ActionPlotDistribution(windowOpt: Option[Window], selectedVariable: 
     chart
   }
 
-  private def mkChartPanel(chart: Chart): Component = Component.wrap(new ChartPanel(chart.peer))
+  private def mkChartPanel(chart: Chart): Component = {
+    val jp = new ChartPanel(chart.peer) {
+      override def paintComponent(g: Graphics): Unit =
+        try {
+          super.paintComponent(g)
+        } catch {
+          case NonFatal(ex) =>
+            g.clearRect(0, 0, getWidth, getHeight)
+            val fm = g.getFontMetrics
+            g.setColor(Color.red)
+            g.drawString(s"Error: ${ex.getMessage}", 4, 4 + fm.getAscent)
+        }
+    }
+    Component.wrap(jp)
+  }
 
   private def mkPlotWindow(chartPanel: Component, title0: String): Window =
     new desktop.impl.WindowImpl { win =>
