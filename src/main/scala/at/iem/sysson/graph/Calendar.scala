@@ -55,28 +55,38 @@ object Calendar {
 
   /** Year. This is an absolute fractional value, such as 1990.2,
     * which can be truncated using `.floor`.
+    *
+    * The precision is 0.5 days due to a simplification that
+    * bases the year on 365.2422 days. It is positively biased
+    * so that `.floor` should always give the correct year for
+    * January 1st.
     */
   final case class Year(time: Dim.Play) extends GE {
 
-    override def productPrefix = s"Calendar$$Year"
+    override def productPrefix  = s"Calendar$$Year"
 
-    override def toString = s"Calendar.Year($time)"
+    override def toString       = s"Calendar.Year($time)"
 
-    protected def timeBase  = 'y'
-    protected def modulo = 0
+    protected def timeBase      = 'y'
+    protected def modulo        = 0
   }
 
   /** Month in year. __Note:__ this counts from zero (January) to eleven (December).
     * This is a fractional value, such as 2.54,
     * which can be truncated using `.floor`.
+    *
+    * The precision is 0.5 days due to a simplification that
+    * bases the year on 365.2422 days. It is positively biased
+    * so that `.floor` should always give the correct month for
+    * January 1st.
     */
   final case class Month(time: Dim.Play) extends GE {
 
-    override def productPrefix = s"Calendar$$Month"
+    override def productPrefix  = s"Calendar$$Month"
 
-    override def toString = s"Calendar.Month($time)"
+    override def toString       = s"Calendar.Month($time)"
 
-    protected def timeBase  = 'M'
-    protected def modulo = 12
+    protected def timeBase      = 'M'
+    protected def modulo        = 12
   }
 }
