@@ -218,7 +218,7 @@ object Session130326 extends SessionLike {
           val fmDepth   = gridSize.toDouble / down // 0.25 // 1.0 // 0.5
 //          val noise     = SinOsc.ar(SampleRate.ir/(gridSize * down)) // BrownNoise.ar // WhiteNoise.ar
           val noise     = LFNoise2.ar(sr/down)
-          val fmMod     = noise.linlin(-1, 1, 0, fmDepth)
+          val fmMod     = noise.linLin(-1, 1, 0, fmDepth)
           (phasor0 + fmMod) % bufFrames
         } else phasor0
         BufRd.ar(numChannels = 1, buf = buf.id, index = phasor, loop = 1, interp = 1)

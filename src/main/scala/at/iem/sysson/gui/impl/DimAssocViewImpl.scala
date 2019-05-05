@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -15,10 +15,6 @@
 package at.iem.sysson.gui
 package impl
 
-import javax.swing.TransferHandler
-import javax.swing.TransferHandler.TransferSupport
-import javax.swing.undo.UndoableEdit
-
 import de.sciss.desktop
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
@@ -29,16 +25,21 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.lucre.{stm, event => evt}
 import de.sciss.model.Change
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
+import javax.swing.TransferHandler
+import javax.swing.TransferHandler.TransferSupport
+import javax.swing.undo.UndoableEdit
 
-import scala.concurrent.stm.{Ref, TMap}
+import scala.concurrent.stm.{InTxn, Ref, TMap}
 import scala.language.higherKinds
 import scala.swing.{Alignment, Component, Label}
 
 /** Building block for dropping dimension keys. E.g. used as column headers in the sonification source view */
 abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
-                                            (implicit workspace: Workspace[S], undo: UndoManager, cursor: stm.Cursor[S])
+                                            (implicit universe: Universe[S], undo: UndoManager)
     extends View[S] with ComponentHolder[Component] { me =>
+
+  type C = Component
 
   // ---- abstract ----
 
@@ -61,7 +62,7 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
 
   /** Sub-classes must call `super` if they override this. */
   def dispose()(implicit tx: S#Tx): Unit = {
-    implicit val ptx = tx.peer
+    implicit val ptx: InTxn = tx.peer
     observer.dispose()
     bindingObs.foreach(_._2.dispose())
     bindingObs.clear()
@@ -108,12 +109,12 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
       case Change(`keyName`, _) => removeBinding(key)
       case _ =>
     }}
-    implicit val ptx = tx.peer
+    implicit val ptx: InTxn = tx.peer
     bindingObs.put(key, obs)
   }
 
   private def removeBindingObserver(key: String)(implicit tx: S#Tx): Unit = {
-    implicit val ptx = tx.peer
+    implicit val ptx: InTxn = tx.peer
     bindingObs.remove(key).foreach(_.dispose())
   }
 
@@ -127,8 +128,8 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
     val thatSource  = drag.source()
     if (thisSource != thatSource) None else {
       dimsH().modifiableOption.map { map =>
-        implicit val s = StringObj
-        // import workspace.cursor
+        implicit val s: StringObj.type = StringObj
+        import universe.cursor
         val exprOpt: Option[StringObj[S]] = Some(StringObj.newConst(keyName))
         EditExprMap[S, String, String, StringObj]("Map Dimension", map, key = drag.key, value = exprOpt)
       }
@@ -163,8 +164,8 @@ abstract class DimAssocViewImpl[S <: Sys[S]](keyName: String)
       override def importData(support: TransferSupport): Boolean = {
         val t     = support.getTransferable
         val drag  = t.getTransferData(flavor).asInstanceOf[MappingDragS]
-        val editOpt = if (drag.workspace != workspace) None else {
-          cursor.step { implicit tx =>
+        val editOpt = if (drag.workspace != universe.workspace) None else {
+          universe.cursor.step { implicit tx =>
             importMapping(drag)
           }
         }

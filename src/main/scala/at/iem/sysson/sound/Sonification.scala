@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -26,10 +26,10 @@ import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.{event => evt}
 import de.sciss.optional.Optional
 import de.sciss.serial.{DataInput, Serializer}
-import de.sciss.synth.proc.{GenContext, Proc}
+import de.sciss.synth.proc.{Proc, Universe}
 
 object Sonification extends Obj.Type {
-  final val typeID = 0x30004
+  final val typeId = 0x30004
 
   def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] =
     Impl.readIdentifiedObj(in, access)
@@ -58,7 +58,7 @@ object Sonification extends Obj.Type {
   // -------------------------------------------------------
 
   object Source extends Obj.Type {
-    final val typeID = 0x30007
+    final val typeId = 0x30007
 
     def readIdentifiedObj[S <: Sys[S]](in: DataInput, access: S#Acc)(implicit tx: S#Tx): Obj[S] =
       Impl.readIdentifiedSource(in, access)
@@ -94,7 +94,7 @@ object Sonification extends Obj.Type {
 
   def render[S <: Sys[S]](fscape: FScape[S], sonification: Optional[Sonification[S]] = None,
                           config: Control.Config = FScape.defaultConfig)
-                         (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
+                         (implicit tx: S#Tx, universe: Universe[S]): FScape.Rendering[S] = {
     def render(): FScape.Rendering[S] = GenViewFactory.render(fscape, config)
 
     sonification.fold(render())(AuralSonificationImpl.use(_)(render()))

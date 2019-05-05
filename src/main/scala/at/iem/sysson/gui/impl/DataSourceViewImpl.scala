@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -17,10 +17,11 @@ package gui
 package impl
 
 import java.awt.datatransfer.Transferable
+
+import at.iem.sysson
 import javax.swing.table.AbstractTableModel
 import javax.swing.tree.DefaultTreeCellRenderer
 import javax.swing.{JComponent, JTree, TransferHandler}
-
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.equal
 import de.sciss.file._
@@ -35,7 +36,7 @@ import de.sciss.mellite.gui.GUI
 import de.sciss.model.impl.ModelImpl
 import de.sciss.swingtree.event.TreeNodeSelected
 import de.sciss.swingtree.{ExternalTreeModel, Tree}
-import de.sciss.synth.proc.{ObjKeys, Workspace}
+import de.sciss.synth.proc.{ObjKeys, Universe, Workspace}
 import ucar.nc2
 
 import scala.annotation.switch
@@ -46,9 +47,9 @@ import scala.swing.{Action, BorderPanel, BoxPanel, Component, Orientation, Scrol
 object DataSourceViewImpl {
   import at.iem.sysson.Implicits._
 
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit workspace: Workspace[S], tx: S#Tx,
-                                                cursor: stm.Cursor[S]): DataSourceView[S] = {
-    implicit val resolver = WorkspaceResolver[S]
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, universe: Universe[S]): DataSourceView[S] = {
+    import universe.workspace
+    implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
     val data  = source.data()
     val docH  = tx.newHandle(source)
     val res   = new Impl[S](docH, source.artifact.value, data)
@@ -132,9 +133,11 @@ object DataSourceViewImpl {
 
   private final class Impl[S <: Sys[S]](sourceH: stm.Source[S#Tx, DataSource[S]],
                                         val file: File, data: nc2.NetcdfFile)
-                                       (implicit val workspace: Workspace[S], val cursor: stm.Cursor[S])
+                                       (implicit val universe: Universe[S])
     extends DataSourceView[S] with ComponentHolder[Component] with ModelImpl[DataSourceView.Update] {
     impl =>
+
+    type C = Component
     
     private[this] var _selVar     = Option.empty[nc2.Variable]
 
@@ -228,7 +231,7 @@ object DataSourceViewImpl {
               DragAndDrop.Transferable(DragAndDrop.MatrixFlavor) {
                 new MatrixDrag {
                   type S1 = S
-                  val workspace : Workspace[S]            = impl.workspace
+                  val workspace : Workspace[S]            = impl.universe.workspace
                   val matrix    : Source[S#Tx, Matrix[S]] = varH
                 }
               }
@@ -242,8 +245,8 @@ object DataSourceViewImpl {
 
       tGroups.selectInterval(0, 0)
 
-      val ggPlot    = GUI.toolButton(actionPlot  , raphael.Shapes.LineChart, tooltip = "Create 2D Plot")
-      val ggSpread  = GUI.toolButton(actionSpread, Shapes.Spreadsheet, tooltip = "Open Data Table")
+      val ggPlot    = GUI.toolButton(actionPlot  , raphael    .Shapes.LineChart   , tooltip = "Create 2D Plot"  )
+      val ggSpread  = GUI.toolButton(actionSpread, sysson.gui .Shapes.Spreadsheet , tooltip = "Open Data Table" )
       tGroupAttrs.preferredViewportSize = tGroupAttrs.preferredSize // WTF? why do we even have to do this explicitly?
       tGroupVars .preferredViewportSize = tGroupVars .preferredSize // WTF? why do we even have to do this explicitly?
       val ggSplit = new SplitPane(Orientation.Horizontal, new ScrollPane(tGroupAttrs), new ScrollPane(tGroupVars))

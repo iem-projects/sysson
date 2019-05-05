@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -17,8 +17,8 @@ package gui
 package impl
 
 import java.awt.datatransfer.Transferable
-import javax.swing.undo.UndoableEdit
 
+import javax.swing.undo.UndoableEdit
 import at.iem.sysson.gui.DragAndDrop.SonificationSourceMappingDrag
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.UndoManager
@@ -32,7 +32,7 @@ import de.sciss.lucre.swing.edit.EditMutableMap
 import de.sciss.lucre.{expr, stm}
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
-import de.sciss.synth.proc.{ObjKeys, Workspace}
+import de.sciss.synth.proc.{ObjKeys, Universe, Workspace}
 
 import scala.annotation.tailrec
 import scala.swing.{Action, Component, FlowPanel}
@@ -40,14 +40,14 @@ import scala.swing.{Action, Component, FlowPanel}
 object SonificationSourceViewImpl {
   def apply[S <: Sys[S]](parent: SonificationView[S],
                          key: String, keyDimNames: Vec[String])
-                        (implicit tx: S#Tx, workspace: Workspace[S],
-                         undoManager: UndoManager, cursor: stm.Cursor[S]): SonificationSourceView[S] = {
+                        (implicit tx: S#Tx, universe: Universe[S],
+                         undoManager: UndoManager): SonificationSourceView[S] = {
     val res = new Impl[S](parent = parent, key = key, _keys = keyDimNames).init1()
     res
   }
 
   private final class Impl[S <: Sys[S]](parent: SonificationView[S], key: String, _keys: Vec[String])
-                                       (implicit workspace: Workspace[S], undoManager: UndoManager, cursor: stm.Cursor[S])
+                                       (implicit val universe: Universe[S], undoManager: UndoManager)
     extends MatrixAssocViewImpl[S](_keys) with SonificationSourceView[S] {
     impl =>
 
@@ -112,7 +112,7 @@ object SonificationSourceViewImpl {
         type S1 = S
         def source: stm.Source[S#Tx, Sonification.Source[S]] = src
         def key: String = key0
-        def workspace: Workspace[S] = impl.workspace
+        def workspace: Workspace[S] = impl.universe.workspace
       })
 
     @tailrec private def findRoot(m: Matrix[S])(implicit tx: S#Tx): Matrix[S] = m match {

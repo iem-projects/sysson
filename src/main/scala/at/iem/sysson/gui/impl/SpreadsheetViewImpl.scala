@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -16,31 +16,27 @@ package at.iem.sysson
 package gui
 package impl
 
-import javax.swing.table.{AbstractTableModel, DefaultTableColumnModel, TableColumn}
-
 import at.iem.sysson.gui.impl.AbstractPlotViewImpl.PlotData
 import de.sciss.desktop.UndoManager
 import de.sciss.lucre.matrix.gui.DimensionIndex
-import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.swingplus.ListView
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
+import javax.swing.table.{AbstractTableModel, DefaultTableColumnModel, TableColumn}
 
 import scala.swing.ScrollPane.BarPolicy
 import scala.swing.Table.{AutoResizeMode, ElementMode}
 import scala.swing.{ScrollPane, Table}
 
 object SpreadsheetViewImpl {
-  def apply[S <: Sys[S]](plot: Plot[S], stats: PlotStatsView[S])(implicit tx: S#Tx, cursor: stm.Cursor[S],
-                                                                 undoManager: UndoManager,
-                                                                 workspace: Workspace[S]): View[S] = {
+  def apply[S <: Sys[S]](plot: Plot[S], stats: PlotStatsView[S])(implicit tx: S#Tx, universe: Universe[S],
+                                                                 undoManager: UndoManager): View[S] = {
     new Impl[S](stats).init(plot)
   }
 
-  private final class Impl[S <: Sys[S]](statsView: PlotStatsView[S])(implicit val cursor: stm.Cursor[S],
-                                                                     val undoManager: UndoManager,
-                                                                     val workspace: Workspace[S])
+  private final class Impl[S <: Sys[S]](statsView: PlotStatsView[S])(implicit val universe: Universe[S],
+                                                                     val undoManager: UndoManager)
     extends AbstractPlotViewImpl[S] {
 
     override def init(plot: Plot[S])(implicit tx: S#Tx): Impl.this.type = {

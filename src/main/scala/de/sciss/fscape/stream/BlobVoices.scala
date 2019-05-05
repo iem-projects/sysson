@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -27,7 +27,7 @@ import scala.annotation.{switch, tailrec}
 object BlobVoices {
   def apply(in: OutD, width: OutI, height: OutI, minWidth: OutI, minHeight: OutI, thresh: OutD, voices: OutI,
             numBlobs: OutI, bounds: OutD, numVertices: OutI, vertices: OutD)(implicit b: Builder): OutD = {
-    val stage0  = new Stage
+    val stage0  = new Stage(b.layer)
     val stage   = b.add(stage0)
     b.connect(in         , stage.in0 )
     b.connect(width      , stage.in1 )
@@ -47,7 +47,7 @@ object BlobVoices {
 
   private type Shape = FanInShape11[BufD, BufI, BufI, BufI, BufI, BufD, BufI, BufI, BufD, BufI, BufD, BufD]
 
-  private final class Stage(implicit ctrl: Control) extends StageImpl[Shape](name) {
+  private final class Stage(layer: Layer)(implicit ctrl: Control) extends StageImpl[Shape](name) {
     val shape = new FanInShape11(
       in0  = InD (s"$name.in"         ),
       in1  = InI (s"$name.width"      ),
@@ -63,7 +63,7 @@ object BlobVoices {
       out  = OutD(s"$name.out"        )
     )
 
-    def createLogic(attr: Attributes) = new Logic(shape)
+    def createLogic(attr: Attributes) = new Logic(layer, shape)
   }
 
   private final class Blob {
@@ -82,8 +82,8 @@ object BlobVoices {
     override def toString = f"Blob(xMin = $xMin%g, xMax = $xMax%g, yMin = $yMin%g, yMax = $yMax%g, numVertices = $numVertices)"
   }
 
-  private final class Logic(shape: Shape)(implicit ctrl: Control)
-    extends NodeImpl(name, shape)
+  private final class Logic(layer: Layer, shape: Shape)(implicit ctrl: Control)
+    extends NodeImpl(name, layer, shape)
       with DemandFilterLogic[BufD, Shape]
       with DemandChunkImpl  [Shape]
       with Out1LogicImpl    [BufD, Shape]
@@ -233,20 +233,20 @@ object BlobVoices {
     def auxInValid  : Boolean = _auxInValid
     def inValid     : Boolean = _inValid
 
-    override def preStart(): Unit = {
-      val sh = shape
-      pull(sh.in0)
-      pull(sh.in1)
-      pull(sh.in2)
-      pull(sh.in3)
-      pull(sh.in4)
-      pull(sh.in5)
-      pull(sh.in6)
-      pull(sh.in7)
-      pull(sh.in8)
-      pull(sh.in9)
-      pull(sh.in10)
-    }
+//    override def preStart(): Unit = {
+//      val sh = shape
+//      pull(sh.in0)
+//      pull(sh.in1)
+//      pull(sh.in2)
+//      pull(sh.in3)
+//      pull(sh.in4)
+//      pull(sh.in5)
+//      pull(sh.in6)
+//      pull(sh.in7)
+//      pull(sh.in8)
+//      pull(sh.in9)
+//      pull(sh.in10)
+//    }
 
     override protected def stopped(): Unit = {
       freeInputBuffers()

@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -18,21 +18,21 @@ package impl
 
 import java.awt.Color
 import java.awt.datatransfer.Transferable
-import javax.swing.{JPanel, TransferHandler}
-import javax.swing.TransferHandler.TransferSupport
-import javax.swing.undo.UndoableEdit
 
 import de.sciss.desktop.UndoManager
 import de.sciss.icons.raphael
 import de.sciss.lucre.expr.IntObj
-import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.matrix.gui.MatrixView
+import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Sys, TxnLike}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.serial.Serializer
-import de.sciss.synth.proc.{GenContext, Workspace}
+import de.sciss.synth.proc.{Universe, Workspace}
+import javax.swing.TransferHandler.TransferSupport
+import javax.swing.undo.UndoableEdit
+import javax.swing.{JPanel, TransferHandler}
 
 import scala.concurrent.stm.{Ref, TxnExecutor}
 import scala.language.higherKinds
@@ -48,12 +48,13 @@ object MatrixAssocViewImpl {
   private val IntFlavor = DragAndDrop.internalFlavor[IntDrag]
 }
 abstract class MatrixAssocViewImpl[S <: Sys[S]](keys: Vec[String])
-                                               (implicit workspace: Workspace[S], undoManager: UndoManager,
-                                                cursor: stm.Cursor[S])
+                                               (implicit universe: Universe[S], undoManager: UndoManager)
   extends View[S] with ComponentHolder[Component] {
   impl =>
 
   import MatrixAssocViewImpl.{IntDrag, IntFlavor}
+
+  type C = Component
 
   // ---- abstract ----
 
@@ -109,9 +110,9 @@ abstract class MatrixAssocViewImpl[S <: Sys[S]](keys: Vec[String])
     def canImportInt(t: TransferSupport): Boolean = t.isDataFlavorSupported(IntFlavor)
 
     def exportInt(x: IntObj[S])(implicit tx: S#Tx): Option[Transferable] = {
-      val drag = new IntDrag {
+      val drag: IntDrag = new IntDrag {
         type S1 = S
-        val workspace : Workspace[S1]                 = impl.workspace
+        val workspace : Workspace[S1]                 = impl.universe.workspace
         val source    : stm.Source[S1#Tx, IntObj[S1]] = tx.newHandle(x)
         val value     : Int                           = x.value
       }
@@ -121,7 +122,7 @@ abstract class MatrixAssocViewImpl[S <: Sys[S]](keys: Vec[String])
 
     def importInt(t: TransferSupport)(implicit tx: S#Tx): Option[IntObj[S]] = {
       val drag = t.getTransferable.getTransferData(IntFlavor).asInstanceOf[IntDrag]
-      val x: IntObj[S] = if (drag.workspace == /* === */ impl.workspace) {
+      val x: IntObj[S] = if (drag.workspace == /* === */ impl.universe.workspace) {
         drag.asInstanceOf[IntDrag { type S1 = S }].source()
       } else {
         IntObj.newConst[S](drag.value)
@@ -131,9 +132,10 @@ abstract class MatrixAssocViewImpl[S <: Sys[S]](keys: Vec[String])
   }
 
   def init()(implicit tx: S#Tx): this.type = {
-    implicit val resolver = WorkspaceResolver[S]
+    import universe.workspace
+    implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
     import Stats.executionContext
-    implicit val gen = GenContext[S]
+    import universe.{cursor, genContext}
 
     _matrixView = MatrixView[S](Some(TH))
     _matrixView.nameVisible = false
@@ -162,13 +164,13 @@ abstract class MatrixAssocViewImpl[S <: Sys[S]](keys: Vec[String])
 
         protected def export(): Option[Transferable] =
           TxnExecutor.defaultAtomic.apply { implicit itx =>
-            implicit val tx = TxnLike.wrap(itx)
+            implicit val tx: TxnLike = TxnLike.wrap(itx)
             ButtonImpl.sourceOpt.map { src =>
               mkDimAssocTransferable(src, key0)
             }
           }
 
-        protected def sourceAction(mod: Int) = TransferHandler.LINK
+        protected def sourceAction(mod: Int): Int = TransferHandler.LINK
 
         protected def sourceActions: Int =
           TransferHandler.LINK | TransferHandler.COPY | TransferHandler.MOVE

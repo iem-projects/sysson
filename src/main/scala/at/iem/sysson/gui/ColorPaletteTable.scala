@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -128,11 +128,11 @@ object ColorPaletteTable {
 
   private def to256(in: Double): Int = {
     import de.sciss.numbers.Implicits._
-    in.clip(0, 1).linlin(0, 1, 0x00, 0xFF).toInt
+    in.clip(0, 1).linLin(0, 1, 0x00, 0xFF).toInt
   }
 
   private def activeLines(in: InputStream): Iterator[String] = {
-    val text = io.Source.fromInputStream(in, "UTF-8")
+    val text = scala.io.Source.fromInputStream(in, "UTF-8")
     text.getLines().map(_.trim).filterNot(ln => ln.isEmpty || ln.startsWith("#"))
   }
 

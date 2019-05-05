@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -17,7 +17,6 @@ package gui
 package impl
 
 import javax.swing.SpinnerNumberModel
-
 import at.iem.sysson.util.NetCdfFileUtil
 import de.sciss.audiowidgets.DualRangeModel
 import de.sciss.desktop.{FileDialog, OptionPane, UndoManager, Window}
@@ -27,10 +26,11 @@ import de.sciss.lucre.expr.IntObj
 import de.sciss.lucre.matrix.gui.DimensionIndex
 import de.sciss.lucre.matrix.gui.impl.ReductionView.UnitLabelImpl
 import de.sciss.lucre.matrix.{DataSource, Dimension, Matrix, Reduce, Sys}
+import de.sciss.lucre.stm.Workspace
 import de.sciss.lucre.swing.{IntRangeSliderView, IntSpinnerView, View}
 import de.sciss.lucre.{matrix, stm}
 import de.sciss.swingplus.{ComboBox, GroupPanel, Spinner}
-import de.sciss.synth.proc.{GenContext, WorkspaceHandle}
+import de.sciss.synth.proc.GenContext
 import ucar.nc2
 
 import scala.concurrent.ExecutionContext
@@ -46,8 +46,9 @@ final class ActionCalculateAnomalies[I <: Sys[I]](windowOpt: Option[Window], sel
       import Implicits._
       import matrix.Implicits._
 
+      implicit val system: I = tx.system
       implicit val resolver: DataSource.Resolver[I] = DataSource.Resolver.empty
-      implicit val ws   : WorkspaceHandle[I]        = WorkspaceHandle.Implicits.dummy
+      implicit val ws   : Workspace[I]              = Workspace.Implicits.dummy
       implicit val undo : UndoManager               = UndoManager()
       implicit val gen  : GenContext[I]             = GenContext[I]
       import ExecutionContext.Implicits.global
@@ -77,6 +78,8 @@ final class ActionCalculateAnomalies[I <: Sys[I]](windowOpt: Option[Window], sel
       val unitLo    = new UnitLabelImpl(dimIdxView, dimRange).init(exprLo)
       val unitHi    = new UnitLabelImpl(dimIdxView, dimRange).init(exprHi)
       val view: View[I] = new View[I] {
+        final type C = Component
+
         lazy val component: Component = new BoxPanel(Orientation.Horizontal) {
           contents += viewSlice.component
           contents += new BoxPanel(Orientation.Vertical) {

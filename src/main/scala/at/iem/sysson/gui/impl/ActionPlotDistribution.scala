@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -18,6 +18,7 @@ package impl
 
 import java.awt.{Color, Graphics}
 
+import de.sciss.chart.{Chart, XYChart}
 import de.sciss.desktop.{DialogSource, Window, WindowHandler}
 import de.sciss.lucre.swing.defer
 import de.sciss.mellite.Application
@@ -31,7 +32,6 @@ import scala.concurrent.stm.atomic
 import scala.swing.{Action, Component, Orientation, SplitPane}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
-import scalax.chart.{Chart, XYChart}
 
 final class ActionPlotDistribution(windowOpt: Option[Window], selectedVariable: => Option[nc2.Variable])
   extends Action("Plot Distribution...") {
@@ -53,14 +53,14 @@ final class ActionPlotDistribution(windowOpt: Option[Window], selectedVariable: 
         val histo   = new Array[Int](numBins)
 
         def loop(rem: Vec[nc2.Dimension], red: VariableSection): Unit = rem match {
-          case head +: (tail @ (_ +: _)) if red.size > 16384 =>   // try to make smart chunks
+          case head +: (tail @ _ +: _) if red.size > 16384 =>   // try to make smart chunks
             for (i <- 0 until head.size) loop(tail, red.in(head.name).select(i))
           case _ =>
             red.variable.fillValue
             val chunk = red.readSafe().double1D.dropNaNs(red.variable.fillValue)
             chunk.foreach { d =>
               import numbers.Implicits._
-              val bin = d.linlin(total.min, total.max, 0, numBins).toInt.min(numBins - 1)
+              val bin = d.linLin(total.min, total.max, 0, numBins).toInt.min(numBins - 1)
               histo(bin) += 1
             }
         }
@@ -94,11 +94,10 @@ final class ActionPlotDistribution(windowOpt: Option[Window], selectedVariable: 
     }
 
   private def mkHistoChart(histo: Vec[Double], stats: Stats.Counts, title: String): XYChart = {
+    import de.sciss.chart.module.Charting._
     import numbers.Implicits._
-
-    import scalax.chart.api._
     val data: Vec[(Double, Double)] = histo.zipWithIndex.map { case (num, i) =>
-      (i + 0.5).linlin(0, histo.length, stats.min, stats.max) -> num
+      (i + 0.5).linLin(0, histo.length, stats.min, stats.max) -> num
     } (breakOut)
     val dataCol = data.toXYSeriesCollection(title)
     // val chart   = XYBarChart(dataCol, title = title, legend = false)

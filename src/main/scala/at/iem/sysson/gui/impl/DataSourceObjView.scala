@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -16,8 +16,6 @@ package at.iem.sysson
 package gui
 package impl
 
-import javax.swing.Icon
-
 import de.sciss.desktop
 import de.sciss.desktop.FileDialog
 import de.sciss.file._
@@ -25,15 +23,18 @@ import de.sciss.icons.raphael
 import de.sciss.lucre.artifact.Artifact
 import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.stm
-import de.sciss.lucre.stm.{Cursor, Obj, Sys}
+import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
-import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
+import de.sciss.mellite.gui.impl.objview.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.mellite.gui.{ActionArtifactLocation, ListObjView, ObjView}
+import de.sciss.processor.Processor.Aborted
 import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.{Universe, Workspace}
+import javax.swing.Icon
 
 import scala.swing.{Component, Label}
+import scala.util.{Failure, Success}
 
 object DataSourceObjView extends ListObjView.Factory {
   private lazy val _init: Unit = ListObjView.addFactory(this)
@@ -46,10 +47,12 @@ object DataSourceObjView extends ListObjView.Factory {
   final val prefix      = "DataSource"
   final val humanName   = "Data Source"
   final val icon: Icon  = ObjViewImpl.raphaelIcon(raphael.Shapes.Database)
-  final val typeID: Int = DataSource.typeID
+  final val typeId: Int = DataSource.typeId
   def category: String  = SwingApplication.categSonification
 
-  def hasMakeDialog: Boolean = true
+  def canMakeObj: Boolean = true
+
+  def initMakeCmdLine[S <: SSys[S]](args: List[String])(implicit universe: Universe[S]): MakeResult[S] = ???
 
   def mkListView[S <: SSys[S]](ds: DataSource[S])(implicit tx: S#Tx): ListObjView[S] = {
     val f         = ds.artifact.value
@@ -64,29 +67,37 @@ object DataSourceObjView extends ListObjView.Factory {
   final case class Config[S <: Sys[S]](files: List[File], location: ActionArtifactLocation.QueryResult[S],
                                        workspace: Workspace[S])
 
-  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])
-                                  (ok: Config[S] => Unit)(implicit cursor: Cursor[S]): Unit = {
+  def initMakeDialog[S <: SSys[S]](window: Option[desktop.Window])(done: MakeResult[S] => Unit)
+                                 (implicit universe: Universe[S]): Unit = {
     val dlg = FileDialog.open(title = "Add Data Source")
     dlg.setFilter(util.NetCdfFileFilter)
     dlg.multiple  = true
     val fOpt      = dlg.show(window)
-    val res = fOpt.flatMap { f0 =>
-      ActionArtifactLocation.query[S](workspace.rootH, file = f0, window = window).map { location =>
+    import universe.workspace
+    val res: Option[Config[S]] = fOpt.flatMap { f0 =>
+      val q = ActionArtifactLocation.query[S](file = f0, window = window)(implicit tx => workspace.root)
+      q.map { location =>
         Config(files = dlg.files, location = location, workspace = workspace)
       }
     }
-    res.foreach(ok(_))
+
+    val tr = res match {
+      case Some(loc)  => Success(loc)
+      case None       => Failure(Aborted())
+    }
+
+    done(tr)
   }
 
   def makeObj[S <: Sys[S]](config: Config[S])(implicit tx: S#Tx): List[Obj[S]] = {
     val (list0: List[Obj[S]], loc) = config.location match {
-      case Left(source) => (Nil, source())
-      case Right((name, directory)) =>
+      case (Left(source), _) => (Nil, source())
+      case (Right(name), directory) =>
         val objLoc  = ActionArtifactLocation.create(name = name, directory = directory)
         (objLoc :: Nil, objLoc)
     }
-    implicit val ws       = config.workspace
-    implicit val resolver = WorkspaceResolver[S]
+    implicit val ws: Workspace[S] = config.workspace
+    implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
     val obj = config.files.map { f =>
       val artifact = Artifact(loc, f)
       val ds       = DataSource[S](artifact)
@@ -116,8 +127,7 @@ object DataSourceObjView extends ListObjView.Factory {
 
     override def obj(implicit tx: S#Tx): DataSource[S] = objH()
 
-    def openView(parent: Option[Window[S]])
-                (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
+    def openView(parent: Option[Window[S]])(implicit tx: S#Tx, universe: Universe[S]): Option[Window[S]] = {
       val frame = DataSourceFrame(obj)
       Some(frame)
     }

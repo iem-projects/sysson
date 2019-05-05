@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -17,8 +17,6 @@ package gui
 package impl
 
 import java.awt
-import javax.swing.table.{AbstractTableModel, DefaultTableCellRenderer}
-import javax.swing.{JTable, SwingConstants}
 
 import at.iem.sysson.Implicits._
 import de.sciss.equal
@@ -28,7 +26,9 @@ import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx}
 import de.sciss.model.impl.ModelImpl
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
+import javax.swing.table.{AbstractTableModel, DefaultTableCellRenderer}
+import javax.swing.{JTable, SwingConstants}
 import ucar.nc2
 
 import scala.annotation.tailrec
@@ -38,15 +38,18 @@ import scala.swing.{BoxPanel, Component, Label, Orientation, Table}
 import scala.util.{Failure, Success}
 
 object PlotStatsViewImpl {
-  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, workspace: Workspace[S]): PlotStatsView[S] = {
-    implicit val resolver = WorkspaceResolver[S]
+  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, universe: Universe[S]): PlotStatsView[S] = {
+    import universe.workspace
+    implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
     new Impl[S].init(plot)
   }
 
-  private final class Impl[S <: Sys[S]](implicit resolver: DataSource.Resolver[S])
+  private final class Impl[S <: Sys[S]](implicit val universe: Universe[S], resolver: DataSource.Resolver[S])
     extends PlotStatsView[S]
     with ComponentHolder[Component]
     with ModelImpl[Stats.Variable] {
+
+    type C = Component
 
     private var observer: Disposable[S#Tx] = _
 

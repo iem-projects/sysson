@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -282,7 +282,7 @@ object MatrixPrepare {
 //        }
 
         val trig  = new StreamBuffer(key = key, idx = index, synth = syn, buf = buf,
-          path = path, fileFrames = numFrames, interp = 1, startFrame = startFrame, loop = true, resetFrame = 0L)
+          path = path, fileFrames = numFrames, interpolation = 1, startFrame = startFrame, loop = true, resetFrame = 0L)
         nr.addUser(trig) // XXX TODO --- CORRECT?
         // b.users ::= trig // NOT: b.addUser(trig) -- which is keyed!
         // trig.install()

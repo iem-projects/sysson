@@ -2,8 +2,8 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.16.0"
-lazy val mimaVersion    = "1.16.0"
+lazy val projectVersion = "1.17.0-SNAPSHOT"
+lazy val mimaVersion    = "1.17.0"
 
 lazy val commonSettings = Seq(
   name          := baseName,
@@ -14,7 +14,7 @@ lazy val commonSettings = Seq(
   licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")),
   // ---- scala compiler settings and libraries ----
   scalaVersion  := scalaMainVersion,
-  crossScalaVersions := Seq(scalaMainVersion, "2.11.11" /* , "2.10.6" */),
+  crossScalaVersions := Seq(scalaMainVersion, "2.11.12"),
   // maven repository for NetCDF library
   resolvers    += "Unidata Releases" at "https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases",
   // maven repository for Oracle BDB JE
@@ -23,35 +23,39 @@ lazy val commonSettings = Seq(
   resolvers += "Typesafe Maven Repository" at "http://repo.typesafe.com/typesafe/maven-releases/", // https://stackoverflow.com/questions/23979577
   fork in run := true,
   scalacOptions ++= {
-    val xs = Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xfuture")
+    val xs = Seq("-deprecation", "-unchecked", "-feature", "-encoding", "utf8", "-Xsource:2.13")
     if (scalaVersion.value.startsWith("2.10")) xs else xs :+ "-Xlint:-stars-align,_"
-  }
+  },
+  updateOptions := updateOptions.value.withLatestSnapshots(false)
 )
 
-lazy val scalaMainVersion           = "2.12.2"
+lazy val scalaMainVersion           = "2.12.8"
 
 // ---- library versions ----
 
-lazy val melliteVersion             = "2.16.0"
-lazy val soundProcessesVersion      = "3.13.0"
-lazy val lucreMatrixVersion         = "1.5.1"
-lazy val lucreSwingVersion          = "1.6.0"
-lazy val lucreVersion               = "3.4.1"
-lazy val scalaColliderVersion       = "1.22.4"
-lazy val scalaColliderSwingVersion  = "1.34.0"
-lazy val ugensVersion               = "1.16.4"
-lazy val fileCacheVersion           = "0.3.4"
-lazy val swingTreeVersion           = "0.1.2"
-lazy val kollFlitzVersion           = "0.2.1"
-lazy val sheetVersion               = "0.1.2"
-lazy val slfVersion                 = "1.7.25"
-lazy val fscapeVersion              = "2.8.0"
-lazy val orsonpdfVersion            = "1.7"
-lazy val webLaFVersion              = "2.1.3"
-
-// ---- test libraries ----
-
-lazy val scalaTestVersion           = "3.0.3"
+lazy val deps = new {
+  val main = new {
+    val fileCache           = "0.5.1"
+    val fscape              = "2.25.0"
+    val kollFlitz           = "0.2.3"
+    val lucreMatrix         = "1.7.0-SNAPSHOT"
+    val lucreSwing          = "1.16.0"
+    val lucre               = "3.12.0"
+    val mellite             = "2.35.0"
+    val orsonpdf            = "1.9"
+    val scalaCollider       = "1.28.2"
+    val scalaColliderSwing  = "1.41.1"
+    val scalaColliderUGens  = "1.19.3"
+    val sheet               = "0.1.2"
+    val slf4j               = "1.7.26"
+    val soundProcesses      = "3.28.1-SNAPSHOT"
+    val swingTree           = "0.2.0"
+    val webLaF              = "2.1.5"
+  }
+  val test = new {
+    val scalaTest           = "3.0.7"
+  }
+}
 
 // ---- other global constants
 
@@ -92,7 +96,7 @@ lazy val publishSettings = Seq(
 
 //////////////// standalone fat jar
 lazy val assemblySettings = Seq(
-  test            in assembly := (),
+  test            in assembly := {},
   target          in assembly := baseDirectory.value,   // make .jar file in the main directory
   assemblyJarName in assembly := s"${name.value}.jar",
   mainClass in Compile := Some(mainClazz),
@@ -117,26 +121,25 @@ lazy val root = Project(id = baseNameL, base = file("."))
   .settings(pkgUniversalSettings, pkgDebianSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "de.sciss" %% "mellite"                     % melliteVersion,             // computer music environment
-      "de.sciss" %% "soundprocesses-core"         % soundProcessesVersion,      // computer music environment
-      "de.sciss" %% "scalacollider"               % scalaColliderVersion,       // sound synthesis
-      "de.sciss" %% "scalacolliderswing-core"     % scalaColliderSwingVersion,
-      "de.sciss" %% "scalacolliderswing-plotting" % scalaColliderSwingVersion,  // plotting goodies
-      "de.sciss" %% "scalacolliderugens-plugins"  % ugensVersion,               // third-party ugens
-      // "at.iem"   %% "scalacollider-voices"        % voicesVersion,              // polyphony management
-      "at.iem"   %% "lucrematrix"                 % lucreMatrixVersion,         // reactive matrix component and view
-      "de.sciss" %% "lucreswing"                  % lucreSwingVersion,          // reactive widgets
-      "de.sciss" %% "lucre-core"                  % lucreVersion,               // object model
-      "de.sciss" %% "filecache-txn"               % fileCacheVersion,           // caching statistics of data files
-      "de.sciss" %% "scala-swing-tree"            % swingTreeVersion,           // tree component
-      "de.sciss" %% "kollflitz"                   % kollFlitzVersion,           // collection extensions
-      "de.sciss" %% "sheet"                       % sheetVersion,               // Excel support
-      "de.sciss" %% "fscape"                      % fscapeVersion,              // Offline processing
-      "de.sciss" %  "weblaf-core"                 % webLaFVersion,              // look-and-feel
-      "com.orsonpdf" % "orsonpdf"                 % orsonpdfVersion,            // silly JFreeChart doesn't support iText PDF
-      "org.slf4j" % "slf4j-simple"                % slfVersion                   // logging (used by netcdf)
+      "de.sciss" %% "mellite"                     % deps.main.mellite,             // computer music environment
+      "de.sciss" %% "soundprocesses-core"         % deps.main.soundProcesses,      // computer music environment
+      "de.sciss" %% "scalacollider"               % deps.main.scalaCollider,       // sound synthesis
+      "de.sciss" %% "scalacolliderswing-core"     % deps.main.scalaColliderSwing,
+      "de.sciss" %% "scalacolliderswing-plotting" % deps.main.scalaColliderSwing,  // plotting goodies
+      "de.sciss" %% "scalacolliderugens-plugins"  % deps.main.scalaColliderUGens,  // third-party ugens
+      "de.sciss" %% "lucrematrix"                 % deps.main.lucreMatrix,         // reactive matrix component and view
+      "de.sciss" %% "lucreswing"                  % deps.main.lucreSwing,          // reactive widgets
+      "de.sciss" %% "lucre-core"                  % deps.main.lucre,               // object model
+      "de.sciss" %% "filecache-txn"               % deps.main.fileCache,           // caching statistics of data files
+      "de.sciss" %% "scala-swing-tree"            % deps.main.swingTree,           // tree component
+      "de.sciss" %% "kollflitz"                   % deps.main.kollFlitz,           // collection extensions
+      "de.sciss" %% "sheet"                       % deps.main.sheet,               // Excel support
+      "de.sciss" %% "fscape-lucre"                % deps.main.fscape,              // Offline processing
+      "de.sciss" %  "weblaf-core"                 % deps.main.webLaF,              // look-and-feel
+      "com.orsonpdf" % "orsonpdf"                 % deps.main.orsonpdf,            // silly JFreeChart doesn't support iText PDF
+      "org.slf4j" % "slf4j-simple"                % deps.main.slf4j                // logging (used by netcdf)
     ),
-    libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test",
+    libraryDependencies += "org.scalatest" %% "scalatest" % deps.test.scalaTest % "test",
     mimaPreviousArtifacts := Set("at.iem" %% baseNameL % mimaVersion),
     // ---- runtime settings ----
     initialCommands in console :=

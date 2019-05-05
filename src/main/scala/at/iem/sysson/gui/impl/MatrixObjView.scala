@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -15,8 +15,6 @@
 package at.iem.sysson.gui
 package impl
 
-import javax.swing.Icon
-
 import at.iem.sysson.Vec
 import de.sciss.desktop
 import de.sciss.icons.raphael
@@ -25,9 +23,10 @@ import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
-import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
+import de.sciss.mellite.gui.impl.objview.{ListObjViewImpl, ObjViewImpl}
 import de.sciss.mellite.gui.{ListObjView, ObjView}
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
+import javax.swing.Icon
 
 import scala.swing.{Component, Label}
 
@@ -36,7 +35,7 @@ object MatrixObjView extends ListObjView.Factory {
   final val prefix      = "Matrix"
   def humanName: String = prefix
   final val icon: Icon  = ObjViewImpl.raphaelIcon(raphael.Shapes.IconView)
-  final val typeID: Int = Matrix.typeID
+  final val typeId: Int = Matrix.typeId
   def category: String  = SwingApplication.categSonification
 
   def hasMakeDialog: Boolean = false
@@ -55,8 +54,12 @@ object MatrixObjView extends ListObjView.Factory {
 
   type Config[S <: Sys[S]] = Nothing
 
-  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])(ok: Config[S] => Unit)
-                                  (implicit cursor: stm.Cursor[S]): Unit = ()
+  def canMakeObj: Boolean = false
+
+  def initMakeDialog[S <: SSys[S]](window: Option[desktop.Window])(done: MakeResult[S] => Unit)
+                                  (implicit universe: Universe[S]): Unit = ()
+
+  def initMakeCmdLine[S <: SSys[S]](args: List[String])(implicit universe: Universe[S]): MakeResult[S] = ???
 
   def makeObj[S <: SSys[S]](nada: Nothing)(implicit tx: S#Tx): List[Obj[S]] = Nil
 
@@ -78,8 +81,7 @@ object MatrixObjView extends ListObjView.Factory {
 
     override def obj(implicit tx: S#Tx): Matrix[S] = objH()
 
-    def openView(parent: Option[Window[S]])
-                (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = None
+    def openView(parent: Option[Window[S]])(implicit tx: S#Tx, universe: Universe[S]): Option[Window[S]] = None
 
     def configureRenderer(label: Label): Component = {
       val txt    = value.toString

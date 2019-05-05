@@ -90,7 +90,7 @@ trait SessionLike extends App {
     val fRec  = recDir / s"${name1}_$name.aif"
     val dfRec = SynthDef("_rec") {
       val sig = In.ar(0, 2)
-      DiskOut.ar("buf".ir, Limiter.ar(sig, level = -0.2.dbamp))
+      DiskOut.ar("buf".ir, Limiter.ar(sig, level = -0.2.dbAmp))
     }
     val bRec  = Buffer(s)
     val syRec = Synth(s)

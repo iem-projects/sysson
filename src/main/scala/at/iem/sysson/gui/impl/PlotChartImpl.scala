@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -20,22 +20,20 @@ import java.awt
 import java.awt.image.BufferedImage
 import java.awt.{Color, Graphics, Paint, Rectangle, Shape, TexturePaint}
 import java.util.Locale
-import javax.swing.Icon
 
 import at.iem.sysson.gui.impl.AbstractPlotViewImpl.PlotData
 import de.sciss.desktop.UndoManager
 import de.sciss.equal
 import de.sciss.icons.raphael
-import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
+import de.sciss.lucre.expr.{BooleanObj, CellView, DoubleObj, StringObj}
 import de.sciss.lucre.matrix.gui.DimensionIndex
-import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
-import de.sciss.lucre.swing.{BooleanCheckBoxView, CellView, DoubleSpinnerView, View, defer, deferTx}
-import de.sciss.mellite.gui.AttrCellView
+import de.sciss.lucre.swing.{BooleanCheckBoxView, DoubleSpinnerView, View, defer, deferTx}
 import de.sciss.mellite.gui.edit.EditAttrMap
 import de.sciss.model.Model
 import de.sciss.swingplus.{ComboBox, ListView, OverlayPanel}
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
+import javax.swing.Icon
 import org.jfree.chart.axis.{NumberAxis, SymbolAxis}
 import org.jfree.chart.panel.{AbstractOverlay, Overlay}
 import org.jfree.chart.plot.XYPlot
@@ -49,15 +47,13 @@ import scala.swing.{Alignment, BorderPanel, Component, FlowPanel, Graphics2D, La
 import scala.util.{Failure, Success}
 
 object PlotChartImpl {
-  def apply[S <: Sys[S]](plot: Plot[S], stats: PlotStatsView[S])(implicit tx: S#Tx, cursor: stm.Cursor[S],
-                                                                 undoManager: UndoManager,
-                                                                 workspace: Workspace[S]): View.Editable[S] = {
+  def apply[S <: Sys[S]](plot: Plot[S], stats: PlotStatsView[S])(implicit tx: S#Tx, universe: Universe[S],
+                                                                 undoManager: UndoManager): View.Editable[S] = {
     new Impl[S](stats).init(plot)
   }
 
-  private final class Impl[S <: Sys[S]](statsView: PlotStatsView[S])(implicit val cursor: stm.Cursor[S],
-                                                                     val undoManager: UndoManager,
-                                                                     val workspace: Workspace[S])
+  private final class Impl[S <: Sys[S]](statsView: PlotStatsView[S])(implicit val universe: Universe[S],
+                                                                     val undoManager: UndoManager)
     extends AbstractPlotViewImpl[S] with View.Editable[S] {
 
     private[this] val dataset = new MatrixSeriesCollection
@@ -161,7 +157,7 @@ object PlotChartImpl {
       val mData = scalaData(data.mData, fill = fillValue, min = minValue, max = maxValue)
       val mRows = mData.length
       val mCols = if (mRows == 0) 0 else mData(0).length
-      val ms = new MatrixSeries(data.mName, mRows, mCols) {
+      val ms: MatrixSeries = new MatrixSeries(data.mName, mRows, mCols) {
         private var i = 0
         while (i < mRows) {
           val in  = mData(i)
@@ -212,24 +208,24 @@ object PlotChartImpl {
     override def init(plot: Plot[S])(implicit tx: S#Tx): this.type = {
       super.init(plot)
 
-      implicit val booleanEx  = BooleanObj
-      implicit val stringEx   = StringObj
-      implicit val doubleEx   = DoubleObj
+      implicit val booleanEx: BooleanObj.type  = BooleanObj
+      implicit val stringEx : StringObj .type  = StringObj
+      implicit val doubleEx : DoubleObj .type  = DoubleObj
 
       val plotAttr    = plot.attr
-      val cellOverlay = AttrCellView[S, Boolean, BooleanObj](plotAttr, Plot.attrShowOverlay)
+      val cellOverlay = CellView.attr[S, Boolean, BooleanObj](plotAttr, Plot.attrShowOverlay)
       viewOverlay     = BooleanCheckBoxView.optional(cellOverlay, name = "Map Overlay", default = false)
       addObserver(cellOverlay.react { implicit tx => _ => deferTx(updateOverlay()) })
-      cellPalette     = AttrCellView[S, String, StringObj](plotAttr, Plot.attrPalette)
+      cellPalette     = CellView.attr[S, String, StringObj](plotAttr, Plot.attrPalette)
       addObserver(cellPalette.react { implicit tx => nameOpt =>
         deferTx {
           setPalette(nameOpt)
         }
       })
 
-      val cellMin   = AttrCellView[S, Double , DoubleObj ](plotAttr, Plot.attrMin      )
-      val cellMax   = AttrCellView[S, Double , DoubleObj ](plotAttr, Plot.attrMax      )
-      val cellNorm  = AttrCellView[S, Boolean, BooleanObj](plotAttr, Plot.attrNormalize)
+      val cellMin   = CellView.attr[S, Double , DoubleObj ](plotAttr, Plot.attrMin      )
+      val cellMax   = CellView.attr[S, Double , DoubleObj ](plotAttr, Plot.attrMax      )
+      val cellNorm  = CellView.attr[S, Boolean, BooleanObj](plotAttr, Plot.attrNormalize)
       minView       = DoubleSpinnerView  .optional(cellMin , name = "Minimum")
       maxView       = DoubleSpinnerView  .optional(cellMax , name = "Maximum")
       normalizeView = BooleanCheckBoxView.optional(cellNorm, name = "Normalize", default = true)
@@ -341,10 +337,10 @@ object PlotChartImpl {
             val xN      = xVals(xSzM)
             val y0      = yVals(0)
             val yN      = yVals(ySzM)
-            val xMinD   = xMin.linlin(0, xSzM, x0, xN)
-            val xMaxD   = xMax.linlin(0, xSzM, x0, xN)
-            val yMinD   = yMin.linlin(0, ySzM, y0, yN)
-            val yMaxD   = yMax.linlin(0, ySzM, y0, yN)
+            val xMinD   = xMin.linLin(0, xSzM, x0, xN)
+            val xMaxD   = xMax.linLin(0, xSzM, x0, xN)
+            val yMinD   = yMin.linLin(0, ySzM, y0, yN)
+            val yMaxD   = yMax.linLin(0, ySzM, y0, yN)
 
             // println(f"x = [$xMinD%1.1f, $xMaxD%1.1f], y = [$yMinD%1.1f, $yMaxD%1.1f]")
 
@@ -442,14 +438,14 @@ object PlotChartImpl {
           val value = mColorTable.selectedItem.map(_.name)
           val edit = cursor.step { implicit tx =>
             val valueEx = value.map(StringObj.newConst[S])
-            implicit val stringTpe = StringObj
+            implicit val stringTpe: StringObj.type = StringObj
             EditAttrMap.expr[S, String, StringObj](name = "Palette", obj = plotH(), key = Plot.attrPalette,
               value = valueEx) // (StringObj.apply[S])
           }
           undoManager.add(edit)
       }
       val ggColorTable  = new ComboBox(mColorTable)
-      val rColorTable   = new ListView.Renderer[ColorPaletteTable] {
+      val rColorTable: ListView.Renderer[ColorPaletteTable] = new ListView.Renderer[ColorPaletteTable] {
         private[this] var palette: ColorPaletteTable = _
 
         private[this] val icon = new Icon {

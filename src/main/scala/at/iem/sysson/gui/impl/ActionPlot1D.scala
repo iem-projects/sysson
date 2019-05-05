@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -18,6 +18,7 @@ package impl
 
 import java.awt.Color
 
+import de.sciss.chart.Chart
 import de.sciss.desktop
 import de.sciss.desktop.{DialogSource, OptionPane, Window, WindowHandler}
 import de.sciss.lucre.swing.defer
@@ -28,7 +29,6 @@ import ucar.nc2
 import scala.concurrent.{Future, blocking}
 import scala.swing.{Action, Component}
 import scala.util.{Failure, Success}
-import scalax.chart.Chart
 
 final class ActionPlot1D(windowOpt: Option[Window], selectedVariable: => Option[nc2.Variable])
   extends Action("Plot 1D...") {
@@ -52,8 +52,8 @@ final class ActionPlot1D(windowOpt: Option[Window], selectedVariable: => Option[
         }
         futData.onComplete {
           case Success((dataV, dataD)) => defer {
-            import scalax.chart.api._
             val data: Vec[(Float, Float)] = dataD zip dataV
+            import de.sciss.chart.module.Charting._
             val dataCol = data.toXYSeriesCollection(title)
             val chart   = XYLineChart(dataCol)
             chart.title = title

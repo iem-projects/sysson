@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -26,7 +26,7 @@ import de.sciss.fscape.stream.Control
 import de.sciss.lucre.matrix.impl.UGBContextImpl
 import de.sciss.lucre.matrix.{Matrix => LMatrix}
 import de.sciss.lucre.stm.Sys
-import de.sciss.synth.proc.{GenContext, GenView}
+import de.sciss.synth.proc.{GenContext, GenView, Universe}
 
 import scala.concurrent.ExecutionContext
 
@@ -35,16 +35,18 @@ object GenViewFactory {
   def install(config: Control.Config = FScape.defaultConfig): Unit            = GenView.addFactory(apply(config))
 
   def render[S <: Sys[S]](fscape: FScape[S], config: Control.Config = FScape.defaultConfig)
-                         (implicit tx: S#Tx, context: GenContext[S]): FScape.Rendering[S] = {
+                         (implicit tx: S#Tx, universe: Universe[S]): FScape.Rendering[S] = {
     import config.executionContext
     val ugbCtx: UGenGraphBuilder.Context[S] = new ContextImpl(fscape)
     RenderingImpl(fscape, ugbCtx, config, force = true)
   }
 
   private final class ContextImpl[S <: Sys[S]](protected val fscape: FScape[S])
-                                              (implicit protected val gen: GenContext[S],
+                                              (implicit protected val universe: Universe[S],
                                                protected val executionContext: ExecutionContext)
     extends UGenGraphBuilderContextImpl[S] with UGBContextImpl[S] {
+
+    protected def gen: GenContext[S] = universe.genContext
 
     protected def findMatrix(vr: Matrix)(implicit tx: S#Tx): LMatrix[S] = {
       val f       = fscape
@@ -92,19 +94,20 @@ object GenViewFactory {
 
     override def requestInput[Res](req: Input {type Value = Res}, io: IO[S] with UGenGraphBuilder)
                                   (implicit tx: S#Tx): Res = req match {
-      case i: UserValue => requestUserValue(i)
+      case i: UserValue => requestUserValue(i)  // IntelliJ highlight bug
       case _ => super.requestInput(req, io)
     }
   }
 
   private final class Impl(config: Control.Config) extends GenView.Factory {
-    def typeID: Int = Output.typeID
+    def typeId: Int = Output.typeId
 
     type Repr[~ <: Sys[~]] = Output[~]
 
-    def apply[S <: Sys[S]](output: Output[S])(implicit tx: S#Tx, context: GenContext[S]): GenView[S] = {
+    def apply[S <: Sys[S]](output: Output[S])(implicit tx: S#Tx, universe: Universe[S]): GenView[S] = {
       val _fscape = output.fscape
-      val fscView = context.acquire[Rendering[S]](_fscape) {
+      import universe.genContext
+      val fscView = genContext.acquire[Rendering[S]](_fscape) {
         import config.executionContext
         val ugbCtx: UGenGraphBuilder.Context[S] = new ContextImpl(_fscape)
         RenderingImpl(_fscape, ugbCtx, config, force = false)

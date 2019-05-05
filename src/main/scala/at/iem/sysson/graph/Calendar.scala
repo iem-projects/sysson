@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -44,9 +44,9 @@ object Calendar {
       b.requestInput(this)
 
       val ctl = ctlName.ir(Vector(1f, 0f, 1f))    // mul1, add, mul2
-      val mul1  = ctl \ 0
-      val add   = ctl \ 1
-      val mul2  = ctl \ 2
+      val mul1  = ctl out 0
+      val add   = ctl out 1
+      val mul2  = ctl out 2
       val sig   = (time * mul1 + add) * mul2
 
       if (modulo == 0) sig else sig % modulo

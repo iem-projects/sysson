@@ -10,15 +10,15 @@ import de.sciss.lucre.artifact.{Artifact, ArtifactLocation}
 import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.synth.InMemory
-import de.sciss.synth.proc.{GenContext, GenView, WorkspaceHandle}
+import de.sciss.synth.proc.{GenView, Universe}
 
 import scala.concurrent.stm.Ref
 import scala.util.{Failure, Success}
 
 // refer to a matrix directly in the FScape object's attribute map
 object FScapeDirectTest extends App {
-  implicit val cursor = InMemory()
-  type S              = InMemory
+  type S                  = InMemory
+  implicit val cursor: S  = InMemory()
 
   FScape.init()
   GenViewFactory.install()
@@ -32,7 +32,7 @@ object FScapeDirectTest extends App {
   require(inF.isFile)
   val vName = "Temperature"
 
-  import WorkspaceHandle.Implicits.dummy
+  import de.sciss.synth.proc.Workspace.Implicits.dummy
   implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
   cursor.step { implicit tx =>
@@ -63,7 +63,7 @@ object FScapeDirectTest extends App {
 
     val count = Ref(0)
 
-    implicit val genCtx = GenContext[S]
+    implicit val u: Universe[S] = Universe.dummy
 
     def mkView(out: Output[S], total: Int): GenView[S] = {
       val view  = GenView(out)

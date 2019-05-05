@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -15,22 +15,20 @@
 package at.iem.sysson.gui
 package impl
 
-import javax.swing.Icon
-
 import at.iem.sysson.Plot
-import de.sciss.desktop
 import de.sciss.desktop.OptionPane
-import de.sciss.equal
+import de.sciss.{desktop, equal}
 import de.sciss.icons.raphael
 import de.sciss.lucre.matrix.Matrix
 import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.swing.Window
 import de.sciss.lucre.synth.{Sys => SSys}
 import de.sciss.lucre.{matrix, stm}
-import de.sciss.mellite.gui.{ListObjView, ObjView}
-import de.sciss.mellite.gui.impl.{ListObjViewImpl, ObjViewImpl}
+import de.sciss.mellite.gui.impl.objview.{ListObjViewImpl, ObjViewImpl}
+import de.sciss.mellite.gui.{GUI, ListObjView, ObjView}
 import de.sciss.synth.proc.Implicits._
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
+import javax.swing.Icon
 
 import scala.swing.{Component, Label}
 
@@ -39,7 +37,7 @@ object PlotObjView extends ListObjView.Factory {
   final val prefix      = "Plot"
   def humanName: String = prefix
   final val icon: Icon  = ObjViewImpl.raphaelIcon(raphael.Shapes.LineChart)
-  final val typeID: Int = Plot.typeID
+  final val typeId: Int = Plot.typeId
   def category: String  = SwingApplication.categSonification
 
   def hasMakeDialog: Boolean = true
@@ -58,14 +56,19 @@ object PlotObjView extends ListObjView.Factory {
 
   type Config[S <: Sys[S]] = String
 
-  def initMakeDialog[S <: SSys[S]](workspace: Workspace[S], window: Option[desktop.Window])(ok: Config[S] => Unit)
-                              (implicit cursor: stm.Cursor[S]): Unit = {
-    val opt = OptionPane.textInput(message = "Enter Plot Name:",
+  def initMakeDialog[S <: SSys[S]](window: Option[desktop.Window])(done: MakeResult[S] => Unit)
+                                  (implicit universe: Universe[S]): Unit = {
+    val pane = OptionPane.textInput(message = "Enter Plot Name:",
       messageType = OptionPane.Message.Question, initial = "Plot")
-    opt.title = "Add Plot"
-    val res = opt.show(window)
-    res.foreach(ok(_))
+    pane.title = "Add Plot"
+    val res0    = GUI.optionToAborted(pane.show(window))
+    val res     = res0
+    done(res)
   }
+
+  def initMakeCmdLine[S <: SSys[S]](args: List[String])(implicit universe: Universe[S]): MakeResult[S] = ???
+
+  def canMakeObj: Boolean = true
 
   def makeObj[S <: SSys[S]](name: String)(implicit tx: S#Tx): List[Obj[S]] = {
     import matrix.Implicits._
@@ -98,8 +101,7 @@ object PlotObjView extends ListObjView.Factory {
 
     override def obj(implicit tx: S#Tx): Plot[S] = objH()
 
-    def openView(parent: Option[Window[S]])
-                (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): Option[Window[S]] = {
+    def openView(parent: Option[Window[S]])(implicit tx: S#Tx, universe: Universe[S]): Option[Window[S]] = {
       val frame = PlotFrame(obj)
       Some(frame)
     }

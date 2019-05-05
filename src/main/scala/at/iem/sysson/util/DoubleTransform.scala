@@ -2,7 +2,7 @@ package at.iem.sysson.util
 
 import de.sciss.synth.proc
 import de.sciss.synth.proc.SoundProcesses
-import de.sciss.synth.proc.impl.MemoryClassLoader
+import de.sciss.synth.proc.impl.{CodeImpl, MemoryClassLoader}
 
 import scala.concurrent.stm.{Ref, atomic}
 import scala.concurrent.{Future, Promise, blocking}
@@ -43,9 +43,13 @@ object DoubleTransform {
   private final class Impl(val peer: Double => Double) extends DoubleTransform
 
   object Code extends proc.Code.Type {
-    final val id    = 0x30000
-    final val name  = "Double => Double"
-    type      Repr  = Code
+    final val id      = 0x30000
+    final val prefix  = "Double => Double"
+    type      Repr    = Code
+
+    def humanName: String = prefix
+
+    def docBaseSymbol: String = "de.sciss"
 
     private[this] lazy val _init: Unit = {
       proc.Code.addType(this)
@@ -66,36 +70,24 @@ object DoubleTransform {
   final case class Code(source: String) extends proc.Code {
     type In     = String
     type Out    = Array[Byte]
-    def id: Int = Code.id
+
+    def tpe: proc.Code.Type = Code
 
     def compileBody()(implicit compiler: proc.Code.Compiler): Future[Unit] =
       proc.Code.future(blocking { execute("Unnamed"); () })
 
-    def execute(in: In)(implicit compiler: proc.Code.Compiler): Out = {
-      compileToFunction(in, this)
+    def execute(in: In)(implicit compiler: proc.Code.Compiler): Out =
+      CodeImpl.compileToJar(in, this, prelude = mkPrelude(in), postlude = postlude)
+
+    private def mkPrelude(name: String): String = {
+      s"""final class $name extends Function1[Double, Double] {
+         |  def apply(x: Double): Double = {
+         |""".stripMargin
     }
 
-    private def compileToFunction(name: String, code: Code)(implicit compiler: proc.Code.Compiler): Array[Byte] = {
+    def prelude: String = mkPrelude("Main")
 
-      val imports = proc.Code.getImports(Code.id)
-      val impS    = imports.map(i => s"  import $i\n").mkString
-      val source  =
-      s"""package ${proc.Code.UserPackage}
-          |
-         |final class $name extends Function1[Double, Double] {
-          |  def apply(x: Double): Double = {
-          |$impS
-          |${code.source}
-          |  }
-          |}
-          |""".stripMargin
-
-      // println(source)
-
-      compiler.compile(source)
-    }
-
-    def contextName: String = Code.name
+    def postlude: String = "\n  }\n}\n"
 
     def updateSource(newText: String): Code = copy(source = newText)
   }

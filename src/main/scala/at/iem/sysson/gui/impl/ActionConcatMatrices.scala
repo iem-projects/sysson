@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -16,25 +16,24 @@ package at.iem.sysson
 package gui
 package impl
 
-import javax.swing.undo.UndoableEdit
-
 import at.iem.sysson.util.NetCdfFileUtil
-import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{FileDialog, OptionPane, UndoManager, Window}
 import de.sciss.equal
 import de.sciss.file._
+import de.sciss.lucre.expr.CellView
 import de.sciss.lucre.matrix.{DataSource, Matrix}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
-import de.sciss.lucre.swing.{CellView, View, _}
+import de.sciss.lucre.swing.{View, _}
 import de.sciss.mellite.gui.impl.WindowImpl
 import de.sciss.serial.Serializer
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
+import javax.swing.undo.UndoableEdit
 import ucar.nc2
 
 import scala.annotation.tailrec
 import scala.concurrent.{ExecutionContext, Future}
-import scala.swing.{Action, Alignment, BorderPanel, Button, GridPanel, Label}
+import scala.swing.{Action, Alignment, BorderPanel, Button, Component, GridPanel, Label}
 
 final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: DataSourceView[S])
   extends Action("Concatenate Matrix...") {
@@ -46,7 +45,7 @@ final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: D
 
   private def mkConcatWindow(init1: stm.Source[S#Tx, Matrix[S]]): Unit = {
     import view.cursor
-    implicit val undo = new UndoManagerImpl // not used
+    implicit val undo: UndoManager = UndoManager() // not used
 
     def bail(message: String): Unit =
       OptionPane.message(message = s"Cannot concatenate these matrices:\n$message",
@@ -102,9 +101,8 @@ final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: D
     def updateState(): Unit = {
       val ok = but1.variableOption.isDefined && but2.variableOption.isDefined
       ggProcess.enabled = ok
-    }
-
-    import view.workspace // XXX IntelliJ highlighting bug; this is needed!
+    } // XXX IntelliJ highlighting bug; this is needed!
+    import view.universe
     lazy val but1 = new ConcatButtonImpl(updateState())
     lazy val but2 = new ConcatButtonImpl(updateState())
 
@@ -125,8 +123,8 @@ final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: D
 
       but1.updateSource(Some(init1()))
 
-      val _win = new WindowImpl[S](CellView.const("Concatenate Matrix")) {
-        val view: View[S] = View.wrap[S](p)
+      val _win: WindowImpl[S] = new WindowImpl[S](CellView.const("Concatenate Matrix")) {
+        val view: View[S] = View.wrap[S, Component](p)
 
         override def dispose()(implicit tx: S#Tx): Unit = {
           super.dispose()
@@ -153,8 +151,7 @@ final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: D
       fun(out)
     }
 
-  private class ConcatButtonImpl(set: => Unit)(implicit cursor: stm.Cursor[S],
-                                               workspace: Workspace[S], undoManager: UndoManager)
+  private class ConcatButtonImpl(set: => Unit)(implicit universe: Universe[S], undoManager: UndoManager)
     extends MatrixDnDViewImpl[S, Matrix](canSetMatrix = true, canRemoveMatrix = false) {
 
     private var _varOpt = Option.empty[nc2.Variable]
@@ -178,7 +175,10 @@ final class ActionConcatMatrices[S <: Sys[S]](windowOpt: Option[Window], view: D
     override def updateSource(mOpt: Option[Matrix[S]])(implicit tx: S#Tx): Unit = {
       super.updateSource(mOpt)
 
-      implicit val wr = WorkspaceResolver[S]
+      implicit val wr: DataSource.Resolver[S] = {
+        import universe.workspace
+        WorkspaceResolver[S]
+      }
 
       @tailrec def findVar(x: Matrix[S]): Option[nc2.Variable] = x match {
         case v: DataSource.Variable[S] => Some(v.data())

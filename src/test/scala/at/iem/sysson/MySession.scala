@@ -9,7 +9,7 @@ object MySession extends SessionLike {
     import Ops._
     val x = play {
       FreeSelf.kr(MouseButton.kr)
-      WhiteNoise.ar(SinOsc.ar(MouseX.kr.linexp(0, 1, 1, 1000)) * 0.5)
+      WhiteNoise.ar(SinOsc.ar(MouseX.kr.linExp(0, 1, 1, 1000)) * 0.5)
     }
     println(x)
 

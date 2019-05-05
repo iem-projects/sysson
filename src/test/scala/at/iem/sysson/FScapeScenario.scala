@@ -8,15 +8,15 @@ import de.sciss.fscape.lucre.{Cache, FScape}
 import de.sciss.lucre.artifact.{Artifact, ArtifactLocation}
 import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.synth.InMemory
-import de.sciss.synth.proc.{GenContext, WorkspaceHandle}
+import de.sciss.synth.proc.Universe
 
 import scala.util.{Failure, Success}
 
 // transform an input matrix by
 // averaging over a specified dimension
 object FScapeScenario extends App {
-  implicit val cursor = InMemory()
-  type S              = InMemory
+  type S                  = InMemory
+  implicit val cursor: S  = InMemory()
 
   initTypes()
 
@@ -31,7 +31,7 @@ object FScapeScenario extends App {
   val vName = "Temperature" // [Time:180][Longitude:12][Latitude:36][Altitude:601]
   val dName = "Longitude"
 
-  import WorkspaceHandle.Implicits.dummy
+  import de.sciss.synth.proc.Workspace.Implicits.dummy
   implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
   cursor.step { implicit tx =>
@@ -77,7 +77,7 @@ object FScapeScenario extends App {
     f.attr.put("var" , mat)
     f.attr.put("file", artOut)
 
-    implicit val genCtx = GenContext[S]
+    implicit val u: Universe[S] = Universe.dummy
 
     val r = Sonification.render[S](f)
     r.reactNow { implicit tx => state => if (state.isComplete) {

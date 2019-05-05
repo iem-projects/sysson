@@ -6,11 +6,11 @@ import de.sciss.fscape.lucre.FScape
 import de.sciss.fscape.{Graph, stream}
 import de.sciss.lucre.artifact.{Artifact, ArtifactLocation}
 import de.sciss.lucre.synth.InMemory
-import de.sciss.synth.proc.{GenContext, WorkspaceHandle}
+import de.sciss.synth.proc.Universe
 
 object FScapeSimpleBlobTest extends App {
-  implicit val cursor = InMemory()
-  type S              = InMemory
+  type S                  = InMemory
+  implicit val cursor: S  = InMemory()
 
   FScape.init()
   GenViewFactory.install()
@@ -27,7 +27,7 @@ object FScapeSimpleBlobTest extends App {
     val art = Artifact(loc, Artifact.Child(fOut.name))
 
     val f   = FScape[S]
-    import WorkspaceHandle.Implicits.dummy
+//    import de.sciss.synth.proc.Workspace.Implicits.dummy
 //    implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
     val g = Graph {
@@ -68,7 +68,7 @@ object FScapeSimpleBlobTest extends App {
     f.graph() = g
     f.attr.put("out", art)
 
-    implicit val genCtx = GenContext[S]
+    implicit val u: Universe[S] = Universe.dummy
 
     val config = stream.Control.Config()
     config.useAsync = false // for debugging

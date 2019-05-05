@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -18,10 +18,10 @@ package impl
 
 import java.awt.datatransfer.Transferable
 import java.awt.event.{MouseAdapter, MouseEvent}
+
 import javax.swing.TransferHandler.TransferSupport
 import javax.swing.undo.UndoableEdit
 import javax.swing.{JComponent, JPanel, TransferHandler}
-
 import at.iem.sysson.gui.DragAndDrop.MatrixDrag
 import de.sciss.desktop.UndoManager
 import de.sciss.equal
@@ -31,10 +31,10 @@ import de.sciss.lucre.stm.{Obj, TxnLike}
 import de.sciss.lucre.swing.edit.EditVar
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
-import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.serial.Serializer
 import de.sciss.swingplus.PopupMenu
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.{Universe, Workspace}
+import de.sciss.synth.proc.gui.UniverseView
 
 import scala.concurrent.stm.Ref
 import scala.language.higherKinds
@@ -43,12 +43,13 @@ import scala.swing.{Action, BoxPanel, Component, Label, MenuItem, Orientation, S
 
 abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatrix: Boolean,
                                                                      canRemoveMatrix: Boolean)
-                                                                    (implicit val cursor: stm.Cursor[S],
-                                                                     val workspace: Workspace[S],
+                                                                    (implicit val universe: Universe[S],
                                                                      val undoManager: UndoManager)
-  extends View.Editable[S] with ViewHasWorkspace[S] with ComponentHolder[Component]
+  extends View.Editable[S] with UniverseView[S] with ComponentHolder[Component]
 {
   impl =>
+
+  type C = Component
 
   // ---- abstract ----
 
@@ -104,9 +105,9 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
             sourceOpt.map { source =>
               val m0  = impl.matrix(source)
               val m   = Matrix.Var.unapply(m0).getOrElse(m0)
-              val drag = new MatrixDrag {
+              val drag: MatrixDrag = new MatrixDrag {
                 type S1                                       = S
-                val workspace : Workspace[S1]                 = impl.workspace
+                val workspace : Workspace[S1]                 = impl.universe.workspace
                 val matrix    : stm.Source[S1#Tx, Matrix[S1]] = tx.newHandle(m)
               }
               DragAndDrop.Transferable(DragAndDrop.MatrixFlavor)(drag)
@@ -135,7 +136,7 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
           import equal.Implicits._
           val isCopy    = support.getDropAction === TransferHandler.COPY
           val drag0     = t.getTransferData(DragAndDrop.MatrixFlavor).asInstanceOf[MatrixDrag]
-          if (drag0.workspace == /* === */ workspace) {
+          if (drag0.workspace == /* === */ universe.workspace) {
             val drag  = drag0.asInstanceOf[MatrixDrag { type S1 = S }] // XXX TODO: how to make this more pretty?
             val editOpt = impl.cursor.step { implicit tx =>
               val v0        = drag.matrix()
@@ -146,7 +147,7 @@ abstract class MatrixDnDViewImpl[S <: Sys[S], Source[S1 <: Sys[S1]]](canSetMatri
                 val vr = Matrix.Var(v) // so that the matrix becomes editable in its view
                 editDropMatrix(vr)
               } { vr =>
-                implicit val csr = impl.cursor
+                implicit val csr: stm.Cursor[S] = impl.cursor
                 val _edit = EditVar("Assign Matrix", vr, v)
                 updateSource(sourceOpt)  // XXX TODO - stupid work-around
                 Some(_edit)

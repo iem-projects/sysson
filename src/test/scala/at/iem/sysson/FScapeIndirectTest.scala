@@ -10,12 +10,12 @@ import de.sciss.lucre.expr.DoubleObj
 import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.synth.InMemory
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{AuralSystem, Transport, WorkspaceHandle}
+import de.sciss.synth.proc.{AuralSystem, Transport, Universe}
 
 // refer to a matrix indirectly in FScape, requiring look up in sonification
 object FScapeIndirectTest extends App {
-  implicit val cursor = InMemory()
-  type S              = InMemory
+  type S                  = InMemory
+  implicit val cursor: S  = InMemory()
 
   initTypes()
   val folder = userHome / "Documents" / "temp" / "fscape_test"
@@ -28,7 +28,7 @@ object FScapeIndirectTest extends App {
   require(inF.isFile)
   val vName = "Temperature"
 
-  import WorkspaceHandle.Implicits.dummy
+  import de.sciss.synth.proc.Workspace.Implicits.dummy
   implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
   val as = AuralSystem()
@@ -75,13 +75,15 @@ object FScapeIndirectTest extends App {
     son.proc.attr.put("min", outMn)
     son.proc.attr.put("max", outMx)
 
-    val t = Transport[S](as)
+    implicit val u: Universe[S] = Universe.dummy
+
+    val t = Transport[S](u)
     t.addObject(son)
     t.play()
   }
 
   cursor.step { implicit tx =>
-    as.whenStarted { s =>
+    as.whenStarted { _ =>
       cursor.step { implicit tx =>
         println("Run.")
         run()

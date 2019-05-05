@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -17,16 +17,14 @@ package gui
 package impl
 
 import java.awt.datatransfer.Transferable
-import javax.swing.undo.UndoableEdit
 
 import at.iem.sysson.gui.DragAndDrop.PlotMappingDrag
 import at.iem.sysson.sound.AuralSonification
 import de.sciss.desktop.UndoManager
-import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.equal
 import de.sciss.icons.raphael
 import de.sciss.lucre.expr.IntObj
-import de.sciss.lucre.matrix.{Dimension, Matrix, Reduce}
+import de.sciss.lucre.matrix.{DataSource, Dimension, Matrix, Reduce}
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.edit.EditVar
@@ -34,7 +32,8 @@ import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{View, deferTx}
 import de.sciss.mellite.gui.GUI
 import de.sciss.serial.Serializer
-import de.sciss.synth.proc.{GenContext, Workspace}
+import de.sciss.synth.proc.{Universe, Workspace}
+import javax.swing.undo.UndoableEdit
 
 import scala.annotation.tailrec
 import scala.concurrent.stm.Ref
@@ -46,17 +45,15 @@ import scala.util.{Failure, Success}
 object PlotViewImpl {
   private val DEBUG = false
 
-  def apply[S <: Sys[S]](plot: Plot[S], parent: SonificationView[S])(implicit tx: S#Tx, workspace: Workspace[S],
-                                                                     cursor: stm.Cursor[S]): PlotView[S] =
+  def apply[S <: Sys[S]](plot: Plot[S], parent: SonificationView[S])(implicit tx: S#Tx, universe: Universe[S]): PlotView[S] =
     mkPlotView(plot, Some(parent))
 
-  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, workspace: Workspace[S],
-                                        cursor: stm.Cursor[S]): PlotView[S] =
+  def apply[S <: Sys[S]](plot: Plot[S])(implicit tx: S#Tx, universe: Universe[S]): PlotView[S] =
     mkPlotView(plot, None)
 
   private def mkPlotView[S <: Sys[S]](plot: Plot[S], parentOpt: Option[SonificationView[S]])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] = {
-    implicit val undoMgr = new UndoManagerImpl
+                        (implicit tx: S#Tx, universe: Universe[S]): PlotView[S] = {
+    implicit val undoMgr: UndoManager = UndoManager()
     val isEditable       = Matrix.Var.unapply(plot.matrix).isDefined
     val plotMatrixView   = new PlotMatrixView(canSetMatrix = isEditable, parentOpt = parentOpt).init(plot)
     val statsView        = PlotStatsView(plot)
@@ -66,8 +63,8 @@ object PlotViewImpl {
   }
 
   def mkTableView[S <: Sys[S]](plot: Plot[S], parentOpt: Option[SonificationView[S]])
-                              (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): PlotView[S] = {
-    implicit val undoMgr = new UndoManagerImpl
+                              (implicit tx: S#Tx, universe: Universe[S]): PlotView[S] = {
+    implicit val undoMgr: UndoManager = UndoManager()
     val isEditable       = Matrix.Var.unapply(plot.matrix).isDefined
     val plotMatrixView   = new PlotMatrixView(canSetMatrix = isEditable, parentOpt = parentOpt).init(plot)
     val statsView        = PlotStatsView(plot)
@@ -79,9 +76,10 @@ object PlotViewImpl {
   private final class Impl[S <: Sys[S]](chartView: View[S], matrixView: PlotMatrixView[S], statsView: PlotStatsView[S])
     extends PlotView[S] with ComponentHolder[Component] {
 
-    def workspace   : Workspace[S]  = matrixView.workspace
-    def cursor      : stm.Cursor[S] = matrixView.cursor
     def undoManager : UndoManager   = matrixView.undoManager
+    val universe    : Universe[S]   = matrixView.universe
+
+    type C = Component
 
     def plot(implicit tx: S#Tx): Plot[S] = matrixView.plotH()
 
@@ -107,19 +105,17 @@ object PlotViewImpl {
   }
 
   private final class PlotAssocView[S <: Sys[S]](protected val sourceH: stm.Source[S#Tx, Plot[S]], keyName: String)
-                                                (implicit  workspace: Workspace[S], undoManager: UndoManager,
-                                                 cursor: stm.Cursor[S])
+                                                (implicit universe: Universe[S], undoManager: UndoManager)
     extends DimAssocViewImpl[S](keyName) {
 
     type Source[S1 <: Sys[S1]] = Plot[S1]
 
-    protected def flavor: DragAndDrop.Flavor[PlotMappingDrag] = DragAndDrop.PlotMappingFlavor
+    protected def flavor: DragAndDrop.Flavor[PlotMappingDrag] = DragAndDrop.PlotMappingFlavor // IntelliJ highlight bug
   }
 
   private final class PlotMatrixView[S <: Sys[S]](protected val canSetMatrix: Boolean,
                                                   parentOpt: Option[SonificationView[S]])
-                                                 (implicit val workspace: Workspace[S], val undoManager: UndoManager,
-                                                  val cursor: stm.Cursor[S])
+                                                 (implicit val universe: Universe[S], val undoManager: UndoManager)
     extends MatrixAssocViewImpl[S](Vec(Plot.HKey, Plot.VKey)) { impl =>
 
     protected type Source[S1 <: Sys[S1]] = Plot[S1]
@@ -175,8 +171,8 @@ object PlotViewImpl {
       if (DEBUG) println(s"readElapsedData ${r.id}, $mDim, dimIdx = $dimIdx")
       if (dimIdx >= 0) {
         val dimKey = r.in.prepareDimensionReader(dimIdx, useChannels = false)
-        implicit val resolver = WorkspaceResolver[S]
-        implicit val context  = GenContext       [S]
+        import universe.{genContext, workspace}
+        implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
         import at.iem.sysson.Stats.executionContext
         val readerFut = dimKey.reader()
         val p         = Promise[Array[Float]]()
@@ -255,7 +251,7 @@ object PlotViewImpl {
         type S1 = S
         def source    : stm.Source[S#Tx, Source[S]] = src
         def key       : String                      = key0
-        def workspace : Workspace[S]                = impl.workspace
+        def workspace : Workspace[S]                = impl.universe.workspace
       })
 
     protected def editDropMatrix(m: Matrix[S])(implicit tx: S#Tx): Option[UndoableEdit] =
@@ -266,7 +262,10 @@ object PlotViewImpl {
           case _ => false
         }
 
-        if (isRecursive(m)) None else Some(EditVar("Set Matrix", vr, m))
+        if (isRecursive(m)) None else {
+          import universe.cursor
+          Some(EditVar("Set Matrix", vr, m))
+        }
       }
 
     override protected def mkTopComponent(c: Component): Component = {

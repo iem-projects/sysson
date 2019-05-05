@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -18,26 +18,24 @@ package impl
 
 import at.iem.sysson.sound.{AuralSonification, Sonification}
 import de.sciss.audiowidgets.{Transport => GUITransport}
-import de.sciss.desktop.impl.UndoManagerImpl
 import de.sciss.desktop.{OptionPane, UndoManager, Window}
 import de.sciss.file._
 import de.sciss.icons.raphael
 import de.sciss.lucre.event.impl.ObservableImpl
-import de.sciss.lucre.expr.{BooleanObj, DoubleObj, StringObj}
+import de.sciss.lucre.expr.{BooleanObj, CellView, DoubleObj, StringObj}
 import de.sciss.lucre.matrix.gui.MatrixView
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Disposable
 import de.sciss.lucre.swing.impl.ComponentHolder
-import de.sciss.lucre.swing.{CellView, DoubleSpinnerView, StringFieldView, deferTx}
+import de.sciss.lucre.swing.{DoubleSpinnerView, StringFieldView, deferTx}
 import de.sciss.lucre.synth.Sys
-import de.sciss.{equal, mellite}
-import de.sciss.mellite.Mellite
 import de.sciss.mellite.gui.edit.EditAttrMap
-import de.sciss.mellite.gui.{ActionBounceTimeline, AttrMapFrame, CodeFrame, GUI, MarkdownRenderFrame}
+import de.sciss.mellite.gui.{ActionBounce, AttrMapFrame, CodeFrame, GUI, MarkdownRenderFrame}
 import de.sciss.model.impl.ModelImpl
 import de.sciss.swingplus.{GroupPanel, Separator}
 import de.sciss.synth.SynthGraph
-import de.sciss.synth.proc.{AuralObj, AuralView, Markdown, ObjKeys, Transport, Workspace}
+import de.sciss.synth.proc.{AuralObj, Markdown, ObjKeys, Runner, Transport, Universe, Workspace}
+import de.sciss.{equal, mellite}
 
 import scala.concurrent.stm.Ref
 import scala.swing.event.ButtonClicked
@@ -46,18 +44,21 @@ import scala.util.control.NonFatal
 
 object SonificationViewImpl {
   def apply[S <: Sys[S]](sonification: Sonification[S])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationView[S] = {
-    implicit val undoMgr = new UndoManagerImpl
+                        (implicit tx: S#Tx, universe: Universe[S]): SonificationView[S] = {
+    implicit val undoMgr: UndoManager = UndoManager()
     val sonifH    = tx.newHandle(sonification)
     val nameView  = sonification.attr.$[StringObj](ObjKeys.attrName).map { expr =>
-      // import workspace.cursor
+      import universe.cursor
       StringFieldView(expr, "Name")
     }
 
     val p       = sonification.proc
     val hasHelp = sonification.attr.contains(Sonification.attrHelp)
 
-    val res = new Impl[S, workspace.I](sonifH, nameView, hasHelp = hasHelp)(workspace, undoMgr, cursor) {
+    implicit val workspace: Workspace[S] = universe.workspace
+    val system: S = workspace.system
+
+    val res: Impl[S, system.I] = new Impl[S, system.I](sonifH, nameView, hasHelp = hasHelp)(undoMgr, universe) {
       val graphObserver: Disposable[S#Tx] =
         p.graph.changed.react { implicit tx => upd =>
           updateGraph(upd.now)
@@ -92,12 +93,12 @@ object SonificationViewImpl {
 
   private abstract class Impl[S <: Sys[S], I1 <: Sys[I1]](sonifH: stm.Source[S#Tx, Sonification[S]],
                                                           nameView: Option[StringFieldView[S]], hasHelp: Boolean)
-                                                         (implicit val workspace: Workspace[S] { type I = I1 },
-                                                          val undoManager: UndoManager,
-                                                          val cursor: stm.Cursor[S])
+                                                         (implicit val undoManager: UndoManager, val universe: Universe[S])
     extends SonificationView[S] with ComponentHolder[Component] with ModelImpl[SonificationView.Update] {
 
     impl =>
+
+    type C = Component
 
     protected def graphObserver: Disposable[S#Tx]
 
@@ -113,13 +114,13 @@ object SonificationViewImpl {
     private[this] var ggMute   : ToggleButton = _
     private[this] var ggElapsed: ElapsedBar   = _
 
-    private def mkTransport()(implicit tx: S#Tx, cursor: stm.Cursor[S], workspace: Workspace[S]): TransportRef[S] = {
-      val t     = Transport[S](Mellite.auralSystem)
+    private def mkTransport()(implicit tx: S#Tx): TransportRef[S] = {
+      val t: Transport[S] = Transport[S](universe) // (Mellite.auralSystem)
       val sonif = sonification
       val aObsR = Ref(Option.empty[Disposable[S#Tx]])
       val aStatR= Ref(Option.empty[Disposable[S#Tx]])
 
-      def viewState(state: AuralView.State)(implicit tx: S#Tx): Unit = {
+      def viewState(state: Runner.State)(implicit tx: S#Tx): Unit = {
         val tp = t.isPlaying
         deferTx(auralChange(state, transportPlaying = tp))
       }
@@ -162,13 +163,13 @@ object SonificationViewImpl {
       def update(u: AuralSonification.Update)(implicit tx: S#Tx): Unit = fire(u)
     }
 
-    private def auralChange(state: AuralView.State, transportPlaying: Boolean): Unit = {
+    private def auralChange(state: Runner.State, transportPlaying: Boolean): Unit = {
 //      println(s"STATE $state")
       val ggStop      = transportButtons.button(GUITransport.Stop).get
       val ggPlay      = transportButtons.button(GUITransport.Play).get
       import equal.Implicits._
-      val stopped     = state === AuralView.Stopped // upd.isInstanceOf[Transport.Stop[S]]
-      val playing     = state === AuralView.Playing
+      val stopped     = state === Runner.Stopped // upd.isInstanceOf[Transport.Stop[S]]
+      val playing     = state === Runner.Running
       val preparing   = !playing && transportPlaying // state === AuralView.Preparing
       ggStop.selected = stopped
       ggPlay.selected = playing
@@ -203,7 +204,7 @@ object SonificationViewImpl {
       val controls    = sonif.controls
       val userValues  = g.sources.collect {
         case graph.UserValue(key, default) =>
-          implicit val doubleEx = DoubleObj
+          implicit val doubleEx: DoubleObj.type = DoubleObj
           val cell      = CellView.exprMap[S, String, Double, DoubleObj](controls, key)
           val view      = DoubleSpinnerView.optional[S](cell, name = key.capitalize, default = Some(default))
           (key, view)
@@ -282,7 +283,7 @@ object SonificationViewImpl {
         cursor.step { implicit tx =>
           val sonif = sonifH()
           import de.sciss.mellite.Mellite.compiler
-          CodeFrame.proc(sonif.proc)(tx, workspace, cursor, compiler)
+          CodeFrame.proc(sonif.proc)(tx, universe, compiler)
         }
       }
 
@@ -335,7 +336,7 @@ object SonificationViewImpl {
         reactions += {
           case ButtonClicked(_) =>
             val muted = me.selected
-            implicit val cursor = impl.cursor
+            implicit val cursor: stm.Cursor[S] = impl.cursor
             val edit = cursor /* workspace.inMemoryCursor */ .step { implicit tx =>
               val value = BooleanObj.newConst[S](muted)
               val proc  = sonification.proc
@@ -362,7 +363,7 @@ object SonificationViewImpl {
       val scroll = new ScrollPane(box)
       scroll.peer.putClientProperty("styleId", "undecorated")
 
-      auralChange(AuralView.Stopped, transportPlaying = false)
+      auralChange(Runner.Stopped, transportPlaying = false)
 
       component = new BoxPanel(Orientation.Vertical) {
         contents += pHeader
@@ -391,7 +392,7 @@ object SonificationViewImpl {
         stopAndDisposeTransport()
 //        if (isPausing) runGroup(state = true)
       }
-      auralChange(AuralView.Stopped, transportPlaying = false)
+      auralChange(Runner.Stopped, transportPlaying = false)
     }
 
     private def stopAndDisposeTransport()(implicit tx: S#Tx): Unit =
@@ -444,8 +445,8 @@ object SonificationViewImpl {
       }
     }
 
-    object actionBounce extends ActionBounceTimeline(this, sonifH) {
-      import ActionBounceTimeline.{DurationSelection, Selection}
+    object actionBounce extends ActionBounce(this, sonifH) {
+      import ActionBounce.{DurationSelection, Selection}
 
       override protected def selectionType  : Selection = DurationSelection
 
@@ -456,7 +457,7 @@ object SonificationViewImpl {
           val name  = v.component.text
 //          val ext   = settings.spec.fileType.extension
           val child = name // s"$name.$ext" -- note: recallSettings will automatically replace the extension
-          val parentOption = workspace.folder.flatMap(_.parentOption)
+          val parentOption = universe.workspace.folder.flatMap(_.parentOption)
           parentOption.fold(file(child))(_ / child)
         }
     }

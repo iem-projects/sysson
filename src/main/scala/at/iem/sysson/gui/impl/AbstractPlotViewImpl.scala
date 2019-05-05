@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -24,10 +24,10 @@ import de.sciss.lucre.stm.{Disposable, Sys}
 import de.sciss.lucre.swing.impl.ComponentHolder
 import de.sciss.lucre.swing.{defer, deferTx}
 import de.sciss.lucre.{stm, event => evt}
-import de.sciss.mellite.gui.ViewHasWorkspace
 import de.sciss.processor.Processor
 import de.sciss.processor.impl.ProcessorImpl
 import de.sciss.synth.proc.GenContext
+import de.sciss.synth.proc.gui.UniverseView
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.stm.{Ref, TMap}
@@ -81,8 +81,10 @@ object AbstractPlotViewImpl {
     }
   }
 }
-trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with ComponentHolder[Component] {
+trait AbstractPlotViewImpl[S <: Sys[S]] extends UniverseView[S] with ComponentHolder[Component] {
   import AbstractPlotViewImpl._
+
+  type C = Component
 
   // ---- abstract ----
 
@@ -91,7 +93,10 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
 
   // ---- impl ----
 
-  implicit private[this] val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
+  implicit private[this] val resolver: DataSource.Resolver[S] = {
+    import universe.workspace
+    WorkspaceResolver[S]
+  }
 
   private[this] var _observers  = List.empty[Disposable[S#Tx]]
   private[this] var  _plotH: stm.Source[S#Tx, Plot[S]] = _
@@ -133,9 +138,7 @@ trait AbstractPlotViewImpl[S <: Sys[S]] extends ViewHasWorkspace[S] with Compone
 
       import scala.concurrent.ExecutionContext.Implicits.global
 
-      // this locks:
-//      import SoundProcesses.executionContext
-      implicit val context = GenContext[S]
+      implicit val context: GenContext[S] = universe.genContext
 
       val hIdx      = if (hIdx0 >= 0) hIdx0 else if (vIdx0 >= 0) vIdx0 else 0
       val vIdx      = if (vIdx0 >= 0) vIdx0 else if (hIdx0 >= 0) hIdx0 else 0

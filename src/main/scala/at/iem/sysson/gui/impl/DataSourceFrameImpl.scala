@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -21,14 +21,13 @@ import de.sciss.lucre.matrix.DataSource
 import de.sciss.lucre.stm
 import de.sciss.lucre.stm.Sys
 import de.sciss.mellite.gui.impl.WindowImpl
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
 import ucar.nc2
 
 import scala.swing.Action
 
 object DataSourceFrameImpl {
-  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, workspace: Workspace[S],
-                                                cursor: stm.Cursor[S]): DataSourceFrame[S] = {
+  def apply[S <: Sys[S]](source: DataSource[S])(implicit tx: S#Tx, universe: Universe[S]): DataSourceFrame[S] = {
     val view  = DataSourceView(source)
     val s: S  = tx.system
     type I    = s.I

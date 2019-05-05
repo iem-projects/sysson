@@ -9,13 +9,13 @@ import de.sciss.fscape.lucre.{Cache, FScape}
 import de.sciss.lucre.artifact.{Artifact, ArtifactLocation}
 import de.sciss.lucre.matrix.{DataSource, Dimension, Reduce}
 import de.sciss.lucre.synth.InMemory
-import de.sciss.synth.proc.{GenContext, WorkspaceHandle}
+import de.sciss.synth.proc.Universe
 
 import scala.util.{Failure, Success}
 
 object FScapeBlobTest extends App {
-  implicit val cursor = InMemory()
-  type S              = InMemory
+  type S                  = InMemory
+  implicit val cursor: S  = InMemory()
 
   FScape.init()
   GenViewFactory.install()
@@ -34,7 +34,7 @@ object FScapeBlobTest extends App {
 
   val altRange  = 210 to 360 // 390
 
-  import WorkspaceHandle.Implicits.dummy
+  import de.sciss.synth.proc.Workspace.Implicits.dummy
   implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
   cursor.step { implicit tx =>
@@ -101,7 +101,7 @@ object FScapeBlobTest extends App {
     f.attr.put("var", red   )
     f.attr.put("out", artOut)
 
-    implicit val genCtx = GenContext[S]
+    implicit val u: Universe[S] = Universe.dummy
 
     val r = Sonification.render[S](f)
     r.reactNow { implicit tx => state => if (state.isComplete) {

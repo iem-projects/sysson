@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -22,9 +22,9 @@ import at.iem.sysson.gui.{SwingApplication => App}
 import de.sciss.desktop.{Desktop, KeyStrokes, Menu, OptionPane}
 import de.sciss.lucre.synth.Txn
 import de.sciss.mellite.Mellite
-import de.sciss.mellite.gui.{ActionBounceTimeline, ActionCloseAllWorkspaces, ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
+import de.sciss.mellite.gui.{ActionBounce, ActionCloseAllWorkspaces, ActionNewWorkspace, ActionOpenWorkspace, ActionPreferences, LogFrame}
 import de.sciss.osc
-import de.sciss.synth.Server
+import de.sciss.synth.{Client, Server}
 
 import scala.concurrent.stm.TxnExecutor
 import scala.swing.Label
@@ -57,7 +57,8 @@ object MenuFactory {
         case NonFatal(_) => "?"
       }
       val sConfig = Server.Config()
-      Mellite.applyAudioPrefs(sConfig, useDevice = true, pickPort = true)
+      val cConfig = Client.Config()
+      Mellite.applyAudioPreferences(sConfig, cConfig, useDevice = true, pickPort = true)
       val scVersion = Server.version(sConfig).toOption.fold {
         "Unknown SuperCollider version"
       } { case (v, b) =>
@@ -140,7 +141,7 @@ object MenuFactory {
       .add(Item("close" , proxy("Close" -> (menu1 + Key.W))))
       .add(Item("close-all", ActionCloseAllWorkspaces))
       .add(Item("save"  , proxy("Save" -> (menu1 + Key.S))))
-      .add(Item("bounce", proxy((s"${ActionBounceTimeline.title}...", menu1 + Key.B))))
+      .add(Item("bounce", proxy((s"${ActionBounce.title}...", menu1 + Key.B))))
 
     if (itQuit.visible) gFile.addLine().add(itQuit)
 
@@ -206,7 +207,7 @@ object MenuFactory {
 
   def dumpOSC(): Unit = {
     val sOpt = TxnExecutor.defaultAtomic { itx =>
-      implicit val tx = Txn.wrap(itx)
+      implicit val tx: Txn = Txn.wrap(itx)
       Mellite.auralSystem.serverOption
     }
     sOpt.foreach { s =>

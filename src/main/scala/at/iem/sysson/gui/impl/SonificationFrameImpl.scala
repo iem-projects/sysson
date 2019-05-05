@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -18,18 +18,17 @@ package impl
 
 import at.iem.sysson.sound.Sonification
 import de.sciss.desktop.Menu
-import de.sciss.lucre.stm
-import de.sciss.lucre.swing.{CellView, deferTx}
+import de.sciss.lucre.expr.CellView
+import de.sciss.lucre.swing.deferTx
 import de.sciss.lucre.synth.Sys
-import de.sciss.mellite.gui.AttrCellView
 import de.sciss.mellite.gui.impl.WindowImpl
-import de.sciss.synth.proc.Workspace
+import de.sciss.synth.proc.Universe
 
 object SonificationFrameImpl {
   def apply[S <: Sys[S]](obj: Sonification[S])
-                        (implicit tx: S#Tx, workspace: Workspace[S], cursor: stm.Cursor[S]): SonificationFrame[S] = {
+                        (implicit tx: S#Tx, universe: Universe[S]): SonificationFrame[S] = {
     val view  = SonificationView(obj)
-    val name  = AttrCellView.name(obj)
+    val name  = CellView.name(obj)
     val res   = new Impl(view, name)
     res.init()
     deferTx {

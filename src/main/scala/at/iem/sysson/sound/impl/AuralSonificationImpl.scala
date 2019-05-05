@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -19,16 +19,16 @@ package impl
 import at.iem.sysson.graph.UserValue
 import de.sciss.lucre.event.impl.ObservableImpl
 import de.sciss.lucre.expr.DoubleObj
-import de.sciss.lucre.matrix.{Matrix => LMatrix}
-import de.sciss.lucre.stm.{Disposable, Obj, Sys}
+import de.sciss.lucre.matrix.{DataSource, Matrix => LMatrix}
+import de.sciss.lucre.stm.{Disposable, Obj, Source, Sys}
 import de.sciss.lucre.synth.{NodeRef, Sys => SSys}
 import de.sciss.lucre.{stm, event => evt}
 import de.sciss.synth.proc.impl.{AsyncProcBuilder, AuralProcImpl}
-import de.sciss.synth.proc.{AuralContext, AuralObj, AuralView, Gen, TimeRef, UGenGraphBuilder => UGB}
+import de.sciss.synth.proc.{AuralContext, AuralObj, Gen, Runner, TimeRef, UGenGraphBuilder => UGB}
 import de.sciss.{equal, numbers}
 import ucar.nc2.time.{CalendarDateFormatter, CalendarPeriod}
 
-import scala.concurrent.stm.{TMap, TxnLocal}
+import scala.concurrent.stm.{InTxn, TMap, TxnLocal}
 import scala.util.control.NonFatal
 
 object AuralSonificationImpl {
@@ -115,7 +115,7 @@ object AuralSonificationImpl {
     }
 
     private def ctlRemoved(key: String, value: DoubleObj[S])(implicit tx: S#Tx): Unit = {
-      implicit val ptx = tx.peer
+      implicit val ptx: InTxn = tx.peer
       ctlMap.remove(key).foreach(_.dispose())
       ctlChange(key, None)
     }
@@ -391,9 +391,9 @@ object AuralSonificationImpl {
     private def addMatrixStream(b: AsyncProcBuilder[S], spec: MatrixPrepare.Spec, idx: Int)
                                (implicit tx: S#Tx): Unit = {
       // note: info-only graph elems not yet supported (or existent)
-      import context.workspaceHandle
+      import context.universe.workspace
       import spec.{elem, streamDim}
-      implicit val resolver = WorkspaceResolver[S]
+      implicit val resolver: DataSource.Resolver[S] = WorkspaceResolver[S]
 
       //      val matrix  = if (isDim) {
       //        val dimIdx  = findDimIndex(source, elem)
@@ -432,16 +432,16 @@ object AuralSonificationImpl {
 
       val key = MatrixPrepare.mkKey(elem) // mkKeyOLD(dimElem, isDim = isDim) // graph.Dim.key(dimElem)
       val cfg = MatrixPrepare.Config(matrix = matrix, server = server, key = key, index = idx, bufSize = bufSize)
-      import context.gen
+      import context.universe.genContext
       val res = MatrixPrepare(cfg)
       b.resources ::= res
     }
   }
 
   private final class Impl[S <: SSys[S]]
-    extends AuralSonification[S] with ObservableImpl[S, AuralView.State] {
+    extends AuralSonification[S] with ObservableImpl[S, Runner.State] {
 
-    def typeID: Int = Sonification.typeID
+    def tpe: Obj.Type = Sonification
 
     private var procViewL: Disposable[S#Tx] = _
 
@@ -449,6 +449,8 @@ object AuralSonificationImpl {
 
     private var _obj: stm.Source[S#Tx, Sonification[S]] = _
     private var _procView: AuralObj[S] = _
+
+    def objH: Source[S#Tx, Obj[S]] = _obj
 
     def obj: stm.Source[S#Tx, Sonification[S]] = _obj
 
@@ -469,7 +471,7 @@ object AuralSonificationImpl {
     }
 
     def sonification(implicit tx: S#Tx): Sonification[S] = {
-      implicit val itx = tx.peer
+      implicit val itx: InTxn = tx.peer
       if (sonifLoc.isInitialized) sonifLoc.get
       else {
         val sonif = _obj()
@@ -483,9 +485,9 @@ object AuralSonificationImpl {
       _procView.prepare(timeRef)
     }
 
-    def play(timeRef: TimeRef.Option, target: Unit)(implicit tx: S#Tx): Unit = {
+    def run(timeRef: TimeRef.Option, target: Unit)(implicit tx: S#Tx): Unit = {
       logDebugTx("AuralSonification: play")
-      _procView.play(timeRef, target)
+      _procView.run(timeRef, target)
     }
 
     def stop()(implicit tx: S#Tx): Unit = {
@@ -493,7 +495,7 @@ object AuralSonificationImpl {
       _procView.stop()
     }
 
-    def state(implicit tx: S#Tx): AuralView.State = {
+    def state(implicit tx: S#Tx): Runner.State = {
       _procView.state
     }
 

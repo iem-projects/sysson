@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -15,20 +15,20 @@
 package at.iem.sysson
 package sound
 
-import de.sciss.lucre.stm.Sys
-import de.sciss.lucre.{event => evt}
+import at.iem.sysson.sound.impl.{AuralSonificationImpl => Impl}
+import de.sciss.lucre.stm.{Obj, Sys}
 import de.sciss.lucre.synth.{Sys => SSys}
+import de.sciss.lucre.{event => evt}
 import de.sciss.synth.proc.{AuralContext, AuralObj}
-import impl.{AuralSonificationImpl => Impl}
 
 object AuralSonification extends AuralObj.Factory {
   private lazy val _init: Unit = AuralObj.addFactory(this)
 
+  def tpe: Obj.Type = Sonification
+
   def init(): Unit = _init
 
   def find[S <: Sys[S]]()(implicit tx: S#Tx): Option[Sonification[S]] = Impl.find()
-
-  def typeID: Int = Sonification.typeID
 
   type Repr[S <: Sys[S]] = Sonification[S]
 

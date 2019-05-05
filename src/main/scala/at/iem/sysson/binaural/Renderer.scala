@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -88,7 +88,7 @@ object Renderer {
       import numbers.Implicits._
       val d = distance.clip(1.5, 5.8)
       val decibels = 1.1034 * d.squared - 12.6433 * d + 14.3775
-      (decibels + 1.2).dbamp
+      (decibels + 1.2).dbAmp
     }
 
     override def toString = f"Position(${Samples(index)}, distance = $distance%1.2f meters"

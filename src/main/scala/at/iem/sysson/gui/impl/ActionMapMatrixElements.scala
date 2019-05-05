@@ -3,7 +3,7 @@
  *  (SysSon)
  *
  *  Copyright (c) 2013-2017 Institute of Electronic Music and Acoustics, Graz.
- *  Copyright (c) 2014-2017 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2014-2019 Hanns Holger Rutz. All rights reserved.
  *
  *	This software is published under the GNU General Public License v3+
  *
@@ -17,20 +17,20 @@ package gui
 package impl
 
 import at.iem.sysson.util.{DoubleTransform, NetCdfFileUtil}
-import de.sciss.desktop.impl.UndoManagerImpl
-import de.sciss.desktop.{FileDialog, OptionPane, Window}
+import de.sciss.desktop.{FileDialog, OptionPane, UndoManager, Window}
 import de.sciss.file._
-import de.sciss.processor
+import de.sciss.lucre.expr.CellView
 import de.sciss.lucre.stm.Sys
-import de.sciss.lucre.swing.{CellView, View}
+import de.sciss.lucre.swing.View
 import de.sciss.mellite.Mellite
 import de.sciss.mellite.gui.CodeView
 import de.sciss.mellite.gui.impl.WindowImpl
+import de.sciss.processor
 import de.sciss.synth.proc.Code
 import ucar.{ma2, nc2}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.swing.{Action, BorderPanel, Button}
+import scala.swing.{Action, BorderPanel, Button, Component}
 import scala.util.{Failure, Success}
 
 final class ActionMapMatrixElements[S <: Sys[S]](windowOpt: Option[Window], view: DataSourceView[S])
@@ -43,15 +43,16 @@ final class ActionMapMatrixElements[S <: Sys[S]](windowOpt: Option[Window], view
       messageType = OptionPane.Message.Error).show(windowOpt)
 
   def apply(): Unit = {
-    import view.{cursor, workspace}
+    import view.cursor
+    import view.universe
     view.selectedVariable.foreach { vr =>
       lazy val win = cursor.step { implicit tx =>
         val code0         = DoubleTransform.Code("x")
         val codeObj       = Code.Obj.newVar(Code.Obj.newConst[S](code0))
         import Mellite.compiler
-        implicit val undo = new UndoManagerImpl
+        implicit val undo: UndoManager = UndoManager()
 
-        val viewTransform = View.wrap[S] {
+        val viewTransform = View.wrap[S, Component] {
           Button("Transform...") {
             cursor.step { implicit tx =>
               codeObj.value
@@ -81,8 +82,8 @@ final class ActionMapMatrixElements[S <: Sys[S]](windowOpt: Option[Window], view
           add(_codeView.component, BorderPanel.Position.Center)
         }
 
-        val _win = new WindowImpl[S](CellView.const(title0)) {
-          val view: View[S] = View.wrap[S](p)
+        val _win: WindowImpl[S] = new WindowImpl[S](CellView.const(title0)) {
+          val view: View[S] = View.wrap[S, Component](p)
 
           override def dispose()(implicit tx: S#Tx): Unit = {
             super.dispose()
@@ -152,8 +153,9 @@ final class ActionMapMatrixElements[S <: Sys[S]](windowOpt: Option[Window], view
         }
         ma2.Array.factory(ja: AnyRef)
       }
-      import ExecutionContext.Implicits.global
       import processor._
+
+      import ExecutionContext.Implicits.global
       proc.monitor(printResult = false)
       proc.start()
     }
