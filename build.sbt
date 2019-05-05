@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.linux.LinuxPackageMapping
 
 lazy val baseName       = "SysSon"
 lazy val baseNameL      = baseName.toLowerCase
-lazy val projectVersion = "1.17.0-SNAPSHOT"
+lazy val projectVersion = "1.17.0"
 lazy val mimaVersion    = "1.17.0"
 
 lazy val commonSettings = Seq(
@@ -10,7 +10,7 @@ lazy val commonSettings = Seq(
   version       := projectVersion,
   organization  := "at.iem",
   description   := "Sonification platform of the IEM SysSon project",
-  homepage      := Some(url(s"https://github.com/iem-projects/$baseNameL")),
+  homepage      := Some(url(s"https://git.iem.at/sysson/$baseNameL")),
   licenses      := Seq("GPL v3+" -> url("http://www.gnu.org/licenses/gpl-3.0.txt")),
   // ---- scala compiler settings and libraries ----
   scalaVersion  := scalaMainVersion,
@@ -29,7 +29,7 @@ lazy val commonSettings = Seq(
   updateOptions := updateOptions.value.withLatestSnapshots(false)
 )
 
-lazy val scalaMainVersion           = "2.12.8"
+lazy val scalaMainVersion = "2.12.8"
 
 // ---- library versions ----
 
@@ -38,17 +38,17 @@ lazy val deps = new {
     val fileCache           = "0.5.1"
     val fscape              = "2.25.0"
     val kollFlitz           = "0.2.3"
-    val lucreMatrix         = "1.7.0-SNAPSHOT"
+    val lucreMatrix         = "1.7.0"
     val lucreSwing          = "1.16.0"
     val lucre               = "3.12.0"
-    val mellite             = "2.35.0"
+    val mellite             = "2.35.1"
     val orsonpdf            = "1.9"
     val scalaCollider       = "1.28.2"
     val scalaColliderSwing  = "1.41.1"
     val scalaColliderUGens  = "1.19.3"
     val sheet               = "0.1.2"
     val slf4j               = "1.7.26"
-    val soundProcesses      = "3.28.1-SNAPSHOT"
+    val soundProcesses      = "3.28.1"
     val swingTree           = "0.2.0"
     val webLaF              = "2.1.5"
   }
@@ -79,8 +79,8 @@ lazy val publishSettings = Seq(
   pomIncludeRepository := { _ => false },
   pomExtra := { val n = name.value
 <scm>
-  <url>git@github.com:iem-projects/{n}.git</url>
-  <connection>scm:git:git@github.com:iem-projects/{n}.git</connection>
+  <url>git@git.iem.at:sysson/{n}.git</url>
+  <connection>scm:git:git@git.iem.at:sysson/{n}.git</connection>
 </scm>
 <developers>
   <developer>
@@ -102,9 +102,11 @@ lazy val assemblySettings = Seq(
   mainClass in Compile := Some(mainClazz),
   assemblyMergeStrategy in assembly := {
   //  case "META-INF/MANIFEST.MF" => MergeStrategy.last
-    case PathList("javax", "xml"                 , _ @ _*) => MergeStrategy.first  // conflict xml-apis vs. stax-api
-    case PathList("org"  , "xmlpull"             , _ @ _*) => MergeStrategy.first  // from xstream I think
-    case PathList("org"  , "w3c", "dom", "events", _ @ _*) => MergeStrategy.first  // bloody Apache Batik
+    case PathList("javax", "xml"                 , _ @ _*) => MergeStrategy.first   // conflict xml-apis vs. stax-api
+    case PathList("org"  , "xmlpull"             , _ @ _*) => MergeStrategy.first   // from xstream I think
+    case PathList("org"  , "w3c", "dom", "events", _ @ _*) => MergeStrategy.first   // bloody Apache Batik
+    case PathList("com"  , "mchange"             , _ @ _*) => MergeStrategy.first   // why is this duplicate and different?
+    case x if x.contains("io.netty.versions.properties")   => MergeStrategy.discard
     case other =>
       val oldStrategy = (assemblyMergeStrategy in assembly).value
       oldStrategy(other)
@@ -164,13 +166,13 @@ lazy val root = Project(id = baseNameL, base = file("."))
 lazy val pkgUniversalSettings: Seq[sbt.Def.Setting[_]] = Seq(
   // NOTE: doesn't work on Windows, where we have to
   // provide manual file `SYSSON_config.txt` instead!
-  javaOptions in Universal ++= Seq(
-    // -J params will be added as jvm parameters
-    "-J-Xmx1024m",
-    "-J-XX:MaxPermSize=128M"
-    // others will be added as app parameters
-    // "-Dproperty=true",
-  ),
+//  javaOptions in Universal ++= Seq(
+//    // -J params will be added as jvm parameters
+//    "-J-Xmx1024m",
+//    "-J-XX:MaxPermSize=128M"
+//    // others will be added as app parameters
+//    // "-Dproperty=true",
+//  ),
   // Since our class path is very very long,
   // we use instead the wild-card, supported
   // by Java 6+. In the packaged script this
@@ -184,7 +186,7 @@ lazy val pkgUniversalSettings: Seq[sbt.Def.Setting[_]] = Seq(
 //////////////// debian installer
 lazy val pkgDebianSettings: Seq[sbt.Def.Setting[_]] = Seq(
   maintainer in Debian := s"$authorName <$authorEMail>",
-  debianPackageDependencies in Debian += "java7-runtime",
+  debianPackageDependencies in Debian += "java8-runtime",
   packageSummary in Debian := description.value,
   packageDescription in Debian :=
     """SysSon is a platform for the development and application

@@ -20,11 +20,7 @@ All source code with group-ID `de.sciss` is available from [github.com/Sciss](ht
 
 ## Installation and Documentation
 
-[The wiki](https://github.com/iem-projects/sysson/wiki) contains all relevant information to get started with SysSon:
-
-- [Software Installation](https://github.com/iem-projects/sysson/wiki/Installation)
-- [User Manual](https://github.com/iem-projects/sysson/wiki/Table-of-Contents)
-
+Please refer to the [main website](https://sysson.iem.at/).
 
 ### Building from Source
 

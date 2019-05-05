@@ -32,7 +32,7 @@ object Main {
 
   def main(args: Array[String]): Unit = {
     // logInfo(s"Welcome to $name v$version")
-
+//    de.sciss.lucre.matrix.impl.ReaderFactoryImpl.DEBUG = false
     SwingApplication.main(args)
   }
 }
